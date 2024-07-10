@@ -30,8 +30,8 @@ export const useTwitterProfileStore = defineStore('twitterProfile', () => {
   })
 })
 
-// Twitter tweets
-export const useTwitterTweetsStore = defineStore('twitterTweets', () => {
+// Twitter latest tweets
+export const useTwitterLatestTweetsStore = defineStore('twitterLatestTweets', () => {
   return createFetchStore<TwitterTweetListResponse | null>({
     data: null,
     fetcher(params?: any) {
@@ -48,8 +48,8 @@ export const useInstagramProfileStore = defineStore('instagramProfile', () => {
   })
 })
 
-// Instagram timeline
-export const useInstagramTimelineStore = defineStore('instagramTimeline', () => {
+// Instagram latest medias
+export const useInstagramLatestMediasStore = defineStore('instagramLatestMedias', () => {
   return createFetchStore<InstagramMediaListResponse | null>({
     data: null,
     fetcher: () => {

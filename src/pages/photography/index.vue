@@ -15,7 +15,7 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
 
-  const { instagramTimeline } = useStores()
+  const { instagramLatestMedias } = useStores()
   const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
 
   const loading = ref(false)
@@ -26,7 +26,7 @@
     try {
       loading.value = true
       const request = tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
-        after: lastPaging.value?.cursors.after ?? instagramTimeline.data?.paging?.cursors.after
+        after: lastPaging.value?.cursors.after ?? instagramLatestMedias.data?.paging?.cursors.after
       })
       const response = await (isClient ? delayPromise(360, request) : request)
       medias.push(...response.data)
@@ -37,8 +37,8 @@
   }
 
   const allMedias = computed(() => {
-    const timeline = instagramTimeline.data?.data ?? []
-    return [...timeline, ...medias]
+    const latestMedias = instagramLatestMedias.data?.data ?? []
+    return [...latestMedias, ...medias]
   })
 
   seoMeta(() => {
@@ -51,7 +51,7 @@
     }
   })
 
-  useUniversalFetch(() => instagramTimeline.fetch())
+  useUniversalFetch(() => instagramLatestMedias.fetch())
 </script>
 
 <template>
@@ -75,7 +75,7 @@
     </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
-      <placeholder :data="instagramTimeline.data?.data" :loading="instagramTimeline.fetching">
+      <placeholder :data="instagramLatestMedias.data?.data" :loading="instagramLatestMedias.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
@@ -92,7 +92,7 @@
           <div>
             <instagram-grid :medias="allMedias" />
             <loadmore
-              v-if="!instagramTimeline.fetching && !finished"
+              v-if="!instagramLatestMedias.fetching && !finished"
               class="loadmore"
               :loading="loading"
               @loadmore="fetchMoreMedias"

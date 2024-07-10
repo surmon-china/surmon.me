@@ -10,7 +10,7 @@
   import Twitter from './twitter.vue'
 
   const { seoMeta, i18n: _i18n, isZhLang } = useEnhancer()
-  const { appOption, articleList: articleListStore, twitterProfile, twitterTweets } = useStores()
+  const { appOption, twitterProfile, twitterLatestTweets, articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
     const targetPage = articleListStore.pagination!.current_page + 1
@@ -30,7 +30,7 @@
     return Promise.all([
       articleListStore.fetch(),
       twitterProfile.fetch().catch(() => {}),
-      twitterTweets.fetch().catch(() => {})
+      twitterLatestTweets.fetch().catch(() => {})
     ])
   })
 </script>
@@ -41,8 +41,8 @@
     <twitter
       class="twitter"
       :profile="twitterProfile.data"
-      :tweets="twitterTweets.data?.data ?? []"
-      :fetching="twitterTweets.fetching || twitterProfile.fetching || articleListStore.fetching"
+      :tweets="twitterLatestTweets.data?.data ?? []"
+      :fetching="twitterLatestTweets.fetching || twitterProfile.fetching || articleListStore.fetching"
     />
     <article-list
       :mammon="false"

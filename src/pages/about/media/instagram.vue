@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
-  import { useInstagramTimelineStore } from '/@/stores/media'
+  import { useInstagramLatestMediasStore } from '/@/stores/media'
   import {
     isVideoMediaIns,
     isAlbumMediaIns,
@@ -12,8 +12,8 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   const fetching = ref(true)
-  const igTimelineStore = useInstagramTimelineStore()
-  const igMedias = computed(() => igTimelineStore.data?.data.slice(0, 23) ?? [])
+  const igLatestMediasStore = useInstagramLatestMediasStore()
+  const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     return getOriginalProxyURL(
       isVideoMediaIns(media) ? getInstagramCoverURL(media) : getInstagramThumbnail(media, 't')
@@ -21,7 +21,7 @@
   }
 
   onMounted(() => {
-    igTimelineStore
+    igLatestMediasStore
       .fetch()
       .catch(() => null)
       .finally(() => {

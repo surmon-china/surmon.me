@@ -20,8 +20,8 @@ import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarSt
 import {
   useDoubanMoviesStore,
   useTwitterProfileStore,
-  useTwitterTweetsStore,
-  useInstagramTimelineStore,
+  useTwitterLatestTweetsStore,
+  useInstagramLatestMediasStore,
   useInstagramProfileStore,
   useYouTubePlayListStore
 } from './media'
@@ -61,8 +61,8 @@ export const useStores = (pinia?: Pinia) => ({
 
   doubanMovies: useDoubanMoviesStore(pinia),
   twitterProfile: useTwitterProfileStore(pinia),
-  twitterTweets: useTwitterTweetsStore(pinia),
+  twitterLatestTweets: useTwitterLatestTweetsStore(pinia),
   instagramProfile: useInstagramProfileStore(pinia),
-  instagramTimeline: useInstagramTimelineStore(pinia),
+  instagramLatestMedias: useInstagramLatestMediasStore(pinia),
   youtubePlayList: useYouTubePlayListStore(pinia)
 })
