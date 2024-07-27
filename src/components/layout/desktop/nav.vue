@@ -126,10 +126,16 @@
 
       .divider {
         display: block;
-        height: 0;
-        background-color: transparent;
-        border-top: 1px dotted $module-bg-darker-2;
         margin-bottom: $gap-sm;
+        height: 1px;
+        background-image: linear-gradient(
+          to right,
+          transparent 0%,
+          $module-bg-darker-2 14%,
+          $module-bg-darker-2 50%,
+          $module-bg-darker-1 80%,
+          transparent 100%
+        );
       }
     }
   }
