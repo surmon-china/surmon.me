@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_0r968ccn2vo.woff2?t=1722107085349') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_0r968ccn2vo.woff?t=1722107085349') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_0r968ccn2vo.ttf?t=1722107085349') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.woff2?t=1722108653813') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.woff?t=1722108653813') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.ttf?t=1722108653813') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-tool:before {
+  content: '\e7f2';
 }
 
 .icon-calendar:before {
@@ -584,10 +588,6 @@
 
 .icon-taichi:before {
   content: '\e661';
-}
-
-.icon-vlog:before {
-  content: '\e660';
 }
 
 .icon-peachblossom:before {

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
   import { Theme } from '/@/composables/theme'
+  import { Language, LanguageKey } from '/@/language'
   import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { META } from '/@/config/app.config'
@@ -27,6 +27,14 @@
       event_label: theme.theme.value
     })
   }
+
+  const languageIcon = computed(() => {
+    const languageIconMap = {
+      [Language.Chinese]: 'icon-chinese',
+      [Language.English]: 'icon-english'
+    }
+    return languageIconMap[_i18n.language.value]
+  })
 
   const tooggleLanguage = () => {
     _i18n.toggle()
@@ -58,7 +66,7 @@
           <i class="iconfont icon-top-menu"></i>
         </button>
         <button class="button language" title="Switch language" @click="tooggleLanguage">
-          {{ _i18n.language.value || '-' }}
+          <i class="iconfont" :class="languageIcon"></i>
         </button>
         <button class="button theme" :class="theme.theme.value" @click="toggleTheme">
           <i class="iconfont" :class="themeIcon"></i>
@@ -175,7 +183,7 @@
             cursor: none;
           }
           &.language {
-            font-weight: bold;
+            font-size: $font-size-h4;
           }
         }
       }
