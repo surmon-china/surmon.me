@@ -98,10 +98,10 @@ const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRend
   const html = markdownToHTML(markdown, {
     sanitize: false,
     imageSourceGetter,
-    headingIdentifierGetter: (_, level, raw) => {
-      const anchor = getArticleHeadingUrlHash(raw)
+    headingIdentifierGetter: (level, text) => {
+      const anchor = getArticleHeadingUrlHash(text)
       const id = getArticleContentHeadingElementId(level, anchor)
-      headings.push({ level, text: raw, id, anchor })
+      headings.push({ level, text, id, anchor })
       return { id, anchor }
     }
   })

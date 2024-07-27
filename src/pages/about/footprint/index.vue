@@ -147,6 +147,7 @@
       display: flex;
       flex-direction: column;
       margin-left: $gap * 2;
+
       .now {
         flex-shrink: 0;
         display: inline-flex;

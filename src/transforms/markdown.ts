@@ -67,23 +67,24 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererCreatorOptions {
   sanitize: boolean
   lazyLoadImage: boolean
-  headingIdentifierGetter(html: string, level: number, raw: string): { anchor?: string; id?: string }
+  headingIdentifierGetter(level: number, text: string): { anchor?: string; id?: string }
   imageSourceGetter(src: string): string | { src: string; sources: Array<{ srcset: string; type: string }> }
 }
 
+// https://github.com/markedjs/marked/blob/master/src/Renderer.ts
 const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => {
   const renderer = new Renderer()
 
   // html: escape > sanitize
-  renderer.html = (html) => {
-    const trimmed = html.trim()
+  renderer.html = ({ text }) => {
+    const trimmed = text.trim()
     const transformed = CUSTOM_ELEMENT_LIST.reduce((result, ce) => ce.transform(result), trimmed)
     // https://github.com/apostrophecms/sanitize-html#default-options
     return options?.sanitize ? sanitizeHTML(escape(transformed)) : transformed
   }
 
   // heading
-  renderer.heading = (html, level, raw) => {
+  renderer.heading = ({ depth, tokens }) => {
     const getAnchorWithLink = (anchor: string) => {
       const preventDefault = `event.preventDefault()`
       const copy = `window.navigator.clipboard?.writeText(this.href)`
@@ -92,37 +93,40 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       return `<a class="anchor link" ${href} ${onclick}>#</a>`
     }
 
-    const identifier = options?.headingIdentifierGetter?.(html, level, raw)
+    const text = renderer.parser.parseInline(tokens)
+    const identifier = options?.headingIdentifierGetter?.(depth, text)
     const idAttr = identifier?.id ? `id="${identifier.id}"` : ''
-    const titleAttr = `title="${escape(raw)}"`
+    const titleAttr = `title="${escape(text)}"`
     const anchorElement = identifier?.anchor
       ? getAnchorWithLink(identifier.anchor)
       : `<span class="anchor static">#</span>`
-    return `<h${level} ${idAttr} ${titleAttr}>${anchorElement}${html}</h${level}>`
+    return `<h${depth} ${idAttr} ${titleAttr}>${anchorElement}${text}</h${depth}>`
   }
 
   // paragraph
-  renderer.paragraph = (text) => {
-    const trimmed = text.trim()
+  renderer.paragraph = ({ tokens }) => {
+    const html = renderer.parser.parseInline(tokens)
+    const trimmed = html.trim()
     const isBlockChild = ['p', 'div', 'figure'].some((tag) => {
       return trimmed.startsWith(`<${tag}`) && trimmed.endsWith(`</${tag}>`)
     })
-    return isBlockChild ? text : `<p>${text}</p>`
+    return isBlockChild ? html : `<p>${html}</p>`
   }
 
   // checkbox
-  renderer.checkbox = (checked) => {
+  renderer.checkbox = ({ checked }) => {
     return checked
       ? `<i class="checkbox checked iconfont icon-checkbox-selected"></i>`
       : `<i class="checkbox iconfont icon-checkbox-unselected"></i>`
   }
 
   // link: sanitize
-  renderer.link = (href, title, text) => {
-    const isSelf = href?.startsWith(META.url)
+  renderer.link = ({ href, title, tokens }) => {
+    const text = renderer.parser.parseInline(tokens)
     const isImageLink = text.includes('<img')
+    const isSelf = href.startsWith(META.url)
     const textValue = options?.sanitize ? escape(text) : text
-    const hrefValue = options?.sanitize ? sanitizeUrl(href!) : href
+    const hrefValue = options?.sanitize ? sanitizeUrl(href) : href
     const titleValue = options?.sanitize ? escape(title!) : title
     return sanitizeHTML(
       trimHTML(`
@@ -138,11 +142,11 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   }
 
   // image: sanitize(title, alt) > popup
-  renderer.image = (src, title, alt) => {
+  renderer.image = ({ href, title, text }) => {
     // HTTP > proxy
-    const titleValue = sanitizeHTML(escape(title || alt))
-    const altValue = sanitizeHTML(escape(alt!))
-    const sanitized = sanitizeUrl(src!)
+    const titleValue = sanitizeHTML(escape(title || text))
+    const altValue = sanitizeHTML(escape(text!))
+    const sanitized = sanitizeUrl(href!)
     const original = sanitized.startsWith('http://') ? getOriginalProxyURL(sanitized) : sanitized
     const parsed = options?.imageSourceGetter ? options.imageSourceGetter(original) : original
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
@@ -184,7 +188,10 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   }
 
   // code: line number
-  renderer.code = function (code, lang, isEscaped) {
+  renderer.code = function ({ text, lang, escaped }) {
+    const langString = (lang || '').match(/^\S*/)?.[0]
+    const code = text.replace(/\n$/, '') + '\n'
+
     const lineNumbers = code
       .split('\n')
       .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
@@ -197,19 +204,19 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       `onkeydown="if(event.metaKey) return true; return false;"`
     ].join(' ')
 
-    return lang
+    return langString
       ? `
-        <pre data-lang="${lang}">
+        <pre data-lang="${langString}">
           <ul class="code-lines">${lineNumbers}</ul>
-          <code ${readOnlyAttrs} class="${highlightLangPrefix}${encodeURI(lang)}">${
-            isEscaped ? code : encodeURI(code)
+          <code ${readOnlyAttrs} class="${highlightLangPrefix}${escape(langString)}">${
+            escaped ? code : escape(code)
           }\n</code>
         </pre>\n
       `
       : `
         <pre>
           <ul class="code-lines">${lineNumbers}</ul>
-          <code ${readOnlyAttrs}>${isEscaped ? code : encodeURI(code)}\n</code>
+          <code ${readOnlyAttrs}>${escaped ? code : escape(code)}\n</code>
         </pre>
       `
   }

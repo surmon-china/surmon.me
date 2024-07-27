@@ -69,14 +69,14 @@
   @import 'src/styles/mixins.scss';
 
   .statistic {
+    #{--brand-color}: $white;
     width: 100%;
     height: 14rem;
     padding: 1em 1.8em 1.2em 1.8em;
     border-radius: $radius-lg;
-    @include common-bg-module();
     position: relative;
     overflow: hidden;
-    #{--brand-color}: $white;
+    @include common-bg-module();
     &.douban {
       #{--s-primary}: $douban-primary;
     }

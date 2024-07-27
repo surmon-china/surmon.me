@@ -56,7 +56,7 @@ export const getInstagramMedias = async <T = InstagramMediaItem>(options?: Insta
 
     return response.data
   } catch (error) {
-    throw isAxiosError(error) ? error.response?.data?.error ?? error.toJSON() : error
+    throw isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error
   }
 }
 
@@ -71,6 +71,6 @@ export const getInstagramMediaChildren = (mediaId: string) => {
     .get<InstagramMediaListResponse>(url, { timeout: 8000, params })
     .then((response) => response.data.data)
     .catch((error) => {
-      return Promise.reject(isAxiosError(error) ? error.response?.data?.error ?? error.toJSON() : error)
+      return Promise.reject(isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error)
     })
 }

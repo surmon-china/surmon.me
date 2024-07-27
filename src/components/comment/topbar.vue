@@ -317,11 +317,11 @@
           border-top: 1px solid transparent;
           border-bottom: 1px solid transparent;
           &:hover {
+            font-weight: bold;
+            border-bottom-color: $color-text-secondary;
             .iconfont {
               font-weight: normal;
             }
-            font-weight: bold;
-            border-bottom-color: $color-text-secondary;
           }
 
           .iconfont {

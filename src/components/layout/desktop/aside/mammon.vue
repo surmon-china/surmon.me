@@ -68,10 +68,10 @@
       <template #container-end>
         <div class="swiper-pagination">
           <div
-            v-for="(__, index) in adConfig.PC_ASIDE_SWIPER"
-            :key="index"
-            :aria-label="`Go to slide ${index}`"
-            :class="{ active: index === activeIndex }"
+            v-for="(__, _index) in adConfig.PC_ASIDE_SWIPER"
+            :key="_index"
+            :aria-label="`Go to slide ${_index}`"
+            :class="{ active: _index === activeIndex }"
             class="swiper-pagination-bullet"
             role="button"
           >

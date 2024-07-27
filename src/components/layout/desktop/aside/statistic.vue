@@ -90,6 +90,8 @@
       }
 
       .skeleton {
+        font-size: $font-size-h3;
+        animation: skeleton 0.8s linear alternate infinite;
         @keyframes skeleton {
           from {
             color: $color-text-divider;
@@ -98,8 +100,6 @@
             color: $color-link;
           }
         }
-        font-size: $font-size-h3;
-        animation: skeleton 0.8s linear alternate infinite;
       }
 
       .count {

@@ -332,7 +332,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // run
   server.listen(getBFFServerPort(), () => {
     const address = server.address()
-    const port = typeof address === 'string' ? address : address?.port ?? getBFFServerPort()
+    const port = typeof address === 'string' ? address : (address?.port ?? getBFFServerPort())
     logger.success(
       `${META.title} app is running!`,
       `| env: ${NODE_ENV}`,
