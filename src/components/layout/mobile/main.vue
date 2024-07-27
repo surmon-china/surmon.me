@@ -9,11 +9,13 @@
   const { route } = useEnhancer()
   const pageURL = computed(() => getPageURL(route.fullPath))
 
+  const isLoaded = ref(false)
   const isOpenedAside = ref(false)
   const openAside = () => (isOpenedAside.value = true)
   const closeAside = () => (isOpenedAside.value = false)
 
   onMounted(() => {
+    isLoaded.value = true
     watch(isOpenedAside, (opened) => {
       document.body.style.overflow = opened ? 'hidden' : 'auto'
     })
@@ -22,7 +24,7 @@
 
 <template>
   <div class="mobile-main">
-    <div class="asider" :class="{ opened: isOpenedAside }">
+    <div class="asider" :class="{ loaded: isLoaded, opened: isOpenedAside }">
       <aside-view class="aside" />
     </div>
     <div class="main" :class="{ opened: isOpenedAside }">
@@ -64,10 +66,13 @@
       left: 0;
       background-color: $mobile-aside-bg;
       transform: translate3d(-100%, 0, 0);
-      transition: $mobile-aside-transition;
+
       .aside {
         opacity: 0;
-        transform: scale(0.8, 0.8);
+        transition: $mobile-aside-transition;
+      }
+
+      &.loaded {
         transition: $mobile-aside-transition;
       }
 
@@ -77,7 +82,6 @@
         -webkit-overflow-scrolling: touch;
         .aside {
           opacity: 1;
-          transform: scale(1, 1);
           transition: $mobile-aside-transition;
         }
       }

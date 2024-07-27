@@ -193,7 +193,7 @@
           width: 100%;
           height: 3em;
           margin-bottom: 0.5em;
-          padding: 0 1em;
+          padding-left: $gap * 2;
           border: none;
           text-decoration: none;
           color: $white;
