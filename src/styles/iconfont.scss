@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.woff2?t=1722108653813') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.woff?t=1722108653813') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_nycm4r5hov.ttf?t=1722108653813') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_m21of664lw.woff2?t=1722113940259') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_m21of664lw.woff?t=1722113940259') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_m21of664lw.ttf?t=1722113940259') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-whatsapp:before {
+  content: '\eafa';
 }
 
 .icon-tool:before {

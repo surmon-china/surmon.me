@@ -91,10 +91,10 @@
     </div>
     <div class="qrcodes">
       <div class="item">
-        <uimage cdn class="image" src="/images/qrcodes/wechat.webp" />
+        <uimage cdn class="image" src="/images/qrcodes/whatsapp.webp" />
       </div>
       <div class="item">
-        <uimage cdn class="image" src="/images/qrcodes/wechat-channel.webp" />
+        <uimage cdn class="image" src="/images/qrcodes/wechat.webp" />
       </div>
     </div>
   </div>
