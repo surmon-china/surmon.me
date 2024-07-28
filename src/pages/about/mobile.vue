@@ -66,7 +66,7 @@
         </ulink>
         <ulink class="item center instagram" :href="VALUABLE_LINKS.INSTAGRAM">
           <i class="iconfont icon-instagram" />
-          <span class="text">Instagram</span>
+          <span class="text">IG</span>
         </ulink>
         <ulink class="item center twitter" :href="VALUABLE_LINKS.TWITTER">
           <i class="iconfont icon-twitter-x" />
@@ -265,7 +265,7 @@
 
       .item {
         width: 100%;
-        padding: $gap;
+        padding: $gap-sm;
         border-radius: $radius-lg;
         overflow: hidden;
         background-color: $module-bg-opaque;

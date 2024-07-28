@@ -179,6 +179,7 @@
           margin: 0 $gap;
           width: 2rem;
           height: 2rem;
+          line-height: 2rem;
           &.menu {
             cursor: none;
           }
