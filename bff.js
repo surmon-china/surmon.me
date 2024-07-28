@@ -128,8 +128,9 @@ const app_config_IDENTITIES = Object.freeze({
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
     GITHUB_USER_NAME: 'surmon-china',
-    TWITTER_USER_NAME: 'surmon7788',
     INSTAGRAM_USERNAME: 'surmon666',
+    TWITTER_USER_NAME: 'surmon7788',
+    TWITTER_USER_ID: '706498928393359360',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
@@ -187,7 +188,7 @@ var NodeEnv;
     NodeEnv["Production"] = "production";
 })(NodeEnv || (NodeEnv = {}));
 const NODE_ENV = process.env.NODE_ENV;
-const environment_isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
+const isNodeDev = process.env.NODE_ENV === NodeEnv.Development;
 const isNodeProd = process.env.NODE_ENV === NodeEnv.Production;
 
 ;// CONCATENATED MODULE: ./src/constants/http-code.ts
@@ -212,7 +213,8 @@ var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["WebFont"] = "webfont";
     TunnelModule["MyGoogleMap"] = "my_google_map";
-    TunnelModule["TwitterAggregate"] = "twitter_aggregate";
+    TunnelModule["TwitterProfile"] = "twitter_profile";
+    TunnelModule["TwitterTweets"] = "twitter_tweets";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
     TunnelModule["InstagramProfile"] = "instagram_profile";
@@ -291,13 +293,13 @@ const external_path_namespaceObject = external_path_x({ ["default"]: () => __WEB
 const getNodePressAPI = () => {
     const local = getLocalApiURL();
     const online = getOnlineApiURL();
-    return environment_isNodeDev ? local : online;
+    return isNodeDev ? local : online;
 };
 const ROOT_PATH = process.cwd();
 const DIST_PATH = external_path_namespaceObject["default"].join(ROOT_PATH, 'dist');
 const PRDO_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'client');
 const PRDO_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
-const PUBLIC_PATH = environment_isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
+const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
 
 ;// CONCATENATED MODULE: ./src/server/route.ts
 /**
@@ -519,37 +521,6 @@ const getMyGoogleMap = () => {
         .then((response) => parser.parse(response.data).kml.Document);
 };
 
-;// CONCATENATED MODULE: ./src/constants/value.ts
-/**
- * @file Value constant
- * @module constant.value
- * @author Surmon <https://github.com/surmon-china>
- */
-const NULL = null;
-const value_UNDEFINED = void 0;
-const isNull = (value) => value === NULL;
-const isUndefined = (value) => value === value_UNDEFINED;
-const isNil = (value) => isNull(value) || isUndefined(value);
-
-;// CONCATENATED MODULE: ./src/utils/logger.ts
-/**
- * @file App logger
- * @module utils/logger
- * @author Surmon <https://github.com/surmon-china>
- */
-const createLogger = (scope) => ({
-    // levels
-    log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),
-    info: (...messages) => console.info('🔵', `[${scope}]`, ...messages),
-    warn: (...messages) => console.warn('🟠', `[${scope}]`, ...messages),
-    error: (...messages) => console.error('🔴', `[${scope}]`, ...messages),
-    debug: (...messages) => console.debug('🟤', `[${scope}]`, ...messages),
-    // aliases
-    success: (...messages) => console.log('🟢', `[${scope}]`, ...messages),
-    failure: (...messages) => console.warn('🔴', `[${scope}]`, ...messages)
-});
-/* harmony default export */ const logger = (createLogger('APP'));
-
 ;// CONCATENATED MODULE: external "yargs"
 var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
 var external_yargs_y = x => () => x
@@ -565,191 +536,259 @@ const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)
 const GITHUB_BEARER_TOKEN = argv.github_token;
 const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
-const bff_yargs_SOTWE_SCRAPER_TOKEN = argv.sotwe_scraper_token;
+const TWITTER_COOKIE = argv.twitter_cookie;
+const WEB_SCRAPER_TOKEN = argv.web_scraper_token;
 
-;// CONCATENATED MODULE: ./src/server/getters/twitter/sotwe-api.ts
+;// CONCATENATED MODULE: ./src/server/getters/twitter/web-api.ts
 
 
-
-// Don't try to simulate a browser request, it will be blocked by Cloudflare.
-// Can't make requests based on headless browsers because it takes up too much memory
-// So one has to look for third party online services, here are some of the available scraper services:
-// - https://dashboard.scrape.do
-// - https://dashboard.scraperapi.com
-// - https://apilayer.com/marketplace/adv_scraper-api
-// - https://app.zenrows.com
-// - ...
-const fetchSotweAggregate = async (twitterUsername) => {
+// https://blog.nest.moe/posts/how-to-login-to-twitter#cookie
+// https://blog.nest.moe/posts/how-to-crawl-twitter-with-graphql#guest-token-cookie
+// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/utils.ts
+const BASE_URL = 'https://x.com/i/api';
+// prettier-ignore
+// https://blog.nest.moe/posts/how-to-crawl-twitter-with-graphql#authorization
+// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/constants.ts
+const bearerToken = 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA';
+// prettier-ignore
+// https://github.com/DIYgod/RSSHub/blob/master/lib/utils/rand-user-agent.ts
+const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
+// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/constants.ts
+const gqlFeatureUser = {
+    hidden_profile_likes_enabled: true,
+    hidden_profile_subscriptions_enabled: true,
+    responsive_web_graphql_exclude_directive_enabled: true,
+    verified_phone_label_enabled: false,
+    subscriptions_verification_info_is_identity_verified_enabled: true,
+    subscriptions_verification_info_verified_since_enabled: true,
+    highlights_tweets_tab_ui_enabled: true,
+    responsive_web_twitter_article_notes_tab_enabled: true,
+    creator_subscriptions_tweet_preview_api_enabled: true,
+    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+    responsive_web_graphql_timeline_navigation_enabled: true
+};
+const gqlFeatureFeed = {
+    responsive_web_graphql_exclude_directive_enabled: true,
+    verified_phone_label_enabled: false,
+    creator_subscriptions_tweet_preview_api_enabled: true,
+    responsive_web_graphql_timeline_navigation_enabled: true,
+    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+    c9s_tweet_anatomy_moderator_badge_enabled: true,
+    tweetypie_unmention_optimization_enabled: true,
+    responsive_web_edit_tweet_api_enabled: true,
+    graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
+    view_counts_everywhere_api_enabled: true,
+    longform_notetweets_consumption_enabled: true,
+    responsive_web_twitter_article_tweet_consumption_enabled: true,
+    tweet_awards_web_tipping_enabled: false,
+    freedom_of_speech_not_reach_fetch_enabled: true,
+    standardized_nudges_misinfo: true,
+    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
+    rweb_video_timestamps_enabled: true,
+    longform_notetweets_rich_text_read_enabled: true,
+    longform_notetweets_inline_media_enabled: true,
+    responsive_web_enhance_cards_enabled: false
+};
+const gqlTweetDetailFeatures = {
+    rweb_tipjar_consumption_enabled: true,
+    responsive_web_graphql_exclude_directive_enabled: true,
+    verified_phone_label_enabled: false,
+    creator_subscriptions_tweet_preview_api_enabled: true,
+    responsive_web_graphql_timeline_navigation_enabled: true,
+    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+    communities_web_enable_tweet_community_results_fetch: true,
+    c9s_tweet_anatomy_moderator_badge_enabled: true,
+    articles_preview_enabled: false,
+    tweetypie_unmention_optimization_enabled: true,
+    responsive_web_edit_tweet_api_enabled: true,
+    graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
+    view_counts_everywhere_api_enabled: true,
+    longform_notetweets_consumption_enabled: true,
+    responsive_web_twitter_article_tweet_consumption_enabled: true,
+    tweet_awards_web_tipping_enabled: false,
+    creator_subscriptions_quote_tweet_preview_enabled: false,
+    freedom_of_speech_not_reach_fetch_enabled: true,
+    standardized_nudges_misinfo: true,
+    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
+    tweet_with_visibility_results_prefer_gql_media_interstitial_enabled: true,
+    rweb_video_timestamps_enabled: true,
+    longform_notetweets_rich_text_read_enabled: true,
+    longform_notetweets_inline_media_enabled: true,
+    responsive_web_enhance_cards_enabled: false
+};
+const gqlFeatures = {
+    UserByScreenName: gqlFeatureUser,
+    UserByRestId: gqlFeatureUser,
+    UserTweets: gqlFeatureFeed,
+    UserMedia: gqlFeatureFeed,
+    Likes: gqlFeatureFeed,
+    TweetDetail: gqlTweetDetailFeatures
+};
+const graphQLEndpointsMap = {
+    UserByScreenName: '/graphql/k5XapwcSikNsEsILW5FvgA/UserByScreenName',
+    UserByRestId: '/graphql/tD8zKvQzwY3kdx5yz6YmOw/UserByRestId',
+    UserTweets: '/graphql/eS7LO5Jy3xgmd3dbL044EA/UserTweets',
+    UserMedia: '/graphql/TOU4gQw8wXIqpSzA4TYKgg/UserMedia',
+    Likes: '/graphql/B8I_QCljDBVfin21TTWMqA/Likes',
+    TweetDetail: '/graphql/zJvfJs3gSbrVhC0MKjt_OQ/TweetDetail'
+};
+const fetchTwitter = (url, params = {}) => {
+    if (!TWITTER_COOKIE) {
+        throw new Error('Twitter cookie is not configured');
+    }
+    const jsonCookie = Object.fromEntries(TWITTER_COOKIE.split(';').map((i) => i.trim().split('=')));
+    if (!jsonCookie.auth_token || !jsonCookie.ct0) {
+        throw new Error('Twitter cookie is not valid');
+    }
+    return services_axios(url, {
+        params: params ?? {},
+        headers: {
+            'user-agent': userAgent,
+            authority: 'x.com',
+            accept: '*/*',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'no-cache',
+            'content-type': 'application/json',
+            authorization: bearerToken,
+            dnt: '1',
+            pragma: 'no-cache',
+            referer: 'https://x.com/narendramodi',
+            'x-twitter-active-user': 'yes',
+            'x-twitter-auth-type': 'OAuth2Session',
+            'x-twitter-client-language': 'en',
+            'x-csrf-token': jsonCookie.ct0,
+            cookie: TWITTER_COOKIE
+        }
+    });
+};
+const getWebTwitterProfile = async (twitterUsername) => {
     try {
-        const target = `https://api.sotwe.com/v3/user/${twitterUsername}`;
-        // const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`
-        const scraper = `https://api.scraperapi.com/?api_key=${bff_yargs_SOTWE_SCRAPER_TOKEN}&url=${target}`;
-        // To avoid wasting request credits, tokens are not used in development environments
-        const response = await services_axios.get(environment_isNodeDev ? target : scraper, { timeout: 28000 });
-        return response.data;
+        const response = await fetchTwitter(BASE_URL + graphQLEndpointsMap.UserByScreenName, {
+            variables: JSON.stringify({
+                screen_name: twitterUsername,
+                withSafetyModeUserFields: true
+            }),
+            features: JSON.stringify(gqlFeatures.UserByScreenName),
+            fieldToggles: JSON.stringify({
+                withAuxiliaryUserLabels: false
+            })
+        });
+        const userId = response.data.data.user.result.rest_id;
+        const userInfo = response.data.data.user.result.legacy;
+        return {
+            id: userId,
+            name: userInfo?.name,
+            avatar: userInfo?.profile_image_url_https.replace(/_normal.jpg$/, '.jpg'),
+            createdAt: new Date(userInfo?.created_at).getTime(),
+            description: userInfo?.description,
+            location: userInfo.location,
+            tweetCount: userInfo.statuses_count,
+            followerCount: userInfo.followers_count,
+            followingCount: userInfo.friends_count
+        };
     }
     catch (error) {
         throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
     }
 };
-const improveSotweTweet = (tweet) => {
-    // remove new lines and multiple spaces
-    // replace unknown characters
-    let result = tweet.text.replaceAll('\n', ' ').replace(/ +/g, ' ').replaceAll('�', '_');
-    // remove media urls
-    tweet.mediaEntities?.forEach((media) => {
-        result = result.replace(media.url, '');
-    });
-    // replace url with link
-    tweet.urlEntities?.forEach((url) => {
-        result = result.replace(url.url, url.text);
-    });
-    return result;
-};
-const sotwe_api_getSotweTwitterAggregate = async (twitterUsername) => {
-    const sotwe = await fetchSotweAggregate(twitterUsername);
-    const tweets = [];
-    const userinfo = {
-        name: sotwe?.info?.name || twitterUsername,
-        avatar: sotwe?.info?.profileImageOriginal || '',
-        description: sotwe?.info.description || void 0,
-        location: sotwe?.info.location || void 0,
-        tweetCount: sotwe?.info.postCount ?? void 0,
-        followerCount: sotwe?.info.followerCount ?? void 0,
-        followingCount: sotwe?.info.followingCount ?? void 0
-    };
-    // sotwe all tweets
-    const sotweTweets = [];
-    if (sotwe?.data.length) {
-        sotwe.data.forEach((item) => {
-            sotweTweets.push(item);
-            if (item.conversation?.length) {
-                sotweTweets.push(...item.conversation);
+// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/utils.ts#L88C1-L114C3
+const getWebTwitterUserTweets = async (userId, params) => {
+    try {
+        const response = await fetchTwitter(BASE_URL + graphQLEndpointsMap.UserTweets, {
+            features: JSON.stringify(gqlFeatures.UserTweets),
+            variables: JSON.stringify({
+                userId,
+                ...params,
+                // MARK: Whatever the setting, it's actually 20
+                count: 20,
+                includePromotedContent: true,
+                withQuickPromoteEligibilityTweetFields: true,
+                withVoice: true,
+                withV2Timeline: true
+            })
+        });
+        // Getting the right raw data
+        const instructions = response.data?.data?.user?.result?.timeline_v2?.timeline?.instructions ?? [];
+        const entries1 = instructions.find((i) => i.type === 'TimelineAddToModule')?.moduleItems; // Media
+        const entries2 = instructions.find((i) => i.type === 'TimelineAddEntries').entries;
+        const entries = entries1 || entries2;
+        // Converting data structures
+        const tweets = [];
+        const topCursor = entries.find((e) => e.entryId?.startsWith?.('cursor-top-'))?.content.value;
+        const bottomCursor = entries.find((e) => e.entryId?.startsWith?.('cursor-bottom-'))?.content.value;
+        const parseSingleTweet = (tweet, references) => {
+            const user = tweet.core.user_results?.result;
+            const tweetMedias = tweet.legacy?.entities?.media ?? [];
+            const tweetUrls = tweet.legacy?.entities?.urls ?? [];
+            const tweetDisplayTextRange = tweet.legacy.display_text_range;
+            const tweetFullText = tweet.legacy.full_text;
+            // remove medias url in full text
+            // MARK: Split Emoji https://stackoverflow.com/a/37535876/6222535
+            const pureText = [...tweetFullText].slice(...tweetDisplayTextRange).join('');
+            // replace url with link
+            const htmlText = !tweetUrls.length
+                ? pureText
+                : tweetUrls.reduce((result, url) => {
+                    const linkHtml = `<a class="link" rel="external nofollow noopener" target="_blank" href="${url.expanded_url}">[${url.display_url}]</a>`;
+                    const [start, end] = url.indices;
+                    return result.substring(0, start) + linkHtml + result.substring(end);
+                }, pureText);
+            const result = {
+                id: tweet.legacy.id_str,
+                owner: user?.legacy?.screen_name,
+                text: pureText,
+                html: htmlText,
+                date: new Date(tweet.legacy.created_at).getTime(),
+                location: tweet.legacy.place?.country,
+                viewCount: Number(tweet.views?.count ?? 0),
+                favoriteCount: tweet.legacy.favorite_count,
+                commentCount: tweet.legacy.reply_count,
+                retweetCount: tweet.legacy.retweet_count,
+                quoteCount: tweet.legacy.quote_count,
+                mediaCount: tweetMedias.length,
+                hasImage: tweetMedias.some((media) => media.type === 'photo'),
+                hasVideo: tweetMedias.some((media) => media.type === 'video'),
+                isQuote: tweet.legacy.is_quote_status,
+                isReply: !!tweet.legacy.in_reply_to_status_id_str,
+                isRetweet: tweet.legacy.retweeted
+            };
+            if (result.isQuote && tweet.quoted_status_result) {
+                result.ref = parseSingleTweet(tweet.quoted_status_result.result);
+            }
+            else if (result.isRetweet && tweet.legacy.retweeted_status_result) {
+                result.ref = parseSingleTweet(tweet.legacy.retweeted_status_result.result);
+            }
+            else if (result.isReply) {
+                const refId = tweet.legacy.in_reply_to_status_id_str;
+                const refTarget = references?.find((ref) => ref.rest_id === refId);
+                if (refTarget) {
+                    result.ref = parseSingleTweet(refTarget);
+                }
+            }
+            return result;
+        };
+        entries.forEach((entry) => {
+            if (entry.entryId.startsWith('tweet-')) {
+                tweets.push(parseSingleTweet(entry.content.itemContent.tweet_results.result));
+            }
+            else if (entry.entryId.startsWith('profile-conversation-')) {
+                const conversationTweets = entry.content.items.map((i) => i.item.itemContent.tweet_results.result);
+                conversationTweets.forEach((tweet) => {
+                    tweets.push(parseSingleTweet(tweet, conversationTweets));
+                });
             }
         });
-    }
-    sotweTweets.forEach((tweet) => {
-        // not retweet
-        if (tweet.retweetedStatus) {
-            return;
-        }
-        // not reply to other
-        if (tweet.inReplyToUserId && tweet.inReplyToUserId !== sotwe.info.id) {
-            return;
-        }
-        // not your own tweet
-        if (tweet.user && tweet.user.id !== sotwe.info.id) {
-            return;
-        }
-        tweets.push({
-            id: tweet.id,
-            owner: twitterUsername,
-            text: improveSotweTweet(tweet),
-            date: tweet.createdAt,
-            location: tweet.location?.name || void 0,
-            favoriteCount: tweet.favoriteCount ?? void 0,
-            retweetCount: tweet.retweetCount ?? void 0,
-            mediaCount: tweet.mediaEntities?.length ?? 0,
-            isReply: !!tweet.inReplyToUserId,
-            isQuote: !!tweet.quotedStatus,
-            isRetweet: !!tweet.retweetedStatus,
-            hasVideo: tweet.mediaEntities?.some((media) => media.type === 'video'),
-            hasImage: tweet.mediaEntities?.some((media) => media.type === 'photo')
-        });
-    });
-    return { userinfo, tweets };
-};
-
-;// CONCATENATED MODULE: ./src/server/getters/twitter/nitter-html.ts
-
-
-
-
-const fetchNitterTweets = async (twitterUsername) => {
-    try {
-        const target = `https://nitter.net/${twitterUsername}?scroll=true`;
-        const scraper = `http://api.scrape.do/?token=${SOTWE_SCRAPER_TOKEN}&url=${target}`;
-        // To avoid wasting request credits, tokens are not used in development environments
-        const response = await axios.get(isNodeDev ? target : scraper, { timeout: 30000 });
-        return response.data;
+        return {
+            data: tweets,
+            cursors: {
+                top: topCursor,
+                bottom: bottomCursor
+            }
+        };
     }
     catch (error) {
-        throw isAxiosError(error) ? error.toJSON() : error;
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
     }
-};
-const parseUTCDate = (str) => {
-    const parts = str.split('·').map((part) => part.trim());
-    // date
-    const dateParts = parts[0].split(' ');
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const month = monthNames.indexOf(dateParts[0]) + 1;
-    const day = parseInt(dateParts[1].replace(',', ''));
-    const year = parseInt(dateParts[2]);
-    // time
-    const timeParts = parts[1].split(' ')[0].split(':');
-    let hours = parseInt(timeParts[0]);
-    const minutes = parseInt(timeParts[1]);
-    const ampm = parts[1].split(' ')[1];
-    // 12h > 24h
-    if (ampm === 'PM' && hours !== 12)
-        hours += 12;
-    if (ampm === 'AM' && hours === 12)
-        hours = 0;
-    return new Date(Date.UTC(year, month - 1, day, hours, minutes));
-};
-const nitter_html_getNitterTweets = async (twitterUsername) => {
-    const html = await fetchNitterTweets(twitterUsername);
-    const parser = new XMLParser({
-        ignoreAttributes: false,
-        attributeNamePrefix: '',
-        parseAttributeValue: true,
-        processEntities: true,
-        htmlEntities: true
-    });
-    return parser
-        .parse(html)
-        .div.div.filter((item) => item.class.includes('timeline-item'))
-        .map((item) => {
-        const bodyParts = item.div.div;
-        const itemHeader = bodyParts[0].div;
-        const itemContent = bodyParts.find((i) => i.class?.includes('tweet-content'));
-        const itemStates = bodyParts.find((i) => i.class?.includes('tweet-stats'))?.span;
-        const getItemState = (name) => {
-            const state = itemStates.find((i) => i.div.span.class.includes(name));
-            return state.div['#text'];
-        };
-        // attachments
-        const itemAttachments = [];
-        const attNode = bodyParts.find((i) => i.class?.includes('attachments'))?.div;
-        if (Array.isArray(attNode)) {
-            attNode.forEach((att) => {
-                itemAttachments.push(...(Array.isArray(att.div) ? att.div : [att.div]));
-            });
-        }
-        else {
-            if (Array.isArray(attNode?.div)) {
-                itemAttachments.push(...attNode.div);
-            }
-            else if (attNode) {
-                itemAttachments.push(attNode?.div ?? attNode);
-            }
-        }
-        return {
-            id: item.a.href.match(/\/status\/(\d+)#/)?.[1],
-            owner: twitterUsername,
-            text: itemContent?.['#text']?.replaceAll('\n', ' ')?.replace(/ +/g, ' ') || '',
-            date: parseUTCDate(itemHeader.div.span.a.title).getTime(),
-            commentCount: getItemState('icon-comment') || 0,
-            favoriteCount: getItemState('icon-heart') || 0,
-            retweetCount: getItemState('icon-quote') || 0,
-            mediaCount: itemAttachments.length,
-            hasImage: itemAttachments.find((i) => i.class?.includes('image')) ? true : false,
-            hasVideo: itemAttachments.find((i) => i.class?.includes('video')) ? true : false,
-            isQuote: false,
-            isRetweet: false,
-            isReply: false
-        };
-    });
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/index.ts
@@ -760,39 +799,11 @@ const nitter_html_getNitterTweets = async (twitterUsername) => {
  */
 
 
-
-
-
-const twitter_logger = createLogger('BFF:Twitter');
-const getTwitterAggregate = async () => {
-    return sotwe_api_getSotweTwitterAggregate(app_config_IDENTITIES.TWITTER_USER_NAME);
+const getTwitterProfile = () => {
+    return getWebTwitterProfile(app_config_IDENTITIES.TWITTER_USER_NAME);
 };
-// MARK: Nitter is over https://nitter.cz/
-// https://github.com/zedeus/nitter/issues/1171
-const getTwitterAggregateLegacy = async () => {
-    const [sotwe, nitter] = await Promise.allSettled([
-        getSotweTwitterAggregate(IDENTITIES.TWITTER_USER_NAME),
-        getNitterTweets(IDENTITIES.TWITTER_USER_NAME)
-    ]);
-    if (sotwe.status === 'rejected') {
-        throw sotwe.reason;
-    }
-    if (nitter.status === 'rejected') {
-        twitter_logger.failure('Get Nitter tweets failed:', nitter.reason);
-        return sotwe.value;
-    }
-    const sotweAggregate = sotwe.value;
-    const nitterTweets = nitter.value;
-    const resolvedTweets = sotweAggregate.tweets.map((tweet) => {
-        const found = nitterTweets.find((t) => t.id === tweet.id);
-        return {
-            ...tweet,
-            text: found?.text ?? tweet.text,
-            commentCount: found?.commentCount ?? tweet.commentCount ?? UNDEFINED,
-            favoriteCount: found?.favoriteCount ?? tweet.favoriteCount ?? UNDEFINED
-        };
-    });
-    return { ...sotweAggregate, tweets: resolvedTweets };
+const getTwitterTweets = (params) => {
+    return getWebTwitterUserTweets(app_config_IDENTITIES.TWITTER_USER_ID, params);
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/github.ts
@@ -923,7 +934,7 @@ const getInstagramMedias = async (options) => {
         return response.data;
     }
     catch (error) {
-        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.response?.data?.error ?? error.toJSON() : error;
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error;
     }
 };
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media/children
@@ -936,7 +947,7 @@ const getInstagramMediaChildren = (mediaId) => {
     return services_axios.get(url, { timeout: 8000, params })
         .then((response) => response.data.data)
         .catch((error) => {
-        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? error.response?.data?.error ?? error.toJSON() : error);
+        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error);
     });
 };
 
@@ -1423,6 +1434,25 @@ function isObject(value) {
 
 /* harmony default export */ const lodash_es_isObject = (isObject);
 
+;// CONCATENATED MODULE: ./src/utils/logger.ts
+/**
+ * @file App logger
+ * @module utils/logger
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const createLogger = (scope) => ({
+    // levels
+    log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),
+    info: (...messages) => console.info('🔵', `[${scope}]`, ...messages),
+    warn: (...messages) => console.warn('🟠', `[${scope}]`, ...messages),
+    error: (...messages) => console.error('🔴', `[${scope}]`, ...messages),
+    debug: (...messages) => console.debug('🟤', `[${scope}]`, ...messages),
+    // aliases
+    success: (...messages) => console.log('🟢', `[${scope}]`, ...messages),
+    failure: (...messages) => console.warn('🔴', `[${scope}]`, ...messages)
+});
+/* harmony default export */ const logger = (createLogger('APP'));
+
 ;// CONCATENATED MODULE: ./src/server/helpers/responser.ts
 /**
  * @file BFF Server responser
@@ -1878,15 +1908,32 @@ createExpressApp().then(async ({ app, server, cache }) => {
             errorer(response, { message: error });
         }
     });
-    // Twitter aggregate
-    const getTwitterAggregateCache = cacher.interval(cache, {
-        key: TunnelModule.TwitterAggregate,
-        ttl: hours(12),
-        interval: hours(1.6),
-        retry: minutes(10),
-        getter: getTwitterAggregate
+    // Twitter profile
+    const getTwitterProfileCache = cacher.interval(cache, {
+        key: TunnelModule.TwitterProfile,
+        ttl: days(7),
+        interval: hours(12),
+        retry: hours(1),
+        getter: getTwitterProfile
     });
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterAggregate}`, responser(() => getTwitterAggregateCache()));
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterProfile}`, responser(() => getTwitterProfileCache()));
+    // Twitter latest tweets
+    const getTwitterLatestTweetsCache = cacher.interval(cache, {
+        key: 'twitter_tweets_page_latest',
+        ttl: hours(12),
+        interval: minutes(20),
+        retry: minutes(5),
+        getter: getTwitterTweets
+    });
+    // Twitter tweets route
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, (request, response, next) => {
+        responser(() => {
+            // loadmore or latest cache
+            return request.query.cursor || request.query.count
+                ? getTwitterTweets(request.query)
+                : getTwitterLatestTweetsCache();
+        })(request, response, next);
+    });
     // Bing wallpapers
     const getWallpaperCache = cacher.interval(cache, {
         key: TunnelModule.BingWallpaper,
@@ -1914,7 +1961,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
         getter: getSongList
     });
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => get163MusicCache()));
-    // Instagram medias cache
+    // Instagram first page medias cache
     const getInsFirstPageMediasCache = cacher.interval(cache, {
         key: 'instagram_medias_page_first',
         ttl: hours(12),
@@ -2053,11 +2100,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
         }
     });
     // vue renderer
-    await (environment_isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
+    await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
     // run
     server.listen(getBFFServerPort(), () => {
         const address = server.address();
-        const port = typeof address === 'string' ? address : address?.port ?? getBFFServerPort();
+        const port = typeof address === 'string' ? address : (address?.port ?? getBFFServerPort());
         bff_logger.success(`${META.title} app is running!`, `| env: ${NODE_ENV}`, `| port: ${port}`, `| ${new Date().toLocaleString()}`);
     });
 });
