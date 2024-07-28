@@ -179,7 +179,9 @@
                     <div class="background"></div>
                     <uimage class="image" cdn src="/images/qrcodes/whatsapp.webp" />
                     <span class="text">
-                      💬 &nbsp; Let's chat on <ulink href="https://www.whatsapp.com/">WhatsApp</ulink>
+                      <i class="iconfont icon-whatsapp" />
+                      Let's chat on
+                      <ulink href="https://www.whatsapp.com/">WhatsApp</ulink>
                     </span>
                   </div>
                 </popup>
@@ -195,7 +197,7 @@
                     <span class="text">
                       <i18n>
                         <template #en>Friend me on WeChat | Channel</template>
-                        <template #zh>微信扫码加好友 ｜ 关注视频号</template>
+                        <template #zh>扫码加微 ｜ 关注视频号</template>
                       </i18n>
                     </span>
                   </div>

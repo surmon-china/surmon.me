@@ -265,7 +265,7 @@
 
       .item {
         width: 100%;
-        padding: $gap-sm;
+        padding: $gap;
         border-radius: $radius-lg;
         overflow: hidden;
         background-color: $module-bg-opaque;
