@@ -370,7 +370,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.37.2";
+const APP_VERSION = "4.37.3";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -16212,7 +16212,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-d89edfc3><div class="container" data-v-d89edfc3><div class="tools" data-v-d89edfc3>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-0cf949ab><div class="container" data-v-0cf949ab><div class="tools" data-v-0cf949ab>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "rss",
         href: unref(VALUABLE_LINKS).RSS,
@@ -16220,7 +16220,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-rss" data-v-d89edfc3${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-rss" data-v-0cf949ab${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-rss" })
@@ -16229,7 +16229,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="feedback"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).FEEDBACK))} data-v-d89edfc3><i class="iconfont icon-mail-plane" data-v-d89edfc3></i></button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_TOP))} data-v-d89edfc3><i class="iconfont icon-totop" data-v-d89edfc3></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_BOTTOM))} data-v-d89edfc3><i class="iconfont icon-tobottom" data-v-d89edfc3></i></button></div></div></div>`);
+      _push(`<button class="feedback"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).FEEDBACK))} data-v-0cf949ab><i class="iconfont icon-mail-plane" data-v-0cf949ab></i></button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_TOP))} data-v-0cf949ab><i class="iconfont icon-totop" data-v-0cf949ab></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_BOTTOM))} data-v-0cf949ab><i class="iconfont icon-tobottom" data-v-0cf949ab></i></button></div></div></div>`);
     };
   }
 });
@@ -16239,7 +16239,7 @@ _sfc_main$k.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/toolbox.vue");
   return _sfc_setup$k ? _sfc_setup$k(props, ctx) : void 0;
 };
-const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-d89edfc3"]]);
+const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-0cf949ab"]]);
 const _sfc_main$j = /* @__PURE__ */ defineComponent({
   __name: "feedback",
   __ssrInlineRender: true,
