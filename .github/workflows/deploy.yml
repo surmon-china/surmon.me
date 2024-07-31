@@ -42,7 +42,7 @@ jobs:
           publish_dir: ./dist
 
       - name: Exec deploy script with SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           command_timeout: 4m
           host: ${{ secrets.DEPLOY_HOST }}
