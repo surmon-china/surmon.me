@@ -184,6 +184,25 @@
         .to-page-bottom {
           height: $size * 0.618;
           line-height: $size * 0.618;
+          &:hover {
+            .iconfont {
+              transform: translateY(0);
+            }
+          }
+
+          .iconfont {
+            display: inline-block;
+            transform: translateY(-6px);
+            transition: transform $motion-duration-mid;
+          }
+        }
+
+        .to-page-top:hover {
+          & + .to-page-bottom {
+            .iconfont {
+              transform: translateY(0);
+            }
+          }
         }
       }
     }
