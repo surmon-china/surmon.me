@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import isObject from 'lodash-es/isObject'
+import _isObject from 'lodash-es/isObject'
 import { isAxiosError } from 'axios'
 import { RequestHandler, Response } from 'express'
 import { INVALID_ERROR } from '@/constants/http-code'
@@ -16,7 +16,7 @@ export const getErrorMessage = (_error: unknown) => {
   const error = isAxiosError(_error) ? _error.toJSON() : _error
   return typeof error === 'string'
     ? error
-    : error instanceof Error || isObject(error)
+    : error instanceof Error || _isObject(error)
       ? (error as any).message || (error as any)?.name
       : JSON.stringify(error)
 }

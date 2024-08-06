@@ -5,7 +5,7 @@
  */
 
 import serialize from 'serialize-javascript'
-import isObject from 'lodash-es/isObject'
+import _isObject from 'lodash-es/isObject'
 import type { Request } from 'express'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from 'vue/server-renderer'
@@ -153,7 +153,7 @@ export interface RenderResult {
 export const renderError = async (request: Request, error: unknown): Promise<RenderResult> => {
   const renderError: RenderErrorValue = {
     code: (error as any).code ?? INVALID_ERROR,
-    message: error instanceof Error ? error.message : isObject(error) ? error['message'] : JSON.stringify(error)
+    message: error instanceof Error ? error.message : _isObject(error) ? error['message'] : JSON.stringify(error)
   }
   const ssrContext = createSSRContext(request, renderError)
   const { app, head, theme } = createApp(ssrContext)
