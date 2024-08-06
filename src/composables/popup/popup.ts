@@ -26,7 +26,6 @@ export const PopupUiProps = {
 export const omitUiProps = <P extends PopupUiPropsType>(
   p: P
 ): Pick<P, Exclude<keyof P, keyof PopupUiPropsType>> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { border, maskClose, scrollClose, ...rest } = p
   return rest
 }
@@ -64,7 +63,6 @@ export default defineComponent({
       watch(
         () => props.visible,
         (visible) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { clone: _, visible: __, ...popupOptions } = props
           visible ? popup.visible(popupOptions) : popup.hidden()
         }

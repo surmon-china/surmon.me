@@ -224,7 +224,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   return renderer
 }
 
-export interface MarkdownRenderOption extends Partial<RendererCreatorOptions> {}
+export type MarkdownRenderOption = Partial<RendererCreatorOptions>
 export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption) => {
   if (!markdown || typeof markdown !== 'string') {
     return ''

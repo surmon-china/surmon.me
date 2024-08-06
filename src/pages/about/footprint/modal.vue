@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import type { Map } from 'mapbox-gl'
+  import type { Map, Popup } from 'mapbox-gl'
   import { shallowRef } from 'vue'
   import { GoogleMyMapFolder, FeatureCollectionJSON, GoogleMyMapPlacemark, newMapboxPopup } from './helper'
   import Mapbox from './mapbox.vue'
@@ -18,7 +18,7 @@
     map.value = payload.map
   }
 
-  let prevPopup: mapboxgl.Popup | null = null
+  let prevPopup: Popup | null = null
   const handlePlacemarkClick = (placemark: GoogleMyMapPlacemark) => {
     if (map.value) {
       prevPopup?.remove()

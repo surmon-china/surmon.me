@@ -24,8 +24,8 @@ export default (text: string, tagMap: TagMap) => {
 
       const slug = foundTag.slug
       const path = getTagFlowRoute(slug)
-      const command = `window.$app.config.globalProperties.$router.push({ path: \'${path}\' });return false`
-      return `<a href=\"${path}\" title=\"${foundTag.description}\" onclick=\"${command}\">${tagText}</a>`
+      const command = `window.$app.config.globalProperties.$router.push({ path: '${path}' });return false`
+      return `<a href="${path}" title="${foundTag.description}" onclick="${command}">${tagText}</a>`
     })
   }
 }

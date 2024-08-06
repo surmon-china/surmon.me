@@ -194,7 +194,6 @@ export const renderApp = async (request: Request, cache: CacheClient): Promise<R
     const rendered = await renderHTML(app, ssrContext)
     const cacheTTL = app.router.currentRoute.value.meta?.ssrCacheTTL
     if (cacheTTL !== false && typeof cacheTTL === 'number' && cacheTTL > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { contextScripts, ...rest } = rendered
       if (cacheTTL === Infinity) {
         cache.set(cacheKey, rest)

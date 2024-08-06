@@ -59,7 +59,6 @@
     })
   }
 
-  // eslint-disable-next-line vue/no-setup-props-destructure
   const blossomed = ref(props.defaultBlossomed)
   const handleBlossom = () => {
     blossomed.value = true

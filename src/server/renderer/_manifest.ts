@@ -2,7 +2,6 @@ import type { Manifest } from 'vite'
 
 // manifest: https://vitejs.dev/guide/backend-integration.html
 // render manifeat json to HTML
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const renderAssetsByManifest = (manifest: Manifest, prefix: string) => {
   const item = Object.values(manifest)
   const entry = item.find((item) => item.isEntry)
