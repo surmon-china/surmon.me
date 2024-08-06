@@ -25,7 +25,7 @@ export const useNodepressStatisticStore = defineStore('nodepressStatistic', () =
   return createFetchStore<NodePressStatistic | null>({
     data: null,
     fetcher: async () => {
-      const response = await nodepress.get<NodePressStatistic>('/expansion/statistic')
+      const response = await nodepress.get<NodePressStatistic>('/extension/statistic')
       return response.result
     }
   })
