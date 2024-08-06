@@ -1322,7 +1322,6 @@ const enableDevRenderer = async (app, cache) => {
 ;// CONCATENATED MODULE: ./src/server/renderer/_manifest.ts
 // manifest: https://vitejs.dev/guide/backend-integration.html
 // render manifeat json to HTML
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const renderAssetsByManifest = (manifest, prefix) => {
     const item = Object.values(manifest);
     const entry = item.find((item) => item.isEntry);

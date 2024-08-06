@@ -3,11 +3,11 @@
     "file": "basic-o3JHQHtc.css",
     "src": "_basic-!~{002}~.js"
   },
-  "_basic-BwRBq6Sm.js": {
-    "file": "basic-BwRBq6Sm.js",
+  "_basic-CwPvp5Nb.js": {
+    "file": "basic-CwPvp5Nb.js",
     "name": "basic",
     "imports": [
-      "_vendor-CkdqQ_6l.js"
+      "_vendor-D3ae4xOF.js"
     ],
     "css": [
       "basic-o3JHQHtc.css"
@@ -17,41 +17,41 @@
     "file": "mapbox-gl-C1Im9pGR.css",
     "src": "_mapbox-gl-!~{004}~.js"
   },
-  "_mapbox-gl-Ci68RgC5.js": {
-    "file": "mapbox-gl-Ci68RgC5.js",
+  "_mapbox-gl-DvH4z13x.js": {
+    "file": "mapbox-gl-DvH4z13x.js",
     "name": "mapbox-gl",
     "isDynamicEntry": true,
     "imports": [
-      "_basic-BwRBq6Sm.js"
+      "_basic-CwPvp5Nb.js"
     ],
     "css": [
       "mapbox-gl-C1Im9pGR.css"
     ]
   },
-  "_vendor-CkdqQ_6l.js": {
-    "file": "vendor-CkdqQ_6l.js",
+  "_vendor-D3ae4xOF.js": {
+    "file": "vendor-D3ae4xOF.js",
     "name": "vendor",
     "isDynamicEntry": true,
     "imports": [
-      "_basic-BwRBq6Sm.js"
+      "_basic-CwPvp5Nb.js"
     ]
   },
   "index.html": {
-    "file": "index-DUFukQ81.js",
+    "file": "index-Bf631-y3.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_basic-BwRBq6Sm.js",
-      "_vendor-CkdqQ_6l.js",
-      "_mapbox-gl-Ci68RgC5.js"
+      "_basic-CwPvp5Nb.js",
+      "_vendor-D3ae4xOF.js",
+      "_mapbox-gl-DvH4z13x.js"
     ],
     "dynamicImports": [
-      "_vendor-CkdqQ_6l.js",
-      "_mapbox-gl-Ci68RgC5.js"
+      "_vendor-D3ae4xOF.js",
+      "_mapbox-gl-DvH4z13x.js"
     ],
     "css": [
-      "index-Dlto1LgI.css"
+      "index-CuKvYMX1.css"
     ]
   }
 }

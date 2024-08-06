@@ -1,5 +1,5 @@
 import serialize from "serialize-javascript";
-import isObject from "lodash-es/isObject.js";
+import _isObject from "lodash-es/isObject.js";
 import { useRoute, useRouter, createRouter, RouterLink, createMemoryHistory } from "vue-router";
 import { ssrRenderAttrs, ssrRenderSlot, ssrRenderClass, ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrRenderStyle, ssrRenderList, ssrIncludeBooleanAttr, ssrGetDirectiveProps, ssrRenderVNode, ssrLooseEqual, ssrRenderSuspense, renderToString } from "vue/server-renderer";
 import { renderSSRHead } from "@unhead/ssr";
@@ -370,7 +370,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.37.4";
+const APP_VERSION = "4.38.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1233,7 +1233,7 @@ const useNodepressStatisticStore = defineStore("nodepressStatistic", () => {
   return createFetchStore({
     data: null,
     fetcher: async () => {
-      const response = await nodepress$1.get("/expansion/statistic");
+      const response = await nodepress$1.get("/extension/statistic");
       return response.result;
     }
   });
@@ -7730,15 +7730,15 @@ const _sfc_main$1e = /* @__PURE__ */ defineComponent({
         }],
         name: "comment",
         id: _ctx.id
-      }, _attrs))} data-v-5cd00edc>`);
+      }, _attrs))} data-v-6996d6a9>`);
       if (unref(user).type === unref(UserType).Null) {
-        _push(`<div class="profile" style="${ssrRenderStyle(blossomed.value ? null : { display: "none" })}" data-v-5cd00edc><div class="name" data-v-5cd00edc><input${ssrRenderAttr("value", _ctx.profile.name)} required type="text" name="name" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_NAME) + " *")} data-v-5cd00edc></div><div class="email" data-v-5cd00edc><input${ssrRenderAttr("value", _ctx.profile.email)} required type="email" name="email" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_EMAIL) + " *")} data-v-5cd00edc></div><div class="site" data-v-5cd00edc><input${ssrRenderAttr("value", _ctx.profile.site)} type="url" name="url" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_SITE))} data-v-5cd00edc></div></div>`);
+        _push(`<div class="profile" style="${ssrRenderStyle(blossomed.value ? null : { display: "none" })}" data-v-6996d6a9><div class="name" data-v-6996d6a9><input${ssrRenderAttr("value", _ctx.profile.name)} required type="text" name="name" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_NAME) + " *")} data-v-6996d6a9></div><div class="email" data-v-6996d6a9><input${ssrRenderAttr("value", _ctx.profile.email)} required type="email" name="email" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_EMAIL) + " *")} data-v-6996d6a9></div><div class="site" data-v-6996d6a9><input${ssrRenderAttr("value", _ctx.profile.site)} type="url" name="url" autocomplete="on"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_SITE))} data-v-6996d6a9></div></div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="postbox" data-v-5cd00edc>`);
+      _push(`<div class="postbox" data-v-6996d6a9>`);
       if (!_ctx.hiddenAvatar) {
-        _push(`<div class="avatar" data-v-5cd00edc>`);
+        _push(`<div class="avatar" data-v-6996d6a9>`);
         _push(ssrRenderComponent(_component_uimage, {
           alt: _ctx.profile.name,
           src: avatar.value
@@ -7748,11 +7748,11 @@ const _sfc_main$1e = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       if (blossomed.value) {
-        _push(`<div class="editor" data-v-5cd00edc>`);
+        _push(`<div class="editor" data-v-6996d6a9>`);
         ssrRenderSlot(_ctx.$slots, "pen", {}, null, _push, _parent);
         _push(`</div>`);
       } else {
-        _push(`<div class="placeholder" data-v-5cd00edc>`);
+        _push(`<div class="placeholder" data-v-6996d6a9>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "在下有一拙见，不知...",
           en: `${_ctx.total ? "Join" : "Start"} the discussion...`
@@ -7769,7 +7769,7 @@ _sfc_main$1e.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/publisher/publisher.vue");
   return _sfc_setup$1e ? _sfc_setup$1e(props, ctx) : void 0;
 };
-const CommentPublisher = /* @__PURE__ */ _export_sfc(_sfc_main$1e, [["__scopeId", "data-v-5cd00edc"]]);
+const CommentPublisher = /* @__PURE__ */ _export_sfc(_sfc_main$1e, [["__scopeId", "data-v-6996d6a9"]]);
 const _sfc_main$1d = /* @__PURE__ */ defineComponent({
   __name: "pen",
   __ssrInlineRender: true,
@@ -11238,27 +11238,27 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-fae8db97>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-1dd5c3ea>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         "gm-geo-json": _ctx.gmGeoJson,
         onReady: handleMapboxReady
       }, null, _parent));
-      _push(`<div class="panel" data-v-fae8db97><div class="info" data-v-fae8db97><h3 class="title" data-v-fae8db97>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-fae8db97>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-fae8db97><!--[-->`);
+      _push(`<div class="panel" data-v-1dd5c3ea><div class="info" data-v-1dd5c3ea><h3 class="title" data-v-1dd5c3ea>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-1dd5c3ea>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-1dd5c3ea><!--[-->`);
       ssrRenderList(_ctx.gmFolders, (folder, index) => {
-        _push(`<li class="folder" data-v-fae8db97><div class="title" data-v-fae8db97><i class="iconfont icon-route" data-v-fae8db97></i><span class="text" data-v-fae8db97>${ssrInterpolate(folder.name)}</span><span class="count" data-v-fae8db97>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
+        _push(`<li class="folder" data-v-1dd5c3ea><div class="title" data-v-1dd5c3ea><i class="iconfont icon-route" data-v-1dd5c3ea></i><span class="text" data-v-1dd5c3ea>${ssrInterpolate(folder.name)}</span><span class="count" data-v-1dd5c3ea>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
         if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-fae8db97>null</div>`);
+          _push(`<div class="empty" data-v-1dd5c3ea>null</div>`);
         } else {
-          _push(`<ul class="placemarks" data-v-fae8db97><!--[-->`);
+          _push(`<ul class="placemarks" data-v-1dd5c3ea><!--[-->`);
           ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark" data-v-fae8db97>`);
+            _push(`<li class="placemark" data-v-1dd5c3ea>`);
             _push(ssrRenderComponent(_component_uimage, {
               class: "icon",
               cdn: true,
               src: `/images/third-party/mapbox-${placemark.image ? "attraction" : "veterinary"}.svg`
             }, null, _parent));
-            _push(`<span class="text" data-v-fae8db97>${ssrInterpolate(placemark.name)}</span></li>`);
+            _push(`<span class="text" data-v-1dd5c3ea>${ssrInterpolate(placemark.name)}</span></li>`);
           });
           _push(`<!--]--></ul>`);
         }
@@ -11274,7 +11274,7 @@ _sfc_main$U.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/footprint/modal.vue");
   return _sfc_setup$U ? _sfc_setup$U(props, ctx) : void 0;
 };
-const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-fae8db97"]]);
+const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-1dd5c3ea"]]);
 const _sfc_main$T = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -19152,7 +19152,7 @@ const renderHTML = async (mainApp, ssrContext) => {
 const renderError = async (request, error) => {
   const renderError2 = {
     code: error.code ?? INVALID_ERROR,
-    message: error instanceof Error ? error.message : isObject(error) ? error["message"] : JSON.stringify(error)
+    message: error instanceof Error ? error.message : _isObject(error) ? error["message"] : JSON.stringify(error)
   };
   const ssrContext = createSSRContext(request, renderError2);
   const { app, head, theme } = createApp(ssrContext);
