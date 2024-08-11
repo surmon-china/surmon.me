@@ -111,8 +111,8 @@
 </template>
 
 <style lang="scss" scoped>
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .aside {
     $border-color: darken($mobile-aside-bg, 3%);

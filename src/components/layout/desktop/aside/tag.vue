@@ -43,8 +43,8 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .tags {
     margin-bottom: 0;

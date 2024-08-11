@@ -34,8 +34,8 @@
 </template>
 
 <style lang="scss">
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .global-markdown-plain {
     p {

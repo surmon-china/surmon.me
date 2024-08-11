@@ -6,6 +6,7 @@
  */
 
 import path from 'path'
+import * as sass from 'sass'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
 import UnheadVite from '@unhead/addons/vite'
@@ -44,28 +45,15 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          charset: false,
+          // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptions
+          // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptionsextensionadditionaldata
           additionalData: `$source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';`,
-          // https://sass-lang.com/documentation/breaking-changes/mixed-decls/
-          // https://sass-lang.com/documentation/js-api/interfaces/deprecations/#mixed_decls
-          // https://github.com/sass/dart-sass/issues/2276
-          // https://github.com/sass/sass/issues/3893
-          // https://github.com/sass/dart-sass/issues/2280
-          // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/css.ts#L2148
-          // https://github.com/vitejs/vite/issues/14689
-          // https://github.com/vitejs/vite/pull/17728
-          // https://github.com/vitejs/vite/issues/7116
-          // https://github.com/vuepress-theme-hope/vuepress-theme-hope/issues/4264
-          silenceDeprecations: ['mixed-decls'],
-          // MARK: Remove the logger when vite support the `silenceDeprecations` option.
-          // https://sass-lang.com/documentation/js-api/interfaces/logger-1/
-          logger: {
-            warn(message, options) {
-              if (options.deprecation && message.includes('mixed-decls')) {
-                return
-              }
-            }
-          }
+          // https://github.com/vitejs/vite/pull/17728#issuecomment-2247114522
+          api: 'modern',
+          // https://sass-lang.com/documentation/js-api/interfaces/stringoptions/
+          charset: false,
+          importers: [new sass.NodePackageImporter()],
+          silenceDeprecations: ['mixed-decls']
         }
       }
     },

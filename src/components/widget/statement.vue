@@ -23,8 +23,8 @@
 </template>
 
 <style lang="scss" scoped>
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .statement {
     background-color: $module-bg-opaque !important;

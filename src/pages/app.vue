@@ -84,8 +84,8 @@
 </template>
 
 <style lang="scss" scoped>
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .app-page {
     display: flex;

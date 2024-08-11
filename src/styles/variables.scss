@@ -1,7 +1,7 @@
 @use 'sass:math';
 
 // overwrite in vite.config.ts
-// Used to specify absolute URL addresses in CSS, such as in the following svg scenario
+// Used to specify absolute URL addresses in CSS (e.g. svg file)
 $source-url: '' !default;
 @function surl($path) {
   @return url('#{$source-url}#{$path}');

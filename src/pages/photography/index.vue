@@ -114,8 +114,8 @@
 </template>
 
 <style lang="scss" scoped>
-  @import 'src/styles/variables.scss';
-  @import 'src/styles/mixins.scss';
+  @import '/src/styles/variables.scss';
+  @import '/src/styles/mixins.scss';
 
   .photography-page {
     min-height: $full-page-active-content-height;
