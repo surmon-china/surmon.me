@@ -222,12 +222,12 @@ var TunnelModule;
     TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
     TunnelModule["InstagramCalendar"] = "instagram_calendar";
     TunnelModule["BingWallpaper"] = "bing_wallpaper";
-    TunnelModule["GitHubSponsors"] = "github_sponsors";
-    TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["NetEaseMusic"] = "netease_music";
     TunnelModule["DoubanMovies"] = "douban_movies";
-    TunnelModule["OpenSourceGitHubStatistic"] = "open_source_github_statistic";
-    TunnelModule["OpenSourceNPMStatistic"] = "open_source_npm_statistic";
+    TunnelModule["GitHubSponsors"] = "github_sponsors";
+    TunnelModule["GitHubContributions"] = "github_contributions";
+    TunnelModule["StatisticGitHubJson"] = "statistic_github_json";
+    TunnelModule["StatisticNpmJson"] = "statistic_npm_json";
 })(TunnelModule || (TunnelModule = {}));
 
 ;// CONCATENATED MODULE: external "rss"
@@ -533,7 +533,6 @@ const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => __W
  */
 
 const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)).argv;
-const GITHUB_BEARER_TOKEN = argv.github_token;
 const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
 const TWITTER_COOKIE = argv.twitter_cookie;
@@ -806,106 +805,6 @@ const getTwitterTweets = (params) => {
     return getWebTwitterUserTweets(app_config_IDENTITIES.TWITTER_USER_ID, params);
 };
 
-;// CONCATENATED MODULE: ./src/server/getters/github.ts
-/**
- * @file BFF GitHub getter
- * @module server.getter.github
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-
-const graphqlGitHub = (query) => {
-    return services_axios.request({
-        // https://github.com/settings/tokens
-        headers: { Authorization: `bearer ${GITHUB_BEARER_TOKEN}` },
-        url: `https://api.github.com/graphql`,
-        method: 'POST',
-        data: JSON.stringify({
-            query: `query {
-        user(login: "${app_config_IDENTITIES.GITHUB_USER_NAME}") {
-          ${query}
-        }
-      }`
-        })
-    })
-        .then((response) => {
-        return response.data.errors
-            ? Promise.reject(response.data.errors.map((error) => error.message).join('; '))
-            : Promise.resolve(response.data.data.user);
-    });
-};
-const getGitHubSponsors = () => {
-    const SPONSOR_NODE_QUERY = `
-    ... on User {
-      login
-      name
-      url
-      avatarUrl
-      websiteUrl
-    }
-    ... on Organization {
-      login
-      name
-      url
-      avatarUrl
-      websiteUrl
-    }
-  `;
-    // https://github.com/orgs/community/discussions/37234#discussioncomment-4047906
-    // https://github.com/dohooo/get-past-sponsors
-    // https://github.com/community/community/discussions/3818#discussioncomment-2155340
-    // https://docs.github.com/en/graphql/reference/objects#sponsorsactivity
-    // https://docs.github.com/en/graphql/reference/enums#sponsorsactivityaction
-    return graphqlGitHub(`
-    sponsorsActivities(first:100, period: ALL, orderBy: { direction: DESC, field: TIMESTAMP }, actions: [NEW_SPONSORSHIP, CANCELLED_SPONSORSHIP]) {
-      nodes {
-        action,
-        sponsorsTier {
-          isOneTime
-        },
-        sponsor {
-          ${SPONSOR_NODE_QUERY}
-        }
-      }
-    },
-    sponsors(first: 100) {
-      totalCount
-      edges {
-        node {
-          ${SPONSOR_NODE_QUERY}
-        }
-      }
-    }
-  `);
-};
-const isISODateString = (dateString) => {
-    if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(dateString))
-        return false;
-    return new Date(dateString).toISOString() === dateString;
-};
-const getGitHubContributions = async (from, to) => {
-    if (!isISODateString(from) || !isISODateString(to)) {
-        return Promise.reject('Invalid date string!');
-    }
-    const result = await graphqlGitHub(`
-    contributionsCollection(from: "${from}", to: "${to}") {
-      contributionCalendar {
-        totalContributions
-        weeks {
-          contributionDays {
-            weekday
-            date
-            contributionCount
-            color
-          }
-        }
-      }
-    }
-  `);
-    return result.contributionsCollection.contributionCalendar;
-};
-
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/media.ts
 
 
@@ -1086,21 +985,21 @@ const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
     return response.data.items;
 };
 
-;// CONCATENATED MODULE: ./src/server/getters/open-srouce.ts
+;// CONCATENATED MODULE: ./src/server/getters/github.ts
 /**
- * @file BFF open-srouce getter
- * @module server.getter.open-srouce
+ * @file BFF GitHub getter
+ * @module server.getter.github
  * @author Surmon <https://github.com/surmon-china>
  */
 
 
-const fetchStatisticJSON = async (fileName) => {
+const fetchGitHubStatisticJSON = async (fileName) => {
     const url = `https://raw.githubusercontent.com/${app_config_IDENTITIES.GITHUB_USER_NAME}/${app_config_IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
     const response = await services_axios.get(url, { timeout: 6000 });
     return response.data;
 };
 const getGitHubStatistic = () => {
-    return fetchStatisticJSON('github.json').then((data) => ({
+    return fetchGitHubStatisticJSON('github.json').then((data) => ({
         followerCount: data.userinfo.followers,
         followingCount: data.userinfo.following,
         gistCount: data.userinfo.public_gists,
@@ -1110,25 +1009,38 @@ const getGitHubStatistic = () => {
         totalCodeSize: data.statistics.size
     }));
 };
-const getNPMStatistic = () => {
-    return fetchStatisticJSON('npm.json').then((data) => {
-        const totalPackages = data ? Object.keys(data.downloads).length : 0;
-        const totalDownloads = data ? Object.values(data.downloads).reduce((p, c) => p + c, 0) : 0;
-        const averageScore = (() => {
-            const packages = data?.packages;
-            if (!packages?.length) {
-                return 0;
-            }
-            // https://itnext.io/increasing-an-npm-packages-search-score-fb557f859300
-            const totalScore = packages.reduce((p, c) => p + c.score.final, 0);
-            return (totalScore / packages.length).toFixed(3);
-        })();
-        return {
-            totalPackages,
-            totalDownloads,
-            averageScore
-        };
-    });
+const getGitHubSponsors = () => {
+    return fetchGitHubStatisticJSON('github.sponsors.json');
+};
+const getGitHubContributions = () => {
+    return fetchGitHubStatisticJSON('github.contributions.json');
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/npm.ts
+/**
+ * @file BFF NPM getter
+ * @module server.getter.npm
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+const getNPMStatistic = async () => {
+    const data = await fetchGitHubStatisticJSON('npm.json');
+    const totalPackages = data ? Object.keys(data.downloads).length : 0;
+    const totalDownloads = data ? Object.values(data.downloads).reduce((p, c) => p + c, 0) : 0;
+    const averageScore = (() => {
+        const packages = data?.packages;
+        if (!packages?.length) {
+            return 0;
+        }
+        // https://itnext.io/increasing-an-npm-packages-search-score-fb557f859300
+        const totalScore = packages.reduce((p, c) => p + c.score.final, 0);
+        return (totalScore / packages.length).toFixed(3);
+    })();
+    return {
+        totalPackages,
+        totalDownloads,
+        averageScore
+    };
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/douban.ts
@@ -1942,15 +1854,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
         getter: getAllWallpapers
     });
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.BingWallpaper}`, responser(() => getWallpaperCache()));
-    // GitHub sponsors
-    const getSponsorsCache = cacher.interval(cache, {
-        key: TunnelModule.GitHubSponsors,
-        ttl: days(3),
-        interval: hours(18),
-        retry: minutes(10),
-        getter: getGitHubSponsors
-    });
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responser(() => getSponsorsCache()));
     // 163 music BGM list
     const get163MusicCache = cacher.interval(cache, {
         key: TunnelModule.NetEaseMusic,
@@ -2033,32 +1936,34 @@ createExpressApp().then(async ({ app, server, cache }) => {
             });
         })(request, response, next);
     });
+    // GitHub sponsors
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubSponsors}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.GitHubSponsors,
+            ttl: hours(4),
+            getter: getGitHubSponsors
+        });
+    }));
     // GitHub contributions
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.GitHubContributions}`, responser(() => {
         return cacher.passive(cache, {
             key: TunnelModule.GitHubContributions,
-            ttl: hours(8),
-            getter: () => {
-                const now = new Date();
-                const end = now.toISOString();
-                now.setFullYear(now.getFullYear() - 1);
-                const start = now.toISOString();
-                return getGitHubContributions(start, end);
-            }
+            ttl: hours(4),
+            getter: getGitHubContributions
         });
     }));
     // GitHub statistic
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceGitHubStatistic}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.StatisticGitHubJson}`, responser(() => {
         return cacher.passive(cache, {
-            key: TunnelModule.OpenSourceGitHubStatistic,
+            key: TunnelModule.StatisticGitHubJson,
             ttl: hours(8),
             getter: getGitHubStatistic
         });
     }));
     // NPM statistic
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.OpenSourceNPMStatistic}`, responser(() => {
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.StatisticNpmJson}`, responser(() => {
         return cacher.passive(cache, {
-            key: TunnelModule.OpenSourceNPMStatistic,
+            key: TunnelModule.StatisticNpmJson,
             ttl: hours(8),
             getter: getNPMStatistic
         });
