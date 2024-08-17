@@ -13,7 +13,7 @@ import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
 import { useIdentityStore } from './identity'
 import { useWallpaperStore } from './wallpaper'
-import { useSponsorStore } from './sponsor'
+import { useGitHubSponsorsStore } from './sponsors'
 import { useAdminInfoStore, useAppOptionStore } from './basic'
 import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticStore } from './statistic'
 import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
@@ -38,6 +38,7 @@ export const useStores = (pinia?: Pinia) => ({
   featuredArticleList: useFeaturedArticleListStore(pinia),
   latestArticleList: useLatestArticleListStore(pinia),
 
+  // BIZ
   articleList: useArticleListStore(pinia),
   articleDetail: useArticleDetailStore(pinia),
   announcement: useAnnouncementStore(pinia),
@@ -49,16 +50,21 @@ export const useStores = (pinia?: Pinia) => ({
   adminInfo: useAdminInfoStore(pinia),
   appOption: useAppOptionStore(pinia),
   wallpaper: useWallpaperStore(pinia),
-  sponsor: useSponsorStore(pinia),
 
+  // sponsor
+  githubSponsors: useGitHubSponsorsStore(pinia),
+
+  // statistic
   nodepressStatistic: useNodepressStatisticStore(pinia),
   githubStatistic: useGitHubStatisticStore(pinia),
   npmStatistic: useNpmStatisticStore(pinia),
 
+  // calendar
   articleCalendar: useArticleCalendarStore(pinia),
   instagramCalendar: useInstagramCalendarStore(pinia),
   githubCalendar: useGitHubCalendarStore(pinia),
 
+  // third
   doubanMovies: useDoubanMoviesStore(pinia),
   twitterProfile: useTwitterProfileStore(pinia),
   twitterLatestTweets: useTwitterLatestTweetsStore(pinia),

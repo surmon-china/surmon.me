@@ -18,7 +18,7 @@
   })
 
   onBeforeMount(() => {
-    sponsorState.githubSponsor.fetch()
+    sponsorState.githubSponsors.fetch()
   })
 
   onMounted(() => {

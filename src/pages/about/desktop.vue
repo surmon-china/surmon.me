@@ -19,7 +19,7 @@
   import { useAboutPageMeta, useAdminAvatar, i18ns, SPECIAL_LINKS } from './shared'
 
   const { gtag, gState, isZhLang, cdnDomain } = useEnhancer()
-  const { adminInfo, appOption, sponsor } = useStores()
+  const { adminInfo, appOption, githubSponsors } = useStores()
 
   const handleGTagEvent = (event: string) => {
     gtag?.event(event, {
@@ -43,7 +43,7 @@
   }
 
   const handleSponsor = () => {
-    sponsor.fetch()
+    githubSponsors.fetch()
     gState.toggleSwitcher('sponsor', true)
     handleGTagEvent('sponsor_modal')
   }

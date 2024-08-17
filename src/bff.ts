@@ -16,10 +16,10 @@ import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
 import { getTwitterProfile, getTwitterTweets } from './server/getters/twitter'
-import { getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getInstagramMedias, getInstagramMediaChildren, getInstagramCalendar } from './server/getters/instagram'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
-import { getGitHubStatistic, getNPMStatistic } from './server/getters/open-srouce'
+import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
+import { getNPMStatistic } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { getWebFont, WebFontContentType } from './server/getters/webfont'
@@ -120,20 +120,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(
     `${TUN}/${TunnelModule.BingWallpaper}`,
     responser(() => getWallpaperCache())
-  )
-
-  // GitHub sponsors
-  const getSponsorsCache = cacher.interval(cache, {
-    key: TunnelModule.GitHubSponsors,
-    ttl: days(3),
-    interval: hours(18),
-    retry: minutes(10),
-    getter: getGitHubSponsors
-  })
-
-  app.get(
-    `${TUN}/${TunnelModule.GitHubSponsors}`,
-    responser(() => getSponsorsCache())
   )
 
   // 163 music BGM list
@@ -240,30 +226,36 @@ createExpressApp().then(async ({ app, server, cache }) => {
     })(request, response, next)
   })
 
+  // GitHub sponsors
+  app.get(
+    `${TUN}/${TunnelModule.GitHubSponsors}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.GitHubSponsors,
+        ttl: hours(4),
+        getter: getGitHubSponsors
+      })
+    })
+  )
+
   // GitHub contributions
   app.get(
     `${TUN}/${TunnelModule.GitHubContributions}`,
     responser(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubContributions,
-        ttl: hours(8),
-        getter: () => {
-          const now = new Date()
-          const end = now.toISOString()
-          now.setFullYear(now.getFullYear() - 1)
-          const start = now.toISOString()
-          return getGitHubContributions(start, end)
-        }
+        ttl: hours(4),
+        getter: getGitHubContributions
       })
     })
   )
 
   // GitHub statistic
   app.get(
-    `${TUN}/${TunnelModule.OpenSourceGitHubStatistic}`,
+    `${TUN}/${TunnelModule.StatisticGitHubJson}`,
     responser(() => {
       return cacher.passive(cache, {
-        key: TunnelModule.OpenSourceGitHubStatistic,
+        key: TunnelModule.StatisticGitHubJson,
         ttl: hours(8),
         getter: getGitHubStatistic
       })
@@ -272,10 +264,10 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // NPM statistic
   app.get(
-    `${TUN}/${TunnelModule.OpenSourceNPMStatistic}`,
+    `${TUN}/${TunnelModule.StatisticNpmJson}`,
     responser(() => {
       return cacher.passive(cache, {
-        key: TunnelModule.OpenSourceNPMStatistic,
+        key: TunnelModule.StatisticNpmJson,
         ttl: hours(8),
         getter: getNPMStatistic
       })

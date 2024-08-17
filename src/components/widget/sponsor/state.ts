@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { GAEventCategories } from '/@/constants/gtag'
-import { useSponsorStore } from '/@/stores/sponsor'
+import { useGitHubSponsorsStore } from '/@/stores/sponsors'
 import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
 
 export enum ProviderId {
@@ -60,7 +60,7 @@ export const PROVIDERS = [
 export type SponsorState = ReturnType<typeof useSponsorState>
 export const useSponsorState = (initId?: ProviderId) => {
   const { gtag } = useEnhancer()
-  const githubSponsor = useSponsorStore()
+  const githubSponsors = useGitHubSponsorsStore()
   const activeId = ref(initId && PROVIDER_IDS.includes(initId) ? initId : PROVIDERS[0].id)
   const activeProvider = computed(() => PROVIDERS.find((t) => t.id === activeId.value)!)
 
@@ -77,6 +77,6 @@ export const useSponsorState = (initId?: ProviderId) => {
     activeId,
     activeProvider,
     setProviderId,
-    githubSponsor
+    githubSponsors
   }
 }

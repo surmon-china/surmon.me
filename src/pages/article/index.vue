@@ -30,7 +30,7 @@
   }>()
 
   const { i18n: _i18n, head, seoMeta, route, gtag, gState } = useEnhancer()
-  const { identity, sponsor, comment: commentStore, articleDetail: articleDetailStore } = useStores()
+  const { identity, githubSponsors, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
   const articleExtends = computed(() => article.value?.extends || [])
@@ -54,7 +54,7 @@
   }
 
   const handleSponsor = () => {
-    sponsor.fetch()
+    githubSponsors.fetch()
     gState.toggleSwitcher('sponsor', true)
     gtag?.event('article_sponsor', {
       event_category: GAEventCategories.Article

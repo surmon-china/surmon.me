@@ -17,12 +17,15 @@
   const { isZhLang } = useEnhancer()
   const activeProvider = computed(() => props.state.activeProvider.value)
   const allGitHubSponsors = computed(() => {
+    if (!props.state.githubSponsors.data) {
+      return []
+    }
     return [
-      ...props.state.githubSponsor.activeSponsors.map((sponsor) => ({
+      ...props.state.githubSponsors.data.currentSponsors.map((sponsor) => ({
         active: true,
         _: sponsor
       })),
-      ...props.state.githubSponsor.inactiveSponsors.map((sponsor) => ({
+      ...props.state.githubSponsors.data.pastSponsors.map((sponsor) => ({
         active: false,
         _: sponsor
       }))
@@ -70,13 +73,13 @@
             <i18n>
               <template #zh>
                 我在 GitHub Sponsors 累计已得到
-                <span class="active-total"> {{ state.githubSponsor.activeSponsors.length }} </span>
-                + {{ state.githubSponsor.inactiveSponsors.length }} 位赞助者的支持
+                <span class="active-total"> {{ state.githubSponsors.data?.currentSponsors.length }} </span>
+                + {{ state.githubSponsors.data?.pastSponsors.length }} 位赞助者的支持
               </template>
               <template #en>
                 I have accumulated
-                <span class="active-total">{{ state.githubSponsor.activeSponsors.length }}</span>
-                + {{ state.githubSponsor.inactiveSponsors.length }} backers on GitHub Sponsors
+                <span class="active-total">{{ state.githubSponsors.data?.currentSponsors.length }}</span>
+                + {{ state.githubSponsors.data?.pastSponsors.length }} backers on GitHub Sponsors
               </template>
             </i18n>
           </p>

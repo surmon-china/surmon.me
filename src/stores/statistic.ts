@@ -7,7 +7,8 @@
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
-import type { GitHubStatistic, NpmStatistic } from '/@/server/getters/open-srouce'
+import type { NpmStatistic } from '/@/server/getters/npm'
+import type { GitHubStatistic } from '/@/server/getters/github'
 import nodepress from '/@/services/nodepress'
 import tunnel from '/@/services/tunnel'
 
@@ -35,7 +36,7 @@ export const useGitHubStatisticStore = defineStore('githubStatistic', () => {
   return createFetchStore<GitHubStatistic | null>({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch(TunnelModule.OpenSourceGitHubStatistic)
+    fetcher: () => tunnel.dispatch(TunnelModule.StatisticGitHubJson)
   })
 })
 
@@ -43,6 +44,6 @@ export const useNpmStatisticStore = defineStore('npmStatistic', () => {
   return createFetchStore<NpmStatistic | null>({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch<NpmStatistic>(TunnelModule.OpenSourceNPMStatistic)
+    fetcher: () => tunnel.dispatch<NpmStatistic>(TunnelModule.StatisticNpmJson)
   })
 })

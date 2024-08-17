@@ -8,6 +8,7 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
+import type { GitHubContributionsResponse } from '/@/server/getters/github'
 import nodepress from '/@/services/nodepress'
 import tunnel from '/@/services/tunnel'
 
@@ -40,7 +41,7 @@ export const useGitHubCalendarStore = defineStore('githubContributionsCalendar',
   const fetchStore = createFetchStore({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch(TunnelModule.GitHubContributions)
+    fetcher: () => tunnel.dispatch<GitHubContributionsResponse>(TunnelModule.GitHubContributions)
   })
 
   const days = computed<Array<{ date: string; count: number; color: string }>>(() => {

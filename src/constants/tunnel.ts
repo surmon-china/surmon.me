@@ -16,10 +16,10 @@ export enum TunnelModule {
   InstagramMediaChildren = 'instagram_media_children',
   InstagramCalendar = 'instagram_calendar',
   BingWallpaper = 'bing_wallpaper',
-  GitHubSponsors = 'github_sponsors',
-  GitHubContributions = 'github_contributions',
   NetEaseMusic = 'netease_music',
   DoubanMovies = 'douban_movies',
-  OpenSourceGitHubStatistic = 'open_source_github_statistic',
-  OpenSourceNPMStatistic = 'open_source_npm_statistic'
+  GitHubSponsors = 'github_sponsors',
+  GitHubContributions = 'github_contributions',
+  StatisticGitHubJson = 'statistic_github_json',
+  StatisticNpmJson = 'statistic_npm_json'
 }
