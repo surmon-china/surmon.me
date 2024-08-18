@@ -79,6 +79,7 @@
         flex: 1;
         margin: 0 auto;
         width: $container-width;
+        min-height: 27rem;
         overflow: hidden;
       }
     }
