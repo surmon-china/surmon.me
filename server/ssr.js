@@ -370,7 +370,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.40.0";
+const APP_VERSION = "4.40.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -12964,7 +12964,7 @@ const _sfc_main$M = /* @__PURE__ */ defineComponent({
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
       const _component_container = resolveComponent("container");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "sponsor-page" }, _attrs))} data-v-92775aa0>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "sponsor-page" }, _attrs))} data-v-e9774674>`);
       _push(ssrRenderComponent(PageBanner, {
         image: "/images/page-sponsor/banner.webp",
         cdn: ""
@@ -13020,7 +13020,7 @@ const _sfc_main$M = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-content" data-v-92775aa0>`);
+      _push(`<div class="page-content" data-v-e9774674>`);
       _push(ssrRenderComponent(_component_container, { class: "tabs-wrapper" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -13053,7 +13053,7 @@ _sfc_main$M.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/sponsor.vue");
   return _sfc_setup$M ? _sfc_setup$M(props, ctx) : void 0;
 };
-const SponsorPage = /* @__PURE__ */ _export_sfc(_sfc_main$M, [["__scopeId", "data-v-92775aa0"]]);
+const SponsorPage = /* @__PURE__ */ _export_sfc(_sfc_main$M, [["__scopeId", "data-v-e9774674"]]);
 const _sfc_main$L = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
