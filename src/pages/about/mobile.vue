@@ -81,8 +81,8 @@
         <ulink class="item linkedin icon-only" :href="VALUABLE_LINKS.LINKEDIN">
           <i class="iconfont icon-linkedin" />
         </ulink>
-        <ulink class="item youtube icon-only" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
-          <i class="iconfont icon-youtube" />
+        <ulink class="item zhihu icon-only" :href="VALUABLE_LINKS.ZHIHU">
+          <i class="iconfont icon-zhihu" />
         </ulink>
         <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN_MOVIE">
           <i class="iconfont icon-douban" />
@@ -246,6 +246,9 @@
           }
           &.douban {
             background-color: $douban-primary;
+          }
+          &.zhihu {
+            background-color: $zhihu-primary;
           }
           &.youtube {
             background-color: $youtube-primary;

@@ -159,12 +159,14 @@
               <i class="iconfont icon-instagram" />
               <span class="text">Instagram</span>
             </ulink>
-            <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
-              <i class="iconfont icon-twitter-x" />
-              <span class="text">Twitter</span>
+            <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+              <i class="iconfont icon-zhihu-full" />
             </ulink>
           </span>
           <span class="mini">
+            <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+              <i class="iconfont icon-twitter-x" />
+            </ulink>
             <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
               <i class="iconfont icon-youtube" />
             </ulink>
@@ -441,10 +443,10 @@
 
               .iconfont {
                 font-size: $font-size-h4;
-                margin-right: $gap-sm;
               }
 
               .text {
+                margin-left: $gap-sm;
                 font-weight: bold;
               }
 
@@ -454,10 +456,10 @@
                   background-color: $github-primary-hover;
                 }
               }
-              &.twitter {
-                background-color: $twitter-x-primary;
+              &.zhihu {
+                background-color: $zhihu-primary;
                 &:hover {
-                  background-color: $twitter-x-primary-hover;
+                  background-color: $zhihu-primary-hover;
                 }
               }
               &.youtube {
@@ -500,6 +502,9 @@
                 font-size: $font-size-h4;
               }
 
+              &.twitter {
+                background-color: $twitter-x-primary;
+              }
               &.wechat {
                 background-color: $wechat-primary;
               }
