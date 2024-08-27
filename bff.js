@@ -155,6 +155,7 @@ const VALUABLE_LINKS = Object.freeze({
     YOUTUBE_CHANNEL: `https://www.youtube.com/${app_config_IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
+    ZHIHU: 'https://www.zhihu.com/people/surmon',
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
