@@ -15,7 +15,7 @@
     article: Article
   }>()
 
-  const { cdnDomain } = useEnhancer()
+  const { router, cdnDomain, gState } = useEnhancer()
   const identityStore = useIdentityStore()
   const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -23,7 +23,11 @@
   const isOriginal = computed(() => isOriginalType(props.article.origin))
 
   const handleClick = () => {
-    openNewWindow(getArticleDetailRoute(props.article.id))
+    if (gState.userAgent.isWechat) {
+      router.push(getArticleDetailRoute(props.article.id))
+    } else {
+      openNewWindow(getArticleDetailRoute(props.article.id))
+    }
   }
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {

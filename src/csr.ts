@@ -112,24 +112,26 @@ router.isReady().finally(() => {
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init user identity state
     store.stores.identity.initOnClient()
-    // title surprise
-    document.addEventListener(
-      'visibilitychange',
-      (event) => {
-        // @ts-ignore
-        const isHidden = event.target?.hidden || event.target?.webkitHidden
-        const surprises = [
-          // tltle: zero width character
-          // { favicon: '🌝', title: '​' },
-          // { favicon: '⛔️', title: 'FORBIDDEN' },
-          // { favicon: '⭕️', title: 'FBI WARNING' },
-          { favicon: '🌱', title: META.en_sub_title }
-        ]
-        const index = Math.floor(Math.random() * surprises.length)
-        isHidden ? runTitler(surprises[index]) : resetTitler()
-      },
-      false
-    )
+    // title surprise (desktop only)
+    if (!globalState.userAgent.isMobile) {
+      document.addEventListener(
+        'visibilitychange',
+        (event) => {
+          // @ts-ignore
+          const isHidden = event.target?.hidden || event.target?.webkitHidden
+          const surprises = [
+            // tltle: zero width character
+            // { favicon: '🌝', title: '​' },
+            // { favicon: '⛔️', title: 'FORBIDDEN' },
+            // { favicon: '⭕️', title: 'FBI WARNING' },
+            { favicon: '🌱', title: META.en_sub_title }
+          ]
+          const index = Math.floor(Math.random() * surprises.length)
+          isHidden ? runTitler(surprises[index]) : resetTitler()
+        },
+        false
+      )
+    }
     // production only
     if (isProd) {
       consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.appOption.data?.site_email)
