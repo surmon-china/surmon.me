@@ -371,7 +371,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.40.3";
+const APP_VERSION = "4.40.4";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -2479,7 +2479,7 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { cdnDomain } = useEnhancer();
+    const { router, cdnDomain, gState } = useEnhancer();
     const identityStore = useIdentityStore();
     const isLiked = computed(() => identityStore.isLikedPage(props.article.id));
     const isHybrid = computed(() => isHybridType(props.article.origin));
@@ -2504,11 +2504,11 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_router_link = resolveComponent("router-link");
       const _component_udate = resolveComponent("udate");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-058291e0><div class="thumbnail" data-v-058291e0><span class="${ssrRenderClass([{
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-2a08c572><div class="thumbnail" data-v-2a08c572><span class="${ssrRenderClass([{
         original: isOriginal.value,
         reprint: isReprint.value,
         hybrid: isHybrid.value
-      }, "oirigin"])}" data-v-058291e0>`);
+      }, "oirigin"])}" data-v-2a08c572>`);
       if (isOriginal.value) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2526,7 +2526,7 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       }
       _push(`</span>`);
       if (_ctx.article.featured) {
-        _push(`<span class="featured" data-v-058291e0>`);
+        _push(`<span class="featured" data-v-2a08c572>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).ARTICLE_FEATURED
         }, null, _parent));
@@ -2534,13 +2534,13 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<picture class="picture" data-v-058291e0>`);
+      _push(`<picture class="picture" data-v-2a08c572>`);
       if (unref(isOriginalStaticURL)(_ctx.article.thumbnail)) {
-        _push(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-058291e0><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-058291e0><!--]-->`);
+        _push(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-2a08c572><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-2a08c572><!--]-->`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-058291e0></picture></div><div class="content" data-v-058291e0><div class="body" data-v-058291e0><h4 class="title" data-v-058291e0>`);
+      _push(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-2a08c572></picture></div><div class="content" data-v-2a08c572><div class="body" data-v-2a08c572><h4 class="title" data-v-2a08c572>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         title: _ctx.article.title,
@@ -2557,14 +2557,14 @@ const _sfc_main$1F = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="language" data-v-058291e0>`);
+      _push(`<span class="language" data-v-2a08c572>`);
       _push(ssrRenderComponent(_component_i18n, unref(ArticleLangI18n)[_ctx.article.lang], null, _parent));
-      _push(`</span></h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-058291e0>${_ctx.article.description ?? ""}</p></div><div class="meta" data-v-058291e0><span class="date" data-v-058291e0><i class="iconfont icon-clock" data-v-058291e0></i>`);
+      _push(`</span></h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-2a08c572>${_ctx.article.description ?? ""}</p></div><div class="meta" data-v-2a08c572><span class="date" data-v-2a08c572><i class="iconfont icon-clock" data-v-2a08c572></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-058291e0><i class="iconfont icon-eye" data-v-058291e0></i><span data-v-058291e0>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-058291e0><i class="iconfont icon-comment" data-v-058291e0></i><span data-v-058291e0>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-058291e0><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-058291e0></i><span data-v-058291e0>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
+      _push(`</span><span class="views" data-v-2a08c572><i class="iconfont icon-eye" data-v-2a08c572></i><span data-v-2a08c572>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-2a08c572><i class="iconfont icon-comment" data-v-2a08c572></i><span data-v-2a08c572>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-2a08c572><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-2a08c572></i><span data-v-2a08c572>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div></div>`);
     };
   }
 });
@@ -2574,7 +2574,7 @@ _sfc_main$1F.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/mobile/item.vue");
   return _sfc_setup$1F ? _sfc_setup$1F(props, ctx) : void 0;
 };
-const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1F, [["__scopeId", "data-v-058291e0"]]);
+const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1F, [["__scopeId", "data-v-2a08c572"]]);
 const _sfc_main$1E = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
