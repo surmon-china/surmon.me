@@ -8,13 +8,14 @@
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { openNewWindow } from '/@/utils/opener'
   import { numberSplit } from '/@/transforms/text'
 
   const props = defineProps<{
     article: Article
   }>()
 
-  const { router, cdnDomain } = useEnhancer()
+  const { cdnDomain } = useEnhancer()
   const identityStore = useIdentityStore()
   const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -22,7 +23,7 @@
   const isOriginal = computed(() => isOriginalType(props.article.origin))
 
   const handleClick = () => {
-    router.push(getArticleDetailRoute(props.article.id))
+    openNewWindow(getArticleDetailRoute(props.article.id))
   }
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
