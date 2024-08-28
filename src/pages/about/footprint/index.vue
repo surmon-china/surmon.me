@@ -4,6 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
   import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
+  import { openNewWindow } from '/@/utils/opener'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
   import { GOOGLE_MAP_LINKS } from './google-map'
   import { i18ns } from '../shared'
@@ -58,10 +59,6 @@
     })
   }
 
-  const handleGoogleMapLinkClick = (url: string) => {
-    window.open(url, '_blank')
-  }
-
   onMounted(() => gmStore.fetch())
 </script>
 
@@ -103,12 +100,7 @@
             <i18n zh="我的旅行足迹" en="My footprints"></i18n>
           </span>
         </li>
-        <li
-          class="item"
-          :key="index"
-          v-for="(link, index) in GOOGLE_MAP_LINKS"
-          @click="handleGoogleMapLinkClick(link.url)"
-        >
+        <li class="item" :key="index" v-for="(link, index) in GOOGLE_MAP_LINKS" @click="openNewWindow(link.url)">
           <i class="iconfont icon-map"></i>
           <span class="text">
             <i18n :zh="link.zh" :en="link.en"></i18n>

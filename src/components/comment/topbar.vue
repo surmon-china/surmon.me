@@ -6,8 +6,8 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { UserType, useIdentityStore } from '/@/stores/identity'
   import { useEnhancer } from '/@/app/enhancer'
-  import { openWindow } from '/@/utils/opener'
   import nodepress from '/@/services/nodepress'
+  import { openPopupWindow, openNewWindow } from '/@/utils/opener'
   import { logger, CommentEvents } from './helper'
 
   interface Props {
@@ -53,7 +53,7 @@
 
     const forum = identity.disqusConfig.forum
     const slug = disqusThreadMap.get(props.postId).slug
-    window.open(`https://disqus.com/home/discussion/${forum}/${slug}/`)
+    openNewWindow(`https://disqus.com/home/discussion/${forum}/${slug}/`)
   }
 
   const handleSort = (target: any) => {
@@ -73,7 +73,7 @@
       event_label: `id: ${props.postId}`
     })
 
-    openWindow(identity.disqusConfig.authorize_url, {
+    openPopupWindow(identity.disqusConfig.authorize_url, {
       name: `Disqus Auth ${META.title}`,
       onClose: () => {
         identity.fetchDisqusUserInfo()

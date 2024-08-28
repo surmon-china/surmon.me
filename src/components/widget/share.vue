@@ -18,7 +18,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { getPageURL } from '/@/transforms/url'
-  import { openWindow } from '/@/utils/opener'
+  import { openPopupWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
 
@@ -199,7 +199,7 @@
     if (social.handler) {
       social.handler(shareParams)
     } else {
-      openWindow(social.url!(shareParams), { name: `Share: ${META.title}` })
+      openPopupWindow(social.url!(shareParams), { name: `Share: ${META.title}` })
     }
   }
 </script>

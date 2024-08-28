@@ -26,7 +26,8 @@ export interface WindowOpenerOptions {
     [key: string]: string
   }
 }
-export const openWindow = (targetURL: string, options: WindowOpenerOptions = {}) => {
+
+export const openPopupWindow = (targetURL: string, options: WindowOpenerOptions = {}) => {
   const { name = '', closeInterval = 268, onClose, params = {} } = options
   const width = Math.round((screen.availWidth / 6) * 2)
   const height = Math.round((screen.availHeight / 5) * 2)
@@ -52,4 +53,8 @@ export const openWindow = (targetURL: string, options: WindowOpenerOptions = {})
     _window?.focus()
     return _window
   }
+}
+
+export const openNewWindow = (targetURL: string, target?: string) => {
+  return window.open(targetURL, target)
 }
