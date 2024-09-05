@@ -95,8 +95,8 @@
             </ulink>
             <ulink
               class="more-link"
-              v-if="allGitHubSponsors.length > maxSponsors"
               :href="VALUABLE_LINKS.GITHUB_SPONSORS"
+              v-if="allGitHubSponsors.length > maxSponsors"
             >
               + {{ allGitHubSponsors.length - maxSponsors }}
             </ulink>

@@ -4,14 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { AnchorHTMLAttributes, defineComponent, h } from 'vue'
+import { AnchorHTMLAttributes, PropType, defineComponent, h } from 'vue'
 import { RouterLink, RouterLinkProps } from 'vue-router'
 
 export default defineComponent({
   name: 'Ulink',
   props: {
-    // @ts-ignore
-    ...RouterLink.props,
     to: {
       type: String,
       required: false
@@ -27,31 +25,33 @@ export default defineComponent({
     blank: {
       type: Boolean,
       default: true
+    },
+    routerLink: {
+      type: Object as PropType<RouterLinkProps>
     }
   },
   setup(props, context) {
     return () => {
-      const { to, href, external, blank, ...routerLinkProps } = props
       const customAttrs: AnchorHTMLAttributes = { ...context.attrs }
 
       // <router-link>
-      if (to && !to.startsWith('http')) {
-        const ps: RouterLinkProps = {
-          to: to,
-          ...routerLinkProps
+      if (props.to && !props.to.startsWith('http')) {
+        const linkProps: RouterLinkProps = {
+          to: props.to,
+          ...(props.routerLink ?? {})
         }
-        return h(RouterLink, ps, context.slots.default)
+        return h(RouterLink, linkProps, context.slots.default)
       }
 
       // <a>
-      if (external) {
+      if (props.external) {
         customAttrs.rel = 'external nofollow noopener'
       }
-      if (blank) {
+      if (props.blank) {
         customAttrs.target = '_blank'
       }
 
-      return h('a', { ...customAttrs, href }, context.slots.default?.())
+      return h('a', { ...customAttrs, href: props.href }, context.slots.default?.())
     }
   }
 })

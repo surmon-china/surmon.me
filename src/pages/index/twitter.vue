@@ -36,7 +36,7 @@
 
 <template>
   <div class="twitter">
-    <placeholder :data="profile" :loading="fetching">
+    <placeholder :data="profile ?? void 0" :loading="fetching">
       <template #placeholder>
         <empty class="twitter-empty" bold key="empty" />
       </template>
