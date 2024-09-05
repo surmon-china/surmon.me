@@ -42,7 +42,7 @@
           </span>
         </div>
         <div class="right">
-          <span class="created" v-if="gptTimestamp">
+          <span class="created" data-allow-mismatch v-if="gptTimestamp">
             <udate :date="Number(gptTimestamp) * 1000" to="ago" />
           </span>
         </div>

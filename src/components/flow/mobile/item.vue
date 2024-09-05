@@ -93,7 +93,7 @@
         <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
       </div>
       <div class="meta">
-        <span class="date">
+        <span class="date" data-allow-mismatch>
           <i class="iconfont icon-clock"></i>
           <udate to="ago" :date="article.created_at" />
         </span>

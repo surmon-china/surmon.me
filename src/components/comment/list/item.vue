@@ -183,7 +183,7 @@
         </div>
         <div class="cm-footer">
           <div class="left">
-            <span class="create-at">
+            <span class="create-at" data-allow-mismatch>
               <udate to="ago" :date="comment.created_at" />
             </span>
             <button

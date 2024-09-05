@@ -71,7 +71,7 @@
               </div>
               <span class="published-at">
                 <i class="iconfont icon-clock"></i>
-                <span class="text">
+                <span class="text" data-allow-mismatch>
                   <udate to="ago" :date="item.snippet.publishedAt" />
                 </span>
               </span>

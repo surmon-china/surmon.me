@@ -65,7 +65,9 @@
             >
               <swiper-slide v-for="(ann, index) in announcements" :key="index">
                 <markdown class="content" :plain="true" :markdown="ann.content" />
-                <div class="date"><udate to="ago" :date="ann.created_at" /></div>
+                <div class="date" data-allow-mismatch>
+                  <udate to="ago" :date="ann.created_at" />
+                </div>
               </swiper-slide>
             </swiper>
             <div class="navigation">

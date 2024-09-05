@@ -127,7 +127,7 @@
                     <i class="iconfont icon-heart"></i>
                     <span>{{ tweet.favoriteCount }}</span>
                   </span>
-                  <span class="item date" v-if="tweet.date">
+                  <span class="item date" data-allow-mismatch v-if="tweet.date">
                     <i class="iconfont icon-clock"></i>
                     <udate to="ago" :date="tweet.date" />
                   </span>
