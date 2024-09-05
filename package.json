@@ -85,6 +85,7 @@
     "@vitejs/plugin-vue": "^5.x",
     "builtin-modules": "^4.x",
     "eslint": "^9.x",
+    "eslint-config-prettier": "^9.x",
     "eslint-plugin-prettier": "^5.x",
     "eslint-plugin-vue": "^9.x",
     "globals": "^15.9.0",
