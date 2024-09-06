@@ -1,12 +1,11 @@
 <script lang="ts" setup>
   import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
-  import type { ZhihuAnswerItem } from '/@/server/getters/zhihu'
+  import { VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
   import { getZhihuAnswerDetailURL } from '/@/transforms/media'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import { openNewWindow } from '/@/utils/opener'
   import { i18nTitle, useAnswersPageData, useAnswersPageMeta } from '../shared'
   import AnswerCard from '../card.vue'
 
@@ -16,10 +15,6 @@
     fetchMoreAnswers().then(() => {
       scrollToNextScreen()
     })
-  }
-
-  const openZhihuLink = (answer: ZhihuAnswerItem) => {
-    openNewWindow(getZhihuAnswerDetailURL(answer.question.id, answer.id))
   }
 
   useAnswersPageMeta()
@@ -44,9 +39,25 @@
       </template>
       <template #default>
         <div class="module-content">
+          <div class="statistics">
+            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
+              <div class="logo"><i class="iconfont icon-zhihu-full"></i></div>
+              <div class="description">
+                {{ zhihuLatestAnswers?.data?.paging.totals ?? '-' }}
+                <i18n zh="个回答" en="answers" />
+              </div>
+            </ulink>
+            <divider type="vertical" />
+            <ulink class="item" :href="VALUABLE_LINKS.QUORA">
+              <div class="logo quora"><i class="iconfont icon-quora-full"></i></div>
+              <div class="description">-</div>
+            </ulink>
+          </div>
           <ul class="answer-list">
-            <li class="answer-item" v-for="(answer, index) in allAnswers" :key="index">
-              <answer-card :answer="answer" @click="openZhihuLink(answer)" />
+            <li class="answer-item" v-for="(answer, index) in allAnswers" :key="index" data-allow-mismatch>
+              <ulink :href="getZhihuAnswerDetailURL(answer.question.id, answer.id)">
+                <answer-card :answer="answer" />
+              </ulink>
             </li>
           </ul>
           <loadmore
@@ -102,6 +113,39 @@
 
     .module-content {
       margin-top: $item-gap;
+
+      .statistics {
+        margin: $item-gap 0;
+        padding: 1.8rem $gap-lg;
+        border-radius: $radius-lg;
+        background-color: $module-bg-translucent;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        .item {
+          text-align: center;
+
+          .logo {
+            margin-bottom: $gap-xs;
+            font-size: $font-size-h1;
+            &.quora {
+              display: flex;
+              $size: $font-size-h3 * 2;
+              height: $size;
+              line-height: $size;
+              font-size: $size;
+            }
+          }
+
+          .description {
+            font-weight: bold;
+            font-size: $font-size-small;
+            color: $color-text-secondary;
+            text-transform: uppercase;
+          }
+        }
+      }
 
       .answer-list {
         margin: 0;

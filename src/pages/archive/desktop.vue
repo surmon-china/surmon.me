@@ -39,7 +39,7 @@
         <i18n v-bind="i18ns.description" />
       </template>
     </page-banner>
-    <container class="statistic-warpper">
+    <container class="statistic-wrapper">
       <transition name="module" mode="out-in">
         <div class="skeletons" v-if="statisticFetching">
           <skeleton-base class="item" :key="s" v-for="s in statistics.length" />
@@ -57,7 +57,7 @@
         </div>
       </transition>
     </container>
-    <container class="archive-warpper">
+    <container class="archive-wrapper">
       <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
         <template #placeholder>
           <empty class="archive-empty" bold key="empty">
@@ -122,7 +122,7 @@
   @import '/src/styles/mixins.scss';
 
   .archive-page {
-    .statistic-warpper {
+    .statistic-wrapper {
       padding: 3rem 0;
       background-color: $module-bg-translucent;
 
@@ -171,7 +171,7 @@
       }
     }
 
-    .archive-warpper {
+    .archive-wrapper {
       padding: 3rem 0;
       overflow: hidden;
 

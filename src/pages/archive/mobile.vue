@@ -11,11 +11,6 @@
   const archiveStore = useArchiveStore()
   const statisticState = useArchivePageStatistics()
   const statisticFetching = ref(true)
-  const statistics = computed(() => [
-    statisticState.statistics.value.articles,
-    statisticState.statistics.value.comments,
-    statisticState.statistics.value.totalLikes
-  ])
 
   useArchivePageMeta()
   useUniversalFetch(() => archiveStore.fetch())
@@ -33,20 +28,30 @@
       <template #description><i18n v-bind="i18ns.title" /></template>
     </page-banner>
     <div class="page-content">
-      <container class="statistic-warpper">
+      <container class="statistic-wrapper">
         <transition name="module" mode="out-in">
           <div class="skeletons" v-if="statisticFetching">
-            <skeleton-base class="skeleton" :key="s" v-for="s in statistics.length" />
+            <skeleton-base class="skeleton" :key="s" v-for="s in 3" />
           </div>
           <div class="statistics" v-else>
-            <div class="item" :key="index" v-for="(s, index) in statistics">
-              <p class="title">{{ s.title }}</p>
-              <div class="content">{{ s.content }}</div>
+            <div class="item">
+              <p class="title">{{ statisticState.statistics.value.articles.title }}</p>
+              <div class="content">{{ statisticState.statistics.value.articles.content }}</div>
+            </div>
+            <divider type="vertical" />
+            <div class="item">
+              <p class="title">{{ statisticState.statistics.value.todayViews.title }}</p>
+              <div class="content">{{ statisticState.statistics.value.todayViews.content }}</div>
+            </div>
+            <divider type="vertical" />
+            <div class="item">
+              <p class="title">{{ statisticState.statistics.value.comments.title }}</p>
+              <div class="content">{{ statisticState.statistics.value.comments.content }}</div>
             </div>
           </div>
         </transition>
       </container>
-      <container class="archive-warpper">
+      <container class="archive-wrapper">
         <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
           <template #placeholder>
             <empty class="archive-empty" key="empty">
@@ -92,11 +97,11 @@
   @import '/src/styles/mixins.scss';
 
   .archive-page {
-    .statistic-warpper {
-      padding: 2rem;
+    .statistic-wrapper {
+      margin-top: $gap-lg;
+      padding: 1.8rem 2rem;
+      border-radius: $radius-lg;
       background-color: $module-bg-translucent;
-      border-bottom-left-radius: $radius-lg;
-      border-bottom-right-radius: $radius-lg;
 
       .skeletons,
       .statistics {
@@ -107,8 +112,8 @@
       }
 
       .skeleton {
-        width: 3rem;
-        height: 2rem;
+        width: 5rem;
+        height: 2.6rem;
       }
 
       .statistics {
@@ -118,6 +123,7 @@
         .item {
           display: inline-flex;
           flex-direction: column;
+          text-align: center;
 
           .title {
             margin-bottom: $gap-xs;
@@ -134,7 +140,7 @@
       }
     }
 
-    .archive-warpper {
+    .archive-wrapper {
       overflow: hidden;
       margin-top: $gap-lg;
 

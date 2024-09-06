@@ -16,7 +16,7 @@
     </h2>
     <div class="content" v-html="answer.content"></div>
     <div class="info">
-      <div class="metas">
+      <div class="left">
         <span class="item"><i class="iconfont icon-like"></i> {{ answer.voteup_count }} 赞同</span>
         <span class="item"><i class="iconfont icon-comment"></i> {{ answer.comment_count }} 评论</span>
       </div>
@@ -75,19 +75,26 @@
       color: $color-text-disabled;
       font-size: $font-size-small;
 
-      .metas {
+      .left {
         .item {
+          display: inline-flex;
+          align-items: center;
           margin-right: $gap * 2;
 
           .iconfont {
-            margin-right: $gap-xs;
+            margin-right: $gap-sm;
           }
         }
       }
 
-      .link {
-        color: $zhihu-primary;
-        margin-left: $gap;
+      .right {
+        display: inline-flex;
+        align-items: center;
+        .link {
+          display: inline-flex;
+          color: $zhihu-primary;
+          margin-left: $gap;
+        }
       }
     }
   }

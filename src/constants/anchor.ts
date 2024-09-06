@@ -29,7 +29,7 @@ export const getArticleHeadingUrlHash = (heading: string) => {
     .replace(/\s+/g, '-')
 }
 
-export const COMMENT_ELEMENT_ID = 'A_comment_warpper'
+export const COMMENT_ELEMENT_ID = 'A_comment_wrapper'
 export const COMMENT_PUBLISHER_ELEMENT_ID = 'A_comment_publisher'
 export const COMMENT_REPLY_PUBLISHER_ELEMENT_ID = 'A_comment_reply_publisher'
 export const COMMENT_FOOTER_ELEMENT_ID = 'A_comment_footer'

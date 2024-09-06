@@ -44,7 +44,7 @@
         </div>
       </template>
       <template #default>
-        <div class="warpper" key="warpper">
+        <div class="wrapper" key="wrapper">
           <div class="background" :data-content="announcements[activeIndex]?.content" />
           <div class="title">
             <span class="icon-box" :style="{ transform: `rotate(-${activeIndex * 135}deg)` }">

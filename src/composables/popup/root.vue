@@ -23,7 +23,7 @@
   <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }" v-disabled-wallflower>
     <transition name="module">
       <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
-        <div ref="element" class="warpper" :class="{ border: state.border }">
+        <div ref="element" class="wrapper" :class="{ border: state.border }">
           <img v-if="state.isImage" v-bind="image.attrs" :src="image.src || ''" />
         </div>
       </div>
@@ -43,7 +43,7 @@
     }
     &.mobile {
       .mask {
-        .warpper {
+        .wrapper {
           & > ::v-deep(*) {
             min-width: 50vw;
             min-height: 4rem;
@@ -67,7 +67,7 @@
       @include visibility-transition();
       @include backdrop-blur(5px);
 
-      .warpper {
+      .wrapper {
         display: contents;
         position: relative;
 

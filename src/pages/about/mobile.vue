@@ -112,18 +112,6 @@
       border-bottom-left-radius: $radius-lg;
       border-bottom-right-radius: $radius-lg;
       background-color: $module-bg-opaque;
-      &::before {
-        content: '';
-        position: absolute;
-        display: block;
-        height: 1rem;
-        bottom: -0.5rem;
-        left: 0;
-        right: 0;
-        background-image: radial-gradient(circle, transparent 70%, $module-bg-opaque 70%);
-        background-size: 0.7em 1em;
-        background-position: 0 -0.5em;
-      }
 
       .avatar {
         width: 100%;

@@ -148,12 +148,12 @@
       padding: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-gap: $gap * 5;
+      grid-gap: $gap * 4;
 
       .item {
         padding: $gap * 2;
-        @include radius-box($radius-xs);
         @include common-bg-module();
+        @include radius-box($radius-sm);
 
         .item-skeleton {
           width: 100%;
