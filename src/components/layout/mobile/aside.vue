@@ -72,6 +72,18 @@
             <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
           </webfont>
         </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Answers)">
+          <i class="iconfont icon-buddhism"></i>
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_ANSWERS" />
+          </webfont>
+        </router-link>
+        <router-link class="item" :to="getPageRoute(RouteName.Archive)">
+          <i class="iconfont icon-quill"></i>
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_ARCHIVE" />
+          </webfont>
+        </router-link>
         <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
           <i class="iconfont icon-github"></i>
           <webfont bolder uppercase>
@@ -81,30 +93,24 @@
             <i class="iconfont icon-new-window-s"></i>
           </span>
         </ulink>
-        <router-link class="item" :to="getPageRoute(RouteName.Archive)">
-          <i class="iconfont icon-quill"></i>
-          <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_ARCHIVE" />
-          </webfont>
-        </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.About)">
-          <i class="iconfont icon-swordsman"></i>
-          <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_ABOUT" />
-          </webfont>
-        </router-link>
-        <router-link class="item guestbook" :to="getPageRoute(RouteName.Guestbook)">
+        <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
           </webfont>
         </router-link>
-        <router-link class="item app" :to="getPageRoute(RouteName.App)">
+        <router-link class="item about" :to="getPageRoute(RouteName.About)">
+          <i class="iconfont icon-swordsman"></i>
+          <webfont bolder uppercase>
+            <i18n :k="LanguageKey.PAGE_ABOUT" />
+          </webfont>
+        </router-link>
+        <!-- <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <uimage cdn class="icon" src="/images/page-app/logo.png" />
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_APP" />
           </webfont>
-        </router-link>
+        </router-link> -->
       </nav>
     </div>
   </aside>
@@ -205,6 +211,10 @@
             color: $primary;
             font-weight: bold;
             background-color: $body-bg;
+          }
+
+          &.about {
+            color: $surmon;
           }
 
           &.app {

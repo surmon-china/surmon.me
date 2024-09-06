@@ -202,7 +202,7 @@
             background-color: $surmon;
           }
           &[data-index='2'] {
-            background-color: rgba($accent, 0.7);
+            background-color: rgba($green, 0.75);
           }
           &[data-index='3'] {
             background-color: rgba($red, 0.6);

@@ -9,12 +9,16 @@ $source-url: '' !default;
 
 // colors
 $surmon: #0088f5;
-$accent: #4caf50;
-$red: #ff5722;
-$yellow: #ffeb3b;
-$grey: #c0c0c0;
-$white: #ffffff;
+
 $black: #000000;
+$white: #ffffff;
+$grey: #c0c0c0;
+
+// https://en.wikipedia.org/wiki/Buddhist_flag
+// https://en.wikipedia.org/wiki/Prayer_flag
+$red: #ff4d4f;
+$orange: #faad14;
+$green: #2e9a1a;
 
 // theme colors
 $primary: var(--color-primary);
@@ -81,7 +85,7 @@ $footer-height: 6rem;
 $container-width: 1050px;
 $navbar-width: 160px;
 $aside-width: 266px;
-$full-column-page-banner-height: 28rem;
+$full-column-page-banner-height: 27rem;
 
 $full-page-occupied-height: $header-height + $footer-height;
 $full-page-active-content-height: calc(100vh - #{$full-page-occupied-height});

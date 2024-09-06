@@ -88,6 +88,7 @@
       .link {
         color: $white;
         text-decoration: underline;
+        text-underline-offset: 6px;
       }
     }
 

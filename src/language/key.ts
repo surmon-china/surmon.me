@@ -13,6 +13,7 @@ export enum LanguageKey {
   PAGE_PHOTOGRAPHY = 'photography',
   PAGE_ABOUT = 'about',
   PAGE_SPONSOR = 'sponsor',
+  PAGE_ANSWERS = 'answers',
   PAGE_GUESTBOOK = 'guestbook',
   PAGE_APP = 'app',
   PAGE_ARCHIVE = 'archive',

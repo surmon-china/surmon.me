@@ -56,7 +56,7 @@
         </template>
       </button>
       <button v-if="!hiddenSponsor" class="button sponsor" @click="handleSponsor">
-        <i class="icon iconfont icon-heart"></i>
+        <i class="icon iconfont icon-peachblossom"></i>
       </button>
     </div>
   </div>

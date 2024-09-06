@@ -33,6 +33,8 @@ import AppPage from '/@/pages/app.vue'
 import SponsorPage from '/@/pages/sponsor.vue'
 import YoutubePage from '/@/pages/youtube/index.vue'
 import PhotographyPage from '/@/pages/photography/index.vue'
+import DesktopAnswersPage from '/@/pages/answers/desktop/index.vue'
+import MobileAnswersPage from '/@/pages/answers/mobile/index.vue'
 
 // https://router.vuejs.org/guide/advanced/meta.html#typescript
 import 'vue-router'
@@ -65,6 +67,7 @@ export enum RouteName {
   Sponsor = 'sponsor',
   Photography = 'photography',
   YouTube = 'youtube',
+  Answers = 'answers',
   Error = 'error'
 }
 
@@ -276,6 +279,19 @@ export const routes: RouteRecordRaw[] = [
       responsive: false,
       layout: LayoutColumn.Full,
       ssrCacheTTL: 60 * 60 * 1 // 1 hours
+    }
+  },
+  {
+    path: '/answers',
+    name: RouteName.Answers,
+    components: {
+      default: DesktopAnswersPage,
+      mobile: MobileAnswersPage
+    },
+    meta: {
+      responsive: true,
+      layout: LayoutColumn.Full,
+      ssrCacheTTL: 60 * 60 * 6 // 6 hours
     }
   },
   {

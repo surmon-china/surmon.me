@@ -71,10 +71,10 @@
       route: getPageRoute(RouteName.Photography)
     },
     {
-      class: 'nft',
-      icon: 'icon-opensea',
-      i18n: i18ns.nft,
-      href: VALUABLE_LINKS.OPENSEA
+      class: 'answers',
+      icon: 'icon-buddhism',
+      i18n: i18ns.answers,
+      route: getPageRoute(RouteName.Answers)
     },
     {
       class: 'archive',
@@ -108,7 +108,7 @@
     },
     {
       class: 'sponsor',
-      icon: 'icon-heart',
+      icon: 'icon-peachblossom',
       i18n: i18ns.sponsor,
       onClick: handleSponsor
     },

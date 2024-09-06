@@ -50,6 +50,12 @@ export const menus: Array<MenuItem> = [
     i18nKey: LanguageKey.PAGE_PHOTOGRAPHY
   },
   {
+    id: RouteName.Answers,
+    route: getPageRoute(RouteName.Answers),
+    i18nKey: LanguageKey.PAGE_ANSWERS,
+    icon: 'icon-buddhism'
+  },
+  {
     id: RouteName.About,
     route: getPageRoute(RouteName.About),
     icon: 'icon-swordsman',
@@ -61,13 +67,13 @@ export const menus: Array<MenuItem> = [
     i18nKey: LanguageKey.PAGE_GUESTBOOK,
     icon: 'icon-comment'
   },
-  {
-    id: RouteName.App,
-    route: getPageRoute(RouteName.App),
-    imageIcon: getPageURL('/images/page-app/logo.png'),
-    i18nKey: LanguageKey.PAGE_APP,
-    divider: true
-  },
+  // {
+  //   id: RouteName.App,
+  //   route: getPageRoute(RouteName.App),
+  //   imageIcon: getPageURL('/images/page-app/logo.png'),
+  //   i18nKey: LanguageKey.PAGE_APP,
+  //   divider: true
+  // },
   {
     id: 'sponsor',
     route: getPageRoute(RouteName.Sponsor),

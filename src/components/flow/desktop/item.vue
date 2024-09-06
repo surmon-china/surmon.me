@@ -223,7 +223,7 @@
             background-color: rgba($surmon, $opacity);
           }
           &.hybrid {
-            background-color: rgba($accent, $opacity);
+            background-color: rgba($green, $opacity);
           }
           &.reprint {
             background-color: rgba($red, $opacity);

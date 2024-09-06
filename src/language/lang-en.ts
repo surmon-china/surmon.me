@@ -12,6 +12,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.PAGE_ABOUT]: 'About',
   [LanguageKey.PAGE_GUESTBOOK]: 'Guestbook',
   [LanguageKey.PAGE_SPONSOR]: 'Sponsor',
+  [LanguageKey.PAGE_ANSWERS]: 'Answers',
   [LanguageKey.PAGE_APP]: 'APP',
   [LanguageKey.PAGE_PHOTOGRAPHY]: 'Photog',
   [LanguageKey.STATISTIC_ARTICLES]: 'Articles',

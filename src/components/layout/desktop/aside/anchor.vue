@@ -62,7 +62,7 @@
       </ul>
     </div>
     <button class="link" @click="scrollToAnchor(ANCHORS.ARTICLE_META_ELEMENT_ID)">
-      <i class="iconfont icon-heart"></i>
+      <i class="iconfont icon-peachblossom"></i>
       <i18n zh="随喜" en="Sponsor" />
       <divider type="vertical" />
       <span class="meta">

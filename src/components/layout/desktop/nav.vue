@@ -94,7 +94,7 @@
         }
 
         &.sponsor {
-          color: $github-sponsor-primary;
+          color: $red;
         }
 
         .font-icon {

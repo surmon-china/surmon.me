@@ -131,7 +131,7 @@
         --color: #{rgba($surmon, 0.7)};
       }
       &.hybrid {
-        --color: #{rgba($accent, 0.7)};
+        --color: #{rgba($green, 0.7)};
       }
       &.reprint {
         --color: #{rgba($red, 0.7)};

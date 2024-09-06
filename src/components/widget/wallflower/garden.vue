@@ -5,10 +5,7 @@
   import { ATTRBUTE_NAME } from './directive'
 
   const EN_FLOWERS = ['💙', '🤍', '❤️']
-  const ZH_FLOWERS = [
-    ...['富强', '民主', '文明', '和谐', '自由', '平等'],
-    ...['公正', '法治', '爱国', '敬业', '诚信', '友善']
-  ]
+  const ZH_FLOWERS = ['布施', '持戒', '忍辱', '精进', '禅定', '般若']
 
   const { isZhLang } = useEnhancer()
   const state = reactive({

@@ -21,6 +21,7 @@ import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from '.
 import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getNPMStatistic } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
+import { getZhihuAnswers } from './server/getters/zhihu'
 import { getSongList } from './server/getters/netease-music'
 import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
@@ -135,6 +136,34 @@ createExpressApp().then(async ({ app, server, cache }) => {
     `${TUN}/${TunnelModule.NetEaseMusic}`,
     responser(() => get163MusicCache())
   )
+
+  // Zhihu first page cache
+  const getZhihuFirstPageCache = cacher.interval(cache, {
+    key: 'zhihu_answers_page_first',
+    ttl: hours(12),
+    interval: hours(3),
+    retry: minutes(10),
+    getter: getZhihuAnswers
+  })
+
+  // Zhihu answer route
+  app.get(`${TUN}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
+    const page = request.query.page
+    if (!!page && !Number.isInteger(Number(page))) {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return !page
+        ? getZhihuFirstPageCache()
+        : cacher.passive(cache, {
+            key: `zhihu_answers_page_${page}`,
+            ttl: hours(12),
+            getter: () => getZhihuAnswers(Number(page))
+          })
+    })(request, response, next)
+  })
 
   // Instagram first page medias cache
   const getInsFirstPageMediasCache = cacher.interval(cache, {

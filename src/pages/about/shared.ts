@@ -44,6 +44,10 @@ export const i18ns = {
     [Language.Chinese]: '给我留言',
     [Language.English]: 'Guestbook'
   },
+  answers: {
+    [Language.Chinese]: '利乐有情',
+    [Language.English]: 'Answers'
+  },
   nft: {
     [Language.Chinese]: '数字藏品',
     [Language.English]: 'NFTs'
@@ -62,19 +66,20 @@ export const i18ns = {
   },
   biography: {
     [Language.Chinese]: [
-      `嗨！我是 Surmon，一名靠摸爬滚打自学的野生工程师，曾在美图秀秀、七牛云、字节跳动、加密交易所工作过；`,
+      `嗨！我是 Surmon，法名觉了（jué liǎo），曾经是一名野生软件工程师，曾在美图秀秀、七牛云、字节跳动、加密交易所工作过。`,
       `如你所见，我有着还不错的设计灵感和编码能力，我经常会开源一些 “没用” 或 “有用” 的小物件，你都可以在 GitHub 找到。`,
-      `在不远的未来，我可能会制作一些公共产品，希望得到你的关注和支持。`,
-      `如果我的任何输出帮助了你，也期待你的慷慨赞助。`,
-      `我把这里称之为自己的数字花园，祝你在这儿玩得愉快！`,
-      `（另外：如果你对我个人的成长轨迹感兴趣，可以阅读<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
+      `当然，如果某些输出恰好帮助了你，也期待你的随喜赞助。`,
+      `｜`,
+      `在不远的未来，我可能会成为一名正式的 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣。`,
+      `我把这里称之为自己的数字 <a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>，随缘记录，祝你在这儿玩得愉快！`,
+      `（俗生履历参考：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
     ].join(''),
     [Language.English]: [
       `Hi! I'm Surmon, a software engineer who has worked at Meitu Inc., Qiniu Cloud, ByteDance, and Crypto Exchange.`,
       `I have developed strong design inspiration and coding skills.`,
       `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
       `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
-      `I call this place my own digital garden. Have fun here!`
+      `I call this place my own digital vihara. Have fun here!`
     ].join(' ')
   }
 }
