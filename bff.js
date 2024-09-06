@@ -98,8 +98,9 @@ const RENDER_LONG_ARTICLE_THRESHOLD = 16688;
 const META = Object.freeze({
     title: 'Surmon.me',
     zh_sub_title: '斯是陋室，唯吾芳馨',
-    en_sub_title: `Surmon's digital garden`,
-    zh_description: '本是浪蝶游蜂，自留半亩石池，但求直抒胸臆，挥墨九云之中',
+    en_sub_title: `Surmon's digital vihara`,
+    zh_description: `本是浪蝶游蜂，无智无德无明；幸闻佛道开化，广利有情众生`,
+    zh_description_short: `本是蝶蜂，无德无明；幸闻佛道，广利众生`,
     en_description: 'Either write something worth reading or do something worth writing.',
     url: 'https://surmon.me',
     domain: 'surmon.me',
@@ -127,6 +128,7 @@ const app_config_IDENTITIES = Object.freeze({
     YOUTUBE_CHANNEL_SHORT_ID: '@surmon_v',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
+    ZHIHU_USER_NAME: 'surmon',
     GITHUB_USER_NAME: 'surmon-china',
     INSTAGRAM_USERNAME: 'surmon666',
     TWITTER_USER_NAME: 'surmon7788',
@@ -155,7 +157,8 @@ const VALUABLE_LINKS = Object.freeze({
     YOUTUBE_CHANNEL: `https://www.youtube.com/${app_config_IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
-    ZHIHU: 'https://www.zhihu.com/people/surmon/answers',
+    ZHIHU: `https://www.zhihu.com/people/${app_config_IDENTITIES.ZHIHU_USER_NAME}/answers`,
+    QUORA: `https://www.quora.com/profile/Surmon/answers`,
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
@@ -225,6 +228,7 @@ var TunnelModule;
     TunnelModule["BingWallpaper"] = "bing_wallpaper";
     TunnelModule["NetEaseMusic"] = "netease_music";
     TunnelModule["DoubanMovies"] = "douban_movies";
+    TunnelModule["ZhihuAnswers"] = "zhihu_answers";
     TunnelModule["GitHubSponsors"] = "github_sponsors";
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["StatisticGitHubJson"] = "statistic_github_json";
@@ -537,6 +541,7 @@ const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)
 const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
 const TWITTER_COOKIE = argv.twitter_cookie;
+const ZHIHU_COOKIE = argv.zhihu_cookie;
 const WEB_SCRAPER_TOKEN = argv.web_scraper_token;
 
 ;// CONCATENATED MODULE: ./src/server/getters/twitter/web-api.ts
@@ -948,7 +953,7 @@ const getInstagramProfile = async () => {
 ;// CONCATENATED MODULE: ./src/server/getters/youtube.ts
 /**
  * @file BFF YouTube getter
- * @module server.getter.instagram
+ * @module server.getter.youtube
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -1060,6 +1065,42 @@ const getDoubanMovies = async () => {
         headers: { Referer: referer }
     });
     return response.data;
+};
+
+;// CONCATENATED MODULE: ./src/server/getters/zhihu.ts
+/**
+ * @file BFF Zhihu getter
+ * @module server.getter.zhihu
+ * @author Surmon <https://github.com/surmon-china>
+ */
+
+
+
+// According to the documentation, a maximum of 20
+const ZHIHU_PAGE_LIMIT = 20;
+// https://www.zhihu.com/people/<username>/answers
+const ZHIHU_INCLUDE_PARAMS = `data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,attachment,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,excerpt,paid_info,reaction_instruction,is_labeled,label_info,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp;data[*].vessay_info;data[*].author.badge[?(type=best_answerer)].topics;data[*].author.vip_info;data[*].question.has_publishing_draft,relationship`;
+// Get answers by member ID
+// https://yifei.me/note/460
+const getZhihuAnswers = async (page = 1) => {
+    const api = `https://api.zhihu.com/members/${app_config_IDENTITIES.ZHIHU_USER_NAME}/answers`;
+    const response = await services_axios.get(api, {
+        timeout: 8000,
+        headers: { cookie: ZHIHU_COOKIE },
+        params: {
+            limit: ZHIHU_PAGE_LIMIT,
+            offset: (page - 1) * ZHIHU_PAGE_LIMIT,
+            sort_by: 'created',
+            include: ZHIHU_INCLUDE_PARAMS
+        }
+    });
+    return {
+        ...response.data,
+        paging: {
+            ...response.data.paging,
+            current: page
+        }
+    };
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/netease-music.ts
@@ -1778,6 +1819,7 @@ const createExpressApp = async () => {
 
 
 
+
 const bff_logger = createLogger('BFF');
 // init env variables for BFF server env
 external_dotenv_namespaceObject["default"].config();
@@ -1864,6 +1906,31 @@ createExpressApp().then(async ({ app, server, cache }) => {
         getter: getSongList
     });
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => get163MusicCache()));
+    // Zhihu first page cache
+    const getZhihuFirstPageCache = cacher.interval(cache, {
+        key: 'zhihu_answers_page_first',
+        ttl: hours(12),
+        interval: hours(3),
+        retry: minutes(10),
+        getter: getZhihuAnswers
+    });
+    // Zhihu answer route
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
+        const page = request.query.page;
+        if (!!page && !Number.isInteger(Number(page))) {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return !page
+                ? getZhihuFirstPageCache()
+                : cacher.passive(cache, {
+                    key: `zhihu_answers_page_${page}`,
+                    ttl: hours(12),
+                    getter: () => getZhihuAnswers(Number(page))
+                });
+        })(request, response, next);
+    });
     // Instagram first page medias cache
     const getInsFirstPageMediasCache = cacher.interval(cache, {
         key: 'instagram_medias_page_first',
