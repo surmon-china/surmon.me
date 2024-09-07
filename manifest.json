@@ -3,11 +3,11 @@
     "file": "basic-o3JHQHtc.css",
     "src": "_basic-!~{002}~.js"
   },
-  "_basic-Dh2aZ_mu.js": {
-    "file": "basic-Dh2aZ_mu.js",
+  "_basic-BBdrl2ub.js": {
+    "file": "basic-BBdrl2ub.js",
     "name": "basic",
     "imports": [
-      "_vendor-FgfuiXDU.js"
+      "_vendor-B5dXw02P.js"
     ],
     "css": [
       "basic-o3JHQHtc.css"
@@ -17,41 +17,41 @@
     "file": "mapbox-gl-C1Im9pGR.css",
     "src": "_mapbox-gl-!~{004}~.js"
   },
-  "_mapbox-gl-CD07Nq9c.js": {
-    "file": "mapbox-gl-CD07Nq9c.js",
+  "_mapbox-gl-BIJd0JdS.js": {
+    "file": "mapbox-gl-BIJd0JdS.js",
     "name": "mapbox-gl",
     "isDynamicEntry": true,
     "imports": [
-      "_basic-Dh2aZ_mu.js"
+      "_basic-BBdrl2ub.js"
     ],
     "css": [
       "mapbox-gl-C1Im9pGR.css"
     ]
   },
-  "_vendor-FgfuiXDU.js": {
-    "file": "vendor-FgfuiXDU.js",
+  "_vendor-B5dXw02P.js": {
+    "file": "vendor-B5dXw02P.js",
     "name": "vendor",
     "isDynamicEntry": true,
     "imports": [
-      "_basic-Dh2aZ_mu.js"
+      "_basic-BBdrl2ub.js"
     ]
   },
   "index.html": {
-    "file": "index-DPn8yiDO.js",
+    "file": "index-C_DFomu_.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_basic-Dh2aZ_mu.js",
-      "_vendor-FgfuiXDU.js",
-      "_mapbox-gl-CD07Nq9c.js"
+      "_basic-BBdrl2ub.js",
+      "_vendor-B5dXw02P.js",
+      "_mapbox-gl-BIJd0JdS.js"
     ],
     "dynamicImports": [
-      "_vendor-FgfuiXDU.js",
-      "_mapbox-gl-CD07Nq9c.js"
+      "_vendor-B5dXw02P.js",
+      "_mapbox-gl-BIJd0JdS.js"
     ],
     "css": [
-      "index-pvg-7EKf.css"
+      "index-te1zbFWA.css"
     ]
   }
 }

@@ -377,7 +377,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.43.0";
+const APP_VERSION = "4.43.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -15475,7 +15475,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_divider = resolveComponent("divider");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "answers-page" }, _attrs))} data-v-79dec3be>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "answers-page" }, _attrs))} data-v-b4304e32>`);
       _push(ssrRenderComponent(PageBanner, {
         "is-mobile": true,
         image: "/images/page-answers/banner-mobile.webp",
@@ -15512,11 +15512,11 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-loading" data-v-79dec3be${_scopeId}><!--[-->`);
+            _push2(`<div class="module-loading" data-v-b4304e32${_scopeId}><!--[-->`);
             ssrRenderList(3, (item) => {
-              _push2(`<div class="item" data-v-79dec3be${_scopeId}><!--[-->`);
+              _push2(`<div class="item" data-v-b4304e32${_scopeId}><!--[-->`);
               ssrRenderList(3, (i) => {
-                _push2(`<div class="item-skeleton" data-v-79dec3be${_scopeId}>`);
+                _push2(`<div class="item-skeleton" data-v-b4304e32${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
                 _push2(`</div>`);
               });
@@ -15550,7 +15550,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-content" data-v-79dec3be${_scopeId}><div class="statistics" data-v-79dec3be${_scopeId}>`);
+            _push2(`<div class="module-content" data-v-b4304e32${_scopeId}><div class="statistics" data-v-b4304e32${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item",
               href: unref(VALUABLE_LINKS).ZHIHU
@@ -15558,7 +15558,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 var _a2, _b, _c, _d;
                 if (_push3) {
-                  _push3(`<div class="logo" data-v-79dec3be${_scopeId2}><i class="iconfont icon-zhihu-full" data-v-79dec3be${_scopeId2}></i></div><div class="description" data-v-79dec3be${_scopeId2}>${ssrInterpolate(((_b = (_a2 = unref(zhihuLatestAnswers)) == null ? void 0 : _a2.data) == null ? void 0 : _b.paging.totals) ?? "-")} `);
+                  _push3(`<div class="logo" data-v-b4304e32${_scopeId2}><i class="iconfont icon-zhihu-full" data-v-b4304e32${_scopeId2}></i></div><div class="description" data-v-b4304e32${_scopeId2}>${ssrInterpolate(((_b = (_a2 = unref(zhihuLatestAnswers)) == null ? void 0 : _a2.data) == null ? void 0 : _b.paging.totals) ?? "-")} `);
                   _push3(ssrRenderComponent(_component_i18n, {
                     zh: "个回答",
                     en: "answers"
@@ -15588,7 +15588,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="logo quora" data-v-79dec3be${_scopeId2}><i class="iconfont icon-quora-full" data-v-79dec3be${_scopeId2}></i></div><div class="description" data-v-79dec3be${_scopeId2}>-</div>`);
+                  _push3(`<div class="logo quora" data-v-b4304e32${_scopeId2}><i class="iconfont icon-quora-full" data-v-b4304e32${_scopeId2}></i></div><div class="description" data-v-b4304e32${_scopeId2}>-</div>`);
                 } else {
                   return [
                     createVNode("div", { class: "logo quora" }, [
@@ -15600,9 +15600,9 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</div><ul class="answer-list" data-v-79dec3be${_scopeId}><!--[-->`);
+            _push2(`</div><ul class="answer-list" data-v-b4304e32${_scopeId}><!--[-->`);
             ssrRenderList(unref(allAnswers), (answer, index) => {
-              _push2(`<li class="answer-item" data-allow-mismatch data-v-79dec3be${_scopeId}>`);
+              _push2(`<li class="answer-item" data-allow-mismatch data-v-b4304e32${_scopeId}>`);
               _push2(ssrRenderComponent(_component_ulink, {
                 href: unref(getZhihuAnswerDetailURL)(answer.question.id, answer.id)
               }, {
@@ -15628,7 +15628,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
               }, {
                 normal: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<button class="normal" data-v-79dec3be${_scopeId2}><i class="iconfont icon-loadmore" data-v-79dec3be${_scopeId2}></i></button>`);
+                    _push3(`<button class="normal" data-v-b4304e32${_scopeId2}><i class="iconfont icon-loadmore" data-v-b4304e32${_scopeId2}></i></button>`);
                   } else {
                     return [
                       createVNode("button", {
@@ -15762,7 +15762,7 @@ _sfc_main$D.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/answers/mobile/index.vue");
   return _sfc_setup$D ? _sfc_setup$D(props, ctx) : void 0;
 };
-const MobileAnswersPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-79dec3be"]]);
+const MobileAnswersPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-b4304e32"]]);
 var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
   CategorySlug2["Code"] = "code";
   CategorySlug2["Insight"] = "insight";
