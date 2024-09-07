@@ -46,10 +46,10 @@
         </div>
         <div class="statistics" v-else>
           <div class="item" :key="index" v-for="(s, index) in statistics">
-            <p class="label">{{ s.label }}</p>
+            <i class="iconfont" :class="s.icon"></i>
             <div class="content">
-              <i class="iconfont" :class="s.icon"></i>
-              <span class="value">{{ s.value }}</span>
+              <p class="label">{{ s.label }}</p>
+              <div class="value">{{ s.value }}</div>
             </div>
           </div>
         </div>
@@ -141,28 +141,26 @@
       .statistics {
         .item {
           display: inline-flex;
-          flex-direction: column;
-          $value-size: $font-size-h1 * 1.1;
+          align-items: flex-end;
 
-          .label {
-            margin-bottom: 0;
-            text-transform: uppercase;
-            color: $color-text-secondary;
-            margin-left: $value-size;
-            padding-left: $gap-sm;
+          .iconfont {
+            margin-right: $gap;
+            display: inline-block;
+            font-size: $font-size-h3 * 2;
+            color: $color-text-disabled;
+            opacity: 0.2;
           }
 
           .content {
-            .iconfont {
-              margin-right: $gap-sm;
-              display: inline-block;
-              font-size: $value-size;
-              color: $color-text-divider;
+            .label {
+              margin-bottom: 0;
+              text-transform: uppercase;
+              color: $color-text-secondary;
             }
 
             .value {
               font-weight: bold;
-              font-size: $value-size;
+              font-size: $font-size-h1 * 1.1;
             }
           }
         }

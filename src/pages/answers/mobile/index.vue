@@ -97,7 +97,7 @@
 
       .statistics,
       .cards {
-        padding: 2rem;
+        padding: $gap-lg;
         margin-bottom: $item-gap;
         @include common-bg-module();
         @include radius-box($radius-sm);

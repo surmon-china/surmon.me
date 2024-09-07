@@ -172,7 +172,7 @@
         height: 3em;
         display: flex;
         align-items: center;
-        padding: 0 1em;
+        padding-left: 1em;
         border-radius: $radius-sm;
         background-color: $module-bg;
         font-weight: bold;

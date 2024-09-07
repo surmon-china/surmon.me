@@ -105,7 +105,6 @@
   .archive-page {
     .statistic-wrapper {
       margin-top: $gap-lg;
-      padding: 1.4em 2em;
       border-radius: $radius-sm;
       background-color: $module-bg-translucent;
 
@@ -117,12 +116,16 @@
         width: 100%;
       }
 
-      .skeleton {
-        width: 6rem;
-        height: 3rem;
+      .skeletons {
+        padding: $gap-lg;
+        .skeleton {
+          width: 6rem;
+          height: 3rem;
+        }
       }
 
       .statistics {
+        padding: 1.4em 2em;
         flex-wrap: wrap;
         justify-content: space-between;
 
@@ -165,7 +168,7 @@
         list-style: none;
 
         .item {
-          padding: 2rem;
+          padding: $gap-lg;
           background-color: $module-bg-translucent;
           @include radius-box($radius-sm);
           margin-bottom: $gap-lg;
