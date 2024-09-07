@@ -29,16 +29,19 @@
     </page-banner>
     <placeholder :data="zhihuLatestAnswers.data?.data" :loading="zhihuLatestAnswers.fetching">
       <template #loading>
-        <div class="module-loading" key="loading">
-          <div class="item" v-for="item in 3" :key="item">
-            <div class="item-skeleton" v-for="i in 3" :key="i">
+        <div class="answers-loading" key="loading">
+          <div class="statistics">
+            <skeleton-base class="item" :key="s" v-for="s in 3" />
+          </div>
+          <div class="cards" v-for="item in 3" :key="item">
+            <div class="item" v-for="i in 2" :key="i">
               <skeleton-line />
             </div>
           </div>
         </div>
       </template>
       <template #default>
-        <div class="module-content">
+        <div class="answers-content">
           <div class="statistics">
             <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
               <div class="logo"><i class="iconfont icon-zhihu-full"></i></div>
@@ -53,8 +56,8 @@
               <div class="description">-</div>
             </ulink>
           </div>
-          <ul class="answer-list">
-            <li class="answer-item" v-for="(answer, index) in allAnswers" :key="index" data-allow-mismatch>
+          <ul class="cards">
+            <li class="item" v-for="(answer, index) in allAnswers" :key="index" data-allow-mismatch>
               <ulink :href="getZhihuAnswerDetailURL(answer.question.id, answer.id)">
                 <answer-card :answer="answer" />
               </ulink>
@@ -88,22 +91,37 @@
   .answers-page {
     $item-gap: 1.4rem;
 
-    .module-loading {
+    .answers-loading {
       padding: 0;
       margin-top: $item-gap;
 
-      .item {
-        padding: $gap-lg;
+      .statistics,
+      .cards {
+        padding: 2rem;
         margin-bottom: $item-gap;
         @include common-bg-module();
         @include radius-box($radius-sm);
+      }
+
+      .statistics {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .item {
+          width: 6rem;
+          height: 3rem;
+        }
+      }
+
+      .cards {
         &:last-child {
           margin-bottom: 0;
         }
 
-        .item-skeleton {
+        .item {
           height: 2rem;
-          margin-bottom: $gap-lg;
+          margin-bottom: 2rem;
           &:last-child {
             margin-bottom: 0;
           }
@@ -111,7 +129,7 @@
       }
     }
 
-    .module-content {
+    .answers-content {
       margin-top: $item-gap;
 
       .statistics {
@@ -146,12 +164,12 @@
         }
       }
 
-      .answer-list {
+      .cards {
         margin: 0;
         padding: 0;
         list-style: none;
 
-        .answer-item {
+        .item {
           @include radius-box($radius-sm);
           margin-bottom: 1.4rem;
           &:last-child {

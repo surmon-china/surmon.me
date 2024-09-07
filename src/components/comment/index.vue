@@ -253,7 +253,7 @@
 </script>
 
 <template>
-  <div :id="ANCHORS.COMMENT_ELEMENT_ID" class="comment-box">
+  <div :id="ANCHORS.COMMENT_ELEMENT_ID" class="comment-box" :class="{ plain }">
     <comment-topbar
       :total="commentStore.pagination?.total"
       :loaded="commentStore.comments.length"
@@ -355,6 +355,9 @@
     padding: $gap;
     @include common-bg-module();
     @include radius-box($radius-lg);
+    &.plain {
+      border-radius: $radius-sm;
+    }
 
     .divider {
       border-color: $module-bg-darker-1 !important;

@@ -33,39 +33,39 @@ export const useArchivePageStatistics = () => {
   const store = useNodepressStatisticStore()
   const statistics = computed(() => ({
     tags: {
-      icon: 'icon-quill',
-      title: i18n.t(LanguageKey.STATISTIC_TAGS)!,
-      content: numberSplit(store.data?.tags || 0)
+      icon: 'icon-tag',
+      label: i18n.t(LanguageKey.STATISTIC_TAGS)!,
+      value: numberSplit(store.data?.tags || 0)
     },
     articles: {
       icon: 'icon-quill',
-      title: i18n.t(LanguageKey.STATISTIC_ARTICLES)!,
-      content: numberSplit(store.data?.articles || 0)
+      label: i18n.t(LanguageKey.STATISTIC_ARTICLES)!,
+      value: numberSplit(store.data?.articles || 0)
     },
     comments: {
       icon: 'icon-comment',
-      title: i18n.t(LanguageKey.STATISTIC_COMMENTS)!,
-      content: numberSplit(store.data?.comments || 0)
+      label: i18n.t(LanguageKey.STATISTIC_COMMENTS)!,
+      value: numberSplit(store.data?.comments || 0)
     },
     todayViews: {
       icon: 'icon-eye',
-      title: i18n.t(LanguageKey.STATISTIC_TODAY_VIEWS)!,
-      content: numberSplit(store.data?.todayViews || 0)
+      label: i18n.t(LanguageKey.STATISTIC_TODAY_VIEWS)!,
+      value: numberSplit(store.data?.todayViews || 0)
     },
     totalViews: {
       icon: 'icon-eye',
-      title: i18n.t(LanguageKey.STATISTIC_TOTAL_VIEWS)!,
-      content: numberToKilo(store.data?.totalViews || 0)
+      label: i18n.t(LanguageKey.STATISTIC_TOTAL_VIEWS)!,
+      value: numberToKilo(store.data?.totalViews || 0)
     },
     totalLikes: {
       icon: 'icon-like',
-      title: i18n.t(LanguageKey.STATISTIC_TOTAL_UPVOTES)!,
-      content: numberSplit(store.data?.totalLikes || 0)
+      label: i18n.t(LanguageKey.STATISTIC_TOTAL_UPVOTES)!,
+      value: numberSplit(store.data?.totalLikes || 0)
     },
     averageEmotion: {
       icon: 'icon-emoji',
-      title: i18n.t(LanguageKey.STATISTIC_AVERAGE_EMOTION)!,
-      content: String(store.data?.averageEmotion ?? '-')
+      label: i18n.t(LanguageKey.STATISTIC_AVERAGE_EMOTION)!,
+      value: String(store.data?.averageEmotion ?? '-')
     }
   }))
 

@@ -35,16 +35,8 @@
         </webfont>
       </template>
       <template #description>
-        <i18n>
-          <template #zh>
-            <span>
-              在我的 <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube 频道</ulink> 查看更多
-            </span>
-          </template>
-          <template #en>
-            View all videos on my <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube Channel</ulink>
-          </template>
-        </i18n>
+        <i class="iconfont icon-youtube"></i>
+        <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube Channel</ulink>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -85,6 +77,11 @@
     min-height: $full-page-active-content-height;
 
     .page-banner {
+      .iconfont {
+        font-size: $font-size-h3;
+        margin-right: $gap-xs;
+      }
+
       .link {
         color: $white;
         text-decoration: underline;

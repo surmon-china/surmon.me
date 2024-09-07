@@ -1,6 +1,6 @@
+import { useStores } from '/@/stores'
 import { useEnhancer } from '/@/app/enhancer'
 import { useCDNDomain } from '/@/app/context'
-import { useStores } from '/@/stores'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
 import { getAssetURL } from '/@/transforms/url'
@@ -8,6 +8,23 @@ import { META } from '/@/config/app.config'
 
 export const useAdminAvatar = (avatar?: string) => {
   return avatar || getAssetURL(useCDNDomain(), '/images/anonymous.png')
+}
+
+export const useAboutPageMeta = () => {
+  const { i18n, seoMeta, isZhLang } = useEnhancer()
+  const { adminInfo } = useStores()
+
+  return seoMeta(() => {
+    const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
+    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
+    const description = `${isZhLang.value ? '关于' : 'About'} ${META.author}`
+    return {
+      pageTitle: titles.join(' | '),
+      description,
+      ogType: 'profile',
+      ogImage: adminInfo.data?.avatar
+    }
+  })
 }
 
 export interface AboutI18nConfig {
@@ -83,35 +100,3 @@ export const i18ns = {
     ].join(' ')
   }
 }
-
-export const useAboutPageMeta = () => {
-  const { i18n, seoMeta, isZhLang } = useEnhancer()
-  const { adminInfo } = useStores()
-
-  return seoMeta(() => {
-    const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
-    const description = `${isZhLang.value ? '关于' : 'About'} ${META.author}`
-    return {
-      pageTitle: titles.join(' | '),
-      description,
-      ogType: 'profile',
-      ogImage: adminInfo.data?.avatar
-    }
-  })
-}
-
-export const SPECIAL_LINKS = Object.freeze([
-  {
-    name: 'GitHub',
-    url: 'https://github.com'
-  },
-  {
-    name: `Vite`,
-    url: 'https://vitejs.dev/'
-  },
-  {
-    name: `Disqus`,
-    url: 'https://disqus.com/'
-  }
-])

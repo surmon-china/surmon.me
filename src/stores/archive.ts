@@ -23,7 +23,7 @@ export type ArchiveTreeList = Array<{
 export const useArchiveStore = defineStore('archive', () => {
   const fetchStore = createFetchStore<Archive | null>({
     data: null,
-    once: true,
+    once: false,
     async fetcher() {
       const response = await nodepress.get<Archive>('/archive')
       return response.result

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { useUniversalFetch } from '/@/universal'
   import { useArchiveStore } from '/@/stores/archive'
   import { LanguageKey } from '/@/language'
@@ -29,27 +29,31 @@
     </page-banner>
     <div class="page-content">
       <container class="statistic-wrapper">
-        <transition name="module" mode="out-in">
-          <div class="skeletons" v-if="statisticFetching">
-            <skeleton-base class="skeleton" :key="s" v-for="s in 3" />
-          </div>
-          <div class="statistics" v-else>
-            <div class="item">
-              <p class="title">{{ statisticState.statistics.value.articles.title }}</p>
-              <div class="content">{{ statisticState.statistics.value.articles.content }}</div>
+        <placeholder :loading="statisticFetching">
+          <template #loading>
+            <div class="skeletons" key="skeletons">
+              <skeleton-base class="skeleton" :key="s" v-for="s in 3" />
             </div>
-            <divider type="vertical" />
-            <div class="item">
-              <p class="title">{{ statisticState.statistics.value.todayViews.title }}</p>
-              <div class="content">{{ statisticState.statistics.value.todayViews.content }}</div>
+          </template>
+          <template #default>
+            <div class="statistics" key="statistics">
+              <div class="item">
+                <p class="label">{{ statisticState.statistics.value.articles.label }}</p>
+                <div class="value">{{ statisticState.statistics.value.articles.value }}</div>
+              </div>
+              <divider type="vertical" />
+              <div class="item">
+                <p class="label">{{ statisticState.statistics.value.todayViews.label }}</p>
+                <div class="value">{{ statisticState.statistics.value.todayViews.value }}</div>
+              </div>
+              <divider type="vertical" />
+              <div class="item">
+                <p class="label">{{ statisticState.statistics.value.comments.label }}</p>
+                <div class="value">{{ statisticState.statistics.value.comments.value }}</div>
+              </div>
             </div>
-            <divider type="vertical" />
-            <div class="item">
-              <p class="title">{{ statisticState.statistics.value.comments.title }}</p>
-              <div class="content">{{ statisticState.statistics.value.comments.content }}</div>
-            </div>
-          </div>
-        </transition>
+          </template>
+        </placeholder>
       </container>
       <container class="archive-wrapper">
         <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
@@ -59,9 +63,11 @@
             </empty>
           </template>
           <template #loading>
-            <div class="archive-skeleton" key="skeleton">
-              <skeleton-line class="item" :key="s" v-for="s in 6" />
-            </div>
+            <ul class="archive-skeleton" key="skeleton">
+              <li v-for="item in 3" :key="item" class="item">
+                <skeleton-line v-for="i in 2" :key="i" class="line" />
+              </li>
+            </ul>
           </template>
           <template #default>
             <archive-tree class="archive-content" :tree="archiveStore.tree" key="content">
@@ -99,21 +105,21 @@
   .archive-page {
     .statistic-wrapper {
       margin-top: $gap-lg;
-      padding: 1.8rem 2rem;
-      border-radius: $radius-lg;
+      padding: 1.4em 2em;
+      border-radius: $radius-sm;
       background-color: $module-bg-translucent;
 
       .skeletons,
       .statistics {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         width: 100%;
       }
 
       .skeleton {
-        width: 5rem;
-        height: 2.6rem;
+        width: 6rem;
+        height: 3rem;
       }
 
       .statistics {
@@ -125,14 +131,14 @@
           flex-direction: column;
           text-align: center;
 
-          .title {
+          .label {
             margin-bottom: $gap-xs;
             text-transform: uppercase;
             font-size: $font-size-small;
             color: $color-text-secondary;
           }
 
-          .content {
+          .value {
             font-size: $font-size-h1;
             font-weight: bold;
           }
@@ -148,25 +154,37 @@
         font-weight: bold;
       }
 
-      .archive-skeleton,
       .archive-content {
         background-color: $module-bg-translucent;
-        @include radius-box($radius-lg);
+        @include radius-box($radius-sm);
       }
 
       .archive-skeleton {
-        padding: 2rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
         .item {
-          height: 2rem;
-          margin-bottom: 2rem;
+          padding: 2rem;
+          background-color: $module-bg-translucent;
+          @include radius-box($radius-sm);
+          margin-bottom: $gap-lg;
           &:last-child {
             margin-bottom: 0;
+          }
+
+          .line {
+            height: 2rem;
+            margin-bottom: 2rem;
+            &:last-child {
+              margin-bottom: 0;
+            }
           }
         }
       }
 
       .archive-content {
-        padding: 0 3rem;
+        padding: 0 2em;
         .archive-title {
           margin: 2em 0;
           text-align: center;

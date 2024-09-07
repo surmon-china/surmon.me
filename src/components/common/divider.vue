@@ -3,6 +3,7 @@
     type?: 'horizontal' | 'vertical'
     size?: 'default' | 'xs' | 'sm' | 'lg'
     dashed?: boolean
+    color?: string
   }
 
   withDefaults(defineProps<Props>(), {
@@ -13,7 +14,12 @@
 </script>
 
 <template>
-  <div role="separator" class="divider" :class="[type, size, { dashed }, { slot: !!$slots.default }]">
+  <div
+    role="separator"
+    class="divider"
+    :class="[type, size, { dashed }, { slot: !!$slots.default }]"
+    :style="color ? { '--border-color': color } : {}"
+  >
     <slot></slot>
   </div>
 </template>
@@ -26,6 +32,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+
     &.default {
       #{--divider-gap}: $gap;
     }
@@ -45,7 +52,7 @@
       clear: both;
       width: 100%;
       margin: var(--divider-gap) 0;
-      border-top: 1px solid $color-text-divider;
+      border-top: 1px solid var(--border-color, $color-text-divider);
       &.slot {
         border-top: none;
       }
@@ -58,7 +65,7 @@
       height: 0.9em;
       margin: 0 var(--divider-gap);
       vertical-align: middle;
-      border-left: 1px solid $color-text-divider;
+      border-left: 1px solid var(--border-color, $color-text-divider);
 
       &.slot {
         display: inline-flex;

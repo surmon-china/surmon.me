@@ -33,34 +33,21 @@
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
       <template #description>
-        <i18n>
-          <template #zh>
-            <span>
-              在我的
-              <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
-              和 <ulink :href="VALUABLE_LINKS.QUORA" class="link">Quora</ulink> 主页查看更多
-            </span>
-          </template>
-          <template #en>
-            View all answers on
-            <ulink :href="VALUABLE_LINKS.ZHIHU" class="link">
-              <i class="iconfont icon-zhihu-full"></i>
-            </ulink>
-            & <ulink :href="VALUABLE_LINKS.QUORA" class="link">Quora</ulink>
-          </template>
-        </i18n>
+        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
+        <divider type="vertical" size="lg" color="#ffffffcc" />
+        <ulink :href="VALUABLE_LINKS.QUORA" class="link">Quora</ulink>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
       <placeholder :data="zhihuLatestAnswers.data?.data" :loading="zhihuLatestAnswers.fetching">
         <template #placeholder>
-          <empty class="module-empty" key="empty">
+          <empty class="answers-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
-          <div key="loading" class="module-loading">
+          <div key="loading" class="answers-loading">
             <div class="item" v-for="item in 3 * 3" :key="item">
               <div class="item-skeleton" v-for="i in 3" :key="i">
                 <skeleton-line />
@@ -144,7 +131,7 @@
       }
     }
 
-    .module-loading {
+    .answers-loading {
       padding: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -156,7 +143,6 @@
         @include radius-box($radius-sm);
 
         .item-skeleton {
-          width: 100%;
           height: 2rem;
           margin-bottom: 2rem;
           &:last-child {
@@ -166,7 +152,7 @@
       }
     }
 
-    .module-empty {
+    .answers-empty {
       font-weight: bold;
       font-size: $font-size-h3;
     }

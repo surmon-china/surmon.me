@@ -7,7 +7,7 @@
   import { openNewWindow } from '/@/utils/opener'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
   import { GOOGLE_MAP_LINKS } from './google-map'
-  import { i18ns } from '../shared'
+  import { i18ns } from '../../shared'
   import Mapbox from './mapbox.vue'
   import FootprintModal from './modal.vue'
 

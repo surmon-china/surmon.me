@@ -15,7 +15,7 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
 
-  const { instagramLatestMedias } = useStores()
+  const { instagramProfile, instagramLatestMedias } = useStores()
   const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
 
   const loading = ref(false)
@@ -51,7 +51,7 @@
     }
   })
 
-  useUniversalFetch(() => instagramLatestMedias.fetch())
+  useUniversalFetch(() => Promise.all([instagramProfile.fetch(), instagramLatestMedias.fetch()]))
 </script>
 
 <template>
@@ -63,14 +63,16 @@
         </webfont>
       </template>
       <template #description>
-        <i18n>
-          <template #zh>
-            <span>在我的 <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink> 主页查看更多</span>
-          </template>
-          <template #en>
-            View all photographs on my <ulink :href="VALUABLE_LINKS.INSTAGRAM" class="link">Instagram</ulink>
-          </template>
-        </i18n>
+        <client-only>
+          <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">
+            <i class="iconfont icon-instagram"></i>
+            {{ instagramProfile.data?.name ?? '-' }}
+          </ulink>
+          <divider type="vertical" size="lg" color="#ffffffcc" />
+          {{ instagramProfile.data?.mediaCount ?? '-' }} <i18n zh="帖子" en="posts" />
+          <divider type="vertical" size="lg" color="#ffffffcc" />
+          {{ instagramProfile.data?.followerCount ?? '-' }} <i18n zh="粉丝" en="followers" />
+        </client-only>
       </template>
     </page-banner>
     <container class="page-bridge"></container>

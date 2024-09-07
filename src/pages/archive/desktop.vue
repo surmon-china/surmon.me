@@ -5,19 +5,19 @@
   import { LanguageKey } from '/@/language'
   import { numberSplit } from '/@/transforms/text'
   import { getArticleDetailRoute } from '/@/transforms/route'
+  import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
   import PageBanner from '/@/components/common/banner.vue'
   import ArchiveTree from './tree.vue'
-  import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
 
   const archiveStore = useArchiveStore()
   const statisticState = useArchivePageStatistics()
   const statisticFetching = ref(true)
   const statistics = computed(() => [
-    statisticState.statistics.value.todayViews,
     statisticState.statistics.value.articles,
+    statisticState.statistics.value.todayViews,
     statisticState.statistics.value.comments,
     statisticState.statistics.value.totalLikes,
-    statisticState.statistics.value.totalViews
+    statisticState.statistics.value.averageEmotion
   ])
 
   useArchivePageMeta()
@@ -46,13 +46,11 @@
         </div>
         <div class="statistics" v-else>
           <div class="item" :key="index" v-for="(s, index) in statistics">
-            <p class="title">
-              <span class="text">{{ s.title }}</span>
-              <span class="icon">
-                <i class="iconfont" :class="s.icon"></i>
-              </span>
-            </p>
-            <div class="content">{{ s.content }}</div>
+            <p class="label">{{ s.label }}</p>
+            <div class="content">
+              <i class="iconfont" :class="s.icon"></i>
+              <span class="value">{{ s.value }}</span>
+            </div>
           </div>
         </div>
       </transition>
@@ -135,8 +133,8 @@
 
       .skeletons {
         .item {
-          width: 5em;
-          height: 2em;
+          width: 8rem;
+          height: 2.8rem;
         }
       }
 
@@ -144,28 +142,28 @@
         .item {
           display: inline-flex;
           flex-direction: column;
+          $value-size: $font-size-h1 * 1.1;
 
-          .title {
-            display: flex;
-            align-items: center;
+          .label {
             margin-bottom: 0;
-
-            .text {
-              text-transform: uppercase;
-              color: $color-text-secondary;
-            }
-
-            .icon {
-              margin-left: $gap-sm;
-              display: inline-block;
-              font-size: $font-size-h6;
-              color: $color-text-divider;
-            }
+            text-transform: uppercase;
+            color: $color-text-secondary;
+            margin-left: $value-size;
+            padding-left: $gap-sm;
           }
 
           .content {
-            font-size: $font-size-h1 * 1.3;
-            font-weight: bold;
+            .iconfont {
+              margin-right: $gap-sm;
+              display: inline-block;
+              font-size: $value-size;
+              color: $color-text-divider;
+            }
+
+            .value {
+              font-weight: bold;
+              font-size: $value-size;
+            }
           }
         }
       }
@@ -191,7 +189,7 @@
           width: 100%;
           padding: 2rem;
           background-color: $module-bg-translucent;
-          @include radius-box($radius-lg);
+          @include radius-box($radius-sm);
           &:last-child {
             margin-bottom: 0;
           }

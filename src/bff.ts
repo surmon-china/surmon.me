@@ -16,7 +16,12 @@ import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
 import { getTwitterProfile, getTwitterTweets } from './server/getters/twitter'
-import { getInstagramMedias, getInstagramMediaChildren, getInstagramCalendar } from './server/getters/instagram'
+import {
+  getInstagramProfile,
+  getInstagramMedias,
+  getInstagramMediaChildren,
+  getInstagramCalendar
+} from './server/getters/instagram'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
 import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getNPMStatistic } from './server/getters/npm'
@@ -155,15 +160,29 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
 
     responser(() => {
-      return !page
-        ? getZhihuFirstPageCache()
-        : cacher.passive(cache, {
-            key: `zhihu_answers_page_${page}`,
-            ttl: hours(12),
-            getter: () => getZhihuAnswers(Number(page))
-          })
+      if (!page) {
+        return getZhihuFirstPageCache()
+      }
+
+      return cacher.passive(cache, {
+        key: `zhihu_answers_page_${page}`,
+        ttl: hours(12),
+        getter: () => getZhihuAnswers(Number(page))
+      })
     })(request, response, next)
   })
+
+  // Instagram profile
+  app.get(
+    `${TUN}/${TunnelModule.InstagramProfile}`,
+    responser(() => {
+      return cacher.passive(cache, {
+        key: TunnelModule.InstagramProfile,
+        ttl: hours(12),
+        getter: getInstagramProfile
+      })
+    })
+  )
 
   // Instagram first page medias cache
   const getInsFirstPageMediasCache = cacher.interval(cache, {
