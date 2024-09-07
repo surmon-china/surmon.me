@@ -127,14 +127,13 @@
           text-align: center;
 
           .logo {
-            margin-bottom: $gap-xs;
+            margin-bottom: $gap-sm;
             font-size: $font-size-h1;
             &.quora {
               display: flex;
-              $size: $font-size-h3 * 2;
-              height: $size;
-              line-height: $size;
-              font-size: $size;
+              height: $font-size-h3 * 1.4;
+              line-height: $font-size-h3 * 1.4;
+              font-size: $font-size-h3 * 2;
             }
           }
 
