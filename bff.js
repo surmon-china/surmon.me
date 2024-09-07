@@ -99,8 +99,8 @@ const META = Object.freeze({
     title: 'Surmon.me',
     zh_sub_title: '斯是陋室，唯吾芳馨',
     en_sub_title: `Surmon's digital vihara`,
-    zh_description: `本是浪蝶游蜂，无智无德无明；幸闻佛道开化，广利有情众生`,
-    zh_description_short: `本是蝶蜂，无德无明；幸闻佛道，广利众生`,
+    zh_description: `本是浪蝶游蜂，无智无德无明；幸闻佛道开化，志利有情众生`,
+    zh_description_short: `本为蝶蜂，无德无明；幸闻佛道，志利众生`,
     en_description: 'Either write something worth reading or do something worth writing.',
     url: 'https://surmon.me',
     domain: 'surmon.me',
@@ -120,7 +120,7 @@ const MAPBOX_CONFIG = Object.freeze({
     ZOOM: 12.4374,
     CENTER: [103.830391822121, 1.348463]
 });
-const app_config_IDENTITIES = Object.freeze({
+const IDENTITIES = Object.freeze({
     GOOGLE_ANALYTICS_MEASUREMENT_ID: 'G-R40DDTSYNQ',
     GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
     SENTRY_PUBLIC_DSN: 'https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528',
@@ -142,8 +142,8 @@ const VALUABLE_LINKS = Object.freeze({
     UPTIME_STATUS: 'https://redirect.surmon.me/status',
     NPM_HOMEPAGE: 'https://www.npmjs.com/~surmon',
     PAYPAL: 'https://paypal.me/surmon',
-    GITHUB_SPONSORS: `https://github.com/sponsors/${app_config_IDENTITIES.GITHUB_USER_NAME}`,
-    GITHUB: `https://github.com/${app_config_IDENTITIES.GITHUB_USER_NAME}`,
+    GITHUB_SPONSORS: `https://github.com/sponsors/${IDENTITIES.GITHUB_USER_NAME}`,
+    GITHUB: `https://github.com/${IDENTITIES.GITHUB_USER_NAME}`,
     GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
     GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
     GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
@@ -153,17 +153,17 @@ const VALUABLE_LINKS = Object.freeze({
     GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
     DISCORD_GROUP: 'https://redirect.surmon.me/discord-server',
     TELEGRAM_GROUP: 'https://redirect.surmon.me/telegram-group',
-    MUSIC_163: `https://music.163.com/#/playlist?id=${app_config_IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-    YOUTUBE_CHANNEL: `https://www.youtube.com/${app_config_IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
+    MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
+    YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
-    ZHIHU: `https://www.zhihu.com/people/${app_config_IDENTITIES.ZHIHU_USER_NAME}/answers`,
+    ZHIHU: `https://www.zhihu.com/people/${IDENTITIES.ZHIHU_USER_NAME}/answers`,
     QUORA: `https://www.quora.com/profile/Surmon/answers`,
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
-    INSTAGRAM: `https://www.instagram.com/${app_config_IDENTITIES.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${app_config_IDENTITIES.TWITTER_USER_NAME}`
+    INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
+    TWITTER: `https://twitter.com/${IDENTITIES.TWITTER_USER_NAME}`
 });
 
 ;// CONCATENATED MODULE: ./src/config/bff.config.ts
@@ -260,7 +260,7 @@ const external_agentkeepalive_namespaceObject = external_agentkeepalive_x({ ["Ht
 // https://github.com/node-modules/agentkeepalive
 // https://github.com/axios/axios?tab=readme-ov-file#request-config
 // https://github.com/node-fetch/node-fetch/issues/1295
-const axios_axios = external_axios_namespaceObject["default"].create({
+const axios = external_axios_namespaceObject["default"].create({
     httpAgent: new external_agentkeepalive_namespaceObject["default"]({
         keepAlive: true,
         maxSockets: 160,
@@ -278,7 +278,7 @@ const axios_axios = external_axios_namespaceObject["default"].create({
         keepAliveMsecs: 60000
     })
 });
-/* harmony default export */ const services_axios = (axios_axios);
+/* harmony default export */ const services_axios = (axios);
 
 
 ;// CONCATENATED MODULE: external "path"
@@ -456,7 +456,7 @@ const getGaScriptURL = (measurementId) => {
 
 
 const getGTagScript = async () => {
-    const url = getGaScriptURL(app_config_IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
+    const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
     const response = await services_axios.get(url, { timeout: 6000 });
     return response.data;
 };
@@ -805,10 +805,10 @@ const getWebTwitterUserTweets = async (userId, params) => {
 
 
 const getTwitterProfile = () => {
-    return getWebTwitterProfile(app_config_IDENTITIES.TWITTER_USER_NAME);
+    return getWebTwitterProfile(IDENTITIES.TWITTER_USER_NAME);
 };
 const getTwitterTweets = (params) => {
-    return getWebTwitterUserTweets(app_config_IDENTITIES.TWITTER_USER_ID, params);
+    return getWebTwitterUserTweets(IDENTITIES.TWITTER_USER_ID, params);
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/media.ts
@@ -913,7 +913,7 @@ const getInstagramProfile = async () => {
     try {
         const url = `https://i.instagram.com/api/v1/users/web_profile_info/?username=${IDENTITIES.INSTAGRAM_USERNAME}`;
         const agent = 'Instagram 76.0.0.15.395 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890; en_US; 138226743)';
-        const response = await axios.get(url, { timeout: 8000, headers: { 'User-Agent': agent } });
+        const response = await services_axios.get(url, { timeout: 8000, headers: { 'User-Agent': agent } });
         if (response.data.status !== 'ok') {
             return Promise.reject(response.data);
         }
@@ -930,7 +930,7 @@ const getInstagramProfile = async () => {
         }
     }
     catch (error) {
-        throw isAxiosError(error) ? error.toJSON() : error;
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
     }
 };
 
@@ -969,7 +969,7 @@ const getYouTubeChannelPlayLists = async () => {
         params: {
             part: 'snippet,contentDetails',
             maxResults: 50,
-            channelId: app_config_IDENTITIES.YOUTUBE_CHANNEL_ID,
+            channelId: IDENTITIES.YOUTUBE_CHANNEL_ID,
             key: YOUTUBE_API_KEY
         }
     });
@@ -1000,7 +1000,7 @@ const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
 
 
 const fetchGitHubStatisticJSON = async (fileName) => {
-    const url = `https://raw.githubusercontent.com/${app_config_IDENTITIES.GITHUB_USER_NAME}/${app_config_IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
+    const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
     const response = await services_axios.get(url, { timeout: 6000 });
     return response.data;
 };
@@ -1058,8 +1058,8 @@ const getNPMStatistic = async () => {
 
 
 const getDoubanMovies = async () => {
-    const api = `https://m.douban.com/rexxar/api/v2/user/${app_config_IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
-    const referer = `https://m.douban.com/people/${app_config_IDENTITIES.DOUBAN_USER_ID}/movie_charts`;
+    const api = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`;
+    const referer = `https://m.douban.com/people/${IDENTITIES.DOUBAN_USER_ID}/movie_charts`;
     const response = await services_axios.get(api, {
         timeout: 1000 * 12,
         headers: { Referer: referer }
@@ -1083,7 +1083,7 @@ const ZHIHU_INCLUDE_PARAMS = `data[*].is_normal,admin_closed_comment,reward_info
 // Get answers by member ID
 // https://yifei.me/note/460
 const getZhihuAnswers = async (page = 1) => {
-    const api = `https://api.zhihu.com/members/${app_config_IDENTITIES.ZHIHU_USER_NAME}/answers`;
+    const api = `https://api.zhihu.com/members/${IDENTITIES.ZHIHU_USER_NAME}/answers`;
     const response = await services_axios.get(api, {
         timeout: 8000,
         headers: { cookie: ZHIHU_COOKIE },
@@ -1114,7 +1114,7 @@ const getZhihuAnswers = async (page = 1) => {
 const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
     // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
-    const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${app_config_IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
+    const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
     const playlistDetail = await services_axios.get(playlistURL, { timeout: 6000 });
     if (playlistDetail.data.code < 0) {
         throw new Error(playlistDetail.data.message);
@@ -1922,15 +1922,24 @@ createExpressApp().then(async ({ app, server, cache }) => {
             return;
         }
         responser(() => {
-            return !page
-                ? getZhihuFirstPageCache()
-                : cacher.passive(cache, {
-                    key: `zhihu_answers_page_${page}`,
-                    ttl: hours(12),
-                    getter: () => getZhihuAnswers(Number(page))
-                });
+            if (!page) {
+                return getZhihuFirstPageCache();
+            }
+            return cacher.passive(cache, {
+                key: `zhihu_answers_page_${page}`,
+                ttl: hours(12),
+                getter: () => getZhihuAnswers(Number(page))
+            });
         })(request, response, next);
     });
+    // Instagram profile
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.InstagramProfile}`, responser(() => {
+        return cacher.passive(cache, {
+            key: TunnelModule.InstagramProfile,
+            ttl: hours(12),
+            getter: getInstagramProfile
+        });
+    }));
     // Instagram first page medias cache
     const getInsFirstPageMediasCache = cacher.interval(cache, {
         key: 'instagram_medias_page_first',
