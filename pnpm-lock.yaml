@@ -20,14 +20,14 @@ importers:
         specifier: ^8.x
         version: 8.28.0(vue@3.5.2(typescript@5.5.4))
       '@unhead/schema':
-        specifier: ^1.10.x
-        version: 1.10.4
+        specifier: ^1.11.x
+        version: 1.11.1
       '@unhead/ssr':
-        specifier: ^1.10.x
-        version: 1.10.4
+        specifier: ^1.11.x
+        version: 1.11.1
       '@unhead/vue':
-        specifier: ^1.10.x
-        version: 1.10.4(vue@3.5.2(typescript@5.5.4))
+        specifier: ^1.11.x
+        version: 1.11.1(vue@3.5.2(typescript@5.5.4))
       agentkeepalive:
         specifier: ^4.5.0
         version: 4.5.0
@@ -86,7 +86,7 @@ importers:
         specifier: ^1.16.0
         version: 1.16.0
       lru-cache:
-        specifier: ^11.0.0
+        specifier: ^11.x
         version: 11.0.0
       mapbox-gl:
         specifier: ^3.6.0
@@ -189,8 +189,8 @@ importers:
         specifier: ^0.7.39
         version: 0.7.39
       '@unhead/addons':
-        specifier: ^1.10.x
-        version: 1.10.4(rollup@4.21.2)(webpack-sources@3.2.3)
+        specifier: ^1.11.x
+        version: 1.11.1(rollup@4.21.2)(webpack-sources@3.2.3)
       '@vercel/ncc':
         specifier: ^0.38.1
         version: 0.38.1
@@ -1079,23 +1079,23 @@ packages:
     resolution: {integrity: sha512-zTQD6WLNTre1hj5wp09nBIDiOc2U5r/qmzo7wxPn4ZgAjHql09EofqhF9WF+fZHzL5aCyaIpPcT2hyxl73kr9A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@unhead/addons@1.10.4':
-    resolution: {integrity: sha512-oQMmovJ2X3ybf+xRK2aiYJZ6/inolBOsDyUcAJaC1Jewcc+2eJK3/8mCPBGFrpSxJDtuN6/Jgp2pI4D/qaKzsw==}
+  '@unhead/addons@1.11.1':
+    resolution: {integrity: sha512-prBFyuWqtvMvWhEmAapiG+RCjdz2WoVrmUSVWhar728Yc8i3CKlvHs95QWF9upZAPAXY3C8CmcVj6g7SmF9sMQ==}
 
-  '@unhead/dom@1.10.4':
-    resolution: {integrity: sha512-ehMy9k6efo4GTLmiP27wCtywWYdiggrP3m7h6kD/d1uhfORH3yCgsd4yXQnmDoSbsMyX6GlY5DBzy5bnYPp/Xw==}
+  '@unhead/dom@1.11.1':
+    resolution: {integrity: sha512-lyqegiA35OzcvsaP9gQpAPWv5LmZpP9D/55xkFVTnaXfd1kl1TCxBkioAzv3lxtaYsu6CLSqH/jRxO+fB3Q2kQ==}
 
-  '@unhead/schema@1.10.4':
-    resolution: {integrity: sha512-nX9sJgKPy2t4GHB9ky/vkMLbYqXl9Num5NZToTr0rKrIGkshzHhUrbn/EiHreIjcGI1eIpu+edniCDIwGTJgmw==}
+  '@unhead/schema@1.11.1':
+    resolution: {integrity: sha512-oEl5vV3+zZyY1Y3PVE1+gWNMj2wJczP6w0gscp8RnFRSik9p94XqYzBnzeb0tezIyVJWKWycGne9ocV0uGHbzw==}
 
-  '@unhead/shared@1.10.4':
-    resolution: {integrity: sha512-C5wsps9i/XCBObMVQUrbXPvZG17a/e5yL0IsxpICaT4QSiZAj9v7JrNQ5WpM5JOZVMKRI5MYRdafNDw3iSmqZg==}
+  '@unhead/shared@1.11.1':
+    resolution: {integrity: sha512-05hd92qxAwkndMU8Ftklf4/97GuRVYHM0XzMz3ioENxJl8NfFGAyV48H/idt8WFv8JIkY9d7KgJDBmxG+CHi9Q==}
 
-  '@unhead/ssr@1.10.4':
-    resolution: {integrity: sha512-2nDG08q9bTvMB24YGNJCXimAs1vuG9yVa01i/Et1B2y4P8qhweXOxnialGmt5j8xeXwPFUBCe36tC5kLCSuJoQ==}
+  '@unhead/ssr@1.11.1':
+    resolution: {integrity: sha512-rol3eGQZOvkKAsx604rZCM3uiBXNfro5V73kQKWq4kv6GNEifzY1r54Fqj1cOk6AMVYpNqowmDcvBwBC/rqXZw==}
 
-  '@unhead/vue@1.10.4':
-    resolution: {integrity: sha512-Q45F/KOvDeitc8GkfkPY45V8Dmw1m1b9A/aHM5A2BwRV8GyoRV+HRWVw5h02e0AO1TsICvcW8tI90qeCM2oGSA==}
+  '@unhead/vue@1.11.1':
+    resolution: {integrity: sha512-MSeFsRr0Pco96bjoY8bijV5su+xw7joqv1LUJQxcDVIp51M1cfrutzMIBTGne30/0K43aIvshCGbmyuW8jouxw==}
     peerDependencies:
       vue: '>=2.7 || >=3'
 
@@ -1502,6 +1502,9 @@ packages:
   define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
     engines: {node: '>= 0.4'}
+
+  defu@6.1.4:
+    resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
 
   delayed-stream@1.0.0:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
@@ -3085,8 +3088,8 @@ packages:
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
-  unhead@1.10.4:
-    resolution: {integrity: sha512-qKiYhgZ4IuDbylP409cdwK/8WEIi5cOSIBei/OXzxFs4uxiTZHSSa8NC1qPu2kooxHqxyoXGBw8ARms9zOsbxw==}
+  unhead@1.11.1:
+    resolution: {integrity: sha512-2BqoGPtor6eR427J2m6+Qhxwpi+6Uea0Dok+gGn8v+LOzOxQG/fNR6m7qw+7a0uB2PlR3ImvoAvWQ/LiNevymg==}
 
   unique-filename@2.0.1:
     resolution: {integrity: sha512-ODWHtkkdx3IAR+veKxFV+VBkUMcN+FaqzUUd7IZzt+0zhDZFPFxhlqwPF3YQvMHx1TD0tdgYl+kuPnJ8E6ql7A==}
@@ -4089,11 +4092,11 @@ snapshots:
       '@typescript-eslint/types': 8.4.0
       eslint-visitor-keys: 3.4.3
 
-  '@unhead/addons@1.10.4(rollup@4.21.2)(webpack-sources@3.2.3)':
+  '@unhead/addons@1.11.1(rollup@4.21.2)(webpack-sources@3.2.3)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.21.2)
-      '@unhead/schema': 1.10.4
-      '@unhead/shared': 1.10.4
+      '@unhead/schema': 1.11.1
+      '@unhead/shared': 1.11.1
       magic-string: 0.30.11
       mlly: 1.7.1
       ufo: 1.5.4
@@ -4103,31 +4106,32 @@ snapshots:
       - rollup
       - webpack-sources
 
-  '@unhead/dom@1.10.4':
+  '@unhead/dom@1.11.1':
     dependencies:
-      '@unhead/schema': 1.10.4
-      '@unhead/shared': 1.10.4
+      '@unhead/schema': 1.11.1
+      '@unhead/shared': 1.11.1
 
-  '@unhead/schema@1.10.4':
+  '@unhead/schema@1.11.1':
     dependencies:
       hookable: 5.5.3
       zhead: 2.2.4
 
-  '@unhead/shared@1.10.4':
+  '@unhead/shared@1.11.1':
     dependencies:
-      '@unhead/schema': 1.10.4
+      '@unhead/schema': 1.11.1
 
-  '@unhead/ssr@1.10.4':
+  '@unhead/ssr@1.11.1':
     dependencies:
-      '@unhead/schema': 1.10.4
-      '@unhead/shared': 1.10.4
+      '@unhead/schema': 1.11.1
+      '@unhead/shared': 1.11.1
 
-  '@unhead/vue@1.10.4(vue@3.5.2(typescript@5.5.4))':
+  '@unhead/vue@1.11.1(vue@3.5.2(typescript@5.5.4))':
     dependencies:
-      '@unhead/schema': 1.10.4
-      '@unhead/shared': 1.10.4
+      '@unhead/schema': 1.11.1
+      '@unhead/shared': 1.11.1
+      defu: 6.1.4
       hookable: 5.5.3
-      unhead: 1.10.4
+      unhead: 1.11.1
       vue: 3.5.2(typescript@5.5.4)
 
   '@vercel/ncc@0.38.1': {}
@@ -4569,6 +4573,8 @@ snapshots:
       define-data-property: 1.1.4
       has-property-descriptors: 1.0.2
       object-keys: 1.1.1
+
+  defu@6.1.4: {}
 
   delayed-stream@1.0.0: {}
 
@@ -6251,11 +6257,11 @@ snapshots:
 
   undici-types@6.19.8: {}
 
-  unhead@1.10.4:
+  unhead@1.11.1:
     dependencies:
-      '@unhead/dom': 1.10.4
-      '@unhead/schema': 1.10.4
-      '@unhead/shared': 1.10.4
+      '@unhead/dom': 1.11.1
+      '@unhead/schema': 1.11.1
+      '@unhead/shared': 1.11.1
       hookable: 5.5.3
 
   unique-filename@2.0.1:
