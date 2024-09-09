@@ -101,6 +101,7 @@
         }"
       >
         <!-- unuse suspense -> async route component -> can't extract style to css file -->
+        <!-- https://vuejs.org/guide/built-ins/suspense#combining-with-other-components -->
         <router-view v-slot="{ Component, route: r }">
           <div class="router-view" v-disabled-wallflower>
             <transition name="page" mode="out-in" @before-enter="handlePageTransitionDone">
