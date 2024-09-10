@@ -5,10 +5,7 @@
  */
 
 // polyfills
-// e.g. loadmore / lozad component
-import 'intersection-observer'
-// for Android browsers. e.g. WeChat webview
-import 'core-js/modules/web.url.can-parse'
+import './polyfills'
 
 import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'

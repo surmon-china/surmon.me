@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { LanguageKey } from '/@/language'
+  import { UNDEFINED } from '/@/constants/value'
   import { Article, ArticleLangI18n } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
@@ -8,32 +9,25 @@
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
-  import { openNewWindow } from '/@/utils/opener'
   import { numberSplit } from '/@/transforms/text'
 
   const props = defineProps<{
     article: Article
   }>()
 
-  const { router, cdnDomain, gState } = useEnhancer()
+  const { cdnDomain, gState } = useEnhancer()
   const identityStore = useIdentityStore()
   const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
   const isReprint = computed(() => isReprintType(props.article.origin))
   const isOriginal = computed(() => isOriginalType(props.article.origin))
-
-  const handleClick = () => {
-    if (gState.userAgent.isWechat) {
-      router.push(getArticleDetailRoute(props.article.id))
-    } else {
-      openNewWindow(getArticleDetailRoute(props.article.id))
-    }
-  }
+  const detailRoutePath = getArticleDetailRoute(props.article.id)
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
     if (!isOriginalStaticURL(url)) {
       return url
     }
+
     return getImgProxyURL(
       cdnDomain,
       getImgProxyPath(getStaticPath(url), {
@@ -48,7 +42,13 @@
 </script>
 
 <template>
-  <div class="article-item" @click="handleClick">
+  <ulink
+    class="article-item"
+    :to="gState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
+    :href="!gState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
+    :blank="!gState.userAgent.isWechat"
+    :external="false"
+  >
     <div class="thumbnail">
       <span
         class="origin"
@@ -83,9 +83,7 @@
     <div class="content">
       <div class="body">
         <h4 class="title">
-          <router-link class="link" :title="article.title" :to="getArticleDetailRoute(article.id)">
-            {{ article.title }}
-          </router-link>
+          <span class="text" :title="article.title">{{ article.title }}</span>
           <span class="language">
             <i18n v-bind="ArticleLangI18n[article.lang]" />
           </span>
@@ -111,7 +109,7 @@
         </span>
       </div>
     </div>
-  </div>
+  </ulink>
 </template>
 
 <style lang="scss" scoped>
@@ -198,8 +196,7 @@
           display: flex;
           justify-content: space-between;
 
-          .link {
-            text-decoration: none;
+          .text {
             max-width: calc(100% - 3em);
             @include text-overflow();
           }
