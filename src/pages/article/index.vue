@@ -5,7 +5,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
   import * as ANCHORS from '/@/constants/anchor'
-  import * as URL_HASHS from '/@/constants/anchor'
+  import * as URL_HASHES from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
@@ -42,13 +42,13 @@
   const articleGPTModel = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-model'))
 
   const handleCommentTopBarChatGPTClick = () => {
-    gtag?.event('chatgpt_comemnt_top_bar', {
+    gtag?.event('chatgpt_comment_top_bar', {
       event_category: GAEventCategories.Comment
     })
   }
 
   const handleCommentUsernameChatGPTClick = () => {
-    gtag?.event('chatgpt_comemnt_name_link', {
+    gtag?.event('chatgpt_comment_name_link', {
       event_category: GAEventCategories.Comment
     })
   }
@@ -127,7 +127,7 @@
       ...(articleDetailStore.moreContent?.headings ?? [])
     ]
     const elementID =
-      urlHash === URL_HASHS.COMMENTS_URL_HASH
+      urlHash === URL_HASHES.COMMENTS_URL_HASH
         ? ANCHORS.COMMENT_ELEMENT_ID
         : articleHeadings.find(({ anchor }) => anchor === urlHash)?.id
 

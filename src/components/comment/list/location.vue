@@ -7,12 +7,12 @@
     location: IPLocation
   }>()
 
-  const municipalitys: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
+  const municipalities: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
   const countryText = computed(() => props.location.country_code || props.location.country)
   const emojiText = computed(() => countryCodeToEmoji(props.location.country_code))
   const cityText = computed(() => {
     if (props.location.country_code === 'CN') {
-      if (municipalitys.includes(props.location.region)) {
+      if (municipalities.includes(props.location.region)) {
         return props.location.region
       }
     }

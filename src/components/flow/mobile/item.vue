@@ -51,7 +51,7 @@
   <div class="article-item" @click="handleClick">
     <div class="thumbnail">
       <span
-        class="oirigin"
+        class="origin"
         :class="{
           original: isOriginal,
           reprint: isReprint,
@@ -132,7 +132,7 @@
       position: relative;
       background-color: $module-bg-darker-3;
 
-      .oirigin {
+      .origin {
         $opacity: 0.7;
         position: absolute;
         right: 0;

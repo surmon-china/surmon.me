@@ -2,7 +2,7 @@
   import { reactive, onMounted, onBeforeUnmount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import Flower, { Props as FlowerProps } from './flower.vue'
-  import { ATTRBUTE_NAME } from './directive'
+  import { ATTRIBUTE_NAME } from './directive'
 
   const EN_FLOWERS = ['💙', '🤍', '❤️']
   const ZH_FLOWERS = ['布施', '持戒', '忍辱', '精进', '禅定', '般若']
@@ -17,7 +17,7 @@
   const handleClick = (event: MouseEvent) => {
     let currentElement = event?.target as HTMLElement | null
     while (currentElement) {
-      if (currentElement.getAttribute(ATTRBUTE_NAME) != null) {
+      if (currentElement.getAttribute(ATTRIBUTE_NAME) != null) {
         return
       }
       currentElement = currentElement.parentElement

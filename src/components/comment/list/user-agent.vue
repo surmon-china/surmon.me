@@ -12,7 +12,7 @@
     iOS: 'icon-apple'
   }
 
-  const browersIconsNameMap = {
+  const browsersIconsNameMap = {
     Chrome: 'icon-chrome',
     Chromium: 'icon-chrome',
     WeChat: 'icon-wechat',
@@ -38,7 +38,7 @@
   })
   const browserIconName = computed(() => {
     const browserName = uaResult.value.result.browser.name
-    return browserName ? browersIconsNameMap[browserName] : null
+    return browserName ? browsersIconsNameMap[browserName] : null
   })
 </script>
 

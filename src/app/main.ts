@@ -71,7 +71,7 @@ export const createMainApp = (context: ICreatorContext) => {
     languages
   })
 
-  // global head attrbutes: for use in different environments
+  // global head attributes: for use in different environments
   const getGlobalHead = (): Head => ({
     htmlAttrs: {
       lang: i18n.l.value?.iso ?? '',

@@ -63,7 +63,7 @@
     <div class="item-content">
       <router-link class="item-thumbnail" :to="getArticleDetailRoute(article.id)">
         <span
-          class="item-oirigin"
+          class="item-origin"
           :class="{
             original: isOriginal,
             hybrid: isHybrid,
@@ -178,7 +178,7 @@
 
       &:hover {
         .item-thumbnail {
-          .item-oirigin {
+          .item-origin {
             opacity: 1;
           }
           .item-featured {
@@ -202,7 +202,7 @@
         position: relative;
         @include radius-box($radius-xs);
 
-        .item-oirigin {
+        .item-origin {
           $height: 2.1rem;
           $opacity: 0.7;
           position: absolute;

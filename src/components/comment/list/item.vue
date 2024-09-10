@@ -79,10 +79,10 @@
     return UNDEFINED
   })
 
-  const isDeleteable = computed(() => {
-    // 1. Disqus logined
+  const isDeletable = computed(() => {
+    // 1. Disqus logged-in
     if (identityStore.user.type === UserType.Disqus) {
-      // 2. Logined user ID === comment.author.disqus-author-id
+      // 2. Logged-in user ID === comment.author.disqus-author-id
       if (disqusAuthorId.value) {
         return identityStore.user.disqusProfile?.id === disqusAuthorId.value
       }
@@ -189,8 +189,8 @@
             <button
               class="vote"
               :class="{
-                actived: liked,
-                alived: Boolean(comment.likes)
+                voted: liked,
+                'has-count': Boolean(comment.likes)
               }"
               :disabled="liked"
               @click="handleVote(true)"
@@ -202,8 +202,8 @@
             <button
               class="vote"
               :class="{
-                actived: disliked,
-                alived: Boolean(comment.dislikes)
+                voted: disliked,
+                'has-count': Boolean(comment.dislikes)
               }"
               :disabled="disliked"
               @click="handleVote(false)"
@@ -222,7 +222,7 @@
             </button>
           </div>
           <div class="right">
-            <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeleteable">
+            <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeletable">
               <i class="iconfont icon-delete" />
               <i18n :k="LanguageKey.COMMENT_DELETE" />
             </button>
@@ -457,11 +457,11 @@
 
         .vote {
           &:hover,
-          &.actived {
+          &.voted {
             color: $red;
           }
-          &.actived,
-          &.alived {
+          &.voted,
+          &.has-count {
             .count {
               font-weight: bold;
             }

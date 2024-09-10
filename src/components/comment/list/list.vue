@@ -46,7 +46,7 @@
       const { i18n: _i18n, gtag } = useEnhancer()
       const { comment: commentStore, identity } = useStores()
 
-      const buildeCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
+      const buildCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
         return comments.map((comment) => ({
           comment,
           children: []
@@ -88,7 +88,7 @@
 
       return {
         identity,
-        buildeCommentTree,
+        buildCommentTree,
         handleReplyComment,
         handleCancelReply,
         handleDeleteComment,
@@ -123,7 +123,7 @@
         </template>
         <template #children v-if="item.children.length">
           <comment-list
-            :comments="buildeCommentTree(item.children)"
+            :comments="buildCommentTree(item.children)"
             :is-child-list="true"
             :hidden-avatar="hiddenAvatar"
             :hidden-ua="hiddenUa"

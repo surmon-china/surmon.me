@@ -50,7 +50,7 @@
 <template>
   <div ref="element" class="detail">
     <div
-      class="oirigin"
+      class="origin"
       :class="{
         original: isOriginal,
         reprint: isReprint,
@@ -113,7 +113,7 @@
     height: auto;
     transition: height $motion-duration-mid;
 
-    .oirigin {
+    .origin {
       position: absolute;
       top: 0.6rem;
       left: -2.4rem;

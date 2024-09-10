@@ -36,7 +36,7 @@
     return languageIconMap[_i18n.language.value]
   })
 
-  const tooggleLanguage = () => {
+  const toggleLanguage = () => {
     _i18n.toggle()
     gtag?.event('switch_language', {
       event_category: GAEventCategories.Widget,
@@ -65,7 +65,7 @@
         <button class="button menu" v-if="isEnabledNav">
           <i class="iconfont icon-top-menu"></i>
         </button>
-        <button class="button language" title="Switch language" @click="tooggleLanguage">
+        <button class="button language" title="Switch language" @click="toggleLanguage">
           <i class="iconfont" :class="languageIcon"></i>
         </button>
         <button class="button theme" :class="theme.theme.value" @click="toggleTheme">

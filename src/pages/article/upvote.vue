@@ -18,11 +18,11 @@
     (e: ArticleUpvoteEvents.Sponsor): void
   }>()
 
-  const newliked = ref(false)
+  const newLiked = ref(false)
   const handleLike = () => {
     if (!props.isLiked) {
       emit(ArticleUpvoteEvents.Like, () => {
-        newliked.value = true
+        newLiked.value = true
       })
     }
   }
@@ -37,7 +37,7 @@
     <div class="wrapper">
       <button
         class="button like"
-        :class="{ liked: isLiked, parkinson: enabledParkinson, newliked: newliked }"
+        :class="{ liked: isLiked, parkinson: enabledParkinson, newliked: newLiked }"
         :disabled="isLiked"
         @click="handleLike"
       >
@@ -50,7 +50,7 @@
         </span>
         <template v-if="enabledParkinson">
           <span class="parkinson-mask">
-            <i class="iconfont" :class="newliked ? 'icon-like' : 'icon-like-pre'"></i>
+            <i class="iconfont" :class="newLiked ? 'icon-like' : 'icon-like-pre'"></i>
           </span>
           <div class="parkinson-likes">+ 1</div>
         </template>

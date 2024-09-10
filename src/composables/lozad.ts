@@ -30,10 +30,10 @@ export const useLozad = (options?: { elementor?: () => HTMLElement; immediate?: 
   const observer = ref<lozad.Observer | null>(null)
 
   const observe = () => {
-    const tagretClass = options?.className || LOZAD_CLASS_NAME
+    const targetClass = options?.className || LOZAD_CLASS_NAME
     const targetElement = options?.elementor?.() || container.value
     if (targetElement?.querySelectorAll) {
-      const lozadElements = targetElement.querySelectorAll(`.${tagretClass}`)
+      const lozadElements = targetElement.querySelectorAll(`.${targetClass}`)
       if (lozadElements?.length) {
         observer.value = lozadObserve(lozadElements)
       }
