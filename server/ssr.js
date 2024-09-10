@@ -377,7 +377,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.44.4";
+const APP_VERSION = "4.44.5";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -15090,7 +15090,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_udate = resolveComponent("udate");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "answer-card" }, _attrs))} data-v-f2545ada><h4 class="question"${ssrRenderAttr("title", _ctx.answer.question.title)} data-v-f2545ada>${ssrInterpolate(_ctx.answer.question.title)}</h4><div class="divider" data-v-f2545ada></div><p class="excerpt"${ssrRenderAttr("title", _ctx.answer.excerpt)} data-v-f2545ada>${ssrInterpolate(_ctx.answer.excerpt)}</p><div class="info" data-v-f2545ada><div class="left" data-v-f2545ada><span class="item" data-v-f2545ada><i class="iconfont icon-like" data-v-f2545ada></i> ${ssrInterpolate(_ctx.answer.voteup_count)} 赞同</span><span class="item" data-v-f2545ada><i class="iconfont icon-comment" data-v-f2545ada></i> ${ssrInterpolate(_ctx.answer.comment_count)} 评论</span></div><div class="right" data-v-f2545ada><span class="date" data-v-f2545ada>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "answer-card" }, _attrs))} data-v-c1409cf2><h4 class="question"${ssrRenderAttr("title", _ctx.answer.question.title)} data-v-c1409cf2>${ssrInterpolate(_ctx.answer.question.title)}</h4><div class="divider" data-v-c1409cf2></div><p class="excerpt"${ssrRenderAttr("title", _ctx.answer.excerpt)} data-v-c1409cf2>${ssrInterpolate(_ctx.answer.excerpt)}</p><div class="info" data-v-c1409cf2><div class="left" data-v-c1409cf2><span class="item" data-v-c1409cf2><i class="iconfont icon-like" data-v-c1409cf2></i> ${ssrInterpolate(_ctx.answer.voteup_count)} 赞同</span><span class="item" data-v-c1409cf2><i class="iconfont icon-comment" data-v-c1409cf2></i> ${ssrInterpolate(_ctx.answer.comment_count)} 评论</span></div><div class="right" data-v-c1409cf2><span class="date" data-v-c1409cf2>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.answer.created_time * 1e3
@@ -15103,7 +15103,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-zhihu-full" data-v-f2545ada${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-zhihu-full" data-v-c1409cf2${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-zhihu-full" })
@@ -15122,7 +15122,7 @@ _sfc_main$F.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/answers/card.vue");
   return _sfc_setup$F ? _sfc_setup$F(props, ctx) : void 0;
 };
-const AnswerCard = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-f2545ada"]]);
+const AnswerCard = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-c1409cf2"]]);
 const _sfc_main$E = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
