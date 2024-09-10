@@ -1,5 +1,6 @@
 import axios, { isAxiosError } from '@/server/services/axios'
 import { WEB_SCRAPER_TOKEN } from '@/config/bff.yargs'
+import { UNDEFINED } from '/@/constants/value'
 import { isNodeDev } from '@/server/environment'
 import type { TwitterTweet, TwitterProfile, TwitterAggregate } from './index'
 
@@ -129,11 +130,11 @@ export const getSotweTwitterAggregate = async (twitterUsername: string): Promise
     id: sotwe?.info?.id,
     name: sotwe?.info?.name || twitterUsername,
     avatar: sotwe?.info?.profileImageOriginal || '',
-    description: sotwe?.info.description || void 0,
-    location: sotwe?.info.location || void 0,
-    tweetCount: sotwe?.info.postCount ?? void 0,
-    followerCount: sotwe?.info.followerCount ?? void 0,
-    followingCount: sotwe?.info.followingCount ?? void 0
+    description: sotwe?.info.description || UNDEFINED,
+    location: sotwe?.info.location || UNDEFINED,
+    tweetCount: sotwe?.info.postCount ?? UNDEFINED,
+    followerCount: sotwe?.info.followerCount ?? UNDEFINED,
+    followingCount: sotwe?.info.followingCount ?? UNDEFINED
   }
 
   // sotwe all tweets
@@ -167,9 +168,9 @@ export const getSotweTwitterAggregate = async (twitterUsername: string): Promise
       text: improveSotweTweet(tweet),
       html: improveSotweTweet(tweet),
       date: tweet.createdAt,
-      location: tweet.location?.name || void 0,
-      favoriteCount: tweet.favoriteCount ?? void 0,
-      retweetCount: tweet.retweetCount ?? void 0,
+      location: tweet.location?.name || UNDEFINED,
+      favoriteCount: tweet.favoriteCount ?? UNDEFINED,
+      retweetCount: tweet.retweetCount ?? UNDEFINED,
       mediaCount: tweet.mediaEntities?.length ?? 0,
       isReply: !!tweet.inReplyToUserId,
       isQuote: !!tweet.quotedStatus,

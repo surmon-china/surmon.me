@@ -2,6 +2,7 @@
   import { ref, shallowRef } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { unescape, padStart, numberSplit } from '/@/transforms/text'
@@ -36,7 +37,7 @@
 
 <template>
   <div class="twitter">
-    <placeholder :data="profile ?? void 0" :loading="fetching">
+    <placeholder :data="profile ?? UNDEFINED" :loading="fetching">
       <template #placeholder>
         <empty class="twitter-empty" bold key="empty" />
       </template>
