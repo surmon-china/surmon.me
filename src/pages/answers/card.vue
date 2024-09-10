@@ -50,6 +50,7 @@
       margin: 0;
       line-height: 1.68;
       color: $color-link;
+      font-weight: bold;
     }
 
     .divider {
