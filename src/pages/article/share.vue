@@ -49,7 +49,7 @@
   const isRenderedShareImage = computed(() => Boolean(shareImageUrl.value))
 
   const renderShareTemplate = async (element: HTMLElement) => {
-    // generate qrcode
+    // generate QRcode
     const url = getPageURL(getArticleDetailRoute(props.article.id))
     shareTemplateQRCode.value = await renderTextToQRCodeDataURL(url, { errorCorrectionLevel: 'M' })
     // ensure all images loaded
@@ -84,12 +84,12 @@
     }
   }
 
-  const closeImageSharePopop = () => {
+  const closeImageSharePopup = () => {
     shareImageVisibility.value = false
     shareTemplateQRCode.value = null
     shareImageUrl.value = null
   }
-  const openImageSharePopop = () => {
+  const openImageSharePopup = () => {
     shareImageVisibility.value = true
     nextTick(async () => {
       if (shareTemplateElementRef.value) {
@@ -106,55 +106,57 @@
       class="share"
       :socials="props.socials"
       :disabled-image-share="disabledImageShare"
-      @share-as-image="openImageSharePopop"
+      @share-as-image="openImageSharePopup"
     />
-    <popup :visible="shareImageVisibility" :scroll-close="false" @close="closeImageSharePopop">
-      <div class="share-as-image-modal" :class="{ rendered: isRenderedShareImage }">
-        <div
-          v-if="!isRenderedShareImage"
-          ref="shareTemplateElementRef"
-          class="share-template"
-          :class="theme.theme.value"
-        >
-          <div class="content">
-            <div class="header">
-              <h1 class="title">{{ article.title }}</h1>
-              <p class="meta-info">
-                <i18n zh="发布于 " en="Created at " />
-                <udate to="YMDm" :date="article.created_at" separator="/" />
-                <divider type="vertical" size="sm" />
-                <i18n
-                  :zh="`全文共 ${numberSplit(article.content.length)} 字`"
-                  :en="`${numberSplit(article.content.length)} characters`"
-                />
+    <client-only>
+      <popup :visible="shareImageVisibility" :scroll-close="false" @close="closeImageSharePopup">
+        <div class="share-as-image-modal" :class="{ rendered: isRenderedShareImage }">
+          <div
+            v-if="!isRenderedShareImage"
+            ref="shareTemplateElementRef"
+            class="share-template"
+            :class="theme.theme.value"
+          >
+            <div class="content">
+              <div class="header">
+                <h1 class="title">{{ article.title }}</h1>
+                <p class="meta-info">
+                  <i18n zh="发布于 " en="Created at " />
+                  <udate to="YMDm" :date="article.created_at" separator="/" />
+                  <divider type="vertical" size="sm" />
+                  <i18n
+                    :zh="`全文共 ${numberSplit(article.content.length)} 字`"
+                    :en="`${numberSplit(article.content.length)} characters`"
+                  />
+                </p>
+                <uimage v-if="shareTemplateQRCode" class="qrcode" :src="shareTemplateQRCode" />
+              </div>
+              <markdown
+                class="markdown"
+                :markdown="templateMarkdown"
+                :render-options="{ lazyLoadImage: false, imageSourceGetter: getOriginalProxyURL }"
+              />
+              <div class="read-more-mask" v-if="isLongArticle"></div>
+            </div>
+            <div class="footer">
+              <p class="tip">
+                <i18n zh="长按识别二维码，阅读全文，参与评论" en="Long-press the QR code to read and discuss" />
               </p>
               <uimage v-if="shareTemplateQRCode" class="qrcode" :src="shareTemplateQRCode" />
+              <uimage class="logo" src="/images/logo.svg" />
             </div>
-            <markdown
-              class="markdown"
-              :markdown="templateMarkdown"
-              :render-options="{ lazyLoadImage: false, imageSourceGetter: getOriginalProxyURL }"
-            />
-            <div class="readmore-mask" v-if="isLongArticle"></div>
           </div>
-          <div class="footer">
-            <p class="tip">
-              <i18n zh="长按识别二维码，阅读全文，参与评论" en="Long-press the QR code to read and discuss" />
-            </p>
-            <uimage v-if="shareTemplateQRCode" class="qrcode" :src="shareTemplateQRCode" />
-            <uimage class="logo" src="/images/logo.svg" />
+          <transition name="module">
+            <div v-if="!isRenderedShareImage" class="share-rendering">
+              <loading-indicator width="1.8rem" height="1.2rem" />
+            </div>
+          </transition>
+          <div v-if="isRenderedShareImage" class="share-image">
+            <img class="image" :src="shareImageUrl!" :alt="article.title" />
           </div>
         </div>
-        <transition name="module">
-          <div v-if="!isRenderedShareImage" class="share-rendering">
-            <loading-indicator width="1.8rem" height="1.2rem" />
-          </div>
-        </transition>
-        <div v-if="isRenderedShareImage" class="share-image">
-          <img class="image" :src="shareImageUrl!" :alt="article.title" />
-        </div>
-      </div>
-    </popup>
+      </popup>
+    </client-only>
   </div>
 </template>
 
@@ -209,7 +211,7 @@
         .footer {
           background-color: $module-bg-darker-1;
         }
-        .readmore-mask {
+        .read-more-mask {
           background: linear-gradient(to bottom, transparent 10%, $module-bg 30%, $white);
         }
       }
@@ -220,7 +222,7 @@
         .footer {
           background-color: $module-bg-darker-3;
         }
-        .readmore-mask {
+        .read-more-mask {
           background: linear-gradient(to bottom, transparent, $black);
         }
       }
@@ -259,7 +261,7 @@
           font-size: $font-size-h4;
         }
 
-        .readmore-mask {
+        .read-more-mask {
           position: absolute;
           bottom: 0;
           left: 0;

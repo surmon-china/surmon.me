@@ -32,7 +32,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "emoji-233333": "^0.3.2",
-    "express": "^4.19.2",
+    "express": "^4.20.x",
     "fast-xml-parser": "^4.5.x",
     "fontmin": "^1.1.0",
     "fs-extra": "^11.2.0",
