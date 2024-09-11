@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/surmon-china/surmon.me" target="blank">
-    <img src="/screenhots/logo.svg" height="48" alt="surmon.me logo" />
+    <img src="/screenshots/logo.svg" height="48" alt="surmon.me logo" />
   </a>
 </p>
 
@@ -57,7 +57,7 @@ $ pnpm run release
 
 **Rule:**
 
-- Any PR opend → `CI:Build test`
+- Any PR opened → `CI:Build test`
 - New tag `v*` → `CI:Create Release`
 - Release created → `CI:Deploy` → `CI:Execute server script`
 
