@@ -21,7 +21,6 @@ import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
-import { exportStickyEventsToGlobal } from '/@/effects/sticky'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/universal'
@@ -73,7 +72,6 @@ store.hydrate()
 
 // init: services with client
 exportEmojiRainToGlobal()
-exportStickyEventsToGlobal()
 exportAppToGlobal(app)
 initCopyrighter()
 

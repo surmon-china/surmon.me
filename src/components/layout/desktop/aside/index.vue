@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useRoute } from 'vue-router'
-  import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-  import { ASIDE_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { computed } from 'vue'
+  import { ASIDE_ELEMENT_ID } from '/@/constants/anchor'
   import { isArticleDetail } from '/@/transforms/route'
   import AsideSearch from './search.vue'
   import AsideStatistic from './statistic.vue'
@@ -11,45 +11,12 @@
   import AsideAnchor from './anchor.vue'
   import AsideCalendar from './calendar.vue'
 
-  const ASIDE_STICKY_ELEMENT_ID = 'aside-sticky-module'
-
   const route = useRoute()
   const isArticlePage = computed(() => isArticleDetail(route.name))
-
-  // polyfill sticky event
-  let stickyEvents: any = null
-  const element = ref<HTMLDivElement>(null as any)
-
-  const handleStickyStateChange = () => {
-    // workaround: when (main container height >= aside height) & isSticky -> render sticky ad
-    const targetElement = document.getElementById(MAIN_CONTENT_ELEMENT_ID)?.children?.[0]
-    // const asideElementHeight = element.value.clientHeight
-    if (targetElement) {
-      // const mainContentElementHeight = targetElement.clientHeight
-      // const isFeasible = mainContentElementHeight >= asideElementHeight
-      // console.log(isFeasible && event.detail.isSticky)
-    }
-  }
-
-  onMounted(() => {
-    nextTick(() => {
-      stickyEvents = new window.$StickyEvents({
-        enabled: true,
-        stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
-      })
-      stickyEvents.stickyElements?.[0]?.addEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange)
-    })
-  })
-
-  onBeforeUnmount(() => {
-    stickyEvents.stickyElements?.[0]?.removeEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange)
-    stickyEvents.disableEvents(false)
-    stickyEvents = null
-  })
 </script>
 
 <template>
-  <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" ref="element" v-disabled-wallflower>
+  <aside :id="ASIDE_ELEMENT_ID" class="desktop-aside" v-disabled-wallflower>
     <div class="module">
       <aside-search />
     </div>
@@ -67,7 +34,7 @@
     <div class="module">
       <aside-calendar />
     </div>
-    <div :id="ASIDE_STICKY_ELEMENT_ID" class="aside-sticky-box">
+    <div class="aside-sticky-box">
       <div class="module mammon-square">
         <client-only>
           <Adsense

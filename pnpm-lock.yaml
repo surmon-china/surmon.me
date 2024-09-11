@@ -122,11 +122,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       sitemap:
-        specifier: ^8.0.0
+        specifier: ^8.x
         version: 8.0.0
-      sticky-events:
-        specifier: ^3.4.12
-        version: 3.4.12
       swiper:
         specifier: ^11.1.x
         version: 11.1.12
@@ -2914,9 +2911,6 @@ packages:
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
     engines: {node: '>= 0.8'}
-
-  sticky-events@3.4.12:
-    resolution: {integrity: sha512-DjCjyFX8yLvxY4JQQ0t1JTxfmugx0T6gofb2CsOlPppY077+RAxKyRqiwbQSPOhfkuEJpBWcVGzwqpVeIvQemQ==}
 
   stream-combiner@0.2.2:
     resolution: {integrity: sha512-6yHMqgLYDzQDcAkL+tjJDC5nSNuNIx0vZtRZeiPh7Saef7VHX9H5Ijn9l2VIol2zaNYlYEX6KyuT/237A58qEQ==}
@@ -6116,8 +6110,6 @@ snapshots:
       minipass: 3.3.6
 
   statuses@2.0.1: {}
-
-  sticky-events@3.4.12: {}
 
   stream-combiner@0.2.2:
     dependencies:
