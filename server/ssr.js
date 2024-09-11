@@ -1,11 +1,11 @@
+import { inject, ref, reactive, computed, readonly, onServerPrefetch, shallowRef, watch, unref, getCurrentInstance, useSSRContext, onMounted, onBeforeUnmount, defineComponent, h, nextTick, mergeProps, resolveComponent, withCtx, createVNode, openBlock, createBlock, createCommentVNode, Fragment, toDisplayString, onBeforeMount, createTextVNode, renderList, TransitionGroup, Transition, resolveDirective, renderSlot, toRaw, createSlots, onUnmounted, onUpdated, resolveDynamicComponent, withDirectives, shallowReactive, cloneVNode, onErrorCaptured, Suspense, createSSRApp } from "vue";
+import parser from "ua-parser-js";
 import serialize from "serialize-javascript";
 import _isObject from "lodash-es/isObject.js";
 import { useRoute, useRouter, createRouter, RouterLink, createMemoryHistory } from "vue-router";
 import { ssrRenderAttrs, ssrRenderSlot, ssrRenderComponent, ssrRenderClass, ssrRenderAttr, ssrInterpolate, ssrRenderStyle, ssrRenderList, ssrIncludeBooleanAttr, ssrGetDirectiveProps, ssrRenderVNode, ssrLooseEqual, ssrRenderSuspense, renderToString } from "vue/server-renderer";
 import { renderSSRHead } from "@unhead/ssr";
-import { inject, ref, reactive, computed, readonly, onServerPrefetch, shallowRef, watch, unref, getCurrentInstance, useSSRContext, onMounted, onBeforeUnmount, defineComponent, h, nextTick, mergeProps, resolveComponent, withCtx, createVNode, openBlock, createBlock, createCommentVNode, Fragment, toDisplayString, onBeforeMount, createTextVNode, renderList, TransitionGroup, Transition, resolveDirective, renderSlot, toRaw, createSlots, onUnmounted, onUpdated, resolveDynamicComponent, withDirectives, shallowReactive, cloneVNode, onErrorCaptured, Suspense, createSSRApp } from "vue";
 import { defineStore, createPinia, storeToRefs } from "pinia";
-import parser from "ua-parser-js";
 import axios, { isAxiosError } from "axios";
 import _escape from "lodash-es/escape.js";
 import _unescape from "lodash-es/unescape.js";
@@ -43,7 +43,6 @@ import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import qs from "qs";
 import QRCode from "qrcode";
-/* empty css          */
 var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
   LanguageKey2["APP_SLOGAN"] = "app-slogan";
   LanguageKey2["CATEGORY_INSIGHT"] = "insight";
@@ -377,7 +376,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.44.7";
+const APP_VERSION = "4.45.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1416,36 +1415,6 @@ const verseConfig = {
     }
     return html;
   }
-  // new FontFace(...)
-  // Since FontFace does not support the size-adjest parameter,
-  // if you use JavaScript to manipulate the side effects,
-  // you will need to manually maintain the lifecycle to add the global class name
-  // MARK: No custom fonts for now
-  /*
-    style(element) {
-      const nodes = Array.from(element.querySelectorAll<HTMLParagraphElement>('p.verse[zh]'))
-      const string = nodes.map((node) => node.innerText).join('')
-      const words = Array.from(new Set(string.split('')))
-      if (!words.length) {
-        return null
-      }
-  
-      const textParams = encodeURIComponent(words.join(''))
-      const fontnameParams = encodeURIComponent(VERSE_ZH_FONT_FILENAME)
-      const url = `${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}?fontname=${fontnameParams}&text=${textParams}`
-      // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/size-adjust
-      // https://caniuse.com/?search=size-adjust
-      return `
-        @font-face {
-          font-family: ${VERSE_ZH_FONT_FAMILY};
-          font-weight: 700;
-          font-display: swap;
-          size-adjust: 136%;
-          src: url('${url}');
-        }
-      `
-    }
-    */
 };
 const CUSTOM_ELEMENTS = {
   [
@@ -1741,7 +1710,8 @@ const markdownToHTML = (markdown, options) => {
   const renderOptions = {
     ...options,
     sanitize: (options == null ? void 0 : options.sanitize) ?? false,
-    lazyLoadImage: (options == null ? void 0 : options.lazyLoadImage) ?? true
+    lazyLoadImage: (options == null ? void 0 : options.lazyLoadImage) ?? true,
+    codeLineNumbers: (options == null ? void 0 : options.codeLineNumbers) ?? true
   };
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) });
 };
@@ -19036,55 +19006,30 @@ _sfc_main$8.setup = (props, ctx) => {
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
 const AsideCalendar = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-070e36e2"]]);
-const ASIDE_STICKY_ELEMENT_ID = "aside-sticky-module";
 const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
   setup(__props) {
     const route = useRoute();
     const isArticlePage = computed(() => isArticleDetail(route.name));
-    let stickyEvents = null;
-    const element = ref(null);
-    const handleStickyStateChange = () => {
-      var _a, _b;
-      (_b = (_a = document.getElementById(MAIN_CONTENT_ELEMENT_ID)) == null ? void 0 : _a.children) == null ? void 0 : _b[0];
-    };
-    onMounted(() => {
-      nextTick(() => {
-        var _a, _b;
-        stickyEvents = new window.$StickyEvents({
-          enabled: true,
-          stickySelector: `#${ASIDE_STICKY_ELEMENT_ID}`
-        });
-        (_b = (_a = stickyEvents.stickyElements) == null ? void 0 : _a[0]) == null ? void 0 : _b.addEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange);
-      });
-    });
-    onBeforeUnmount(() => {
-      var _a, _b;
-      (_b = (_a = stickyEvents.stickyElements) == null ? void 0 : _a[0]) == null ? void 0 : _b.removeEventListener(window.$StickyEvents.CHANGE, handleStickyStateChange);
-      stickyEvents.disableEvents(false);
-      stickyEvents = null;
-    });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = resolveComponent("client-only");
       const _component_Adsense = resolveComponent("Adsense");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
       _push(`<aside${ssrRenderAttrs(mergeProps({
         id: unref(ASIDE_ELEMENT_ID),
-        class: "desktop-aside",
-        ref_key: "element",
-        ref: element
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-cdaf9ed9><div class="module" data-v-cdaf9ed9>`);
+        class: "desktop-aside"
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-6787a121><div class="module" data-v-6787a121>`);
       _push(ssrRenderComponent(AsideSearch, null, null, _parent));
-      _push(`</div><div class="module" data-v-cdaf9ed9>`);
+      _push(`</div><div class="module" data-v-6787a121>`);
       _push(ssrRenderComponent(AsideStatistic, null, null, _parent));
-      _push(`</div><div class="module" data-v-cdaf9ed9>`);
+      _push(`</div><div class="module" data-v-6787a121>`);
       _push(ssrRenderComponent(AsideArticle, null, null, _parent));
       _push(`</div>`);
       _push(ssrRenderComponent(_component_client_only, { transition: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module mammon" data-v-cdaf9ed9${_scopeId}>`);
+            _push2(`<div class="module mammon" data-v-6787a121${_scopeId}>`);
             _push2(ssrRenderComponent(AsideMammon, null, null, _parent2, _scopeId));
             _push2(`</div>`);
           } else {
@@ -19097,9 +19042,9 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="module" data-v-cdaf9ed9>`);
+      _push(`<div class="module" data-v-6787a121>`);
       _push(ssrRenderComponent(AsideCalendar, null, null, _parent));
-      _push(`</div><div${ssrRenderAttr("id", ASIDE_STICKY_ELEMENT_ID)} class="aside-sticky-box" data-v-cdaf9ed9><div class="module mammon-square" data-v-cdaf9ed9>`);
+      _push(`</div><div class="aside-sticky-box" data-v-6787a121><div class="module mammon-square" data-v-6787a121>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -19120,7 +19065,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><div class="module" data-v-cdaf9ed9>`);
+      _push(`</div><div class="module" data-v-6787a121>`);
       if (isArticlePage.value) {
         _push(ssrRenderComponent(_component_client_only, null, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -19147,7 +19092,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/index.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const AsideView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-cdaf9ed9"]]);
+const AsideView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-6787a121"]]);
 const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   __name: "nav",
   __ssrInlineRender: true,

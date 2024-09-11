@@ -302,9 +302,9 @@ const getNodePressAPI = () => {
 };
 const ROOT_PATH = process.cwd();
 const DIST_PATH = external_path_namespaceObject["default"].join(ROOT_PATH, 'dist');
-const PRDO_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'client');
-const PRDO_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
-const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PRDO_CLIENT_PATH;
+const PROD_CLIENT_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'client');
+const PROD_SERVER_PATH = external_path_namespaceObject["default"].join(DIST_PATH, 'server');
+const PUBLIC_PATH = isNodeDev ? external_path_namespaceObject["default"].join(ROOT_PATH, 'public') : PROD_CLIENT_PATH;
 
 ;// CONCATENATED MODULE: ./src/server/route.ts
 /**
@@ -978,7 +978,7 @@ const getYouTubeChannelPlayLists = async () => {
 // 3. Get video list by playlist ID
 // https://developers.google.com/youtube/v3/docs/playlistItems/list
 // MARK: can't order by date, max results 50
-const getYouTubeVideoListByPlayerlistId = async (playlistId) => {
+const getYouTubeVideoListByPlayerListId = async (playlistId) => {
     const response = await services_axios.get(`https://www.googleapis.com/youtube/v3/playlistItems`, {
         timeout: 8000,
         params: {
@@ -1168,12 +1168,12 @@ const WebFontContentType = 'font/woff2';
 const cacheMap = new Map();
 const getWebFont = (options) => {
     const text = Array.from(new Set(options.text.split(''))).join('');
-    const fontPath = __nccwpck_require__.ab + "surmon.me/" + PUBLIC_PATH + '/fonts/' + options.fontname;
+    const fontPath = __nccwpck_require__.ab + "surmon.me/" + PUBLIC_PATH + '/fonts/' + options.fontName;
     if (!external_fs_extra_namespaceObject["default"].existsSync(fontPath)) {
-        return Promise.reject(`Font "${options.fontname}" not found!`);
+        return Promise.reject(`Font "${options.fontName}" not found!`);
     }
     // memory cache
-    const cacheKey = `${options.fontname}_${text}`;
+    const cacheKey = `${options.fontName}_${text}`;
     if (cacheMap.has(cacheKey)) {
         return Promise.resolve(cacheMap.get(cacheKey));
     }
@@ -1247,27 +1247,27 @@ const enableDevRenderer = async (app, cache) => {
         try {
             const url = request.originalUrl;
             template = await viteServer.transformIndexHtml(url, template);
-            const redered = await renderApp(request, cache);
+            const rendered = await renderApp(request, cache);
             response
-                .status(redered.code)
+                .status(rendered.code)
                 .set({ 'Content-Type': 'text/html' })
                 .end(resolveTemplate({
                 template,
-                heads: redered.heads,
-                appHTML: redered.html,
-                scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts
+                heads: rendered.heads,
+                appHTML: rendered.html,
+                scripts: rendered.stateScripts,
+                extraScripts: rendered.contextScripts
             }));
         }
         catch (error) {
             viteServer.ssrFixStacktrace(error);
-            const redered = await renderError(request, error);
-            response.status(redered.code).end(resolveTemplate({
+            const rendered = await renderError(request, error);
+            response.status(rendered.code).end(resolveTemplate({
                 template,
-                heads: redered.heads,
-                appHTML: redered.html,
-                scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts
+                heads: rendered.heads,
+                appHTML: rendered.html,
+                scripts: rendered.stateScripts,
+                extraScripts: rendered.contextScripts
             }));
         }
     });
@@ -1325,30 +1325,30 @@ const enableProdRenderer = async (app, cache) => {
     // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
     // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
     const _import = new Function('p', 'return import(p)');
-    const { renderApp, renderError } = await _import(external_path_namespaceObject["default"].resolve(PRDO_SERVER_PATH, 'ssr.js'));
-    // const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+    const { renderApp, renderError } = await _import(external_path_namespaceObject["default"].resolve(PROD_SERVER_PATH, 'ssr.js'));
+    // const { renderApp, renderError } = require(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
     app.use('*', async (request, response) => {
         try {
-            const redered = await renderApp(request, cache);
+            const rendered = await renderApp(request, cache);
             response
-                .status(redered.code)
+                .status(rendered.code)
                 .set({ 'Content-Type': 'text/html' })
                 .end(resolveTemplate({
-                template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
-                heads: redered.heads,
-                appHTML: redered.html,
-                scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts
+                template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),
+                heads: rendered.heads,
+                appHTML: rendered.html,
+                scripts: rendered.stateScripts,
+                extraScripts: rendered.contextScripts
             }));
         }
         catch (error) {
-            const redered = await renderError(request, error);
-            response.status(redered.code).end(resolveTemplate({
-                template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
-                heads: redered.heads,
-                appHTML: redered.html,
-                scripts: redered.stateScripts,
-                extraScripts: redered.contextScripts
+            const rendered = await renderError(request, error);
+            response.status(rendered.code).end(resolveTemplate({
+                template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),
+                heads: rendered.heads,
+                appHTML: rendered.html,
+                scripts: rendered.stateScripts,
+                extraScripts: rendered.contextScripts
             }));
         }
     });
@@ -2009,7 +2009,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
             return cacher.passive(cache, {
                 key: `youtube_playlist_${playlistId}`,
                 ttl: hours(1),
-                getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
+                getter: () => getYouTubeVideoListByPlayerListId(playlistId)
             });
         })(request, response, next);
     });
@@ -2063,14 +2063,14 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }));
     // WebFont
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
-        const fontname = decodeURIComponent(String(request.query.fontname)).trim();
+        const fontName = decodeURIComponent(String(request.query.fontname)).trim();
         const text = decodeURIComponent(String(request.query.text)).trim();
-        if (!text || !fontname) {
+        if (!text || !fontName) {
             errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
             return;
         }
         try {
-            const data = await getWebFont({ fontname, text });
+            const data = await getWebFont({ fontName, text });
             // never expired
             response.header('Cache-Control', 'public, max-age=31536000');
             response.header('Content-Type', WebFontContentType);
