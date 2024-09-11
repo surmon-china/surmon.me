@@ -23,7 +23,12 @@ export const bundleClientRender = async (paths) => {
       sourcemap: true,
       minify: true,
       manifest: true,
-      emptyOutDir: false
+      emptyOutDir: false,
+      // MARK: disabled `<link rel=modulepreload ...>`
+      // https://github.com/vitejs/vite/pull/9938
+      // https://vitejs.dev/config/build-options.html#build-modulepreload
+      // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload
+      modulePreload: false
     }
   })
 }
