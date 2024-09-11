@@ -1131,7 +1131,7 @@ const getSongList = async () => {
     }
     const songs = songListDetail.data.songs || [];
     return (songs
-        // Filtering to remove uncopyrighted music: https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e6%ad%8c%e5%8d%95
+        // Filtering to remove unlicensed music: https://binaryify.github.io/NeteaseCloudMusicApi/#/?id=%e8%8e%b7%e5%8f%96%e7%94%a8%e6%88%b7%e6%ad%8c%e5%8d%95
         .filter((song) => !song.noCopyrightRcmd)
         .slice(0, PLAY_LIST_LIMIT)
         .map((song) => ({
