@@ -67,7 +67,7 @@ app.use(gtag, {
 })
 // enable adsense on desktop only
 if (!globalState.userAgent.isMobile) {
-  app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: true })
+  app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: false })
 }
 
 // init: store (from SSR context or fetch)

@@ -67,6 +67,7 @@ const trimHTML = (html: string) => html.replace(/\s+/g, ' ').replace(/\n/g, ' ')
 interface RendererCreatorOptions {
   sanitize: boolean
   lazyLoadImage: boolean
+  codeLineNumbers: boolean
   headingIdentifierGetter(level: number, text: string): { anchor?: string; id?: string }
   imageSourceGetter(src: string): string | { src: string; sources: Array<{ srcset: string; type: string }> }
 }
@@ -233,7 +234,8 @@ export const markdownToHTML = (markdown: string, options?: MarkdownRenderOption)
   const renderOptions: Partial<RendererCreatorOptions> = {
     ...options,
     sanitize: options?.sanitize ?? false,
-    lazyLoadImage: options?.lazyLoadImage ?? true
+    lazyLoadImage: options?.lazyLoadImage ?? true,
+    codeLineNumbers: options?.codeLineNumbers ?? true
   }
 
   return marked.parse(markdown, { renderer: createRenderer(renderOptions) }) as string

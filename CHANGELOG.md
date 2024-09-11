@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.45.0 (2024-09-12)
+
+**Feature**
+
+- Disabled adsense on mobile device.
+- Remove `replayIntegration` from Sentry.
+- Improve `manualChunks` in rollup.
+- Add `/answers` page.
+
 ### v4.31.0 (2023-11-22)
 
 **Feature**
