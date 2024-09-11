@@ -6,6 +6,8 @@ export const bundleClientRender = async (paths) => {
   if (process.env.SENTRY_AUTH_TOKEN) {
     plugins.push(
       sentryVitePlugin({
+        // https://docs.sentry.io/platforms/javascript/configuration/tree-shaking/
+        // bundleSizeOptimizations: { ... }
         authToken: process.env.SENTRY_AUTH_TOKEN,
         org: 'surmon-me',
         project: 'surmon-me-website',
@@ -23,12 +25,13 @@ export const bundleClientRender = async (paths) => {
       sourcemap: true,
       minify: true,
       manifest: true,
-      emptyOutDir: false,
-      // MARK: disabled `<link rel=modulepreload ...>`
+      emptyOutDir: false
       // https://github.com/vitejs/vite/pull/9938
       // https://vitejs.dev/config/build-options.html#build-modulepreload
       // https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload
-      modulePreload: false
+      // MARK: if dynamic import cannot be set correctly, `modulePreload` should be disabled here.
+      // HTML: `<link rel=modulepreload ...>`
+      // modulePreload: false
     }
   })
 }

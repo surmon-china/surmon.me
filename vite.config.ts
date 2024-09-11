@@ -9,7 +9,7 @@ import path from 'path'
 import * as sass from 'sass'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
-import UnheadVite from '@unhead/addons/vite'
+import UnHeadVite from '@unhead/addons/vite'
 import packageJSON from './package.json'
 
 const CWD = process.cwd()
@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
 
   return {
-    plugins: [vuePlugin(), UnheadVite()],
+    plugins: [vuePlugin(), UnHeadVite()],
     root: path.resolve(__dirname),
     publicDir: 'public',
     resolve: {
@@ -101,28 +101,33 @@ export default defineConfig(({ mode }) => {
           entryFileNames: '[name]-[hash].js',
           chunkFileNames: '[name]-[hash].js',
           assetFileNames: '[name]-[hash].[ext]',
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              const basics = [
-                'swiper',
-                'lozad',
-                'marked',
-                'emoji-233333',
-                'highlight.js',
-                'ua-parse-js',
-                'intersection-observer',
-                'serialize-javascript',
-                '@braintree/sanitize-url'
-              ]
-
-              if (basics.some((exp) => id.includes(`node_modules/${exp}`))) {
-                return 'basic'
-              } else if (id.includes('mapbox-gl')) {
-                return 'mapbox-gl'
-              } else {
-                return 'vendor'
-              }
-            }
+          manualChunks: {
+            sentry: ['@sentry/vue'],
+            vendor: [
+              'vue',
+              'vue-router',
+              'pinia',
+              '@unhead/vue',
+              '@unhead/schema',
+              'axios',
+              'qs',
+              'swiper',
+              'lozad',
+              'qrcode',
+              'geojson',
+              'js-cookie',
+              'lodash-es',
+              'marked',
+              'marked-highlight',
+              'marked-mangle',
+              'marked-xhtml',
+              'emoji-233333',
+              'highlight.js',
+              'ua-parser-js',
+              'bezier-easing',
+              'intersection-observer',
+              '@braintree/sanitize-url'
+            ]
           }
         }
       }
