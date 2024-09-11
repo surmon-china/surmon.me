@@ -52,11 +52,6 @@
   .global-markdown-html {
     font-size: $font-size-base * 1.05;
 
-    /* for google adsense */
-    .google-auto-placed {
-      margin-bottom: $gap-sm;
-    }
-
     p {
       text-indent: 2em;
       line-height: 2.2em;

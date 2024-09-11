@@ -43,7 +43,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   // WORKAROUND: for Google AdSense layout
   position: relative !important;
-  // Forefox: https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-width
+  // Firefox: https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-width
   scrollbar-width: thin;
 }
 

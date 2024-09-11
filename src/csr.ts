@@ -59,13 +59,16 @@ app.use(music)
 app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
-app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: true })
 app.use(gtag, {
   router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
   customResourceURL: '/gtag-script'
 })
+// enable adsense on desktop only
+if (!globalState.userAgent.isMobile) {
+  app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: true })
+}
 
 // init: store (from SSR context or fetch)
 store.hydrate()
