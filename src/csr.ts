@@ -81,18 +81,20 @@ const mainHead = head.push(globalHead, { mode: 'client' })
 watch(globalHead, (newValue) => mainHead.patch(newValue))
 
 // init: sentry
-initSentry({
-  app,
-  dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
-  environment: APP_ENV,
-  release: APP_VERSION,
-  tracesSampleRate: isDev ? 1.0 : 0.2,
-  // replaysSessionSampleRate: isDev ? 0.8 : 0.1,
-  // replaysOnErrorSampleRate: 1.0,
-  // MARK: replayIntegration ≈ 110kb+
-  integrations: [/* replayIntegration() */ browserTracingIntegration({ router })],
-  tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
-})
+if (isProd) {
+  initSentry({
+    app,
+    dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
+    environment: APP_ENV,
+    release: APP_VERSION,
+    tracesSampleRate: isDev ? 1.0 : 0.2,
+    // replaysSessionSampleRate: isDev ? 0.8 : 0.1,
+    // replaysOnErrorSampleRate: 1.0,
+    // MARK: replayIntegration ≈ 110kb+
+    integrations: [/* replayIntegration() */ browserTracingIntegration({ router })],
+    tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
+  })
+}
 
 // router ready -> mount
 router.isReady().finally(() => {
