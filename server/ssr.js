@@ -377,7 +377,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.44.6";
+const APP_VERSION = "4.44.7";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
