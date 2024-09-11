@@ -12,7 +12,7 @@ import { PUBLIC_PATH } from '../config'
 export const WebFontContentType = 'font/woff2'
 
 export interface IWebFontOptions {
-  fontname: string
+  fontName: string
   text: string
 }
 
@@ -20,13 +20,13 @@ const cacheMap = new Map<string, any>()
 
 export const getWebFont = (options: IWebFontOptions): Promise<any> => {
   const text = Array.from(new Set(options.text.split(''))).join('')
-  const fontPath = path.resolve(PUBLIC_PATH, 'fonts', options.fontname)
+  const fontPath = path.resolve(PUBLIC_PATH, 'fonts', options.fontName)
   if (!fs.existsSync(fontPath)) {
-    return Promise.reject(`Font "${options.fontname}" not found!`)
+    return Promise.reject(`Font "${options.fontName}" not found!`)
   }
 
   // memory cache
-  const cacheKey = `${options.fontname}_${text}`
+  const cacheKey = `${options.fontName}_${text}`
   if (cacheMap.has(cacheKey)) {
     return Promise.resolve(cacheMap.get(cacheKey))
   }

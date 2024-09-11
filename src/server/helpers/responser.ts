@@ -6,7 +6,7 @@
 
 import _isObject from 'lodash-es/isObject'
 import { isAxiosError } from 'axios'
-import { RequestHandler, Response } from 'express'
+import type { RequestHandler, Response } from 'express'
 import { INVALID_ERROR } from '@/constants/http-code'
 import { createLogger } from '@/utils/logger'
 

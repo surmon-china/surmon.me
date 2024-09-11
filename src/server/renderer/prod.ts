@@ -1,11 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 import type { Manifest } from 'vite'
-import { Express } from 'express'
-import { DIST_PATH, PRDO_SERVER_PATH } from '../config'
-import { CacheClient } from '../services/cache'
-import { resolveTemplate } from './_template'
+import type { Express } from 'express'
+import type { CacheClient } from '../services/cache'
+import { DIST_PATH, PROD_SERVER_PATH } from '../config'
 import { getManifestFlatFiles, resolveAssetsPrefix } from './_manifest'
+import { resolveTemplate } from './_template'
 import type { RenderResult } from '@/ssr'
 
 export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
@@ -17,33 +17,33 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
   // Bypass webpack rewrite dynamic import, it will be resolved at runtime.
   // https://github.com/vercel/ncc/issues/935#issuecomment-1189850042
   const _import = new Function('p', 'return import(p)')
-  const { renderApp, renderError } = await _import(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
-  // const { renderApp, renderError } = require(path.resolve(PRDO_SERVER_PATH, 'ssr.js'))
+  const { renderApp, renderError } = await _import(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
+  // const { renderApp, renderError } = require(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
 
   app.use('*', async (request, response) => {
     try {
-      const redered: RenderResult = await renderApp(request, cache)
+      const rendered: RenderResult = await renderApp(request, cache)
       response
-        .status(redered.code)
+        .status(rendered.code)
         .set({ 'Content-Type': 'text/html' })
         .end(
           resolveTemplate({
-            template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
-            heads: redered.heads,
-            appHTML: redered.html,
-            scripts: redered.stateScripts,
-            extraScripts: redered.contextScripts
+            template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),
+            heads: rendered.heads,
+            appHTML: rendered.html,
+            scripts: rendered.stateScripts,
+            extraScripts: rendered.contextScripts
           })
         )
     } catch (error: any) {
-      const redered: RenderResult = await renderError(request, error)
-      response.status(redered.code).end(
+      const rendered: RenderResult = await renderError(request, error)
+      response.status(rendered.code).end(
         resolveTemplate({
-          template: resolveAssetsPrefix(template, manifestFiles, redered.assetsPrefix),
-          heads: redered.heads,
-          appHTML: redered.html,
-          scripts: redered.stateScripts,
-          extraScripts: redered.contextScripts
+          template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),
+          heads: rendered.heads,
+          appHTML: rendered.html,
+          scripts: rendered.stateScripts,
+          extraScripts: rendered.contextScripts
         })
       )
     }

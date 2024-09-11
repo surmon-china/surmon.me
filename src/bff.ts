@@ -22,7 +22,7 @@ import {
   getInstagramMediaChildren,
   getInstagramCalendar
 } from './server/getters/instagram'
-import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerlistId } from './server/getters/youtube'
+import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerListId } from './server/getters/youtube'
 import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getNPMStatistic } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
@@ -269,7 +269,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
       return cacher.passive(cache, {
         key: `youtube_playlist_${playlistId}`,
         ttl: hours(1),
-        getter: () => getYouTubeVideoListByPlayerlistId(playlistId)
+        getter: () => getYouTubeVideoListByPlayerListId(playlistId)
       })
     })(request, response, next)
   })
@@ -348,15 +348,15 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // WebFont
   app.get(`${TUN}/${TunnelModule.WebFont}`, async (request, response) => {
-    const fontname = decodeURIComponent(String(request.query.fontname)).trim()
+    const fontName = decodeURIComponent(String(request.query.fontname)).trim()
     const text = decodeURIComponent(String(request.query.text)).trim()
-    if (!text || !fontname) {
+    if (!text || !fontName) {
       errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
     try {
-      const data = await getWebFont({ fontname, text })
+      const data = await getWebFont({ fontName, text })
       // never expired
       response.header('Cache-Control', 'public, max-age=31536000')
       response.header('Content-Type', WebFontContentType)

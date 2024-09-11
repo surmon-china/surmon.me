@@ -29,7 +29,7 @@ export const getYouTubeChannelPlayLists = async () => {
 // 3. Get video list by playlist ID
 // https://developers.google.com/youtube/v3/docs/playlistItems/list
 // MARK: can't order by date, max results 50
-export const getYouTubeVideoListByPlayerlistId = async (playlistId: string) => {
+export const getYouTubeVideoListByPlayerListId = async (playlistId: string) => {
   const response = await axios.get<any>(`https://www.googleapis.com/youtube/v3/playlistItems`, {
     timeout: 8000,
     params: {

@@ -5,7 +5,7 @@
  */
 
 import httpProxy from 'http-proxy'
-import { RequestHandler } from 'express'
+import type { RequestHandler } from 'express'
 import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
