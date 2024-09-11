@@ -36,6 +36,7 @@ export const getWebFont = (options: IWebFontOptions): Promise<any> => {
     .src(fontPath)
     .use(Fontmin.glyph({ text, hinting: false }))
     .use(Fontmin.ttf2woff2())
+
   return new Promise((resolve, reject) => {
     fontmin.run((error, files) => {
       if (error) {
