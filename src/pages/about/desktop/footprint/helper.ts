@@ -1,7 +1,7 @@
 import type GeoJSON from 'geojson'
 import type { LngLatLike, LayerSpecification } from 'mapbox-gl'
 
-export interface GoogleMyMapPlacemark {
+export interface GoogleMyMapPlaceMark {
   index: number
   id: string
   name: string
@@ -11,10 +11,10 @@ export interface GoogleMyMapPlacemark {
 }
 export interface GoogleMyMapFolder {
   name: string
-  placemarks: Array<GoogleMyMapPlacemark>
+  placemarks: Array<GoogleMyMapPlaceMark>
 }
 
-export type FeatureCollectionJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, GoogleMyMapPlacemark>
+export type FeatureCollectionJSON = GeoJSON.FeatureCollection<GeoJSON.Geometry, GoogleMyMapPlaceMark>
 
 export const gmmFoldersToGeoJSON = (folders: Array<GoogleMyMapFolder>): FeatureCollectionJSON => ({
   type: 'FeatureCollection',
