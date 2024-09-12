@@ -343,7 +343,6 @@
         .code-line-number {
           padding: 0;
           list-style-type: none;
-          height: $code-row-line-height;
           line-height: $code-row-line-height;
         }
       }
