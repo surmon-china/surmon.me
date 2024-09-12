@@ -376,7 +376,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.45.1";
+const APP_VERSION = "4.45.2";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -11482,27 +11482,27 @@ const _sfc_main$_ = /* @__PURE__ */ defineComponent({
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-565acf5f>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-1c37f598>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         "gm-geo-json": _ctx.gmGeoJson,
         onReady: handleMapboxReady
       }, null, _parent));
-      _push(`<div class="panel" data-v-565acf5f><div class="info" data-v-565acf5f><h3 class="title" data-v-565acf5f>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-565acf5f>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-565acf5f><!--[-->`);
+      _push(`<div class="panel" data-v-1c37f598><div class="info" data-v-1c37f598><h3 class="title" data-v-1c37f598>${ssrInterpolate(_ctx.name ?? "-")}</h3><p class="description" data-v-1c37f598>${ssrInterpolate(_ctx.description ?? "-")}</p></div><ul class="folders" data-v-1c37f598><!--[-->`);
       ssrRenderList(_ctx.gmFolders, (folder, index) => {
-        _push(`<li class="folder" data-v-565acf5f><div class="title" data-v-565acf5f><i class="iconfont icon-route" data-v-565acf5f></i><span class="text" data-v-565acf5f>${ssrInterpolate(folder.name)}</span><span class="count" data-v-565acf5f>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
+        _push(`<li class="folder" data-v-1c37f598><div class="title" data-v-1c37f598><i class="iconfont icon-route" data-v-1c37f598></i><span class="text" data-v-1c37f598>${ssrInterpolate(folder.name)}</span><span class="count" data-v-1c37f598>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
         if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-565acf5f>null</div>`);
+          _push(`<div class="empty" data-v-1c37f598>null</div>`);
         } else {
-          _push(`<ul class="placemarks" data-v-565acf5f><!--[-->`);
+          _push(`<ul class="placemarks" data-v-1c37f598><!--[-->`);
           ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark" data-v-565acf5f>`);
+            _push(`<li class="placemark" data-v-1c37f598>`);
             _push(ssrRenderComponent(_component_uimage, {
               class: "icon",
               cdn: true,
               src: `/images/third-party/mapbox-${placemark.image ? "attraction" : "veterinary"}.svg`
             }, null, _parent));
-            _push(`<span class="text" data-v-565acf5f>${ssrInterpolate(placemark.name)}</span></li>`);
+            _push(`<span class="text" data-v-1c37f598>${ssrInterpolate(placemark.name)}</span></li>`);
           });
           _push(`<!--]--></ul>`);
         }
@@ -11518,7 +11518,7 @@ _sfc_main$_.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/modal.vue");
   return _sfc_setup$_ ? _sfc_setup$_(props, ctx) : void 0;
 };
-const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["__scopeId", "data-v-565acf5f"]]);
+const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["__scopeId", "data-v-1c37f598"]]);
 const _sfc_main$Z = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
