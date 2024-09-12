@@ -16,12 +16,13 @@
   const { element } = useLozad()
   const { isDarkTheme } = useEnhancer()
   const markdownHTML = computed<string>(() => {
-    if (!props.markdown) {
-      return props.html || ''
+    if (props.markdown) {
+      return markdownToHTML(props.markdown, {
+        ...props.renderOptions
+      })
     }
-    return markdownToHTML(props.markdown, {
-      ...props.renderOptions
-    })
+
+    return props.html || ''
   })
 </script>
 
@@ -276,26 +277,36 @@
 
     code {
       vertical-align: middle;
-      padding: 0.2em 0.4em 0.14em;
       margin: 0;
+      padding: 0.2em 0.4em 0.14em;
       border-radius: $radius-sm;
+      border: 1px solid $module-bg-darker-2;
+      background-color: $module-bg-darker-1;
+      color: $color-link;
       font-size: 95%;
     }
 
     pre {
       $code-header-height: 2.8rem;
       $code-number-width: 3rem;
-      $code-row-line-height: 1.8em;
+      $code-row-line-height: 1.68em;
       $code-padding: 0.8rem;
       $code-font-size: $font-size-base;
       position: relative;
       display: flex;
       margin-bottom: 1em;
       padding-top: $code-header-height;
-      padding-left: $code-number-width;
       border-radius: $radius-xs;
       overflow: hidden;
       font-size: $code-font-size;
+      background-color: #f3f3f3;
+      @include background-transition($motion-duration-mid);
+      &.with-line-numbers {
+        padding-left: $code-number-width;
+        code {
+          border-left: none;
+        }
+      }
 
       &::before {
         content: attr(data-lang) ' CODE';
@@ -306,6 +317,7 @@
         width: 100%;
         height: $code-header-height;
         line-height: $code-header-height;
+        background-color: $module-bg-darker-2;
         text-transform: uppercase;
         text-align: center;
         z-index: $z-index-normal + 2;
@@ -322,9 +334,11 @@
         padding-top: $code-header-height + $code-padding;
         width: $code-number-width;
         height: 100%;
-        color: $color-text-divider;
         text-align: center;
         user-select: none;
+        font-size: $code-font-size;
+        background-color: $module-bg-darker-1;
+        color: $color-text-divider;
 
         .code-line-number {
           padding: 0;
@@ -342,8 +356,29 @@
         height: 100%;
         display: block;
         line-height: $code-row-line-height;
-        font-size: $font-size-base;
+        border-radius: 0;
+        border-width: 0 1px 1px 1px;
+        border-color: $module-bg-darker-1;
+        font-size: $code-font-size;
+        background-color: transparent !important;
+        color: #444;
         cursor: text;
+      }
+    }
+
+    &.dark {
+      pre {
+        background-color: #1e1e1e;
+        &::before {
+          background-color: $module-bg-darker-1;
+        }
+        .code-lines {
+          background-color: $module-bg-darker-3;
+        }
+        code {
+          color: #c9d1d9;
+          border-color: transparent;
+        }
       }
     }
 
@@ -352,12 +387,8 @@
       word-wrap: break-word;
       font-size: $font-size-base;
 
-      p,
-      pre {
-        margin-bottom: $gap;
-      }
-
       p {
+        margin-bottom: $gap;
         text-indent: 0;
         line-height: 2em;
         &:last-child {
@@ -390,68 +421,6 @@
         }
       }
 
-      pre {
-        $code-header-height: 2.5rem;
-        margin-top: 1rem;
-        padding-left: 0;
-        padding-top: $code-header-height;
-        &::before {
-          height: $code-header-height;
-          line-height: $code-header-height;
-        }
-
-        .code-lines {
-          display: none;
-        }
-
-        code {
-          line-height: 1.8;
-        }
-      }
-    }
-  }
-
-  .global-markdown-html {
-    code {
-      border: 1px solid $module-bg-darker-2;
-      background-color: $module-bg-darker-1;
-      color: $color-link;
-    }
-
-    pre {
-      background-color: #f3f3f3;
-      &::before {
-        background-color: $module-bg-darker-2;
-      }
-      .code-lines {
-        background-color: $module-bg-darker-1;
-      }
-      code {
-        color: #444;
-        border-radius: 0;
-        border-width: 0 1px 1px 0;
-        border-color: $module-bg-darker-1;
-        background-color: transparent !important;
-      }
-    }
-
-    &.dark {
-      pre {
-        background-color: #1e1e1e;
-        &::before {
-          background-color: $module-bg-darker-1;
-        }
-        .code-lines {
-          background-color: $module-bg-darker-3;
-        }
-        code {
-          color: #c9d1d9;
-          border-color: transparent;
-        }
-      }
-    }
-
-    &.compact {
       blockquote {
         border-color: $module-bg-darker-3;
         background-color: $module-bg-darker-2;
@@ -463,10 +432,19 @@
       }
 
       pre {
+        $code-header-height: 2.5rem;
+        margin-top: $gap;
+        margin-bottom: $gap;
+        padding-top: $code-header-height;
         border: 1px solid $module-bg-darker-3;
+        &::before {
+          height: $code-header-height;
+          line-height: $code-header-height;
+        }
+
         code {
+          line-height: 1.8;
           border-color: transparent;
-          background-color: transparent;
         }
       }
     }

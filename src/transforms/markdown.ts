@@ -190,34 +190,38 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
 
   // code: line number
   renderer.code = function ({ text, lang, escaped }) {
+    const code = text.replace(/\n$/, '')
     const langString = (lang || '').match(/^\S*/)?.[0]
-    const code = text.replace(/\n$/, '') + '\n'
-
-    const lineNumbers = code
-      .split('\n')
-      .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
-      .join('')
 
     const readOnlyAttrs = [
       `contenteditable="true"`,
+      `spellcheck="false"`,
       `oncut="return false"`,
       `onpaste="return false"`,
+      `onbeforeinput="return false"`,
       `onkeydown="if(event.metaKey) return true; return false;"`
     ].join(' ')
 
+    const escapedCode = escaped ? code : escape(code)
+    const preClassName = options?.codeLineNumbers ? 'with-line-numbers' : 'default'
+    const lineNumbersList = options?.codeLineNumbers
+      ? `<ul class="code-lines">${code
+          .split('\n')
+          .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
+          .join('')}</ul>`
+      : ''
+
     return langString
       ? `
-        <pre data-lang="${langString}">
-          <ul class="code-lines">${lineNumbers}</ul>
-          <code ${readOnlyAttrs} class="${highlightLangPrefix}${escape(langString)}">${
-            escaped ? code : escape(code)
-          }\n</code>
-        </pre>\n
+        <pre class="${preClassName}" data-lang="${langString}">
+          ${lineNumbersList}
+          <code ${readOnlyAttrs} class="${highlightLangPrefix}${escape(langString)}">${escapedCode}</code>
+        </pre>
       `
       : `
-        <pre>
-          <ul class="code-lines">${lineNumbers}</ul>
-          <code ${readOnlyAttrs}>${escaped ? code : escape(code)}\n</code>
+        <pre class="${preClassName}">
+          ${lineNumbersList}
+          <code ${readOnlyAttrs}>${escapedCode}</code>
         </pre>
       `
   }

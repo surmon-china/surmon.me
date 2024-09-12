@@ -178,7 +178,11 @@
             <i18n zh="：" en=":" />
           </p>
           <div class="markdown">
-            <markdown :markdown="comment.content" :compact="true" :render-options="{ sanitize: true }" />
+            <markdown
+              :markdown="comment.content"
+              :compact="true"
+              :render-options="{ sanitize: true, codeLineNumbers: false }"
+            />
           </div>
         </div>
         <div class="cm-footer">

@@ -134,7 +134,11 @@
               <markdown
                 class="markdown"
                 :markdown="templateMarkdown"
-                :render-options="{ lazyLoadImage: false, imageSourceGetter: getOriginalProxyURL }"
+                :render-options="{
+                  lazyLoadImage: false,
+                  codeLineNumbers: false,
+                  imageSourceGetter: getOriginalProxyURL
+                }"
               />
               <div class="read-more-mask" v-if="isLongArticle"></div>
             </div>

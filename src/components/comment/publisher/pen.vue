@@ -155,7 +155,11 @@
       </div>
       <transition name="list-fade">
         <div class="preview-content" v-if="isPreviewed">
-          <markdown :markdown="content" :compact="true" :render-options="{ sanitize: true }" />
+          <markdown
+            :markdown="content"
+            :compact="true"
+            :render-options="{ sanitize: true, codeLineNumbers: false }"
+          />
         </div>
       </transition>
     </div>
