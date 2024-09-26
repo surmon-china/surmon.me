@@ -1,10 +1,10 @@
 <script lang="ts">
   export enum SocialMedia {
     Wechat = 'wechat',
-    Weibo = 'weibo',
     Twitter = 'twitter',
+    Threads = 'threads',
+    Weibo = 'weibo',
     douban = 'douban',
-    Evernote = 'evernote',
     Facebook = 'facebook',
     LinkedIn = 'linkedin'
   }
@@ -82,6 +82,20 @@
       }
     },
     {
+      id: SocialMedia.Threads,
+      name: 'Threads',
+      class: 'threads',
+      url: (params) => {
+        return (
+          `https://www.threads.net/intent/post?` +
+          qs.stringify({
+            url: params.url,
+            text: params.title
+          })
+        )
+      }
+    },
+    {
       id: SocialMedia.Facebook,
       name: 'Facebook',
       class: 'facebook',
@@ -117,23 +131,6 @@
         return (
           // https://www.douban.com/service/sharebutton
           `https://www.douban.com/recommend/?` +
-          qs.stringify({
-            url: params.url,
-            title: params.title
-            // image: '',
-            // updated: '',
-            // bm: ''
-          })
-        )
-      }
-    },
-    {
-      id: SocialMedia.Evernote,
-      name: 'Evernote',
-      class: 'evernote',
-      url: (params) => {
-        return (
-          `https://www.evernote.com/clip.action?` +
           qs.stringify({
             url: params.url,
             title: params.title
@@ -252,8 +249,8 @@
       &.douban:hover {
         background-color: $douban-primary !important;
       }
-      &.evernote:hover {
-        background-color: $evernote-primary !important;
+      &.threads:hover {
+        background-color: $threads-primary !important;
       }
       &.twitter:hover {
         background-color: $twitter-x-primary !important;
