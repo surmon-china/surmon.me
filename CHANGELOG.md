@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.46.0 (2024-09-27)
+
+**Feature**
+
+- Use `Threads` instead of `Twitter`.
+
 ### v4.45.0 (2024-09-12)
 
 **Feature**
