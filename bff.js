@@ -79,13 +79,15 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
-  "k": () => (/* binding */ bff_logger)
+  v: () => (/* binding */ bff_logger)
 });
 
 ;// CONCATENATED MODULE: external "dotenv"
-var x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var y = x => () => x
-const external_dotenv_namespaceObject = x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_dotenv__["default"] });
+var x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var y = (x) => (() => (x))
+const external_dotenv_namespaceObject = x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_dotenv__["default"]) });
 ;// CONCATENATED MODULE: ./src/config/app.config.ts
 /**
  * @file App config
@@ -131,8 +133,7 @@ const IDENTITIES = Object.freeze({
     ZHIHU_USER_NAME: 'surmon',
     GITHUB_USER_NAME: 'surmon-china',
     INSTAGRAM_USERNAME: 'surmon666',
-    TWITTER_USER_NAME: 'surmon7788',
-    TWITTER_USER_ID: '706498928393359360',
+    THREADS_USER_NAME: 'surmon666',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
@@ -163,7 +164,8 @@ const VALUABLE_LINKS = Object.freeze({
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-    TWITTER: `https://twitter.com/${IDENTITIES.TWITTER_USER_NAME}`
+    THREADS: `https://www.threads.net/@${IDENTITIES.THREADS_USER_NAME}`,
+    THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.THREADS_USER_NAME}`
 });
 
 ;// CONCATENATED MODULE: ./src/config/bff.config.ts
@@ -217,10 +219,11 @@ var TunnelModule;
 (function (TunnelModule) {
     TunnelModule["WebFont"] = "webfont";
     TunnelModule["MyGoogleMap"] = "my_google_map";
-    TunnelModule["TwitterProfile"] = "twitter_profile";
-    TunnelModule["TwitterTweets"] = "twitter_tweets";
     TunnelModule["YouTubePlaylist"] = "youtube_playlist";
     TunnelModule["YouTubeVideoList"] = "youtube_video_list";
+    TunnelModule["ThreadsProfile"] = "threads_profile";
+    TunnelModule["ThreadsMedias"] = "threads_medias";
+    TunnelModule["ThreadsMediaChildren"] = "threads_media_children";
     TunnelModule["InstagramProfile"] = "instagram_profile";
     TunnelModule["InstagramMedias"] = "instagram_medias";
     TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
@@ -236,17 +239,23 @@ var TunnelModule;
 })(TunnelModule || (TunnelModule = {}));
 
 ;// CONCATENATED MODULE: external "rss"
-var external_rss_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_rss_y = x => () => x
-const external_rss_namespaceObject = external_rss_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_rss__["default"] });
+var external_rss_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_rss_y = (x) => (() => (x))
+const external_rss_namespaceObject = external_rss_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_rss__["default"]) });
 ;// CONCATENATED MODULE: external "axios"
-var external_axios_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_axios_y = x => () => x
-const external_axios_namespaceObject = external_axios_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_axios__["default"], ["isAxiosError"]: () => __WEBPACK_EXTERNAL_MODULE_axios__.isAxiosError });
+var external_axios_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_axios_y = (x) => (() => (x))
+const external_axios_namespaceObject = external_axios_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_axios__["default"]), ["isAxiosError"]: () => (__WEBPACK_EXTERNAL_MODULE_axios__.isAxiosError) });
 ;// CONCATENATED MODULE: external "agentkeepalive"
-var external_agentkeepalive_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_agentkeepalive_y = x => () => x
-const external_agentkeepalive_namespaceObject = external_agentkeepalive_x({ ["HttpsAgent"]: () => __WEBPACK_EXTERNAL_MODULE_agentkeepalive__.HttpsAgent, ["default"]: () => __WEBPACK_EXTERNAL_MODULE_agentkeepalive__["default"] });
+var external_agentkeepalive_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_agentkeepalive_y = (x) => (() => (x))
+const external_agentkeepalive_namespaceObject = external_agentkeepalive_x({ ["HttpsAgent"]: () => (__WEBPACK_EXTERNAL_MODULE_agentkeepalive__.HttpsAgent), ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_agentkeepalive__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/services/axios.ts
 /**
  * @file BFF Server fetcher
@@ -282,9 +291,11 @@ const axios = external_axios_namespaceObject["default"].create({
 
 
 ;// CONCATENATED MODULE: external "path"
-var external_path_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_path_y = x => () => x
-const external_path_namespaceObject = external_path_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_path__["default"] });
+var external_path_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_path_y = (x) => (() => (x))
+const external_path_namespaceObject = external_path_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_path__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/config.ts
 /**
  * @file BFF Server helper
@@ -365,13 +376,17 @@ const getRssXml = async () => {
 };
 
 ;// CONCATENATED MODULE: external "stream"
-var external_stream_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_stream_y = x => () => x
-const external_stream_namespaceObject = external_stream_x({ ["Readable"]: () => __WEBPACK_EXTERNAL_MODULE_stream__.Readable });
+var external_stream_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_stream_y = (x) => (() => (x))
+const external_stream_namespaceObject = external_stream_x({ ["Readable"]: () => (__WEBPACK_EXTERNAL_MODULE_stream__.Readable) });
 ;// CONCATENATED MODULE: external "sitemap"
-var external_sitemap_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_sitemap_y = x => () => x
-const external_sitemap_namespaceObject = external_sitemap_x({ ["EnumChangefreq"]: () => __WEBPACK_EXTERNAL_MODULE_sitemap__.EnumChangefreq, ["SitemapStream"]: () => __WEBPACK_EXTERNAL_MODULE_sitemap__.SitemapStream, ["streamToPromise"]: () => __WEBPACK_EXTERNAL_MODULE_sitemap__.streamToPromise });
+var external_sitemap_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_sitemap_y = (x) => (() => (x))
+const external_sitemap_namespaceObject = external_sitemap_x({ ["EnumChangefreq"]: () => (__WEBPACK_EXTERNAL_MODULE_sitemap__.EnumChangefreq), ["SitemapStream"]: () => (__WEBPACK_EXTERNAL_MODULE_sitemap__.SitemapStream), ["streamToPromise"]: () => (__WEBPACK_EXTERNAL_MODULE_sitemap__.streamToPromise) });
 ;// CONCATENATED MODULE: ./src/server/getters/sitemap.ts
 /**
  * @file Archive sitemap generator
@@ -462,9 +477,11 @@ const getGTagScript = async () => {
 };
 
 ;// CONCATENATED MODULE: external "wonderful-bing-wallpaper"
-var external_wonderful_bing_wallpaper_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_wonderful_bing_wallpaper_y = x => () => x
-const external_wonderful_bing_wallpaper_namespaceObject = external_wonderful_bing_wallpaper_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_wonderful_bing_wallpaper_bd315d6d__["default"] });
+var external_wonderful_bing_wallpaper_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_wonderful_bing_wallpaper_y = (x) => (() => (x))
+const external_wonderful_bing_wallpaper_namespaceObject = external_wonderful_bing_wallpaper_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_wonderful_bing_wallpaper_bd315d6d__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/getters/wallpaper.ts
 /**
  * @file BFF wallpaper getter
@@ -504,9 +521,11 @@ const getAllWallpapers = async () => {
 };
 
 ;// CONCATENATED MODULE: external "fast-xml-parser"
-var external_fast_xml_parser_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_fast_xml_parser_y = x => () => x
-const external_fast_xml_parser_namespaceObject = external_fast_xml_parser_x({ ["XMLParser"]: () => __WEBPACK_EXTERNAL_MODULE_fast_xml_parser_352df6bd__.XMLParser });
+var external_fast_xml_parser_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_fast_xml_parser_y = (x) => (() => (x))
+const external_fast_xml_parser_namespaceObject = external_fast_xml_parser_x({ ["XMLParser"]: () => (__WEBPACK_EXTERNAL_MODULE_fast_xml_parser_352df6bd__.XMLParser) });
 ;// CONCATENATED MODULE: ./src/server/getters/my-google-map.ts
 /**
  * @file BFF google map getter
@@ -527,9 +546,11 @@ const getMyGoogleMap = () => {
 };
 
 ;// CONCATENATED MODULE: external "yargs"
-var external_yargs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_yargs_y = x => () => x
-const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_yargs__["default"] });
+var external_yargs_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_yargs_y = (x) => (() => (x))
+const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_yargs__["default"]) });
 ;// CONCATENATED MODULE: ./src/config/bff.yargs.ts
 /**
  * @file BFF yargs config
@@ -538,278 +559,122 @@ const external_yargs_namespaceObject = external_yargs_x({ ["default"]: () => __W
  */
 
 const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)).argv;
-const INSTAGRAM_TOKEN = argv.instagram_token;
 const YOUTUBE_API_KEY = argv.youtube_token;
-const TWITTER_COOKIE = argv.twitter_cookie;
+const INSTAGRAM_TOKEN = argv.instagram_token;
+const THREADS_TOKEN = argv.threads_token;
 const ZHIHU_COOKIE = argv.zhihu_cookie;
-const WEB_SCRAPER_TOKEN = argv.web_scraper_token;
 
-;// CONCATENATED MODULE: ./src/server/getters/twitter/web-api.ts
+;// CONCATENATED MODULE: ./src/server/getters/threads/post.ts
 
 
-// https://blog.nest.moe/posts/how-to-login-to-twitter#cookie
-// https://blog.nest.moe/posts/how-to-crawl-twitter-with-graphql#guest-token-cookie
-// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/utils.ts
-const BASE_URL = 'https://x.com/i/api';
-// prettier-ignore
-// https://blog.nest.moe/posts/how-to-crawl-twitter-with-graphql#authorization
-// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/constants.ts
-const bearerToken = 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA';
-// prettier-ignore
-// https://github.com/DIYgod/RSSHub/blob/master/lib/utils/rand-user-agent.ts
-const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
-// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/constants.ts
-const gqlFeatureUser = {
-    hidden_profile_likes_enabled: true,
-    hidden_profile_subscriptions_enabled: true,
-    responsive_web_graphql_exclude_directive_enabled: true,
-    verified_phone_label_enabled: false,
-    subscriptions_verification_info_is_identity_verified_enabled: true,
-    subscriptions_verification_info_verified_since_enabled: true,
-    highlights_tweets_tab_ui_enabled: true,
-    responsive_web_twitter_article_notes_tab_enabled: true,
-    creator_subscriptions_tweet_preview_api_enabled: true,
-    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
-    responsive_web_graphql_timeline_navigation_enabled: true
-};
-const gqlFeatureFeed = {
-    responsive_web_graphql_exclude_directive_enabled: true,
-    verified_phone_label_enabled: false,
-    creator_subscriptions_tweet_preview_api_enabled: true,
-    responsive_web_graphql_timeline_navigation_enabled: true,
-    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
-    c9s_tweet_anatomy_moderator_badge_enabled: true,
-    tweetypie_unmention_optimization_enabled: true,
-    responsive_web_edit_tweet_api_enabled: true,
-    graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
-    view_counts_everywhere_api_enabled: true,
-    longform_notetweets_consumption_enabled: true,
-    responsive_web_twitter_article_tweet_consumption_enabled: true,
-    tweet_awards_web_tipping_enabled: false,
-    freedom_of_speech_not_reach_fetch_enabled: true,
-    standardized_nudges_misinfo: true,
-    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
-    rweb_video_timestamps_enabled: true,
-    longform_notetweets_rich_text_read_enabled: true,
-    longform_notetweets_inline_media_enabled: true,
-    responsive_web_enhance_cards_enabled: false
-};
-const gqlTweetDetailFeatures = {
-    rweb_tipjar_consumption_enabled: true,
-    responsive_web_graphql_exclude_directive_enabled: true,
-    verified_phone_label_enabled: false,
-    creator_subscriptions_tweet_preview_api_enabled: true,
-    responsive_web_graphql_timeline_navigation_enabled: true,
-    responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
-    communities_web_enable_tweet_community_results_fetch: true,
-    c9s_tweet_anatomy_moderator_badge_enabled: true,
-    articles_preview_enabled: false,
-    tweetypie_unmention_optimization_enabled: true,
-    responsive_web_edit_tweet_api_enabled: true,
-    graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
-    view_counts_everywhere_api_enabled: true,
-    longform_notetweets_consumption_enabled: true,
-    responsive_web_twitter_article_tweet_consumption_enabled: true,
-    tweet_awards_web_tipping_enabled: false,
-    creator_subscriptions_quote_tweet_preview_enabled: false,
-    freedom_of_speech_not_reach_fetch_enabled: true,
-    standardized_nudges_misinfo: true,
-    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
-    tweet_with_visibility_results_prefer_gql_media_interstitial_enabled: true,
-    rweb_video_timestamps_enabled: true,
-    longform_notetweets_rich_text_read_enabled: true,
-    longform_notetweets_inline_media_enabled: true,
-    responsive_web_enhance_cards_enabled: false
-};
-const gqlFeatures = {
-    UserByScreenName: gqlFeatureUser,
-    UserByRestId: gqlFeatureUser,
-    UserTweets: gqlFeatureFeed,
-    UserMedia: gqlFeatureFeed,
-    Likes: gqlFeatureFeed,
-    TweetDetail: gqlTweetDetailFeatures
-};
-const graphQLEndpointsMap = {
-    UserByScreenName: '/graphql/k5XapwcSikNsEsILW5FvgA/UserByScreenName',
-    UserByRestId: '/graphql/tD8zKvQzwY3kdx5yz6YmOw/UserByRestId',
-    UserTweets: '/graphql/eS7LO5Jy3xgmd3dbL044EA/UserTweets',
-    UserMedia: '/graphql/TOU4gQw8wXIqpSzA4TYKgg/UserMedia',
-    Likes: '/graphql/B8I_QCljDBVfin21TTWMqA/Likes',
-    TweetDetail: '/graphql/zJvfJs3gSbrVhC0MKjt_OQ/TweetDetail'
-};
-const fetchTwitter = (url, params = {}) => {
-    if (!TWITTER_COOKIE) {
-        throw new Error('Twitter cookie is not configured');
-    }
-    const jsonCookie = Object.fromEntries(TWITTER_COOKIE.split(';').map((i) => i.trim().split('=')));
-    if (!jsonCookie.auth_token || !jsonCookie.ct0) {
-        throw new Error('Twitter cookie is not valid');
-    }
-    return services_axios(url, {
-        params: params ?? {},
-        headers: {
-            'user-agent': userAgent,
-            authority: 'x.com',
-            accept: '*/*',
-            'accept-language': 'en-US,en;q=0.9',
-            'cache-control': 'no-cache',
-            'content-type': 'application/json',
-            authorization: bearerToken,
-            dnt: '1',
-            pragma: 'no-cache',
-            referer: 'https://x.com/narendramodi',
-            'x-twitter-active-user': 'yes',
-            'x-twitter-auth-type': 'OAuth2Session',
-            'x-twitter-client-language': 'en',
-            'x-csrf-token': jsonCookie.ct0,
-            cookie: TWITTER_COOKIE
+const THREADS_MEDIA_FULL_FIELDS = `id,media_product_type,media_type,media_url,permalink,owner,username,text,timestamp,shortcode,thumbnail_url,children,is_quote_post`;
+// https://developers.facebook.com/docs/threads/threads-media
+const getThreadsMedias = async (options) => {
+    try {
+        const uri = 'https://graph.threads.net/v1.0/me/threads';
+        const params = {
+            access_token: THREADS_TOKEN,
+            fields: options?.fields ?? THREADS_MEDIA_FULL_FIELDS,
+            // MARK: max 100
+            limit: options?.limit ?? 24
+        };
+        // MARK: unix timestamp
+        if (options?.since) {
+            params.since = options.since;
         }
+        // MARK: cursor
+        if (options?.after) {
+            params.after = options.after;
+        }
+        const response = await services_axios.get(uri, { timeout: 8000, params });
+        return response.data;
+    }
+    catch (error) {
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error;
+    }
+};
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/media/children
+const getThreadsMediaChildren = (threadsMediaId) => {
+    const uri = `https://graph.threads.net/v1.0/${threadsMediaId}`;
+    const params = {
+        access_token: THREADS_TOKEN,
+        fields: THREADS_MEDIA_FULL_FIELDS
+    };
+    return services_axios.get(uri, { timeout: 8000, params })
+        .then((response) => response.data.data)
+        .catch((error) => {
+        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error);
     });
 };
-const getWebTwitterProfile = async (twitterUsername) => {
+
+;// CONCATENATED MODULE: ./src/server/getters/threads/profile.ts
+
+
+const getThreadsUserProfile = async () => {
     try {
-        const response = await fetchTwitter(BASE_URL + graphQLEndpointsMap.UserByScreenName, {
-            variables: JSON.stringify({
-                screen_name: twitterUsername,
-                withSafetyModeUserFields: true
-            }),
-            features: JSON.stringify(gqlFeatures.UserByScreenName),
-            fieldToggles: JSON.stringify({
-                withAuxiliaryUserLabels: false
-            })
+        // https://developers.facebook.com/docs/threads/threads-profiles
+        const uri = 'https://graph.threads.net/v1.0/me';
+        const fields = 'id,username,name,threads_profile_picture_url,threads_biography';
+        const response = await services_axios.get(uri, {
+            params: { access_token: THREADS_TOKEN, fields },
+            timeout: 8000
         });
-        const userId = response.data.data.user.result.rest_id;
-        const userInfo = response.data.data.user.result.legacy;
         return {
-            id: userId,
-            name: userInfo?.name,
-            avatar: userInfo?.profile_image_url_https.replace(/_normal.jpg$/, '.jpg'),
-            createdAt: new Date(userInfo?.created_at).getTime(),
-            description: userInfo?.description,
-            location: userInfo.location,
-            tweetCount: userInfo.statuses_count,
-            followerCount: userInfo.followers_count,
-            followingCount: userInfo.friends_count
+            id: response.data.id,
+            name: response.data.name,
+            username: response.data.username,
+            avatar: response.data.threads_profile_picture_url,
+            biography: response.data.threads_biography
         };
     }
     catch (error) {
-        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error;
     }
 };
-// https://github.com/DIYgod/RSSHub/blob/master/lib/routes/twitter/api/web-api/utils.ts#L88C1-L114C3
-const getWebTwitterUserTweets = async (userId, params) => {
+const getThreadsUserInsights = async () => {
     try {
-        const response = await fetchTwitter(BASE_URL + graphQLEndpointsMap.UserTweets, {
-            features: JSON.stringify(gqlFeatures.UserTweets),
-            variables: JSON.stringify({
-                userId,
-                ...params,
-                // MARK: Whatever the setting, it's actually 20
-                count: 20,
-                includePromotedContent: true,
-                withQuickPromoteEligibilityTweetFields: true,
-                withVoice: true,
-                withV2Timeline: true
-            })
+        // https://developers.facebook.com/docs/threads/insights
+        const uri = 'https://graph.threads.net/v1.0/me/threads_insights';
+        const metric = 'likes,reposts,quotes,followers_count';
+        const response = await services_axios.get(uri, {
+            params: { access_token: THREADS_TOKEN, metric },
+            timeout: 8000
         });
-        // Getting the right raw data
-        const instructions = response.data?.data?.user?.result?.timeline_v2?.timeline?.instructions ?? [];
-        const entries1 = instructions.find((i) => i.type === 'TimelineAddToModule')?.moduleItems; // Media
-        const entries2 = instructions.find((i) => i.type === 'TimelineAddEntries').entries;
-        const entries = entries1 || entries2;
-        // Converting data structures
-        const tweets = [];
-        const topCursor = entries.find((e) => e.entryId?.startsWith?.('cursor-top-'))?.content.value;
-        const bottomCursor = entries.find((e) => e.entryId?.startsWith?.('cursor-bottom-'))?.content.value;
-        const parseSingleTweet = (tweet, references) => {
-            const user = tweet.core.user_results?.result;
-            const tweetMedias = tweet.legacy?.entities?.media ?? [];
-            const tweetUrls = tweet.legacy?.entities?.urls ?? [];
-            const tweetDisplayTextRange = tweet.legacy.display_text_range;
-            const tweetFullText = tweet.legacy.full_text;
-            // remove medias url in full text
-            // MARK: Split Emoji https://stackoverflow.com/a/37535876/6222535
-            const pureText = [...tweetFullText].slice(...tweetDisplayTextRange).join('');
-            // replace url with link
-            const htmlText = !tweetUrls.length
-                ? pureText
-                : tweetUrls.reduce((result, url) => {
-                    const linkHtml = `<a class="link" rel="external nofollow noopener" target="_blank" href="${url.expanded_url}">[${url.display_url}]</a>`;
-                    const [start, end] = url.indices;
-                    return result.substring(0, start) + linkHtml + result.substring(end);
-                }, pureText);
-            const result = {
-                id: tweet.legacy.id_str,
-                owner: user?.legacy?.screen_name,
-                text: pureText,
-                html: htmlText,
-                date: new Date(tweet.legacy.created_at).getTime(),
-                location: tweet.legacy.place?.country,
-                viewCount: Number(tweet.views?.count ?? 0),
-                favoriteCount: tweet.legacy.favorite_count,
-                commentCount: tweet.legacy.reply_count,
-                retweetCount: tweet.legacy.retweet_count,
-                quoteCount: tweet.legacy.quote_count,
-                mediaCount: tweetMedias.length,
-                hasImage: tweetMedias.some((media) => media.type === 'photo'),
-                hasVideo: tweetMedias.some((media) => media.type === 'video'),
-                isQuote: tweet.legacy.is_quote_status,
-                isReply: !!tweet.legacy.in_reply_to_status_id_str,
-                isRetweet: tweet.legacy.retweeted
-            };
-            if (result.isQuote && tweet.quoted_status_result) {
-                result.ref = parseSingleTweet(tweet.quoted_status_result.result);
-            }
-            else if (result.isRetweet && tweet.legacy.retweeted_status_result) {
-                result.ref = parseSingleTweet(tweet.legacy.retweeted_status_result.result);
-            }
-            else if (result.isReply) {
-                const refId = tweet.legacy.in_reply_to_status_id_str;
-                const refTarget = references?.find((ref) => ref.rest_id === refId);
-                if (refTarget) {
-                    result.ref = parseSingleTweet(refTarget);
-                }
-            }
-            return result;
-        };
-        entries.forEach((entry) => {
-            if (entry.entryId.startsWith('tweet-')) {
-                tweets.push(parseSingleTweet(entry.content.itemContent.tweet_results.result));
-            }
-            else if (entry.entryId.startsWith('profile-conversation-')) {
-                const conversationTweets = entry.content.items.map((i) => i.item.itemContent.tweet_results.result);
-                conversationTweets.forEach((tweet) => {
-                    tweets.push(parseSingleTweet(tweet, conversationTweets));
-                });
-            }
-        });
+        // MARK: data.data[index] follow the `metric`'s order
         return {
-            data: tweets,
-            cursors: {
-                top: topCursor,
-                bottom: bottomCursor
-            }
+            totalLikes: response.data.data[0].total_value.value,
+            totalReposts: response.data.data[1].total_value.value,
+            totalQuotes: response.data.data[2].total_value.value,
+            followersCount: response.data.data[3].total_value.value
         };
     }
     catch (error) {
-        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
+        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error;
     }
+};
+const getThreadsProfile = async () => {
+    const [userProfile, userInsights] = await Promise.all([getThreadsUserProfile(), getThreadsUserInsights()]);
+    return {
+        ...userProfile,
+        ...userInsights
+    };
 };
 
-;// CONCATENATED MODULE: ./src/server/getters/twitter/index.ts
+;// CONCATENATED MODULE: ./src/server/getters/threads/index.ts
 /**
- * @file BFF Twitter getter
- * @module server.getter.twitter
+ * @file BFF threads getter
+ * @module server.getter.threads
  * @author Surmon <https://github.com/surmon-china>
  */
+// 1. Generate long-lived access tokens for Threads Testers (60 days)
+// https://developers.facebook.com/docs/threads/overview
+// 2. Get posts useing API
+// https://developers.facebook.com/docs/threads/threads-media
+// https://github.com/fbsamples/threads_api/blob/main/src/index.js
+// 3. TODO: Refresh token
+// https://developers.facebook.com/docs/threads/get-started/long-lived-tokens
 
 
-const getTwitterProfile = () => {
-    return getWebTwitterProfile(IDENTITIES.TWITTER_USER_NAME);
-};
-const getTwitterTweets = (params) => {
-    return getWebTwitterUserTweets(IDENTITIES.TWITTER_USER_ID, params);
-};
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/media.ts
 
@@ -1147,13 +1012,17 @@ const getSongList = async () => {
 };
 
 ;// CONCATENATED MODULE: external "fs-extra"
-var external_fs_extra_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_fs_extra_y = x => () => x
-const external_fs_extra_namespaceObject = external_fs_extra_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__["default"] });
+var external_fs_extra_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_fs_extra_y = (x) => (() => (x))
+const external_fs_extra_namespaceObject = external_fs_extra_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__["default"]) });
 ;// CONCATENATED MODULE: external "fontmin"
-var external_fontmin_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_fontmin_y = x => () => x
-const external_fontmin_namespaceObject = external_fontmin_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_fontmin__["default"] });
+var external_fontmin_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_fontmin_y = (x) => (() => (x))
+const external_fontmin_namespaceObject = external_fontmin_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_fontmin__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/getters/webfont.ts
 /**
  * @file WebFont getter
@@ -1198,13 +1067,17 @@ const getWebFont = (options) => {
 };
 
 ;// CONCATENATED MODULE: external "fs"
-var external_fs_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_fs_y = x => () => x
-const external_fs_namespaceObject = external_fs_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_fs__["default"] });
+var external_fs_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_fs_y = (x) => (() => (x))
+const external_fs_namespaceObject = external_fs_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_fs__["default"]) });
 ;// CONCATENATED MODULE: external "vite"
-var external_vite_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_vite_y = x => () => x
-const external_vite_namespaceObject = external_vite_x({ ["createServer"]: () => __WEBPACK_EXTERNAL_MODULE_vite__.createServer });
+var external_vite_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_vite_y = (x) => (() => (x))
+const external_vite_namespaceObject = external_vite_x({ ["createServer"]: () => (__WEBPACK_EXTERNAL_MODULE_vite__.createServer) });
 ;// CONCATENATED MODULE: ./src/server/renderer/_template.ts
 const resolveTemplate = (input) => {
     return (input.template
@@ -1439,9 +1312,11 @@ const responser = (promise) => {
 };
 
 ;// CONCATENATED MODULE: external "crypto"
-var external_crypto_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_crypto_y = x => () => x
-const external_crypto_namespaceObject = external_crypto_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_crypto__["default"] });
+var external_crypto_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_crypto_y = (x) => (() => (x))
+const external_crypto_namespaceObject = external_crypto_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_crypto__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/helpers/cacher.ts
 /**
  * @file BFF Server cacher
@@ -1549,29 +1424,41 @@ const interval = (cache, opts) => {
 });
 
 ;// CONCATENATED MODULE: external "http"
-var external_http_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_http_y = x => () => x
-const external_http_namespaceObject = external_http_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_http__["default"] });
+var external_http_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_http_y = (x) => (() => (x))
+const external_http_namespaceObject = external_http_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_http__["default"]) });
 ;// CONCATENATED MODULE: external "express"
-var external_express_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_express_y = x => () => x
-const external_express_namespaceObject = external_express_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_express__["default"] });
+var external_express_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_express_y = (x) => (() => (x))
+const external_express_namespaceObject = external_express_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_express__["default"]) });
 ;// CONCATENATED MODULE: external "compression"
-var external_compression_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_compression_y = x => () => x
-const external_compression_namespaceObject = external_compression_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_compression__["default"] });
+var external_compression_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_compression_y = (x) => (() => (x))
+const external_compression_namespaceObject = external_compression_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_compression__["default"]) });
 ;// CONCATENATED MODULE: external "cookie-parser"
-var external_cookie_parser_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_cookie_parser_y = x => () => x
-const external_cookie_parser_namespaceObject = external_cookie_parser_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_cookie_parser_591162dd__["default"] });
+var external_cookie_parser_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_cookie_parser_y = (x) => (() => (x))
+const external_cookie_parser_namespaceObject = external_cookie_parser_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_cookie_parser_591162dd__["default"]) });
 ;// CONCATENATED MODULE: external "lru-cache"
-var external_lru_cache_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_lru_cache_y = x => () => x
-const external_lru_cache_namespaceObject = external_lru_cache_x({ ["LRUCache"]: () => __WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__.LRUCache });
+var external_lru_cache_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_lru_cache_y = (x) => (() => (x))
+const external_lru_cache_namespaceObject = external_lru_cache_x({ ["LRUCache"]: () => (__WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__.LRUCache) });
 ;// CONCATENATED MODULE: external "redis"
-var external_redis_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_redis_y = x => () => x
-const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () => __WEBPACK_EXTERNAL_MODULE_redis__.createClient });
+var external_redis_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_redis_y = (x) => (() => (x))
+const external_redis_namespaceObject = external_redis_x({ ["createClient"]: () => (__WEBPACK_EXTERNAL_MODULE_redis__.createClient) });
 ;// CONCATENATED MODULE: ./src/server/services/cache.ts
 /**
  * @file Universal Server cache
@@ -1655,9 +1542,11 @@ const createCacheClient = async (options) => {
 };
 
 ;// CONCATENATED MODULE: external "http-proxy"
-var external_http_proxy_x = y => { var x = {}; __nccwpck_require__.d(x, y); return x; }
-var external_http_proxy_y = x => () => x
-const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]: () => __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__["default"] });
+var external_http_proxy_x = (y) => {
+	var x = {}; __nccwpck_require__.d(x, y); return x
+} 
+var external_http_proxy_y = (x) => (() => (x))
+const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__["default"]) });
 ;// CONCATENATED MODULE: ./src/server/services/proxy.ts
 /**
  * @file BFF Server proxy
@@ -1720,12 +1609,14 @@ const proxyer = () => {
             parsedURL = new URL(targetURL);
         }
         catch (error) {
-            return response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`);
+            response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`);
+            return;
         }
         if (parsedURL.hostname.endsWith(META.domain)) {
             const staticUrl = new URL(getStaticURL());
             if (parsedURL.hostname !== staticUrl.hostname) {
-                return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+                response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`);
+                return;
             }
         }
         if (isNodeProd) {
@@ -1734,7 +1625,8 @@ const proxyer = () => {
             const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer);
             const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin);
             if (!isAllowedReferer || !isAllowedOrigin) {
-                return response.status(FORBIDDEN).send('Proxy error: forbidden');
+                response.status(FORBIDDEN).send('Proxy error: forbidden');
+                return;
             }
         }
         const headers = {};
@@ -1862,32 +1754,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
             errorer(response, { message: error });
         }
     });
-    // Twitter profile
-    const getTwitterProfileCache = cacher.interval(cache, {
-        key: TunnelModule.TwitterProfile,
-        ttl: days(7),
-        interval: hours(12),
-        retry: hours(1),
-        getter: getTwitterProfile
-    });
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterProfile}`, responser(() => getTwitterProfileCache()));
-    // Twitter latest tweets
-    const getTwitterLatestTweetsCache = cacher.interval(cache, {
-        key: 'twitter_tweets_page_latest',
-        ttl: hours(12),
-        interval: minutes(20),
-        retry: minutes(5),
-        getter: getTwitterTweets
-    });
-    // Twitter tweets route
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.TwitterTweets}`, (request, response, next) => {
-        responser(() => {
-            // loadmore or latest cache
-            return request.query.cursor || request.query.count
-                ? getTwitterTweets(request.query)
-                : getTwitterLatestTweetsCache();
-        })(request, response, next);
-    });
     // Bing wallpapers
     const getWallpaperCache = cacher.interval(cache, {
         key: TunnelModule.BingWallpaper,
@@ -1929,6 +1795,55 @@ createExpressApp().then(async ({ app, server, cache }) => {
                 key: `zhihu_answers_page_${page}`,
                 ttl: hours(12),
                 getter: () => getZhihuAnswers(Number(page))
+            });
+        })(request, response, next);
+    });
+    // Threads profile
+    const getThreadsProfileCache = cacher.interval(cache, {
+        key: TunnelModule.ThreadsProfile,
+        ttl: days(7),
+        interval: hours(12),
+        retry: hours(1),
+        getter: getThreadsProfile
+    });
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ThreadsProfile}`, responser(() => getThreadsProfileCache()));
+    // Threads latest medias
+    const getThreadsFirstPageMediasCache = cacher.interval(cache, {
+        key: 'threads_medias_page_first',
+        ttl: hours(12),
+        interval: minutes(20),
+        retry: minutes(5),
+        getter: getThreadsMedias
+    });
+    // Threads medias route
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ThreadsMedias}`, (request, response, next) => {
+        const afterToken = request.query.after;
+        if (afterToken && typeof afterToken !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return !afterToken
+                ? getThreadsFirstPageMediasCache()
+                : cacher.passive(cache, {
+                    key: `threads_medias_page_${afterToken}`,
+                    ttl: hours(12),
+                    getter: () => getThreadsMedias({ after: afterToken })
+                });
+        })(request, response, next);
+    });
+    // Threads media children
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ThreadsMediaChildren}`, (request, response, next) => {
+        const mediaId = request.query.id;
+        if (!mediaId || typeof mediaId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher.passive(cache, {
+                key: `threads_media_children_${mediaId}`,
+                ttl: days(7),
+                getter: () => getThreadsMediaChildren(mediaId)
             });
         })(request, response, next);
     });
@@ -2090,5 +2005,5 @@ createExpressApp().then(async ({ app, server, cache }) => {
     });
 });
 
-var __webpack_exports__logger = __webpack_exports__.k;
+var __webpack_exports__logger = __webpack_exports__.v;
 export { __webpack_exports__logger as logger };
