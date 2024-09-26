@@ -15,7 +15,7 @@ import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
-import { getTwitterProfile, getTwitterTweets } from './server/getters/twitter'
+import { getThreadsProfile, getThreadsMedias, getThreadsMediaChildren } from './server/getters/threads'
 import {
   getInstagramProfile,
   getInstagramMedias,
@@ -81,39 +81,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
     }
   })
 
-  // Twitter profile
-  const getTwitterProfileCache = cacher.interval(cache, {
-    key: TunnelModule.TwitterProfile,
-    ttl: days(7),
-    interval: hours(12),
-    retry: hours(1),
-    getter: getTwitterProfile
-  })
-
-  app.get(
-    `${TUN}/${TunnelModule.TwitterProfile}`,
-    responser(() => getTwitterProfileCache())
-  )
-
-  // Twitter latest tweets
-  const getTwitterLatestTweetsCache = cacher.interval(cache, {
-    key: 'twitter_tweets_page_latest',
-    ttl: hours(12),
-    interval: minutes(20),
-    retry: minutes(5),
-    getter: getTwitterTweets
-  })
-
-  // Twitter tweets route
-  app.get(`${TUN}/${TunnelModule.TwitterTweets}`, (request, response, next) => {
-    responser(() => {
-      // loadmore or latest cache
-      return request.query.cursor || request.query.count
-        ? getTwitterTweets(request.query)
-        : getTwitterLatestTweetsCache()
-    })(request, response, next)
-  })
-
   // Bing wallpapers
   const getWallpaperCache = cacher.interval(cache, {
     key: TunnelModule.BingWallpaper,
@@ -168,6 +135,65 @@ createExpressApp().then(async ({ app, server, cache }) => {
         key: `zhihu_answers_page_${page}`,
         ttl: hours(12),
         getter: () => getZhihuAnswers(Number(page))
+      })
+    })(request, response, next)
+  })
+
+  // Threads profile
+  const getThreadsProfileCache = cacher.interval(cache, {
+    key: TunnelModule.ThreadsProfile,
+    ttl: days(7),
+    interval: hours(12),
+    retry: hours(1),
+    getter: getThreadsProfile
+  })
+
+  app.get(
+    `${TUN}/${TunnelModule.ThreadsProfile}`,
+    responser(() => getThreadsProfileCache())
+  )
+
+  // Threads latest medias
+  const getThreadsFirstPageMediasCache = cacher.interval(cache, {
+    key: 'threads_medias_page_first',
+    ttl: hours(12),
+    interval: minutes(20),
+    retry: minutes(5),
+    getter: getThreadsMedias
+  })
+
+  // Threads medias route
+  app.get(`${TUN}/${TunnelModule.ThreadsMedias}`, (request, response, next) => {
+    const afterToken = request.query.after
+    if (afterToken && typeof afterToken !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return !afterToken
+        ? getThreadsFirstPageMediasCache()
+        : cacher.passive(cache, {
+            key: `threads_medias_page_${afterToken}`,
+            ttl: hours(12),
+            getter: () => getThreadsMedias({ after: afterToken })
+          })
+    })(request, response, next)
+  })
+
+  // Threads media children
+  app.get(`${TUN}/${TunnelModule.ThreadsMediaChildren}`, (request, response, next) => {
+    const mediaId = request.query.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return cacher.passive(cache, {
+        key: `threads_media_children_${mediaId}`,
+        ttl: days(7),
+        getter: () => getThreadsMediaChildren(mediaId)
       })
     })(request, response, next)
   })

@@ -71,9 +71,9 @@
         <i class="iconfont icon-instagram" />
         <span class="text">Instagram</span>
       </ulink>
-      <ulink class="item center twitter" :href="VALUABLE_LINKS.TWITTER">
-        <i class="iconfont icon-twitter-x" />
-        <span class="text">Twitter</span>
+      <ulink class="item center threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+        <i class="iconfont icon-threads" />
+        <span class="text">Threads</span>
       </ulink>
     </div>
     <div class="links col-4">
@@ -245,8 +245,8 @@
         &.github {
           background-color: $github-primary;
         }
-        &.twitter {
-          background-color: $twitter-x-primary;
+        &.threads {
+          background-color: $threads-primary;
         }
         &.instagram {
           background: $instagram-primary;

@@ -83,7 +83,7 @@
     &.npm {
       #{--s-primary}: $npm-primary;
     }
-    &.twitter {
+    &.threads {
       #{--s-primary}: $color-link;
       #{--brand-color}: $color-text-reversal;
     }

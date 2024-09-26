@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_yplwgisyntj.woff2?t=1725663738453') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_yplwgisyntj.woff?t=1725663738453') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_yplwgisyntj.ttf?t=1725663738453') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_b8reeohwh6g.woff2?t=1727378640675') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_b8reeohwh6g.woff?t=1727378640675') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_b8reeohwh6g.ttf?t=1727378640675') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-audio:before {
+  content: '\e6e7';
+}
+
+.icon-repost:before {
+  content: '\e636';
+}
+
+.icon-threads:before {
+  content: '\e6eb';
 }
 
 .icon-lotus:before {
@@ -72,10 +84,6 @@
 
 .icon-chat-gpt:before {
   content: '\e644';
-}
-
-.icon-retweet:before {
-  content: '\e704';
 }
 
 .icon-opensea:before {

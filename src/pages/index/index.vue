@@ -7,10 +7,10 @@
   import { META } from '/@/config/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'
   import Carrousel from './carrousel.vue'
-  import Twitter from './twitter.vue'
+  import Threads from './threads.vue'
 
   const { seoMeta, i18n: _i18n, isZhLang } = useEnhancer()
-  const { appOption, twitterProfile, twitterLatestTweets, articleList: articleListStore } = useStores()
+  const { appOption, threadsProfile, threadsLatestMedias, articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
     const targetPage = articleListStore.pagination!.current_page + 1
@@ -29,8 +29,8 @@
   useUniversalFetch(() => {
     return Promise.all([
       articleListStore.fetch(),
-      twitterProfile.fetch().catch(() => {}),
-      twitterLatestTweets.fetch().catch(() => {})
+      threadsProfile.fetch().catch(() => {}),
+      threadsLatestMedias.fetch().catch(() => {})
     ])
   })
 </script>
@@ -38,11 +38,11 @@
 <template>
   <div class="index-page">
     <carrousel class="carrousel" :articles="articleListStore.data" :fetching="articleListStore.fetching" />
-    <twitter
-      class="twitter"
-      :profile="twitterProfile.data"
-      :tweets="twitterLatestTweets.data?.data ?? []"
-      :fetching="twitterLatestTweets.fetching || twitterProfile.fetching || articleListStore.fetching"
+    <Threads
+      class="threads"
+      :profile="threadsProfile.data"
+      :medias="threadsLatestMedias.data?.data ?? []"
+      :fetching="threadsLatestMedias.fetching || threadsProfile.fetching || articleListStore.fetching"
     />
     <article-list
       :mammon="false"
@@ -60,7 +60,7 @@
 
   .index-page {
     .carrousel,
-    .twitter {
+    .threads {
       margin-bottom: $gap-lg;
     }
   }

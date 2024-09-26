@@ -5,13 +5,12 @@
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
-  import { unescape, padStart, numberSplit } from '/@/transforms/text'
-  import { getTwitterTweetDetailURL } from '/@/transforms/media'
-  import type { TwitterProfile, TwitterTweet } from '/@/server/getters/twitter'
+  import type { ThreadsProfile, ThreadsMedia } from '/@/server/getters/threads'
+  import { unescape } from '/@/transforms/text'
 
   defineProps<{
-    profile: TwitterProfile | null
-    tweets: Array<TwitterTweet>
+    profile: ThreadsProfile | null
+    medias: Array<ThreadsMedia>
     fetching: boolean
   }>()
 
@@ -28,6 +27,10 @@
     activeIndex.value = swiperRef.value?.activeIndex || 0
   }
 
+  const isMediaPost = (media: ThreadsMedia) => {
+    return ['AUDIO', 'IMAGE', 'VIDEO', 'CAROUSEL_ALBUM'].includes(media.media_type)
+  }
+
   const handleGtagEvent = (name: string) => {
     gtag?.event(name, {
       event_category: GAEventCategories.Index
@@ -36,43 +39,38 @@
 </script>
 
 <template>
-  <div class="twitter">
+  <div class="threads">
     <placeholder :data="profile ?? UNDEFINED" :loading="fetching">
       <template #placeholder>
-        <empty class="twitter-empty" bold key="empty" />
+        <empty class="threads-empty" bold key="empty" />
       </template>
       <template #loading>
-        <div class="twitter-skeleton" key="skeleton">
+        <div class="threads-skeleton" key="skeleton">
           <div class="left"><skeleton-line /></div>
           <div class="right"><skeleton-line /></div>
         </div>
       </template>
       <template #default>
-        <div class="twitter-content" key="content">
+        <div class="threads-content" key="content">
           <div class="profile" v-if="profile" :title="profile.name">
-            <ulink class="link" :href="VALUABLE_LINKS.TWITTER" @mousedown="handleGtagEvent('twitter_homepage')">
+            <ulink class="link" :href="VALUABLE_LINKS.THREADS" @mousedown="handleGtagEvent('threads_homepage')">
               <uimage class="avatar" proxy :src="profile.avatar" />
-              <span class="logo"><i class="iconfont icon-twitter-x" /></span>
+              <span class="logo"><i class="iconfont icon-threads" /></span>
             </ulink>
             <div class="count">
               <p class="title">
-                <template v-if="profile.tweetCount">
-                  {{ padStart(numberSplit(profile.tweetCount), 3, '0') }}
-                </template>
-                <template v-else>
-                  <i18n en="Latest" zh="碎碎" />
-                </template>
+                <i18n en="Latest" zh="时新" />
               </p>
               <p class="secondary">
-                <i18n en="tweets" :zh="profile.tweetCount ? '碎碎念' : '念念'" />
+                <i18n en="threads" zh="清静念" />
               </p>
             </div>
           </div>
-          <div class="tweets">
-            <empty v-if="!tweets.length" class="tweets-empty" bold key="empty" />
+          <div class="posts">
+            <empty v-if="!medias.length" class="posts-empty" bold key="empty" />
             <swiper
               v-else
-              class="tweets-swiper"
+              class="posts-swiper"
               direction="vertical"
               :height="66"
               :mousewheel="true"
@@ -83,70 +81,62 @@
               @transition-start="handleSwiperTransitionStart"
               @swiper="setSwiper"
             >
-              <swiper-slide class="tweet-item" :key="index" v-for="(tweet, index) in tweets">
+              <swiper-slide class="post-item" :key="index" v-for="(media, index) in medias">
                 <div class="content">
                   <div
-                    v-if="tweet.text"
-                    v-html="unescape(tweet.html)"
-                    :title="tweet.text"
-                    :class="['main', { 'has-media': tweet.mediaCount }]"
+                    v-if="media.text"
+                    :title="media.text"
+                    v-html="unescape(media.text)"
+                    :class="['main', { 'has-media': isMediaPost(media) }]"
                   ></div>
                   <ulink
-                    v-if="tweet.mediaCount"
-                    :class="['medias', { empty: !tweet.text }]"
-                    :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
-                    @mousedown="handleGtagEvent('twitter_image_link')"
+                    v-if="isMediaPost(media)"
+                    :class="['medias', { empty: !media.text }]"
+                    :href="media.permalink"
+                    @mousedown="handleGtagEvent('threads_image_link')"
                   >
-                    <template v-if="tweet.hasVideo">
+                    <template v-if="media.media_type === 'VIDEO'">
                       <i class="iconfont media icon-video"></i>
                     </template>
-                    <template v-else-if="tweet.hasImage">
+                    <template v-else-if="media.media_type === 'AUDIO'">
+                      <i class="iconfont media icon-audio"></i>
+                    </template>
+                    <template v-else-if="media.media_type === 'IMAGE' || media.media_type === 'CAROUSEL_ALBUM'">
                       <i class="iconfont media icon-image"></i>
                     </template>
-                    <span class="count">[{{ tweet.mediaCount }}]</span>
+                    <span class="count" v-if="media.children?.data?.length"
+                      >[{{ media.children.data.length }}]</span
+                    >
                     <i class="iconfont window icon-new-window-s"></i>
                   </ulink>
                 </div>
                 <div class="meta">
                   <ulink
                     class="item link"
-                    title="To Tweet"
-                    :href="getTwitterTweetDetailURL(tweet.owner, tweet.id)"
-                    @mousedown="handleGtagEvent('twitter_detail_link')"
+                    title="To Post"
+                    :href="media.permalink"
+                    @mousedown="handleGtagEvent('threads_detail_link')"
                   >
-                    <i class="iconfont icon-retweet" v-if="tweet.isQuote || tweet.isRetweet"></i>
-                    <i class="iconfont icon-follow-up" v-else-if="tweet.isReply"></i>
-                    <i class="iconfont twitter icon-twitter-x" v-else></i>
-                    <span>Tweet</span>
+                    <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
+                    <i class="iconfont icon-threads" v-else></i>
+                    <span>thread</span>
                     <i class="iconfont window icon-new-window-s"></i>
                   </ulink>
-                  <span class="item replies" v-if="Number.isInteger(tweet.commentCount)">
-                    <i class="iconfont icon-comment"></i>
-                    <span>{{ tweet.commentCount }}</span>
-                  </span>
-                  <span class="item likes" v-if="Number.isInteger(tweet.favoriteCount)">
-                    <i class="iconfont icon-heart"></i>
-                    <span>{{ tweet.favoriteCount }}</span>
-                  </span>
-                  <span class="item date" data-allow-mismatch v-if="tweet.date">
+                  <span class="item date" data-allow-mismatch v-if="media.timestamp">
                     <i class="iconfont icon-clock"></i>
-                    <udate to="ago" :date="tweet.date" />
-                  </span>
-                  <span class="item location" :title="tweet.location" v-if="tweet.location">
-                    <i class="iconfont icon-location"></i>
-                    <span>{{ tweet.location }}</span>
+                    <udate to="ago" :date="media.timestamp" />
                   </span>
                 </div>
               </swiper-slide>
             </swiper>
           </div>
           <div class="navigation">
-            <button class="button prev" :disabled="!tweets.length || activeIndex === 0" @click="prevSlide">
+            <button class="button prev" :disabled="!medias.length || activeIndex === 0" @click="prevSlide">
               <i class="iconfont icon-totop" />
             </button>
             <button
               class="button next"
-              :disabled="!tweets.length || activeIndex === tweets.length - 1"
+              :disabled="!medias.length || activeIndex === medias.length - 1"
               @click="nextSlide"
             >
               <i class="iconfont icon-tobottom" />
@@ -163,23 +153,23 @@
   @import '/src/styles/variables.scss';
   @import '/src/styles/mixins.scss';
 
-  $twitter-height: 66px;
+  $threads-height: 66px;
   $content-height: 42px;
 
-  .twitter-empty,
-  .twitter-skeleton,
-  .twitter-content {
+  .threads-empty,
+  .threads-skeleton,
+  .threads-content {
     width: 100%;
-    height: $twitter-height;
+    height: $threads-height;
     display: flex;
   }
 
-  .twitter-empty {
+  .threads-empty {
     @include common-bg-module();
     @include radius-box($radius-sm);
   }
 
-  .twitter-skeleton {
+  .threads-skeleton {
     padding: $gap;
     background-color: $module-bg;
     @include radius-box($radius-sm);
@@ -193,9 +183,9 @@
     }
   }
 
-  .twitter-content {
+  .threads-content {
     .profile,
-    .tweets {
+    .posts {
       @include common-bg-module();
     }
 
@@ -213,18 +203,19 @@
 
       .link {
         position: relative;
-        background-color: $module-bg-darker-2;
         color: $white;
-        opacity: 0.9;
-        @include radius-box($radius-xs);
-        @include visibility-transition();
-        &:hover {
-          opacity: 1;
-        }
 
         .avatar {
           width: $content-height;
           height: $content-height;
+          border-radius: 100%;
+          overflow: hidden;
+          background-color: $module-bg-darker-2;
+          @include visibility-transition();
+          opacity: 0.9;
+          &:hover {
+            opacity: 1;
+          }
         }
 
         .logo {
@@ -238,7 +229,7 @@
           align-items: center;
           font-size: $font-size-root;
           border-top-left-radius: $radius-xs;
-          background-color: rgba($twitter-x-primary, 0.7);
+          background-color: rgba($threads-primary, 0.7);
         }
       }
 
@@ -281,16 +272,16 @@
       }
     }
 
-    .tweets {
+    .posts {
       flex: 1;
-      height: $twitter-height;
+      height: $threads-height;
       @include radius-box($radius-mini);
 
-      .tweets-empty {
+      .posts-empty {
         min-height: auto;
       }
 
-      .tweets-swiper {
+      .posts-swiper {
         ::v-deep(.swiper-wrapper) {
           flex-direction: column;
           &[style*='300ms'] {
@@ -301,13 +292,13 @@
         }
       }
 
-      .tweet-item {
+      .post-item {
         display: flex;
         flex-direction: column;
         justify-content: center;
         box-sizing: border-box;
         width: 100%;
-        height: $twitter-height;
+        height: $threads-height;
         padding: 0 $gap-lg;
 
         .content {
@@ -322,35 +313,10 @@
             max-width: 100%;
             @include text-overflow();
             &.has-media {
-              max-width: #{calc(100% - 40px)};
+              max-width: #{calc(100% - 42px)};
             }
             & + .medias {
               margin-left: $content-gap;
-            }
-
-            /* for html */
-            ::v-deep(p) {
-              margin: 0;
-              max-width: 100%;
-              @include text-overflow();
-            }
-            ::v-deep(img),
-            ::v-deep(video) {
-              display: none;
-            }
-            ::v-deep(.link) {
-              font-weight: normal;
-              font-size: $font-size-base - 1;
-              color: $color-text-secondary;
-              @include color-transition();
-              &:hover {
-                color: $color-link;
-                text-decoration: underline;
-              }
-
-              & + .link {
-                margin-left: $content-gap;
-              }
             }
           }
 
@@ -420,12 +386,6 @@
               &:hover {
                 color: $color-text;
               }
-            }
-
-            &.location {
-              flex: 1;
-              margin-right: 0;
-              @include text-overflow();
             }
           }
         }

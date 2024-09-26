@@ -7,10 +7,11 @@
 export enum TunnelModule {
   WebFont = 'webfont',
   MyGoogleMap = 'my_google_map',
-  TwitterProfile = 'twitter_profile',
-  TwitterTweets = 'twitter_tweets',
   YouTubePlaylist = 'youtube_playlist',
   YouTubeVideoList = 'youtube_video_list',
+  ThreadsProfile = 'threads_profile',
+  ThreadsMedias = 'threads_medias',
+  ThreadsMediaChildren = 'threads_media_children',
   InstagramProfile = 'instagram_profile',
   InstagramMedias = 'instagram_medias',
   InstagramMediaChildren = 'instagram_media_children',

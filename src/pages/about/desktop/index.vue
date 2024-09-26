@@ -8,7 +8,7 @@
   import { getPageRoute } from '/@/transforms/route'
   import NpmStatistic from './statistic/npm.vue'
   import GithubStatistic from './statistic/github.vue'
-  import TwitterStatistic from './statistic/twitter.vue'
+  import ThreadsStatistic from './statistic/threads.vue'
   import DoubanStatistic from './statistic/douban.vue'
   import InstagramMedia from './media/instagram.vue'
   import YoutubeMedia from './media/youtube.vue'
@@ -153,7 +153,7 @@
       <div class="statistics">
         <github-statistic />
         <npm-statistic />
-        <twitter-statistic />
+        <threads-statistic />
         <douban-statistic />
       </div>
       <div class="plogs">

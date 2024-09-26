@@ -10,7 +10,7 @@ import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 import { delayPromise } from '/@/utils/delayer'
 import type { ZhihuAnswersResponse } from '/@/server/getters/zhihu'
-import type { TwitterProfile, TwitterTweetListResponse } from '/@/server/getters/twitter'
+import type { ThreadsProfile, ThreadsMediaListResponse } from '/@/server/getters/threads'
 import type { InstagramProfile, InstagramMediaListResponse } from '/@/server/getters/instagram'
 import tunnel from '/@/services/tunnel'
 
@@ -34,20 +34,21 @@ export const useZhihuLatestAnswersStore = defineStore('zhihuLatestAnswersStore',
   })
 })
 
-// Twitter profile
-export const useTwitterProfileStore = defineStore('twitterProfile', () => {
-  return createFetchStore<TwitterProfile | null>({
+// Threads profile
+export const useThreadsProfileStore = defineStore('threadsProfile', () => {
+  return createFetchStore<ThreadsProfile | null>({
     data: null,
-    fetcher: () => tunnel.dispatch<TwitterProfile>(TunnelModule.TwitterProfile)
+    fetcher: () => tunnel.dispatch<ThreadsProfile>(TunnelModule.ThreadsProfile)
   })
 })
 
-// Twitter latest tweets
-export const useTwitterLatestTweetsStore = defineStore('twitterLatestTweets', () => {
-  return createFetchStore<TwitterTweetListResponse | null>({
+// Threads latest medias
+export const useThreadsLatestMediasStore = defineStore('threadsLatestMedias', () => {
+  return createFetchStore<ThreadsMediaListResponse | null>({
     data: null,
-    fetcher(params?: any) {
-      return tunnel.dispatch<TwitterTweetListResponse>(TunnelModule.TwitterTweets, params)
+    fetcher: () => {
+      const request = tunnel.dispatch<ThreadsMediaListResponse>(TunnelModule.ThreadsMedias)
+      return isClient ? delayPromise(480, request) : request
     }
   })
 })

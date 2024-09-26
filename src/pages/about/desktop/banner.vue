@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS, IDENTITIES } from '/@/config/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
   const emit = defineEmits<{
@@ -52,21 +52,21 @@
       </p>
       <div class="socials">
         <span class="normal">
-          <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
-            <i class="iconfont icon-github" />
-            <span class="text">GitHub</span>
-          </ulink>
           <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram" />
             <span class="text">Instagram</span>
+          </ulink>
+          <ulink class="item threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+            <i class="iconfont icon-threads" />
+            <span class="text">Threads</span>
           </ulink>
           <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
             <i class="iconfont icon-zhihu-full" />
           </ulink>
         </span>
         <span class="mini">
-          <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
-            <i class="iconfont icon-twitter-x" />
+          <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
+            <i class="iconfont icon-github" />
           </ulink>
           <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
             <i class="iconfont icon-youtube" />
@@ -288,12 +288,6 @@
               font-weight: bold;
             }
 
-            &.github {
-              background-color: $github-primary;
-              &:hover {
-                background-color: $github-primary-hover;
-              }
-            }
             &.zhihu {
               background-color: $zhihu-primary;
               &:hover {
@@ -310,6 +304,13 @@
               opacity: 0.8;
               background: $instagram-primary;
               background: $instagram-gradient;
+              &:hover {
+                opacity: 1;
+              }
+            }
+            &.threads {
+              background-color: $threads-primary;
+              opacity: 0.8;
               &:hover {
                 opacity: 1;
               }
@@ -340,8 +341,11 @@
               font-size: $font-size-h4;
             }
 
-            &.twitter {
-              background-color: $twitter-x-primary;
+            &.github {
+              background-color: $github-primary;
+              &:hover {
+                background-color: $github-primary-hover;
+              }
             }
             &.wechat {
               background-color: $wechat-primary;

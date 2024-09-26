@@ -48,8 +48,6 @@ export function useSeoMeta(source: SeoMetaObject | ComputedGetter<SeoMetaObject>
     title: computed(() => input.value.fullTitle),
     description: () => input.value.description ?? '',
     keywords: () => input.value.keywords ?? '',
-    twitterSite: `@${IDENTITIES.TWITTER_USER_NAME}`,
-    twitterCreator: IDENTITIES.TWITTER_USER_NAME,
     twitterCard: 'summary_large_image',
     twitterImage: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE,
     twitterTitle: () => input.value._.ogTitle ?? input.value.fullTitle ?? '',

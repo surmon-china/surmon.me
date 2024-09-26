@@ -46,8 +46,8 @@ export const getYouTubeVideoEmbedURL = (id: string, list?: string) => {
   return `https://www.youtube.com/embed/${id}${listParam}`
 }
 
-export const getTwitterTweetDetailURL = (username: string, id: string) => {
-  return `https://twitter.com/${username}/status/${id}`
+export const getThreadsPostDetailURL = (username: string, shortCode: string) => {
+  return `https://www.threads.net/@${username}/post/${shortCode}`
 }
 
 export const get163MusicSongDetailURL = (songId: string | number) => {

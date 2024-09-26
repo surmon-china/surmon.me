@@ -20,8 +20,8 @@ import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarSt
 import {
   useDoubanMoviesStore,
   useZhihuLatestAnswersStore,
-  useTwitterProfileStore,
-  useTwitterLatestTweetsStore,
+  useThreadsProfileStore,
+  useThreadsLatestMediasStore,
   useInstagramLatestMediasStore,
   useInstagramProfileStore,
   useYouTubePlayListStore
@@ -68,8 +68,8 @@ export const useStores = (pinia?: Pinia) => ({
   // third
   doubanMovies: useDoubanMoviesStore(pinia),
   zhihuLatestAnswers: useZhihuLatestAnswersStore(pinia),
-  twitterProfile: useTwitterProfileStore(pinia),
-  twitterLatestTweets: useTwitterLatestTweetsStore(pinia),
+  threadsProfile: useThreadsProfileStore(pinia),
+  threadsLatestMedias: useThreadsLatestMediasStore(pinia),
   instagramProfile: useInstagramProfileStore(pinia),
   instagramLatestMedias: useInstagramLatestMediasStore(pinia),
   youtubePlayList: useYouTubePlayListStore(pinia)

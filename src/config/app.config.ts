@@ -47,8 +47,7 @@ export const IDENTITIES = Object.freeze({
   ZHIHU_USER_NAME: 'surmon',
   GITHUB_USER_NAME: 'surmon-china',
   INSTAGRAM_USERNAME: 'surmon666',
-  TWITTER_USER_NAME: 'surmon7788',
-  TWITTER_USER_ID: '706498928393359360',
+  THREADS_USER_NAME: 'surmon666',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
   ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })
@@ -80,5 +79,6 @@ export const VALUABLE_LINKS = Object.freeze({
   DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
   LINKEDIN: 'https://www.linkedin.com/in/surmon',
   INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-  TWITTER: `https://twitter.com/${IDENTITIES.TWITTER_USER_NAME}`
+  THREADS: `https://www.threads.net/@${IDENTITIES.THREADS_USER_NAME}`,
+  THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.THREADS_USER_NAME}`
 })

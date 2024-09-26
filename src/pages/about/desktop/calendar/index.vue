@@ -73,7 +73,7 @@
         v-for="(day, i) in month"
         :key="i"
         :date="day"
-        :tweets="0"
+        :threads="0"
         :articles="getDayArticles(day)"
         :instagrams="getDayInstagrams(day)"
         :contributions="getDayContributions(day)"

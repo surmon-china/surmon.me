@@ -4,7 +4,7 @@
 
   const props = defineProps<{
     date: string
-    tweets: number
+    threads: number
     instagrams: number
     articles: number
     contributions: number
@@ -12,7 +12,7 @@
   }>()
 
   const { isDarkTheme } = useEnhancer()
-  const total = computed(() => props.articles + props.tweets + props.contributions + props.instagrams)
+  const total = computed(() => props.articles + props.threads + props.contributions + props.instagrams)
   const getPointHeightStyle = (value: number) => {
     return isNaN(value) ? 0 : `${Math.floor(value * 100)}%`
   }
@@ -25,13 +25,13 @@
     :data-date="date"
     :data-total-count="total"
     :data-article-count="articles"
-    :data-tweet-count="tweets"
+    :data-thread-count="threads"
     :data-instagram-count="instagrams"
     :data-contribution-count="contributions"
   >
     <div class="point">
       <div class="item article" :style="{ height: getPointHeightStyle(articles / total) }" />
-      <div class="item tweet" :style="{ height: getPointHeightStyle(tweets / total) }" />
+      <div class="item threads" :style="{ height: getPointHeightStyle(threads / total) }" />
       <div class="item instagram" :style="{ height: getPointHeightStyle(instagrams / total) }" />
       <div
         class="item contribution"
@@ -49,10 +49,10 @@
           <span class="count">{{ articles }}</span>
           articles
         </li>
-        <li class="item tweet">
-          <i class="iconfont icon-twitter-x"></i>
-          <span class="count">{{ tweets }}</span>
-          tweets
+        <li class="item thread">
+          <i class="iconfont icon-threads"></i>
+          <span class="count">{{ threads }}</span>
+          threads
         </li>
         <li class="item instagram">
           <i class="iconfont icon-instagram"></i>
@@ -113,10 +113,10 @@
       .item {
         width: 100%;
         &.article {
-          background-color: $rss-primary;
+          background-color: $surmon;
         }
-        &.tweet {
-          background-color: $twitter-x-primary;
+        &.thread {
+          background-color: $threads-primary;
         }
         &.instagram {
           background-color: $instagram-primary;
@@ -166,11 +166,11 @@
           line-height: 1.8em;
           font-size: $font-size-small;
           &.article {
-            color: $rss-primary;
+            color: $surmon;
           }
-          &.tweet {
+          &.thread {
             color: $color-text-reversal;
-            /* A token to indicate that twitter is no longer supported */
+            /* TODO: threads API data */
             text-decoration: line-through;
           }
           &.instagram {
@@ -190,7 +190,7 @@
     &:not([data-article-count='0']) {
       .point {
         .article {
-          background-color: $rss-primary;
+          background-color: $surmon;
         }
       }
     }
@@ -198,7 +198,7 @@
     &[data-article-count='1'] {
       .point {
         .article {
-          background-color: lighten($rss-primary, 20%);
+          background-color: lighten($surmon, 20%);
         }
       }
     }
@@ -208,7 +208,7 @@
     &[data-article-count='4'] {
       .point {
         .article {
-          background-color: lighten($rss-primary, 10%);
+          background-color: lighten($surmon, 10%);
         }
       }
     }
@@ -240,41 +240,41 @@
       }
     }
 
-    /* tweets */
+    /* threads */
     /* 8+ */
-    &:not([data-tweet-count='0']) {
+    &:not([data-thread-count='0']) {
       .point {
-        .tweet {
-          background-color: $twitter-x-primary;
+        .thread {
+          background-color: $threads-primary;
         }
       }
     }
     /* 1 */
-    &[data-tweet-count='1'] {
+    &[data-thread-count='1'] {
       .point {
-        .tweet {
-          background-color: lighten($twitter-x-primary, 22%);
+        .thread {
+          background-color: lighten($threads-primary, 22%);
         }
       }
     }
     /* 2-4 */
-    &[data-tweet-count='2'],
-    &[data-tweet-count='3'],
-    &[data-tweet-count='4'] {
+    &[data-thread-count='2'],
+    &[data-thread-count='3'],
+    &[data-thread-count='4'] {
       .point {
-        .tweet {
-          background-color: lighten($twitter-x-primary, 16%);
+        .thread {
+          background-color: lighten($threads-primary, 16%);
         }
       }
     }
     /* 5-8 */
-    &[data-tweet-count='5'],
-    &[data-tweet-count='6'],
-    &[data-tweet-count='7'],
-    &[data-tweet-count='8'] {
+    &[data-thread-count='5'],
+    &[data-thread-count='6'],
+    &[data-thread-count='7'],
+    &[data-thread-count='8'] {
       .point {
-        .tweet {
-          background-color: lighten($twitter-x-primary, 8%);
+        .thread {
+          background-color: lighten($threads-primary, 8%);
         }
       }
     }
