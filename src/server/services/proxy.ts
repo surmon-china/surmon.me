@@ -71,13 +71,15 @@ export const proxyer = (): RequestHandler => {
       response.setHeader('x-original-url', targetURL)
       parsedURL = new URL(targetURL)
     } catch (error: any) {
-      return response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`)
+      response.status(BAD_REQUEST).send(`Proxy error: "${error?.message || String(error)}"`)
+      return
     }
 
     if (parsedURL.hostname.endsWith(META.domain)) {
       const staticUrl = new URL(getStaticURL())
       if (parsedURL.hostname !== staticUrl.hostname) {
-        return response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+        response.status(BAD_REQUEST).send(`Proxy error: Invalid URL`)
+        return
       }
     }
 
@@ -87,7 +89,8 @@ export const proxyer = (): RequestHandler => {
       const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer)
       const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin)
       if (!isAllowedReferer || !isAllowedOrigin) {
-        return response.status(FORBIDDEN).send('Proxy error: forbidden')
+        response.status(FORBIDDEN).send('Proxy error: forbidden')
+        return
       }
     }
 
