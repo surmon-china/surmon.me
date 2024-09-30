@@ -203,33 +203,33 @@
 
       .link {
         position: relative;
-        color: $white;
+        border-radius: 100%;
+        overflow: hidden;
+        &:hover {
+          .logo {
+            @include visible();
+          }
+        }
 
         .avatar {
           width: $content-height;
           height: $content-height;
-          border-radius: 100%;
-          overflow: hidden;
           background-color: $module-bg-darker-2;
-          @include visibility-transition();
-          opacity: 0.9;
-          &:hover {
-            opacity: 1;
-          }
         }
 
         .logo {
           position: absolute;
-          width: 38%;
-          height: 38%;
+          width: 100%;
+          height: 100%;
           right: 0;
           bottom: 0;
           display: flex;
           justify-content: center;
           align-items: center;
-          font-size: $font-size-root;
-          border-top-left-radius: $radius-xs;
-          background-color: rgba($threads-primary, 0.7);
+          background-color: rgba($threads-primary, 0.4);
+          color: $white;
+          @include visibility-transition();
+          @include hidden();
         }
       }
 
