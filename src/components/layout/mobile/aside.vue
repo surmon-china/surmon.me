@@ -72,10 +72,10 @@
             <i18n :k="LanguageKey.CATEGORY_INSIGHT" />
           </webfont>
         </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.Answers)">
+        <router-link class="item" :to="getPageRoute(RouteName.Snippets)">
           <i class="iconfont icon-buddhism"></i>
           <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_ANSWERS" />
+            <i18n :k="LanguageKey.PAGE_SNIPPETS" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">

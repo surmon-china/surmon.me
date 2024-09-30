@@ -126,6 +126,7 @@
       .link {
         color: $white;
         text-decoration: underline;
+        text-decoration-color: rgba($white, 0.6);
         text-underline-offset: 6px;
       }
     }

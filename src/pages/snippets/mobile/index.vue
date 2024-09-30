@@ -6,10 +6,10 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import { getZhihuAnswerDetailURL } from '/@/transforms/media'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import { i18nTitle, useAnswersPageData, useAnswersPageMeta } from '../shared'
+  import { i18nTitle, useSnippetsPageData, useSnippetsPageMeta } from '../shared'
   import AnswerCard from '../card.vue'
 
-  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useAnswersPageData()
+  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useSnippetsPageData()
 
   const fetchMoreAnswersAndNextScreen = () => {
     fetchMoreAnswers().then(() => {
@@ -17,14 +17,14 @@
     })
   }
 
-  useAnswersPageMeta()
+  useSnippetsPageMeta()
   useUniversalFetch(() => zhihuLatestAnswers.fetch())
 </script>
 
 <template>
   <div class="answers-page">
     <page-banner :is-mobile="true" image="/images/page-answers/banner-mobile.webp" :image-position="80" cdn>
-      <template #title><i18n :k="LanguageKey.PAGE_ANSWERS" /></template>
+      <template #title><i18n :k="LanguageKey.PAGE_SNIPPETS" /></template>
       <template #description><i18n v-bind="i18nTitle" /></template>
     </page-banner>
     <placeholder :data="zhihuLatestAnswers.data?.data" :loading="zhihuLatestAnswers.fetching">

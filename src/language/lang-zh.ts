@@ -12,7 +12,7 @@ export const zhLangMap: LanguageMap = {
   [LanguageKey.PAGE_GUESTBOOK]: '四方馆',
   [LanguageKey.PAGE_ABOUT]: '狂浪生',
   [LanguageKey.PAGE_SPONSOR]: '随喜',
-  [LanguageKey.PAGE_ANSWERS]: '觉有情',
+  [LanguageKey.PAGE_SNIPPETS]: '觉有情',
   [LanguageKey.PAGE_PHOTOGRAPHY]: '大千界',
   [LanguageKey.PAGE_APP]: '客户端',
   [LanguageKey.STATISTIC_ARTICLES]: '全站文章',

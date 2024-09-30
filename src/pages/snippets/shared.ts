@@ -12,15 +12,15 @@ import { META } from '/@/config/app.config'
 
 export const i18nTitle = {
   [Language.Chinese]: '广行饶益，利乐有情',
-  [Language.English]: `${META.author}'s answers`
+  [Language.English]: `${META.author}'s snippets`
 } as const
 
-export const useAnswersPageMeta = () => {
+export const useSnippetsPageMeta = () => {
   const { i18n, seoMeta, isZhLang } = useEnhancer()
   seoMeta(() => {
-    const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ANSWERS, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ANSWERS), enTitle] : [enTitle]
-    const description = isZhLang.value ? `${META.author} 的问答` : `${META.author}'s answers`
+    const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SNIPPETS, Language.English)!)
+    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SNIPPETS), enTitle] : [enTitle]
+    const description = isZhLang.value ? `${META.author} 的清净念` : `${META.author}'s snippets`
     return {
       pageTitle: titles.join(' | '),
       description: description
@@ -28,7 +28,7 @@ export const useAnswersPageMeta = () => {
   })
 }
 
-export const useAnswersPageData = () => {
+export const useSnippetsPageData = () => {
   const zhihuLatestAnswers = useZhihuLatestAnswersStore()
   const loading = ref(false)
   const localAnswers = shallowReactive<Array<ZhihuAnswerItem>>([])

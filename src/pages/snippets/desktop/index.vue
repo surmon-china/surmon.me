@@ -7,7 +7,7 @@
   import type { ZhihuAnswerItem } from '/@/server/getters/zhihu'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import { i18nTitle, useAnswersPageMeta, useAnswersPageData } from '../shared'
+  import { i18nTitle, useSnippetsPageMeta, useSnippetsPageData } from '../shared'
   import AnswerMasonryList from './masonry.vue'
   import AnswerDetail from '../detail.vue'
   import AnswerCard from '../card.vue'
@@ -20,9 +20,9 @@
     modalActiveAnswer.value = NULL
   }
 
-  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useAnswersPageData()
+  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useSnippetsPageData()
 
-  useAnswersPageMeta()
+  useSnippetsPageMeta()
   useUniversalFetch(() => zhihuLatestAnswers.fetch())
 </script>
 
@@ -35,7 +35,15 @@
       <template #description>
         <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
         <divider type="vertical" size="lg" color="#ffffffcc" />
-        <ulink :href="VALUABLE_LINKS.QUORA" class="link">Quora</ulink>
+        <ulink :href="VALUABLE_LINKS.THREADS" class="link">
+          <i class="iconfont icon-threads"></i>
+          Threads
+        </ulink>
+        <divider type="vertical" size="lg" color="#ffffffcc" />
+        <ulink :href="VALUABLE_LINKS.QUORA" class="link">
+          <i class="iconfont icon-quora"></i>
+          Quora
+        </ulink>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -102,6 +110,7 @@
       .link {
         color: $white;
         text-decoration: underline;
+        text-decoration-color: rgba($white, 0.6);
         text-underline-offset: 6px;
 
         .iconfont {

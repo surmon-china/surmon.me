@@ -40,9 +40,9 @@
         <i class="iconfont icon-quill" />
         <i18n v-bind="i18ns.archive" />
       </router-link>
-      <router-link class="item" :to="getPageRoute(RouteName.Answers)">
+      <router-link class="item" :to="getPageRoute(RouteName.Snippets)">
         <i class="iconfont icon-buddhism" />
-        <i18n v-bind="i18ns.answers" />
+        <i18n v-bind="i18ns.snippets" />
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
         <i class="iconfont icon-comment" />

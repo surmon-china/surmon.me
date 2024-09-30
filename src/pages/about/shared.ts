@@ -61,9 +61,9 @@ export const i18ns = {
     [Language.Chinese]: '给我留言',
     [Language.English]: 'Guestbook'
   },
-  answers: {
+  snippets: {
     [Language.Chinese]: '利乐有情',
-    [Language.English]: 'Answers'
+    [Language.English]: 'Snippets'
   },
   nft: {
     [Language.Chinese]: '数字藏品',

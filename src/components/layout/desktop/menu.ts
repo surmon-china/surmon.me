@@ -50,9 +50,9 @@ export const menus: Array<MenuItem> = [
     i18nKey: LanguageKey.PAGE_PHOTOGRAPHY
   },
   {
-    id: RouteName.Answers,
-    route: getPageRoute(RouteName.Answers),
-    i18nKey: LanguageKey.PAGE_ANSWERS,
+    id: RouteName.Snippets,
+    route: getPageRoute(RouteName.Snippets),
+    i18nKey: LanguageKey.PAGE_SNIPPETS,
     icon: 'icon-buddhism'
   },
   {

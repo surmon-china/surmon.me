@@ -55,10 +55,10 @@
       route: getPageRoute(RouteName.Photography)
     },
     {
-      class: 'answers',
+      class: 'snippets',
       icon: 'icon-buddhism',
-      i18n: i18ns.answers,
-      route: getPageRoute(RouteName.Answers)
+      i18n: i18ns.snippets,
+      route: getPageRoute(RouteName.Snippets)
     },
     {
       class: 'archive',
