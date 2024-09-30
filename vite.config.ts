@@ -53,7 +53,8 @@ export default defineConfig(({ mode }) => {
           // https://sass-lang.com/documentation/js-api/interfaces/stringoptions/
           charset: false,
           importers: [new sass.NodePackageImporter()],
-          silenceDeprecations: ['mixed-decls']
+          // https://sass-lang.com/documentation/breaking-changes/color-functions/
+          silenceDeprecations: ['mixed-decls', 'color-functions']
         }
       }
     },
