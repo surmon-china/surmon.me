@@ -50,7 +50,7 @@
       </i18n>
     </p>
     <p>
-      <i class="iconfont icon-edit"></i>
+      <i class="iconfont icon-heart"></i>
       <span v-if="isZhLang">收获了</span>
       <statistic-count large primary split :count="store.data?.totalLikes || '-'" />
       <span v-if="isZhLang">次喜欢</span>

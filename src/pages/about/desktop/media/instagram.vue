@@ -1,5 +1,8 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useCountry } from '/@/app/context'
+  import { isCNCode } from '/@/transforms/region'
   import { useInstagramLatestMediasStore } from '/@/stores/media'
   import {
     isVideoMediaIns,
@@ -8,16 +11,17 @@
     getInstagramThumbnail
   } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import { getOriginalProxyURL } from '/@/transforms/url'
+  import { getProxyURL } from '/@/transforms/url'
   import { VALUABLE_LINKS } from '/@/config/app.config'
 
   const fetching = ref(true)
+  const { cdnDomain } = useEnhancer()
   const igLatestMediasStore = useInstagramLatestMediasStore()
   const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
-    return getOriginalProxyURL(
-      isVideoMediaIns(media) ? getInstagramCoverURL(media) : getInstagramThumbnail(media, 't')
-    )
+    const countryCode = useCountry()
+    const url = isVideoMediaIns(media) ? getInstagramCoverURL(media) : getInstagramThumbnail(media, 't')
+    return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
   }
 
   onMounted(() => {
