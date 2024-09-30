@@ -74,7 +74,7 @@ export const getThreadsMediaChildren = (threadsMediaId: string) => {
   }
   return axios
     .get<ThreadsMediaListResponse>(uri, { timeout: 8000, params })
-    .then((response) => response.data.data)
+    .then((response) => response.data)
     .catch((error) => {
       return Promise.reject(isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error)
     })
