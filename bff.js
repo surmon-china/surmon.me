@@ -601,7 +601,7 @@ const getThreadsMediaChildren = (threadsMediaId) => {
         fields: THREADS_MEDIA_FULL_FIELDS
     };
     return services_axios.get(uri, { timeout: 8000, params })
-        .then((response) => response.data.data)
+        .then((response) => response.data)
         .catch((error) => {
         return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error);
     });
@@ -947,25 +947,19 @@ const ZHIHU_PAGE_LIMIT = 20;
 const ZHIHU_INCLUDE_PARAMS = `data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,attachment,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,excerpt,paid_info,reaction_instruction,is_labeled,label_info,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp;data[*].vessay_info;data[*].author.badge[?(type=best_answerer)].topics;data[*].author.vip_info;data[*].question.has_publishing_draft,relationship`;
 // Get answers by member ID
 // https://yifei.me/note/460
-const getZhihuAnswers = async (page = 1) => {
+const getZhihuAnswers = async (offset = 0) => {
     const api = `https://api.zhihu.com/members/${IDENTITIES.ZHIHU_USER_NAME}/answers`;
     const response = await services_axios.get(api, {
         timeout: 8000,
         headers: { cookie: ZHIHU_COOKIE },
         params: {
+            offset,
             limit: ZHIHU_PAGE_LIMIT,
-            offset: (page - 1) * ZHIHU_PAGE_LIMIT,
             sort_by: 'created',
             include: ZHIHU_INCLUDE_PARAMS
         }
     });
-    return {
-        ...response.data,
-        paging: {
-            ...response.data.paging,
-            current: page
-        }
-    };
+    return response.data;
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/netease-music.ts
@@ -1774,7 +1768,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => get163MusicCache()));
     // Zhihu first page cache
     const getZhihuFirstPageCache = cacher.interval(cache, {
-        key: 'zhihu_answers_page_first',
+        key: 'zhihu_answers_offset_0',
         ttl: hours(12),
         interval: hours(3),
         retry: minutes(10),
@@ -1782,20 +1776,13 @@ createExpressApp().then(async ({ app, server, cache }) => {
     });
     // Zhihu answer route
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
-        const page = request.query.page;
-        if (!!page && !Number.isInteger(Number(page))) {
+        const offset = request.query.offset;
+        if (!!offset && !Number.isInteger(Number(offset))) {
             errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
             return;
         }
         responser(() => {
-            if (!page) {
-                return getZhihuFirstPageCache();
-            }
-            return cacher.passive(cache, {
-                key: `zhihu_answers_page_${page}`,
-                ttl: hours(12),
-                getter: () => getZhihuAnswers(Number(page))
-            });
+            return offset ? getZhihuAnswers(Number(offset)) : getZhihuFirstPageCache();
         })(request, response, next);
     });
     // Threads profile
