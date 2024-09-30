@@ -111,7 +111,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // Zhihu first page cache
   const getZhihuFirstPageCache = cacher.interval(cache, {
-    key: 'zhihu_answers_page_first',
+    key: 'zhihu_answers_offset_0',
     ttl: hours(12),
     interval: hours(3),
     retry: minutes(10),
@@ -120,22 +120,14 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // Zhihu answer route
   app.get(`${TUN}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
-    const page = request.query.page
-    if (!!page && !Number.isInteger(Number(page))) {
+    const offset = request.query.offset
+    if (!!offset && !Number.isInteger(Number(offset))) {
       errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
     responser(() => {
-      if (!page) {
-        return getZhihuFirstPageCache()
-      }
-
-      return cacher.passive(cache, {
-        key: `zhihu_answers_page_${page}`,
-        ttl: hours(12),
-        getter: () => getZhihuAnswers(Number(page))
-      })
+      return offset ? getZhihuAnswers(Number(offset)) : getZhihuFirstPageCache()
     })(request, response, next)
   })
 

@@ -33,6 +33,10 @@ export const useSnippetsPageData = () => {
   const loading = ref(false)
   const localAnswers = shallowReactive<Array<ZhihuAnswerItem>>([])
   const lastPaging = shallowRef<ZhihuAnswersResponse['paging'] | null>(null)
+  const nextPageOffset = computed(() => {
+    const paging = lastPaging.value ?? zhihuLatestAnswers.data?.paging
+    return new URL(paging!.next)?.searchParams.get('offset')
+  })
   const finished = computed(() => lastPaging.value?.is_end ?? zhihuLatestAnswers.data?.paging.is_end ?? false)
   const allAnswers = computed(() => {
     const latestMedias = zhihuLatestAnswers.data?.data ?? []
@@ -43,7 +47,7 @@ export const useSnippetsPageData = () => {
     try {
       loading.value = true
       const request = tunnel.dispatch<ZhihuAnswersResponse>(TunnelModule.ZhihuAnswers, {
-        page: (lastPaging.value?.current ?? zhihuLatestAnswers.data?.paging?.current ?? 0) + 1
+        offset: nextPageOffset.value
       })
       const response = await (isClient ? delayPromise(360, request) : request)
       localAnswers.push(...response.data)

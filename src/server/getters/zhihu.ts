@@ -82,7 +82,6 @@ export interface ZhihuAnswerItem {
 export interface ZhihuAnswersResponse {
   data: ZhihuAnswerItem[]
   paging: {
-    current: number
     totals: number
     is_start: boolean
     is_end: boolean
@@ -98,24 +97,18 @@ const ZHIHU_INCLUDE_PARAMS = `data[*].is_normal,admin_closed_comment,reward_info
 
 // Get answers by member ID
 // https://yifei.me/note/460
-export const getZhihuAnswers = async (page = 1) => {
+export const getZhihuAnswers = async (offset = 0) => {
   const api = `https://api.zhihu.com/members/${IDENTITIES.ZHIHU_USER_NAME}/answers`
   const response = await axios.get<ZhihuAnswersResponse>(api, {
     timeout: 8000,
     headers: { cookie: ZHIHU_COOKIE },
     params: {
+      offset,
       limit: ZHIHU_PAGE_LIMIT,
-      offset: (page - 1) * ZHIHU_PAGE_LIMIT,
       sort_by: 'created',
       include: ZHIHU_INCLUDE_PARAMS
     }
   })
 
-  return {
-    ...response.data,
-    paging: {
-      ...response.data.paging,
-      current: page
-    }
-  }
+  return response.data
 }
