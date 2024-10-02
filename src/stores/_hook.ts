@@ -19,7 +19,6 @@ import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticSto
 import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
 import {
   useDoubanMoviesStore,
-  useZhihuLatestAnswersStore,
   useThreadsProfileStore,
   useThreadsLatestMediasStore,
   useInstagramLatestMediasStore,
@@ -67,7 +66,6 @@ export const useStores = (pinia?: Pinia) => ({
 
   // third
   doubanMovies: useDoubanMoviesStore(pinia),
-  zhihuLatestAnswers: useZhihuLatestAnswersStore(pinia),
   threadsProfile: useThreadsProfileStore(pinia),
   threadsLatestMedias: useThreadsLatestMediasStore(pinia),
   instagramProfile: useInstagramProfileStore(pinia),

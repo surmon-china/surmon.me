@@ -59,7 +59,13 @@ export const getThreadsMedias = async <T = ThreadsMedia>(options?: ThreadsMediaG
     }
 
     const response = await axios.get<ThreadsMediaListResponse<T>>(uri, { timeout: 8000, params })
-    return response.data
+    return {
+      ...response.data,
+      paging: {
+        cursors: response.data.paging?.cursors
+        // MARK: remove `next` & `previous`
+      }
+    }
   } catch (error) {
     throw isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error
   }
@@ -74,6 +80,22 @@ export const getThreadsMediaChildren = (threadsMediaId: string) => {
   }
   return axios
     .get<ThreadsMediaListResponse>(uri, { timeout: 8000, params })
+    .then((response) => response.data)
+    .catch((error) => {
+      return Promise.reject(isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error)
+    })
+}
+
+// https://developers.facebook.com/docs/threads/reply-management/#a-thread-s-conversations
+export const getThreadsMediaConversation = (threadsMediaId: string) => {
+  const uri = `https://graph.threads.net/v1.0/${threadsMediaId}/conversation`
+  const params = {
+    access_token: THREADS_TOKEN,
+    reverse: false,
+    fields: `id,text,username,permalink,timestamp,media_type,media_url,shortcode,thumbnail_url,children,is_quote_post,has_replies,root_post,replied_to,is_reply,is_reply_owned_by_me,reply_audience`
+  }
+  return axios
+    .get<any>(uri, { timeout: 8000, params })
     .then((response) => response.data)
     .catch((error) => {
       return Promise.reject(isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error)

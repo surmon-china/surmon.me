@@ -15,7 +15,12 @@ import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
-import { getThreadsProfile, getThreadsMedias, getThreadsMediaChildren } from './server/getters/threads'
+import {
+  getThreadsProfile,
+  getThreadsMedias,
+  getThreadsMediaChildren,
+  getThreadsMediaConversation
+} from './server/getters/threads'
 import {
   getInstagramProfile,
   getInstagramMedias,
@@ -26,7 +31,6 @@ import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerListId } from '.
 import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import { getNPMStatistic } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
-import { getZhihuAnswers } from './server/getters/zhihu'
 import { getSongList } from './server/getters/netease-music'
 import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
@@ -109,28 +113,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
     responser(() => get163MusicCache())
   )
 
-  // Zhihu first page cache
-  const getZhihuFirstPageCache = cacher.interval(cache, {
-    key: 'zhihu_answers_offset_0',
-    ttl: hours(12),
-    interval: hours(3),
-    retry: minutes(10),
-    getter: getZhihuAnswers
-  })
-
-  // Zhihu answer route
-  app.get(`${TUN}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
-    const offset = request.query.offset
-    if (!!offset && !Number.isInteger(Number(offset))) {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    responser(() => {
-      return offset ? getZhihuAnswers(Number(offset)) : getZhihuFirstPageCache()
-    })(request, response, next)
-  })
-
   // Threads profile
   const getThreadsProfileCache = cacher.interval(cache, {
     key: TunnelModule.ThreadsProfile,
@@ -186,6 +168,23 @@ createExpressApp().then(async ({ app, server, cache }) => {
         key: `threads_media_children_${mediaId}`,
         ttl: days(7),
         getter: () => getThreadsMediaChildren(mediaId)
+      })
+    })(request, response, next)
+  })
+
+  // Threads media conversation
+  app.get(`${TUN}/${TunnelModule.ThreadsMediaConversation}`, (request, response, next) => {
+    const mediaId = request.query.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      return
+    }
+
+    responser(() => {
+      return cacher.passive(cache, {
+        key: `threads_media_conversation_${mediaId}`,
+        ttl: days(7),
+        getter: () => getThreadsMediaConversation(mediaId)
       })
     })(request, response, next)
   })

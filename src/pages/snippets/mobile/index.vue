@@ -4,32 +4,32 @@
   import { VALUABLE_LINKS } from '/@/config/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import { getZhihuAnswerDetailURL } from '/@/transforms/media'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import { i18nTitle, useSnippetsPageData, useSnippetsPageMeta } from '../shared'
-  import AnswerCard from '../card.vue'
+  import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import { useThreadsMediasData } from '../threads/shared'
+  import ThreadsCard from '../threads/card.vue'
 
-  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useSnippetsPageData()
+  const { latestThreadsStore, loading, finished, allMedias, fetchMoreMedias } = useThreadsMediasData()
 
-  const fetchMoreAnswersAndNextScreen = () => {
-    fetchMoreAnswers().then(() => {
+  const fetchMoreMediasAndNextScreen = () => {
+    fetchMoreMedias().then(() => {
       scrollToNextScreen()
     })
   }
 
   useSnippetsPageMeta()
-  useUniversalFetch(() => zhihuLatestAnswers.fetch())
+  useUniversalFetch(() => latestThreadsStore.fetch())
 </script>
 
 <template>
-  <div class="answers-page">
-    <page-banner :is-mobile="true" image="/images/page-answers/banner-mobile.webp" :image-position="80" cdn>
+  <div class="snippets-page">
+    <page-banner :is-mobile="true" image="/images/page-snippets/banner-mobile.webp" :image-position="80" cdn>
       <template #title><i18n :k="LanguageKey.PAGE_SNIPPETS" /></template>
       <template #description><i18n v-bind="i18nTitle" /></template>
     </page-banner>
-    <placeholder :data="zhihuLatestAnswers.data?.data" :loading="zhihuLatestAnswers.fetching">
+    <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
       <template #loading>
-        <div class="answers-loading" key="loading">
+        <div class="snippets-loading" key="loading">
           <div class="statistics">
             <skeleton-base class="item" :key="s" v-for="s in 3" />
           </div>
@@ -41,36 +41,31 @@
         </div>
       </template>
       <template #default>
-        <div class="answers-content">
+        <div class="snippets-content">
           <div class="statistics">
-            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
-              <div class="logo"><i class="iconfont icon-zhihu-full"></i></div>
-              <div class="description">
-                {{ zhihuLatestAnswers?.data?.paging.totals ?? '-' }}
-                <i18n zh="个回答" en="answers" />
-              </div>
+            <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+              <i class="iconfont icon-threads"></i> Threads
             </ulink>
             <divider type="vertical" />
-            <ulink class="item" :href="VALUABLE_LINKS.QUORA">
-              <div class="logo quora"><i class="iconfont icon-quora-full"></i></div>
-              <div class="description">-</div>
+            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
+              <i class="iconfont icon-zhihu-full"></i>
             </ulink>
           </div>
           <ul class="cards">
-            <li class="item" v-for="(answer, index) in allAnswers" :key="index" data-allow-mismatch>
-              <ulink :href="getZhihuAnswerDetailURL(answer.question.id, answer.id)">
-                <answer-card :answer="answer" />
+            <li class="item" v-for="(media, index) in allMedias" :key="index" data-allow-mismatch>
+              <ulink :href="media.permalink">
+                <threads-card :media="media" />
               </ulink>
             </li>
           </ul>
           <loadmore
-            v-if="!zhihuLatestAnswers.fetching && !finished"
+            v-if="!latestThreadsStore.fetching && !finished"
             class="loadmore"
             :loading="loading"
-            @loadmore="fetchMoreAnswersAndNextScreen"
+            @loadmore="fetchMoreMediasAndNextScreen"
           >
             <template #normal>
-              <button class="normal" @click="fetchMoreAnswersAndNextScreen">
+              <button class="normal" @click="fetchMoreMediasAndNextScreen">
                 <i class="iconfont icon-loadmore"></i>
               </button>
             </template>
@@ -88,10 +83,10 @@
   @import '/src/styles/variables.scss';
   @import '/src/styles/mixins.scss';
 
-  .answers-page {
+  .snippets-page {
     $item-gap: 1.4rem;
 
-    .answers-loading {
+    .snippets-loading {
       padding: 0;
       margin-top: $item-gap;
 
@@ -129,7 +124,7 @@
       }
     }
 
-    .answers-content {
+    .snippets-content {
       margin-top: $item-gap;
 
       .statistics {
@@ -143,24 +138,7 @@
 
         .item {
           text-align: center;
-
-          .logo {
-            margin-bottom: $gap-sm;
-            font-size: $font-size-h1;
-            &.quora {
-              display: flex;
-              height: $font-size-h3 * 1.4;
-              line-height: $font-size-h3 * 1.4;
-              font-size: $font-size-h3 * 2;
-            }
-          }
-
-          .description {
-            font-weight: bold;
-            font-size: $font-size-small;
-            color: $color-text-secondary;
-            text-transform: uppercase;
-          }
+          font-size: $font-size-h3;
         }
       }
 

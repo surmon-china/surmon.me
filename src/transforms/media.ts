@@ -53,7 +53,3 @@ export const getThreadsPostDetailURL = (username: string, shortCode: string) => 
 export const get163MusicSongDetailURL = (songId: string | number) => {
   return `https://music.163.com/#/song?id=${songId}`
 }
-
-export const getZhihuAnswerDetailURL = (questionId: number, answerId: number) => {
-  return `https://www.zhihu.com/question/${questionId}/answer/${answerId}`
-}

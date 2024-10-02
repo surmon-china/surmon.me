@@ -1,17 +1,16 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import type { ZhihuAnswerItem } from '/@/server/getters/zhihu'
 
   const props = defineProps<{
     cols: number
-    answers: Array<ZhihuAnswerItem>
+    data: Array<any>
   }>()
 
   const columns = computed(() => {
-    const columnList = Array.from({ length: props.cols }).map<ZhihuAnswerItem[]>(() => [])
-    props.answers.forEach((answer, index) => {
+    const columnList = Array.from({ length: props.cols }).map<any>(() => [])
+    props.data.forEach((item, index) => {
       const colIndex = index % props.cols
-      columnList.at(colIndex)!.push(answer)
+      columnList.at(colIndex)!.push(item)
     })
     return columnList
   })
@@ -20,9 +19,9 @@
 <template>
   <ul class="columns" :style="{ '--grid-columns': cols }">
     <li class="column" v-for="(data, i) in columns" :key="i">
-      <ul class="answers">
-        <li class="answer-item-wrapper" v-for="(answer, index) in data" :key="index">
-          <slot name="answer" :answer="answer"></slot>
+      <ul class="list">
+        <li class="item-wrapper" v-for="(item, index) in data" :key="index">
+          <slot name="item" :data="item"></slot>
         </li>
       </ul>
     </li>
@@ -47,12 +46,12 @@
     }
   }
 
-  .answers {
+  .list {
     margin: 0;
     padding: 0;
     list-style: none;
 
-    .answer-item-wrapper {
+    .item-wrapper {
       @include radius-box($radius-sm);
       margin-bottom: $gap-lg * 2;
       &:last-child {

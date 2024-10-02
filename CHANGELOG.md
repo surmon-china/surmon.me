@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v4.49.0 (2024-10-02)
+
+**Feature**
+
+- Use `Threads` instead of `ZhiHu`.
+- Use `snippets` page instead of `answers` page.
+
 ### v4.46.0 (2024-09-27)
 
 **Feature**

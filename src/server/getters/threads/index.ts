@@ -14,7 +14,7 @@
 // 3. TODO: Refresh token
 // https://developers.facebook.com/docs/threads/get-started/long-lived-tokens
 
-export { getThreadsMedias, getThreadsMediaChildren } from './post'
+export { getThreadsMedias, getThreadsMediaChildren, getThreadsMediaConversation } from './post'
 export type { ThreadsMedia, ThreadsMediaListResponse } from './post'
 export { getThreadsProfile } from './profile'
 export type { ThreadsProfile } from './profile'

@@ -9,7 +9,6 @@ import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 import { delayPromise } from '/@/utils/delayer'
-import type { ZhihuAnswersResponse } from '/@/server/getters/zhihu'
 import type { ThreadsProfile, ThreadsMediaListResponse } from '/@/server/getters/threads'
 import type { InstagramProfile, InstagramMediaListResponse } from '/@/server/getters/instagram'
 import tunnel from '/@/services/tunnel'
@@ -20,17 +19,6 @@ export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
     once: true,
     data: null,
     fetcher: () => tunnel.dispatch(TunnelModule.DoubanMovies)
-  })
-})
-
-// Zhihu latest answers
-export const useZhihuLatestAnswersStore = defineStore('zhihuLatestAnswersStore', () => {
-  return createFetchStore<ZhihuAnswersResponse | null>({
-    data: null,
-    fetcher: () => {
-      const request = tunnel.dispatch<ZhihuAnswersResponse>(TunnelModule.ZhihuAnswers)
-      return isClient ? delayPromise(480, request) : request
-    }
   })
 })
 

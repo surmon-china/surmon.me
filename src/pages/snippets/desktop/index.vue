@@ -1,61 +1,45 @@
 <script lang="ts" setup>
-  import { shallowRef } from 'vue'
-  import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
-  import { NULL } from '/@/constants/value'
   import { VALUABLE_LINKS } from '/@/config/app.config'
-  import type { ZhihuAnswerItem } from '/@/server/getters/zhihu'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import { i18nTitle, useSnippetsPageMeta, useSnippetsPageData } from '../shared'
-  import AnswerMasonryList from './masonry.vue'
-  import AnswerDetail from '../detail.vue'
-  import AnswerCard from '../card.vue'
+  import { useUniversalFetch } from '/@/universal'
+  import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import { useThreadsMediasData } from '../threads/shared'
+  import ThreadsCard from '../threads/card.vue'
+  import MasonryList from './masonry.vue'
 
-  const modalActiveAnswer = shallowRef<ZhihuAnswerItem | null>(null)
-  const openAnswerModal = (answer: ZhihuAnswerItem) => {
-    modalActiveAnswer.value = answer
-  }
-  const closeAnswerModal = () => {
-    modalActiveAnswer.value = NULL
-  }
-
-  const { zhihuLatestAnswers, loading, finished, allAnswers, fetchMoreAnswers } = useSnippetsPageData()
+  const { latestThreadsStore, loading, finished, allMedias, fetchMoreMedias } = useThreadsMediasData()
 
   useSnippetsPageMeta()
-  useUniversalFetch(() => zhihuLatestAnswers.fetch())
+  useUniversalFetch(() => latestThreadsStore.fetch())
 </script>
 
 <template>
-  <div class="answers-page">
+  <div class="snippets-page">
     <page-banner class="page-banner" video="/videos/clips/forest-1.mp4" :video-position="72" cdn>
       <template #title>
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
       <template #description>
-        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
-        <divider type="vertical" size="lg" color="#ffffffcc" />
         <ulink :href="VALUABLE_LINKS.THREADS" class="link">
           <i class="iconfont icon-threads"></i>
           Threads
         </ulink>
         <divider type="vertical" size="lg" color="#ffffffcc" />
-        <ulink :href="VALUABLE_LINKS.QUORA" class="link">
-          <i class="iconfont icon-quora"></i>
-          Quora
-        </ulink>
+        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
-      <placeholder :data="zhihuLatestAnswers.data?.data" :loading="zhihuLatestAnswers.fetching">
+      <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
         <template #placeholder>
-          <empty class="answers-empty" key="empty">
+          <empty class="data-empty" key="empty">
             <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
-          <div key="loading" class="answers-loading">
+          <div key="loading" class="data-loading">
             <div class="item" v-for="item in 3 * 3" :key="item">
               <div class="item-skeleton" v-for="i in 3" :key="i">
                 <skeleton-line />
@@ -65,19 +49,19 @@
         </template>
         <template #default>
           <div>
-            <answer-masonry-list :answers="allAnswers" :cols="3">
-              <template #answer="{ answer }">
-                <answer-card :answer="answer" @click="openAnswerModal(answer)" />
+            <masonry-list :data="allMedias" :cols="3">
+              <template #item="{ data }">
+                <threads-card :media="data" />
               </template>
-            </answer-masonry-list>
+            </masonry-list>
             <loadmore
-              v-if="!zhihuLatestAnswers.fetching && !finished"
+              v-if="!latestThreadsStore.fetching && !finished"
               class="loadmore"
               :loading="loading"
-              @loadmore="fetchMoreAnswers"
+              @loadmore="fetchMoreMedias"
             >
               <template #normal>
-                <button class="normal" @click="fetchMoreAnswers">
+                <button class="normal" @click="fetchMoreMedias">
                   <i class="iconfont icon-loadmore"></i>
                 </button>
               </template>
@@ -89,13 +73,6 @@
         </template>
       </placeholder>
     </container>
-    <client-only>
-      <popup :visible="!!modalActiveAnswer" :scroll-close="false" @close="closeAnswerModal">
-        <div class="answer-detail-wrapper">
-          <answer-detail v-if="modalActiveAnswer" :answer="modalActiveAnswer" />
-        </div>
-      </popup>
-    </client-only>
   </div>
 </template>
 
@@ -103,7 +80,7 @@
   @import '/src/styles/variables.scss';
   @import '/src/styles/mixins.scss';
 
-  .answers-page {
+  .snippets-page {
     min-height: $full-page-active-content-height;
 
     .page-banner {
@@ -140,7 +117,7 @@
       }
     }
 
-    .answers-loading {
+    .data-loading {
       padding: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -161,7 +138,7 @@
       }
     }
 
-    .answers-empty {
+    .data-empty {
       font-weight: bold;
       font-size: $font-size-h3;
     }
