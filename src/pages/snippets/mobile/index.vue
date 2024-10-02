@@ -47,9 +47,7 @@
               <i class="iconfont icon-threads"></i> Threads
             </ulink>
             <divider type="vertical" />
-            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
-              <i class="iconfont icon-zhihu-full"></i>
-            </ulink>
+            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU"><i class="iconfont icon-zhihu"></i> Zhihu.com</ulink>
           </div>
           <ul class="cards">
             <li class="item" v-for="(media, index) in allMedias" :key="index" data-allow-mismatch>
@@ -137,6 +135,7 @@
         align-items: center;
 
         .item {
+          flex: 1;
           text-align: center;
           font-size: $font-size-h3;
         }

@@ -1,31 +1,48 @@
 <script lang="ts" setup>
+  import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useCountry } from '/@/app/context'
+  import { isCNCode } from '/@/transforms/region'
+  import { getProxyURL } from '/@/transforms/url'
   import type { ThreadsMedia } from '/@/server/getters/threads'
   import Markdown from '/@/components/common/markdown.vue'
-  defineProps<{
+
+  const props = defineProps<{
     media: ThreadsMedia
+    showIcon?: boolean
   }>()
 
-  const openImagePopup = (url: string) => {
-    window.$popup.vImage(url)
-  }
+  const emit = defineEmits<{
+    (e: 'click-image', url: string): void
+  }>()
+
+  const { cdnDomain } = useEnhancer()
+  const mediaUrl = computed(() => {
+    const url = props.media.media_url
+    if (!url) return null
+    const countryCode = useCountry()
+    const isCNUser = isCNCode(countryCode ?? '')
+    return isCNUser ? getProxyURL(cdnDomain, url) : url
+  })
 </script>
 
 <template>
   <div class="threads-media-card">
-    <div class="media" :class="{ audio: media.media_type === 'AUDIO' }" v-if="media.media_url">
-      <audio class="audio" :src="media.media_url" controls v-if="media.media_type === 'AUDIO'" />
-      <video class="video" :src="media.media_url" controls v-else-if="media.media_type === 'VIDEO'" />
-      <uimage
+    <div class="media" :class="{ audio: media.media_type === 'AUDIO' }" v-if="mediaUrl">
+      <audio class="audio" :src="mediaUrl" controls v-if="media.media_type === 'AUDIO'" />
+      <video class="video" :src="mediaUrl" controls v-else-if="media.media_type === 'VIDEO'" />
+      <img
         class="image"
         :alt="media.text"
-        :src="media.media_url"
+        :src="mediaUrl"
         loading="lazy"
+        draggable="false"
+        @click="emit('click-image', mediaUrl)"
         v-else
-        @click="openImagePopup(media.media_url)"
       />
     </div>
     <div class="content">
-      <span class="icon" v-if="!media.media_url">
+      <span class="icon" v-if="!mediaUrl && showIcon">
         <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
         <i class="iconfont icon-audio" v-else-if="media.media_type === 'AUDIO'"></i>
         <i class="iconfont icon-video" v-else-if="media.media_type === 'VIDEO'"></i>

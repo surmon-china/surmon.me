@@ -11,6 +11,10 @@
 
   const { latestThreadsStore, loading, finished, allMedias, fetchMoreMedias } = useThreadsMediasData()
 
+  const openImagePopup = (url: string) => {
+    window.$popup.vImage(url)
+  }
+
   useSnippetsPageMeta()
   useUniversalFetch(() => latestThreadsStore.fetch())
 </script>
@@ -27,7 +31,10 @@
           Threads
         </ulink>
         <divider type="vertical" size="lg" color="#ffffffcc" />
-        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link"><i class="iconfont icon-zhihu-full"></i></ulink>
+        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link">
+          <i class="iconfont icon-zhihu"></i>
+          Zhihu.com
+        </ulink>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -51,7 +58,7 @@
           <div>
             <masonry-list :data="allMedias" :cols="3">
               <template #item="{ data }">
-                <threads-card :media="data" />
+                <threads-card :media="data" :show-icon="true" @click-image="openImagePopup" />
               </template>
             </masonry-list>
             <loadmore
