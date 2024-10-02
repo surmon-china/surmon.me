@@ -130,7 +130,6 @@ const IDENTITIES = Object.freeze({
     YOUTUBE_CHANNEL_SHORT_ID: '@surmon_v',
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
-    ZHIHU_USER_NAME: 'surmon',
     GITHUB_USER_NAME: 'surmon-china',
     INSTAGRAM_USERNAME: 'surmon666',
     THREADS_USER_NAME: 'surmon666',
@@ -158,8 +157,7 @@ const VALUABLE_LINKS = Object.freeze({
     YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
     TELEGRAM: 'https://t.me/surmon',
     OPENSEA: 'https://opensea.io/Surmon',
-    ZHIHU: `https://www.zhihu.com/people/${IDENTITIES.ZHIHU_USER_NAME}/answers`,
-    QUORA: `https://www.quora.com/profile/Surmon/answers`,
+    ZHIHU: `https://www.zhihu.com/people/surmon/answers`,
     DOUBAN: 'https://www.douban.com/people/nocower',
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
@@ -224,6 +222,7 @@ var TunnelModule;
     TunnelModule["ThreadsProfile"] = "threads_profile";
     TunnelModule["ThreadsMedias"] = "threads_medias";
     TunnelModule["ThreadsMediaChildren"] = "threads_media_children";
+    TunnelModule["ThreadsMediaConversation"] = "threads_media_conversation";
     TunnelModule["InstagramProfile"] = "instagram_profile";
     TunnelModule["InstagramMedias"] = "instagram_medias";
     TunnelModule["InstagramMediaChildren"] = "instagram_media_children";
@@ -231,7 +230,6 @@ var TunnelModule;
     TunnelModule["BingWallpaper"] = "bing_wallpaper";
     TunnelModule["NetEaseMusic"] = "netease_music";
     TunnelModule["DoubanMovies"] = "douban_movies";
-    TunnelModule["ZhihuAnswers"] = "zhihu_answers";
     TunnelModule["GitHubSponsors"] = "github_sponsors";
     TunnelModule["GitHubContributions"] = "github_contributions";
     TunnelModule["StatisticGitHubJson"] = "statistic_github_json";
@@ -562,7 +560,6 @@ const argv = (0,external_yargs_namespaceObject["default"])(process.argv.slice(2)
 const YOUTUBE_API_KEY = argv.youtube_token;
 const INSTAGRAM_TOKEN = argv.instagram_token;
 const THREADS_TOKEN = argv.threads_token;
-const ZHIHU_COOKIE = argv.zhihu_cookie;
 
 ;// CONCATENATED MODULE: ./src/server/getters/threads/post.ts
 
@@ -587,7 +584,13 @@ const getThreadsMedias = async (options) => {
             params.after = options.after;
         }
         const response = await services_axios.get(uri, { timeout: 8000, params });
-        return response.data;
+        return {
+            ...response.data,
+            paging: {
+                cursors: response.data.paging?.cursors
+                // MARK: remove `next` & `previous`
+            }
+        };
     }
     catch (error) {
         throw (0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error;
@@ -599,6 +602,20 @@ const getThreadsMediaChildren = (threadsMediaId) => {
     const params = {
         access_token: THREADS_TOKEN,
         fields: THREADS_MEDIA_FULL_FIELDS
+    };
+    return services_axios.get(uri, { timeout: 8000, params })
+        .then((response) => response.data)
+        .catch((error) => {
+        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error);
+    });
+};
+// https://developers.facebook.com/docs/threads/reply-management/#a-thread-s-conversations
+const getThreadsMediaConversation = (threadsMediaId) => {
+    const uri = `https://graph.threads.net/v1.0/${threadsMediaId}/conversation`;
+    const params = {
+        access_token: THREADS_TOKEN,
+        reverse: false,
+        fields: `id,text,username,permalink,timestamp,media_type,media_url,shortcode,thumbnail_url,children,is_quote_post,has_replies,root_post,replied_to,is_reply,is_reply_owned_by_me,reply_audience`
     };
     return services_axios.get(uri, { timeout: 8000, params })
         .then((response) => response.data)
@@ -928,36 +945,6 @@ const getDoubanMovies = async () => {
     const response = await services_axios.get(api, {
         timeout: 1000 * 12,
         headers: { Referer: referer }
-    });
-    return response.data;
-};
-
-;// CONCATENATED MODULE: ./src/server/getters/zhihu.ts
-/**
- * @file BFF Zhihu getter
- * @module server.getter.zhihu
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-
-// According to the documentation, a maximum of 20
-const ZHIHU_PAGE_LIMIT = 20;
-// https://www.zhihu.com/people/<username>/answers
-const ZHIHU_INCLUDE_PARAMS = `data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,attachment,voteup_count,reshipment_settings,comment_permission,created_time,updated_time,review_info,excerpt,paid_info,reaction_instruction,is_labeled,label_info,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp;data[*].vessay_info;data[*].author.badge[?(type=best_answerer)].topics;data[*].author.vip_info;data[*].question.has_publishing_draft,relationship`;
-// Get answers by member ID
-// https://yifei.me/note/460
-const getZhihuAnswers = async (offset = 0) => {
-    const api = `https://api.zhihu.com/members/${IDENTITIES.ZHIHU_USER_NAME}/answers`;
-    const response = await services_axios.get(api, {
-        timeout: 8000,
-        headers: { cookie: ZHIHU_COOKIE },
-        params: {
-            offset,
-            limit: ZHIHU_PAGE_LIMIT,
-            sort_by: 'created',
-            include: ZHIHU_INCLUDE_PARAMS
-        }
     });
     return response.data;
 };
@@ -1705,7 +1692,6 @@ const createExpressApp = async () => {
 
 
 
-
 const bff_logger = createLogger('BFF');
 // init env variables for BFF server env
 external_dotenv_namespaceObject["default"].config();
@@ -1766,25 +1752,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
         getter: getSongList
     });
     app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.NetEaseMusic}`, responser(() => get163MusicCache()));
-    // Zhihu first page cache
-    const getZhihuFirstPageCache = cacher.interval(cache, {
-        key: 'zhihu_answers_offset_0',
-        ttl: hours(12),
-        interval: hours(3),
-        retry: minutes(10),
-        getter: getZhihuAnswers
-    });
-    // Zhihu answer route
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ZhihuAnswers}`, (request, response, next) => {
-        const offset = request.query.offset;
-        if (!!offset && !Number.isInteger(Number(offset))) {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        responser(() => {
-            return offset ? getZhihuAnswers(Number(offset)) : getZhihuFirstPageCache();
-        })(request, response, next);
-    });
     // Threads profile
     const getThreadsProfileCache = cacher.interval(cache, {
         key: TunnelModule.ThreadsProfile,
@@ -1831,6 +1798,21 @@ createExpressApp().then(async ({ app, server, cache }) => {
                 key: `threads_media_children_${mediaId}`,
                 ttl: days(7),
                 getter: () => getThreadsMediaChildren(mediaId)
+            });
+        })(request, response, next);
+    });
+    // Threads media conversation
+    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.ThreadsMediaConversation}`, (request, response, next) => {
+        const mediaId = request.query.id;
+        if (!mediaId || typeof mediaId !== 'string') {
+            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
+            return;
+        }
+        responser(() => {
+            return cacher.passive(cache, {
+                key: `threads_media_conversation_${mediaId}`,
+                ttl: days(7),
+                getter: () => getThreadsMediaConversation(mediaId)
             });
         })(request, response, next);
     });
