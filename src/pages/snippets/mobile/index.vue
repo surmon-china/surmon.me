@@ -44,10 +44,14 @@
         <div class="snippets-content">
           <div class="statistics">
             <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-              <i class="iconfont icon-threads"></i> Threads
+              <i class="iconfont icon-threads"></i>
+              <strong>Threads</strong>
             </ulink>
             <divider type="vertical" />
-            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU"><i class="iconfont icon-zhihu"></i> Zhihu.com</ulink>
+            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
+              <i class="iconfont icon-zhihu"></i>
+              <strong>zhihu.com</strong>
+            </ulink>
           </div>
           <ul class="cards">
             <li class="item" v-for="(media, index) in allMedias" :key="index" data-allow-mismatch>
@@ -138,6 +142,10 @@
           flex: 1;
           text-align: center;
           font-size: $font-size-h3;
+
+          .iconfont {
+            margin-right: $gap-xs;
+          }
         }
       }
 

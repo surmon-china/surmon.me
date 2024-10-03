@@ -50,11 +50,11 @@
       </i18n>
     </p>
     <p>
-      <i class="iconfont icon-heart"></i>
-      <span v-if="isZhLang">收获了</span>
-      <statistic-count large primary split :count="store.data?.totalLikes || '-'" />
-      <span v-if="isZhLang">次喜欢</span>
-      <span v-else>likes</span>
+      <i class="iconfont icon-threads"></i>
+      <span v-if="isZhLang">发布了</span>
+      <statistic-count large primary split count="NaN" />
+      <span v-if="isZhLang">篇帖子</span>
+      <span v-else>threads</span>
     </p>
     <p>
       <i class="iconfont icon-follower"></i>

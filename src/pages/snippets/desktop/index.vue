@@ -26,14 +26,10 @@
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
       <template #description>
-        <ulink :href="VALUABLE_LINKS.THREADS" class="link">
-          <i class="iconfont icon-threads"></i>
-          Threads
-        </ulink>
+        <ulink :href="VALUABLE_LINKS.THREADS" class="link"><i class="iconfont icon-threads"></i> Threads</ulink>
         <divider type="vertical" size="lg" color="#ffffffcc" />
         <ulink :href="VALUABLE_LINKS.ZHIHU" class="link">
-          <i class="iconfont icon-zhihu"></i>
-          Zhihu.com
+          <i class="iconfont icon-zhihu-full"></i> zhihu.com
         </ulink>
       </template>
     </page-banner>
