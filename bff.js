@@ -131,8 +131,7 @@ const IDENTITIES = Object.freeze({
     MUSIC_163_BGM_ALBUM_ID: '638949385',
     DOUBAN_USER_ID: '56647958',
     GITHUB_USER_NAME: 'surmon-china',
-    INSTAGRAM_USERNAME: 'surmon666',
-    THREADS_USER_NAME: 'surmon666',
+    INSTAGRAM_USERNAME: 'surmon_sattva',
     BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
     ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 });
@@ -162,8 +161,8 @@ const VALUABLE_LINKS = Object.freeze({
     DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
     LINKEDIN: 'https://www.linkedin.com/in/surmon',
     INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-    THREADS: `https://www.threads.net/@${IDENTITIES.THREADS_USER_NAME}`,
-    THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.THREADS_USER_NAME}`
+    THREADS: `https://www.threads.net/@${IDENTITIES.INSTAGRAM_USERNAME}`,
+    THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.INSTAGRAM_USERNAME}`
 });
 
 ;// CONCATENATED MODULE: ./src/config/bff.config.ts
