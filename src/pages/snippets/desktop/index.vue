@@ -54,7 +54,7 @@
           <div>
             <masonry-list :data="allMedias" :cols="3">
               <template #item="{ data }">
-                <threads-card :media="data" :show-icon="true" @click-image="openImagePopup" />
+                <threads-card :media="data" @click-image="openImagePopup" />
               </template>
             </masonry-list>
             <loadmore

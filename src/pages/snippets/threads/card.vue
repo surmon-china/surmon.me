@@ -9,7 +9,6 @@
 
   const props = defineProps<{
     media: ThreadsMedia
-    showIcon?: boolean
   }>()
 
   const emit = defineEmits<{
@@ -28,6 +27,16 @@
 
 <template>
   <div class="threads-media-card">
+    <div class="publish">
+      <ulink class="link" :title="media.username" :href="media.permalink">
+        <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
+        <i class="iconfont icon-threads" v-else></i>
+        <span class="username">{{ media.username }}</span>
+      </ulink>
+      <div class="timestamp">
+        <udate to="ago" :date="media.timestamp" />
+      </div>
+    </div>
     <div class="media" :class="{ audio: media.media_type === 'AUDIO' }" v-if="mediaUrl">
       <audio class="audio" :src="mediaUrl" controls v-if="media.media_type === 'AUDIO'" />
       <video class="video" :src="mediaUrl" controls v-else-if="media.media_type === 'VIDEO'" />
@@ -41,28 +50,23 @@
         v-else
       />
     </div>
-    <div class="content">
-      <span class="icon" v-if="!mediaUrl && showIcon">
+    <markdown class="content" compact :markdown="media.text" :title="media.text" />
+    <div class="meta">
+      <span class="characters">
+        <i18n>
+          <template #en>{{ media.text?.length ?? 0 }} characters</template>
+          <template #zh>共 {{ media.text?.length ?? 0 }} 字</template>
+        </i18n>
+      </span>
+      <span class="type">
         <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
         <i class="iconfont icon-audio" v-else-if="media.media_type === 'AUDIO'"></i>
         <i class="iconfont icon-video" v-else-if="media.media_type === 'VIDEO'"></i>
         <i class="iconfont icon-image" v-else-if="media.media_type === 'IMAGE'"></i>
         <i class="iconfont icon-album" v-else-if="media.media_type === 'CAROUSEL_ALBUM'"></i>
         <i class="iconfont icon-threads" v-else></i>
+        <span class="text">{{ media.media_type }}</span>
       </span>
-      <markdown class="text" compact :markdown="media.text" :title="media.text" />
-    </div>
-    <div class="info">
-      <div class="left">
-        <span class="item">
-          <i class="iconfont icon-clock-outlined"></i>
-          <udate to="ago" :date="media.timestamp" />
-        </span>
-      </div>
-      <ulink class="right" :title="media.username" :href="media.permalink">
-        <i class="iconfont icon-threads"></i>
-        {{ media.username }}
-      </ulink>
     </div>
   </div>
 </template>
@@ -76,8 +80,39 @@
     padding: $gap-lg;
     @include common-bg-module($motion-duration-fast);
     &:hover {
-      .text {
+      .content {
         color: $color-link;
+      }
+    }
+
+    .publish {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .link {
+        display: inline-flex;
+        &:hover {
+          .username {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+          }
+        }
+
+        .iconfont {
+          margin-right: 2px;
+          color: $color-link;
+        }
+
+        .username {
+          font-weight: bold;
+          line-height: 1.2;
+        }
+      }
+
+      .timestamp {
+        color: $color-text-secondary;
       }
     }
 
@@ -105,42 +140,20 @@
 
     .content {
       margin-bottom: $gap-sm;
-
-      .icon {
-        color: $color-text-divider;
-        display: inline;
-        float: left;
-        line-height: 2;
-        margin-right: $gap-sm;
-      }
-
-      .text {
-        line-height: 1.72;
-        color: $color-text;
-      }
+      color: $color-text;
     }
 
-    .info {
+    .meta {
       display: flex;
       justify-content: space-between;
-      color: $color-text-secondary;
+      color: $color-text-divider;
       font-size: $font-size-small;
 
-      .left {
-        .item {
-          display: inline-flex;
-          align-items: center;
-          margin-right: $gap * 2;
-          .iconfont {
-            margin-right: $gap-sm;
-          }
+      .type {
+        .text {
+          margin-left: $gap-xs;
+          text-transform: uppercase;
         }
-      }
-
-      .right {
-        display: inline-flex;
-        align-items: center;
-        color: $color-link;
       }
     }
   }
