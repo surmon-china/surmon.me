@@ -10,7 +10,7 @@ import { UseSeoMetaInput } from '@unhead/schema'
 import { Head, useHead as useUnhead, useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
-import { META, IDENTITIES } from '/@/config/app.config'
+import { META } from '/@/config/app.config'
 
 export type { Head } from '@unhead/vue'
 export { createHead } from '@unhead/vue'

@@ -5,7 +5,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
   import { isClient } from '/@/app/environment'
   import { delayPromise } from '/@/utils/delayer'
@@ -15,7 +15,7 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
 
-  const { instagramProfile, instagramLatestMedias } = useStores()
+  const { instagramLatestMedias } = useStores()
   const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
 
   const loading = ref(false)
@@ -51,7 +51,7 @@
     }
   })
 
-  useUniversalFetch(() => Promise.all([instagramProfile.fetch(), instagramLatestMedias.fetch()]))
+  useUniversalFetch(() => instagramLatestMedias.fetch())
 </script>
 
 <template>
@@ -64,14 +64,10 @@
       </template>
       <template #description>
         <client-only>
-          <ulink class="link" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink class="link" title="instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram"></i>
-            {{ instagramProfile.data?.name ?? '-' }}
+            Instagram (@{{ IDENTITIES.INSTAGRAM_USERNAME }})
           </ulink>
-          <divider type="vertical" size="lg" color="#ffffffcc" />
-          {{ instagramProfile.data?.mediaCount ?? '-' }} <i18n zh="帖子" en="posts" />
-          <divider type="vertical" size="lg" color="#ffffffcc" />
-          {{ instagramProfile.data?.followerCount ?? '-' }} <i18n zh="粉丝" en="followers" />
         </client-only>
       </template>
     </page-banner>

@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import qs from 'qs'
+import { stringify } from '/@/transforms/qs'
 
 export interface EmailLinkOptions {
   email: string
@@ -17,5 +17,5 @@ export const emailLink = (email: string | EmailLinkOptions) => {
   }
 
   const { email: _email, ...content } = email
-  return `mailto:${_email}?` + qs.stringify(content)
+  return `mailto:${_email}?` + stringify(content)
 }

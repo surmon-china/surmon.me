@@ -11,13 +11,14 @@
 </script>
 
 <script lang="ts" setup>
-  import qs from 'qs'
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
+  import { UNDEFINED } from '/@/constants/value'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { getPageURL } from '/@/transforms/url'
+  import { stringify } from '/@/transforms/qs'
   import { openPopupWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
   import { META } from '/@/config/app.config'
@@ -25,6 +26,7 @@
   interface ShareParams {
     url: string
     title: string
+    ogTitle: string | void
     description: string
   }
 
@@ -56,11 +58,11 @@
       url: (params) => {
         return (
           `https://service.weibo.com/share/share.php?` +
-          qs.stringify({
+          stringify({
             url: params.url,
             source: params.url,
             sourceUrl: params.url,
-            title: params.title,
+            title: params.ogTitle,
             content: params.description
           })
         )
@@ -74,9 +76,9 @@
       url: (params) => {
         return (
           `https://twitter.com/intent/tweet?` +
-          qs.stringify({
+          stringify({
             url: params.url,
-            text: params.title
+            text: params.ogTitle
           })
         )
       }
@@ -88,9 +90,9 @@
       url: (params) => {
         return (
           `https://www.threads.net/intent/post?` +
-          qs.stringify({
+          stringify({
             url: params.url,
-            text: params.title
+            text: params.ogTitle
           })
         )
       }
@@ -102,8 +104,8 @@
       url: (params) => {
         return (
           `https://www.facebook.com/share.php?` +
-          qs.stringify({
-            t: params.title,
+          stringify({
+            t: params.ogTitle,
             u: encodeURI(params.url)
           })
         )
@@ -116,8 +118,8 @@
       url: (params) => {
         return (
           `https://www.linkedin.com/shareArticle?` +
-          qs.stringify({
-            title: params.title,
+          stringify({
+            title: params.ogTitle,
             url: params.url
           })
         )
@@ -131,7 +133,7 @@
         return (
           // https://www.douban.com/service/sharebutton
           `https://www.douban.com/recommend/?` +
-          qs.stringify({
+          stringify({
             url: params.url,
             title: params.title
           })
@@ -157,6 +159,7 @@
 
   const getURL = () => getPageURL(route.fullPath)
   const getTitle = () => document.title || META.title
+  const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? UNDEFINED
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
     return pageDescription || _i18n.t(LanguageKey.APP_SLOGAN)!
@@ -190,6 +193,7 @@
     const shareParams: ShareParams = {
       url: getURL(),
       title: getTitle(),
+      ogTitle: getOgTitle(),
       description: getDescription()
     }
 
