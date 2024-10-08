@@ -40,7 +40,6 @@ import BezierEasing from "bezier-easing";
 import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
-import qs from "qs";
 import QRCode from "qrcode";
 var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
   LanguageKey2["APP_SLOGAN"] = "app-slogan";
@@ -372,7 +371,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.49.3";
+const APP_VERSION = "4.49.5";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -6186,6 +6185,19 @@ async function renderTextToQRCodeDataURL(value, options) {
     ...options
   });
 }
+const stringify = (object, sep = "&", eq = "=") => {
+  let str = "";
+  for (let k in object) {
+    if (object.hasOwnProperty(k)) {
+      let value = object[k];
+      if (value === null || value === void 0) continue;
+      let encodedKey = encodeURIComponent(k);
+      let encodedValue = encodeURIComponent(value);
+      str += encodedKey + eq + encodedValue + sep;
+    }
+  }
+  return str.slice(0, -1);
+};
 const baseParams = {
   scrollbars: 0,
   status: 0,
@@ -6261,11 +6273,11 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         name: "微博",
         class: "weibo",
         url: (params) => {
-          return `https://service.weibo.com/share/share.php?` + qs.stringify({
+          return `https://service.weibo.com/share/share.php?` + stringify({
             url: params.url,
             source: params.url,
             sourceUrl: params.url,
-            title: params.title,
+            title: params.ogTitle,
             content: params.description
           });
         }
@@ -6276,9 +6288,9 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         class: "twitter",
         iconfont: "twitter-x",
         url: (params) => {
-          return `https://twitter.com/intent/tweet?` + qs.stringify({
+          return `https://twitter.com/intent/tweet?` + stringify({
             url: params.url,
-            text: params.title
+            text: params.ogTitle
           });
         }
       },
@@ -6287,9 +6299,9 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         name: "Threads",
         class: "threads",
         url: (params) => {
-          return `https://www.threads.net/intent/post?` + qs.stringify({
+          return `https://www.threads.net/intent/post?` + stringify({
             url: params.url,
-            text: params.title
+            text: params.ogTitle
           });
         }
       },
@@ -6298,8 +6310,8 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         name: "Facebook",
         class: "facebook",
         url: (params) => {
-          return `https://www.facebook.com/share.php?` + qs.stringify({
-            t: params.title,
+          return `https://www.facebook.com/share.php?` + stringify({
+            t: params.ogTitle,
             u: encodeURI(params.url)
           });
         }
@@ -6309,8 +6321,8 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         name: "LinkedIn",
         class: "linkedin",
         url: (params) => {
-          return `https://www.linkedin.com/shareArticle?` + qs.stringify({
-            title: params.title,
+          return `https://www.linkedin.com/shareArticle?` + stringify({
+            title: params.ogTitle,
             url: params.url
           });
         }
@@ -6322,7 +6334,7 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
         url: (params) => {
           return (
             // https://www.douban.com/service/sharebutton
-            `https://www.douban.com/recommend/?` + qs.stringify({
+            `https://www.douban.com/recommend/?` + stringify({
               url: params.url,
               title: params.title
             })
@@ -6341,18 +6353,18 @@ const _sfc_main$1u = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-b9d3aed0><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-f9eaabff><!--[-->`);
       ssrRenderList(enabledSocials.value, (social, index) => {
-        _push(`<button${ssrRenderAttr("title", "Share to: " + social.name)} class="${ssrRenderClass([social.class, "share-ejector"])}" data-v-b9d3aed0><i class="${ssrRenderClass([`icon-${social.iconfont ?? social.class}`, "iconfont"])}" data-v-b9d3aed0></i></button>`);
+        _push(`<button${ssrRenderAttr("title", "Share to: " + social.name)} class="${ssrRenderClass([social.class, "share-ejector"])}" data-v-f9eaabff><i class="${ssrRenderClass([`icon-${social.iconfont ?? social.class}`, "iconfont"])}" data-v-f9eaabff></i></button>`);
       });
       _push(`<!--]-->`);
       if (!props.disabledImageShare) {
-        _push(`<button class="share-ejector share-as-image" title="Share as image" data-v-b9d3aed0><i class="iconfont icon-image-share" data-v-b9d3aed0></i></button>`);
+        _push(`<button class="share-ejector share-as-image" title="Share as image" data-v-f9eaabff><i class="iconfont icon-image-share" data-v-f9eaabff></i></button>`);
       } else {
         _push(`<!---->`);
       }
       if (!props.disabledCopyLink) {
-        _push(`<button class="share-ejector copy-link" title="Copy link" data-v-b9d3aed0><i class="iconfont icon-link" data-v-b9d3aed0></i></button>`);
+        _push(`<button class="share-ejector copy-link" title="Copy link" data-v-f9eaabff><i class="iconfont icon-link" data-v-f9eaabff></i></button>`);
       } else {
         _push(`<!---->`);
       }
@@ -6366,7 +6378,7 @@ _sfc_main$1u.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/share.vue");
   return _sfc_setup$1u ? _sfc_setup$1u(props, ctx) : void 0;
 };
-const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1u, [["__scopeId", "data-v-b9d3aed0"]]);
+const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1u, [["__scopeId", "data-v-f9eaabff"]]);
 const getChatGPTShareURL = (conversationId) => {
   return `https://chat.openai.com/share/${conversationId}`;
 };
@@ -14340,7 +14352,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
   setup(__props) {
-    const { instagramProfile, instagramLatestMedias } = useStores();
+    const { instagramLatestMedias } = useStores();
     const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer();
     const loading = ref(false);
     const medias = shallowReactive([]);
@@ -14374,19 +14386,18 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
         description
       };
     });
-    useUniversalFetch(() => Promise.all([instagramProfile.fetch(), instagramLatestMedias.fetch()]));
+    useUniversalFetch(() => instagramLatestMedias.fetch());
     return (_ctx, _push, _parent, _attrs) => {
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
       const _component_client_only = resolveComponent("client-only");
       const _component_ulink = resolveComponent("ulink");
-      const _component_divider = resolveComponent("divider");
       const _component_container = resolveComponent("container");
       const _component_placeholder = resolveComponent("placeholder");
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_base = resolveComponent("skeleton-base");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-e2e9cdea>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-e7496fe6>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/ocean-5.mp4",
@@ -14431,80 +14442,37 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
           if (_push2) {
             _push2(ssrRenderComponent(_component_client_only, null, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
-                var _a, _b, _c, _d;
                 if (_push3) {
                   _push3(ssrRenderComponent(_component_ulink, {
                     class: "link",
+                    title: "instagram",
                     href: unref(VALUABLE_LINKS).INSTAGRAM
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
-                      var _a2, _b2;
                       if (_push4) {
-                        _push4(`<i class="iconfont icon-instagram" data-v-e2e9cdea${_scopeId3}></i> ${ssrInterpolate(((_a2 = unref(instagramProfile).data) == null ? void 0 : _a2.name) ?? "-")}`);
+                        _push4(`<i class="iconfont icon-instagram" data-v-e7496fe6${_scopeId3}></i> Instagram (@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}) `);
                       } else {
                         return [
                           createVNode("i", { class: "iconfont icon-instagram" }),
-                          createTextVNode(" " + toDisplayString(((_b2 = unref(instagramProfile).data) == null ? void 0 : _b2.name) ?? "-"), 1)
+                          createTextVNode(" Instagram (@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME) + ") ", 1)
                         ];
                       }
                     }),
                     _: 1
                   }, _parent3, _scopeId2));
-                  _push3(ssrRenderComponent(_component_divider, {
-                    type: "vertical",
-                    size: "lg",
-                    color: "#ffffffcc"
-                  }, null, _parent3, _scopeId2));
-                  _push3(` ${ssrInterpolate(((_a = unref(instagramProfile).data) == null ? void 0 : _a.mediaCount) ?? "-")} `);
-                  _push3(ssrRenderComponent(_component_i18n, {
-                    zh: "帖子",
-                    en: "posts"
-                  }, null, _parent3, _scopeId2));
-                  _push3(ssrRenderComponent(_component_divider, {
-                    type: "vertical",
-                    size: "lg",
-                    color: "#ffffffcc"
-                  }, null, _parent3, _scopeId2));
-                  _push3(` ${ssrInterpolate(((_b = unref(instagramProfile).data) == null ? void 0 : _b.followerCount) ?? "-")} `);
-                  _push3(ssrRenderComponent(_component_i18n, {
-                    zh: "粉丝",
-                    en: "followers"
-                  }, null, _parent3, _scopeId2));
                 } else {
                   return [
                     createVNode(_component_ulink, {
                       class: "link",
+                      title: "instagram",
                       href: unref(VALUABLE_LINKS).INSTAGRAM
                     }, {
-                      default: withCtx(() => {
-                        var _a2;
-                        return [
-                          createVNode("i", { class: "iconfont icon-instagram" }),
-                          createTextVNode(" " + toDisplayString(((_a2 = unref(instagramProfile).data) == null ? void 0 : _a2.name) ?? "-"), 1)
-                        ];
-                      }),
+                      default: withCtx(() => [
+                        createVNode("i", { class: "iconfont icon-instagram" }),
+                        createTextVNode(" Instagram (@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME) + ") ", 1)
+                      ]),
                       _: 1
-                    }, 8, ["href"]),
-                    createVNode(_component_divider, {
-                      type: "vertical",
-                      size: "lg",
-                      color: "#ffffffcc"
-                    }),
-                    createTextVNode(" " + toDisplayString(((_c = unref(instagramProfile).data) == null ? void 0 : _c.mediaCount) ?? "-") + " ", 1),
-                    createVNode(_component_i18n, {
-                      zh: "帖子",
-                      en: "posts"
-                    }),
-                    createVNode(_component_divider, {
-                      type: "vertical",
-                      size: "lg",
-                      color: "#ffffffcc"
-                    }),
-                    createTextVNode(" " + toDisplayString(((_d = unref(instagramProfile).data) == null ? void 0 : _d.followerCount) ?? "-") + " ", 1),
-                    createVNode(_component_i18n, {
-                      zh: "粉丝",
-                      en: "followers"
-                    })
+                    }, 8, ["href"])
                   ];
                 }
               }),
@@ -14513,44 +14481,19 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
           } else {
             return [
               createVNode(_component_client_only, null, {
-                default: withCtx(() => {
-                  var _a, _b;
-                  return [
-                    createVNode(_component_ulink, {
-                      class: "link",
-                      href: unref(VALUABLE_LINKS).INSTAGRAM
-                    }, {
-                      default: withCtx(() => {
-                        var _a2;
-                        return [
-                          createVNode("i", { class: "iconfont icon-instagram" }),
-                          createTextVNode(" " + toDisplayString(((_a2 = unref(instagramProfile).data) == null ? void 0 : _a2.name) ?? "-"), 1)
-                        ];
-                      }),
-                      _: 1
-                    }, 8, ["href"]),
-                    createVNode(_component_divider, {
-                      type: "vertical",
-                      size: "lg",
-                      color: "#ffffffcc"
-                    }),
-                    createTextVNode(" " + toDisplayString(((_a = unref(instagramProfile).data) == null ? void 0 : _a.mediaCount) ?? "-") + " ", 1),
-                    createVNode(_component_i18n, {
-                      zh: "帖子",
-                      en: "posts"
-                    }),
-                    createVNode(_component_divider, {
-                      type: "vertical",
-                      size: "lg",
-                      color: "#ffffffcc"
-                    }),
-                    createTextVNode(" " + toDisplayString(((_b = unref(instagramProfile).data) == null ? void 0 : _b.followerCount) ?? "-") + " ", 1),
-                    createVNode(_component_i18n, {
-                      zh: "粉丝",
-                      en: "followers"
-                    })
-                  ];
-                }),
+                default: withCtx(() => [
+                  createVNode(_component_ulink, {
+                    class: "link",
+                    title: "instagram",
+                    href: unref(VALUABLE_LINKS).INSTAGRAM
+                  }, {
+                    default: withCtx(() => [
+                      createVNode("i", { class: "iconfont icon-instagram" }),
+                      createTextVNode(" Instagram (@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME) + ") ", 1)
+                    ]),
+                    _: 1
+                  }, 8, ["href"])
+                ]),
                 _: 1
               })
             ];
@@ -14606,9 +14549,9 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-e2e9cdea${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-e7496fe6${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-e2e9cdea${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-e7496fe6${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -14633,7 +14576,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-e2e9cdea${_scopeId2}>`);
+                  _push3(`<div data-v-e7496fe6${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramLatestMedias).fetching && !finished.value) {
                     _push3(ssrRenderComponent(Loadmore, {
@@ -14643,7 +14586,7 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
                     }, {
                       normal: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<button class="normal" data-v-e2e9cdea${_scopeId3}><i class="iconfont icon-loadmore" data-v-e2e9cdea${_scopeId3}></i></button>`);
+                          _push4(`<button class="normal" data-v-e7496fe6${_scopeId3}><i class="iconfont icon-loadmore" data-v-e7496fe6${_scopeId3}></i></button>`);
                         } else {
                           return [
                             createVNode("button", {
@@ -14794,7 +14737,7 @@ _sfc_main$H.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$H ? _sfc_setup$H(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-e2e9cdea"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-e7496fe6"]]);
 const i18nTitle = {
   [Language.Chinese]: "广行饶益，利乐有情",
   [Language.English]: `${META.author}'s snippets`
@@ -17509,7 +17452,7 @@ const emailLink = (email) => {
     return `mailto:${email}`;
   }
   const { email: _email, ...content } = email;
-  return `mailto:${_email}?` + qs.stringify(content);
+  return `mailto:${_email}?` + stringify(content);
 };
 const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "statement",

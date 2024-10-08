@@ -788,31 +788,17 @@ const getInstagramCalendar = () => {
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/profile.ts
 
 
-// Unstable access to Instagram API
-// https://stackoverflow.com/a/73376216/6222535
-const getInstagramProfile = async () => {
-    try {
-        const url = `https://i.instagram.com/api/v1/users/web_profile_info/?username=${IDENTITIES.INSTAGRAM_USERNAME}`;
-        const agent = 'Instagram 76.0.0.15.395 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G930F; herolte; samsungexynos8890; en_US; 138226743)';
-        const response = await services_axios.get(url, { timeout: 8000, headers: { 'User-Agent': agent } });
-        if (response.data.status !== 'ok') {
-            return Promise.reject(response.data);
-        }
-        else {
-            return {
-                name: response.data.data.user.full_name,
-                avatar: response.data.data.user.profile_pic_url_hd,
-                category: response.data.data.user.category_name,
-                biography: response.data.data.user.biography,
-                mediaCount: response.data.data.user.edge_owner_to_timeline_media.count,
-                followerCount: response.data.data.user.edge_followed_by.count,
-                followingCount: response.data.data.user.edge_follow.count
-            };
-        }
-    }
-    catch (error) {
-        throw (0,external_axios_namespaceObject.isAxiosError)(error) ? error.toJSON() : error;
-    }
+// https://developers.facebook.com/docs/instagram-basic-display-api/reference/user
+const getInstagramProfile = () => {
+    const params = {
+        access_token: INSTAGRAM_TOKEN,
+        fields: `id,username,account_type,media_count`
+    };
+    return services_axios.get(`https://graph.instagram.com/me`, { timeout: 8000, params })
+        .then((response) => response.data)
+        .catch((error) => {
+        return Promise.reject((0,external_axios_namespaceObject.isAxiosError)(error) ? (error.response?.data?.error ?? error.toJSON()) : error);
+    });
 };
 
 ;// CONCATENATED MODULE: ./src/server/getters/instagram/index.ts
