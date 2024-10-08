@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.49.4",
+  "version": "4.49.5",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -52,6 +52,7 @@
     "marked-xhtml": "^1.0.11",
     "pinia": "^2.2.x",
     "qrcode": "^1.5.x",
+    "qs": "^6.13.0",
     "redis": "^4.7.0",
     "rss": "^1.2.2",
     "serialize-javascript": "^6.0.2",
