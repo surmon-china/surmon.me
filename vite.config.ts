@@ -54,6 +54,7 @@ export default defineConfig(({ mode }) => {
           charset: false,
           importers: [new sass.NodePackageImporter()],
           // https://sass-lang.com/documentation/breaking-changes/color-functions/
+          // https://sass-lang.com/documentation/breaking-changes/import/
           silenceDeprecations: ['mixed-decls', 'color-functions']
         }
       }

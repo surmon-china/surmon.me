@@ -50,7 +50,13 @@
         v-else
       />
     </div>
-    <markdown class="content" compact :markdown="media.text" :title="media.text" />
+    <markdown
+      class="content"
+      compact
+      :title="media.text"
+      :markdown="media.text"
+      :render-options="{ codeLineNumbers: false }"
+    />
     <div class="meta">
       <span class="characters">
         <i18n>
