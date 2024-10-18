@@ -371,7 +371,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.49.5";
+const APP_VERSION = "4.49.6";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -14811,7 +14811,7 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_udate = resolveComponent("udate");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "threads-media-card" }, _attrs))} data-v-98ba1d0b><div class="publish" data-v-98ba1d0b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "threads-media-card" }, _attrs))} data-v-65951a61><div class="publish" data-v-65951a61>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "link",
         title: _ctx.media.username,
@@ -14820,11 +14820,11 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (_ctx.media.is_quote_post) {
-              _push2(`<i class="iconfont icon-repost" data-v-98ba1d0b${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-repost" data-v-65951a61${_scopeId}></i>`);
             } else {
-              _push2(`<i class="iconfont icon-threads" data-v-98ba1d0b${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-threads" data-v-65951a61${_scopeId}></i>`);
             }
-            _push2(`<span class="username" data-v-98ba1d0b${_scopeId}>${ssrInterpolate(_ctx.media.username)}</span>`);
+            _push2(`<span class="username" data-v-65951a61${_scopeId}>${ssrInterpolate(_ctx.media.username)}</span>`);
           } else {
             return [
               _ctx.media.is_quote_post ? (openBlock(), createBlock("i", {
@@ -14840,20 +14840,20 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="timestamp" data-v-98ba1d0b>`);
+      _push(`<div class="timestamp" data-v-65951a61>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.media.timestamp
       }, null, _parent));
       _push(`</div></div>`);
       if (mediaUrl.value) {
-        _push(`<div class="${ssrRenderClass([{ audio: _ctx.media.media_type === "AUDIO" }, "media"])}" data-v-98ba1d0b>`);
+        _push(`<div class="${ssrRenderClass([{ audio: _ctx.media.media_type === "AUDIO" }, "media"])}" data-v-65951a61>`);
         if (_ctx.media.media_type === "AUDIO") {
-          _push(`<audio class="audio"${ssrRenderAttr("src", mediaUrl.value)} controls data-v-98ba1d0b></audio>`);
+          _push(`<audio class="audio"${ssrRenderAttr("src", mediaUrl.value)} controls data-v-65951a61></audio>`);
         } else if (_ctx.media.media_type === "VIDEO") {
-          _push(`<video class="video"${ssrRenderAttr("src", mediaUrl.value)} controls data-v-98ba1d0b></video>`);
+          _push(`<video class="video"${ssrRenderAttr("src", mediaUrl.value)} controls data-v-65951a61></video>`);
         } else {
-          _push(`<img class="image"${ssrRenderAttr("alt", _ctx.media.text)}${ssrRenderAttr("src", mediaUrl.value)} loading="lazy" draggable="false" data-v-98ba1d0b>`);
+          _push(`<img class="image"${ssrRenderAttr("alt", _ctx.media.text)}${ssrRenderAttr("src", mediaUrl.value)} loading="lazy" draggable="false" data-v-65951a61>`);
         }
         _push(`</div>`);
       } else {
@@ -14862,10 +14862,11 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_sfc_main$1r, {
         class: "content",
         compact: "",
+        title: _ctx.media.text,
         markdown: _ctx.media.text,
-        title: _ctx.media.text
+        "render-options": { codeLineNumbers: false }
       }, null, _parent));
-      _push(`<div class="meta" data-v-98ba1d0b><span class="characters" data-v-98ba1d0b>`);
+      _push(`<div class="meta" data-v-65951a61><span class="characters" data-v-65951a61>`);
       _push(ssrRenderComponent(_component_i18n, null, {
         en: withCtx((_, _push2, _parent2, _scopeId) => {
           var _a, _b;
@@ -14889,21 +14890,21 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</span><span class="type" data-v-98ba1d0b>`);
+      _push(`</span><span class="type" data-v-65951a61>`);
       if (_ctx.media.is_quote_post) {
-        _push(`<i class="iconfont icon-repost" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-repost" data-v-65951a61></i>`);
       } else if (_ctx.media.media_type === "AUDIO") {
-        _push(`<i class="iconfont icon-audio" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-audio" data-v-65951a61></i>`);
       } else if (_ctx.media.media_type === "VIDEO") {
-        _push(`<i class="iconfont icon-video" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-video" data-v-65951a61></i>`);
       } else if (_ctx.media.media_type === "IMAGE") {
-        _push(`<i class="iconfont icon-image" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-image" data-v-65951a61></i>`);
       } else if (_ctx.media.media_type === "CAROUSEL_ALBUM") {
-        _push(`<i class="iconfont icon-album" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-album" data-v-65951a61></i>`);
       } else {
-        _push(`<i class="iconfont icon-threads" data-v-98ba1d0b></i>`);
+        _push(`<i class="iconfont icon-threads" data-v-65951a61></i>`);
       }
-      _push(`<span class="text" data-v-98ba1d0b>${ssrInterpolate(_ctx.media.media_type)}</span></span></div></div>`);
+      _push(`<span class="text" data-v-65951a61>${ssrInterpolate(_ctx.media.media_type)}</span></span></div></div>`);
     };
   }
 });
@@ -14913,7 +14914,7 @@ _sfc_main$G.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/snippets/threads/card.vue");
   return _sfc_setup$G ? _sfc_setup$G(props, ctx) : void 0;
 };
-const ThreadsCard = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-98ba1d0b"]]);
+const ThreadsCard = /* @__PURE__ */ _export_sfc(_sfc_main$G, [["__scopeId", "data-v-65951a61"]]);
 const _sfc_main$F = /* @__PURE__ */ defineComponent({
   __name: "masonry",
   __ssrInlineRender: true,
