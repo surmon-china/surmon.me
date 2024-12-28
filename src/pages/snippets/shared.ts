@@ -13,7 +13,7 @@ export const useSnippetsPageMeta = () => {
   seoMeta(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SNIPPETS, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SNIPPETS), enTitle] : [enTitle]
-    const description = isZhLang.value ? `${META.author} 的清净念` : `${META.author}'s snippets`
+    const description = isZhLang.value ? `${META.author} 的清风念` : `${META.author}'s snippets`
     return {
       pageTitle: titles.join(' | '),
       description: description

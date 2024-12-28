@@ -62,7 +62,7 @@
                 <i18n en="Latest" zh="时时" />
               </p>
               <p class="secondary">
-                <i18n en="threads" zh="清静念" />
+                <i18n en="threads" zh="清风念" />
               </p>
             </div>
           </div>
