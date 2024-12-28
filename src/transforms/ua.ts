@@ -4,27 +4,27 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import parser from 'ua-parser-js'
+import { UAParser } from 'ua-parser-js'
 import { Language } from '/@/language'
 
 export const uaParser = (userAgent: string) => {
-  const parseResult = parser(userAgent || '')
-  const browserName = String(parseResult.browser.name).toLowerCase()
-  const isTargetDevice = (browsers: string[]) => {
+  const parsed = UAParser(userAgent || '')
+  const browserName = String(parsed.browser.name).toLowerCase()
+  const isBrowserMatched = (browsers: string[]) => {
     return browsers.some((browser) => browser.toLowerCase() === browserName)
   }
 
   return {
-    result: parseResult,
-    isIE: isTargetDevice(['compatible', 'MSIE', 'IE']),
-    isEdge: isTargetDevice(['Edge']),
-    isFirefox: isTargetDevice(['Firefox']),
-    isChrome: isTargetDevice(['Chrome', 'Chromium']),
-    isSafari: isTargetDevice(['Safari']),
-    isWechat: isTargetDevice(['Wechat']),
-    isIos: parseResult.os.name === 'iOS',
-    isAndroid: parseResult.os.name === 'Android',
-    isMobile: parseResult.device.type === 'mobile'
+    uap: parsed,
+    isIE: isBrowserMatched(['compatible', 'MSIE', 'IE', 'IEMobile']),
+    isEdge: isBrowserMatched(['Edge']),
+    isFirefox: isBrowserMatched(['Firefox']),
+    isChrome: isBrowserMatched(['Chrome', 'Chromium']),
+    isSafari: isBrowserMatched(['Safari']),
+    isWechat: isBrowserMatched(['Wechat']),
+    isIos: parsed.os.is('iOS'),
+    isAndroid: parsed.os.is('Android'),
+    isMobile: parsed.device.is('mobile')
   }
 }
 
@@ -37,6 +37,7 @@ const isTargetLanguageUser = (language: UaLanguage, targetLang: string) => {
   }
   return false
 }
+
 export type UaLanguage = string | string[]
 export const isEnUser = (language: UaLanguage) => isTargetLanguageUser(language, Language.English)
 export const isZhUser = (language: UaLanguage) => {

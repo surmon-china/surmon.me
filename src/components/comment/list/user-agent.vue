@@ -2,9 +2,10 @@
   import { computed } from 'vue'
   import { uaParser } from '/@/transforms/ua'
 
-  // https://github.com/faisalman/ua-parser-js#methods
+  // https://docs.uaparser.dev/info/os/name.html
   const osIconsNameMap = {
-    'Mac OS': 'icon-apple',
+    'Chrome OS': 'icon-chrome',
+    macOS: 'icon-apple',
     Windows: 'icon-windows',
     Android: 'icon-android',
     Ubuntu: 'icon-ubuntu',
@@ -12,47 +13,47 @@
     iOS: 'icon-apple'
   }
 
+  // https://docs.uaparser.dev/info/browser/name.html
   const browsersIconsNameMap = {
     Chrome: 'icon-chrome',
-    Chromium: 'icon-chrome',
-    WeChat: 'icon-wechat',
-    QQ: 'icon-qq',
+    'Mobile Chrome': 'icon-chrome',
     Safari: 'icon-safari',
     'Mobile Safari': 'icon-safari',
-    UCBrowser: 'icon-uc',
-    Maxthon: 'icon-maxthon',
     Firefox: 'icon-firefox',
+    'Mobile Firefox': 'icon-firefox',
+    Chromium: 'icon-chrome',
     IE: 'icon-ie',
+    Edge: 'icon-edge',
     Opera: 'icon-opera',
-    Edge: 'icon-edge'
+    UCBrowser: 'icon-uc',
+    WeChat: 'icon-wechat',
+    Twitter: 'icon-twitter-x',
+    Instagram: 'icon-instagram',
+    Baidu: 'icon-baidu',
+    QQ: 'icon-qq'
   }
 
   const props = defineProps<{
     userAgent: string
   }>()
 
-  const uaResult = computed(() => uaParser(props.userAgent))
-  const osIconName = computed(() => {
-    const osName = uaResult.value.result.os.name
-    return osName && osIconsNameMap[osName]
-  })
-  const browserIconName = computed(() => {
-    const browserName = uaResult.value.result.browser.name
-    return browserName ? browsersIconsNameMap[browserName] : null
-  })
+  const { uap: uaParsed } = uaParser(props.userAgent)
+  const osName = uaParsed.os.name
+  const browserName = uaParsed.browser.name
+  const osIconName = osName ? osIconsNameMap[osName] : null
+  const browserIconName = browserName ? browsersIconsNameMap[browserName] : null
 </script>
 
 <template>
   <span class="user-agent">
-    <span class="os">
+    <span class="os" v-if="osName">
       <i v-if="osIconName" class="iconfont" :class="osIconName" />
-      <span>{{ uaResult.result.os.name }}</span>
-      <!-- <span>{{ uaResult.result.os.version }}</span> -->
+      <span>{{ osName }}</span>
     </span>
-    <span class="browser">
+    <span class="browser" v-if="browserName">
       <i v-if="browserIconName" class="iconfont" :class="browserIconName" />
-      <span>{{ uaResult.result.browser.name }}</span>
-      <!-- <span>{{ uaResult.result.browser.version }}</span> -->
+      <i v-else class="iconfont icon-internet" />
+      <span>{{ browserName }}</span>
     </span>
   </span>
 </template>

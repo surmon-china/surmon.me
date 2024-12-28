@@ -57,7 +57,7 @@
     "serialize-javascript": "^6.0.2",
     "sitemap": "^8.x",
     "swiper": "^11.1.x",
-    "ua-parser-js": "^1.0.x",
+    "ua-parser-js": "^2.x",
     "vue": "^3.5.x",
     "vue-router": "^4.5.x",
     "wonderful-bing-wallpaper": "^0.3.4",
