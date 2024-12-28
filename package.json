@@ -34,7 +34,6 @@
     "emoji-233333": "^0.3.2",
     "express": "^4.21.x",
     "fast-xml-parser": "^4.5.x",
-    "fontmin": "^2.0.x",
     "fs-extra": "^11.2.0",
     "geojson": "^0.5.0",
     "highlight.js": "^11.11.x",

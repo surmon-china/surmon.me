@@ -32,7 +32,6 @@ import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from '.
 import { getNPMStatistic } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
-import { getWebFont, WebFontContentType } from './server/getters/webfont'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
 import { responser, errorer } from './server/helpers/responser'
@@ -362,26 +361,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
       })
     })
   )
-
-  // WebFont
-  app.get(`${TUN}/${TunnelModule.WebFont}`, async (request, response) => {
-    const fontName = decodeURIComponent(String(request.query.fontname)).trim()
-    const text = decodeURIComponent(String(request.query.text)).trim()
-    if (!text || !fontName) {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
-      return
-    }
-
-    try {
-      const data = await getWebFont({ fontName, text })
-      // never expired
-      response.header('Cache-Control', 'public, max-age=31536000')
-      response.header('Content-Type', WebFontContentType)
-      response.send(data)
-    } catch (error) {
-      errorer(response, { message: error })
-    }
-  })
 
   // vue renderer
   await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
