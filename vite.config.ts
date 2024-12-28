@@ -9,7 +9,7 @@ import path from 'path'
 import * as sass from 'sass'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
-import UnHeadVite from '@unhead/addons/vite'
+import UnheadVite from '@unhead/addons/vite'
 import packageJSON from './package.json'
 
 const CWD = process.cwd()
@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
 
   return {
-    plugins: [vuePlugin(), UnHeadVite()],
+    plugins: [vuePlugin(), UnheadVite()],
     root: path.resolve(__dirname),
     publicDir: 'public',
     resolve: {

@@ -6,22 +6,14 @@
  */
 
 import { computed, ComputedGetter } from 'vue'
-import { UseSeoMetaInput } from '@unhead/schema'
-import { Head, useHead as useUnhead, useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
+import type { UseSeoMetaInput } from '@unhead/schema'
+import { useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
 import { META } from '/@/config/app.config'
 
 export type { Head } from '@unhead/vue'
-export { createHead } from '@unhead/vue'
-
-export const useHead = (source: Head | ComputedGetter<Head>) => {
-  return useUnhead(
-    computed<Head>(() => {
-      return typeof source === 'function' ? source() : source
-    })
-  )
-}
+export { createHead, useHead } from '@unhead/vue'
 
 const DEFAULT_TITLER = (title: string) => `${title} | ${META.title}`
 const DEFAULT_OG_IMAGE = getPageURL('/images/og-social-card.jpg')
