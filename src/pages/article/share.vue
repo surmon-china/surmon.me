@@ -166,8 +166,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .share-box {
     padding: $gap;
@@ -252,7 +253,7 @@
             margin-top: 0;
             margin-bottom: $gap-sm;
             max-width: 80%;
-            @include text-overflow();
+            @include mix.text-overflow();
           }
 
           .meta-info {

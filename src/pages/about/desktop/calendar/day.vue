@@ -70,8 +70,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .day {
     $size: 11px;
@@ -98,7 +99,7 @@
       }
       .point:hover {
         & + .tooltip {
-          @include visible();
+          @include mix.visible();
         }
       }
     }
@@ -137,7 +138,7 @@
       background-color: var(--background);
       border-radius: $radius-sm;
       color: $color-text-reversal;
-      @include hidden();
+      @include mix.hidden();
       &::before {
         $size: 4px;
         content: '';
@@ -198,7 +199,7 @@
     &[data-article-count='1'] {
       .point {
         .article {
-          background-color: lighten($surmon, 20%);
+          background-color: funs.lighten($surmon, 20%);
         }
       }
     }
@@ -208,7 +209,7 @@
     &[data-article-count='4'] {
       .point {
         .article {
-          background-color: lighten($surmon, 10%);
+          background-color: funs.lighten($surmon, 10%);
         }
       }
     }
@@ -226,7 +227,7 @@
     &[data-instagram-count='1'] {
       .point {
         .instagram {
-          background-color: lighten($instagram-primary, 20%);
+          background-color: funs.lighten($instagram-primary, 20%);
         }
       }
     }
@@ -235,7 +236,7 @@
     &[data-instagram-count='3'] {
       .point {
         .instagram {
-          background-color: lighten($instagram-primary, 10%);
+          background-color: funs.lighten($instagram-primary, 10%);
         }
       }
     }
@@ -253,7 +254,7 @@
     &[data-thread-count='1'] {
       .point {
         .thread {
-          background-color: lighten($threads-primary, 22%);
+          background-color: funs.lighten($threads-primary, 22%);
         }
       }
     }
@@ -263,7 +264,7 @@
     &[data-thread-count='4'] {
       .point {
         .thread {
-          background-color: lighten($threads-primary, 16%);
+          background-color: funs.lighten($threads-primary, 16%);
         }
       }
     }
@@ -274,7 +275,7 @@
     &[data-thread-count='8'] {
       .point {
         .thread {
-          background-color: lighten($threads-primary, 8%);
+          background-color: funs.lighten($threads-primary, 8%);
         }
       }
     }

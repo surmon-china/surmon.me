@@ -1,19 +1,10 @@
 @use 'sass:math';
 
-// overwrite in vite.config.ts
-// Used to specify absolute URL addresses in CSS (e.g. svg file)
-$source-url: '' !default;
-@function surl($path) {
-  @return url('#{$source-url}#{$path}');
-}
-
 // colors
 $surmon: #0088f5;
-
 $black: #000000;
 $white: #ffffff;
 $grey: #c0c0c0;
-
 // https://en.wikipedia.org/wiki/Buddhist_flag
 // https://en.wikipedia.org/wiki/Prayer_flag
 $red: #ff4d4f;

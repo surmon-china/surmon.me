@@ -44,8 +44,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .desktop-nav {
     width: $navbar-width;
@@ -71,7 +72,7 @@
         color: $color-text-secondary;
         will-change: background-color;
         transition: background-color $motion-duration-fast * 0.6;
-        @include radius-box($radius-sm);
+        @include mix.radius-box($radius-sm);
         &:last-child {
           margin-bottom: 0;
         }

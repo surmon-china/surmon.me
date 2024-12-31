@@ -84,8 +84,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .aggregate-calendar {
     display: flex;
@@ -100,7 +101,7 @@
       grid-auto-flow: column;
       grid-auto-columns: min-content;
       grid-gap: 5px;
-      @include scroll-snap-item();
+      @include mix.scroll-snap-item();
     }
   }
 </style>

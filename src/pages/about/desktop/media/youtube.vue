@@ -46,8 +46,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .list {
     list-style: none;
@@ -70,11 +71,11 @@
         border-radius: $radius-xs;
         overflow: hidden;
         opacity: 0.8;
-        @include visibility-transition();
+        @include mix.visibility-transition();
         &:hover {
           opacity: 1;
           .mask {
-            @include visible();
+            @include mix.visible();
           }
         }
 
@@ -121,7 +122,7 @@
 
           .text {
             font-weight: bold;
-            @include text-overflow();
+            @include mix.text-overflow();
           }
         }
 
@@ -137,8 +138,8 @@
           color: $white;
           font-size: $font-size-h2;
           background-color: rgba(0, 0, 0, 0.3);
-          @include visibility-transition();
-          @include hidden();
+          @include mix.visibility-transition();
+          @include mix.hidden();
         }
 
         &.more {

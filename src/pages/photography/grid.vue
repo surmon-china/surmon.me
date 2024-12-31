@@ -88,8 +88,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .medias {
     margin: 0;
@@ -104,7 +105,7 @@
       display: block;
       padding: 1rem;
       background-color: $module-bg;
-      @include radius-box($radius-xs);
+      @include mix.radius-box($radius-xs);
 
       .content {
         position: relative;
@@ -113,7 +114,7 @@
 
         &:hover {
           .mask {
-            @include visible();
+            @include mix.visible();
           }
         }
 
@@ -158,8 +159,8 @@
           z-index: $z-index-normal + 1;
           background-color: rgba(#000, 0.3);
           color: rgba($white, 0.8);
-          @include hidden();
-          @include visibility-transition();
+          @include mix.hidden();
+          @include mix.visibility-transition();
 
           .icon {
             font-size: 2em;

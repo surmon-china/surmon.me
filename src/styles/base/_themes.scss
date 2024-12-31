@@ -1,4 +1,5 @@
-/// @name theme
+@use 'variables' as vars;
+@use 'functions' as funs;
 
 @mixin css-var(
   $theme-text,
@@ -22,8 +23,8 @@
   #{--color-link-hover}: $theme-link-hover;
 
   #{--color-text}: $theme-text;
-  #{--color-text-lighter}: lighter($theme-text, 20%);
-  #{--color-text-darker}: darken($theme-text, 20%);
+  #{--color-text-lighter}: funs.lighten($theme-text, 20%);
+  #{--color-text-darker}: funs.darken($theme-text, 20%);
   #{--color-text-secondary}: rgba($theme-text, 0.5);
   #{--color-text-disabled}: rgba($theme-text, 0.38);
   #{--color-text-divider}: rgba($theme-text, 0.26);
@@ -35,11 +36,11 @@
   #{--module-bg-opaque}: $module-bg-opaque;
   #{--module-bg-lighter}: rgba($module-bg, 0.8);
   #{--module-bg-translucent}: rgba($module-bg, 0.5);
-  #{--module-bg-darker-1}: darken($module-bg-opaque, 9%);
-  #{--module-bg-darker-2}: darken($module-bg-opaque, 13%);
-  #{--module-bg-darker-3}: darken($module-bg-opaque, 19%);
-  #{--module-bg-darker-4}: darken($module-bg-opaque, 24%);
-  #{--module-bg-darker-5}: darken($module-bg-opaque, 29%);
+  #{--module-bg-darker-1}: funs.darken($module-bg-opaque, 9%);
+  #{--module-bg-darker-2}: funs.darken($module-bg-opaque, 13%);
+  #{--module-bg-darker-3}: funs.darken($module-bg-opaque, 19%);
+  #{--module-bg-darker-4}: funs.darken($module-bg-opaque, 24%);
+  #{--module-bg-darker-5}: funs.darken($module-bg-opaque, 29%);
 }
 
 @mixin appLightTheme() {
@@ -49,7 +50,7 @@
     $theme-link-hover: rgba(#000, 0.86),
     $theme-white: #fff,
     $theme-black: #000,
-    $theme-primary: $surmon,
+    $theme-primary: vars.$surmon,
     $theme-body-bg: #e3e3e3,
     $logo-rotate: none
   );

@@ -103,8 +103,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .detail {
     padding: 1rem 2rem;
@@ -195,8 +196,8 @@
           text-align: center;
           color: $color-text-reversal;
           background-color: $primary-lighter;
-          @include background-transition();
-          @include radius-box($radius-xs);
+          @include mix.background-transition();
+          @include mix.radius-box($radius-xs);
 
           &[disabled] {
             cursor: no-drop;

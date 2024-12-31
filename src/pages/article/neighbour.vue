@@ -37,8 +37,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .neighbour {
     display: grid;
@@ -55,7 +56,7 @@
       display: flex;
       position: relative;
       overflow: hidden;
-      @include radius-box($radius-sm);
+      @include mix.radius-box($radius-sm);
     }
 
     .null {
@@ -67,7 +68,7 @@
     }
 
     .link {
-      @include common-bg-module();
+      @include mix.common-bg-module();
       &:hover {
         .icon {
           color: $color-text;
@@ -116,7 +117,7 @@
           display: block;
           width: 100%;
           transition: color $motion-duration-fast;
-          @include text-overflow();
+          @include mix.text-overflow();
         }
 
         .title {

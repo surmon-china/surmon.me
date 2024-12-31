@@ -97,8 +97,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .header {
     position: fixed;
@@ -109,11 +110,11 @@
     z-index: $z-index-header;
     background-color: $module-bg;
     border-bottom: 1px solid $module-bg-darker-2;
-    @include backdrop-blur(5px);
+    @include mix.backdrop-blur(5px);
 
     &.enable-nav:hover {
       .header-nav {
-        @include visible();
+        @include mix.visible();
       }
     }
 
@@ -167,7 +168,7 @@
         align-items: center;
         justify-content: center;
         opacity: 0.6;
-        @include visibility-transition();
+        @include mix.visibility-transition();
         &:hover {
           opacity: 1;
         }
@@ -194,8 +195,8 @@
       width: 100%;
       height: 4rem;
       background-color: $primary-lighter;
-      @include hidden();
-      @include visibility-transition();
+      @include mix.hidden();
+      @include mix.visibility-transition();
 
       .nav-list {
         height: 100%;
@@ -215,7 +216,7 @@
           align-items: center;
           color: $color-text-reversal;
           opacity: 0.7;
-          @include visibility-transition();
+          @include mix.visibility-transition();
           &:hover {
             opacity: 1;
           }

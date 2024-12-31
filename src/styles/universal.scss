@@ -1,18 +1,21 @@
-@import './theme.scss';
-@import './variables.scss';
-@import '/src/effects/highlight/theme.scss';
+@use './base/variables' as *;
+@use './base/functions' as funs;
+@use './base/mixins' as mix;
+@use './base/themes' as themes;
+@use '/src/effects/highlight/theme.scss' as highlight;
 
 :root {
   background-color: $body-bg;
 
   // theme
   &[data-theme='light'] {
-    @include appLightTheme();
-    @include highlightLightTheme();
+    @include themes.appLightTheme();
+    @include highlight.highlightLightTheme();
   }
+
   &[data-theme='dark'] {
-    @include appDarkTheme();
-    @include highlightDarkTheme();
+    @include themes.appDarkTheme();
+    @include highlight.highlightDarkTheme();
   }
 
   // device
@@ -22,6 +25,7 @@
       margin: 0 auto;
     }
   }
+
   &[data-device='mobile'] {
     .container {
       width: 100%;
@@ -47,7 +51,7 @@ body {
   scrollbar-width: thin;
 }
 
-@include scrollbar-style(
+@include mix.scrollbar-style(
   $size: $gap-sm,
   $bg: $module-bg,
   $thumb-bg: $module-bg-darker-3,
@@ -55,7 +59,7 @@ body {
 );
 
 body {
-  @include scrollbar-style(
+  @include mix.scrollbar-style(
     $size: $gap-xs,
     $bg: $module-bg,
     $thumb-bg: $module-bg-darker-1,
@@ -66,22 +70,6 @@ body {
 [hidden],
 [v-cloak] {
   display: none !important;
-}
-
-.iconfont {
-  font-size: 1em;
-}
-
-.radio,
-.checkbox {
-  display: inline-block;
-  margin-top: 0px;
-  padding-top: 0px;
-  margin-bottom: 0px;
-}
-
-.placeholder {
-  color: $color-text-secondary;
 }
 
 input {
@@ -102,6 +90,26 @@ select:-webkit-autofill {
 ::-webkit-selection {
   background: $primary;
   color: $color-text-reversal;
+}
+
+.radio,
+.checkbox {
+  display: inline-block;
+  margin-top: 0px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+}
+
+.iconfont {
+  font-size: 1em;
+}
+
+.placeholder {
+  color: $color-text-secondary;
+}
+
+.center-placeholder {
+  @include mix.center-placeholder;
 }
 
 .mammon-box {

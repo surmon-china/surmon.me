@@ -65,8 +65,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .statistic {
     #{--brand-color}: $white;
@@ -76,7 +77,7 @@
     border-radius: $radius-lg;
     position: relative;
     overflow: hidden;
-    @include common-bg-module();
+    @include mix.common-bg-module();
     &.douban {
       #{--s-primary}: $douban-primary;
     }

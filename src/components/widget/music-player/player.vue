@@ -114,8 +114,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .music-player {
     position: relative;
@@ -143,7 +144,7 @@
           border-radius: $radius-sm;
           margin-right: $gap;
           background-color: $module-bg-darker-1;
-          background-image: surl('/images/music.webp');
+          background-image: global.surl('/images/music.webp');
           background-size: cover;
         }
 
@@ -159,7 +160,7 @@
             .name,
             .artist {
               display: inline-block;
-              @include text-overflow();
+              @include mix.text-overflow();
             }
 
             .name {
@@ -289,7 +290,7 @@
     .songs {
       flex: 1;
       overflow-y: scroll;
-      @include scroll-snap-y();
+      @include mix.scroll-snap-y();
 
       .list {
         width: 100%;
@@ -302,7 +303,7 @@
           width: 100%;
           height: 3rem;
           line-height: 3rem;
-          @include scroll-snap-item();
+          @include mix.scroll-snap-item();
           &.playing,
           &:hover {
             background-color: $module-bg-lighter;
@@ -335,7 +336,7 @@
           .name .text,
           .artist {
             max-width: 80%;
-            @include text-overflow();
+            @include mix.text-overflow();
           }
 
           .name {

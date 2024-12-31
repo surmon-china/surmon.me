@@ -117,11 +117,12 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .aside {
-    $border-color: darken($mobile-aside-bg, 3%);
+    $border-color: funs.darken($mobile-aside-bg, 3%);
     display: block;
     overflow: auto;
     position: relative;
@@ -145,7 +146,7 @@
         margin-right: $gap-lg;
         border: 2px solid $white;
         background-color: $body-bg;
-        @include radius-box(100%);
+        @include mix.radius-box(100%);
       }
 
       .profile {
@@ -166,7 +167,7 @@
           margin: 0;
           max-width: 100%;
           color: $surmon;
-          @include text-overflow();
+          @include mix.text-overflow();
         }
       }
     }

@@ -50,8 +50,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .mobile-main {
     color: $color-text;
@@ -104,7 +105,7 @@
         right: 0;
         z-index: $z-index-top;
         background-color: $module-bg-translucent;
-        @include backdrop-blur(3px);
+        @include mix.backdrop-blur(3px);
       }
 
       .main-container {
@@ -138,7 +139,7 @@
 
           .link {
             color: $color-text-disabled;
-            @include text-underline(0.4em);
+            @include mix.text-underline(0.4em);
           }
         }
 

@@ -33,8 +33,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .header {
     position: relative;
@@ -42,7 +43,7 @@
     height: 16.4rem;
     margin-bottom: $gap-lg;
     color: $white;
-    @include radius-box($radius-lg);
+    @include mix.radius-box($radius-lg);
 
     &:hover {
       .background {
@@ -96,7 +97,7 @@
           font-size: 5em;
           display: inline-block;
           transform: scale(1.01);
-          @include transform-transition($motion-duration-mid);
+          @include mix.transform-transition($motion-duration-mid);
         }
       }
 

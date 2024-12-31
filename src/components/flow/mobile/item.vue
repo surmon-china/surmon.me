@@ -113,15 +113,16 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .article-item {
     display: flex;
     flex-direction: column;
     position: relative;
     background-color: $module-bg;
-    @include radius-box($radius-sm);
+    @include mix.radius-box($radius-sm);
 
     .thumbnail {
       width: 100%;
@@ -198,7 +199,7 @@
 
           .text {
             max-width: calc(100% - 3em);
-            @include text-overflow();
+            @include mix.text-overflow();
           }
 
           .language {
@@ -213,7 +214,7 @@
           overflow: hidden;
           color: $color-text-secondary;
           text-overflow: ellipsis;
-          @include clamp(3);
+          @include mix.clamp(3);
         }
       }
 

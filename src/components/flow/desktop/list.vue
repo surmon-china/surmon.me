@@ -123,8 +123,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .articles {
     .article-list-skeleton {
@@ -138,8 +139,8 @@
         height: 10rem;
         padding: $gap;
         margin-bottom: $gap-lg;
-        @include common-bg-module();
-        @include radius-box($radius-sm);
+        @include mix.common-bg-module();
+        @include mix.radius-box($radius-sm);
         &:last-child {
           margin-bottom: 0;
         }
@@ -178,8 +179,8 @@
       min-height: 10rem;
       padding: $gap-sm;
       margin-bottom: $gap-lg;
-      @include common-bg-module();
-      @include radius-box($radius-sm);
+      @include mix.common-bg-module();
+      @include mix.radius-box($radius-sm);
 
       &::v-deep(.mammon-ins) {
         margin: $gap-xs 0;
@@ -194,8 +195,8 @@
 
       .empty {
         height: $gap * 10;
-        @include common-bg-module();
-        @include radius-box($radius-sm);
+        @include mix.common-bg-module();
+        @include mix.radius-box($radius-sm);
       }
 
       .list-item {
@@ -211,7 +212,7 @@
       height: 3.4rem;
       position: relative;
       display: block;
-      @include radius-box($radius-sm);
+      @include mix.radius-box($radius-sm);
       &[disabled] {
         opacity: 0.6;
       }
@@ -242,7 +243,7 @@
 
         .left,
         .right {
-          @include color-transition();
+          @include mix.color-transition();
         }
 
         .left {
@@ -283,7 +284,7 @@
         .right {
           height: 100%;
           border-radius: $radius-xs;
-          @include background-transition();
+          @include mix.background-transition();
         }
 
         .left {

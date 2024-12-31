@@ -99,8 +99,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .archive-page {
     .statistic-wrapper {
@@ -159,7 +160,7 @@
 
       .archive-content {
         background-color: $module-bg-translucent;
-        @include radius-box($radius-sm);
+        @include mix.radius-box($radius-sm);
       }
 
       .archive-skeleton {
@@ -170,7 +171,7 @@
         .item {
           padding: $gap-lg;
           background-color: $module-bg-translucent;
-          @include radius-box($radius-sm);
+          @include mix.radius-box($radius-sm);
           margin-bottom: $gap-lg;
           &:last-child {
             margin-bottom: 0;
@@ -202,7 +203,7 @@
             margin-top: 0;
             margin-bottom: $gap-sm;
             max-width: 75vw;
-            @include text-overflow();
+            @include mix.text-overflow();
 
             .date {
               display: inline-block;

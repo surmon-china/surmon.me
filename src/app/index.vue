@@ -26,7 +26,7 @@
 </template>
 
 <style lang="scss">
-  @import '/src/styles/variables.scss';
+  @use '/src/styles/base/variables' as *;
 
   .app-root {
     &[v-cloak] {

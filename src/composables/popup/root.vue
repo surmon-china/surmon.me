@@ -32,8 +32,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   #popup {
     &.dark {
@@ -64,8 +65,8 @@
       align-items: center;
       overflow: hidden;
       background-color: rgba($grey, 0.5);
-      @include visibility-transition();
-      @include backdrop-blur(5px);
+      @include mix.visibility-transition();
+      @include mix.backdrop-blur(5px);
 
       .wrapper {
         display: contents;
@@ -81,7 +82,7 @@
 
         &.border > ::v-deep(*) {
           border: $gap-sm solid $module-bg-darker-1;
-          @include radius-box($radius-sm);
+          @include mix.radius-box($radius-sm);
         }
       }
     }

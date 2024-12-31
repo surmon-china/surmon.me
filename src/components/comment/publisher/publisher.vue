@@ -138,8 +138,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   $avatar-size: 4rem;
 
@@ -184,8 +185,8 @@
           line-height: 2em;
           text-indent: 3px;
           background-color: $module-bg-darker-1;
-          @include radius-box($radius-mini);
-          @include background-transition();
+          @include mix.radius-box($radius-mini);
+          @include mix.background-transition();
 
           &:focus,
           &:hover {
@@ -214,7 +215,7 @@
         width: $avatar-size;
         height: $avatar-size;
         background-color: $module-bg-darker-1;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
 
         img {
           width: 100%;
@@ -238,7 +239,7 @@
         align-items: center;
         font-size: $font-size-h4;
         cursor: text;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
         background-color: $module-bg-darker-1;
         &:hover {
           background-color: $module-bg-darker-3;

@@ -116,8 +116,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .archive-page {
     .statistic-wrapper {
@@ -187,7 +188,7 @@
           width: 100%;
           padding: 2rem;
           background-color: $module-bg-translucent;
-          @include radius-box($radius-sm);
+          @include mix.radius-box($radius-sm);
           &:last-child {
             margin-bottom: 0;
           }
@@ -233,7 +234,7 @@
               }
 
               .link {
-                @include text-underline(0.4em);
+                @include mix.text-underline(0.4em);
                 text-decoration-color: $color-text-secondary;
               }
             }

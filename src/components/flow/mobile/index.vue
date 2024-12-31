@@ -179,8 +179,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .articles {
     .header {
@@ -204,7 +205,7 @@
         flex-grow: 1;
         padding-left: $size;
         font-weight: bold;
-        @include text-overflow();
+        @include mix.text-overflow();
       }
     }
 
@@ -214,7 +215,7 @@
 
       .item {
         background-color: $module-bg;
-        @include radius-box($radius-sm);
+        @include mix.radius-box($radius-sm);
         margin-bottom: $gap-lg;
         &:last-child {
           margin-bottom: 0;

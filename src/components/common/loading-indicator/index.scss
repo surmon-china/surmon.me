@@ -1,5 +1,4 @@
-@import '/src/styles/variables.scss';
-@import '/src/styles/mixins.scss';
+@use '/src/styles/base/variables' as *;
 
 .global-loading-indicator {
   display: flex;

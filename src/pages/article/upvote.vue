@@ -64,8 +64,10 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use 'sass:color';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .upvote {
     display: flex;
@@ -74,7 +76,7 @@
     $button-radius: $radius-sm;
     $like-icon-size: $font-size-h2;
     /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
-    $lighter-red: mix($white, $red, 10%);
+    $lighter-red: color.mix($white, $red, 10%);
 
     .wrapper {
       position: relative;
@@ -147,7 +149,7 @@
           font-size: $like-icon-size + 1;
           background-color: $red;
           color: $white;
-          @include hidden();
+          @include mix.hidden();
         }
 
         .parkinson-likes {
@@ -158,7 +160,7 @@
           font-size: 100px;
           font-weight: bold;
           transition: all $motion-duration-mid;
-          @include hidden();
+          @include mix.hidden();
         }
 
         &:not([disabled]):hover,
@@ -169,7 +171,7 @@
               opacity $motion-duration-mid,
               visibility $motion-duration-mid;
             transition-delay: $motion-duration-fast;
-            @include visible();
+            @include mix.visible();
             @keyframes pre-like-icon {
               0% {
                 transform: rotate(6deg) translateY(-2px) translateX(-40%);
@@ -206,7 +208,7 @@
           &.newliked {
             .parkinson-mask {
               transition-delay: 1s;
-              @include hidden();
+              @include mix.hidden();
               /* icon animate */
               @keyframes liked-icon {
                 0% {
@@ -247,7 +249,7 @@
                 transform: scale(1);
               }
               20% {
-                @include visible();
+                @include mix.visible();
                 bottom: 100px;
                 transform: scale(1);
               }

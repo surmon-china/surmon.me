@@ -85,8 +85,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   #player {
     $size: 5rem;
@@ -138,8 +139,8 @@
       .song-link {
         max-width: 11rem;
         color: $color-text-secondary;
-        @include color-transition();
-        @include text-overflow();
+        @include mix.color-transition();
+        @include mix.text-overflow();
         &:hover {
           color: $color-link-hover;
         }
@@ -159,7 +160,7 @@
         height: 100%;
         overflow: hidden;
         background-color: $module-bg-darker-1;
-        background-image: surl('/images/music.webp');
+        background-image: global.surl('/images/music.webp');
         background-size: cover;
       }
 

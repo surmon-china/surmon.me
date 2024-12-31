@@ -127,8 +127,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .header {
     position: fixed;
@@ -138,7 +139,7 @@
     height: $mobile-header-height;
     background-color: $module-bg;
     z-index: $z-index-header;
-    @include backdrop-blur(5px);
+    @include mix.backdrop-blur(5px);
 
     .navbar {
       width: 100%;
@@ -202,7 +203,7 @@
         padding: $gap-lg;
         touch-action: none;
         background-color: $module-bg-translucent;
-        @include backdrop-blur(5px);
+        @include mix.backdrop-blur(5px);
 
         .tag-list {
           padding: 0;
@@ -224,7 +225,7 @@
             font-family: $font-family-normal;
             background-color: $module-bg-darker-1;
             transition: margin-bottom $motion-duration-fast;
-            @include radius-box($radius-xs);
+            @include mix.radius-box($radius-xs);
 
             .iconfont {
               font-size: $font-size-small;

@@ -84,8 +84,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .app-page {
     display: flex;
@@ -131,7 +132,7 @@
 
         .link {
           margin-left: $gap-xs;
-          @include text-underline();
+          @include mix.text-underline();
         }
 
         .prefix {
@@ -153,13 +154,13 @@
           }
 
           .download {
-            @include visible();
+            @include mix.visible();
           }
         }
 
         .screen-img {
           width: 100%;
-          @include visibility-transition($motion-duration-mid);
+          @include mix.visibility-transition($motion-duration-mid);
         }
 
         .download {
@@ -173,14 +174,14 @@
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          @include hidden();
-          @include backdrop-blur(3px);
-          @include visibility-transition($motion-duration-mid);
+          @include mix.hidden();
+          @include mix.backdrop-blur(3px);
+          @include mix.visibility-transition($motion-duration-mid);
 
           .qrcode {
             width: $size;
             height: auto;
-            @include radius-box($radius-sm);
+            @include mix.radius-box($radius-sm);
           }
 
           .button {
@@ -245,7 +246,7 @@
           }
 
           .download {
-            @include visible();
+            @include mix.visible();
           }
         }
       }

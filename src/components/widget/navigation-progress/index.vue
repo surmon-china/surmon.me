@@ -54,8 +54,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   #navigation-progress {
     position: fixed;
@@ -65,10 +66,10 @@
     height: var(--height);
     pointer-events: none;
     z-index: $z-index-navigation-progress;
-    @include visibility-transition($motion-duration-mid);
-    @include hidden();
+    @include mix.visibility-transition($motion-duration-mid);
+    @include mix.hidden();
     &.visible {
-      @include visible();
+      @include mix.visible();
     }
 
     .progress {

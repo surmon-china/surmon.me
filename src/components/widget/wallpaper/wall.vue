@@ -60,8 +60,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .wall {
     position: relative;
@@ -92,7 +93,7 @@
       .title,
       .sub-title,
       .desc {
-        @include title-shadow();
+        @include mix.title-shadow();
       }
 
       .title {
@@ -119,7 +120,7 @@
           margin-right: $gap;
           text-align: center;
           background-color: $module-bg;
-          @include radius-box($radius-xs);
+          @include mix.radius-box($radius-xs);
 
           &[disabled] {
             opacity: 0.6;

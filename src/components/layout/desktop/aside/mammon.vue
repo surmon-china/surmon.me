@@ -84,8 +84,8 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
 
   .mammon {
     width: 100%;
@@ -98,7 +98,7 @@
       .swiper-wrapper {
         &[style*='300ms'] {
           .swiper-slide-active {
-            @include motion-blur-filter('vertical-small');
+            @include global.motion-blur-filter('vertical-small');
           }
         }
 

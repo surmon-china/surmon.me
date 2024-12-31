@@ -191,8 +191,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .about-page {
     width: 100%;
@@ -215,8 +216,8 @@
         justify-content: space-between;
         align-items: center;
         padding: 0 1em 0 2em;
-        @include common-bg-module($motion-duration-fast);
-        @include radius-box($radius-lg);
+        @include mix.common-bg-module($motion-duration-fast);
+        @include mix.radius-box($radius-lg);
         &.discord {
           --item-primary: #{$discord-primary};
           --item-hover: white;
@@ -291,7 +292,7 @@
       margin-bottom: $gap * 2;
       border-radius: $radius-lg;
       padding: $gap;
-      @include common-bg-module();
+      @include mix.common-bg-module();
     }
 
     .footprint {
@@ -303,12 +304,12 @@
       display: flex;
       justify-content: space-between;
       padding: 2rem $gap-lg;
-      @include common-bg-module();
-      @include radius-box($radius-lg);
+      @include mix.common-bg-module();
+      @include mix.radius-box($radius-lg);
 
       .item {
         font-weight: bold;
-        @include text-underline();
+        @include mix.text-underline();
       }
 
       .special-links {

@@ -43,8 +43,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .tags {
     margin-bottom: 0;
@@ -100,19 +101,19 @@
         line-height: $height;
         font-size: $font-size-h6;
         font-family: $font-family-normal;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
 
         .iconfont {
           width: 2em;
           text-align: center;
           background-color: $module-bg-darker-1;
-          @include background-transition();
+          @include mix.background-transition();
         }
 
         .name {
           display: block;
           padding: 0 $gap-sm;
-          @include background-transition();
+          @include mix.background-transition();
 
           .count {
             margin-left: $gap-xs;

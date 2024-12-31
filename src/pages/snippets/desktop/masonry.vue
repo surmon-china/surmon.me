@@ -29,8 +29,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .columns {
     padding: 0;
@@ -52,7 +53,7 @@
     list-style: none;
 
     .item-wrapper {
-      @include radius-box($radius-sm);
+      @include mix.radius-box($radius-sm);
       margin-bottom: $gap-lg * 2;
       &:last-child {
         margin-bottom: 0;

@@ -91,8 +91,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .anchor {
     padding: $gap;
@@ -123,7 +124,7 @@
       padding: 0 $gap;
       height: 3rem;
       line-height: 3rem;
-      @include text-overflow();
+      @include mix.text-overflow();
       &:last-child {
         margin-bottom: 0;
       }
@@ -152,7 +153,7 @@
         display: block;
         width: 100%;
         font-weight: bold;
-        @include text-overflow();
+        @include mix.text-overflow();
       }
 
       .read {
@@ -164,7 +165,7 @@
       max-height: 36rem;
       padding: $gap-sm $gap;
       overflow-y: auto;
-      @include scroll-snap-y();
+      @include mix.scroll-snap-y();
       &:hover {
         border-color: $primary;
       }
@@ -193,8 +194,8 @@
         .item {
           cursor: pointer;
           line-height: 2.4em;
-          @include scroll-snap-item();
-          @include text-overflow();
+          @include mix.scroll-snap-item();
+          @include mix.text-overflow();
           &:hover {
             color: $primary;
             .iconfont {
@@ -211,7 +212,7 @@
           }
 
           .text {
-            @include text-underline(0.4em);
+            @include mix.text-underline(0.4em);
             text-decoration-style: dotted;
           }
 

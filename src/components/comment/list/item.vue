@@ -244,8 +244,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .comment-item {
     position: relative;
@@ -342,7 +343,7 @@
       padding: $gap-sm $gap-sm $gap-sm ($gap-lg * 3);
       background-color: $module-bg-darker-1;
       border-radius: $radius-xs;
-      @include background-transition();
+      @include mix.background-transition();
 
       > .cm-header {
         position: relative;
@@ -363,7 +364,7 @@
           font-weight: bold;
           margin-right: $gap;
           &.url:hover {
-            @include text-underline();
+            @include mix.text-underline();
           }
         }
 

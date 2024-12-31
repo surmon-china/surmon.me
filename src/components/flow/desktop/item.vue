@@ -145,12 +145,13 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .article-item {
     position: relative;
-    @include radius-box($radius-sm);
+    @include mix.radius-box($radius-sm);
 
     &:last-child {
       margin: 0;
@@ -174,7 +175,7 @@
       height: $height;
       padding: $padding;
       overflow: hidden;
-      @include common-bg-module($motion-duration-fast);
+      @include mix.common-bg-module($motion-duration-fast);
 
       &:hover {
         .item-thumbnail {
@@ -200,7 +201,7 @@
         height: $content-height;
         margin-right: $gap-lg;
         position: relative;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
 
         .item-origin {
           $height: 2.1rem;
@@ -217,7 +218,7 @@
           color: $white;
           text-align: center;
           opacity: 0.5;
-          @include visibility-transition();
+          @include mix.visibility-transition();
 
           &.original {
             background-color: rgba($surmon, $opacity);
@@ -237,7 +238,7 @@
           z-index: $z-index-normal + 1;
           color: $white;
           opacity: 0.5;
-          @include visibility-transition();
+          @include mix.visibility-transition();
         }
 
         .image {
@@ -280,7 +281,7 @@
             border-bottom: 1px solid transparent;
             color: $color-text;
             transition: margin $motion-duration-mid;
-            @include text-overflow();
+            @include mix.text-overflow();
             &:hover {
               color: $color-link;
               border-color: initial;
@@ -300,7 +301,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           font-size: $font-size-h6;
-          @include clamp(2);
+          @include mix.clamp(2);
         }
 
         > .item-meta {

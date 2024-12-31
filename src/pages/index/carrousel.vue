@@ -169,16 +169,17 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   $carrousel-height: 210px;
 
   .carrousel {
     position: relative;
     height: $carrousel-height;
-    @include common-bg-module();
-    @include radius-box($radius-lg);
+    @include mix.common-bg-module();
+    @include mix.radius-box($radius-lg);
 
     .article-empty {
       font-size: $font-size-h1;
@@ -227,7 +228,7 @@
       ::v-deep(.swiper-wrapper[style*='300ms']) {
         .swiper-slide-active {
           .content {
-            @include motion-blur-filter('horizontal');
+            @include global.motion-blur-filter('horizontal');
           }
         }
       }
@@ -342,7 +343,7 @@
             transition:
               transform $motion-duration-fast,
               background-color $motion-duration-fast;
-            @include text-overflow;
+            @include mix.text-overflow;
 
             .text {
               letter-spacing: 0.3px;

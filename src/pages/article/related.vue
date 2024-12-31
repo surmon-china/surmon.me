@@ -77,8 +77,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .related {
     overflow: hidden;
@@ -95,8 +96,8 @@
 
       .item {
         width: auto;
-        @include common-bg-module();
-        @include radius-box($radius-sm);
+        @include mix.common-bg-module();
+        @include mix.radius-box($radius-sm);
 
         &.disabled {
           pointer-events: none;
@@ -141,7 +142,7 @@
             width: 100%;
             padding: 0 $gap-sm;
             transition: color $motion-duration-fast;
-            @include text-overflow();
+            @include mix.text-overflow();
           }
 
           .title {

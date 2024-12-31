@@ -1,0 +1,24 @@
+@use 'sass:color';
+@use 'variables' as *;
+
+@function is-important($important) {
+  @return #{if($important, '!important', '')};
+}
+
+@function toRGBValue($color) {
+  @return red($color) + ', ' + green($color) + ', ' + blue($color);
+}
+
+@function toRGB($color) {
+  @return 'rgb(' + toRGBValue($color) + ')';
+}
+
+// https://sass-lang.com/documentation/modules/color/#darken
+@function darken($color, $amount) {
+  @return color.adjust($color, $lightness: -$amount, $space: hsl);
+}
+
+// https://sass-lang.com/documentation/modules/color/#lighten
+@function lighten($color, $amount) {
+  @return color.adjust($color, $lightness: $amount, $space: hsl);
+}

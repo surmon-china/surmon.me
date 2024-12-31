@@ -102,8 +102,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   #toolbox {
     position: fixed;
@@ -139,7 +140,7 @@
           height: $size;
           line-height: $size;
           text-align: center;
-          @include common-bg-module($motion-duration-fast);
+          @include mix.common-bg-module($motion-duration-fast);
         }
 
         .rss {

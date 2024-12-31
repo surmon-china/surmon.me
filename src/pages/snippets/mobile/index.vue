@@ -82,8 +82,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .snippets-page {
     $item-gap: 1.4rem;
@@ -96,8 +97,8 @@
       .cards {
         padding: $gap-lg;
         margin-bottom: $item-gap;
-        @include common-bg-module();
-        @include radius-box($radius-sm);
+        @include mix.common-bg-module();
+        @include mix.radius-box($radius-sm);
       }
 
       .statistics {
@@ -155,7 +156,7 @@
         list-style: none;
 
         .item {
-          @include radius-box($radius-sm);
+          @include mix.radius-box($radius-sm);
           margin-bottom: 1.4rem;
           &:last-child {
             margin-bottom: 0;

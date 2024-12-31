@@ -87,19 +87,20 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .video {
     display: block;
     height: 166px;
     cursor: pointer;
-    @include radius-box($radius-sm);
-    @include common-bg-module();
+    @include mix.radius-box($radius-sm);
+    @include mix.common-bg-module();
     &:hover {
       .thumbnail {
         .mask {
-          @include visible();
+          @include mix.visible();
         }
       }
 
@@ -157,8 +158,8 @@
         align-items: center;
         z-index: $z-index-normal + 1;
         background-color: rgba(#000, 0.4);
-        @include hidden();
-        @include visibility-transition();
+        @include mix.hidden();
+        @include mix.visibility-transition();
 
         .button {
           opacity: 0.88;
@@ -180,14 +181,14 @@
       font-weight: bold;
       color: $color-text;
       max-width: 90%;
-      @include text-overflow();
+      @include mix.text-overflow();
     }
 
     .description {
       max-width: 95%;
       font-size: $font-size-h5 - 1;
       color: $color-text-secondary;
-      @include text-overflow();
+      @include mix.text-overflow();
     }
   }
 </style>

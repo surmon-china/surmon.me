@@ -113,8 +113,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .footprint-modal {
     width: 88vw;
@@ -130,8 +131,8 @@
 
     .legends .folders,
     .legends .now {
-      @include common-bg-module();
-      @include radius-box($radius-lg);
+      @include mix.common-bg-module();
+      @include mix.radius-box($radius-lg);
     }
 
     .legends {
@@ -201,8 +202,8 @@
     .mapbox-wrapper {
       position: relative;
       padding: $gap;
-      @include common-bg-module();
-      @include radius-box($radius-lg);
+      @include mix.common-bg-module();
+      @include mix.radius-box($radius-lg);
 
       .mapbox {
         width: $map-width;
@@ -229,7 +230,7 @@
           background-color: $module-bg;
           font-size: $font-size-h4;
           color: $color-text-secondary;
-          @include backdrop-blur(1px);
+          @include mix.backdrop-blur(1px);
           &:hover {
             color: $color-link;
             background-color: $module-bg-opaque;

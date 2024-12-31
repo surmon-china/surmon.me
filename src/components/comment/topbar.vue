@@ -206,8 +206,11 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
+
+  // local variables
   $topbar-size: 2em;
 
   .topbar,
@@ -256,7 +259,7 @@
         padding: 0;
         padding-right: 0.6em;
         background-color: $module-bg-darker-1;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
         will-change: width;
         transition: all $motion-duration-fast;
         max-width: 180px;
@@ -271,7 +274,7 @@
           text-align: center;
           margin-right: $gap-xs;
           background-color: $module-bg-darker-2;
-          @include background-transition();
+          @include mix.background-transition();
         }
 
         .count {
@@ -284,7 +287,7 @@
       .disqus {
         margin-left: $gap;
         background-color: $module-bg-darker-1;
-        @include radius-box($radius-xs);
+        @include mix.radius-box($radius-xs);
         cursor: pointer;
         &:hover {
           background-color: $module-bg-darker-2;
@@ -354,7 +357,7 @@
           display: flex;
           align-items: center;
           background-color: $module-bg-darker-1;
-          @include radius-box($radius-xs);
+          @include mix.radius-box($radius-xs);
 
           .icon {
             &.disqus {
@@ -385,7 +388,7 @@
             margin: 0;
             padding: 0;
             list-style: none;
-            @include radius-box($radius-xs);
+            @include mix.radius-box($radius-xs);
 
             .item {
               .button {

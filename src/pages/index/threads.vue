@@ -150,8 +150,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   $threads-height: 66px;
   $content-height: 42px;
@@ -165,14 +166,14 @@
   }
 
   .threads-empty {
-    @include common-bg-module();
-    @include radius-box($radius-sm);
+    @include mix.common-bg-module();
+    @include mix.radius-box($radius-sm);
   }
 
   .threads-skeleton {
     padding: $gap;
     background-color: $module-bg;
-    @include radius-box($radius-sm);
+    @include mix.radius-box($radius-sm);
 
     .left {
       width: 140px;
@@ -186,7 +187,7 @@
   .threads-content {
     .profile,
     .posts {
-      @include common-bg-module();
+      @include mix.common-bg-module();
     }
 
     .profile {
@@ -197,7 +198,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      @include radius-box($radius-sm);
+      @include mix.radius-box($radius-sm);
       border-top-right-radius: $radius-mini;
       border-bottom-right-radius: $radius-mini;
 
@@ -207,7 +208,7 @@
         overflow: hidden;
         &:hover {
           .logo {
-            @include visible();
+            @include mix.visible();
           }
         }
 
@@ -228,8 +229,8 @@
           align-items: center;
           background-color: rgba($threads-primary, 0.4);
           color: $white;
-          @include visibility-transition();
-          @include hidden();
+          @include mix.visibility-transition();
+          @include mix.hidden();
         }
       }
 
@@ -275,7 +276,7 @@
     .posts {
       flex: 1;
       height: $threads-height;
-      @include radius-box($radius-mini);
+      @include mix.radius-box($radius-mini);
 
       .posts-empty {
         min-height: auto;
@@ -286,7 +287,7 @@
           flex-direction: column;
           &[style*='300ms'] {
             .swiper-slide-active {
-              @include motion-blur-filter('vertical-small');
+              @include global.motion-blur-filter('vertical-small');
             }
           }
         }
@@ -311,7 +312,7 @@
           .main {
             font-weight: bold;
             max-width: 100%;
-            @include text-overflow();
+            @include mix.text-overflow();
             &.has-media {
               max-width: #{calc(100% - 42px)};
             }
@@ -335,7 +336,7 @@
 
             .iconfont {
               vertical-align: top;
-              @include color-transition();
+              @include mix.color-transition();
 
               &.media {
                 font-size: $font-size-base + 1;
@@ -354,7 +355,7 @@
               margin-left: $gap-xs;
               vertical-align: top;
               font-size: $font-size-small;
-              @include color-transition();
+              @include mix.color-transition();
             }
           }
         }
@@ -370,7 +371,7 @@
             margin-right: $gap-lg;
             font-size: $font-size-small;
             color: $color-text-divider;
-            @include color-transition();
+            @include mix.color-transition();
             .iconfont {
               margin-right: $gap-xs;
               font-size: $font-size-small - 1;
@@ -405,9 +406,9 @@
         font-size: $font-size-small;
         text-align: center;
         color: $color-text-disabled;
-        @include color-transition();
-        @include common-bg-module();
-        @include radius-box($radius-mini);
+        @include mix.color-transition();
+        @include mix.common-bg-module();
+        @include mix.radius-box($radius-mini);
 
         &:not([disabled]):hover {
           color: $color-link;

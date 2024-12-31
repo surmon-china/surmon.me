@@ -72,8 +72,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .list {
     padding: 0;
@@ -98,11 +99,11 @@
         height: 100%;
         background-color: $module-bg-darker-1;
         opacity: 0.8;
-        @include visibility-transition();
+        @include mix.visibility-transition();
         &:hover {
           opacity: 1;
           .mask {
-            @include visible();
+            @include mix.visible();
           }
         }
 
@@ -139,8 +140,8 @@
           align-items: center;
           color: $white;
           background-color: rgba(0, 0, 0, 0.3);
-          @include visibility-transition();
-          @include hidden();
+          @include mix.visibility-transition();
+          @include mix.hidden();
         }
       }
     }

@@ -122,8 +122,10 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use 'sass:color';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .qrcode-modal {
     $image-size: 16rem;
@@ -156,7 +158,7 @@
       height: $image-size;
       margin-bottom: 2rem;
       background-color: $module-bg-opaque;
-      @include radius-box($radius-sm);
+      @include mix.radius-box($radius-sm);
     }
 
     .text {
@@ -208,7 +210,7 @@
       justify-content: flex-start;
       width: 100%;
       background-color: $module-bg;
-      background-image: surl('/images/page-about/background.png'),
+      background-image: global.surl('/images/page-about/background.png'),
         linear-gradient($module-bg-opaque 50%, #00000000 100%);
       background-size: contain;
       background-repeat: repeat-x;
@@ -297,7 +299,7 @@
             &.youtube {
               background-color: $youtube-primary;
               &:hover {
-                background-color: mix($black, $youtube-primary, 8%);
+                background-color: color.mix($black, $youtube-primary, 8%);
               }
             }
             &.instagram {

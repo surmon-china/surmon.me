@@ -104,8 +104,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .guestbook-page {
     .mobile-banner {
@@ -119,7 +120,7 @@
       height: 19rem;
       border: 0;
       background-color: $module-bg;
-      @include radius-box($radius-lg);
+      @include mix.radius-box($radius-lg);
 
       .image {
         width: 100%;
@@ -150,7 +151,7 @@
           margin-right: $gap-sm;
           color: rgba($red, 0.6);
           font-size: $font-size-h2;
-          @include color-transition();
+          @include mix.color-transition();
         }
 
         .count {

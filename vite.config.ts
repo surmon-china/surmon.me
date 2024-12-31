@@ -45,17 +45,17 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
+          // https://sass-lang.com/documentation/at-rules/use/#configuration
           // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptions
           // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptionsextensionadditionaldata
-          additionalData: `$source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}';`,
+          additionalData: `@use '/src/styles/base/_global' with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`,
           // https://github.com/vitejs/vite/pull/17728#issuecomment-2247114522
           api: 'modern',
           // https://sass-lang.com/documentation/js-api/interfaces/stringoptions/
           charset: false,
           importers: [new sass.NodePackageImporter()],
-          // https://sass-lang.com/documentation/breaking-changes/color-functions/
-          // https://sass-lang.com/documentation/breaking-changes/import/
-          silenceDeprecations: ['mixed-decls', 'color-functions']
+          // https://sass-lang.com/documentation/breaking-changes/mixed-decls/
+          silenceDeprecations: ['mixed-decls']
         }
       }
     },

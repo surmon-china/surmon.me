@@ -232,17 +232,18 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .share {
-    @include visibility-transition();
+    @include mix.visibility-transition();
 
     > .share-ejector {
       cursor: pointer;
       display: inline-block;
       text-align: center;
-      @include background-transition();
+      @include mix.background-transition();
 
       &.wechat:hover {
         background-color: $wechat-primary !important;

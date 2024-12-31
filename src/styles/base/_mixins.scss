@@ -1,14 +1,5 @@
-@function is-important($important) {
-  @return #{if($important, '!important', '')};
-}
-
-@function toRGBValue($color) {
-  @return red($color) + ', ' + green($color) + ', ' + blue($color);
-}
-
-@function toRGB($color) {
-  @return 'rgb(' + toRGBValue($color) + ')';
-}
+@use 'variables' as *;
+@use 'functions' as funs;
 
 /// Element border radius
 @mixin radius-box($radius-size) {
@@ -40,14 +31,14 @@
 
 /// Visible element
 @mixin visible($important: false) {
-  opacity: 1 is-important($important);
-  visibility: visible is-important($important);
+  opacity: 1 funs.is-important($important);
+  visibility: visible funs.is-important($important);
 }
 
 /// Hidden element
 @mixin hidden($important: false) {
-  opacity: 0 is-important($important);
-  visibility: hidden is-important($important);
+  opacity: 0 funs.is-important($important);
+  visibility: hidden funs.is-important($important);
 }
 
 /// Backdrop drop effect
@@ -75,6 +66,17 @@
     0px 0px 0px $text-color,
     0px 0px 2px rgba($black, 0.6),
     0px 0px 4px rgba($black, 0.6);
+}
+
+/// https://developer.mozilla.org/zh-CN/docs/Web/CSS/scroll-snap-type
+@mixin scroll-snap-y() {
+  scroll-snap-type: y mandatory;
+}
+@mixin scroll-snap-x() {
+  scroll-snap-type: x mandatory;
+}
+@mixin scroll-snap-item() {
+  scroll-snap-align: start;
 }
 
 /// General module background
@@ -113,11 +115,6 @@
   transition: filter $time;
 }
 
-@mixin motion-blur-filter($param: 'horizontal') {
-  // https://github.com/jonathantneal/svg4everybody/issues/16
-  filter: surl('/images/filters/motion-blur.svg##{$param}');
-}
-
 /// Text Shadow
 /// @param {Size} $x [2px] - X
 /// @param {Size} $y [2px] - Y
@@ -135,8 +132,8 @@
 @mixin scrollbar-style(
   $size: $gap-sm,
   $bg: $white,
-  $thumb-bg: darken($white, 18%),
-  $thumb-bg-hover: darken($white, 26%)
+  $thumb-bg: funs.darken($white, 18%),
+  $thumb-bg-hover: funs.darken($white, 26%)
 ) {
   ::-webkit-scrollbar {
     width: $size;
@@ -176,21 +173,4 @@
     letter-spacing: 0.2em;
     transform: translate(-50%, -50%);
   }
-}
-
-.center-placeholder {
-  @include center-placeholder;
-}
-
-/// https://developer.mozilla.org/zh-CN/docs/Web/CSS/scroll-snap-type
-@mixin scroll-snap-y() {
-  scroll-snap-type: y mandatory;
-}
-
-@mixin scroll-snap-x() {
-  scroll-snap-type: x mandatory;
-}
-
-@mixin scroll-snap-item() {
-  scroll-snap-align: start;
 }

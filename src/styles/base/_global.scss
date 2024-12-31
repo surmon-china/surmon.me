@@ -1,0 +1,14 @@
+@use 'sass:meta';
+
+// `$source-url` defined in vite.config.ts (preprocessorOptions.scss.additionalData)
+$source-url: '' !default;
+
+// Used to specify absolute URL addresses in CSS (e.g. svg file)
+@function surl($path) {
+  @return url('#{$source-url}#{$path}');
+}
+
+@mixin motion-blur-filter($param: 'horizontal') {
+  // https://github.com/jonathantneal/svg4everybody/issues/16
+  filter: surl('/images/filters/motion-blur.svg##{$param}');
+}

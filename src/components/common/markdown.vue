@@ -35,18 +35,19 @@
 </template>
 
 <style lang="scss">
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .global-markdown-plain {
     p {
       margin: 0;
       max-width: 100%;
-      @include text-overflow();
+      @include mix.text-overflow();
     }
 
     a {
-      @include text-underline();
+      @include mix.text-underline();
     }
   }
 
@@ -61,7 +62,7 @@
     a {
       margin: 0;
       font-weight: bold;
-      @include text-underline();
+      @include mix.text-underline();
       &.image-link {
         margin: 0;
         border: 0;
@@ -300,7 +301,7 @@
       overflow: hidden;
       font-size: $code-font-size;
       background-color: #f3f3f3;
-      @include background-transition($motion-duration-mid);
+      @include mix.background-transition($motion-duration-mid);
       &.with-line-numbers {
         padding-left: $code-number-width;
         code {
@@ -396,7 +397,7 @@
       }
 
       a {
-        @include text-underline();
+        @include mix.text-underline();
       }
 
       .figure-wrapper {

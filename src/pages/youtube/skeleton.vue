@@ -19,8 +19,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .skeletons {
     padding: 0;
@@ -29,8 +30,8 @@
 
     .item {
       padding: $gap;
-      @include radius-box($radius-sm);
-      @include common-bg-module();
+      @include mix.radius-box($radius-sm);
+      @include mix.common-bg-module();
     }
   }
 </style>

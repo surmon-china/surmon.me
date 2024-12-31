@@ -93,8 +93,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .instagram-gallery {
     position: relative;
@@ -142,7 +143,7 @@
         width: 100%;
         padding: 2em;
         font-size: $font-size-base + 1;
-        @include title-shadow();
+        @include mix.title-shadow();
       }
 
       .username-link {
@@ -152,7 +153,7 @@
         margin: 0;
         font-weight: bold;
         font-size: $font-size-base + 1;
-        @include title-shadow();
+        @include mix.title-shadow();
         &:first-letter {
           font-family: system-ui;
         }

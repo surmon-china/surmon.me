@@ -27,13 +27,14 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .mammon {
     min-height: 16rem;
     max-height: 30rem;
     background-color: $module-bg;
-    @include radius-box($radius-sm);
+    @include mix.radius-box($radius-sm);
   }
 </style>

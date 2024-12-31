@@ -33,14 +33,15 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .article-skeleton {
     .module {
       margin-bottom: $gap-lg;
-      @include radius-box($radius-sm);
-      @include common-bg-module();
+      @include mix.radius-box($radius-sm);
+      @include mix.common-bg-module();
     }
 
     .content-skeleton {
@@ -77,8 +78,8 @@
       margin: 0;
       display: grid;
       grid-gap: $gap;
-      @include radius-box($radius-sm);
-      @include common-bg-module();
+      @include mix.radius-box($radius-sm);
+      @include mix.common-bg-module();
 
       .item {
         width: auto !important;

@@ -91,8 +91,9 @@
 
 <style lang="scss" scoped>
   @use 'sass:math';
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   $announcement-height: 42px;
   $title-width: 10%;
@@ -106,8 +107,8 @@
     line-height: $announcement-height;
     font-size: $font-size-h6;
     color: $color-text-secondary;
-    @include common-bg-module();
-    @include radius-box($radius-xs);
+    @include mix.common-bg-module();
+    @include mix.radius-box($radius-xs);
 
     .announcement-empty {
       height: 100%;
@@ -154,7 +155,7 @@
         direction: rtl;
         opacity: 0.2;
         z-index: -1;
-        @include text-overflow(clip);
+        @include mix.text-overflow(clip);
       }
 
       &::after {
@@ -199,7 +200,7 @@
           &[style*='300ms'] {
             .swiper-slide-active {
               .content {
-                @include motion-blur-filter('vertical-small');
+                @include global.motion-blur-filter('vertical-small');
               }
             }
           }
@@ -215,7 +216,7 @@
             max-width: 76%;
             position: relative;
             font-weight: bold;
-            @include text-overflow();
+            @include mix.text-overflow();
           }
 
           .date {
@@ -236,7 +237,7 @@
           text-align: center;
           color: $color-text-divider;
           cursor: pointer;
-          @include color-transition();
+          @include mix.color-transition();
 
           &:hover {
             color: $color-text;

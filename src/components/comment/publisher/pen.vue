@@ -217,8 +217,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .pen {
     position: relative;
@@ -261,7 +262,7 @@
           outline: none;
           overflow: auto;
           background-color: $module-bg-darker-1;
-          @include background-transition();
+          @include mix.background-transition();
           &:focus {
             content: none;
           }
@@ -304,7 +305,7 @@
           height: $size;
           text-align: center;
           display: block;
-          @include background-transition();
+          @include mix.background-transition();
 
           &[disabled] {
             opacity: 0.7;
@@ -377,7 +378,7 @@
         font-size: $font-size-small;
         color: $color-text-disabled;
         background-color: $module-bg-darker-3;
-        @include background-transition();
+        @include mix.background-transition();
         &:hover {
           color: $color-text-secondary;
           background-color: $module-bg-darker-4;

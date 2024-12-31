@@ -1,17 +1,14 @@
-// variables
-@import './variables.scss';
-
-// mixins
-@import './mixins.scss';
+// global variables
+@use './base/variables' as *;
 
 // reset style
-@import './reset.scss';
+@use './reset.scss' as *;
 
 // font
-@import './font.scss';
+@use './font.scss' as *;
 
-// Iconfont
-@import './iconfont.scss';
+// iconfont
+@use './iconfont.scss' as *;
 
 // universal style
-@import './universal.scss';
+@use './universal.scss' as *;

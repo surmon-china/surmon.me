@@ -32,8 +32,9 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .error {
     top: 0;
@@ -107,12 +108,12 @@
       font-size: 10em;
       font-weight: normal;
       margin: 0;
-      background-image: surl('/images/page-error/wave.png');
+      background-image: global.surl('/images/page-error/wave.png');
       background-size: cover;
       background-repeat: repeat-x;
       background-position: center;
       -webkit-background-clip: text;
-      color: rgba(darken($white, 30%), 20%);
+      color: rgba(funs.darken($white, 30%), 20%);
       animation:
         error-item ease-out both 0.6s $motion-duration-mid,
         code-wave ease-out both 0.6s $motion-duration-mid,
@@ -128,8 +129,8 @@
     .link {
       cursor: pointer;
       margin-bottom: 4rem;
-      @include text-underline(0.5em);
-      @include color-transition();
+      @include mix.text-underline(0.5em);
+      @include mix.color-transition();
       &:hover {
         color: $color-text-darker;
       }

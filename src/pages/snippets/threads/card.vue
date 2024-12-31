@@ -78,13 +78,14 @@
 </template>
 
 <style lang="scss" scoped>
-  @import '/src/styles/variables.scss';
-  @import '/src/styles/mixins.scss';
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
 
   .threads-media-card {
     display: block;
     padding: $gap-lg;
-    @include common-bg-module($motion-duration-fast);
+    @include mix.common-bg-module($motion-duration-fast);
     &:hover {
       .content {
         color: $color-link;
