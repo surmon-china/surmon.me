@@ -25,7 +25,7 @@
     "@unhead/schema": "^1.11.x",
     "@unhead/ssr": "^1.11.x",
     "@unhead/vue": "^1.11.x",
-    "agentkeepalive": "^4.5.0",
+    "agentkeepalive": "^4.6.x",
     "axios": "^1.7.x",
     "bezier-easing": "^2.1.0",
     "compression": "^1.7.5",
