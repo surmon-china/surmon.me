@@ -48,7 +48,7 @@ export default defineConfig(({ mode }) => {
           // https://sass-lang.com/documentation/at-rules/use/#configuration
           // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptions
           // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptionsextensionadditionaldata
-          additionalData: `@use '/src/styles/base/_global' with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`,
+          additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`,
           // https://github.com/vitejs/vite/pull/17728#issuecomment-2247114522
           api: 'modern',
           // https://sass-lang.com/documentation/js-api/interfaces/stringoptions/
