@@ -76,7 +76,7 @@
 </script>
 
 <template>
-  <header class="header">
+  <header class="header" :class="{ search: searchState.open }">
     <nav class="navbar">
       <button class="navbar-menu" @click.stop.prevent="handleMenuToggle">
         <i class="iconfont icon-menu"></i>
@@ -139,7 +139,9 @@
     height: $mobile-header-height;
     background-color: $module-bg;
     z-index: $z-index-header;
-    @include mix.backdrop-blur(5px);
+    &:not(.search) {
+      @include mix.backdrop-blur(5px);
+    }
 
     .navbar {
       width: 100%;
