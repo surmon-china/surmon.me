@@ -92,7 +92,7 @@
     "tsx": "^4.19.x",
     "typescript": "^5.7.x",
     "typescript-eslint": "^8.x",
-    "vite": "^5.4.x"
+    "vite": "^6.x"
   },
   "pnpm": {
     "//": "https://github.com/vitejs/vite/pull/16655",

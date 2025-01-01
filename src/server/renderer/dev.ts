@@ -9,6 +9,7 @@ import { ROOT_PATH } from '../config'
 
 export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
   // https://vitejs.dev/guide/ssr.html
+  // TODO: https://vite.dev/guide/api-environment-frameworks.html
   const viteServer = await createServer({
     root: process.cwd(),
     logLevel: 'info',
