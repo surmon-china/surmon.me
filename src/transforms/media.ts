@@ -28,11 +28,6 @@ export const getInstagramThumbnail = (media: InstagramMediaItem, size?: 't' | 'm
   return `${media.permalink}media/?size=${size}`
 }
 
-export const autoInstagramThumbnail = (media: InstagramMediaItem, size?: 't' | 'm' | 'l') => {
-  const defaultCover = getInstagramCoverURL(media)
-  return isVideoMediaIns(media) ? defaultCover : size ? getInstagramThumbnail(media, size) : defaultCover
-}
-
 export const getYouTubePlaylistURL = (id: string) => {
   return `https://www.youtube.com/playlist?list=${id}`
 }

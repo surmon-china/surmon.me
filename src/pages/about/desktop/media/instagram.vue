@@ -4,12 +4,7 @@
   import { useCountry } from '/@/app/context'
   import { isCNCode } from '/@/transforms/region'
   import { useInstagramLatestMediasStore } from '/@/stores/media'
-  import {
-    isVideoMediaIns,
-    isAlbumMediaIns,
-    getInstagramCoverURL,
-    getInstagramThumbnail
-  } from '/@/transforms/media'
+  import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getProxyURL } from '/@/transforms/url'
   import { VALUABLE_LINKS } from '/@/config/app.config'
@@ -20,7 +15,7 @@
   const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const countryCode = useCountry()
-    const url = isVideoMediaIns(media) ? getInstagramCoverURL(media) : getInstagramThumbnail(media, 't')
+    const url = getInstagramCoverURL(media)
     return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
   }
 
