@@ -33,6 +33,7 @@ import './effects/swiper/style'
 import './effects/elements/index.scss'
 import './components/common/loading-indicator/index.scss'
 import './styles/app.scss'
+import './styles/font.scss'
 
 console.group(`🔵 [SSR:CONTEXT]`)
 console.table(getSSRContextData())

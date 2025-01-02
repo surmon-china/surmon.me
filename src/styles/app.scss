@@ -4,11 +4,12 @@
 // reset style
 @use './reset.scss' as *;
 
-// font
-@use './font.scss' as *;
-
 // iconfont
 @use './iconfont.scss' as *;
 
 // universal style
 @use './universal.scss' as *;
+
+// font
+// MARK: To ensure that `global.surl` is properly referenced, the `font.scss` file is imported separately in `csr.ts`.
+// @use './font.scss' as *;
