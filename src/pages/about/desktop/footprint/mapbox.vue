@@ -4,7 +4,6 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
-  import 'mapbox-gl/dist/mapbox-gl.css'
 
   const props = defineProps<{
     gmGeoJson: FeatureCollectionJSON
@@ -73,7 +72,10 @@
   })
 
   onMounted(() => {
+    // dynamic import css
+    import('mapbox-gl/dist/mapbox-gl.css')
     Promise.all([
+      // dynamic import lib
       import('mapbox-gl').then((result) => result.default),
       new Promise((resolve) => window.setTimeout(resolve, 600))
     ]).then(([mapboxgl]) => {
