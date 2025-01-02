@@ -8,8 +8,6 @@ import * as __WEBPACK_EXTERNAL_MODULE_sitemap__ from "sitemap";
 import * as __WEBPACK_EXTERNAL_MODULE_wonderful_bing_wallpaper_bd315d6d__ from "wonderful-bing-wallpaper";
 import * as __WEBPACK_EXTERNAL_MODULE_fast_xml_parser_352df6bd__ from "fast-xml-parser";
 import * as __WEBPACK_EXTERNAL_MODULE_yargs__ from "yargs";
-import * as __WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__ from "fs-extra";
-import * as __WEBPACK_EXTERNAL_MODULE_fontmin__ from "fontmin";
 import * as __WEBPACK_EXTERNAL_MODULE_fs__ from "fs";
 import * as __WEBPACK_EXTERNAL_MODULE_vite__ from "vite";
 import * as __WEBPACK_EXTERNAL_MODULE_crypto__ from "crypto";
@@ -20,37 +18,8 @@ import * as __WEBPACK_EXTERNAL_MODULE_cookie_parser_591162dd__ from "cookie-pars
 import * as __WEBPACK_EXTERNAL_MODULE_lru_cache_883435dc__ from "lru-cache";
 import * as __WEBPACK_EXTERNAL_MODULE_redis__ from "redis";
 import * as __WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__ from "http-proxy";
-/******/ var __webpack_modules__ = ({});
-/************************************************************************/
-/******/ // The module cache
-/******/ var __webpack_module_cache__ = {};
-/******/ 
-/******/ // The require function
-/******/ function __nccwpck_require__(moduleId) {
-/******/ 	// Check if module is in cache
-/******/ 	var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 	if (cachedModule !== undefined) {
-/******/ 		return cachedModule.exports;
-/******/ 	}
-/******/ 	// Create a new module (and put it into the cache)
-/******/ 	var module = __webpack_module_cache__[moduleId] = {
-/******/ 		// no module.id needed
-/******/ 		// no module.loaded needed
-/******/ 		exports: {}
-/******/ 	};
-/******/ 
-/******/ 	// Execute the module function
-/******/ 	var threw = true;
-/******/ 	try {
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nccwpck_require__);
-/******/ 		threw = false;
-/******/ 	} finally {
-/******/ 		if(threw) delete __webpack_module_cache__[moduleId];
-/******/ 	}
-/******/ 
-/******/ 	// Return the exports of the module
-/******/ 	return module.exports;
-/******/ }
+/******/ // The require scope
+/******/ var __nccwpck_require__ = {};
 /******/ 
 /************************************************************************/
 /******/ /* webpack/runtime/define property getters */
@@ -807,8 +776,10 @@ const getInstagramProfile = () => {
  * @module server.getter.instagram
  * @author Surmon <https://github.com/surmon-china>
  */
+// Although the Instagram Basic Display API is no longer in service, the API endpoints continue to be available.
+// https://lightwidget.com/basic-display-api-deprecation
 // 1. Generate long-lived access tokens for Instagram Testers (60 days)
-// https://developers.facebook.com/apps/625907498725071/instagram-basic-display/basic-display/
+// https://developers.facebook.com/apps/1308707530127503/instagram-business/API-Setup/?business_id=277570526188879
 // 2. Get medias useing API
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/media#fields
 // 3. TODO: Refresh token
@@ -977,61 +948,6 @@ const getSongList = async () => {
     })));
 };
 
-;// CONCATENATED MODULE: external "fs-extra"
-var external_fs_extra_x = (y) => {
-	var x = {}; __nccwpck_require__.d(x, y); return x
-} 
-var external_fs_extra_y = (x) => (() => (x))
-const external_fs_extra_namespaceObject = external_fs_extra_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_fs_extra_c99523cd__["default"]) });
-;// CONCATENATED MODULE: external "fontmin"
-var external_fontmin_x = (y) => {
-	var x = {}; __nccwpck_require__.d(x, y); return x
-} 
-var external_fontmin_y = (x) => (() => (x))
-const external_fontmin_namespaceObject = external_fontmin_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_fontmin__["default"]) });
-;// CONCATENATED MODULE: ./src/server/getters/webfont.ts
-/**
- * @file WebFont getter
- * @module server.getter.webfont
- * @author Surmon <https://github.com/surmon-china>
- */
-
-
-
-
-const WebFontContentType = 'font/woff2';
-const cacheMap = new Map();
-const getWebFont = (options) => {
-    const text = Array.from(new Set(options.text.split(''))).join('');
-    const fontPath = __nccwpck_require__.ab + "surmon.me/" + PUBLIC_PATH + '/fonts/' + options.fontName;
-    if (!external_fs_extra_namespaceObject["default"].existsSync(fontPath)) {
-        return Promise.reject(`Font "${options.fontName}" not found!`);
-    }
-    // memory cache
-    const cacheKey = `${options.fontName}_${text}`;
-    if (cacheMap.has(cacheKey)) {
-        return Promise.resolve(cacheMap.get(cacheKey));
-    }
-    // https://github.com/ecomfe/fontmin
-    const fontmin = new external_fontmin_namespaceObject["default"]()
-        .src(fontPath)
-        .use(external_fontmin_namespaceObject["default"].glyph({ text, hinting: false }))
-        .use(external_fontmin_namespaceObject["default"].ttf2woff2());
-    return new Promise((resolve, reject) => {
-        fontmin.run((error, files) => {
-            if (error) {
-                reject(error);
-            }
-            else {
-                // @ts-ignore
-                const fontData = files[0]._contents;
-                cacheMap.set(cacheKey, fontData);
-                resolve(fontData);
-            }
-        });
-    });
-};
-
 ;// CONCATENATED MODULE: external "fs"
 var external_fs_x = (y) => {
 	var x = {}; __nccwpck_require__.d(x, y); return x
@@ -1066,6 +982,7 @@ const resolveTemplate = (input) => {
 
 const enableDevRenderer = async (app, cache) => {
     // https://vitejs.dev/guide/ssr.html
+    // TODO: https://vite.dev/guide/api-environment-frameworks.html
     const viteServer = await (0,external_vite_namespaceObject.createServer)({
         root: process.cwd(),
         logLevel: 'info',
@@ -1676,7 +1593,6 @@ const createExpressApp = async () => {
 
 
 
-
 const bff_logger = createLogger('BFF');
 // init env variables for BFF server env
 external_dotenv_namespaceObject["default"].config();
@@ -1930,25 +1846,6 @@ createExpressApp().then(async ({ app, server, cache }) => {
             getter: getMyGoogleMap
         });
     }));
-    // WebFont
-    app.get(`${BFF_TUNNEL_PREFIX}/${TunnelModule.WebFont}`, async (request, response) => {
-        const fontName = decodeURIComponent(String(request.query.fontname)).trim();
-        const text = decodeURIComponent(String(request.query.text)).trim();
-        if (!text || !fontName) {
-            errorer(response, { code: BAD_REQUEST, message: 'Invalid params' });
-            return;
-        }
-        try {
-            const data = await getWebFont({ fontName, text });
-            // never expired
-            response.header('Cache-Control', 'public, max-age=31536000');
-            response.header('Content-Type', WebFontContentType);
-            response.send(data);
-        }
-        catch (error) {
-            errorer(response, { message: error });
-        }
-    });
     // vue renderer
     await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache));
     // run
