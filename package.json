@@ -77,7 +77,6 @@
     "@types/qrcode": "^1.5.5",
     "@types/rss": "^0.0.32",
     "@types/serialize-javascript": "^5.0.4",
-    "@types/ua-parser-js": "^0.7.39",
     "@unhead/addons": "^1.11.x",
     "@vercel/ncc": "^0.38.3",
     "@vitejs/plugin-vue": "^5.x",
