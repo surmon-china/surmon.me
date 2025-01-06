@@ -960,6 +960,15 @@ var external_vite_x = (y) => {
 } 
 var external_vite_y = (x) => (() => (x))
 const external_vite_namespaceObject = external_vite_x({ ["createServer"]: () => (__WEBPACK_EXTERNAL_MODULE_vite__.createServer) });
+;// CONCATENATED MODULE: ./src/server/renderer/_context.ts
+const createRequestContext = (request) => {
+    return {
+        headers: request.headers,
+        cookies: request.cookies,
+        url: request.originalUrl
+    };
+};
+
 ;// CONCATENATED MODULE: ./src/server/renderer/_template.ts
 const resolveTemplate = (input) => {
     return (input.template
@@ -975,6 +984,7 @@ const resolveTemplate = (input) => {
 };
 
 ;// CONCATENATED MODULE: ./src/server/renderer/dev.ts
+
 
 
 
@@ -997,13 +1007,14 @@ const enableDevRenderer = async (app, cache) => {
     });
     // use vite's connect instance as middleware
     app.use(viteServer.middlewares);
-    app.use('*', async (request, response) => {
+    app.get('*path', async (request, response) => {
+        const requestContext = createRequestContext(request);
         const { renderApp, renderError } = await viteServer.ssrLoadModule('/src/ssr.ts');
         let template = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(ROOT_PATH, 'index.html'), 'utf-8');
         try {
             const url = request.originalUrl;
             template = await viteServer.transformIndexHtml(url, template);
-            const rendered = await renderApp(request, cache);
+            const rendered = await renderApp(requestContext, cache);
             response
                 .status(rendered.code)
                 .set({ 'Content-Type': 'text/html' })
@@ -1017,7 +1028,7 @@ const enableDevRenderer = async (app, cache) => {
         }
         catch (error) {
             viteServer.ssrFixStacktrace(error);
-            const rendered = await renderError(request, error);
+            const rendered = await renderError(requestContext, error);
             response.status(rendered.code).end(resolveTemplate({
                 template,
                 heads: rendered.heads,
@@ -1072,6 +1083,7 @@ const resolveAssetsPrefix = (html, manifestFiles, filePrefix) => {
 
 
 
+
 const enableProdRenderer = async (app, cache) => {
     const template = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'template.html'), 'utf-8');
     const manifest = external_fs_namespaceObject["default"].readFileSync(external_path_namespaceObject["default"].resolve(DIST_PATH, 'manifest.json'), 'utf-8');
@@ -1083,9 +1095,9 @@ const enableProdRenderer = async (app, cache) => {
     const _import = new Function('p', 'return import(p)');
     const { renderApp, renderError } = await _import(external_path_namespaceObject["default"].resolve(PROD_SERVER_PATH, 'ssr.js'));
     // const { renderApp, renderError } = require(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
-    app.use('*', async (request, response) => {
+    app.get('*path', async (request, response) => {
         try {
-            const rendered = await renderApp(request, cache);
+            const rendered = await renderApp(createRequestContext(request), cache);
             response
                 .status(rendered.code)
                 .set({ 'Content-Type': 'text/html' })
@@ -1098,7 +1110,7 @@ const enableProdRenderer = async (app, cache) => {
             }));
         }
         catch (error) {
-            const rendered = await renderError(request, error);
+            const rendered = await renderError(createRequestContext(request), error);
             response.status(rendered.code).end(resolveTemplate({
                 template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),
                 heads: rendered.heads,
@@ -1443,7 +1455,9 @@ const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]:
 
 
 const proxy_logger = createLogger('BFF:Proxy');
-const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`;
+const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*url`;
+const getProxyUrlFromRequest = (request) => atob(String(request.params.url));
+const makeRedirectLocation = (location) => `${BFF_PROXY_PREFIX}/${btoa(location)}`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
     const proxy = external_http_proxy_namespaceObject["default"].createProxyServer({
@@ -1464,7 +1478,7 @@ const proxyer = () => {
         const location = proxyResponse.headers.location;
         // If the target resource redirects, the proxy server still needs to encode the format of the redirection
         if ([301, 302, 307, 308].includes(statusCode) && location) {
-            proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${btoa(location)}`;
+            proxyResponse.headers.location = makeRedirectLocation(location);
         }
         if (statusCode === 200) {
             // If the target resource does not specify a Cache-Control, set it to a 1-year max-age
@@ -1487,7 +1501,7 @@ const proxyer = () => {
         let targetURL = null;
         let parsedURL = null;
         try {
-            targetURL = atob(request.params['0']);
+            targetURL = getProxyUrlFromRequest(request);
             response.setHeader('x-original-url', targetURL);
             parsedURL = new URL(targetURL);
         }
@@ -1548,10 +1562,10 @@ const createExpressApp = async () => {
     app.use(external_express_namespaceObject["default"].json());
     app.use((0,external_cookie_parser_namespaceObject["default"])());
     app.use((0,external_compression_namespaceObject["default"])());
-    // app proxy
-    app.use(PROXY_ROUTE_PATH, proxyer());
     // app static
     app.use(external_express_namespaceObject["default"]["static"](PUBLIC_PATH));
+    // app proxy
+    app.get(PROXY_ROUTE_PATH, proxyer());
     // init cache client
     const cache = await createCacheClient({
         namespace: META.domain.replace(/\./gi, '_')

@@ -371,7 +371,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.50.1";
+const APP_VERSION = "4.51.0";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -20117,13 +20117,13 @@ const createMainApp = (context) => {
   };
 };
 const devDebug = (...messages) => isDev;
-const createSSRContext = (request, error) => {
-  const { headers, cookies: cookies2, originalUrl } = request;
+const createSSRContext = (requestContext, error) => {
+  const { headers, cookies: cookies2, url } = requestContext;
   const country = headers["country-code"];
   const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL;
   const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets);
   return {
-    requestURL: originalUrl,
+    requestURL: url,
     country,
     language: headers["accept-language"],
     userAgent: headers["user-agent"],
@@ -20196,12 +20196,12 @@ const renderHTML = async (mainApp, ssrContext) => {
     assetsPrefix: ssrContext.assetsPrefix
   };
 };
-const renderError = async (request, error) => {
+const renderError = async (requestContext, error) => {
   const renderError2 = {
     code: error.code ?? INVALID_ERROR,
     message: error instanceof Error ? error.message : _isObject(error) ? error["message"] : JSON.stringify(error)
   };
-  const ssrContext = createSSRContext(request, renderError2);
+  const ssrContext = createSSRContext(requestContext, renderError2);
   const { app, head, theme } = createApp(ssrContext);
   head.push({ title: `Server Error: ${renderError2.message || "unknow"}` });
   return {
@@ -20218,9 +20218,9 @@ const renderError = async (request, error) => {
     )
   };
 };
-const renderApp = async (request, cache) => {
+const renderApp = async (requestContext, cache) => {
   var _a;
-  const ssrContext = createSSRContext(request);
+  const ssrContext = createSSRContext(requestContext);
   const app = createApp(ssrContext);
   const cacheKey = getCacheKey(app, ssrContext);
   const isCached = await cache.has(cacheKey);
@@ -20247,7 +20247,7 @@ const renderApp = async (request, cache) => {
       code: SUCCESS
     };
   } catch (error) {
-    return renderError(request, error);
+    return renderError(requestContext, error);
   }
 };
 const mapboxGl = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
