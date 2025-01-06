@@ -5,7 +5,7 @@
  */
 
 import httpProxy from 'http-proxy'
-import type { RequestHandler } from 'express'
+import type { Request, RequestHandler } from 'express'
 import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
@@ -14,7 +14,9 @@ import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF:Proxy')
 
-export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*`
+export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*url`
+const getProxyUrlFromRequest = (request: Request) => atob(String(request.params.url))
+const makeRedirectLocation = (location: string) => `${BFF_PROXY_PREFIX}/${btoa(location)}`
 
 export const proxyer = (): RequestHandler => {
   // https://github.com/http-party/node-http-proxy
@@ -41,7 +43,7 @@ export const proxyer = (): RequestHandler => {
     const location = proxyResponse.headers.location
     // If the target resource redirects, the proxy server still needs to encode the format of the redirection
     if ([301, 302, 307, 308].includes(statusCode) && location) {
-      proxyResponse.headers.location = `${BFF_PROXY_PREFIX}/${btoa(location)}`
+      proxyResponse.headers.location = makeRedirectLocation(location)
     }
     if (statusCode === 200) {
       // If the target resource does not specify a Cache-Control, set it to a 1-year max-age
@@ -67,7 +69,7 @@ export const proxyer = (): RequestHandler => {
     let parsedURL: URL | null = null
 
     try {
-      targetURL = atob(request.params['0'])
+      targetURL = getProxyUrlFromRequest(request)
       response.setHeader('x-original-url', targetURL)
       parsedURL = new URL(targetURL)
     } catch (error: any) {

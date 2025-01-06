@@ -23,11 +23,11 @@ export const createExpressApp = async () => {
   app.use(cookieParser())
   app.use(compression())
 
-  // app proxy
-  app.use(PROXY_ROUTE_PATH, proxyer())
-
   // app static
   app.use(express.static(PUBLIC_PATH))
+
+  // app proxy
+  app.get(PROXY_ROUTE_PATH, proxyer())
 
   // init cache client
   const cache = await createCacheClient({

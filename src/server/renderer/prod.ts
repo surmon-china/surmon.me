@@ -5,6 +5,7 @@ import type { Express } from 'express'
 import type { CacheClient } from '../services/cache'
 import { DIST_PATH, PROD_SERVER_PATH } from '../config'
 import { getManifestFlatFiles, resolveAssetsPrefix } from './_manifest'
+import { createRequestContext } from './_context'
 import { resolveTemplate } from './_template'
 import type { RenderResult } from '@/ssr'
 
@@ -20,9 +21,9 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
   const { renderApp, renderError } = await _import(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
   // const { renderApp, renderError } = require(path.resolve(PROD_SERVER_PATH, 'ssr.js'))
 
-  app.use('*', async (request, response) => {
+  app.get('*path', async (request, response) => {
     try {
-      const rendered: RenderResult = await renderApp(request, cache)
+      const rendered: RenderResult = await renderApp(createRequestContext(request), cache)
       response
         .status(rendered.code)
         .set({ 'Content-Type': 'text/html' })
@@ -36,7 +37,7 @@ export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
           })
         )
     } catch (error: any) {
-      const rendered: RenderResult = await renderError(request, error)
+      const rendered: RenderResult = await renderError(createRequestContext(request), error)
       response.status(rendered.code).end(
         resolveTemplate({
           template: resolveAssetsPrefix(template, manifestFiles, rendered.assetsPrefix),

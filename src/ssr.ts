@@ -6,7 +6,7 @@
 
 import serialize from 'serialize-javascript'
 import _isObject from 'lodash-es/isObject'
-import type { Request } from 'express'
+import type { IncomingHttpHeaders } from 'http'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from 'vue/server-renderer'
 import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr'
@@ -27,13 +27,19 @@ import API_CONFIG from '/@/config/api.config'
 const renderLogger = createLogger('SSR:Render')
 const devDebug = (...messages: any[]) => isDev && renderLogger.debug(...messages)
 
-const createSSRContext = (request: Request, error?: RenderErrorValue): SSRContext => {
-  const { headers, cookies, originalUrl } = request
+export interface RequestContext {
+  headers: IncomingHttpHeaders
+  cookies: Record<string, any>
+  url: string
+}
+
+const createSSRContext = (requestContext: RequestContext, error?: RenderErrorValue): SSRContext => {
+  const { headers, cookies, url } = requestContext
   const country = headers['country-code'] as string
   const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
   const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets)
   return {
-    requestURL: originalUrl,
+    requestURL: url,
     country,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
@@ -150,12 +156,12 @@ export interface RenderResult {
  * 2. render fetch error
  * 3. router validate/404 error
  */
-export const renderError = async (request: Request, error: unknown): Promise<RenderResult> => {
+export const renderError = async (requestContext: RequestContext, error: unknown): Promise<RenderResult> => {
   const renderError: RenderErrorValue = {
     code: (error as any).code ?? INVALID_ERROR,
     message: error instanceof Error ? error.message : _isObject(error) ? error['message'] : JSON.stringify(error)
   }
-  const ssrContext = createSSRContext(request, renderError)
+  const ssrContext = createSSRContext(requestContext, renderError)
   const { app, head, theme } = createApp(ssrContext)
   head.push({ title: `Server Error: ${renderError.message || 'unknow'}` })
   return {
@@ -174,8 +180,8 @@ export const renderError = async (request: Request, error: unknown): Promise<Ren
 }
 
 // app renderer
-export const renderApp = async (request: Request, cache: CacheClient): Promise<RenderResult> => {
-  const ssrContext = createSSRContext(request)
+export const renderApp = async (requestContext: RequestContext, cache: CacheClient): Promise<RenderResult> => {
+  const ssrContext = createSSRContext(requestContext)
   const app = createApp(ssrContext)
 
   // render from cache
@@ -207,6 +213,6 @@ export const renderApp = async (request: Request, cache: CacheClient): Promise<R
       code: SUCCESS
     }
   } catch (error: any) {
-    return renderError(request, error)
+    return renderError(requestContext, error)
   }
 }
