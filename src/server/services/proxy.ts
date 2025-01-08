@@ -8,6 +8,7 @@ import httpProxy from 'http-proxy'
 import type { Request, RequestHandler } from 'express'
 import { isNodeProd } from '@/server/environment'
 import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR } from '@/constants/http-code'
+import { base64UrlEncode, base64UrlDecode } from '@/transforms/base64'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
 import { META } from '@/config/app.config'
 import { createLogger } from '@/utils/logger'
@@ -15,8 +16,8 @@ import { createLogger } from '@/utils/logger'
 export const logger = createLogger('BFF:Proxy')
 
 export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*url`
-const getProxyUrlFromRequest = (request: Request) => atob(String(request.params.url))
-const makeRedirectLocation = (location: string) => `${BFF_PROXY_PREFIX}/${btoa(location)}`
+const getProxyUrlFromRequest = (request: Request) => base64UrlDecode(String(request.params.url))
+const makeRedirectLocation = (location: string) => `${BFF_PROXY_PREFIX}/${base64UrlEncode(location)}`
 
 export const proxyer = (): RequestHandler => {
   // https://github.com/http-party/node-http-proxy
