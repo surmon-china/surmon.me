@@ -371,7 +371,7 @@ const languages$1 = [
     data: enLangMap
   }
 ];
-const APP_VERSION = "4.51.0";
+const APP_VERSION = "4.51.1";
 const APP_ENV = "production";
 const isDev = false;
 const isServer = true;
@@ -1497,6 +1497,10 @@ const getLoadingIndicatorHTML = (options = {}) => {
     </div>
   `;
 };
+const base64Encode = btoa;
+const base64UrlEncode = (value) => {
+  return base64Encode(value).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+};
 var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
   CDNPrefix2["Proxy"] = "proxy";
   CDNPrefix2["Assets"] = "assets";
@@ -1539,14 +1543,14 @@ const getStaticPath = (url) => {
   return url.replace(API_CONFIG.STATIC, "");
 };
 const getOriginalProxyURL = (url) => {
-  return `${BFF_PROXY_PREFIX}/${btoa(url)}`;
+  return `${BFF_PROXY_PREFIX}/${base64UrlEncode(url)}`;
 };
 const getProxyURL = (domain, url) => {
   return `${getCDNPrefixURL(
     domain,
     "proxy"
     /* Proxy */
-  )}/${btoa(url)}`;
+  )}/${base64UrlEncode(url)}`;
 };
 const getPageURL = (path, hash) => {
   const targetPath = path;

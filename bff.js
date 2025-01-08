@@ -1442,6 +1442,33 @@ var external_http_proxy_x = (y) => {
 } 
 var external_http_proxy_y = (x) => (() => (x))
 const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]: () => (__WEBPACK_EXTERNAL_MODULE_http_proxy_7fedf318__["default"]) });
+;// CONCATENATED MODULE: ./src/transforms/base64.ts
+/**
+ * @file Base64 and Base64URL utilities
+ * @module transform.base64
+ * @author Surmon <https://github.com/surmon-china>
+ */
+const base64Encode = btoa;
+const base64Decode = atob;
+const base64UrlEncode = (value) => {
+    return base64Encode(value)
+        .replace(/=/g, '') // remove '='
+        .replace(/\+/g, '-') // '+' > '-'
+        .replace(/\//g, '_'); // '/' > '_'
+};
+const base64UrlDecode = (value) => {
+    try {
+        const base64 = value
+            .replace(/-/g, '+') // '-' > '+'
+            .replace(/_/g, '/'); // '_' > '/'
+        const paddedBase64 = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
+        return base64Decode(paddedBase64);
+    }
+    catch (error) {
+        throw new Error('Illegal Base64URL string!');
+    }
+};
+
 ;// CONCATENATED MODULE: ./src/server/services/proxy.ts
 /**
  * @file BFF Server proxy
@@ -1454,10 +1481,11 @@ const external_http_proxy_namespaceObject = external_http_proxy_x({ ["default"]:
 
 
 
+
 const proxy_logger = createLogger('BFF:Proxy');
 const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*url`;
-const getProxyUrlFromRequest = (request) => atob(String(request.params.url));
-const makeRedirectLocation = (location) => `${BFF_PROXY_PREFIX}/${btoa(location)}`;
+const getProxyUrlFromRequest = (request) => base64UrlDecode(String(request.params.url));
+const makeRedirectLocation = (location) => `${BFF_PROXY_PREFIX}/${base64UrlEncode(location)}`;
 const proxyer = () => {
     // https://github.com/http-party/node-http-proxy
     const proxy = external_http_proxy_namespaceObject["default"].createProxyServer({
