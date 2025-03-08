@@ -26,7 +26,7 @@
     "@unhead/ssr": "^1.11.x",
     "@unhead/vue": "^1.11.x",
     "agentkeepalive": "^4.6.x",
-    "axios": "^1.7.x",
+    "axios": "^1.8.x",
     "bezier-easing": "^2.1.0",
     "compression": "^1.8.x",
     "cookie-parser": "^1.4.x",
