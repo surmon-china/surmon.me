@@ -107,8 +107,8 @@ importers:
         specifier: ^1.5.x
         version: 1.5.4
       qs:
-        specifier: ^6.13.x
-        version: 6.13.1
+        specifier: ^6.14.x
+        version: 6.14.0
       redis:
         specifier: ^4.7.0
         version: 4.7.0
@@ -2297,8 +2297,8 @@ packages:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
     engines: {node: '>=0.6'}
 
-  qs@6.13.1:
-    resolution: {integrity: sha512-EJPeIn0CYrGu+hli1xilKAPXODtJ12T0sP63Ijx2/khC2JtuaN3JyNIpvmnkmaEtha9ocbG4A4cMcr+TvqvwQg==}
+  qs@6.14.0:
+    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
 
   queue-microtask@1.2.3:
@@ -4727,7 +4727,7 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
-  qs@6.13.1:
+  qs@6.14.0:
     dependencies:
       side-channel: 1.1.0
 
