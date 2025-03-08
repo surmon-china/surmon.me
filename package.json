@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "4.51.2",
+  "version": "4.51.3",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "agentkeepalive": "^4.6.x",
     "axios": "^1.7.x",
     "bezier-easing": "^2.1.0",
-    "compression": "^1.7.5",
+    "compression": "^1.8.x",
     "cookie-parser": "^1.4.x",
     "dotenv": "^16.4.7",
     "emoji-233333": "^0.3.2",
