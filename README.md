@@ -32,9 +32,9 @@
 
 ## Screenshot
 
-![](/screenhots/desktop.png)
+![](/screenshots/desktop.png)
 
-![](/screenhots/mobile.png)
+![](/screenshots/mobile.png)
 
 ## Development Setup
 
