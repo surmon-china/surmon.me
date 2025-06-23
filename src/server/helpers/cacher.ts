@@ -5,7 +5,7 @@
  */
 
 import crypto from 'crypto'
-import type { CacheClient, Seconds } from '../services/cache'
+import type { CacheStore, Seconds } from '../services/cache'
 import { getErrorMessage } from './responser'
 import { createLogger } from '@/utils/logger'
 
@@ -35,13 +35,13 @@ const getCacheKey = (key: string): string => `bff:${key}`
 const getLockCacheKey = (key: string): string => `bff:interval-lock:${key}`
 
 /** Execute the getter and store the data into the cache. */
-const execute = async <T>(cache: CacheClient, options: CacherOptions<T>) => {
+const execute = async <T>(cache: CacheStore, options: CacherOptions<T>) => {
   const data = await options.getter()
   await cache.set(options.key, data, options.ttl)
   return data
 }
 
-const passive = async <T = any>(cache: CacheClient, opts: CacherOptions<T>): Promise<T> => {
+const passive = async <T = any>(cache: CacheStore, opts: CacherOptions<T>): Promise<T> => {
   const options = { ...opts, key: getCacheKey(opts.key) }
   if (await cache.has(options.key)) {
     return await cache.get<T>(options.key)
@@ -71,7 +71,7 @@ export interface IntervalCacherOptions<T> extends CacherOptions<T> {
   retry: Seconds
 }
 
-const interval = <T>(cache: CacheClient, opts: IntervalCacherOptions<T>) => {
+const interval = <T>(cache: CacheStore, opts: IntervalCacherOptions<T>) => {
   const options = { ...opts, key: getCacheKey(opts.key) }
   const intervalLockKey = getLockCacheKey(opts.key)
 

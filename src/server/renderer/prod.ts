@@ -2,14 +2,14 @@ import fs from 'fs'
 import path from 'path'
 import type { Manifest } from 'vite'
 import type { Express } from 'express'
-import type { CacheClient } from '../services/cache'
+import type { CacheStore } from '../services/cache'
 import { DIST_PATH, PROD_SERVER_PATH } from '../config'
 import { getManifestFlatFiles, resolveAssetsPrefix } from './_manifest'
 import { createRequestContext } from './_context'
 import { resolveTemplate } from './_template'
 import type { RenderResult } from '@/ssr'
 
-export const enableProdRenderer = async (app: Express, cache: CacheClient) => {
+export const enableProdRenderer = async (app: Express, cache: CacheStore) => {
   const template = fs.readFileSync(path.resolve(DIST_PATH, 'template.html'), 'utf-8')
   const manifest = fs.readFileSync(path.resolve(DIST_PATH, 'manifest.json'), 'utf-8')
   const manifestJSON: Manifest = JSON.parse(manifest)

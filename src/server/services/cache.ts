@@ -5,14 +5,14 @@
  */
 
 import { LRUCache } from 'lru-cache'
-import { createClient } from 'redis'
+import { createClient as createRedisClient } from '@redis/client'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF:Cache')
 
 export type Seconds = number
 
-export interface CacheClient {
+export interface CacheStore {
   set(key: string, value: any, ttl?: Seconds): Promise<void>
   get<T = any>(key: string): Promise<T>
   has(key: string): Promise<boolean>
@@ -20,7 +20,7 @@ export interface CacheClient {
   clear(): Promise<void>
 }
 
-const getLRUClient = (): CacheClient => {
+const createLRUStore = (): CacheStore => {
   // https://github.com/isaacs/node-lru-cache
   const lruCache = new LRUCache<string, any>({ max: 500 })
   const set = async (key: string, value: any, ttl?: number) => {
@@ -40,9 +40,9 @@ const getLRUClient = (): CacheClient => {
   }
 }
 
-const getRedisClient = async (options?: CacheClientOptions): Promise<CacheClient> => {
+const createRedisStore = async (options?: CacheStoreOptions): Promise<CacheStore> => {
   // https://github.com/redis/node-redis
-  const client = createClient()
+  const client = createRedisClient()
   client.on('connect', () => logger.info('Redis connecting...'))
   client.on('reconnecting', () => logger.info('Redis reconnecting...'))
   client.on('ready', () => logger.success('Redis readied.'))
@@ -54,29 +54,29 @@ const getRedisClient = async (options?: CacheClientOptions): Promise<CacheClient
     return `${_namespace}:${key}`
   }
 
-  const set: CacheClient['set'] = async (key, value, ttl) => {
+  const set: CacheStore['set'] = async (key, value, ttl) => {
     const _value = value ? JSON.stringify(value) : ''
     if (ttl) {
       // EX — Set the specified expire time, in seconds.
-      await client.set(getCacheKey(key), _value, { EX: ttl })
+      await client.set(getCacheKey(key), _value, { expiration: { type: 'EX', value: ttl } })
     } else {
       await client.set(getCacheKey(key), _value)
     }
   }
 
-  const get: CacheClient['get'] = async (key) => {
+  const get: CacheStore['get'] = async (key) => {
     const value = await client.get(getCacheKey(key))
     return value ? JSON.parse(value) : value
   }
 
-  const has: CacheClient['has'] = async (key) => {
+  const has: CacheStore['has'] = async (key) => {
     const value = await client.exists(getCacheKey(key))
     return Boolean(value)
   }
 
-  const del: CacheClient['del'] = (key) => client.del(getCacheKey(key))
+  const del: CacheStore['del'] = (key) => client.del(getCacheKey(key))
 
-  const clear: CacheClient['clear'] = async () => {
+  const clear: CacheStore['clear'] = async () => {
     const keys = await client.keys(getCacheKey('*'))
     if (keys.length) {
       await client.del(keys)
@@ -86,19 +86,19 @@ const getRedisClient = async (options?: CacheClientOptions): Promise<CacheClient
   return { set, get, has, del, clear }
 }
 
-export interface CacheClientOptions {
+export interface CacheStoreOptions {
   namespace?: string
 }
 
-export const createCacheClient = async (options?: CacheClientOptions) => {
-  let cacheClient: CacheClient | null = null
+export const createCacheStore = async (options?: CacheStoreOptions) => {
+  let cacheStore: CacheStore | null = null
   try {
-    cacheClient = await getRedisClient(options)
+    cacheStore = await createRedisStore(options)
     logger.info('Redis store readied.')
   } catch (error) {
-    cacheClient = getLRUClient()
+    cacheStore = createLRUStore()
     logger.info('LRU store readied.')
   }
-  await cacheClient.clear()
-  return cacheClient
+  await cacheStore.clear()
+  return cacheStore
 }

@@ -19,7 +19,7 @@ import { SUCCESS, INVALID_ERROR } from './constants/http-code'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import { isCNCode } from '/@/transforms/region'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
-import type { CacheClient } from '@/server/services/cache'
+import type { CacheStore } from '@/server/services/cache'
 import { createLogger } from '/@/utils/logger'
 import { isDev } from '/@/app/environment'
 import API_CONFIG from '/@/config/api.config'
@@ -180,7 +180,7 @@ export const renderError = async (requestContext: RequestContext, error: unknown
 }
 
 // app renderer
-export const renderApp = async (requestContext: RequestContext, cache: CacheClient): Promise<RenderResult> => {
+export const renderApp = async (requestContext: RequestContext, cache: CacheStore): Promise<RenderResult> => {
   const ssrContext = createSSRContext(requestContext)
   const app = createApp(ssrContext)
 

@@ -3,12 +3,12 @@ import path from 'path'
 import { createServer } from 'vite'
 import type { Express } from 'express'
 import type { RenderResult } from '@/ssr'
-import type { CacheClient } from '../services/cache'
+import type { CacheStore } from '../services/cache'
 import { createRequestContext } from './_context'
 import { resolveTemplate } from './_template'
 import { ROOT_PATH } from '../config'
 
-export const enableDevRenderer = async (app: Express, cache: CacheClient) => {
+export const enableDevRenderer = async (app: Express, cache: CacheStore) => {
   // https://vitejs.dev/guide/ssr.html
   // TODO: https://vite.dev/guide/api-environment-frameworks.html
   const viteServer = await createServer({

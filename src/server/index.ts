@@ -8,7 +8,7 @@ import http from 'http'
 import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
-import { createCacheClient } from './services/cache'
+import { createCacheStore } from './services/cache'
 import { PROXY_ROUTE_PATH, proxyer } from './services/proxy'
 import { PUBLIC_PATH } from './config'
 import { META } from '@/config/app.config'
@@ -29,8 +29,8 @@ export const createExpressApp = async () => {
   // app proxy
   app.get(PROXY_ROUTE_PATH, proxyer())
 
-  // init cache client
-  const cache = await createCacheClient({
+  // init cache service
+  const cache = await createCacheStore({
     namespace: META.domain.replace(/\./gi, '_')
   })
 
