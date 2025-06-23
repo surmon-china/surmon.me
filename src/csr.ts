@@ -7,7 +7,7 @@
 // polyfills
 import './polyfills'
 
-import { init as initSentry, browserTracingIntegration } from '@sentry/vue'
+import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createMainApp } from '/@/app/main'
@@ -86,7 +86,7 @@ watch(globalHead, (newValue) => mainHead.patch(newValue))
 
 // init: sentry
 if (isProd) {
-  initSentry({
+  Sentry.init({
     app,
     dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
     environment: APP_ENV,
@@ -94,8 +94,11 @@ if (isProd) {
     tracesSampleRate: isDev ? 1.0 : 0.2,
     // replaysSessionSampleRate: isDev ? 0.8 : 0.1,
     // replaysOnErrorSampleRate: 1.0,
-    // MARK: replayIntegration ≈ 110kb+
-    integrations: [/* replayIntegration() */ browserTracingIntegration({ router })],
+    integrations: [
+      Sentry.browserTracingIntegration({ router })
+      // MARK: replayIntegration ≈ 110kb+
+      // Sentry.replayIntegration()
+    ],
     tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
   })
 }
