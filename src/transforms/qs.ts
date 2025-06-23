@@ -6,12 +6,13 @@
 
 export const stringify = (object: any, sep = '&', eq = '=') => {
   let str = ''
-  for (let k in object) {
+  for (const k in object) {
+    // eslint-disable-next-line no-prototype-builtins
     if (object.hasOwnProperty(k)) {
-      let value = object[k]
+      const value = object[k]
       if (value === null || value === undefined) continue
-      let encodedKey = encodeURIComponent(k)
-      let encodedValue = encodeURIComponent(value)
+      const encodedKey = encodeURIComponent(k)
+      const encodedValue = encodeURIComponent(value)
       str += encodedKey + eq + encodedValue + sep
     }
   }

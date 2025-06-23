@@ -18,9 +18,9 @@
 
 <template>
   <ul class="columns" :style="{ '--grid-columns': cols }">
-    <li class="column" v-for="(data, i) in columns" :key="i">
+    <li class="column" v-for="(d, i) in columns" :key="i">
       <ul class="list">
-        <li class="item-wrapper" v-for="(item, index) in data" :key="index">
+        <li class="item-wrapper" v-for="(item, index) in d" :key="index">
           <slot name="item" :data="item"></slot>
         </li>
       </ul>

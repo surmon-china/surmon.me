@@ -210,8 +210,8 @@
       justify-content: flex-start;
       width: 100%;
       background-color: $module-bg;
-      background-image: global.surl('/images/page-about/background.png'),
-        linear-gradient($module-bg-opaque 50%, #00000000 100%);
+      background-image:
+        global.surl('/images/page-about/background.png'), linear-gradient($module-bg-opaque 50%, #00000000 100%);
       background-size: contain;
       background-repeat: repeat-x;
       background-blend-mode: lighten;

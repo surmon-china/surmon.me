@@ -5,7 +5,7 @@ export const GOOGLE_MAP_LINKS = [
     url: 'https://goo.gl/maps/fzHHMCjuSbbJgBVt9'
   },
   {
-    zh: '我的地图评价',
+    zh: '我的地图点评',
     en: 'My map reviews',
     url: 'https://google.com/maps/contrib/101107919754452588990/reviews'
   },
