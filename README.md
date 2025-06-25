@@ -55,11 +55,9 @@ $ pnpm run release
 
 ## Actions setup
 
-**Rule:**
-
-- Any PR opened → `CI:Build test`
-- New tag `v*` → `CI:Create Release`
-- Release created → `CI:Deploy` → `CI:Execute server script`
+- Any PR opened → [`CI:Build test`](.github/workflows/test.yml)
+- New tag `v*` → [`CI:Create Release`](.github/workflows/release.yml)
+- New Release created → [`CI:Deploy`](.github/workflows/deploy.yml) → Execute server [deploy script](./scripts)
 
 ### Changelog
 
