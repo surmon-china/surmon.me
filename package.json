@@ -39,7 +39,6 @@
     "geojson": "^0.5.0",
     "highlight.js": "^11.11.x",
     "html-to-image": "^1.11.x",
-    "http-proxy": "^1.18.1",
     "intersection-observer": "^0.12.2",
     "js-cookie": "^3.0.x",
     "lodash-es": "^4.17.21",
@@ -70,7 +69,6 @@
     "@types/cookie-parser": "^1.4.x",
     "@types/express": "^5.x",
     "@types/fs-extra": "^11.x",
-    "@types/http-proxy": "^1.17.x",
     "@types/lodash-es": "^4.17.12",
     "@types/lozad": "^1.16.4",
     "@types/node": "^22.x",
@@ -92,13 +90,5 @@
     "typescript": "^5.8.x",
     "typescript-eslint": "^8.x",
     "vite": "^7.x"
-  },
-  "pnpm": {
-    "//": "https://github.com/vitejs/vite/pull/16655",
-    "//-": "https://github.com/http-party/node-http-proxy/issues/1674",
-    "//--": "https://pnpm.io/cli/patch",
-    "patchedDependencies": {
-      "http-proxy@1.18.1": "patches/http-proxy@1.18.1.patch"
-    }
   }
 }
