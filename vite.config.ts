@@ -9,7 +9,7 @@ import path from 'path'
 import * as sass from 'sass'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
-import UnheadVite from '@unhead/addons/vite'
+import unheadPlugin from '@unhead/addons/vite'
 import packageJSON from './package.json'
 
 const CWD = process.cwd()
@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
   // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
 
   return {
-    plugins: [vuePlugin(), UnheadVite()],
+    plugins: [vuePlugin(), unheadPlugin()],
     root: path.resolve(__dirname),
     publicDir: 'public',
     resolve: {
@@ -45,15 +45,11 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          // https://sass-lang.com/documentation/at-rules/use/#configuration
-          // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptions
-          // https://github.com/vitejs/vite/blob/main/docs/config/shared-options.md#csspreprocessoroptionsextensionadditionaldata
-          additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`,
-          // https://sass-lang.com/documentation/js-api/interfaces/stringoptions/
           charset: false,
           importers: [new sass.NodePackageImporter()],
-          // https://sass-lang.com/documentation/breaking-changes/mixed-decls/
-          silenceDeprecations: ['mixed-decls']
+          silenceDeprecations: ['mixed-decls'],
+          // https://sass-lang.com/documentation/at-rules/use/#configuration
+          additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`
         }
       }
     },
