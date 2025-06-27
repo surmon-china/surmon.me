@@ -2,6 +2,7 @@
   import { computed, watch, onBeforeMount } from 'vue'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useArticleListStore } from '/@/stores/article'
   import { useTagStore, getTagEnName } from '/@/stores/tag'
   import { getExtendValue } from '/@/transforms/state'
@@ -15,7 +16,7 @@
     tagSlug: string
   }>()
 
-  const { seoMeta, cdnDomain, isZhLang } = useEnhancer()
+  const { cdnDomain, isZhLang } = useEnhancer()
 
   const tagStore = useTagStore()
   const articleListStore = useArticleListStore()
@@ -39,15 +40,12 @@
     scrollToNextScreen()
   }
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(props.tagSlug)
     const zhTitle = currentTag.value?.name!
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']
     const description = currentTag.value?.description || titles.join(',')
-    return {
-      pageTitle: titles.join(' | '),
-      description
-    }
+    return { pageTitles: titles, description }
   })
 
   onBeforeMount(() => {

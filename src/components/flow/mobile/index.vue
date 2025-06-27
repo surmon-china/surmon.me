@@ -3,6 +3,7 @@
   import { LanguageKey } from '/@/language'
   import { META } from '/@/config/app.config'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { useArticleListStore } from '/@/stores/article'
   import { useTagStore, getTagEnName } from '/@/stores/tag'
@@ -20,7 +21,7 @@
     date?: string
   }>()
 
-  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
+  const { i18n: _i18n, isZhLang } = useEnhancer()
   const tagStore = useTagStore()
   const categoryStore = useCategoryStore()
   const articleListStore = useArticleListStore()
@@ -37,17 +38,16 @@
     return pagination ? pagination.current_page < pagination.total_page : false
   })
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const titles: string[] = Object.values(props)
       .filter(Boolean)
       .map((prop) => firstUpperCase(prop as string))
 
-    // filter page
+    // filters page
     if (titles.length) {
-      return {
-        pageTitle: titles.join(' | ')
-      }
+      return { pageTitles: titles }
     }
+
     // index page
     return {
       title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,

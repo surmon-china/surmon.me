@@ -3,18 +3,19 @@
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import PageBanner from '/@/components/common/banner.vue'
 
-  const { i18n: _i18n, seoMeta, route, isZhLang } = useEnhancer()
+  const { i18n: _i18n, route, isZhLang } = useEnhancer()
   const sponsorState = useSponsorState()
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_SPONSOR), enTitle] : [enTitle]
-    return { pageTitle: titles.join(' | ') }
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_SPONSOR)!, enTitle] : [enTitle]
+    return { pageTitles: titles }
   })
 
   onBeforeMount(() => {

@@ -1,5 +1,6 @@
 import { useStores } from '/@/stores'
 import { useEnhancer } from '/@/app/enhancer'
+import { usePageSeo } from '/@/composables/head'
 import { useCDNDomain } from '/@/app/context'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
@@ -11,16 +12,15 @@ export const useAdminAvatar = (avatar?: string) => {
 }
 
 export const useAboutPageMeta = () => {
-  const { i18n, seoMeta, isZhLang } = useEnhancer()
+  const { i18n, isZhLang } = useEnhancer()
   const { adminInfo } = useStores()
 
-  return seoMeta(() => {
+  return usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ABOUT, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT), enTitle] : [enTitle]
-    const description = `${isZhLang.value ? '关于' : 'About'} ${META.author}`
+    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT)!, enTitle] : [enTitle]
     return {
-      pageTitle: titles.join(' | '),
-      description,
+      pageTitles: titles,
+      description: `${isZhLang.value ? '关于' : 'About'} ${META.author}`,
       ogType: 'profile',
       ogImage: adminInfo.data?.avatar
     }

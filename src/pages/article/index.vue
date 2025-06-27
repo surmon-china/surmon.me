@@ -10,6 +10,7 @@
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widget/share.vue'
+  import { useHead, usePageSeo } from '/@/composables/head'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtendValue } from '/@/transforms/state'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -29,7 +30,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, head, seoMeta, route, gtag, gState } = useEnhancer()
+  const { i18n: _i18n, route, gtag, gState } = useEnhancer()
   const { identity, githubSponsors, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
@@ -92,18 +93,21 @@
     customElementsStyle.value = CUSTOM_ELEMENTS.verse.style?.(element) ?? null
   }
 
-  head(() => ({
+  useHead(() => ({
     style: customElementsStyle.value ? [{ children: customElementsStyle.value }] : []
   }))
 
-  seoMeta(() => ({
+  usePageSeo(() => ({
     pageTitle: article.value?.title,
-    description: article.value?.description || '',
+    description: article.value?.description,
     keywords: article.value?.keywords?.join(',') || article.value?.title,
     ogType: 'article',
     ogImage: article.value?.thumbnail,
     ogImageWidth: 1190,
-    ogImageHeight: 420
+    ogImageHeight: 420,
+    articleTags: article.value?.tags.map((tag) => tag.name),
+    articleModifiedTime: article.value?.updated_at,
+    articlePublishedTime: article.value?.created_at
   }))
 
   useUniversalFetch(() => {

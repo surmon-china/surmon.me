@@ -7,7 +7,7 @@
 import dotenv from 'dotenv'
 import { META } from '@/config/app.config'
 import { BFF_TUNNEL_PREFIX as TUN, getBFFServerPort } from '@/config/bff.config'
-import { NODE_ENV, isNodeDev } from '@/server/environment'
+import { NODE_ENV, isNodeDev } from '@/server/env'
 import { BAD_REQUEST } from '@/constants/http-code'
 import { TunnelModule } from '@/constants/tunnel'
 import { getRssXml } from './server/getters/rss'
@@ -34,7 +34,7 @@ import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
-import { responser, errorer } from './server/helpers/responser'
+import { responder, handleError } from './server/helpers/responder'
 import cacher, { minutes, hours, days } from './server/helpers/cacher'
 import { createExpressApp } from './server'
 import { createLogger } from '@/utils/logger'
@@ -52,7 +52,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
       response.header('Content-Type', 'application/xml')
       response.send(await getSitemapXml())
     } catch (error) {
-      errorer(response, { message: error })
+      handleError(response, { message: error })
     }
   })
 
@@ -62,7 +62,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
       response.header('Content-Type', 'application/xml')
       response.send(await getRssXml())
     } catch (error) {
-      errorer(response, { message: error })
+      handleError(response, { message: error })
     }
   })
 
@@ -80,7 +80,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
       response.header('Content-Type', 'text/javascript')
       response.send(await getGtagCache())
     } catch (error) {
-      errorer(response, { message: error })
+      handleError(response, { message: error })
     }
   })
 
@@ -95,7 +95,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   app.get(
     `${TUN}/${TunnelModule.BingWallpaper}`,
-    responser(() => getWallpaperCache())
+    responder(() => getWallpaperCache())
   )
 
   // 163 music BGM list
@@ -109,7 +109,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   app.get(
     `${TUN}/${TunnelModule.NetEaseMusic}`,
-    responser(() => get163MusicCache())
+    responder(() => get163MusicCache())
   )
 
   // Threads profile
@@ -123,7 +123,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   app.get(
     `${TUN}/${TunnelModule.ThreadsProfile}`,
-    responser(() => getThreadsProfileCache())
+    responder(() => getThreadsProfileCache())
   )
 
   // Threads latest medias
@@ -139,11 +139,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(`${TUN}/${TunnelModule.ThreadsMedias}`, (request, response, next) => {
     const afterToken = request.query.after
     if (afterToken && typeof afterToken !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return !afterToken
         ? getThreadsFirstPageMediasCache()
         : cacher.passive(cache, {
@@ -158,11 +158,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(`${TUN}/${TunnelModule.ThreadsMediaChildren}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: `threads_media_children_${mediaId}`,
         ttl: days(7),
@@ -175,11 +175,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(`${TUN}/${TunnelModule.ThreadsMediaConversation}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: `threads_media_conversation_${mediaId}`,
         ttl: days(7),
@@ -191,7 +191,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // Instagram profile
   app.get(
     `${TUN}/${TunnelModule.InstagramProfile}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.InstagramProfile,
         ttl: hours(12),
@@ -213,11 +213,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(`${TUN}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
     const afterToken = request.query.after
     if (afterToken && typeof afterToken !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return !afterToken
         ? getInsFirstPageMediasCache()
         : cacher.passive(cache, {
@@ -232,11 +232,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   app.get(`${TUN}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: `instagram_media_children_${mediaId}`,
         ttl: days(7),
@@ -256,7 +256,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   app.get(
     `${TUN}/${TunnelModule.InstagramCalendar}`,
-    responser(() => getInsCalendarCache())
+    responder(() => getInsCalendarCache())
   )
 
   // YouTube playlists
@@ -270,18 +270,18 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   app.get(
     `${TUN}/${TunnelModule.YouTubePlaylist}`,
-    responser(() => getYouTubePlaylistsCache())
+    responder(() => getYouTubePlaylistsCache())
   )
 
   // YouTube videos
   app.get(`${TUN}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
     const playlistId = request.query.id
     if (!playlistId || typeof playlistId !== 'string') {
-      errorer(response, { code: BAD_REQUEST, message: 'Invalid params' })
+      handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
       return
     }
 
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: `youtube_playlist_${playlistId}`,
         ttl: hours(1),
@@ -293,7 +293,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // GitHub sponsors
   app.get(
     `${TUN}/${TunnelModule.GitHubSponsors}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubSponsors,
         ttl: hours(4),
@@ -305,7 +305,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // GitHub contributions
   app.get(
     `${TUN}/${TunnelModule.GitHubContributions}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubContributions,
         ttl: hours(4),
@@ -317,7 +317,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // GitHub statistic
   app.get(
     `${TUN}/${TunnelModule.StatisticGitHubJson}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.StatisticGitHubJson,
         ttl: hours(8),
@@ -329,7 +329,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // NPM statistic
   app.get(
     `${TUN}/${TunnelModule.StatisticNpmJson}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.StatisticNpmJson,
         ttl: hours(8),
@@ -341,7 +341,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // Douban movies
   app.get(
     `${TUN}/${TunnelModule.DoubanMovies}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.DoubanMovies,
         ttl: days(3),
@@ -353,7 +353,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   // GoogleMaps - My Maps
   app.get(
     `${TUN}/${TunnelModule.MyGoogleMap}`,
-    responser(() => {
+    responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.MyGoogleMap,
         ttl: hours(6),

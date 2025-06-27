@@ -10,6 +10,7 @@ import './polyfills'
 import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
+import { createHead } from '@unhead/vue/client'
 import { createMainApp } from '/@/app/main'
 import gtag from '/@/composables/gtag'
 import lozad from '/@/composables/lozad'
@@ -25,7 +26,7 @@ import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/universal'
 import { Language, LanguageKey } from '/@/language'
-import { APP_VERSION, APP_ENV, isDev, isProd } from '/@/app/environment'
+import { APP_VERSION, isDev, isProd } from './app/environment'
 import { META, IDENTITIES } from '/@/config/app.config'
 import API_CONFIG from '/@/config/api.config'
 
@@ -39,9 +40,9 @@ console.group(`🔵 [SSR:CONTEXT]`)
 console.table(getSSRContextData())
 console.groupEnd()
 
-// app
-const { app, router, head, globalState, i18n, store, getGlobalHead } = createMainApp({
-  historyCreator: createWebHistory,
+// init: app
+const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
+  routerHistoryCreator: createWebHistory,
   language: navigator.language,
   userAgent: navigator.userAgent,
   region: getSSRStateValue('region')!,
@@ -50,12 +51,22 @@ const { app, router, head, globalState, i18n, store, getGlobalHead } = createMai
   error: getSSRContextValue('error')
 })
 
-// services
+// init: composables
 const defer = createDefer()
 const popup = createPopup()
 const music = createMusic({ delay: 668, continueNext: true })
+const head = createHead({ disableCapoSorting: true })
 
-// plugins & services
+// init: global head attributes
+const globalHeadRef = computed(() => getGlobalHead())
+const globalHeadEntry = head.push(globalHeadRef)
+watch(globalHeadRef, (newValue) => globalHeadEntry.patch(newValue))
+
+// init: store (from SSR context or fetch)
+store.hydrate()
+
+// init: plugins & services
+app.use(head)
 app.use(music)
 app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
@@ -66,39 +77,28 @@ app.use(gtag, {
   config: { send_page_view: false },
   customResourceURL: '/gtag-script'
 })
+
 // enable adsense on desktop only
 if (!globalState.userAgent.isMobile) {
   app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: false })
 }
-
-// init: store (from SSR context or fetch)
-store.hydrate()
 
 // init: services with client
 exportEmojiRainToGlobal()
 exportAppToGlobal(app)
 initCopyrighter()
 
-// init global head attributes: https://unhead.harlanzw.com/api/core/push
-const globalHead = computed(() => getGlobalHead())
-const mainHead = head.push(globalHead, { mode: 'client' })
-watch(globalHead, (newValue) => mainHead.patch(newValue))
-
 // init: sentry
 if (isProd) {
   Sentry.init({
     app,
     dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
-    environment: APP_ENV,
     release: APP_VERSION,
     tracesSampleRate: isDev ? 1.0 : 0.2,
     // replaysSessionSampleRate: isDev ? 0.8 : 0.1,
     // replaysOnErrorSampleRate: 1.0,
-    integrations: [
-      Sentry.browserTracingIntegration({ router })
-      // MARK: replayIntegration ≈ 110kb+
-      // Sentry.replayIntegration()
-    ],
+    // MARK: replayIntegration ≈ 110kb+, so disabled by default `Sentry.replayIntegration()`
+    integrations: [Sentry.browserTracingIntegration({ router })],
     tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
   })
 }
@@ -111,7 +111,7 @@ router.isReady().finally(() => {
   app.mount('#app', true).$nextTick(() => {
     // set hydration state
     globalState.setHydrate()
-    // reset: i18n language
+    // reset i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init user identity state
     store.stores.identity.initOnClient()

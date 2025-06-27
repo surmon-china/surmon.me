@@ -6,26 +6,31 @@
 
 import serialize from 'serialize-javascript'
 import _isObject from 'lodash-es/isObject'
-import type { IncomingHttpHeaders } from 'http'
 import { createMemoryHistory } from 'vue-router'
 import { renderToString } from 'vue/server-renderer'
-import { renderSSRHead, SSRHeadPayload } from '@unhead/ssr'
 import { createMainApp, MainApp } from '/@/app/main'
+import { createHead, renderSSRHead } from '@unhead/vue/server'
+import type { IncomingHttpHeaders } from 'http'
+import type { SSRHeadPayload, VueHeadClient } from '@unhead/vue/server'
 import type { SSRContext } from '/@/app/context'
 import type { RenderErrorValue } from '/@/app/state'
+import type { CacheStore } from '@/server/services/cache'
 import { renderSSRStateScript, renderSSRContextScript } from '/@/universal'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
-import { SUCCESS, INVALID_ERROR } from './constants/http-code'
+import * as HTTP_CODES from '/@/constants/http-code'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
-import { isCNCode } from '/@/transforms/region'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
-import type { CacheStore } from '@/server/services/cache'
-import { createLogger } from '/@/utils/logger'
+import { isCNCode } from '/@/transforms/region'
 import { isDev } from '/@/app/environment'
+import { createLogger } from '/@/utils/logger'
 import API_CONFIG from '/@/config/api.config'
 
 const renderLogger = createLogger('SSR:Render')
 const devDebug = (...messages: any[]) => isDev && renderLogger.debug(...messages)
+
+const getRegionByCountryCode = (country?: string) => {
+  return country && isCNCode(country) ? 'cn' : 'global'
+}
 
 export interface RequestContext {
   headers: IncomingHttpHeaders
@@ -40,177 +45,167 @@ const createSSRContext = (requestContext: RequestContext, error?: RenderErrorVal
   const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets)
   return {
     requestURL: url,
-    country,
     language: headers['accept-language'],
     userAgent: headers['user-agent'],
     cookieTheme: cookies[THEME_STORAGE_KEY],
+    country,
     cdnDomain,
     assetsPrefix,
     error
   }
 }
 
-const getRegionByCode = (code?: string) => {
-  return code && isCNCode(code) ? 'cn' : 'global'
-}
-
-const getCacheKey = (vueApp: MainApp, ssrContext: SSRContext): string => {
-  const { i18n, theme, globalState } = vueApp
-  const language = i18n.language.value
-  const themeValue = theme.theme.value
-  const device = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
-  const region = getRegionByCode(ssrContext.country)
-  return `ssr:${language}_${region}_${device}_${themeValue}_${ssrContext.requestURL}`
-}
-
-// app creater
-const createApp = (ssrContext: SSRContext): MainApp => {
+const createSSRMainApp = (ssrContext: SSRContext): [MainApp, VueHeadClient] => {
   const mainApp = createMainApp({
-    historyCreator: createMemoryHistory,
+    routerHistoryCreator: createMemoryHistory,
     language: ssrContext.language!,
     userAgent: ssrContext.userAgent!,
-    theme: (ssrContext.cookieTheme as Theme) || Theme.Light,
-    region: getRegionByCode(ssrContext.country),
+    theme: (ssrContext.cookieTheme as Theme) ?? Theme.Light,
+    region: getRegionByCountryCode(ssrContext.country),
     error: ssrContext.error
   })
-  // set ssr context to app global
-  // mainApp.app.config.globalProperties.$ssrContext = ssrContext
+
   // HACK: hack components and directives for SSR fix warn
   // https://github.com/vuejs/core/blob/main/CHANGELOG.md#features
   const hackDirectives = ['lozad']
   const hackComponents = ['progress-bar', 'popup-root', 'popup', 'Adsense']
   hackDirectives.forEach((d) => mainApp.app.directive(d, {}))
   hackComponents.forEach((c) => mainApp.app.component(c, {}))
-  // init global head attributes: https://unhead.harlanzw.com/api/core/push
-  // When run `head.push` on the server, it is patched immediately and does not need to be updated.
-  mainApp.head.push(mainApp.getGlobalHead(), { mode: 'server' })
-  return mainApp
-}
 
-// https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
-const renderHTML = async (mainApp: MainApp, ssrContext: SSRContext): Promise<Omit<RenderResult, 'code'>> => {
-  const { app, router, store, head, theme, globalState } = mainApp
-  const startTime = Date.now()
+  // init global head attributes
+  // https://unhead.unjs.io/docs/vue/head/guides/get-started/installation
+  // https://unhead.unjs.io/docs/vue/head/guides/get-started/migration#default-ssr-tags
+  // https://unhead.unjs.io/docs/vue/head/guides/get-started/migration#tag-sorting-updated
+  const head = createHead({
+    disableDefaults: true,
+    disableCapoSorting: true,
+    init: [mainApp.getGlobalHead()]
+  })
+  mainApp.app.use(head)
 
-  devDebug(`- 1. route.push.validate: ${ssrContext.requestURL}`)
-  await router.push(ssrContext.requestURL)
-  await router.isReady()
-
-  devDebug('- 2. store.serverInit')
-  await store.serverPrefetch()
-
-  devDebug('- 3. set layout')
-  // because the layout func set has by animation done
-  globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
-
-  devDebug('- 4. renderToString')
-  const html = await renderToString(app, ssrContext)
-  // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
-  if (globalState.renderError.value) {
-    const newError = new Error(globalState.renderError.value.message)
-    ;(newError as any).code = globalState.renderError.value.code
-    throw newError
-  }
-
-  devDebug('- 5. renderSSRHead')
-  const heads = await renderSSRHead(head)
-
-  devDebug('- 6. SSR State & SSR context script')
-  const stateScripts = renderSSRStateScript(
-    serialize({
-      store: store.state.value,
-      theme: theme.theme.value,
-      layout: globalState.layoutColumn.value.layout,
-      region: getRegionByCode(ssrContext.country)
-    })
-  )
-  const contextScripts = renderSSRContextScript(
-    serialize({
-      ...ssrContext,
-      cacheStatus: 'miss'
-    })
-  )
-
-  devDebug('rendered:', Date.now() - startTime, 'ms')
-  return {
-    html,
-    heads,
-    stateScripts,
-    contextScripts,
-    assetsPrefix: ssrContext.assetsPrefix
-  }
+  return [mainApp, head]
 }
 
 export interface RenderResult {
   code: number
-  html: string
-  heads: SSRHeadPayload
+  appHTML: string
+  headHTML: SSRHeadPayload
+  assetsPrefix: string
   stateScripts: string
   contextScripts: string
-  assetsPrefix: string
 }
 
 /**
- * @name error renderer
+ * @name Error page renderer
  * 1. server runtime error
  * 2. render fetch error
  * 3. router validate/404 error
  */
 export const renderError = async (requestContext: RequestContext, error: unknown): Promise<RenderResult> => {
   const renderError: RenderErrorValue = {
-    code: (error as any).code ?? INVALID_ERROR,
+    code: (error as any).code ?? HTTP_CODES.INTERNAL_SERVER_ERROR,
     message: error instanceof Error ? error.message : _isObject(error) ? error['message'] : JSON.stringify(error)
   }
   const ssrContext = createSSRContext(requestContext, renderError)
-  const { app, head, theme } = createApp(ssrContext)
+  const [{ app, theme }, head] = createSSRMainApp(ssrContext)
   head.push({ title: `Server Error: ${renderError.message || 'unknow'}` })
   return {
     code: renderError.code,
-    html: await renderToString(app, ssrContext),
-    heads: await renderSSRHead(head),
+    appHTML: await renderToString(app, ssrContext),
+    headHTML: await renderSSRHead(head),
     assetsPrefix: ssrContext.assetsPrefix,
     contextScripts: renderSSRContextScript(serialize(ssrContext)),
     stateScripts: renderSSRStateScript(
       serialize({
         theme: theme.theme.value,
-        region: getRegionByCode(ssrContext.country)
+        region: getRegionByCountryCode(ssrContext.country)
       })
     )
   }
 }
 
-// app renderer
+// App page renderer
 export const renderApp = async (requestContext: RequestContext, cache: CacheStore): Promise<RenderResult> => {
   const ssrContext = createSSRContext(requestContext)
-  const app = createApp(ssrContext)
+  const [{ app, router, store, theme, i18n, globalState }, head] = createSSRMainApp(ssrContext)
 
-  // render from cache
-  const cacheKey = getCacheKey(app, ssrContext)
+  // Make cache Key
+  const language = i18n.language.value
+  const themeName = theme.theme.value
+  const deviceType = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
+  const regionCode = getRegionByCountryCode(ssrContext.country)
+  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${themeName}_${ssrContext.requestURL}`
+
+  // Return cached result if exists
   const isCached = await cache.has(cacheKey)
   devDebug(`cache:`, isCached, `| "${cacheKey}"`)
   if (isCached) {
     return {
       ...(await cache.get<RenderResult>(cacheKey)),
       contextScripts: renderSSRContextScript(serialize({ ...ssrContext, cacheStatus: 'hit' })),
-      code: SUCCESS
+      code: HTTP_CODES.SUCCESS
     }
   }
 
   try {
-    const rendered = await renderHTML(app, ssrContext)
-    const cacheTTL = app.router.currentRoute.value.meta?.ssrCacheTTL
+    // Try to render the main app
+    const startTime = Date.now()
+
+    devDebug(`- 1. route.push.validate: ${ssrContext.requestURL}`)
+    await router.push(ssrContext.requestURL)
+    await router.isReady()
+
+    devDebug('- 2. store.serverInit')
+    await store.serverPrefetch()
+
+    // because the layout func set has by animation done
+    devDebug('- 3. set layout')
+    globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
+
+    devDebug('- 4. renderToString')
+    const appHTML = await renderToString(app, ssrContext)
+    // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
+    if (globalState.renderError.value) {
+      const newError = new Error(globalState.renderError.value.message)
+      ;(newError as any).code = globalState.renderError.value.code
+      throw newError
+    }
+
+    devDebug('- 5. renderSSRHead')
+    const headHTML = await renderSSRHead(head)
+
+    devDebug('- 6. SSR State & SSR context script')
+    const contextScripts = renderSSRContextScript(serialize({ ...ssrContext, cacheStatus: 'miss' }))
+    const stateScripts = renderSSRStateScript(
+      serialize({
+        store: store.state.value,
+        theme: theme.theme.value,
+        layout: globalState.layoutColumn.value.layout,
+        region: getRegionByCountryCode(ssrContext.country)
+      })
+    )
+
+    devDebug('rendered:', Date.now() - startTime, 'ms')
+
+    const cacheableRendered = {
+      appHTML,
+      headHTML,
+      stateScripts,
+      assetsPrefix: ssrContext.assetsPrefix
+    }
+
+    // Set cache with TTL if specified in route meta
+    const cacheTTL = router.currentRoute.value.meta?.ssrCacheTTL
     if (cacheTTL !== false && typeof cacheTTL === 'number' && cacheTTL > 0) {
-      const { contextScripts, ...rest } = rendered
-      if (cacheTTL === Infinity) {
-        cache.set(cacheKey, rest)
-      } else {
-        cache.set(cacheKey, rest, cacheTTL)
-      }
+      cacheTTL === Infinity
+        ? cache.set(cacheKey, cacheableRendered)
+        : cache.set(cacheKey, cacheableRendered, cacheTTL)
     }
 
     return {
-      ...rendered,
-      code: SUCCESS
+      ...cacheableRendered,
+      contextScripts,
+      code: HTTP_CODES.SUCCESS
     }
   } catch (error: any) {
     return renderError(requestContext, error)

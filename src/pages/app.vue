@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
@@ -10,18 +11,18 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, seoMeta, gtag, isZhLang } = useEnhancer()
+  const { i18n: _i18n, gtag, isZhLang } = useEnhancer()
   const handleAppEvent = (name: string) => {
     gtag?.event(name, {
       event_category: GAEventCategories.App
     })
   }
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_APP, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP), enTitle] : [enTitle]
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP)!, enTitle] : [enTitle]
     return {
-      pageTitle: titles.join(' | '),
+      pageTitles: titles,
       description: `${META.title} App ${isZhLang.value ? '下载' : 'download'}`,
       ogImage: APP_LOGO_URL
     }

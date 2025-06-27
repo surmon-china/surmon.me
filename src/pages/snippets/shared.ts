@@ -1,4 +1,5 @@
 import { useEnhancer } from '/@/app/enhancer'
+import { usePageSeo } from '/@/composables/head'
 import { firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
 import { META } from '/@/config/app.config'
@@ -9,13 +10,13 @@ export const i18nTitle = {
 } as const
 
 export const useSnippetsPageMeta = () => {
-  const { i18n, seoMeta, isZhLang } = useEnhancer()
-  seoMeta(() => {
+  const { i18n, isZhLang } = useEnhancer()
+  usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_SNIPPETS, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SNIPPETS), enTitle] : [enTitle]
+    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_SNIPPETS)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${META.author} 的清风念` : `${META.author}'s snippets`
     return {
-      pageTitle: titles.join(' | '),
+      pageTitles: titles,
       description: description
     }
   })

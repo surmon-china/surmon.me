@@ -35,14 +35,14 @@ export const initCopyrighter = () => {
   }
 
   const buildText = (content) => content + copyText()
-  const buildHtml = (content) => content + copyText()
+  const buildHTML = (content) => content + copyText()
 
   document.addEventListener('copy', (event) => {
     if (!window.getSelection) return
     if (window.__isEnabledCopyrighter) {
       const content = window.getSelection()?.toString()
       event.clipboardData?.setData('text/plain', buildText(content))
-      event.clipboardData?.setData('text/html', buildHtml(content))
+      event.clipboardData?.setData('text/html', buildHTML(content))
       event.preventDefault()
     }
   })

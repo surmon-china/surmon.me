@@ -2,6 +2,7 @@
   import { ref, shallowRef, shallowReactive, computed } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
@@ -16,7 +17,7 @@
   import InstagramGrid from './grid.vue'
 
   const { instagramLatestMedias } = useStores()
-  const { i18n: _i18n, seoMeta, isZhLang } = useEnhancer()
+  const { i18n: _i18n, isZhLang } = useEnhancer()
 
   const loading = ref(false)
   const medias = shallowReactive<Array<InstagramMediaItem>>([])
@@ -41,12 +42,12 @@
     return [...latestMedias, ...medias]
   })
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY), enTitle] : [enTitle]
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${META.author} 的摄影作品` : `${META.author}'s photographs`
     return {
-      pageTitle: titles.join(' | '),
+      pageTitles: titles,
       description: description
     }
   })

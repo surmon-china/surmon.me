@@ -9,10 +9,10 @@ import https from 'https'
 import { pipeline } from 'stream/promises'
 import type { RequestHandler, Request } from 'express'
 import { base64UrlEncode, base64UrlDecode } from '@/transforms/base64'
-import { FORBIDDEN, BAD_REQUEST, INVALID_ERROR, GATEWAY_TIMEOUT } from '@/constants/http-code'
+import { FORBIDDEN, BAD_REQUEST, INTERNAL_SERVER_ERROR, GATEWAY_TIMEOUT } from '@/constants/http-code'
 import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/config/bff.config'
 import { META } from '@/config/app.config'
-import { isNodeProd } from '@/server/environment'
+import { isNodeProd } from '@/server/env'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF:Proxy')
@@ -29,13 +29,13 @@ const PROXY_UA =
 const getProxyUrlFromRequest = (request: Request) => base64UrlDecode(String(request.params.url))
 const makeRedirectLocation = (location: string) => `${BFF_PROXY_PREFIX}/${base64UrlEncode(location)}`
 
-export const proxyer = (): RequestHandler => {
+export const proxifier = (): RequestHandler => {
   return async (request, response) => {
     let targetURL: string | null = null
     let parsedURL: URL | null = null
 
     // Helper: unified error response
-    const sendError = (message: string, statusCode = INVALID_ERROR) => {
+    const sendError = (message: string, statusCode = INTERNAL_SERVER_ERROR) => {
       if (!response.headersSent) {
         response.writeHead(statusCode, { 'Content-Type': 'text/plain' })
       }
@@ -91,7 +91,7 @@ export const proxyer = (): RequestHandler => {
       },
       async (proxyResponse) => {
         // If the target resource redirects, the proxy server still needs to encode the format of the redirection.
-        const statusCode = proxyResponse.statusCode || INVALID_ERROR
+        const statusCode = proxyResponse.statusCode || INTERNAL_SERVER_ERROR
         if ([301, 302, 307, 308].includes(statusCode)) {
           const location = proxyResponse.headers.location
           if (location) {
@@ -105,7 +105,7 @@ export const proxyer = (): RequestHandler => {
         }
 
         // Pipe response headers
-        response.writeHead(proxyResponse.statusCode || INVALID_ERROR, proxyResponse.headers)
+        response.writeHead(proxyResponse.statusCode || INTERNAL_SERVER_ERROR, proxyResponse.headers)
 
         try {
           // Use pipeline to handle response stream

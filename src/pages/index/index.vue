@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch, onClient } from '/@/universal'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
@@ -9,7 +10,7 @@
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
 
-  const { seoMeta, i18n: _i18n, isZhLang } = useEnhancer()
+  const { i18n: _i18n, isZhLang } = useEnhancer()
   const { appOption, threadsProfile, threadsLatestMedias, articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
@@ -20,8 +21,8 @@
     }
   }
 
-  seoMeta(() => ({
-    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)!.replaceAll('，', ' ')}`,
+  usePageSeo(() => ({
+    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
     description: isZhLang.value ? META.zh_description : META.en_description,
     keywords: appOption.data?.keywords.join(',')
   }))

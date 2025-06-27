@@ -15,6 +15,8 @@ export const META = Object.freeze({
   zh_description: `本是浪蝶游蜂，无智无德无明；幸闻佛道开化，志利有情众生`,
   zh_description_short: `本为蝶蜂，无德无明；幸闻佛道，志利众生`,
   en_description: 'Either write something worth reading or do something worth writing.',
+  default_og_image: '/images/og-social-card.jpg',
+  title_separator: ' | ',
   url: 'https://surmon.me',
   domain: 'surmon.me',
   author: 'Surmon',

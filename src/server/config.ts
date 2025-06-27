@@ -1,11 +1,11 @@
 /**
- * @file BFF Server helper
- * @module server.helper.configurer
+ * @file BFF Server configuration and path constants
+ * @module server.config
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import path from 'path'
-import { isNodeDev } from '@/server/environment'
+import { isNodeDev } from '@/server/env'
 import { getOnlineApiURL, getLocalApiURL } from '@/config/bff.config'
 
 // Keep it as a function, since the process.env variables are only valid after the application is completely run

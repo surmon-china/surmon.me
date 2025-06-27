@@ -9,8 +9,8 @@ import { resolveTemplate } from './_template'
 import { ROOT_PATH } from '../config'
 
 export const enableDevRenderer = async (app: Express, cache: CacheStore) => {
-  // https://vitejs.dev/guide/ssr.html
-  // TODO: https://vite.dev/guide/api-environment-frameworks.html
+  // https://vite.dev/guide/ssr.html
+  // https://vite.dev/guide/api-environment-frameworks.html
   const viteServer = await createServer({
     root: process.cwd(),
     logLevel: 'info',
@@ -26,39 +26,31 @@ export const enableDevRenderer = async (app: Express, cache: CacheStore) => {
 
   // use vite's connect instance as middleware
   app.use(viteServer.middlewares)
-  app.get('*path', async (request, response) => {
-    const requestContext = createRequestContext(request)
-    const { renderApp, renderError } = await viteServer.ssrLoadModule('/src/ssr.ts')
-    let template = fs.readFileSync(path.resolve(ROOT_PATH, 'index.html'), 'utf-8')
+  app.get('*all', async (request, response) => {
+    const template = await viteServer.transformIndexHtml(
+      request.originalUrl,
+      fs.readFileSync(path.resolve(ROOT_PATH, 'index.html'), 'utf-8')
+    )
 
-    try {
-      const url = request.originalUrl
-      template = await viteServer.transformIndexHtml(url, template)
-      const rendered: RenderResult = await renderApp(requestContext, cache)
-      response
-        .status(rendered.code)
-        .set({ 'Content-Type': 'text/html' })
-        .end(
-          resolveTemplate({
-            template,
-            heads: rendered.heads,
-            appHTML: rendered.html,
-            scripts: rendered.stateScripts,
-            extraScripts: rendered.contextScripts
-          })
-        )
-    } catch (error: any) {
-      viteServer.ssrFixStacktrace(error)
-      const rendered: RenderResult = await renderError(requestContext, error)
-      response.status(rendered.code).end(
+    const { renderApp, renderError } = await viteServer.ssrLoadModule('/src/ssr.ts')
+    const sendRenderedResponse = (rendered: RenderResult) => {
+      response.status(rendered.code)
+      response.set({ 'Content-Type': 'text/html' })
+      response.end(
         resolveTemplate({
           template,
-          heads: rendered.heads,
-          appHTML: rendered.html,
-          scripts: rendered.stateScripts,
-          extraScripts: rendered.contextScripts
+          appHTML: rendered.appHTML,
+          headHTML: rendered.headHTML,
+          bodyScripts: `${rendered.stateScripts}\n${rendered.contextScripts}`
         })
       )
+    }
+
+    try {
+      sendRenderedResponse(await renderApp(createRequestContext(request), cache))
+    } catch (error: any) {
+      viteServer.ssrFixStacktrace(error)
+      sendRenderedResponse(await renderError(createRequestContext(request), error))
     }
   })
 }

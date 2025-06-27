@@ -1,13 +1,13 @@
 /**
- * @file BFF Server responser
- * @module server.helper.responser
+ * @file BFF Server responder
+ * @module server.helper.responder
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import _isObject from 'lodash-es/isObject'
 import { isAxiosError } from 'axios'
 import type { RequestHandler, Response } from 'express'
-import { INVALID_ERROR } from '@/constants/http-code'
+import { INTERNAL_SERVER_ERROR } from '@/constants/http-code'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF')
@@ -21,21 +21,21 @@ export const getErrorMessage = (_error: unknown) => {
       : JSON.stringify(error)
 }
 
-export interface ErrorerOptions {
+export interface ErrorHandlerOptions {
   message: unknown
   code?: number
 }
 
-export const errorer = (response: Response, { code, message }: ErrorerOptions) => {
+export const handleError = (response: Response, { code, message }: ErrorHandlerOptions) => {
   logger.failure(`Error:`, isAxiosError(message) ? message.toJSON() : message)
-  response.status(code ?? INVALID_ERROR)
+  response.status(code ?? INTERNAL_SERVER_ERROR)
   response.send(getErrorMessage(message))
 }
 
-export const responser = (promise: () => Promise<any>): RequestHandler => {
+export const responder = (promise: () => Promise<any>): RequestHandler => {
   return (_, response) => {
     promise()
       .then((data) => response.send(data))
-      .catch((error: unknown) => errorer(response, { message: error }))
+      .catch((error: unknown) => handleError(response, { message: error }))
   }
 }

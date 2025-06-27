@@ -2,6 +2,7 @@
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
+  import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
   import { META, VALUABLE_LINKS } from '/@/config/app.config'
@@ -10,13 +11,13 @@
   import YoutubeSkeleton from './skeleton.vue'
   import YoutubePlaylist from './playlist.vue'
 
-  const { seoMeta, isZhLang } = useEnhancer()
+  const { isZhLang } = useEnhancer()
   const { youtubePlayList } = useStores()
   const youtubePlaylistData = computed(() => {
     return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
   })
 
-  seoMeta(() => {
+  usePageSeo(() => {
     return {
       pageTitle: 'YouTube',
       description: isZhLang.value ? `${META.author} 的视频` : `${META.author}'s YouTube`

@@ -37,8 +37,8 @@ export default defineConfig(({ mode }) => {
       proxy: {
         [BASE_ENV_CONFIG.VITE_API_PROXY_URL]: {
           target: BASE_ENV_CONFIG.VITE_API_ONLINE_URL,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
+          rewrite: (path) => path.replace(/^\/api/, ''),
+          changeOrigin: true
         }
       }
     },
@@ -104,7 +104,6 @@ export default defineConfig(({ mode }) => {
               'vue-router',
               'pinia',
               '@unhead/vue',
-              '@unhead/schema',
               'axios',
               'qs',
               'swiper',

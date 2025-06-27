@@ -5,7 +5,7 @@
  */
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
-import { INVALID_ERROR } from '/@/constants/http-code'
+import { INTERNAL_SERVER_ERROR } from '/@/constants/http-code'
 import { uaParser, isZhUser } from '/@/transforms/ua'
 import { onClient } from '/@/universal'
 import logger from '/@/utils/logger'
@@ -41,7 +41,7 @@ export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (config: GlobalStateConfig) => {
   // Render error
   const renderError = ref<RenderErrorValue>(config.error ?? null)
-  const defaultError = { code: INVALID_ERROR }
+  const defaultError = { code: INTERNAL_SERVER_ERROR }
   const setRenderError = (error: any) => {
     onClient(() => {
       logger.failure('error:', error)

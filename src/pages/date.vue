@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { watch, onBeforeMount } from 'vue'
   import { useUniversalFetch } from '/@/universal'
-  import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
@@ -11,7 +11,6 @@
     date: string
   }>()
 
-  const { seoMeta } = useEnhancer()
   const { articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
@@ -22,8 +21,8 @@
     scrollToNextScreen()
   }
 
-  seoMeta(() => ({
-    pageTitle: `${props.date} | Date`,
+  usePageSeo(() => ({
+    pageTitles: [props.date, 'Date'],
     ogType: 'website'
   }))
 

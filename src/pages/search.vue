@@ -2,6 +2,7 @@
   import { watch, onBeforeMount } from 'vue'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useArticleListStore } from '/@/stores/article'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/flow/desktop/header.vue'
@@ -9,7 +10,7 @@
 
   const props = defineProps<{ keyword: string }>()
 
-  const { seoMeta } = useEnhancer()
+  const { isZhLang } = useEnhancer()
   const articleListStore = useArticleListStore()
   const loadmoreArticles = async () => {
     await articleListStore.fetch({
@@ -19,8 +20,8 @@
     scrollToNextScreen()
   }
 
-  seoMeta(() => ({
-    pageTitle: `${props.keyword} | Search`,
+  usePageSeo(() => ({
+    pageTitles: [`"${props.keyword}"`, isZhLang.value ? '搜索' : 'Search'],
     ogType: 'website'
   }))
 

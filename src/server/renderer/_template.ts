@@ -1,22 +1,25 @@
-import type { SSRHeadPayload } from '@unhead/ssr'
+import type { SSRHeadPayload } from '@unhead/vue/server'
 
-export const resolveTemplate = (input: {
+export interface TemplateInput {
   template: string
-  heads: SSRHeadPayload
   appHTML: string
-  scripts?: string
-  extraScripts?: string
-}) => {
+  headHTML: SSRHeadPayload
+  bodyScripts: string
+}
+
+export const resolveTemplate = ({ template, appHTML, headHTML, bodyScripts }: TemplateInput) => {
   return (
-    input.template
+    template
+      // https://github.com/unjs/unhead/blob/main/packages/unhead/src/server/transformHtmlTemplate.ts
+      .replace(/<title>[\s\S]*<\/title>/, '')
       // MARK: replace! $ sign & use function replacer
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace#specifying_a_string_as_a_parameter
-      // https://github.com/vueuse/head#ssr-rendering
-      .replace(/<title>[\s\S]*<\/title>/, '')
-      .replace(`<html`, () => `<html ${input.heads.htmlAttrs} `)
-      .replace(`<head>`, () => `<head>\n${input.heads.headTags}`)
-      .replace(`<body>`, () => `<body ${input.heads.bodyAttrs}>`)
-      .replace(`</body>`, () => `\n${input.heads.bodyTags}\n${input.scripts}\n${input.extraScripts}\n</body>`)
-      .replace(`<!--app-html-->`, () => input.appHTML)
+      .replace('<html>', () => `<html${headHTML.htmlAttrs}>`)
+      .replace('<body>', () => `<body${headHTML.bodyAttrs}>`)
+      .replace('<body>', () => `<body>${headHTML.bodyTagsOpen ? `\n${headHTML.bodyTagsOpen}` : ``}`)
+      .replace('</head>', () => `${headHTML.headTags}\n</head>`)
+      .replace('</body>', () => `${headHTML.bodyTags}\n</body>`)
+      .replace('</body>', () => `${bodyScripts}\n</body>`)
+      .replace(`<!--app-html-->`, () => appHTML)
   )
 }

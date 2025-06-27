@@ -6,7 +6,7 @@
 
 import crypto from 'crypto'
 import type { CacheStore, Seconds } from '../services/cache'
-import { getErrorMessage } from './responser'
+import { getErrorMessage } from './responder'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF:Cacher')

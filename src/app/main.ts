@@ -5,48 +5,45 @@
  */
 
 import { createSSRApp } from 'vue'
-import { RouterHistory } from 'vue-router'
-import { Language, LanguageKey, languages } from '/@/language'
+import type { RouterHistory } from 'vue-router'
+import type { SerializableHead } from '@unhead/vue'
 import { createUniversalStore } from '/@/stores'
-import { createI18n } from '/@/composables/i18n'
-import { createHead, Head } from '/@/composables/head'
-import { createTheme, Theme } from '/@/composables/theme'
-import {
-  vDisabledWallflower,
-  DIRECTIVE_NAME as disabledWallflowerDirectiveName
-} from '/@/components/widget/wallflower/directive'
-import { APP_ENV, APP_VERSION } from '/@/app/environment'
-import { NODE_ENV } from '/@/server/environment'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
 import { createGlobalState, LayoutColumn, RenderErrorValue } from './state'
+import { createTheme, Theme } from '/@/composables/theme'
+import { createI18n } from '/@/composables/i18n'
+import { Language, LanguageKey, languages } from '/@/language'
+import { APP_MODE, APP_VERSION } from './environment'
+import { NODE_ENV } from '/@/server/env'
 import API_CONFIG from '/@/config/api.config'
 import components from './components'
 import App from './index.vue'
 
 console.group(`🔵 [APP:INIT]`)
-console.table({ APP_VERSION, APP_ENV, NODE_ENV })
+console.table({ APP_VERSION, APP_MODE, NODE_ENV })
 console.groupEnd()
 
 console.group(`🔵 [APP:API]`)
 console.table(API_CONFIG)
 console.groupEnd()
 
-export interface ICreatorContext {
-  historyCreator(base?: string): RouterHistory
-  routerBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
-  routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
-  layout?: LayoutColumn
+export interface AppCreatorContext {
   theme: Theme
   region: string
   language: string
   userAgent: string
+  layout?: LayoutColumn
   error?: RenderErrorValue
+  routerHistoryCreator(base?: string): RouterHistory
+  routerBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
+  routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
 }
 
 export type MainApp = ReturnType<typeof createMainApp>
-export const createMainApp = (context: ICreatorContext) => {
+export const createMainApp = (context: AppCreatorContext) => {
   // 1. create app
   const app = createSSRApp(App)
+
   // 2. global state
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
@@ -54,16 +51,18 @@ export const createMainApp = (context: ICreatorContext) => {
     layout: context.layout ?? LayoutColumn.Normal,
     error: context.error
   })
+
   // 3. store
   const store = createUniversalStore({ globalState })
+
   // 4. router
   const router = createUniversalRouter({
     beforeMiddleware: context.routerBeforeMiddleware?.(globalState),
     afterMiddleware: context.routerAfterMiddleware?.(globalState),
-    history: context.historyCreator()
+    history: context.routerHistoryCreator()
   })
+
   // 5. composables
-  const head = createHead()
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Chinese : Language.English,
@@ -71,8 +70,8 @@ export const createMainApp = (context: ICreatorContext) => {
     languages
   })
 
-  // global head attributes: for use in different environments
-  const getGlobalHead = (): Head => ({
+  // get global head attributes: for CSR / SSR
+  const getGlobalHead = (): SerializableHead => ({
     htmlAttrs: {
       lang: i18n.l.value?.iso ?? '',
       'data-region': context.region,
@@ -81,10 +80,10 @@ export const createMainApp = (context: ICreatorContext) => {
     }
   })
 
-  // handle global error
+  // handle global error: https://vuejs.org/api/application#app-config-errorhandler
   app.config.errorHandler = (error) => globalState.setRenderError(error)
-  // handle router error https://next.router.vuejs.org/api/#onerror
-  router.onError(globalState.setRenderError)
+  // handle router error: https://router.vuejs.org/api/interfaces/Router.html#onError-
+  router.onError((error) => globalState.setRenderError(error))
 
   // handle router validate error & 404 error
   // https://next.router.vuejs.org/guide/advanced/navigation-guards.html#optional-third-argument-next
@@ -105,16 +104,15 @@ export const createMainApp = (context: ICreatorContext) => {
     }
   })
 
+  // app plugins
   app.use(router)
   app.use(store)
   app.use(globalState)
   app.use(i18n)
-  app.use(head)
   app.use(theme)
-  app.use(components)
 
-  // directives
-  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
+  // components and directives
+  app.use(components)
 
   return {
     app,
@@ -122,7 +120,6 @@ export const createMainApp = (context: ICreatorContext) => {
     store,
     globalState,
     i18n,
-    head,
     theme,
     getGlobalHead
   }

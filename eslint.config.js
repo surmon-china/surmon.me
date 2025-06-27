@@ -58,7 +58,7 @@ export default [
   },
   { rules: vueRules },
   {
-    ignores: ['node_modules', 'dist', 'public', 'sbundler', 'scripts']
+    ignores: ['node_modules', 'dist', 'public', 'bundler', 'scripts']
   },
   prettier,
   { rules: prettierRules }

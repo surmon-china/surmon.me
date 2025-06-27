@@ -5,6 +5,7 @@
  */
 
 import { App } from 'vue'
+
 import Webfont from '/@/components/common/webfont.vue'
 import Spin from '/@/components/common/spin.vue'
 import Empty from '/@/components/common/empty.vue'
@@ -21,6 +22,11 @@ import { Responsive, DesktopOnly } from '/@/components/common/responsive'
 import SkeletonBase from '/@/components/common/skeleton/base.vue'
 import SkeletonLine from '/@/components/common/skeleton/line.vue'
 import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
+
+import {
+  vDisabledWallflower,
+  DIRECTIVE_NAME as disabledWallflowerDirectiveName
+} from '/@/components/widget/wallflower/directive'
 
 declare module 'vue' {
   export interface GlobalComponents {
@@ -44,6 +50,7 @@ declare module 'vue' {
 }
 
 export default function (app: App) {
+  // components
   app.component('Webfont', Webfont)
   app.component('Spin', Spin)
   app.component('Empty', Empty)
@@ -62,4 +69,7 @@ export default function (app: App) {
   app.component('SkeletonBase', SkeletonBase)
   app.component('SkeletonLine', SkeletonLine)
   app.component('SkeletonParagraph', SkeletonParagraph)
+
+  // directives
+  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
 }

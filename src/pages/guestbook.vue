@@ -3,6 +3,7 @@
   import { isClient } from '/@/app/environment'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
@@ -17,7 +18,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, seoMeta, gtag, gState, isZhLang } = useEnhancer()
+  const { i18n: _i18n, gtag, gState, isZhLang } = useEnhancer()
   const { identity, appOption, comment: commentStore } = useStores()
   const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
@@ -52,12 +53,12 @@
     })
   }
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK), enTitle] : [enTitle]
+    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `给 ${META.author} 留言` : 'Leave a comment'
     return {
-      pageTitle: titles.join(' | '),
+      pageTitles: titles,
       description,
       ogType: 'website',
       ogImage: bannerImage,

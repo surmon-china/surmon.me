@@ -6,53 +6,79 @@
  */
 
 import { computed, ComputedGetter } from 'vue'
-import type { UseSeoMetaInput } from '@unhead/schema'
-import { useSeoMeta as useUnheadSeoMeta } from '@unhead/vue'
+import { useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
 import { META } from '/@/config/app.config'
 
-export type { Head } from '@unhead/vue'
-export { createHead, useHead } from '@unhead/vue'
+export { useHead, useSeoMeta } from '@unhead/vue'
 
-const DEFAULT_TITLER = (title: string) => `${title} | ${META.title}`
-const DEFAULT_OG_IMAGE = getPageURL('/images/og-social-card.jpg')
-
-export interface SeoMetaObject extends Omit<UseSeoMetaInput, 'title'> {
+export interface UsePageSeoInput {
+  /** Directly override the title content. */
   title?: string
+  /** Will be concatenated with the title template. */
   pageTitle?: string
+  /** Each item will be concatenated with the title template. */
+  pageTitles?: string[]
+  /** Use this tag to provide a short description of the page. */
   description?: string
+  /** A comma-separated list of keywords. */
   keywords?: string
+
+  // Open Graph
+  ogUrl?: string
+  ogType?: MetaFlat['ogType']
+  ogTitle?: string
+  ogDescription?: string
+  ogImage?: string
+  ogImageAlt?: string
+  ogImageWidth?: string | number
+  ogImageHeight?: string | number
+
+  // Product specific
+  articleTags?: MetaFlat['articleTag']
+  articleCategory?: MetaFlat['articleSection']
+  articleModifiedTime?: MetaFlat['articleModifiedTime']
+  articlePublishedTime?: MetaFlat['articlePublishedTime']
 }
 
-export function useSeoMeta(source: SeoMetaObject | ComputedGetter<SeoMetaObject>) {
+export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInput>) {
   const { i18n, route } = useEnhancer()
-  const input = computed(() => {
-    const value = typeof source === 'function' ? source() : source
-    const { title, pageTitle, description, keywords, ...rest } = value
-    // title | page title
-    const pureTitle = title ?? pageTitle
-    const fullTitle = title ? title : pageTitle ? DEFAULT_TITLER(pageTitle) : ''
-    return { pureTitle, fullTitle, description, keywords, _: rest }
+  const _ = computed(() => {
+    const value = typeof input === 'function' ? input() : input
+    const { title, pageTitle, pageTitles, ...rest } = value
+    const separator = META.title_separator
+    const pureTitle = pageTitle ?? pageTitles?.join(separator)
+    const fullTitle = title ?? (pureTitle ? [pureTitle, META.title].join(separator) : META.title)
+    return { pureTitle, fullTitle, ...rest }
   })
 
-  return useUnheadSeoMeta({
-    title: computed(() => input.value.fullTitle),
-    description: () => input.value.description ?? '',
-    keywords: () => input.value.keywords ?? '',
-    twitterCard: 'summary_large_image',
-    twitterImage: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE,
-    twitterTitle: () => input.value._.ogTitle ?? input.value.fullTitle ?? '',
-    twitterDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
+  return useSeoMeta({
+    // Basic SEO
+    title: computed(() => _.value.fullTitle),
+    description: () => _.value.description,
+    keywords: () => _.value.keywords,
+    // Open Graph
+    ogType: () => _.value.ogType ?? 'website',
+    ogTitle: () => _.value.ogTitle ?? _.value.pureTitle,
+    ogDescription: () => _.value.ogDescription ?? _.value.description,
+    ogUrl: () => _.value.ogUrl ?? getPageURL(route.fullPath),
+    ogImage: () => _.value.ogImage ?? getPageURL(META.default_og_image),
+    ogImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
+    ogImageWidth: () => _.value.ogImageWidth ?? (_.value.ogImage ? null : '1000'),
+    ogImageHeight: () => _.value.ogImageHeight ?? (_.value.ogImage ? null : '526'),
     ogSiteName: () => META.title,
-    ogType: () => input.value._.ogType ?? ('object' as any),
-    ogTitle: () => input.value._.ogTitle ?? input.value.pureTitle ?? '',
-    ogDescription: () => input.value._.ogDescription ?? input.value.description ?? '',
-    ogUrl: () => input.value._.ogUrl ?? getPageURL(route.fullPath),
-    ogImage: () => input.value._.ogImage ?? DEFAULT_OG_IMAGE,
-    ogImageAlt: () => input.value._.ogImageAlt ?? input.value._.ogTitle ?? input.value.fullTitle ?? '',
-    ogImageWidth: () => input.value._.ogImageWidth ?? (input.value._.ogImage ? '' : '1000'),
-    ogImageHeight: () => input.value._.ogImageHeight ?? (input.value._.ogImage ? '' : '526'),
-    ogLocale: () => i18n.l.value?.iso ?? ''
+    ogLocale: () => i18n.l.value?.iso,
+    // Twitter
+    twitterTitle: () => _.value.ogTitle ?? _.value.fullTitle,
+    twitterDescription: () => _.value.ogDescription ?? _.value.description,
+    twitterImage: () => _.value.ogImage ?? getPageURL(META.default_og_image),
+    twitterImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
+    twitterCard: 'summary_large_image',
+    // Product specific https://ogp.me/#type_article
+    articlePublishedTime: () => _.value.articlePublishedTime,
+    articleModifiedTime: () => _.value.articleModifiedTime,
+    articleSection: () => _.value.articleCategory,
+    articleTag: () => _.value.articleTags
   })
 }

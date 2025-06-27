@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/universal'
   import { useStores } from '/@/stores'
   import { getExtendValue } from '/@/transforms/state'
@@ -14,7 +15,7 @@
     categorySlug: string
   }>()
 
-  const { i18n: _i18n, seoMeta, cdnDomain, isZhLang } = useEnhancer()
+  const { i18n: _i18n, cdnDomain, isZhLang } = useEnhancer()
   const { articleList: articleListStore, category: categoryStore } = useStores()
   const currentCategory = computed(() => {
     return categoryStore.data.find((category) => category.slug === props.categorySlug)
@@ -42,14 +43,13 @@
     scrollToNextScreen()
   }
 
-  seoMeta(() => {
+  usePageSeo(() => {
     const enTitle = firstUpperCase(props.categorySlug)
     const zhTitle = _i18n.t(props.categorySlug)!
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle]
-    const description = currentCategory.value?.description || titles.join(',')
     return {
-      pageTitle: titles.join(' | '),
-      description,
+      pageTitles: titles,
+      description: currentCategory.value?.description || titles.join(','),
       ogType: 'website'
     }
   })

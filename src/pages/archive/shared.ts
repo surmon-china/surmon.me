@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
+import { usePageSeo } from '/@/composables/head'
 import { useNodepressStatisticStore } from '/@/stores/statistic'
 import { numberSplit, numberToKilo, firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
@@ -17,12 +18,12 @@ export const i18ns = {
 } as const
 
 export const useArchivePageMeta = () => {
-  const { i18n, seoMeta, isZhLang } = useEnhancer()
-  seoMeta(() => {
+  const { i18n, isZhLang } = useEnhancer()
+  usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LanguageKey.PAGE_ARCHIVE, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE), enTitle] : [enTitle]
+    const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE)!, enTitle] : [enTitle]
     return {
-      pageTitle: titles.join(' | '),
+      pageTitles: titles,
       description: `${META.title} ${isZhLang.value ? '数据归档' : 'archives'}`
     }
   })

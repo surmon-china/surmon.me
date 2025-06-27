@@ -9,7 +9,7 @@ import express from 'express'
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { createCacheStore } from './services/cache'
-import { PROXY_ROUTE_PATH, proxyer } from './services/proxy'
+import { PROXY_ROUTE_PATH, proxifier } from './services/proxy'
 import { PUBLIC_PATH } from './config'
 import { META } from '@/config/app.config'
 
@@ -27,7 +27,7 @@ export const createExpressApp = async () => {
   app.use(express.static(PUBLIC_PATH))
 
   // app proxy
-  app.get(PROXY_ROUTE_PATH, proxyer())
+  app.get(PROXY_ROUTE_PATH, proxifier())
 
   // init cache service
   const cache = await createCacheStore({
