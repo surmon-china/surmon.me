@@ -112,7 +112,7 @@ export const proxifier = (): RequestHandler => {
           await pipeline(proxyResponse, response)
         } catch (error: any) {
           // Handle response stream errors
-          logger.warn(`Response pipeline failed: ${error.message}`)
+          // logger.warn(`Response pipeline failed: ${error.message}`)
           sendError(error.message)
         }
       }
@@ -141,7 +141,7 @@ export const proxifier = (): RequestHandler => {
     try {
       await pipeline(request, proxyRequest)
     } catch (error: any) {
-      logger.warn(`Request pipeline failed: ${error.message}`)
+      // logger.warn(`Request pipeline failed: ${error.message}`)
       sendError(error.message)
     }
   }
