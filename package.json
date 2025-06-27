@@ -74,7 +74,6 @@
     "@types/rss": "^0.0.32",
     "@types/serialize-javascript": "^5.0.4",
     "@unhead/addons": "^2.x",
-    "@vercel/ncc": "^0.38.3",
     "@vitejs/plugin-vue": "^6.x",
     "builtin-modules": "^5.x",
     "eslint": "^9.x",

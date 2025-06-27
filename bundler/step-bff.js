@@ -1,19 +1,35 @@
-import fs from 'fs-extra'
 import path from 'path'
 import builtinModules from 'builtin-modules'
-import ncc from '@vercel/ncc'
+import { build } from 'vite'
 
-export const bundleBFFServer = (paths) => {
-  // https://github.com/vercel/ncc#programmatically-from-nodejs
-  return ncc(path.resolve(paths.src, 'bff.ts'), {
-    sourceMap: false,
-    assetBuilds: false,
-    externals: [
-      ...builtinModules,
-      ...Object.keys(paths.packageJSON.dependencies),
-      ...Object.keys(paths.packageJSON.devDependencies)
-    ]
-  }).then(({ code }) => {
-    fs.writeFileSync(path.resolve(paths.dist, 'bff.js'), code)
+export const bundleBFFServer = async (paths) => {
+  await build({
+    // https://vite.dev/guide/api-javascript#inlineconfig
+    configFile: false,
+    resolve: {
+      alias: {
+        '@': paths.src
+      }
+    },
+    build: {
+      outDir: paths.dist,
+      emptyOutDir: true,
+      emitAssets: false,
+      copyPublicDir: false,
+      sourcemap: false,
+      minify: false,
+      lib: {
+        entry: path.join(paths.src, 'bff.ts'),
+        fileName: 'bff',
+        formats: ['es']
+      },
+      rollupOptions: {
+        external: [
+          ...builtinModules,
+          ...Object.keys(paths.packageJSON.dependencies),
+          ...Object.keys(paths.packageJSON.devDependencies)
+        ]
+      }
+    }
   })
 }
