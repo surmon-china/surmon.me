@@ -1,6 +1,6 @@
 /**
  * @file BFF Server cacher
- * @module server.helper.cacher
+ * @module server/helper/cacher
  * @author Surmon <https://github.com/surmon-china>
  */
 

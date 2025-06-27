@@ -1,8 +1,8 @@
 /**
  * @file vite config
- * @module vite.config
+ * @module vite-config
  * @author Surmon <https://github.com/surmon-china>
- * @reference https://vitejs.dev/config/#conditional-config
+ * @reference https://vite.dev/config/
  */
 
 import path from 'path'

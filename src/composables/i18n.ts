@@ -1,6 +1,6 @@
 /**
  * @file i18n
- * @module composable.i18n
+ * @module composable/i18n
  * @author Surmon <https://github.com/surmon-china>
  */
 

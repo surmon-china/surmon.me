@@ -1,6 +1,6 @@
 /**
  * @file Server render entry
- * @module SSR-entry
+ * @module server-entry
  * @author Surmon <https://github.com/surmon-china>
  */
 

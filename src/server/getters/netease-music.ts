@@ -1,6 +1,6 @@
 /**
  * @file BFF music getter
- * @module server.getter.music
+ * @module server/getter/music
  * @author Surmon <https://github.com/surmon-china>
  */
 

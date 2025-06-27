@@ -1,6 +1,6 @@
 /**
  * @file ImgProxy url transformer
- * @module transform.imgproxy
+ * @module transform/imgproxy
  * @author Surmon <https://github.com/surmon-china>
  */
 

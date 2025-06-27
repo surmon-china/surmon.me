@@ -1,6 +1,6 @@
 /**
  * @file Environment variables and runtime detection for the BFF server
- * @module server.environment
+ * @module server/environment
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file Archive RSS generator
- * @module server.getter.rss
+ * @module server/getter/rss
  * @author Surmon <https://github.com/surmon-china>
  */
 

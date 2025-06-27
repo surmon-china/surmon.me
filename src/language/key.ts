@@ -1,6 +1,6 @@
 /**
  * @file Language keys
- * @module language.key
+ * @module language/key
  * @author Surmon <https://github.com/surmon-china>
  */
 

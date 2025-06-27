@@ -1,6 +1,6 @@
 /**
  * @file Identity state
- * @module store.identity
+ * @module store/identity
  * @author Surmon <https://github.com/surmon-china>
  */
 

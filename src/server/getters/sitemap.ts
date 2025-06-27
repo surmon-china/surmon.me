@@ -1,6 +1,6 @@
 /**
  * @file Archive sitemap generator
- * @module server.getter.sitemap
+ * @module server/getter/sitemap
  * @author Surmon <https://github.com/surmon-china>
  */
 

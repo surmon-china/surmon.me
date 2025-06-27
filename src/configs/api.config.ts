@@ -1,6 +1,6 @@
 /**
  * @file Api config
- * @module config.api
+ * @module config/api
  * @author Surmon <https://github.com/surmon-china>
  */
 

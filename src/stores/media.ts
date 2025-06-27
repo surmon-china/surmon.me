@@ -1,6 +1,6 @@
 /**
  * @file Media state
- * @module store.media
+ * @module store/media
  * @author Surmon <https://github.com/surmon-china>
  */
 

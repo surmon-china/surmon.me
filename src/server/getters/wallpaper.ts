@@ -1,6 +1,6 @@
 /**
  * @file BFF wallpaper getter
- * @module server.getter.wallpaper
+ * @module server/getter/wallpaper
  * @author Surmon <https://github.com/surmon-china>
  */
 

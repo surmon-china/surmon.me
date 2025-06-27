@@ -1,6 +1,6 @@
 /**
  * @file query string
- * @module transforms.qs
+ * @module transforms/qs
  * @author Surmon <https://github.com/surmon-china>
  */
 

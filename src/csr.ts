@@ -1,6 +1,6 @@
 /**
  * @file Client app entry
- * @module CSR-entry
+ * @module client-entry
  * @author Surmon <https://github.com/surmon-china>
  */
 

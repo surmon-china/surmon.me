@@ -1,6 +1,6 @@
 /**
  * @file BFF Server fetcher
- * @module server.service.axios
+ * @module server/service/axios
  * @author Surmon <https://github.com/surmon-china>
  */
 

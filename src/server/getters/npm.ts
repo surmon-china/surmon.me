@@ -1,6 +1,6 @@
 /**
  * @file BFF NPM getter
- * @module server.getter.npm
+ * @module server/getter/npm
  * @author Surmon <https://github.com/surmon-china>
  */
 

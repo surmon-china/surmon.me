@@ -1,6 +1,6 @@
 /**
  * @file copyright
- * @module effect.copyright
+ * @module effect/copyright
  * @author Surmon <https://github.com/surmon-china>
  */
 

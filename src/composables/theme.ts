@@ -1,6 +1,6 @@
 /**
  * @file Theme
- * @module composable.theme
+ * @module composable/theme
  * @author Surmon <https://github.com/surmon-china>
  */
 

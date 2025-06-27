@@ -1,6 +1,6 @@
 /**
  * @file Generate text to QRcode DataURL
- * @module transforms.qrcode
+ * @module transforms/qrcode
  * @author Surmon <https://github.com/surmon-china>
  */
 

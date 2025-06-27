@@ -1,6 +1,6 @@
 /**
  * @file Script loader
- * @module util.scripter
+ * @module util/scripter
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file App universal prefetch
- * @module universal.prefetch
+ * @module universal/prefetch
  * @author Surmon <https://github.com/surmon-china>
  */
 

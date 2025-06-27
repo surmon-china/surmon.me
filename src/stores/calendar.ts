@@ -1,6 +1,6 @@
 /**
  * @file Calendar state
- * @module store.calendar
+ * @module store/calendar
  * @author Surmon <https://github.com/surmon-china>
  */
 

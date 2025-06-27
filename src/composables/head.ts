@@ -1,6 +1,6 @@
 /**
  * @file head
- * @module composable.head
+ * @module composable/head
  * @author Surmon <https://github.com/surmon-china>
  * @link https://github.com/unjs/unhead
  */

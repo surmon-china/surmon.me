@@ -1,6 +1,6 @@
 /**
  * @file popup component
- * @module composable.popup.component
+ * @module composable/popup/component
  * @author Surmon <https://github.com/surmon-china>
  */
 

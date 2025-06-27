@@ -1,6 +1,6 @@
 /**
  * @file App layout getter
- * @module transform.layout
+ * @module transform/layout
  * @author Surmon <https://github.com/surmon-china>
  */
 

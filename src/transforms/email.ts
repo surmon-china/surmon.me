@@ -1,6 +1,6 @@
 /**
  * @file Email URL
- * @module transform.email
+ * @module transform/email
  * @author Surmon <https://github.com/surmon-china>
  */
 

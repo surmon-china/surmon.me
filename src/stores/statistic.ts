@@ -1,6 +1,6 @@
 /**
  * @file Statistic state
- * @module store.statistic
+ * @module store/statistic
  * @author Surmon <https://github.com/surmon-china>
  */
 

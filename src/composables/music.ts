@@ -1,6 +1,6 @@
 /**
  * @file Music player
- * @module composable.music
+ * @module composable/music
  * @author Surmon <https://github.com/surmon-china>
  */
 

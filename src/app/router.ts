@@ -1,6 +1,6 @@
 /**
  * @file App router
- * @module app.router
+ * @module app/router
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file Site inner link transformer
- * @module transform.relink
+ * @module transform/relink
  * @author Surmon <https://github.com/surmon-china>
  */
 

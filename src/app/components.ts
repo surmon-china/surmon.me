@@ -1,6 +1,6 @@
 /**
  * @file App components
- * @module app.component
+ * @module app/components
  * @author Surmon <https://github.com/surmon-china>
  */
 

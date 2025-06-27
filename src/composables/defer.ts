@@ -1,6 +1,6 @@
 /**
  * @file Client defer task manager
- * @module composable.defer
+ * @module composable/defer
  * @author Surmon <https://github.com/surmon-china>
  */
 

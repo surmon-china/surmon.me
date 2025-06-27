@@ -1,6 +1,6 @@
 /**
  * @file Generate text to image DataURL
- * @module transforms.text2image
+ * @module transforms/text2image
  * @author Surmon <https://github.com/surmon-china>
  * @link https://github.com/albinekb/favicon-emoji/blob/master/lib/browser.js
  */

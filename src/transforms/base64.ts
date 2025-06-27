@@ -1,6 +1,6 @@
 /**
  * @file Base64 and Base64URL utilities
- * @module transform.base64
+ * @module transform/base64
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file App universal context
- * @module universal.context
+ * @module universal/context
  * @author Surmon <https://github.com/surmon-china>
  */
 

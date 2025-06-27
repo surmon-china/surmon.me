@@ -1,6 +1,6 @@
 /**
  * @file Title surprise
- * @module effect.titler
+ * @module effect/titler
  * @author Surmon <https://github.com/surmon-china>
  */
 

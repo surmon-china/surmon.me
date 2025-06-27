@@ -1,6 +1,6 @@
 /**
  * @file BFF Server configuration and path constants
- * @module server.config
+ * @module server/config
  * @author Surmon <https://github.com/surmon-china>
  */
 

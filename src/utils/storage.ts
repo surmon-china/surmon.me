@@ -1,6 +1,6 @@
 /**
  * @file Local Storage
- * @module util.storage
+ * @module util/storage
  * @author Surmon <https://github.com/surmon-china>
  */
 

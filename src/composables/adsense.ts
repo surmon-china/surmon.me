@@ -1,6 +1,6 @@
 /**
  * @file Google Adsense
- * @module composable.adsense
+ * @module composable/adsense
  * @author Surmon <https://github.com/surmon-china>
  */
 

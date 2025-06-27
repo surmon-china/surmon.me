@@ -1,6 +1,6 @@
 /**
  * @file Markdown parser
- * @module transform.markdown
+ * @module transform/markdown
  * @author Surmon <https://github.com/surmon-china>
  */
 

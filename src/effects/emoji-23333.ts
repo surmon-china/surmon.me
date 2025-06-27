@@ -1,6 +1,6 @@
 /**
  * @file emoji rain animation effect
- * @module effect.emoji-233333
+ * @module effect/emoji-233333
  * @author Surmon <https://github.com/surmon-china>
  */
 

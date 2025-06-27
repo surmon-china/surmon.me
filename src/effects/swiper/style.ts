@@ -1,6 +1,6 @@
 /**
  * @file Swiper styles
- * @module effect.swiper.style
+ * @module effect/swiper/style
  * @author Surmon <https://github.com/surmon-china>
  */
 

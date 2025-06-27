@@ -1,6 +1,6 @@
 /**
  * @file BFF google map getter
- * @module server.getter.my-google-map
+ * @module server/getter/my-google-map
  * @author Surmon <https://github.com/surmon-china>
  */
 

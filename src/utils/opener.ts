@@ -1,6 +1,6 @@
 /**
  * @file Window opener
- * @module util.opener
+ * @module util/opener
  * @author Surmon <https://github.com/surmon-china>
  */
 

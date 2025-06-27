@@ -1,6 +1,6 @@
 /**
  * @file BFF Server main
- * @module server.index
+ * @module server/index
  * @author Surmon <https://github.com/surmon-china>
  */
 

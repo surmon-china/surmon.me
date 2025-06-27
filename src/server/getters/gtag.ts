@@ -1,6 +1,6 @@
 /**
  * @file BFF GA getter
- * @module server.getter.gtag
+ * @module server/getter/gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 

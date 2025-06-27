@@ -1,6 +1,6 @@
 /**
  * @file BFF GitHub getter
- * @module server.getter.github
+ * @module server/getter/github
  * @author Surmon <https://github.com/surmon-china>
  */
 

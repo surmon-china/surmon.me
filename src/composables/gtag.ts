@@ -1,6 +1,6 @@
 /**
  * @file Google analytics
- * @module composable.gtag
+ * @module composable/gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 

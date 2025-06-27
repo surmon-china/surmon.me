@@ -1,6 +1,6 @@
 /**
  * @file Sponsors state
- * @module store.sponsors
+ * @module store/sponsors
  * @author Surmon <https://github.com/surmon-china>
  */
 

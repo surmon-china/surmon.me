@@ -1,6 +1,6 @@
 /**
  * @file BFF douban getter
- * @module server.getter.douban
+ * @module server/getter/douban
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file App enhancers
- * @module app.enhancer
+ * @module app/enhancer
  * @author Surmon <https://github.com/surmon-china>
  */
 

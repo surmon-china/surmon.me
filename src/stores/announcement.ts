@@ -1,6 +1,6 @@
 /**
  * @file Announcement state
- * @module store.announcement
+ * @module store/announcement
  * @author Surmon <https://github.com/surmon-china>
  */
 

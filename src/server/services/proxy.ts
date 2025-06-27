@@ -1,6 +1,6 @@
 /**
  * @file BFF Server proxy
- * @module server.service.proxy
+ * @module server/service/proxy
  * @author Surmon <https://github.com/surmon-china>
  */
 

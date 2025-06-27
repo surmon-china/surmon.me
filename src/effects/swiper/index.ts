@@ -1,6 +1,6 @@
 /**
  * @file Swiper for vue
- * @module effect.swiper
+ * @module effect/swiper
  * @author Surmon <https://github.com/surmon-china>
  */
 

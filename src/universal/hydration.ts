@@ -1,6 +1,6 @@
 /**
  * @file Universal hydration
- * @module universal.hydration
+ * @module universal/hydration
  * @author Surmon <https://github.com/surmon-china>
  */
 

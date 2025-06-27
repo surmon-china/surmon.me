@@ -1,6 +1,6 @@
 /**
  * @file App exporter
- * @module effect.exporter
+ * @module effect/exporter
  * @author Surmon <https://github.com/surmon-china>
  */
 

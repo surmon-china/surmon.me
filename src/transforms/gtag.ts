@@ -1,6 +1,6 @@
 /**
  * @file Google Analytics
- * @module transform.gtag
+ * @module transform/gtag
  * @author Surmon <https://github.com/surmon-china>
  */
 

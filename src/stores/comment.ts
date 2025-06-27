@@ -1,6 +1,6 @@
 /**
  * @file Comment state
- * @module store.comment
+ * @module store/comment
  * @author Surmon <https://github.com/surmon-china>
  */
 

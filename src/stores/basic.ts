@@ -1,6 +1,6 @@
 /**
  * @file App basic state
- * @module store.basic
+ * @module store/basic
  * @author Surmon <https://github.com/surmon-china>
  */
 

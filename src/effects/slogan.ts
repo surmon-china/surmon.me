@@ -1,6 +1,6 @@
 /**
  * @file Slogan consoler
- * @module effect.slogan
+ * @module effect/slogan
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file fetch store enhance
- * @module store.fetch-store
+ * @module store/fetch-store
  * @author Surmon <https://github.com/surmon-china>
  */
 

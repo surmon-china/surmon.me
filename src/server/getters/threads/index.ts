@@ -1,6 +1,6 @@
 /**
  * @file BFF threads getter
- * @module server.getter.threads
+ * @module server/getter/threads
  * @author Surmon <https://github.com/surmon-china>
  */
 

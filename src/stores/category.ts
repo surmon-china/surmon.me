@@ -1,6 +1,6 @@
 /**
  * @file Category state
- * @module store.category
+ * @module store/category
  * @author Surmon <https://github.com/surmon-china>
  */
 

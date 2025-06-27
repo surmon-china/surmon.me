@@ -1,6 +1,6 @@
 /**
  * @file NodePress API service
- * @module service.nodepress
+ * @module service/nodepress
  * @author Surmon <https://github.com/surmon-china>
  */
 

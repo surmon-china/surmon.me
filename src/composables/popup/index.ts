@@ -1,6 +1,6 @@
 /**
  * @file Client popup
- * @module composable.popup
+ * @module composable/popup
  * @author Surmon <https://github.com/surmon-china>
  * @example window.$popup.vImage('https://xxx.jpg')
  */

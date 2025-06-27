@@ -1,6 +1,6 @@
 /**
  * @file BFF Server responder
- * @module server.helper.responder
+ * @module server/helper/responder
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file App local global state
- * @module app.state
+ * @module app/global-state
  * @author Surmon <https://github.com/surmon-china>
  */
 

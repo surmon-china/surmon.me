@@ -1,6 +1,6 @@
 /**
  * @file highlight.js
- * @module effect.highlight
+ * @module effect/highlight
  * @author Surmon <https://github.com/surmon-china>
  */
 

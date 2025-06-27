@@ -1,6 +1,6 @@
 /**
  * @file App state transformer
- * @module transform.state
+ * @module transform/state
  * @author Surmon <https://github.com/surmon-china>
  */
 

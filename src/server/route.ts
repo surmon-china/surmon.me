@@ -1,6 +1,6 @@
 /**
  * @file BFF route helper
- * @module server.helper.route
+ * @module server/helper/route
  * @author Surmon <https://github.com/surmon-china>
  */
 

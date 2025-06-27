@@ -1,6 +1,6 @@
 /**
  * @file popup hook
- * @module composable.popup.hook
+ * @module composable/popup/hook
  * @author Surmon <https://github.com/surmon-china>
  */
 

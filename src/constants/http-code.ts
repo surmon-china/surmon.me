@@ -1,6 +1,6 @@
 /**
- * @file Error constant
- * @module constant.error
+ * @file HTTP status codes used in the application.
+ * @module constant/http-code
  * @author Surmon <https://github.com/surmon-china>
  */
 

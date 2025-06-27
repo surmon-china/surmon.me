@@ -1,6 +1,6 @@
 /**
  * @file Store hook
- * @module store.hook
+ * @module store/hook
  * @author Surmon <https://github.com/surmon-china>
  */
 

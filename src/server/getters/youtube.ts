@@ -1,6 +1,6 @@
 /**
  * @file BFF YouTube getter
- * @module server.getter.youtube
+ * @module server/getter/youtube
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -1,6 +1,6 @@
 /**
  * @file Archive state
- * @module store.archive
+ * @module store/archive
  * @author Surmon <https://github.com/surmon-china>
  */
 

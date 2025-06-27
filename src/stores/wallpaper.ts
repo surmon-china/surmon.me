@@ -1,6 +1,6 @@
 /**
  * @file Wallpaper state
- * @module store.wallpaper
+ * @module store/wallpaper
  * @author Surmon <https://github.com/surmon-china>
  */
 

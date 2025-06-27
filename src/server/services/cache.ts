@@ -1,6 +1,6 @@
 /**
  * @file Universal Server cache
- * @module server.service.cache
+ * @module server/service/cache
  * @author Surmon <https://github.com/surmon-china>
  */
 

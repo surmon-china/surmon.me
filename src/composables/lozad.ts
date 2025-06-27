@@ -1,6 +1,6 @@
 /**
  * @file lazy load
- * @module composable.lozad
+ * @module composable/lozad
  * @author Surmon <https://github.com/surmon-china>
  */
 
