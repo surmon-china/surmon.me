@@ -130,14 +130,14 @@
       ...(articleDetailStore.defaultContent?.headings ?? []),
       ...(articleDetailStore.moreContent?.headings ?? [])
     ]
-    const elementID =
+    const elementId =
       urlHash === URL_HASHES.COMMENTS_URL_HASH
         ? ANCHORS.COMMENT_ELEMENT_ID
         : articleHeadings.find(({ anchor }) => anchor === urlHash)?.id
 
-    if (elementID && document.getElementById(elementID)) {
+    if (elementId && document.getElementById(elementId)) {
       // Allow a certain amount of time to ensure that the browser is rendered.
-      setTimeout(() => scrollToAnchor(elementID), 400)
+      setTimeout(() => scrollToAnchor(elementId), 400)
     }
   })
 </script>

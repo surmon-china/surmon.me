@@ -243,10 +243,10 @@
   onMounted(() => {
     const urlHash = route.hash.slice(1)
     if (urlHash.startsWith(URL_HASHS.COMMENT_ITEM_URL_HASH_PREFIX)) {
-      const commentID = URL_HASHS.getCommentIdByUrlHash(urlHash)
-      const elementID = ANCHORS.getCommentItemElementId(commentID)
-      if (elementID && document.getElementById(elementID)) {
-        setTimeout(() => scrollToAnchor(elementID), 400)
+      const commentId = URL_HASHS.getCommentIdByUrlHash(urlHash)
+      const elementId = ANCHORS.getCommentItemElementId(commentId)
+      if (elementId && document.getElementById(elementId)) {
+        setTimeout(() => scrollToAnchor(elementId), 400)
       }
     }
   })
