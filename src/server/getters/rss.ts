@@ -6,7 +6,7 @@
 
 import RSS from 'rss'
 import axios from '@/server/services/axios'
-import { META } from '@/config/app.config'
+import { META } from '@/configs/app.config'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
 import { getNodePressAPI } from '../config'

@@ -15,7 +15,7 @@ import { createI18n } from '/@/composables/i18n'
 import { Language, LanguageKey, languages } from '/@/language'
 import { APP_MODE, APP_VERSION } from './environment'
 import { NODE_ENV } from '/@/server/env'
-import API_CONFIG from '/@/config/api.config'
+import API_CONFIG from '/@/configs/api.config'
 import components from './components'
 import App from './index.vue'
 

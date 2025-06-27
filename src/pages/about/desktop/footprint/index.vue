@@ -3,7 +3,7 @@
   import { shallowRef, computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
-  import { GEO_INFO, VALUABLE_LINKS } from '/@/config/app.config'
+  import { GEO_INFO, VALUABLE_LINKS } from '/@/configs/app.config'
   import { openNewWindow } from '/@/utils/opener'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
   import { GOOGLE_MAP_LINKS } from './google-map'

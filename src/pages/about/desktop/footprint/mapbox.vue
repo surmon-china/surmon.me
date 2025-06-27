@@ -2,7 +2,7 @@
   import type { Map, LngLatLike } from 'mapbox-gl'
   import { shallowRef, onBeforeMount, onMounted, onBeforeUnmount, watch } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/config/app.config'
+  import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/configs/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
 
   const props = defineProps<{

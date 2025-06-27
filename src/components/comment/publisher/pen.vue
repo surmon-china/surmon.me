@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, watch, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'

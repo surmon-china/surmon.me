@@ -2,7 +2,7 @@
   import { shallowRef, onMounted, watch, nextTick } from 'vue'
   import { useMusic } from '/@/composables/music'
   import { get163MusicSongDetailURL } from '/@/transforms/media'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { useCoverArtURL } from './helper'
 
   const player = useMusic()

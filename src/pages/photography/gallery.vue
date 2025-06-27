@@ -5,7 +5,7 @@
   import { isCNCode } from '/@/transforms/region'
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import { IDENTITIES } from '/@/config/app.config'
+  import { IDENTITIES } from '/@/configs/app.config'
   import { getProxyURL } from '/@/transforms/url'
   import InstagramAlbum from './album.vue'
 

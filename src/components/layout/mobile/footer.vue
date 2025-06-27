@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   const year = new Date().getFullYear()
   const title = META.title
 </script>

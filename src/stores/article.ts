@@ -17,7 +17,7 @@ import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/app/environment'
-import { RENDER_LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
+import { RENDER_LONG_ARTICLE_THRESHOLD } from '/@/configs/app.config'
 import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'

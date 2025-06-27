@@ -5,7 +5,7 @@ import { useCDNDomain } from '/@/app/context'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
 import { getAssetURL } from '/@/transforms/url'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export const useAdminAvatar = (avatar?: string) => {
   return avatar || getAssetURL(useCDNDomain(), '/images/anonymous.png')

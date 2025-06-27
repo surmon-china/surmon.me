@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, toRaw } from 'vue'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   import { LanguageKey } from '/@/language'
   import { SortType } from '/@/constants/state'
   import { GAEventCategories } from '/@/constants/gtag'

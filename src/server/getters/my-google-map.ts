@@ -6,7 +6,7 @@
 
 import axios from '@/server/services/axios'
 import { XMLParser } from 'fast-xml-parser'
-import { VALUABLE_LINKS } from '@/config/app.config'
+import { VALUABLE_LINKS } from '@/configs/app.config'
 
 export const getMyGoogleMap = () => {
   const parser = new XMLParser({

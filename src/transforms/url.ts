@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import API_CONFIG from '/@/config/api.config'
-import { BFF_PROXY_PREFIX } from '/@/config/bff.config'
+import API_CONFIG from '/@/configs/api.config'
+import { BFF_PROXY_PREFIX } from '/@/configs/bff.config'
 import { base64UrlEncode } from '/@/transforms/base64'
 import { isDev } from '/@/app/environment'
 

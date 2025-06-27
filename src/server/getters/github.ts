@@ -5,7 +5,7 @@
  */
 
 import axios from '@/server/services/axios'
-import { IDENTITIES } from '@/config/app.config'
+import { IDENTITIES } from '@/configs/app.config'
 
 export const fetchGitHubStatisticJSON = async <T = any>(fileName: string): Promise<T> => {
   const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`

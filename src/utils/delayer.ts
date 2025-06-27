@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { DEFAULT_DELAY } from '/@/config/app.config'
+import { DEFAULT_DELAY } from '/@/configs/app.config'
 
 export const delayer = (ms: number = DEFAULT_DELAY) => {
   const start = new Date().getTime()

@@ -1,4 +1,4 @@
-// import { BFF_TUNNEL_PREFIX } from '/@/config/bff.config'
+// import { BFF_TUNNEL_PREFIX } from '/@/configs/bff.config'
 // import { TunnelModule } from '/@/constants/tunnel'
 import { CustomElementConfig } from './'
 

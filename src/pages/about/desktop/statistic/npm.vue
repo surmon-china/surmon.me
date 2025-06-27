@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useNpmStatisticStore } from '/@/stores/statistic'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import StatisticBase, { StatisticCount } from './base.vue'
 
   const { isZhLang } = useEnhancer()

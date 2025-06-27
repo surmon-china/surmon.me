@@ -11,7 +11,7 @@ import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
 import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../route'
 import { getNodePressAPI } from '../config'
-import { META } from '@/config/app.config'
+import { META } from '@/configs/app.config'
 
 export const getSitemapXml = async () => {
   const api = `${getNodePressAPI()}/archive`

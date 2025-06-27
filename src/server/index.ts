@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 import { createCacheStore } from './services/cache'
 import { PROXY_ROUTE_PATH, proxifier } from './services/proxy'
 import { PUBLIC_PATH } from './config'
-import { META } from '@/config/app.config'
+import { META } from '@/configs/app.config'
 
 export const createExpressApp = async () => {
   // init app

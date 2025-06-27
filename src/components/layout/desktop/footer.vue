@@ -2,7 +2,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/gtag'
   import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
 
   const { gState, gtag } = useEnhancer()
   const handleStatementModal = () => {

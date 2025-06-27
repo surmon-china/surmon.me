@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { LanguageKey } from '/@/language'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
   import { useUniversalFetch } from '/@/universal'

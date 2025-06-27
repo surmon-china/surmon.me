@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { shallowRef, computed, nextTick, PropType } from 'vue'
-  import { DEFAULT_DELAY, IMAGE_SHARE_LONG_ARTICLE_THRESHOLD } from '/@/config/app.config'
+  import { DEFAULT_DELAY, IMAGE_SHARE_LONG_ARTICLE_THRESHOLD } from '/@/configs/app.config'
   import { Article } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { numberSplit } from '/@/transforms/text'

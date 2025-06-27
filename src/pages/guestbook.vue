@@ -9,7 +9,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { CommentPostId } from '/@/constants/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   import logger from '/@/utils/logger'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'

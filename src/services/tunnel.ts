@@ -5,7 +5,7 @@
  */
 
 import axios, { AxiosInstance, isAxiosError } from 'axios'
-import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '/@/config/bff.config'
+import { BFF_TUNNEL_PREFIX, getBFFServerPort } from '/@/configs/bff.config'
 import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/app/environment'
 

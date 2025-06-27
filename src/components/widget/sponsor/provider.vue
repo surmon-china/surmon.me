@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { copy } from '/@/utils/clipboard'
   import { ProviderId, SponsorState } from './state'

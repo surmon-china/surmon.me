@@ -4,7 +4,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
   const props = defineProps<{

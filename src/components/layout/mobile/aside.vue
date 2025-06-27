@@ -8,7 +8,7 @@
   import { useAdminInfoStore } from '/@/stores/basic'
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { VALUABLE_LINKS, META } from '/@/config/app.config'
+  import { VALUABLE_LINKS, META } from '/@/configs/app.config'
 
   const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
   const adminInfoStore = useAdminInfoStore()

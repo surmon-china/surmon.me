@@ -4,7 +4,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { RouteName } from '/@/app/router'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { getPageRoute } from '/@/transforms/route'
   import NpmStatistic from './statistic/npm.vue'
   import GithubStatistic from './statistic/github.vue'

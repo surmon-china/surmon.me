@@ -5,7 +5,7 @@
   import { useUniversalFetch, onClient } from '/@/universal'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'

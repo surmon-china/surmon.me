@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, shallowRef } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'

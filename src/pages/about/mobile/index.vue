@@ -2,7 +2,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminInfoStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'

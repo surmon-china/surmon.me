@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 declare global {
   interface Window {

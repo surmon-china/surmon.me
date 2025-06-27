@@ -6,7 +6,7 @@
 
 import path from 'path'
 import { isNodeDev } from '@/server/env'
-import { getOnlineApiURL, getLocalApiURL } from '@/config/bff.config'
+import { getOnlineApiURL, getLocalApiURL } from '@/configs/bff.config'
 
 // Keep it as a function, since the process.env variables are only valid after the application is completely run
 export const getNodePressAPI = () => {

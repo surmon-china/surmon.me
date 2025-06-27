@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
-  import { META, VALUABLE_LINKS, IDENTITIES } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS, IDENTITIES } from '/@/configs/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
   const emit = defineEmits<{

@@ -2,7 +2,7 @@ import { useEnhancer } from '/@/app/enhancer'
 import { usePageSeo } from '/@/composables/head'
 import { firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export const i18nTitle = {
   [Language.Chinese]: '广行饶益，利乐有情',

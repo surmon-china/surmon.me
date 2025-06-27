@@ -5,7 +5,7 @@
  */
 
 import axios from '@/server/services/axios'
-import { IDENTITIES } from '@/config/app.config'
+import { IDENTITIES } from '@/configs/app.config'
 
 export const getDoubanMovies = async () => {
   const api = `https://m.douban.com/rexxar/api/v2/user/${IDENTITIES.DOUBAN_USER_ID}/collection_stats?type=movie&for_mobile=1`

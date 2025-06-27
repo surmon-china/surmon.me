@@ -1,6 +1,6 @@
 import type { LanguageMap } from '.'
 import { LanguageKey } from './key'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export const zhLangMap: LanguageMap = {
   [LanguageKey.APP_SLOGAN]: META.zh_sub_title,

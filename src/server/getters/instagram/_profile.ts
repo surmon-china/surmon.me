@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from '@/server/services/axios'
-import { IDENTITIES } from '@/config/app.config'
+import { IDENTITIES } from '@/configs/app.config'
 
 export interface InstagramProfile {
   name: string

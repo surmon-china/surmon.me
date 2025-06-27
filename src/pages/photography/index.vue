@@ -6,7 +6,7 @@
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META, IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
   import { isClient } from '/@/app/environment'
   import { delayPromise } from '/@/utils/delayer'

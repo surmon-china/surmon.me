@@ -4,7 +4,7 @@
   import { LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
 
   const { i18n: _i18n, gtag, gState } = useEnhancer()
 

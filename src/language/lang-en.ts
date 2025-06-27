@@ -1,6 +1,6 @@
 import type { LanguageMap } from '.'
 import { LanguageKey } from './key'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export const enLangMap: LanguageMap = {
   [LanguageKey.APP_SLOGAN]: META.en_sub_title,

@@ -5,7 +5,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { HEADER_ELEMENT_ID } from '/@/constants/anchor'
   import { GAEventCategories } from '/@/constants/gtag'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   import { menus } from './menu'
 
   const { i18n: _i18n, gtag, theme, gState } = useEnhancer()

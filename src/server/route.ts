@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { META } from '@/config/app.config'
+import { META } from '@/configs/app.config'
 
 export const getTagURL = (tag: string) => `${META.url}/tag/${tag}`
 export const getCategoryURL = (category: string) => `${META.url}/category/${category}`

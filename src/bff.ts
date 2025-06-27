@@ -5,8 +5,8 @@
  */
 
 import dotenv from 'dotenv'
-import { META } from '@/config/app.config'
-import { BFF_TUNNEL_PREFIX as TUN, getBFFServerPort } from '@/config/bff.config'
+import { META } from '@/configs/app.config'
+import { BFF_TUNNEL_PREFIX as TUN, getBFFServerPort } from '@/configs/bff.config'
 import { NODE_ENV, isNodeDev } from '@/server/env'
 import { BAD_REQUEST } from '@/constants/http-code'
 import { TunnelModule } from '@/constants/tunnel'

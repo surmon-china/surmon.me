@@ -23,7 +23,7 @@ import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { isCNCode } from '/@/transforms/region'
 import { isDev } from '/@/app/environment'
 import { createLogger } from '/@/utils/logger'
-import API_CONFIG from '/@/config/api.config'
+import API_CONFIG from '/@/configs/api.config'
 
 const renderLogger = createLogger('SSR:Render')
 const devDebug = (...messages: any[]) => isDev && renderLogger.debug(...messages)

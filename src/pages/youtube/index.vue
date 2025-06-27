@@ -5,7 +5,7 @@
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
-  import { META, VALUABLE_LINKS } from '/@/config/app.config'
+  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
   import YoutubeSkeleton from './skeleton.vue'

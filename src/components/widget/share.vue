@@ -21,7 +21,7 @@
   import { stringify } from '/@/transforms/qs'
   import { openPopupWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
 
   interface ShareParams {
     url: string

@@ -9,7 +9,7 @@ import { computed, ComputedGetter } from 'vue'
 import { useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export { useHead, useSeoMeta } from '@unhead/vue'
 

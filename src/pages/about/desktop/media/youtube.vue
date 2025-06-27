@@ -2,7 +2,7 @@
   import { onMounted } from 'vue'
   import { useYouTubePlayListStore } from '/@/stores/media'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
 
   const youtubeStore = useYouTubePlayListStore()
   onMounted(() => youtubeStore.fetch().catch(() => []))

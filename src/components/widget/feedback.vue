@@ -4,7 +4,7 @@
   import { useStores } from '/@/stores'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language/key'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
 
   enum Event {
     Close = 'close'

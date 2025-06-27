@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { GAEventCategories } from '/@/constants/gtag'
 import { useGitHubSponsorsStore } from '/@/stores/sponsors'
-import { IDENTITIES, VALUABLE_LINKS } from '/@/config/app.config'
+import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
 
 export enum ProviderId {
   GitHub = 'github',

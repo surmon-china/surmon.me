@@ -7,7 +7,7 @@
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getProxyURL } from '/@/transforms/url'
-  import { VALUABLE_LINKS } from '/@/config/app.config'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
 
   const fetching = ref(true)
   const { cdnDomain } = useEnhancer()

@@ -1,4 +1,4 @@
-import { VALUABLE_LINKS } from '/@/config/app.config'
+import { VALUABLE_LINKS } from '/@/configs/app.config'
 import { LanguageKey } from '/@/language'
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'

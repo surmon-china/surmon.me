@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
   import { LanguageKey } from '/@/language'
-  import { META } from '/@/config/app.config'
+  import { META } from '/@/configs/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch, onClient } from '/@/universal'

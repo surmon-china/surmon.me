@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from '@/server/services/axios'
-import { THREADS_TOKEN } from '@/config/bff.yargs'
+import { THREADS_TOKEN } from '@/configs/bff.yargs'
 
 export interface ThreadsProfile {
   // profile

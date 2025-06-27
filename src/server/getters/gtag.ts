@@ -5,7 +5,7 @@
  */
 
 import axios from '@/server/services/axios'
-import { IDENTITIES } from '@/config/app.config'
+import { IDENTITIES } from '@/configs/app.config'
 import { getGaScriptURL } from '@/transforms/gtag'
 
 export const getGTagScript = async () => {

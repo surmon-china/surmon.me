@@ -4,7 +4,7 @@ import { usePageSeo } from '/@/composables/head'
 import { useNodepressStatisticStore } from '/@/stores/statistic'
 import { numberSplit, numberToKilo, firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 export const i18ns = {
   title: {

@@ -15,7 +15,7 @@ import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
 import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
-import { META } from '/@/config/app.config'
+import { META } from '/@/configs/app.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
