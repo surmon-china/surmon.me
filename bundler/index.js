@@ -4,9 +4,9 @@ import { fileURLToPath } from 'url'
 import { bundleBFFServer } from './step-bff.js'
 import { bundleClientRender } from './step-client.js'
 import { bundleServerRender } from './step-server.js'
+import packageJSON from '../package.json' with { type: 'json' }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const packageJSON = fs.readJSONSync(path.resolve(__dirname, '..', 'package.json'))
 
 const ROOT_PATH = path.join(__dirname, '..')
 const SRC_PATH = path.join(ROOT_PATH, 'src')
