@@ -75,7 +75,6 @@
     "@types/serialize-javascript": "^5.0.4",
     "@unhead/addons": "^2.x",
     "@vitejs/plugin-vue": "^6.x",
-    "builtin-modules": "^5.x",
     "eslint": "^9.x",
     "eslint-config-prettier": "^10.x",
     "eslint-plugin-prettier": "^5.x",

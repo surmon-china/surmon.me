@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { createServer } from 'vite'
 import type { Express } from 'express'
 import type { RenderResult } from '@/ssr'
 import type { CacheStore } from '../services/cache'
@@ -11,7 +10,8 @@ import { ROOT_PATH } from '@/configs/bff.env'
 export const enableDevRenderer = async (app: Express, cache: CacheStore) => {
   // https://vite.dev/guide/ssr.html
   // https://vite.dev/guide/api-environment-frameworks.html
-  const viteServer = await createServer({
+  const vite = await import('vite')
+  const viteServer = await vite.createServer({
     root: process.cwd(),
     logLevel: 'info',
     appType: 'custom',

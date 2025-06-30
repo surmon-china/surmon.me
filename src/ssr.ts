@@ -163,6 +163,12 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
     devDebug('- 4. renderToString')
+    // MARK: `vite-plugin-vue` introduces a side effect on `ssrContext.modules`,
+    // even though it's not needed in production environments.
+    // This is not an issue with `vite-plugin-vue` itself — the `context` argument in `renderToString`
+    // is designed specifically for the rendering process, not for passing data into the SSR script.
+    // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/packages/plugin-vue/src/main.ts#L184
+    // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/playground/ssr-vue/src/entry-server.js#L12
     const appHTML = await renderToString(app, ssrContext)
     // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
     if (globalState.renderError.value) {
