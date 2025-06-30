@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { TunnelModule } from '/@/constants/tunnel'
-import { isClient } from '/@/app/environment'
+import { isClient } from '/@/configs/app.env'
 import { delayPromise } from '/@/utils/delayer'
 import type { ThreadsProfile, ThreadsMediaListResponse } from '/@/server/getters/threads'
 import type { InstagramProfile, InstagramMediaListResponse } from '/@/server/getters/instagram'

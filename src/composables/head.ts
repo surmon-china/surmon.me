@@ -9,7 +9,7 @@ import { computed, ComputedGetter } from 'vue'
 import { useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
-import { META } from '/@/configs/app.config'
+import { APP_META, APP_CONFIG } from '/@/configs/app.config'
 
 export { useHead, useSeoMeta } from '@unhead/vue'
 
@@ -47,9 +47,9 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
   const _ = computed(() => {
     const value = typeof input === 'function' ? input() : input
     const { title, pageTitle, pageTitles, ...rest } = value
-    const separator = META.title_separator
+    const separator = APP_CONFIG.title_separator
     const pureTitle = pageTitle ?? pageTitles?.join(separator)
-    const fullTitle = title ?? (pureTitle ? [pureTitle, META.title].join(separator) : META.title)
+    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_META.title].join(separator) : APP_META.title)
     return { pureTitle, fullTitle, ...rest }
   })
 
@@ -63,16 +63,16 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     ogTitle: () => _.value.ogTitle ?? _.value.pureTitle,
     ogDescription: () => _.value.ogDescription ?? _.value.description,
     ogUrl: () => _.value.ogUrl ?? getPageURL(route.fullPath),
-    ogImage: () => _.value.ogImage ?? getPageURL(META.default_og_image),
+    ogImage: () => _.value.ogImage ?? getPageURL(APP_CONFIG.default_og_image),
     ogImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
     ogImageWidth: () => _.value.ogImageWidth ?? (_.value.ogImage ? null : '1000'),
     ogImageHeight: () => _.value.ogImageHeight ?? (_.value.ogImage ? null : '526'),
-    ogSiteName: () => META.title,
+    ogSiteName: () => APP_META.title,
     ogLocale: () => i18n.l.value?.iso,
     // Twitter
     twitterTitle: () => _.value.ogTitle ?? _.value.fullTitle,
     twitterDescription: () => _.value.ogDescription ?? _.value.description,
-    twitterImage: () => _.value.ogImage ?? getPageURL(META.default_og_image),
+    twitterImage: () => _.value.ogImage ?? getPageURL(APP_CONFIG.default_og_image),
     twitterImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
     twitterCard: 'summary_large_image',
     // Product specific https://ogp.me/#type_article

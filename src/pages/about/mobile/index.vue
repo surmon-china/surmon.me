@@ -2,7 +2,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
-  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminInfoStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/universal'
   import { getPageRoute } from '/@/transforms/route'
@@ -30,7 +30,7 @@
       <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
       <h4 class="description">
-        <webfont bolder>{{ isZhLang ? META.zh_description_short : META.en_description }}</webfont>
+        <webfont bolder>{{ isZhLang ? APP_META.zh_description_short : APP_META.en_description }}</webfont>
       </h4>
       <divider dashed />
       <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>

@@ -15,7 +15,7 @@ import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
 import { getOriginalProxyURL } from '/@/transforms/url'
 import { escape } from '/@/transforms/text'
-import { META } from '/@/configs/app.config'
+import { APP_META } from '/@/configs/app.config'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'
@@ -125,7 +125,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   renderer.link = ({ href, title, tokens }) => {
     const text = renderer.parser.parseInline(tokens)
     const isImageLink = text.includes('<img')
-    const isSelf = href.startsWith(META.url)
+    const isSelf = href.startsWith(APP_META.url)
     const textValue = options?.sanitize ? escape(text) : text
     const hrefValue = options?.sanitize ? sanitizeUrl(href) : href
     const titleValue = options?.sanitize ? escape(title!) : title

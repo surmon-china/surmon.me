@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGlobalState } from '/@/app/state'
-import { useCDNDomain } from '/@/app/context'
+import { useCdnDomain } from '/@/app/context'
 import { useI18n } from '/@/composables/i18n'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useTheme, Theme } from '/@/composables/theme'
@@ -17,7 +17,7 @@ import { usePopup } from '/@/composables/popup/hook'
 import { useAppOptionStore } from '/@/stores/basic'
 import { Language } from '/@/language'
 import { UNDEFINED } from '/@/constants/value'
-import { isClient } from './environment'
+import { isClient } from '/@/configs/app.env'
 
 export const useEnhancer = () => {
   const route = useRoute()
@@ -38,7 +38,7 @@ export const useEnhancer = () => {
     i18n,
     theme,
     gState: globalState,
-    cdnDomain: useCDNDomain(),
+    cdnDomain: useCdnDomain(),
 
     adConfig,
     isMobile,

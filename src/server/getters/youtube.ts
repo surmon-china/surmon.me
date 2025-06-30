@@ -6,7 +6,7 @@
 
 import axios from '@/server/services/axios'
 import { IDENTITIES } from '@/configs/app.config'
-import { YOUTUBE_API_KEY } from '@/configs/bff.yargs'
+import { YOUTUBE_API_KEY } from '@/configs/bff.args'
 
 // 1. Generate API key
 // https://console.cloud.google.com/apis/credentials

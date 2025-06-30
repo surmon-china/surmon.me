@@ -2,7 +2,7 @@
   import type { Map, LngLatLike } from 'mapbox-gl'
   import { shallowRef, onBeforeMount, onMounted, onBeforeUnmount, watch } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { META, GEO_INFO, MAPBOX_CONFIG } from '/@/configs/app.config'
+  import { APP_CONFIG, APP_META, MAPBOX_CONFIG } from '/@/configs/app.config'
   import { FeatureCollectionJSON, geoJSONFeatureToLayer, newMapboxPopup } from './helper'
 
   const props = defineProps<{
@@ -93,10 +93,10 @@
 
       // living now marker
       new mapboxgl.Marker({
-        color: META.primary,
+        color: APP_CONFIG.primary_color,
         anchor: 'bottom'
       })
-        .setLngLat(GEO_INFO.coordinates as any)
+        .setLngLat(APP_META.about_page_geo_coordinates as any)
         .addTo(map.value)
 
       // https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers

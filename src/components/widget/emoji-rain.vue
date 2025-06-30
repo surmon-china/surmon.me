@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, reactive, nextTick, onMounted } from 'vue'
-  import { useCDNDomain } from '/@/app/context'
+  import { useCdnDomain } from '/@/app/context'
   import { getAssetURL } from '/@/transforms/url'
 
   declare global {
@@ -9,7 +9,7 @@
     }
   }
 
-  const emojiImage = getAssetURL(useCDNDomain(), '/images/emojis/funny.png')
+  const emojiImage = getAssetURL(useCdnDomain(), '/images/emojis/funny.png')
   const rainBase = ref<HTMLElement>(null as any)
   const state = reactive({
     chambering: false,

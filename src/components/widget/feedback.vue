@@ -4,7 +4,7 @@
   import { useStores } from '/@/stores'
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language/key'
-  import { META } from '/@/configs/app.config'
+  import { APP_META } from '/@/configs/app.config'
 
   enum Event {
     Close = 'close'
@@ -79,8 +79,8 @@
     <template v-else>
       <div class="title">
         <i18n>
-          <template #zh>你认为 {{ META.title }} 整体怎么样？</template>
-          <template #en>How would you rate {{ META.title }}?</template>
+          <template #zh>你认为 {{ APP_META.title }} 整体怎么样？</template>
+          <template #en>How would you rate {{ APP_META.title }}?</template>
         </i18n>
       </div>
       <div class="emotions">

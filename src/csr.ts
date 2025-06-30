@@ -26,9 +26,9 @@ import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/universal'
 import { Language, LanguageKey } from '/@/language'
-import { APP_VERSION, isDev, isProd } from './app/environment'
-import { META, IDENTITIES } from '/@/configs/app.config'
-import API_CONFIG from '/@/configs/api.config'
+import { APP_VERSION, isDev, isProd } from './configs/app.env'
+import { APP_META, IDENTITIES } from '/@/configs/app.config'
+import API_CONFIG from '/@/configs/app.api'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
@@ -127,7 +127,7 @@ router.isReady().finally(() => {
             // { favicon: '🌝', title: '​' },
             // { favicon: '⛔️', title: 'FORBIDDEN' },
             // { favicon: '⭕️', title: 'FBI WARNING' },
-            { favicon: '🌱', title: META.en_sub_title }
+            { favicon: '🌱', title: APP_META.en_sub_title }
           ]
           const index = Math.floor(Math.random() * surprises.length)
           isHidden ? runTitler(surprises[index]) : resetTitler()

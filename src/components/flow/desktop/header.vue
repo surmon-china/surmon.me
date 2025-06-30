@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { useCDNDomain } from '/@/app/context'
+  import { useCdnDomain } from '/@/app/context'
   import { getAssetURL } from '/@/transforms/url'
 
   defineProps<{
@@ -8,7 +8,7 @@
     backgroundImage?: string
   }>()
 
-  const cdnDomain = useCDNDomain()
+  const cdnDomain = useCdnDomain()
   const defaultImage = getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg')
 </script>
 

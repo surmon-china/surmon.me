@@ -3,7 +3,7 @@ import { useThreadsLatestMediasStore } from '/@/stores/media'
 import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
 import { TunnelModule } from '/@/constants/tunnel'
 import { delayPromise } from '/@/utils/delayer'
-import { isClient } from '/@/app/environment'
+import { isClient } from '/@/configs/app.env'
 import tunnel from '/@/services/tunnel'
 
 export const useThreadsMediasData = () => {

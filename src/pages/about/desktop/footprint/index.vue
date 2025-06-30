@@ -3,7 +3,7 @@
   import { shallowRef, computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMyGoogleMapStore } from '/@/stores/media'
-  import { GEO_INFO, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { openNewWindow } from '/@/utils/opener'
   import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
   import { GOOGLE_MAP_LINKS } from './google-map'
@@ -54,7 +54,7 @@
 
   const handleLivingNow = () => {
     map.value?.flyTo({
-      center: GEO_INFO.coordinates as any,
+      center: APP_META.about_page_geo_coordinates as any,
       zoom: 14
     })
   }
@@ -90,7 +90,7 @@
       <div class="now">
         <i class="iconfont icon-location"></i>
         <span class="text" @click="handleLivingNow">
-          {{ isZhLang ? GEO_INFO.zh_title : GEO_INFO.en_title }}
+          {{ isZhLang ? APP_META.about_page_geo_zh_title : APP_META.about_page_geo_en_title }}
         </span>
       </div>
       <ul class="folders">

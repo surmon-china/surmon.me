@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isClient } from '/@/app/environment'
+  import { isClient } from '/@/configs/app.env'
   import { GAEventCategories } from '/@/constants/gtag'
   import { TunnelModule } from '/@/constants/tunnel'
   import { getProxyURL } from '/@/transforms/url'

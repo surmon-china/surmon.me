@@ -1,6 +1,6 @@
 /**
  * @file App environment
- * @module app/environment
+ * @module config/app-env
  * @author Surmon <https://github.com/surmon-china>
  */
 

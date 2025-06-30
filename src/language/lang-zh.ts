@@ -1,9 +1,9 @@
 import type { LanguageMap } from '.'
 import { LanguageKey } from './key'
-import { META } from '/@/configs/app.config'
+import { APP_META } from '/@/configs/app.config'
 
 export const zhLangMap: LanguageMap = {
-  [LanguageKey.APP_SLOGAN]: META.zh_sub_title,
+  [LanguageKey.APP_SLOGAN]: APP_META.zh_sub_title,
   [LanguageKey.PAGE_HOME]: '明殿',
   [LanguageKey.CATEGORY_INSIGHT]: '无色庵',
   [LanguageKey.CATEGORY_CODE]: '宁静寺',

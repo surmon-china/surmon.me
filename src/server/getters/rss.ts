@@ -6,27 +6,27 @@
 
 import RSS from 'rss'
 import axios from '@/server/services/axios'
-import { META } from '@/configs/app.config'
+import { APP_META } from '@/configs/app.config'
+import { NODEPRESS_API_URL } from '@/configs/bff.api'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
-import { getNodePressAPI } from '../config'
-import { getArticleURL } from '../route'
+import { getArticleURL } from '../utils/url'
 
 export const getRssXml = async () => {
-  const api = `${getNodePressAPI()}/archive`
+  const api = `${NODEPRESS_API_URL}/archive`
   const response = await axios.get<NodePressResult<Archive>>(api, { timeout: 6000 })
   const archive = response.data.result
   const feed = new RSS({
-    title: META.title,
-    description: META.zh_sub_title,
-    site_url: META.url,
-    feed_url: `${META.url}/rss.xml`,
-    image_url: `${META.url}/icon.png`,
-    managingEditor: META.author,
-    webMaster: META.author,
-    generator: `${META.domain}`,
+    title: APP_META.title,
+    description: APP_META.zh_sub_title,
+    site_url: APP_META.url,
+    feed_url: `${APP_META.url}/rss.xml`,
+    image_url: `${APP_META.url}/icon.png`,
+    managingEditor: APP_META.author,
+    webMaster: APP_META.author,
+    generator: `${APP_META.domain}`,
     categories: archive.categories.map((category) => category.slug),
-    copyright: `${new Date().getFullYear()} ${META.title}`,
+    copyright: `${new Date().getFullYear()} ${APP_META.title}`,
     language: 'zh',
     ttl: 60
   })
@@ -38,7 +38,7 @@ export const getRssXml = async () => {
       url: getArticleURL(article.id),
       guid: String(article.id),
       categories: article.categories.map((category) => category.slug),
-      author: META.author,
+      author: APP_META.author,
       date: article.created_at,
       enclosure: {
         url: article.thumbnail

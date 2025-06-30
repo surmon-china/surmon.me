@@ -5,7 +5,7 @@
   import { useUniversalFetch, onClient } from '/@/universal'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
-  import { META } from '/@/configs/app.config'
+  import { APP_META } from '/@/configs/app.config'
   import ArticleList from '/@/components/flow/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
@@ -22,8 +22,8 @@
   }
 
   usePageSeo(() => ({
-    title: `${META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
-    description: isZhLang.value ? META.zh_description : META.en_description,
+    title: `${APP_META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
+    description: isZhLang.value ? APP_META.zh_description : APP_META.en_description,
     keywords: appOption.data?.keywords.join(',')
   }))
 

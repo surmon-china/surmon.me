@@ -13,14 +13,13 @@ import { createGlobalState, LayoutColumn, RenderErrorValue } from './state'
 import { createTheme, Theme } from '/@/composables/theme'
 import { createI18n } from '/@/composables/i18n'
 import { Language, LanguageKey, languages } from '/@/language'
-import { APP_MODE, APP_VERSION } from './environment'
-import { NODE_ENV } from '/@/server/env'
-import API_CONFIG from '/@/configs/api.config'
+import { APP_MODE, APP_VERSION } from '/@/configs/app.env'
+import API_CONFIG from '/@/configs/app.api'
 import components from './components'
 import App from './index.vue'
 
 console.group(`🔵 [APP:INIT]`)
-console.table({ APP_VERSION, APP_MODE, NODE_ENV })
+console.table({ APP_VERSION, APP_MODE, NODE_ENV: process.env.NODE_ENV })
 console.groupEnd()
 
 console.group(`🔵 [APP:API]`)

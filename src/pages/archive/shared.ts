@@ -4,7 +4,7 @@ import { usePageSeo } from '/@/composables/head'
 import { useNodepressStatisticStore } from '/@/stores/statistic'
 import { numberSplit, numberToKilo, firstUpperCase } from '/@/transforms/text'
 import { Language, LanguageKey } from '/@/language'
-import { META } from '/@/configs/app.config'
+import { APP_META } from '/@/configs/app.config'
 
 export const i18ns = {
   title: {
@@ -24,7 +24,7 @@ export const useArchivePageMeta = () => {
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ARCHIVE)!, enTitle] : [enTitle]
     return {
       pageTitles: titles,
-      description: `${META.title} ${isZhLang.value ? '数据归档' : 'archives'}`
+      description: `${APP_META.title} ${isZhLang.value ? '数据归档' : 'archives'}`
     }
   })
 }

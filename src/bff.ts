@@ -4,10 +4,13 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import dotenv from 'dotenv'
-import { META } from '@/configs/app.config'
-import { BFF_TUNNEL_PREFIX as TUN, getBFFServerPort } from '@/configs/bff.config'
-import { NODE_ENV, isNodeDev } from '@/server/env'
+// This is required for dotenvx to work properly in the BFF server environment.
+// It should be the first import in this file to ensure all environment variables are loaded before any other imports.
+// https://github.com/dotenvx/dotenvx
+import '@dotenvx/dotenvx/config'
+
+import { APP_META, BFF_CONFIG } from '@/configs/app.config'
+import { NODE_ENV, isNodeDev } from '@/configs/bff.env'
 import { BAD_REQUEST } from '@/constants/http-code'
 import { TunnelModule } from '@/constants/tunnel'
 import { getRssXml } from './server/getters/rss'
@@ -34,15 +37,12 @@ import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { enableDevRenderer } from './server/renderer/dev'
 import { enableProdRenderer } from './server/renderer/prod'
-import { responder, handleError } from './server/helpers/responder'
-import cacher, { minutes, hours, days } from './server/helpers/cacher'
+import { responder, handleError } from './server/utils/responder'
+import cacher, { minutes, hours, days } from './server/utils/cacher'
 import { createExpressApp } from './server'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF')
-
-// init env variables for BFF server env
-dotenv.config()
 
 // create http server app
 createExpressApp().then(async ({ app, server, cache }) => {
@@ -94,7 +94,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUN}/${TunnelModule.BingWallpaper}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.BingWallpaper}`,
     responder(() => getWallpaperCache())
   )
 
@@ -108,7 +108,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUN}/${TunnelModule.NetEaseMusic}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.NetEaseMusic}`,
     responder(() => get163MusicCache())
   )
 
@@ -122,7 +122,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUN}/${TunnelModule.ThreadsProfile}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsProfile}`,
     responder(() => getThreadsProfileCache())
   )
 
@@ -136,7 +136,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Threads medias route
-  app.get(`${TUN}/${TunnelModule.ThreadsMedias}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMedias}`, (request, response, next) => {
     const afterToken = request.query.after
     if (afterToken && typeof afterToken !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -155,7 +155,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Threads media children
-  app.get(`${TUN}/${TunnelModule.ThreadsMediaChildren}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaChildren}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -172,7 +172,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Threads media conversation
-  app.get(`${TUN}/${TunnelModule.ThreadsMediaConversation}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaConversation}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -190,7 +190,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // Instagram profile
   app.get(
-    `${TUN}/${TunnelModule.InstagramProfile}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramProfile}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.InstagramProfile,
@@ -210,7 +210,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Instagram medias route
-  app.get(`${TUN}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramMedias}`, (request, response, next) => {
     const afterToken = request.query.after
     if (afterToken && typeof afterToken !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -229,7 +229,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   // Instagram media children
-  app.get(`${TUN}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramMediaChildren}`, (request, response, next) => {
     const mediaId = request.query.id
     if (!mediaId || typeof mediaId !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -255,7 +255,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUN}/${TunnelModule.InstagramCalendar}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramCalendar}`,
     responder(() => getInsCalendarCache())
   )
 
@@ -269,12 +269,12 @@ createExpressApp().then(async ({ app, server, cache }) => {
   })
 
   app.get(
-    `${TUN}/${TunnelModule.YouTubePlaylist}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.YouTubePlaylist}`,
     responder(() => getYouTubePlaylistsCache())
   )
 
   // YouTube videos
-  app.get(`${TUN}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
+  app.get(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.YouTubeVideoList}`, (request, response, next) => {
     const playlistId = request.query.id
     if (!playlistId || typeof playlistId !== 'string') {
       handleError(response, { code: BAD_REQUEST, message: 'Invalid params' })
@@ -292,7 +292,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GitHub sponsors
   app.get(
-    `${TUN}/${TunnelModule.GitHubSponsors}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.GitHubSponsors}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubSponsors,
@@ -304,7 +304,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GitHub contributions
   app.get(
-    `${TUN}/${TunnelModule.GitHubContributions}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.GitHubContributions}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.GitHubContributions,
@@ -316,7 +316,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GitHub statistic
   app.get(
-    `${TUN}/${TunnelModule.StatisticGitHubJson}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticGitHubJson}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.StatisticGitHubJson,
@@ -328,7 +328,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // NPM statistic
   app.get(
-    `${TUN}/${TunnelModule.StatisticNpmJson}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticNpmJson}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.StatisticNpmJson,
@@ -340,7 +340,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // Douban movies
   app.get(
-    `${TUN}/${TunnelModule.DoubanMovies}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.DoubanMovies}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.DoubanMovies,
@@ -352,7 +352,7 @@ createExpressApp().then(async ({ app, server, cache }) => {
 
   // GoogleMaps - My Maps
   app.get(
-    `${TUN}/${TunnelModule.MyGoogleMap}`,
+    `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.MyGoogleMap}`,
     responder(() => {
       return cacher.passive(cache, {
         key: TunnelModule.MyGoogleMap,
@@ -366,11 +366,11 @@ createExpressApp().then(async ({ app, server, cache }) => {
   await (isNodeDev ? enableDevRenderer(app, cache) : enableProdRenderer(app, cache))
 
   // run
-  server.listen(getBFFServerPort(), () => {
+  server.listen(BFF_CONFIG.server_port, () => {
     const address = server.address()
-    const port = typeof address === 'string' ? address : (address?.port ?? getBFFServerPort())
+    const port = typeof address === 'string' ? address : address?.port
     logger.success(
-      `${META.title} app is running!`,
+      `${APP_META.title} app is running!`,
       `| env: ${NODE_ENV}`,
       `| port: ${port}`,
       `| ${new Date().toLocaleString()}`

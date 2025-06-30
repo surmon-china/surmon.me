@@ -1,6 +1,6 @@
 /**
- * @file BFF Server cacher
- * @module server/helper/cacher
+ * @file BFF Server cache
+ * @module server/util/cache
  * @author Surmon <https://github.com/surmon-china>
  */
 

@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { DEFAULT_DELAY } from '/@/configs/app.config'
+import { APP_CONFIG } from '/@/configs/app.config'
 
-export const delayer = (ms: number = DEFAULT_DELAY) => {
+export const delayer = (ms: number = APP_CONFIG.article_fake_render_delay) => {
   const start = new Date().getTime()
   return (action: () => void) => {
     if (!ms) {

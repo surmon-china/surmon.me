@@ -6,8 +6,8 @@
 
 import axios, { AxiosInstance, Method as AxiosMethod } from 'axios'
 import { BAD_REQUEST } from '/@/constants/http-code'
-import { isClient } from '/@/app/environment'
-import API_CONFIG from '/@/configs/api.config'
+import { isClient } from '/@/configs/app.env'
+import API_CONFIG from '/@/configs/app.api'
 import logger from '/@/utils/logger'
 
 export enum NodePressResponseStatus {

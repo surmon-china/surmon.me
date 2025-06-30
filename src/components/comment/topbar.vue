@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { computed, toRaw } from 'vue'
-  import { META } from '/@/configs/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { APP_META } from '/@/configs/app.config'
   import { LanguageKey } from '/@/language'
   import { SortType } from '/@/constants/state'
   import { GAEventCategories } from '/@/constants/gtag'
   import { UserType, useIdentityStore } from '/@/stores/identity'
-  import { useEnhancer } from '/@/app/enhancer'
   import nodepress from '/@/services/nodepress'
   import { openPopupWindow, openNewWindow } from '/@/utils/opener'
   import { logger, CommentEvents } from './helper'
@@ -74,7 +74,7 @@
     })
 
     openPopupWindow(identity.disqusConfig.authorize_url, {
-      name: `Disqus Auth ${META.title}`,
+      name: `Disqus Auth ${APP_META.title}`,
       onClose: () => {
         identity.fetchDisqusUserInfo()
         logger.info('disqus logined', toRaw(identity.user))

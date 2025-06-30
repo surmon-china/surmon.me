@@ -1,7 +1,7 @@
 import { useSSRContext, getCurrentInstance } from 'vue'
 import { getSSRContextValue } from '/@/universal'
 import type { RenderErrorValue } from './state'
-import { isServer } from './environment'
+import { isServer } from '/@/configs/app.env'
 import logger from '/@/utils/logger'
 
 export interface SSRContext {
@@ -30,8 +30,7 @@ export const useSSRContextValue = <T = any>(key: keyof SSRContext): T | void => 
 
 export const useCountry = () => useSSRContextValue<string>('country')
 export const useCacheStatus = () => useSSRContextValue<string>('cacheStatus')
-
-export const useCDNDomain = () => {
+export const useCdnDomain = () => {
   const domain = useSSRContextValue<string>('cdnDomain')
   if (!domain) {
     throw new Error('CDN domain is not defined.')

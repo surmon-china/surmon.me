@@ -8,7 +8,7 @@ import { ref, shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { useIdentityStore } from './identity'
-import { useCDNDomain } from '/@/app/context'
+import { useCdnDomain } from '/@/app/context'
 import { SortType } from '/@/constants/state'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
@@ -16,8 +16,8 @@ import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
-import { isClient } from '/@/app/environment'
-import { RENDER_LONG_ARTICLE_THRESHOLD } from '/@/configs/app.config'
+import { isClient } from '/@/configs/app.env'
+import { APP_CONFIG } from '/@/configs/app.config'
 import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
@@ -127,7 +127,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   })
 
   const isLongContent = computed(() => {
-    return Boolean(article.value && contentLength.value >= RENDER_LONG_ARTICLE_THRESHOLD)
+    return Boolean(article.value && contentLength.value >= APP_CONFIG.render_long_article_threshold)
   })
 
   const splitIndex = computed(() => {
@@ -136,7 +136,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     }
     return getMarkdownSplitIndex(
       article.value.content,
-      Math.min(RENDER_LONG_ARTICLE_THRESHOLD, Math.floor(contentLength.value / 2))
+      Math.min(APP_CONFIG.render_long_article_threshold, Math.floor(contentLength.value / 2))
     )
   })
 
@@ -144,7 +144,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     if (!isOriginalStaticURL(src)) {
       return src
     }
-    const cdnDomain = useCDNDomain()
+    const cdnDomain = useCdnDomain()
     const path = getStaticPath(src)
     return getStaticURL(cdnDomain, path)
   }
@@ -202,7 +202,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   const postArticleLike = (articleId: number) => {
     const identityStore = useIdentityStore()
     return nodepress
-      .post(`/vote/post`, { post_id: articleId, vote: 1, author: identityStore.author })
+      .post('/vote/post', { post_id: articleId, vote: 1, author: identityStore.author })
       .then((response) => {
         if (article.value) {
           article.value.meta.likes = response.result

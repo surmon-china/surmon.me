@@ -6,7 +6,7 @@
 
 // https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
 import { useSSRContext, watchEffect } from 'vue'
-import { isClient, isServer } from '/@/app/environment'
+import { isClient, isServer } from '/@/configs/app.env'
 import { SSRData, getSSRContextValue } from './context'
 
 /**

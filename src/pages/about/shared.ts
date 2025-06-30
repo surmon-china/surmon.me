@@ -1,14 +1,14 @@
 import { useStores } from '/@/stores'
 import { useEnhancer } from '/@/app/enhancer'
 import { usePageSeo } from '/@/composables/head'
-import { useCDNDomain } from '/@/app/context'
+import { useCdnDomain } from '/@/app/context'
 import { Language, LanguageKey } from '/@/language'
 import { firstUpperCase } from '/@/transforms/text'
 import { getAssetURL } from '/@/transforms/url'
-import { META } from '/@/configs/app.config'
+import { APP_META } from '/@/configs/app.config'
 
 export const useAdminAvatar = (avatar?: string) => {
-  return avatar || getAssetURL(useCDNDomain(), '/images/anonymous.png')
+  return avatar || getAssetURL(useCdnDomain(), '/images/anonymous.png')
 }
 
 export const useAboutPageMeta = () => {
@@ -20,7 +20,7 @@ export const useAboutPageMeta = () => {
     const titles = isZhLang.value ? [i18n.t(LanguageKey.PAGE_ABOUT)!, enTitle] : [enTitle]
     return {
       pageTitles: titles,
-      description: `${isZhLang.value ? '关于' : 'About'} ${META.author}`,
+      description: `${isZhLang.value ? '关于' : 'About'} ${APP_META.author}`,
       ogType: 'profile',
       ogImage: adminInfo.data?.avatar
     }

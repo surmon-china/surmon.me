@@ -4,10 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import API_CONFIG from '/@/configs/api.config'
-import { BFF_PROXY_PREFIX } from '/@/configs/bff.config'
+import API_CONFIG from '/@/configs/app.api'
+import { BFF_CONFIG } from '/@/configs/app.config'
 import { base64UrlEncode } from '/@/transforms/base64'
-import { isDev } from '/@/app/environment'
+import { isDev } from '/@/configs/app.env'
 
 export enum CDNPrefix {
   Proxy = 'proxy',
@@ -46,7 +46,7 @@ export const getStaticPath = (url: string) => {
 }
 
 export const getOriginalProxyURL = (url: string) => {
-  return `${BFF_PROXY_PREFIX}/${base64UrlEncode(url)}`
+  return `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(url)}`
 }
 
 export const getProxyURL = (domain: string, url: string) => {
@@ -55,5 +55,5 @@ export const getProxyURL = (domain: string, url: string) => {
 
 export const getPageURL = (path: string, hash?: string) => {
   const targetPath = hash ? `${path}#${hash}` : path
-  return `${API_CONFIG.FE}${normalizePath(targetPath)}`
+  return `${API_CONFIG.FRONT_END}${normalizePath(targetPath)}`
 }

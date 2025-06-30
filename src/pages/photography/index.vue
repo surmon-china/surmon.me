@@ -6,9 +6,9 @@
   import { useUniversalFetch } from '/@/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
-  import { isClient } from '/@/app/environment'
+  import { isClient } from '/@/configs/app.env'
   import { delayPromise } from '/@/utils/delayer'
   import { TunnelModule } from '/@/constants/tunnel'
   import tunnel from '/@/services/tunnel'
@@ -45,7 +45,7 @@
   usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
-    const description = isZhLang.value ? `${META.author} 的摄影作品` : `${META.author}'s photographs`
+    const description = isZhLang.value ? `${APP_META.author} 的摄影作品` : `${APP_META.author}'s photographs`
     return {
       pageTitles: titles,
       description: description
@@ -60,7 +60,7 @@
     <page-banner class="page-banner" video="/videos/clips/ocean-5.mp4" :video-position="72" cdn>
       <template #title>
         <webfont>
-          <i18n zh="大千同在，万象共栖" :en="`${META.author}'s photographs`" />
+          <i18n zh="大千同在，万象共栖" :en="`${APP_META.author}'s photographs`" />
         </webfont>
       </template>
       <template #description>

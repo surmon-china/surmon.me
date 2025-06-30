@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@braintree/sanitize-url": "^7.1.x",
+    "@dotenvx/dotenvx": "^1.45.x",
     "@redis/client": "^5.x",
     "@sentry/vue": "^9.x",
     "@unhead/vue": "^2.x",
@@ -29,7 +30,6 @@
     "bezier-easing": "^2.1.0",
     "compression": "^1.8.x",
     "cookie-parser": "^1.4.x",
-    "dotenv": "^16.6.x",
     "emoji-233333": "^0.3.2",
     "express": "^5.x",
     "fast-xml-parser": "^5.x",

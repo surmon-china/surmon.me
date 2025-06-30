@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { shallowRef, computed, nextTick, PropType } from 'vue'
-  import { DEFAULT_DELAY, IMAGE_SHARE_LONG_ARTICLE_THRESHOLD } from '/@/configs/app.config'
+  import { APP_CONFIG } from '/@/configs/app.config'
   import { Article } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { numberSplit } from '/@/transforms/text'
@@ -29,13 +29,13 @@
   const { theme } = useEnhancer()
 
   // article content
-  const isLongArticle = computed(() => props.article.content.length > IMAGE_SHARE_LONG_ARTICLE_THRESHOLD)
+  const isLongArticle = computed(() => props.article.content.length > APP_CONFIG.article_image_share_long_threshold)
   const templateMarkdown = computed(() => {
     const content = props.article.content
     if (!isLongArticle.value) {
       return content
     }
-    const splitIndex = getMarkdownSplitIndex(content, IMAGE_SHARE_LONG_ARTICLE_THRESHOLD)
+    const splitIndex = getMarkdownSplitIndex(content, APP_CONFIG.article_image_share_long_threshold)
     return content.slice(0, splitIndex)
   })
 
@@ -63,7 +63,7 @@
       })
     )
     // wait for browser render
-    await new Promise((resolve) => setTimeout(resolve, DEFAULT_DELAY))
+    await new Promise((resolve) => setTimeout(resolve, APP_CONFIG.article_fake_render_delay))
   }
 
   const renderShareImage = async (element: HTMLElement) => {

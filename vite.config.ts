@@ -16,8 +16,7 @@ const CWD = process.cwd()
 const BASE_ENV_CONFIG = loadEnv('', CWD)
 
 export default defineConfig(({ mode }) => {
-  const TARGET_ENV_CONFIG = loadEnv(mode, CWD)
-  // console.info('vite config', { command, mode, TARGET_ENV_CONFIG })
+  const TARGET_MODE_ENV_CONFIG = loadEnv(mode, CWD)
 
   return {
     plugins: [vuePlugin(), unheadPlugin()],
@@ -49,40 +48,14 @@ export default defineConfig(({ mode }) => {
           importers: [new sass.NodePackageImporter()],
           silenceDeprecations: ['mixed-decls'],
           // https://sass-lang.com/documentation/at-rules/use/#configuration
-          additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_ENV_CONFIG.VITE_FE_URL}');`
+          additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_MODE_ENV_CONFIG.VITE_FE_URL}');`
         }
       }
     },
     optimizeDeps: {
-      include: [
-        'highlight.js/lib/core',
-        'highlight.js/lib/languages/go',
-        'highlight.js/lib/languages/css',
-        'highlight.js/lib/languages/sql',
-        'highlight.js/lib/languages/php',
-        'highlight.js/lib/languages/xml',
-        'highlight.js/lib/languages/json',
-        'highlight.js/lib/languages/bash',
-        'highlight.js/lib/languages/less',
-        'highlight.js/lib/languages/scss',
-        'highlight.js/lib/languages/yaml',
-        'highlight.js/lib/languages/rust',
-        'highlight.js/lib/languages/shell',
-        'highlight.js/lib/languages/nginx',
-        'highlight.js/lib/languages/stylus',
-        'highlight.js/lib/languages/python',
-        'highlight.js/lib/languages/javascript',
-        'highlight.js/lib/languages/typescript'
-      ],
       exclude: [
-        // browser
-        'intersection-observer',
-        // server
-        'express',
-        'lru-cache',
-        'cookie-parser',
-        'serialize-javascript',
-        'wonderful-bing-wallpaper'
+        // IIFE
+        'intersection-observer'
       ]
     },
     build: {
@@ -102,8 +75,8 @@ export default defineConfig(({ mode }) => {
             vendor: [
               'vue',
               'vue-router',
-              'pinia',
               '@unhead/vue',
+              'pinia',
               'axios',
               'qs',
               'swiper',
@@ -118,6 +91,7 @@ export default defineConfig(({ mode }) => {
               'marked-xhtml',
               'emoji-233333',
               'highlight.js',
+              'html-to-image',
               'ua-parser-js',
               'bezier-easing',
               'intersection-observer',

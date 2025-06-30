@@ -1,6 +1,6 @@
 /**
- * @file BFF yargs config
- * @module config/bff-yargs
+ * @file BFF cli args
+ * @module config/bff-args
  * @author Surmon <https://github.com/surmon-china>
  */
 

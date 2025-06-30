@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-  import { META } from '/@/configs/app.config'
+  import { APP_META } from '/@/configs/app.config'
   const year = new Date().getFullYear()
-  const title = META.title
+  const title = APP_META.title
 </script>
 
 <template>

@@ -4,7 +4,7 @@
   import { Language, LanguageKey } from '/@/language'
   import { GAEventCategories } from '/@/constants/gtag'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
   const props = defineProps<{
@@ -23,7 +23,7 @@
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP)!, enTitle] : [enTitle]
     return {
       pageTitles: titles,
-      description: `${META.title} App ${isZhLang.value ? '下载' : 'download'}`,
+      description: `${APP_META.title} App ${isZhLang.value ? '下载' : 'download'}`,
       ogImage: APP_LOGO_URL
     }
   })
@@ -35,7 +35,7 @@
       <div class="logo">
         <uimage alt="app-logo" :src="APP_LOGO_URL" cdn />
       </div>
-      <h2 class="title">{{ META.title }}</h2>
+      <h2 class="title">{{ APP_META.title }}</h2>
       <p class="description">
         <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
       </p>

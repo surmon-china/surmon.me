@@ -1,32 +1,39 @@
 /**
  * @file App config
- * @module config/app
+ * @module config/app-config
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const DEFAULT_DELAY = 468
-export const IMAGE_SHARE_LONG_ARTICLE_THRESHOLD = 6688
-export const RENDER_LONG_ARTICLE_THRESHOLD = 16688
+export const BFF_CONFIG = Object.freeze({
+  server_port: 3000,
+  server_local_url: 'http://localhost:3000',
+  tunnel_url_prefix: '/_tunnel',
+  proxy_url_prefix: '/_proxy',
+  proxy_allow_list_regexp: /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/
+})
 
-export const META = Object.freeze({
+export const APP_CONFIG = Object.freeze({
+  article_fake_render_delay: 468,
+  article_image_share_long_threshold: 6688,
+  render_long_article_threshold: 16688,
+  default_og_image: '/images/og-social-card.jpg',
+  title_separator: ' | ',
+  primary_color: '#0088f5'
+})
+
+export const APP_META = Object.freeze({
   title: 'Surmon.me',
   zh_sub_title: '斯是陋室，唯吾芳馨',
   en_sub_title: `Surmon's digital vihara`,
-  zh_description: `本是浪蝶游蜂，无智无德无明；幸闻佛道开化，志利有情众生`,
-  zh_description_short: `本为蝶蜂，无德无明；幸闻佛道，志利众生`,
+  zh_description: '本是浪蝶游蜂，无智无德无明；幸闻佛道开化，志利有情众生',
+  zh_description_short: '本为蝶蜂，无德无明；幸闻佛道，志利众生',
   en_description: 'Either write something worth reading or do something worth writing.',
-  default_og_image: '/images/og-social-card.jpg',
-  title_separator: ' | ',
   url: 'https://surmon.me',
   domain: 'surmon.me',
   author: 'Surmon',
-  primary: '#0088f5'
-})
-
-export const GEO_INFO = Object.freeze({
-  zh_title: '长居亚洲，游走热带',
-  en_title: 'UTC +07:00 ~ +09:00',
-  coordinates: [103.830391822121, 1.340863]
+  about_page_geo_zh_title: '长居亚洲，游走热带',
+  about_page_geo_en_title: 'UTC +07:00 ~ +09:00',
+  about_page_geo_coordinates: [103.830391822121, 1.340863]
 })
 
 export const MAPBOX_CONFIG = Object.freeze({

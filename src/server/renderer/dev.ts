@@ -6,7 +6,7 @@ import type { RenderResult } from '@/ssr'
 import type { CacheStore } from '../services/cache'
 import { createRequestContext } from './_context'
 import { resolveTemplate } from './_template'
-import { ROOT_PATH } from '../config'
+import { ROOT_PATH } from '@/configs/bff.env'
 
 export const enableDevRenderer = async (app: Express, cache: CacheStore) => {
   // https://vite.dev/guide/ssr.html

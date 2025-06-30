@@ -10,13 +10,13 @@ import { pipeline } from 'stream/promises'
 import type { RequestHandler, Request } from 'express'
 import { base64UrlEncode, base64UrlDecode } from '@/transforms/base64'
 import { FORBIDDEN, BAD_REQUEST, INTERNAL_SERVER_ERROR, GATEWAY_TIMEOUT } from '@/constants/http-code'
-import { BFF_PROXY_PREFIX, BFF_PROXY_ALLOWLIST_REGEXP, getStaticURL } from '@/configs/bff.config'
-import { META } from '@/configs/app.config'
-import { isNodeProd } from '@/server/env'
+import { APP_META, BFF_CONFIG } from '@/configs/app.config'
+import { isNodeProd } from '@/configs/bff.env'
+import { STATIC_URL } from '@/configs/bff.api'
 import { createLogger } from '@/utils/logger'
 
 export const logger = createLogger('BFF:Proxy')
-export const PROXY_ROUTE_PATH = `${BFF_PROXY_PREFIX}/*url`
+export const PROXY_ROUTE_PATH = `${BFF_CONFIG.proxy_url_prefix}/*url`
 
 // Timeout (in milliseconds) when proxy receives no response from target.
 const PROXY_REQUEST_TIMEOUT = 10_000
@@ -27,7 +27,7 @@ const PROXY_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3223.8 Safari/'
 
 const getProxyUrlFromRequest = (request: Request) => base64UrlDecode(String(request.params.url))
-const makeRedirectLocation = (location: string) => `${BFF_PROXY_PREFIX}/${base64UrlEncode(location)}`
+const makeRedirectLocation = (location: string) => `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(location)}`
 
 export const proxifier = (): RequestHandler => {
   return async (request, response) => {
@@ -53,9 +53,8 @@ export const proxifier = (): RequestHandler => {
     }
 
     // Step 2: Block internal app requests
-    if (parsedURL.hostname.endsWith(META.domain)) {
-      const staticURL = new URL(getStaticURL())
-      if (parsedURL.hostname !== staticURL.hostname) {
+    if (parsedURL.hostname.endsWith(APP_META.domain)) {
+      if (parsedURL.hostname !== new URL(STATIC_URL).hostname) {
         sendError('Invalid internal URL', BAD_REQUEST)
         return
       }
@@ -65,8 +64,8 @@ export const proxifier = (): RequestHandler => {
     if (isNodeProd) {
       const origin = request.headers.origin
       const referer = (request.headers.referrer as string) || request.headers.referer
-      const isAllowedReferer = !referer || BFF_PROXY_ALLOWLIST_REGEXP.test(referer)
-      const isAllowedOrigin = !origin || BFF_PROXY_ALLOWLIST_REGEXP.test(origin)
+      const isAllowedReferer = !referer || BFF_CONFIG.proxy_allow_list_regexp.test(referer)
+      const isAllowedOrigin = !origin || BFF_CONFIG.proxy_allow_list_regexp.test(origin)
       if (!isAllowedReferer || !isAllowedOrigin) {
         sendError('Forbidden', FORBIDDEN)
         return

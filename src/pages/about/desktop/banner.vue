@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
-  import { META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
   const emit = defineEmits<{
@@ -48,7 +48,7 @@
         <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
       </div>
       <p class="description">
-        <webfont bolder>{{ isZhLang ? META.zh_description : META.en_description }}</webfont>
+        <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
       </p>
       <div class="socials">
         <span class="normal">

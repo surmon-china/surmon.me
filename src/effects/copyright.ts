@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { META } from '/@/configs/app.config'
+import { APP_META } from '/@/configs/app.config'
 
 declare global {
   interface Window {
@@ -27,9 +27,9 @@ export const initCopyrighter = () => {
     return [
       '',
       '',
-      `作者：${META.author}`,
+      `作者：${APP_META.author}`,
       `链接：${location.href}`,
-      `来源：${META.title}`,
+      `来源：${APP_META.title}`,
       '著作权归作者所有，商业转载请联系作者获得授权，非商业转载请注明出处。'
     ].join('\n')
   }

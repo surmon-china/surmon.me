@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  import { isClient } from '/@/app/environment'
+  import { isClient } from '/@/configs/app.env'
   import { useUniversalFetch } from '/@/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
@@ -9,7 +9,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { CommentPostId } from '/@/constants/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import { META } from '/@/configs/app.config'
+  import { APP_META } from '/@/configs/app.config'
   import logger from '/@/utils/logger'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -56,7 +56,7 @@
   usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
-    const description = isZhLang.value ? `给 ${META.author} 留言` : 'Leave a comment'
+    const description = isZhLang.value ? `给 ${APP_META.author} 留言` : 'Leave a comment'
     return {
       pageTitles: titles,
       description,

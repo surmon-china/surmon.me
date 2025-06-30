@@ -9,20 +9,20 @@ import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, SitemapItemLoose, EnumChangefreq } from 'sitemap'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
-import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../route'
-import { getNodePressAPI } from '../config'
-import { META } from '@/configs/app.config'
+import { NODEPRESS_API_URL } from '@/configs/bff.api'
+import { APP_META } from '@/configs/app.config'
+import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../utils/url'
 
 export const getSitemapXml = async () => {
-  const api = `${getNodePressAPI()}/archive`
+  const api = `${NODEPRESS_API_URL}/archive`
   const response = await axios.get<NodePressResult<Archive>>(api, { timeout: 6000 })
   const archive = response.data.result
   const sitemapStream = new SitemapStream({
-    hostname: META.url
+    hostname: APP_META.url
   })
 
   const sitemapItemList: SitemapItemLoose[] = [
-    { url: META.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
+    { url: APP_META.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
     {
       url: getPageURL('about'),
       changefreq: EnumChangefreq.YEARLY,

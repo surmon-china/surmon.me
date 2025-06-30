@@ -13,15 +13,15 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { APP_META } from '/@/configs/app.config'
   import { UNDEFINED } from '/@/constants/value'
-  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
+  import { GAEventCategories } from '/@/constants/gtag'
+  import { LanguageKey } from '/@/language'
   import { getPageURL } from '/@/transforms/url'
   import { stringify } from '/@/transforms/qs'
+  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { openPopupWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
-  import { META } from '/@/configs/app.config'
 
   interface ShareParams {
     url: string
@@ -158,7 +158,7 @@
   })
 
   const getURL = () => getPageURL(route.fullPath)
-  const getTitle = () => document.title || META.title
+  const getTitle = () => document.title || APP_META.title
   const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? UNDEFINED
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
@@ -200,7 +200,7 @@
     if (social.handler) {
       social.handler(shareParams)
     } else {
-      openPopupWindow(social.url!(shareParams), { name: `Share: ${META.title}` })
+      openPopupWindow(social.url!(shareParams), { name: `Share: ${APP_META.title}` })
     }
   }
 </script>

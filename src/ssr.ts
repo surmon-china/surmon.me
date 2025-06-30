@@ -18,12 +18,12 @@ import type { CacheStore } from '@/server/services/cache'
 import { renderSSRStateScript, renderSSRContextScript } from '/@/universal'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import * as HTTP_CODES from '/@/constants/http-code'
+import { createLogger } from '/@/utils/logger'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { isCNCode } from '/@/transforms/region'
-import { isDev } from '/@/app/environment'
-import { createLogger } from '/@/utils/logger'
-import API_CONFIG from '/@/configs/api.config'
+import { isDev } from '/@/configs/app.env'
+import API_CONFIG from '/@/configs/app.api'
 
 const renderLogger = createLogger('SSR:Render')
 const devDebug = (...messages: any[]) => isDev && renderLogger.debug(...messages)

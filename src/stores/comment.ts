@@ -7,7 +7,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
-import { isClient } from '/@/app/environment'
+import { isClient } from '/@/configs/app.env'
 import { Comment } from '/@/interfaces/comment'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { SortType, CommentParentId } from '/@/constants/state'

@@ -8,7 +8,7 @@
   import { useAdminInfoStore } from '/@/stores/basic'
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { VALUABLE_LINKS, META } from '/@/configs/app.config'
+  import { VALUABLE_LINKS, APP_META } from '/@/configs/app.config'
 
   const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
   const adminInfoStore = useAdminInfoStore()
@@ -36,9 +36,9 @@
 <template>
   <aside class="aside">
     <div class="aside-user">
-      <uimage class="avatar" :src="adminInfoStore.data?.avatar || defaultAvatar" :alt="META.author" />
+      <uimage class="avatar" :src="adminInfoStore.data?.avatar || defaultAvatar" :alt="APP_META.author" />
       <div class="profile">
-        <h3 class="name">{{ META.author }}</h3>
+        <h3 class="name">{{ APP_META.author }}</h3>
         <webfont class="slogan">
           <i18n :k="LanguageKey.APP_SLOGAN" />
         </webfont>

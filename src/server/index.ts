@@ -10,8 +10,8 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import { createCacheStore } from './services/cache'
 import { PROXY_ROUTE_PATH, proxifier } from './services/proxy'
-import { PUBLIC_PATH } from './config'
-import { META } from '@/configs/app.config'
+import { PUBLIC_PATH } from '@/configs/bff.env'
+import { APP_META } from '@/configs/app.config'
 
 export const createExpressApp = async () => {
   // init app
@@ -31,7 +31,7 @@ export const createExpressApp = async () => {
 
   // init cache service
   const cache = await createCacheStore({
-    namespace: META.domain.replace(/\./gi, '_')
+    namespace: APP_META.domain.replace(/\./gi, '_')
   })
 
   return {

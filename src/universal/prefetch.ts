@@ -5,7 +5,7 @@
  */
 
 import { onBeforeMount, onServerPrefetch } from 'vue'
-import { isServer, isClient } from '/@/app/environment'
+import { isServer, isClient } from '/@/configs/app.env'
 import { useGlobalState } from '/@/app/state'
 
 // onServerPrefetch === async setup

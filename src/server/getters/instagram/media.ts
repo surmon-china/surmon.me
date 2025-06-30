@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from '@/server/services/axios'
-import { INSTAGRAM_TOKEN } from '@/configs/bff.yargs'
+import { INSTAGRAM_TOKEN } from '@/configs/bff.args'
 
 export interface InstagramMediaItem {
   id: string

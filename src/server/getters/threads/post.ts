@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from '@/server/services/axios'
-import { THREADS_TOKEN } from '@/configs/bff.yargs'
+import { THREADS_TOKEN } from '@/configs/bff.args'
 
 export interface ThreadsMedia {
   id: string
