@@ -11,7 +11,8 @@ export interface EmailLinkOptions {
   subject?: string
   body?: string
 }
-export const emailLink = (email: string | EmailLinkOptions) => {
+
+export const getEmailLink = (email: string | EmailLinkOptions) => {
   if (typeof email === 'string') {
     return `mailto:${email}`
   }

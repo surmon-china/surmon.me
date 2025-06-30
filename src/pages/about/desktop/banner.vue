@@ -3,6 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
+  import { getEmailLink } from '/@/transforms/email'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
@@ -12,6 +13,13 @@
 
   const { isZhLang, cdnDomain } = useEnhancer()
   const { adminInfo } = useStores()
+  const { appOption } = useStores()
+
+  const emailLink = getEmailLink({
+    email: appOption.data?.site_email!,
+    subject: `Hello, ${APP_META.author}!`,
+    body: 'Hi, I am writing to you from your website.'
+  })
 
   const wechatModalOpened = ref(false)
   const handleOpenWeChatModal = () => {
@@ -37,10 +45,10 @@
         <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
         <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
         <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+        <p class="description">
+          <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
+        </p>
       </div>
-      <p class="description">
-        <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
-      </p>
       <div class="socials">
         <span class="normal">
           <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
@@ -87,6 +95,9 @@
           </ulink>
           <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
             <i class="iconfont icon-douban" />
+          </ulink>
+          <ulink class="item email" :href="emailLink">
+            <i class="iconfont icon-mail" />
           </ulink>
         </span>
       </div>
@@ -139,7 +150,7 @@
   }
 
   .page-banner {
-    $banner-height: 20rem;
+    $banner-height: 23rem;
 
     .background {
       display: block;
@@ -189,11 +200,12 @@
 
       .profile {
         margin-top: 2.6rem;
-        margin-bottom: 4.2rem;
+        margin-bottom: 2.2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         z-index: $z-index-normal + 2;
+        color: $white;
 
         .avatar {
           $size: 8rem;
@@ -211,20 +223,18 @@
         }
 
         .name {
-          color: $white;
           margin-top: $gap;
           margin-bottom: $gap-sm;
         }
 
         .slogan {
           font-weight: 600;
-          color: $white;
-          margin: 0;
+          margin-bottom: $gap-lg;
         }
-      }
 
-      .description {
-        font-size: $font-size-h3;
+        .description {
+          font-size: $font-size-h3;
+        }
       }
 
       .socials {
@@ -232,7 +242,7 @@
         display: flex;
         justify-content: center;
         height: $button-size;
-        margin-bottom: $gap-lg;
+        margin-bottom: $gap;
 
         .normal {
           display: inline-flex;
@@ -245,7 +255,7 @@
             height: 100%;
             display: inline-flex;
             align-items: center;
-            border-radius: $radius-lg * 4;
+            border-radius: $radius-lg * 3;
             color: $white;
             transition: all $motion-duration-fast;
             &:last-child {
@@ -257,7 +267,7 @@
             }
 
             .text {
-              margin-left: $gap-sm;
+              margin-left: $gap-xs;
               font-weight: bold;
             }
 
@@ -299,7 +309,6 @@
             color: $white;
             opacity: 0.8;
             transition: all $motion-duration-fast;
-
             &:hover {
               opacity: 1;
             }
@@ -341,13 +350,15 @@
             &.linkedin {
               background-color: $linkedin-primary;
             }
+            &.email {
+              background-color: $surmon;
+            }
           }
         }
       }
 
       .biography {
         width: $container-width;
-        margin-bottom: $gap-lg;
         padding: 0 $gap-xs;
         text-indent: 2em;
         line-height: $line-height-base * 1.9;

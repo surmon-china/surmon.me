@@ -9,7 +9,7 @@ export const getGravatarByHash = (hash: string) => {
   return `https://www.gravatar.com/avatar/${hash}`
 }
 
+// https://disqus.com/api/docs/images/
 export const getDisqusAvatarByUsername = (username: string) => {
-  // https://disqus.com/api/docs/images/
   return `https://disqus.com/api/users/avatars/${username}.jpg`
 }

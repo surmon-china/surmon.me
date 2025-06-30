@@ -32,8 +32,31 @@
       <h4 class="description">
         <webfont bolder>{{ isZhLang ? APP_META.zh_description_short : APP_META.en_description }}</webfont>
       </h4>
-      <divider dashed />
-      <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
+      <div class="socials">
+        <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
+          <i class="iconfont icon-github" />
+        </ulink>
+        <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <i class="iconfont icon-instagram" />
+        </ulink>
+        <ulink class="item threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+          <i class="iconfont icon-threads" />
+        </ulink>
+        <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
+          <i class="iconfont icon-telegram" />
+        </ulink>
+        <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+          <i class="iconfont icon-zhihu" />
+        </ulink>
+        <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN_MOVIE">
+          <i class="iconfont icon-douban" />
+        </ulink>
+      </div>
+    </div>
+    <div class="biography">
+      <div class="bridge left"></div>
+      <div class="bridge right"></div>
+      <p class="content" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
     </div>
     <div class="buttons">
       <router-link class="item" :to="getPageRoute(RouteName.Archive)">
@@ -59,35 +82,6 @@
       <ulink class="item rss" :href="VALUABLE_LINKS.RSS">
         <i class="iconfont icon-rss" />
         <i18n v-bind="i18ns.rss" />
-      </ulink>
-    </div>
-    <divider dashed />
-    <div class="links col-3">
-      <ulink class="item center github" :href="VALUABLE_LINKS.GITHUB">
-        <i class="iconfont icon-github" />
-        <span class="text">GitHub</span>
-      </ulink>
-      <ulink class="item center instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-        <i class="iconfont icon-instagram" />
-        <span class="text">Instagram</span>
-      </ulink>
-      <ulink class="item center threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-        <i class="iconfont icon-threads" />
-        <span class="text">Threads</span>
-      </ulink>
-    </div>
-    <div class="links col-4">
-      <ulink class="item telegram icon-only" :href="VALUABLE_LINKS.TELEGRAM">
-        <i class="iconfont icon-telegram" />
-      </ulink>
-      <ulink class="item linkedin icon-only" :href="VALUABLE_LINKS.LINKEDIN">
-        <i class="iconfont icon-linkedin" />
-      </ulink>
-      <ulink class="item zhihu icon-only" :href="VALUABLE_LINKS.ZHIHU">
-        <i class="iconfont icon-zhihu" />
-      </ulink>
-      <ulink class="item douban icon-only" :href="VALUABLE_LINKS.DOUBAN_MOVIE">
-        <i class="iconfont icon-douban" />
       </ulink>
     </div>
     <div class="qrcodes">
@@ -145,15 +139,86 @@
       }
 
       .description {
-        margin: 0;
+        margin-top: 0;
         line-height: $line-height-base * 1.3;
         text-align: center;
       }
 
-      .biography {
-        text-indent: 2em;
-        line-height: $line-height-base * 1.4;
+      .socials {
+        $button-size: 3em;
+        height: $button-size;
+        padding: 0 $gap-sm;
+        display: flex;
+        justify-content: space-around;
+
+        .item {
+          display: inline-flex;
+          align-items: center;
+          width: $button-size;
+          height: $button-size;
+          border-radius: 100%;
+          color: $white;
+          overflow: hidden;
+          justify-content: center;
+          .iconfont {
+            font-size: $font-size-h2;
+          }
+
+          &.github {
+            background-color: $github-primary;
+          }
+          &.threads {
+            background-color: $threads-primary;
+          }
+          &.instagram {
+            background: $instagram-primary;
+            background: $instagram-gradient;
+          }
+          &.telegram {
+            background-color: $telegram-primary;
+          }
+          &.douban {
+            background-color: $douban-primary;
+          }
+          &.zhihu {
+            background-color: $zhihu-primary;
+          }
+          &.youtube {
+            background-color: $youtube-primary;
+          }
+          &.linkedin {
+            background-color: $linkedin-primary;
+          }
+        }
+      }
+    }
+
+    .biography {
+      margin-top: $gap-lg;
+      position: relative;
+      padding: $gap-lg $gap * 2;
+      border-radius: $radius-sm;
+      background-color: $module-bg-opaque;
+
+      .bridge {
+        $distance: 3rem;
+        position: absolute;
+        top: -$gap-lg;
+        width: $gap-lg;
+        height: $gap-lg;
+        background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
+        &.left {
+          left: $distance;
+        }
+        &.right {
+          right: $distance;
+        }
+      }
+
+      .content {
         margin-bottom: 0;
+        line-height: $line-height-base * 1.4;
+        text-indent: 2em;
 
         ::v-deep(a) {
           font-weight: bold;
@@ -195,78 +260,6 @@
         &.rss {
           background-color: $rss-primary;
           color: $white;
-        }
-      }
-    }
-
-    .links {
-      margin-top: $gap-lg;
-      display: grid;
-      grid-gap: $gap-lg;
-      &.col-2 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      &.col-3 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      &.col-4 {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .item {
-        display: inline-flex;
-        align-items: center;
-        height: 3rem;
-        padding: 0 1em;
-        border-radius: $radius-sm;
-        color: $white;
-        overflow: hidden;
-        &.center {
-          justify-content: center;
-        }
-        &.text-only {
-          background-color: $surmon;
-        }
-        &.icon-only {
-          justify-content: center;
-          .iconfont {
-            font-size: $font-size-h3;
-            margin: 0;
-          }
-        }
-
-        .iconfont {
-          margin-right: $gap-sm;
-        }
-
-        .text {
-          font-weight: bold;
-        }
-
-        &.github {
-          background-color: $github-primary;
-        }
-        &.threads {
-          background-color: $threads-primary;
-        }
-        &.instagram {
-          background: $instagram-primary;
-          background: $instagram-gradient;
-        }
-        &.telegram {
-          background-color: $telegram-primary;
-        }
-        &.douban {
-          background-color: $douban-primary;
-        }
-        &.zhihu {
-          background-color: $zhihu-primary;
-        }
-        &.youtube {
-          background-color: $youtube-primary;
-        }
-        &.linkedin {
-          background-color: $linkedin-primary;
         }
       }
     }

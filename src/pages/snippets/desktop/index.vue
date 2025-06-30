@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { LanguageKey } from '/@/language'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
   import { useUniversalFetch } from '/@/universal'
@@ -26,10 +26,13 @@
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
       <template #description>
-        <ulink :href="VALUABLE_LINKS.THREADS" class="link"><i class="iconfont icon-threads"></i> Threads</ulink>
+        <ulink class="link" title="Threads" :href="VALUABLE_LINKS.THREADS">
+          <i class="iconfont icon-threads"></i>
+          <span class="username">{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
+        </ulink>
         <divider type="vertical" size="lg" color="#ffffffcc" />
-        <ulink :href="VALUABLE_LINKS.ZHIHU" class="link">
-          <i class="iconfont icon-zhihu-full"></i> zhihu.com
+        <ulink class="link" title="知乎" :href="VALUABLE_LINKS.ZHIHU">
+          <i class="iconfont icon-zhihu-full"></i>
         </ulink>
       </template>
     </page-banner>
@@ -80,6 +83,7 @@
 </template>
 
 <style lang="scss" scoped>
+  @use 'sass:math';
   @use '/src/styles/base/variables' as *;
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
@@ -89,13 +93,23 @@
 
     .page-banner {
       .link {
+        display: inline-flex;
+        align-items: center;
         color: $white;
-        text-decoration: underline;
-        text-decoration-color: rgba($white, 0.6);
-        text-underline-offset: 6px;
+        opacity: 0.8;
+        &:hover {
+          opacity: 1;
+        }
 
         .iconfont {
+          font-size: $font-size-h2;
           font-weight: normal;
+        }
+
+        .username {
+          margin-left: math.div($gap-xs, 2);
+          font-family: monospace;
+          font-size: $font-size-h2;
         }
       }
     }

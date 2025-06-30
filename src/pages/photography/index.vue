@@ -65,9 +65,9 @@
       </template>
       <template #description>
         <client-only>
-          <ulink class="link" title="instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink class="link" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram"></i>
-            Instagram (@{{ IDENTITIES.INSTAGRAM_USERNAME }})
+            <span class="username">{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
         </client-only>
       </template>
@@ -122,10 +122,24 @@
 
     .page-banner {
       .link {
+        display: inline-flex;
+        align-items: center;
         color: $white;
-        text-decoration: underline;
-        text-decoration-color: rgba($white, 0.6);
-        text-underline-offset: 6px;
+        opacity: 0.8;
+        &:hover {
+          opacity: 1;
+        }
+
+        .iconfont {
+          font-weight: normal;
+          font-size: $font-size-h2;
+        }
+
+        .username {
+          margin-left: $gap-xs;
+          font-size: $font-size-h2;
+          font-family: monospace;
+        }
       }
     }
 

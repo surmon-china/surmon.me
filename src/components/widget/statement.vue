@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
-  import { emailLink } from '/@/transforms/email'
+  import { getEmailLink } from '/@/transforms/email'
   import Markdown from '/@/components/common/markdown.vue'
 
   const { appOption } = useStores()
@@ -13,7 +13,7 @@
       <br />
       <hr />
       <p v-if="appOption.data" class="email">
-        <a :href="emailLink(appOption.data.site_email)" class="link" target="_blank">
+        <a :href="getEmailLink(appOption.data.site_email)" class="link" target="_blank">
           <i class="iconfont icon-mail"></i>
           <span class="text">{{ appOption.data.site_email }}</span>
         </a>

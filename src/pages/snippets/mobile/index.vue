@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
   import { scrollToNextScreen } from '/@/utils/scroller'
@@ -49,8 +49,8 @@
             </ulink>
             <divider type="vertical" />
             <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
-              <i class="iconfont icon-zhihu"></i>
-              <strong>zhihu.com</strong>
+              <i class="iconfont icon-zhihu-full"></i>
+              <span class="username">(@{{ IDENTITIES.ZHIHU_USERNAME }})</span>
             </ulink>
           </div>
           <ul class="cards">
@@ -146,6 +146,11 @@
 
           .iconfont {
             margin-right: $gap-xs;
+          }
+
+          .username {
+            font-size: $font-size-small;
+            font-family: monospace;
           }
         }
       }
