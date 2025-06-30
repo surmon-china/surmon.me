@@ -24,7 +24,7 @@ export const enLangMap: LanguageMap = {
   [LanguageKey.STATISTIC_AVERAGE_EMOTION]: 'Rating',
   [LanguageKey.EMPTY_PLACEHOLDER]: 'NULL',
   [LanguageKey.NOT_FOUND]: 'Arrives here at last',
-  [LanguageKey.BACK_TO_HOME_PAGE]: 'Drive by',
+  [LanguageKey.BACK_TO_HOME_PAGE]: 'Back to home page',
   [LanguageKey.GUESTBOOK_SLOGAN]: 'Chop wood, Carry water',
   [LanguageKey.AD]: 'AD',
   [LanguageKey.FEEDBACK]: 'Feedback',
