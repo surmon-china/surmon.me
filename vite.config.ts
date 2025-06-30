@@ -1,6 +1,5 @@
 /**
  * @file vite config
- * @module vite-config
  * @author Surmon <https://github.com/surmon-china>
  * @reference https://vite.dev/config/
  */

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { reactive } from 'vue'
+  import { ref } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
@@ -13,18 +13,9 @@
   const { isZhLang, cdnDomain } = useEnhancer()
   const { adminInfo } = useStores()
 
-  const modalState = reactive({
-    whatsApp: false,
-    weChat: false
-  })
-
-  const handleOpenWhatsApp = () => {
-    modalState.whatsApp = true
-    emit('gTagEvent', 'whatsapp_modal')
-  }
-
-  const handleOpenWeChat = () => {
-    modalState.weChat = true
+  const wechatModalOpened = ref(false)
+  const handleOpenWeChatModal = () => {
+    wechatModalOpened.value = true
     emit('gTagEvent', 'wechat_modal')
   }
 </script>
@@ -60,9 +51,6 @@
             <i class="iconfont icon-threads" />
             <span class="text">Threads</span>
           </ulink>
-          <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
-            <i class="iconfont icon-zhihu-full" />
-          </ulink>
         </span>
         <span class="mini">
           <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
@@ -74,26 +62,10 @@
           <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
             <i class="iconfont icon-telegram" />
           </ulink>
-          <button class="item whatsapp" @click="handleOpenWhatsApp">
-            <i class="iconfont icon-whatsapp" />
-            <client-only>
-              <popup v-model:visible="modalState.whatsApp" :scroll-close="false">
-                <div class="qrcode-modal whatsapp">
-                  <div class="background"></div>
-                  <uimage class="image" cdn src="/images/qrcodes/whatsapp.webp" />
-                  <span class="text">
-                    <i class="iconfont icon-whatsapp" />
-                    Let's chat on
-                    <ulink href="https://www.whatsapp.com/">WhatsApp</ulink>
-                  </span>
-                </div>
-              </popup>
-            </client-only>
-          </button>
-          <button class="item wechat" @click="handleOpenWeChat">
+          <button class="item wechat" @click="handleOpenWeChatModal">
             <i class="iconfont icon-wechat" />
             <client-only>
-              <popup v-model:visible="modalState.weChat" :scroll-close="false">
+              <popup v-model:visible="wechatModalOpened" :scroll-close="false">
                 <div class="qrcode-modal wechat">
                   <div class="background"></div>
                   <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
@@ -110,12 +82,14 @@
           <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
             <i class="iconfont icon-linkedin" />
           </ulink>
+          <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+            <i class="iconfont icon-zhihu" />
+          </ulink>
           <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
             <i class="iconfont icon-douban" />
           </ulink>
         </span>
       </div>
-      <divider dashed />
       <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
     </div>
   </div>
@@ -138,9 +112,6 @@
     align-items: center;
     &.wechat {
       --item-primary: #{$wechat-primary};
-    }
-    &.whatsapp {
-      --item-primary: #{$whatsapp-primary};
     }
 
     .background {
@@ -257,11 +228,11 @@
       }
 
       .socials {
-        $button-size: 3rem;
+        $button-size: 3.2rem;
         display: flex;
         justify-content: center;
         height: $button-size;
-        margin-bottom: $gap;
+        margin-bottom: $gap-lg;
 
         .normal {
           display: inline-flex;
@@ -274,7 +245,7 @@
             height: 100%;
             display: inline-flex;
             align-items: center;
-            border-radius: $radius-sm;
+            border-radius: $radius-lg * 4;
             color: $white;
             transition: all $motion-duration-fast;
             &:last-child {
@@ -290,12 +261,6 @@
               font-weight: bold;
             }
 
-            &.zhihu {
-              background-color: $zhihu-primary;
-              &:hover {
-                background-color: $zhihu-primary-hover;
-              }
-            }
             &.youtube {
               background-color: $youtube-primary;
               &:hover {
@@ -330,7 +295,7 @@
             line-height: $button-size;
             margin-right: $gap;
             text-align: center;
-            border-radius: $radius-sm;
+            border-radius: 100%;
             color: $white;
             opacity: 0.8;
             transition: all $motion-duration-fast;
@@ -340,7 +305,7 @@
             }
 
             .iconfont {
-              font-size: $font-size-h4;
+              font-size: $font-size-h3;
             }
 
             &.github {
@@ -352,9 +317,6 @@
             &.wechat {
               background-color: $wechat-primary;
             }
-            &.whatsapp {
-              background-color: $whatsapp-primary;
-            }
             &.youtube {
               background-color: $youtube-primary;
             }
@@ -363,6 +325,12 @@
             }
             &.douban {
               background-color: $douban-primary;
+            }
+            &.zhihu {
+              background-color: $zhihu-primary;
+              &:hover {
+                background-color: $zhihu-primary-hover;
+              }
             }
             &.stackoverflow {
               background-color: $stackoverflow-primary;
@@ -385,6 +353,12 @@
         line-height: $line-height-base * 1.9;
         font-weight: 600;
         color: $color-text-secondary;
+
+        &::first-letter {
+          font-size: $font-size-h2;
+          font-weight: bold;
+          color: $color-text-darker;
+        }
       }
     }
   }
