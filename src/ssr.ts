@@ -169,7 +169,7 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     // is designed specifically for the rendering process, not for passing data into the SSR script.
     // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/packages/plugin-vue/src/main.ts#L184
     // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/playground/ssr-vue/src/entry-server.js#L12
-    const appHTML = await renderToString(app, ssrContext)
+    const appHTML = await renderToString(app, { ...ssrContext })
     // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
     if (globalState.renderError.value) {
       const newError = new Error(globalState.renderError.value.message)
