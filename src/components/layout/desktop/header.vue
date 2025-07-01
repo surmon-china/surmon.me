@@ -205,7 +205,7 @@
         align-items: center;
 
         .divider {
-          height: 6px;
+          height: 8px;
           width: 1px;
           background-color: $module-bg-translucent;
         }
@@ -217,14 +217,16 @@
           color: $color-text-reversal;
           opacity: 0.7;
           @include mix.visibility-transition();
-          &:hover {
+          &:hover,
+          &.link-active {
             opacity: 1;
           }
+
           &.link-active {
             .text {
-              padding-top: 4px;
-              padding-bottom: 2px;
-              border-bottom: 2px solid;
+              text-decoration: underline;
+              text-underline-offset: 0.5em;
+              text-decoration-thickness: 2px;
             }
           }
 

@@ -22,7 +22,7 @@ export const bundleClientRender = async (paths) => {
     plugins,
     build: {
       outDir: paths.client,
-      sourcemap: true,
+      sourcemap: 'hidden',
       minify: true,
       manifest: true,
       emptyOutDir: false

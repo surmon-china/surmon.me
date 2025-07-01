@@ -218,16 +218,16 @@
           }
 
           .item {
-            display: inline-flex;
+            display: inline-block;
             padding: 0 $gap-sm;
             margin-right: $gap-lg;
             margin-bottom: $gap-lg;
             line-height: 2em;
-            font-size: $font-size-h6;
+            font-size: $font-size-h5;
             font-family: $font-family-normal;
             background-color: $module-bg-darker-1;
             transition: margin-bottom $motion-duration-fast;
-            @include mix.radius-box($radius-xs);
+            @include mix.radius-box($radius-sm);
 
             .iconfont {
               font-size: $font-size-small;

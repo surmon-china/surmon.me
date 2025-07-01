@@ -59,11 +59,11 @@
       position: fixed;
 
       .item {
-        display: flex;
-        align-items: center;
+        display: block;
         position: relative;
         width: 100%;
         height: 3em;
+        line-height: 3em;
         margin-bottom: $gap-sm;
         padding: 0 $gap-lg;
         border-radius: $radius-mini;

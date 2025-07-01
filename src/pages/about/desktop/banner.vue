@@ -244,12 +244,11 @@
         $button-size: 3.2rem;
         display: flex;
         justify-content: center;
+        width: 100%;
         height: $button-size;
         margin-bottom: $gap;
 
         .normal {
-          display: inline-flex;
-          align-items: center;
           margin-right: $gap;
 
           .item {

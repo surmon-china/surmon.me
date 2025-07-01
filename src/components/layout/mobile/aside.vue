@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { APP_META } from '/@/configs/app.config'
   import { Language, LanguageKey } from '/@/language'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { Theme } from '/@/composables/theme'
@@ -8,7 +9,6 @@
   import { useAdminInfoStore } from '/@/stores/basic'
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { VALUABLE_LINKS, APP_META } from '/@/configs/app.config'
 
   const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
   const adminInfoStore = useAdminInfoStore()
@@ -45,12 +45,13 @@
       </div>
     </div>
     <div class="aside-tool">
-      <div class="item" @click="theme.toggle">
+      <button class="item" @click="theme.toggle">
         <i class="iconfont" :class="themeIcon"></i>
-      </div>
-      <div class="item" @click="_i18n.toggle">
+      </button>
+      <div class="separator"></div>
+      <button class="item" @click="_i18n.toggle">
         <i class="iconfont" :class="languageIcon"></i>
-      </div>
+      </button>
     </div>
     <div class="aside-nav">
       <nav class="nav-list">
@@ -84,33 +85,24 @@
             <i18n :k="LanguageKey.PAGE_ARCHIVE" />
           </webfont>
         </router-link>
-        <ulink class="item" :href="VALUABLE_LINKS.GITHUB">
-          <i class="iconfont icon-github"></i>
+        <router-link class="item" :to="getPageRoute(RouteName.About)">
+          <i class="iconfont icon-swordsman"></i>
           <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_GITHUB" />
+            <i18n :k="LanguageKey.PAGE_ABOUT" />
           </webfont>
-          <span class="newscript">
-            <i class="iconfont icon-new-window-s"></i>
-          </span>
-        </ulink>
+        </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
           </webfont>
         </router-link>
-        <router-link class="item about" :to="getPageRoute(RouteName.About)">
-          <i class="iconfont icon-swordsman"></i>
-          <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_ABOUT" />
-          </webfont>
-        </router-link>
-        <!-- <router-link class="item app" :to="getPageRoute(RouteName.App)">
+        <router-link class="item app" :to="getPageRoute(RouteName.App)">
           <uimage cdn class="icon" src="/images/page-app/logo.png" />
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_APP" />
           </webfont>
-        </router-link> -->
+        </router-link>
       </nav>
     </div>
   </aside>
@@ -173,12 +165,18 @@
     }
 
     .aside-tool {
-      padding: $gap 0;
       display: flex;
+      height: 4.5rem;
       border-bottom: 1px solid $border-color;
 
+      .separator {
+        width: 1px;
+        height: 100%;
+        background-color: $border-color;
+      }
+
       .item {
-        width: 50%;
+        flex: 1;
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -195,27 +193,26 @@
         margin: 0;
 
         .item {
-          display: flex;
-          align-items: center;
+          display: block;
           width: 100%;
           height: 3em;
+          line-height: 3em;
           margin-bottom: 0.5em;
           padding-left: $gap * 2;
-          border: none;
-          text-decoration: none;
           color: $white;
           &:last-child {
             margin-bottom: 0;
           }
 
-          &.link-active {
-            color: $primary;
-            font-weight: bold;
-            background-color: $body-bg;
+          .iconfont {
+            margin-right: 1em;
+            font-weight: normal;
           }
 
-          &.about {
-            color: $surmon;
+          &.link-active {
+            font-weight: bold;
+            color: $primary;
+            background-color: $body-bg;
           }
 
           &.app {
@@ -229,18 +226,6 @@
               margin-right: 1em;
               border-radius: $radius-xs;
             }
-          }
-
-          .iconfont {
-            width: 1em;
-            margin-right: 1em;
-            display: inline-block;
-            font-weight: normal;
-          }
-
-          .newscript {
-            margin-left: $gap-sm;
-            font-size: $font-size-small;
           }
         }
       }

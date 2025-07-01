@@ -44,13 +44,19 @@
         <div class="snippets-content">
           <div class="statistics">
             <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-              <i class="iconfont icon-threads"></i>
-              <strong>Threads</strong>
+              <p class="platform">
+                <i class="iconfont icon-threads"></i>
+                <span class="text">Threads</span>
+              </p>
+              <p class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</p>
             </ulink>
             <divider type="vertical" />
             <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
-              <i class="iconfont icon-zhihu-full"></i>
-              <span class="username">(@{{ IDENTITIES.ZHIHU_USERNAME }})</span>
+              <p class="platform">
+                <i class="iconfont icon-zhihu-full"></i>
+                <span class="text">回答</span>
+              </p>
+              <p class="username">@{{ IDENTITIES.ZHIHU_USERNAME }}</p>
             </ulink>
           </div>
           <ul class="cards">
@@ -107,8 +113,8 @@
         align-items: center;
 
         .item {
-          width: 6rem;
-          height: 3rem;
+          width: 28%;
+          height: 4rem;
         }
       }
 
@@ -132,7 +138,7 @@
 
       .statistics {
         margin: $item-gap 0;
-        padding: 1.8rem $gap-lg;
+        padding: $gap-lg;
         border-radius: $radius-lg;
         background-color: $module-bg-translucent;
         display: flex;
@@ -142,15 +148,24 @@
         .item {
           flex: 1;
           text-align: center;
-          font-size: $font-size-h3;
 
-          .iconfont {
-            margin-right: $gap-xs;
+          .platform {
+            margin-bottom: $gap-xs;
+            font-size: $font-size-h4;
+
+            .iconfont {
+              margin-right: $gap-xs;
+            }
+            .text {
+              font-weight: bold;
+            }
           }
 
           .username {
+            margin: 0;
+            font-family: $font-family-monospace;
             font-size: $font-size-small;
-            font-family: monospace;
+            color: $color-text-secondary;
           }
         }
       }

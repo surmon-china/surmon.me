@@ -123,17 +123,20 @@
               </template>
             </i18n>
           </div>
-          <select class="sort" name="sort" :value="sort" @change="handleSort($event.target)">
-            <option :value="SortType.Desc">
-              <i18n :k="LanguageKey.COMMENT_SORT_NEW" />
-            </option>
-            <option :value="SortType.Hottest">
-              <i18n :k="LanguageKey.COMMENT_SORT_HOT" />
-            </option>
-            <option :value="SortType.Asc">
-              <i18n :k="LanguageKey.COMMENT_SORT_OLD" />
-            </option>
-          </select>
+          <label class="sort">
+            <span class="icon">▼</span>
+            <select class="select" name="sort" :value="sort" @change="handleSort($event.target)">
+              <option :value="SortType.Desc">
+                <i18n :k="LanguageKey.COMMENT_SORT_NEW" />
+              </option>
+              <option :value="SortType.Hottest">
+                <i18n :k="LanguageKey.COMMENT_SORT_HOT" />
+              </option>
+              <option :value="SortType.Asc">
+                <i18n :k="LanguageKey.COMMENT_SORT_OLD" />
+              </option>
+            </select>
+          </label>
           <button class="disqus" @click="handleDisqusThread">
             <i class="iconfont icon-disqus-logo"></i>
           </button>
@@ -288,15 +291,34 @@
         margin-left: $gap;
         background-color: $module-bg-darker-1;
         @include mix.radius-box($radius-xs);
-        cursor: pointer;
         &:hover {
           background-color: $module-bg-darker-2;
         }
       }
 
       .sort {
-        padding: 0 $gap-xs;
-        font-weight: bold;
+        position: relative;
+
+        .icon {
+          display: inline-flex;
+          align-items: center;
+          position: absolute;
+          top: 0;
+          left: $gap-sm;
+          height: 100%;
+          font-size: $font-size-small;
+          pointer-events: none;
+        }
+
+        .select {
+          padding: 0 $gap-sm 0 $gap * 2;
+          font-weight: bold;
+          appearance: none;
+          background: none;
+          vertical-align: baseline;
+          user-select: none;
+          cursor: pointer;
+        }
       }
 
       .disqus {

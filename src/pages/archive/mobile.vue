@@ -120,8 +120,8 @@
       .skeletons {
         padding: $gap-lg;
         .skeleton {
-          width: 6rem;
-          height: 3rem;
+          width: 28%;
+          height: 4rem;
         }
       }
 
@@ -131,8 +131,6 @@
         justify-content: space-between;
 
         .item {
-          display: inline-flex;
-          flex-direction: column;
           text-align: center;
 
           .label {
