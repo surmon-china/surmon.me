@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+### 5.0.0-beta.1 (2025-07-01)
+
+**Feature**
+
+- Replaced `redis` with `@redis/client`
+- Replaced `yargs` with `yargs-parser`
+- Remove Serverless supports
+- Restructure configuration module
+
+**CI/CD**
+
+- Upgrade Vite to v7
+- Use Vite instead of `ncc` to bundle BFF file
+
 ### v4.49.0 (2024-10-02)
 
 **Feature**
