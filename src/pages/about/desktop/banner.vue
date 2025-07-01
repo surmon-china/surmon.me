@@ -255,7 +255,7 @@
             height: 100%;
             display: inline-flex;
             align-items: center;
-            border-radius: $radius-lg * 3;
+            border-radius: $radius-lg * 2;
             color: $white;
             transition: all $motion-duration-fast;
             &:last-child {

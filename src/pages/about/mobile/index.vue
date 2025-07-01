@@ -140,6 +140,7 @@
 
       .description {
         margin-top: 0;
+        margin-bottom: $gap;
         line-height: $line-height-base * 1.3;
         text-align: center;
       }
@@ -147,7 +148,7 @@
       .socials {
         $button-size: 3em;
         height: $button-size;
-        padding: 0 $gap-sm;
+        margin-bottom: $gap-xs;
         display: flex;
         justify-content: space-around;
 
@@ -196,7 +197,9 @@
     .biography {
       margin-top: $gap-lg;
       position: relative;
-      padding: $gap-lg $gap * 2;
+      padding-top: $gap-sm;
+      padding-bottom: $gap-lg;
+      padding-inline: $gap * 2;
       border-radius: $radius-sm;
       background-color: $module-bg-opaque;
 
@@ -218,7 +221,13 @@
       .content {
         margin-bottom: 0;
         line-height: $line-height-base * 1.4;
-        text-indent: 2em;
+        text-indent: 1em;
+
+        &::first-letter {
+          color: $color-text-darker;
+          font-size: $font-size-h2;
+          font-weight: bold;
+        }
 
         ::v-deep(a) {
           font-weight: bold;
