@@ -1,7 +1,5 @@
 @use './base/variables' as *;
 
-// font-display: https://developer.mozilla.org/zh-cn/docs/Web/CSS/@font-face/font-display
-
 @font-face {
   font-family: SpecialSymbol;
   src: local('PingFang SC'), local('Microsoft Yahei');

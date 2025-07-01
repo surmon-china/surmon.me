@@ -223,7 +223,6 @@
 
   .pen {
     position: relative;
-    border-radius: $radius-xs;
     &.bordered {
       border: 1px solid $module-bg-darker-3;
       .pencilbox {
@@ -234,6 +233,8 @@
     .editor {
       position: relative;
       overflow: hidden;
+      border-top-left-radius: $radius-xs;
+      border-top-right-radius: $radius-xs;
 
       /* https://css-tricks.com/the-cleanest-trick-for-autogrowing-textareas/ */
       .input-wrapper {
@@ -341,6 +342,8 @@
             padding: $gap-xs;
             z-index: $z-index-normal + 1;
             background-color: $module-bg-darker-4;
+            border-bottom-left-radius: $radius-xs;
+            border-bottom-right-radius: $radius-xs;
 
             .emoji-list {
               list-style: none;

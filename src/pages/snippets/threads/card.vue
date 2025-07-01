@@ -99,7 +99,8 @@
       align-items: center;
 
       .link {
-        display: inline-flex;
+        color: $color-text;
+        line-height: 1;
         &:hover {
           .username {
             text-decoration: underline;
@@ -108,14 +109,13 @@
         }
 
         .iconfont {
+          font-size: $font-size-small;
           margin-right: 2px;
         }
 
         .username {
-          color: $color-text;
-          font-family: monospace;
           font-weight: bold;
-          line-height: 1.2;
+          font-family: $font-family-monospace;
         }
       }
 

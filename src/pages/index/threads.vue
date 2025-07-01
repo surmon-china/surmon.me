@@ -59,7 +59,7 @@
             </ulink>
             <div class="count">
               <p class="title">
-                <i18n en="Latest" zh="时时" />
+                <i18n en="Latest" zh="碎碎" />
               </p>
               <p class="secondary">
                 <i18n en="threads" zh="清风念" />
