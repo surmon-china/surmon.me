@@ -26,14 +26,15 @@
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
       <template #description>
-        <ulink class="link" title="Threads" :href="VALUABLE_LINKS.THREADS">
-          <i class="iconfont icon-threads"></i>
-          <span class="username">{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
-        </ulink>
-        <divider type="vertical" size="lg" color="#ffffffcc" />
-        <ulink class="link" title="知乎" :href="VALUABLE_LINKS.ZHIHU">
-          <i class="iconfont icon-zhihu-full"></i>
-        </ulink>
+        <div class="links">
+          <ulink class="item threads" title="Threads" :href="VALUABLE_LINKS.THREADS">
+            <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
+          </ulink>
+          <divider type="vertical" size="lg" color="#ffffffcc" />
+          <ulink class="item zhihu" title="知乎" :href="VALUABLE_LINKS.ZHIHU">
+            <i class="iconfont icon-zhihu-full"></i>
+          </ulink>
+        </div>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -92,24 +93,30 @@
     min-height: $full-page-active-content-height;
 
     .page-banner {
-      .link {
+      .links {
         display: inline-flex;
         align-items: center;
-        color: $white;
-        opacity: 0.8;
-        &:hover {
-          opacity: 1;
-        }
 
-        .iconfont {
-          font-size: $font-size-h2;
-          font-weight: normal;
-        }
+        .item {
+          color: $white;
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
+          }
 
-        .username {
-          margin-left: math.div($gap-xs, 2);
-          font-family: monospace;
-          font-size: $font-size-h2;
+          &.threads {
+            .username {
+              font-family: $font-family-monospace;
+              font-size: $font-size-h3;
+            }
+          }
+
+          &.zhihu {
+            .iconfont {
+              font-size: $font-size-h3;
+              font-weight: normal;
+            }
+          }
         }
       }
     }

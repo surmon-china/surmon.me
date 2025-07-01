@@ -253,10 +253,7 @@
         font-weight: bold;
         letter-spacing: 1px;
         overflow: hidden;
-        .iconfont {
-          margin-right: $gap-sm;
-          font-weight: normal;
-        }
+        white-space: nowrap;
 
         &.discord {
           background-color: $discord-primary;
@@ -269,6 +266,11 @@
         &.rss {
           background-color: $rss-primary;
           color: $white;
+        }
+
+        .iconfont {
+          margin-right: $gap-sm;
+          font-weight: normal;
         }
       }
     }

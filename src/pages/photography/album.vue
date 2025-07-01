@@ -14,9 +14,9 @@
 
   const mediaChildren = shallowRef<Array<InstagramMediaItem>>([])
   const fetchMediaChildren = async (mediaId: string) => {
-    const tm = TunnelModule.InstagramMediaChildren
-    const response = await tunnel.dispatch<Array<InstagramMediaItem>>(tm, { id: mediaId })
-    mediaChildren.value = response
+    mediaChildren.value = await tunnel.dispatch<Array<InstagramMediaItem>>(TunnelModule.InstagramMediaChildren, {
+      id: mediaId
+    })
   }
 
   const activeIndex = shallowRef(0)

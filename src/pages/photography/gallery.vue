@@ -152,11 +152,9 @@
         bottom: 2em;
         margin: 0;
         font-weight: bold;
+        font-family: $font-family-monospace;
         font-size: $font-size-base + 1;
         @include mix.title-shadow();
-        &:first-letter {
-          font-family: system-ui;
-        }
       }
     }
 

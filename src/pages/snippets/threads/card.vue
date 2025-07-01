@@ -109,16 +109,18 @@
 
         .iconfont {
           margin-right: 2px;
-          color: $color-link;
         }
 
         .username {
+          color: $color-text;
+          font-family: monospace;
           font-weight: bold;
           line-height: 1.2;
         }
       }
 
       .timestamp {
+        font-size: $font-size-small;
         color: $color-text-secondary;
       }
     }

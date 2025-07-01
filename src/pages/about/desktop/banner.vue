@@ -67,6 +67,9 @@
           <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
             <i class="iconfont icon-youtube" />
           </ulink>
+          <!-- <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+            <i class="iconfont icon-twitter-x" />
+          </ulink> -->
           <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
             <i class="iconfont icon-telegram" />
           </ulink>
@@ -321,6 +324,12 @@
               background-color: $github-primary;
               &:hover {
                 background-color: $github-primary-hover;
+              }
+            }
+            &.twitter {
+              background-color: $twitter-x-primary;
+              &:hover {
+                background-color: $twitter-x-primary-hover;
               }
             }
             &.wechat {

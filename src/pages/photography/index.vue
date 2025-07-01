@@ -64,12 +64,15 @@
         </webfont>
       </template>
       <template #description>
-        <client-only>
-          <ulink class="link" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-            <i class="iconfont icon-instagram"></i>
-            <span class="username">{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
+        <div class="links">
+          <ulink class="item instagram" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+            <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
-        </client-only>
+          <divider type="vertical" size="lg" color="#ffffffcc" />
+          <ulink class="item xiaohongshu" title="小红书" :href="VALUABLE_LINKS.XIAOHONGSHU">
+            <i class="iconfont icon-xiaohongshu"></i>
+          </ulink>
+        </div>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -121,24 +124,30 @@
     min-height: $full-page-active-content-height;
 
     .page-banner {
-      .link {
+      .links {
         display: inline-flex;
         align-items: center;
-        color: $white;
-        opacity: 0.8;
-        &:hover {
-          opacity: 1;
-        }
 
-        .iconfont {
-          font-weight: normal;
-          font-size: $font-size-h2;
-        }
+        .item {
+          color: $white;
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
+          }
 
-        .username {
-          margin-left: $gap-xs;
-          font-size: $font-size-h2;
-          font-family: monospace;
+          &.instagram {
+            .username {
+              font-size: $font-size-h3;
+              font-family: $font-family-monospace;
+            }
+          }
+
+          &.xiaohongshu {
+            .iconfont {
+              font-size: $font-size-base * 2;
+              font-weight: normal;
+            }
+          }
         }
       }
     }

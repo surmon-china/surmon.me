@@ -5,7 +5,7 @@
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/universal'
   import { LanguageKey } from '/@/language'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
   import YoutubeSkeleton from './skeleton.vue'
@@ -36,8 +36,11 @@
         </webfont>
       </template>
       <template #description>
-        <i class="iconfont icon-youtube"></i>
-        <ulink :href="VALUABLE_LINKS.YOUTUBE_CHANNEL" class="link">YouTube Channel</ulink>
+        <div class="links">
+          <ulink class="item youtube" title="YouTube Channel" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+            <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
+          </ulink>
+        </div>
       </template>
     </page-banner>
     <container class="page-bridge"></container>
@@ -79,15 +82,24 @@
     min-height: $full-page-active-content-height;
 
     .page-banner {
-      .iconfont {
-        font-size: $font-size-h3;
-        margin-right: $gap-xs;
-      }
+      .links {
+        display: inline-flex;
+        align-items: center;
 
-      .link {
-        color: $white;
-        text-decoration: underline;
-        text-underline-offset: 6px;
+        .item {
+          color: $white;
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
+          }
+
+          &.youtube {
+            .username {
+              font-size: $font-size-h3;
+              font-family: $font-family-monospace;
+            }
+          }
+        }
       }
     }
 
