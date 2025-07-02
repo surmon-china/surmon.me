@@ -30,7 +30,7 @@
     <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
       <template #loading>
         <div class="snippets-loading" key="loading">
-          <div class="statistics">
+          <div class="socials">
             <skeleton-base class="item" :key="s" v-for="s in 3" />
           </div>
           <div class="cards" v-for="item in 3" :key="item">
@@ -42,7 +42,7 @@
       </template>
       <template #default>
         <div class="snippets-content">
-          <div class="statistics">
+          <div class="socials">
             <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
               <p class="platform">
                 <i class="iconfont icon-threads"></i>
@@ -99,7 +99,7 @@
       padding: 0;
       margin-top: $item-gap;
 
-      .statistics,
+      .socials,
       .cards {
         padding: $gap-lg;
         margin-bottom: $item-gap;
@@ -107,7 +107,7 @@
         @include mix.radius-box($radius-sm);
       }
 
-      .statistics {
+      .socials {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -136,7 +136,7 @@
     .snippets-content {
       margin-top: $item-gap;
 
-      .statistics {
+      .socials {
         margin: $item-gap 0;
         padding: $gap-lg;
         border-radius: $radius-lg;
@@ -150,7 +150,7 @@
           text-align: center;
 
           .platform {
-            margin-bottom: $gap-xs;
+            margin-bottom: $gap-sm;
             font-size: $font-size-h4;
 
             .iconfont {

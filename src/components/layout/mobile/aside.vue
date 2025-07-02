@@ -12,7 +12,9 @@
 
   const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
   const adminInfoStore = useAdminInfoStore()
-  const defaultAvatar = getAssetURL(cdnDomain, '/images/anonymous.png')
+  const adminAvatar = computed(() => {
+    return adminInfoStore.data?.avatar || getAssetURL(cdnDomain, '/images/anonymous.png')
+  })
 
   const themeIcon = computed(() => {
     const themeIconMap = {
@@ -36,7 +38,7 @@
 <template>
   <aside class="aside">
     <div class="aside-user">
-      <uimage class="avatar" :src="adminInfoStore.data?.avatar || defaultAvatar" :alt="APP_META.author" />
+      <uimage class="avatar" :src="adminAvatar" :alt="APP_META.author" />
       <div class="profile">
         <h3 class="name">{{ APP_META.author }}</h3>
         <webfont class="slogan">
@@ -85,22 +87,16 @@
             <i18n :k="LanguageKey.PAGE_ARCHIVE" />
           </webfont>
         </router-link>
-        <router-link class="item" :to="getPageRoute(RouteName.About)">
-          <i class="iconfont icon-swordsman"></i>
-          <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_ABOUT" />
-          </webfont>
-        </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
           <webfont bolder uppercase>
             <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
           </webfont>
         </router-link>
-        <router-link class="item app" :to="getPageRoute(RouteName.App)">
-          <uimage cdn class="icon" src="/images/page-app/logo.png" />
+        <router-link class="item about" :to="getPageRoute(RouteName.About)">
+          <uimage class="avatar" :src="adminAvatar" />
           <webfont bolder uppercase>
-            <i18n :k="LanguageKey.PAGE_APP" />
+            <i18n :k="LanguageKey.PAGE_ABOUT" />
           </webfont>
         </router-link>
       </nav>
@@ -215,16 +211,17 @@
             background-color: $body-bg;
           }
 
-          &.app {
+          &.about {
             display: flex;
             align-items: center;
             margin-top: $gap;
             color: $surmon;
-            .icon {
-              width: 1em;
-              height: 1em;
+            .avatar {
+              width: 1.2rem;
+              height: 1.2rem;
               margin-right: 1em;
-              border-radius: $radius-xs;
+              border-radius: 100%;
+              border: 1px solid $white;
             }
           }
         }
