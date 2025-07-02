@@ -93,19 +93,19 @@
       <div class="meta">
         <span class="date" data-allow-mismatch>
           <i class="iconfont icon-clock"></i>
-          <udate to="ago" :date="article.created_at" />
+          <span class="text"><udate to="ago" :date="article.created_at" /></span>
         </span>
         <span class="views">
           <i class="iconfont icon-eye"></i>
-          <span>{{ numberSplit(article.meta.views) }}</span>
+          <span class="text">{{ numberSplit(article.meta.views) }}</span>
         </span>
         <span class="comments">
           <i class="iconfont icon-comment"></i>
-          <span>{{ article.meta.comments }}</span>
+          <span class="text">{{ article.meta.comments }}</span>
         </span>
         <span class="likes">
           <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
-          <span>{{ article.meta.likes }}</span>
+          <span class="text">{{ article.meta.likes }}</span>
         </span>
       </div>
     </div>
@@ -226,16 +226,16 @@
         border-top: 1px dashed $module-bg-darker-3;
         overflow: hidden;
         color: $color-text-disabled;
-        font-size: $font-size-small;
         text-overflow: ellipsis;
         white-space: nowrap;
         word-wrap: normal;
 
-        > span {
-          display: inline-flex;
+        .text {
+          font-size: $font-size-small;
         }
 
         .iconfont {
+          font-size: $font-size-small + 1;
           margin-right: $gap-sm;
         }
 

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { Language, LanguageKey } from '/@/language'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { Theme } from '/@/composables/theme'
@@ -101,6 +101,15 @@
         </router-link>
       </nav>
     </div>
+    <div class="aside-source-link">
+      <ulink class="link" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">
+        <i class="iconfont icon-github"></i>
+        <span class="text">Source Code</span>
+        <span class="new-window">
+          <i class="iconfont icon-new-window-s"></i>
+        </span>
+      </ulink>
+    </div>
   </aside>
 </template>
 
@@ -162,7 +171,7 @@
 
     .aside-tool {
       display: flex;
-      height: 4.5rem;
+      height: 4.3rem;
       border-bottom: 1px solid $border-color;
 
       .separator {
@@ -216,14 +225,41 @@
             align-items: center;
             margin-top: $gap;
             color: $surmon;
+
             .avatar {
-              width: 1.2rem;
-              height: 1.2rem;
-              margin-right: 1em;
+              width: 1.3rem;
+              height: 1.3rem;
+              margin-right: 1rem;
               border-radius: 100%;
               border: 1px solid $white;
             }
           }
+        }
+      }
+    }
+
+    .aside-source-link {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      border-top: 1px solid $border-color;
+
+      .link {
+        display: block;
+        width: 100%;
+        height: 3em;
+        line-height: 3em;
+        padding-left: $gap * 2;
+        color: $white;
+
+        .iconfont {
+          margin-right: 1em;
+        }
+
+        .new-window {
+          margin-left: 0.5em;
+          font-size: $font-size-small;
         }
       }
     }
