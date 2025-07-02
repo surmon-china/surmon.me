@@ -61,27 +61,27 @@
     <div class="buttons">
       <router-link class="item" :to="getPageRoute(RouteName.Archive)">
         <i class="iconfont icon-quill" />
-        <i18n v-bind="i18ns.archive" />
+        <span class="label"><i18n v-bind="i18ns.archive" /></span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Snippets)">
         <i class="iconfont icon-buddhism" />
-        <i18n v-bind="i18ns.snippets" />
+        <span class="label"><i18n v-bind="i18ns.snippets" /></span>
       </router-link>
       <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
         <i class="iconfont icon-comment" />
-        <i18n v-bind="i18ns.guestbook" />
+        <span class="label"><i18n v-bind="i18ns.guestbook" /></span>
       </router-link>
       <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
         <i class="iconfont icon-discord" />
-        <i18n v-bind="i18ns.discordGroup" />
+        <span class="label"><i18n v-bind="i18ns.discordGroup" /></span>
       </ulink>
       <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
         <i class="iconfont icon-telegram" />
-        <i18n v-bind="i18ns.telegramGroup" />
+        <span class="label"><i18n v-bind="i18ns.telegramGroup" /></span>
       </ulink>
       <ulink class="item rss" :href="VALUABLE_LINKS.RSS">
         <i class="iconfont icon-rss" />
-        <i18n v-bind="i18ns.rss" />
+        <span class="label"><i18n v-bind="i18ns.rss" /></span>
       </ulink>
     </div>
     <div class="qrcodes">
@@ -247,13 +247,11 @@
         height: 3em;
         display: flex;
         align-items: center;
-        padding-left: 1em;
+        padding-left: $gap;
+        padding-right: $gap-xs;
         border-radius: $radius-sm;
         background-color: $module-bg;
-        font-weight: bold;
-        letter-spacing: 1px;
         overflow: hidden;
-        white-space: nowrap;
 
         &.discord {
           background-color: $discord-primary;
@@ -270,7 +268,12 @@
 
         .iconfont {
           margin-right: $gap-sm;
-          font-weight: normal;
+        }
+
+        .label {
+          letter-spacing: 1px;
+          font-weight: bold;
+          @include mix.text-overflow();
         }
       }
     }

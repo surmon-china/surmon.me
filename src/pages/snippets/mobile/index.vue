@@ -44,7 +44,7 @@
         <div class="snippets-content">
           <div class="socials">
             <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-              <p class="platform">
+              <p class="label">
                 <i class="iconfont icon-threads"></i>
                 <span class="text">Threads</span>
               </p>
@@ -52,7 +52,7 @@
             </ulink>
             <divider type="vertical" />
             <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
-              <p class="platform">
+              <p class="label">
                 <i class="iconfont icon-zhihu-full"></i>
                 <span class="text">回答</span>
               </p>
@@ -149,7 +149,7 @@
           flex: 1;
           text-align: center;
 
-          .platform {
+          .label {
             margin-bottom: $gap-sm;
             font-size: $font-size-h4;
 

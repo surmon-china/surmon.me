@@ -104,7 +104,7 @@
     <div class="aside-source-link">
       <ulink class="link" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">
         <i class="iconfont icon-github"></i>
-        <span class="text">Source Code</span>
+        <span class="label">Source Code</span>
         <span class="new-window">
           <i class="iconfont icon-new-window-s"></i>
         </span>
