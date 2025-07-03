@@ -135,7 +135,7 @@
       .skeletons {
         .item {
           width: 8rem;
-          height: 2.8rem;
+          height: 4rem;
         }
       }
 
@@ -147,12 +147,15 @@
           .iconfont {
             margin-right: $gap;
             display: inline-block;
-            font-size: $font-size-h3 * 2;
+            font-size: $font-size-h4 * 2;
             color: $color-text-disabled;
             opacity: 0.2;
+            @include mix.text-trim();
           }
 
           .content {
+            @include mix.text-trim();
+
             .label {
               margin-bottom: 0;
               text-transform: uppercase;

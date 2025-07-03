@@ -1,16 +1,18 @@
 <script lang="ts" setup>
   import { onMounted, onBeforeMount } from 'vue'
   import { Language, LanguageKey } from '/@/language'
-  import { firstUpperCase } from '/@/transforms/text'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
+  import { useGitHubSponsorsStore } from '/@/stores/sponsors'
   import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
+  import { firstUpperCase } from '/@/transforms/text'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
   import PageBanner from '/@/components/common/banner.vue'
 
   const { i18n: _i18n, route, isZhLang } = useEnhancer()
   const sponsorState = useSponsorState()
+  const githubSponsorsStore = useGitHubSponsorsStore()
 
   usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_SPONSOR, Language.English)!)
@@ -19,7 +21,7 @@
   })
 
   onBeforeMount(() => {
-    sponsorState.githubSponsors.fetch()
+    githubSponsorsStore.fetch()
   })
 
   onMounted(() => {
@@ -49,7 +51,11 @@
       <container class="tabs-wrapper">
         <sponsor-tabs class="sponsor-tabs" :state="sponsorState" />
       </container>
-      <sponsor-provider class="sponsor-provider" :state="sponsorState" />
+      <sponsor-provider
+        class="sponsor-provider"
+        :state="sponsorState"
+        :github-sponsors-data="githubSponsorsStore.data"
+      />
     </div>
   </div>
 </template>

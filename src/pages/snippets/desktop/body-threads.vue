@@ -51,6 +51,8 @@
 
     .media {
       margin-top: $gap-sm;
+      // for Chrome video plugins
+      position: relative;
 
       .image,
       .video,

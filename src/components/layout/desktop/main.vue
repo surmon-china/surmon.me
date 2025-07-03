@@ -10,6 +10,7 @@
   import Wallflower from '/@/components/widget/wallflower/garden.vue'
   import Wallpaper from '/@/components/widget/wallpaper/switcher.vue'
   import Background from '/@/components/widget/background.vue'
+  import { useGitHubSponsorsStore } from '/@/stores/sponsors'
   import { useSponsorState } from '/@/components/widget/sponsor/state'
   import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
@@ -22,10 +23,13 @@
   import AsideView from './aside/index.vue'
   import NavView from './nav.vue'
 
-  const sponsorState = useSponsorState()
-  const wallpaperStore = useWallpaperStore()
   const { route, gState } = useEnhancer()
   const { switcher, layoutColumn } = gState
+
+  const wallpaperStore = useWallpaperStore()
+  const gitHubSponsorsStore = useGitHubSponsorsStore()
+  const sponsorState = useSponsorState()
+
   const handlePageTransitionDone = () => {
     gState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
   }
@@ -43,6 +47,10 @@
     // bing wallpaper
     wallpaperStore.fetch().catch((error) => {
       logger.failure('bing wallpaper fetch failed!', error)
+    })
+    // github sponsors
+    gitHubSponsorsStore.fetch().catch((error) => {
+      logger.failure('GitHub sponsors fetch failed!', error)
     })
     // music player
     useMusic()
@@ -62,7 +70,12 @@
         <div class="sponsor-modal">
           <div class="sponsor">
             <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
-            <sponsor-provider class="provider" :state="sponsorState" :max-sponsors="9" />
+            <sponsor-provider
+              class="provider"
+              :state="sponsorState"
+              :github-sponsors-data="gitHubSponsorsStore.data"
+              :github-sponsors-max-count="9"
+            />
           </div>
         </div>
       </popup>

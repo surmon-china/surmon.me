@@ -18,7 +18,7 @@
   import { useAboutPageMeta, i18ns } from '../shared'
 
   const { gtag, gState } = useEnhancer()
-  const { adminInfo, appOption, githubSponsors } = useStores()
+  const { adminInfo, appOption } = useStores()
 
   const handleGTagEvent = (event: string) => {
     gtag?.event(event, {
@@ -27,7 +27,6 @@
   }
 
   const handleSponsor = () => {
-    githubSponsors.fetch()
     gState.toggleSwitcher('sponsor', true)
     handleGTagEvent('sponsor_modal')
   }

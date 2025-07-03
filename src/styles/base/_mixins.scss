@@ -29,6 +29,12 @@
   text-decoration-thickness: from-font;
 }
 
+/// Text trim
+@mixin text-trim() {
+  text-box-edge: text;
+  text-box-trim: trim-both;
+}
+
 /// Visible element
 @mixin visible($important: false) {
   opacity: 1 funs.is-important($important);
