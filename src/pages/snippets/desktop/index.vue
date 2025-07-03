@@ -1,18 +1,35 @@
 <script lang="ts" setup>
-  import { LanguageKey } from '/@/language'
+  import { shallowRef } from 'vue'
   import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/universal'
+  import { useThreadsLatestMediasStore } from '/@/stores/media'
+  import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
-  import { useThreadsMediasData } from '../threads/shared'
-  import ThreadsCard from '../threads/card.vue'
-  import MasonryList from './masonry.vue'
+  import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
+  import ListItemCard from './card.vue'
+  import ThreadsBody from './body-threads.vue'
 
-  const { latestThreadsStore, loading, finished, allMedias, fetchMoreMedias } = useThreadsMediasData()
+  const { popup } = useEnhancer()
+  const { fetching, fetchMedias } = useThreadsMediasRequest()
+  const latestThreadsStore = useThreadsLatestMediasStore()
 
-  const openImagePopup = (url: string) => {
-    window.$popup.vImage(url)
+  const masonryRef = shallowRef<MasonryRef<ThreadsMedia>>()
+  const lastPaging = shallowRef<ThreadsMediaListResponse['paging'] | null>(null)
+  const noMoreData = shallowRef(false)
+
+  const fetchNextPageThreadsMedias = async () => {
+    if (latestThreadsStore.fetching || fetching.value || noMoreData.value) return
+    const secondPage = latestThreadsStore.data?.paging.cursors.after
+    const nextPage = lastPaging.value?.cursors?.after
+    const response = await fetchMedias(nextPage ?? secondPage)
+    lastPaging.value = response.paging
+    noMoreData.value = !response.paging.cursors?.after
+    masonryRef.value?.appendItems(response.data)
   }
 
   useSnippetsPageMeta()
@@ -56,19 +73,33 @@
         </template>
         <template #default>
           <div>
-            <masonry-list :data="allMedias" :cols="3">
-              <template #item="{ data }">
-                <threads-card :media="data" @click-image="openImagePopup" />
+            <masonry-wall
+              :columns="3"
+              row-gap="2.8rem"
+              col-gap="2.4rem"
+              :initial-items="latestThreadsStore.data?.data || []"
+              :ssr-initial-render="true"
+              @mounted="masonryRef = $event"
+            >
+              <template #default="{ item }">
+                <list-item-card
+                  icon="icon-threads"
+                  :username="item.username"
+                  :permalink="item.permalink"
+                  :timestamp="item.timestamp"
+                >
+                  <threads-body :media="item" @click-image="(url) => popup.vImage(url)" />
+                </list-item-card>
               </template>
-            </masonry-list>
+            </masonry-wall>
             <loadmore
-              v-if="!latestThreadsStore.fetching && !finished"
+              v-if="!latestThreadsStore.fetching && !noMoreData"
               class="loadmore"
-              :loading="loading"
-              @loadmore="fetchMoreMedias"
+              :loading="fetching"
+              @loadmore="fetchNextPageThreadsMedias"
             >
               <template #normal>
-                <button class="normal" @click="fetchMoreMedias">
+                <button class="normal" @click="fetchNextPageThreadsMedias">
                   <i class="iconfont icon-loadmore"></i>
                 </button>
               </template>

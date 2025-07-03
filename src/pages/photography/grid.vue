@@ -46,7 +46,7 @@
 
 <template>
   <div class="instagram-grid">
-    <ul class="medias">
+    <transition-group tag="ul" name="list" class="medias">
       <li
         class="item"
         v-for="(media, index) in medias"
@@ -73,7 +73,7 @@
           </span>
         </div>
       </li>
-    </ul>
+    </transition-group>
     <client-only>
       <popup :visible="!!galleryActiveMedia" :scroll-close="false" @close="closeMediaGallery">
         <ins-gallery

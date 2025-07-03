@@ -145,16 +145,16 @@ select:-webkit-autofill {
 }
 
 // for list transition
-.list-fade-enter-active,
-.list-fade-leave-active {
-  transition: opacity $motion-duration-mid;
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all $motion-duration-mid ease;
 }
-.list-fade-enter,
-.list-fade-leave-active {
+
+.list-enter-from,
+.list-leave-to {
   opacity: 0;
-}
-.list-fade-move {
-  transition: transform $motion-duration-mid;
+  transform: translateY(1rem);
 }
 
 // for client only component transition

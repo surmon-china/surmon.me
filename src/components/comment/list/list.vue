@@ -100,7 +100,7 @@
 
 <template>
   <ul class="comment-list" :class="isChildList ? 'child' : 'root'">
-    <transition-group name="list-fade">
+    <transition-group name="list">
       <comment-item
         v-for="item in comments"
         :key="item.comment.id"

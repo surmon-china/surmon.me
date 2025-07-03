@@ -109,26 +109,24 @@
       border-radius: $radius-sm;
       background-color: $module-bg-translucent;
 
-      .skeletons,
-      .statistics {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      }
-
       .skeletons {
         padding: $gap-lg;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: $gap-lg;
+
         .skeleton {
-          width: 28%;
           height: 4rem;
         }
       }
 
       .statistics {
         padding: 1.4em 2em;
-        flex-wrap: wrap;
+        width: 100%;
+        display: flex;
         justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
 
         .item {
           text-align: center;
@@ -168,16 +166,16 @@
 
         .item {
           padding: $gap-lg;
+          margin-bottom: $gap-lg;
           background-color: $module-bg-translucent;
           @include mix.radius-box($radius-sm);
-          margin-bottom: $gap-lg;
           &:last-child {
             margin-bottom: 0;
           }
 
           .line {
             height: 2rem;
-            margin-bottom: 2rem;
+            margin-bottom: $gap-lg;
             &:last-child {
               margin-bottom: 0;
             }

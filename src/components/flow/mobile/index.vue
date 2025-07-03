@@ -26,10 +26,10 @@
   const categoryStore = useCategoryStore()
   const articleListStore = useArticleListStore()
   const appOptionStore = useAppOptionStore()
-  const category = computed(() => {
+  const filterCategory = computed(() => {
     return props.categorySlug ? categoryStore.data.find((category) => category.slug === props.categorySlug)! : null
   })
-  const tag = computed(() => {
+  const filterTag = computed(() => {
     return props.tagSlug ? tagStore.data.find((tag) => tag.slug === props.tagSlug) : null
   })
 
@@ -39,13 +39,15 @@
   })
 
   usePageSeo(() => {
-    const titles: string[] = Object.values(props)
-      .filter(Boolean)
-      .map((prop) => firstUpperCase(prop as string))
-
     // filters page
-    if (titles.length) {
-      return { pageTitles: titles }
+    if (props.date) {
+      return { pageTitles: [props.date, 'Date'] }
+    } else if (props.searchKeyword) {
+      return { pageTitles: [`"${props.searchKeyword}"`, 'Search'] }
+    } else if (filterCategory.value) {
+      return { pageTitles: [filterCategory.value.name, filterCategory.value.slug] }
+    } else if (filterTag.value) {
+      return { pageTitles: [filterTag.value.name, filterTag.value.slug] }
     }
 
     // index page
@@ -91,16 +93,16 @@
     <div class="header" v-if="tagSlug || categorySlug || date || searchKeyword">
       <div class="content">
         <template v-if="categorySlug">
-          <i18n v-if="category">
-            <template #zh>分类 “{{ category.name }}” 的过滤结果</template>
-            <template #en>Category "{{ firstUpperCase(category.slug) }}" 's result</template>
+          <i18n v-if="filterCategory">
+            <template #zh>分类 “{{ filterCategory.name }}” 的过滤结果</template>
+            <template #en>Category "{{ firstUpperCase(filterCategory.slug) }}" 's result</template>
           </i18n>
           <span v-else>{{ categorySlug }}</span>
         </template>
         <template v-if="tagSlug">
-          <i18n v-if="tag">
-            <template #zh>标签 “{{ tag.name }}” 的过滤结果</template>
-            <template #en>Tag "{{ getTagEnName(tag) }}" 's result</template>
+          <i18n v-if="filterTag">
+            <template #zh>标签 “{{ filterTag.name }}” 的过滤结果</template>
+            <template #en>Tag "{{ getTagEnName(filterTag) }}" 's result</template>
           </i18n>
           <span v-else>{{ tagSlug }}</span>
         </template>
@@ -143,7 +145,7 @@
       </template>
       <template #default>
         <div>
-          <transition-group key="list" name="list-fade" tag="div" class="list">
+          <transition-group key="list" name="list" tag="div" class="list">
             <list-item
               class="list-item"
               :article="article"

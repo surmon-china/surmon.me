@@ -153,7 +153,7 @@
           @blur="enableCopyrighter"
         ></textarea>
       </div>
-      <transition name="list-fade">
+      <transition name="module">
         <div class="preview-content" v-if="isPreviewed">
           <markdown
             :markdown="content"

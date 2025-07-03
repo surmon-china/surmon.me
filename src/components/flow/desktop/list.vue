@@ -85,7 +85,7 @@
                 />
               </template>
             </client-only>
-            <transition-group name="list-fade">
+            <transition-group name="list">
               <list-item
                 v-for="articleItem in articles"
                 class="list-item"

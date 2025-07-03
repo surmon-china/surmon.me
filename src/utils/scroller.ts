@@ -132,7 +132,7 @@ export const scrollToNextScreen = () => {
       target: document.body,
       offset: window.scrollY + window.innerHeight * 0.68,
       duration: 300,
-      easing: Easing.easeIn
+      easing: Easing.easeOut
     })
   })
 }

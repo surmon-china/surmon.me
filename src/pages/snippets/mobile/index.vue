@@ -1,20 +1,34 @@
 <script lang="ts" setup>
-  import { useUniversalFetch } from '/@/universal'
-  import { LanguageKey } from '/@/language'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { shallowRef } from 'vue'
+  import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
+  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import { scrollToNextScreen } from '/@/utils/scroller'
+  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { LanguageKey } from '/@/language'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/universal'
+  import { useThreadsLatestMediasStore } from '/@/stores/media'
+  import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
-  import { useThreadsMediasData } from '../threads/shared'
-  import ThreadsCard from '../threads/card.vue'
+  import ThreadsCard from './card-threads.vue'
 
-  const { latestThreadsStore, loading, finished, allMedias, fetchMoreMedias } = useThreadsMediasData()
+  const { popup } = useEnhancer()
+  const { fetching, fetchMedias } = useThreadsMediasRequest()
+  const latestThreadsStore = useThreadsLatestMediasStore()
 
-  const fetchMoreMediasAndNextScreen = () => {
-    fetchMoreMedias().then(() => {
-      scrollToNextScreen()
-    })
+  const masonryRef = shallowRef<MasonryRef<ThreadsMedia>>()
+  const lastPaging = shallowRef<ThreadsMediaListResponse['paging'] | null>(null)
+  const noMoreData = shallowRef(false)
+
+  const fetchNextPageThreadsMedias = async () => {
+    if (latestThreadsStore.fetching || fetching.value || noMoreData.value) return
+    const secondPage = latestThreadsStore.data?.paging.cursors.after
+    const nextPage = lastPaging.value?.cursors?.after
+    const response = await fetchMedias(nextPage ?? secondPage)
+    lastPaging.value = response.paging
+    noMoreData.value = !response.paging.cursors?.after
+    masonryRef.value?.appendItems(response.data)
   }
 
   useSnippetsPageMeta()
@@ -33,9 +47,9 @@
           <div class="socials">
             <skeleton-base class="item" :key="s" v-for="s in 3" />
           </div>
-          <div class="cards" v-for="item in 3" :key="item">
-            <div class="item" v-for="i in 2" :key="i">
-              <skeleton-line />
+          <div class="cards">
+            <div class="item" v-for="i in 4" :key="i">
+              <skeleton-paragraph :lines="4" line-height="1.2rem" />
             </div>
           </div>
         </div>
@@ -59,21 +73,26 @@
               <p class="username">@{{ IDENTITIES.ZHIHU_USERNAME }}</p>
             </ulink>
           </div>
-          <ul class="cards">
-            <li class="item" v-for="(media, index) in allMedias" :key="index" data-allow-mismatch>
-              <ulink :href="media.permalink">
-                <threads-card :media="media" />
-              </ulink>
-            </li>
-          </ul>
+          <masonry-wall
+            row-gap="1.2rem"
+            col-gap="1.4rem"
+            :columns="2"
+            :initial-items="latestThreadsStore.data?.data || []"
+            :ssr-initial-render="true"
+            @mounted="masonryRef = $event"
+          >
+            <template #default="{ item }">
+              <threads-card :media="item" @click-image="(url) => popup.vImage(url)" />
+            </template>
+          </masonry-wall>
           <loadmore
-            v-if="!latestThreadsStore.fetching && !finished"
+            v-if="!latestThreadsStore.fetching && !noMoreData"
             class="loadmore"
-            :loading="loading"
-            @loadmore="fetchMoreMediasAndNextScreen"
+            :loading="fetching"
+            @loadmore="fetchNextPageThreadsMedias"
           >
             <template #normal>
-              <button class="normal" @click="fetchMoreMediasAndNextScreen">
+              <button class="normal" @click="fetchNextPageThreadsMedias">
                 <i class="iconfont icon-loadmore"></i>
               </button>
             </template>
@@ -99,36 +118,30 @@
       padding: 0;
       margin-top: $item-gap;
 
-      .socials,
-      .cards {
-        padding: $gap-lg;
+      .socials {
         margin-bottom: $item-gap;
+        padding: $gap-lg;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: $gap-lg;
         @include mix.common-bg-module();
         @include mix.radius-box($radius-sm);
-      }
-
-      .socials {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
 
         .item {
-          width: 28%;
           height: 4rem;
         }
       }
 
       .cards {
-        &:last-child {
-          margin-bottom: 0;
-        }
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: $gap-lg;
 
         .item {
-          height: 2rem;
-          margin-bottom: 2rem;
-          &:last-child {
-            margin-bottom: 0;
-          }
+          height: 10rem;
+          padding: $gap-lg;
+          @include mix.common-bg-module();
+          @include mix.radius-box($radius-sm);
         }
       }
     }
@@ -166,20 +179,6 @@
             font-family: $font-family-monospace;
             font-size: $font-size-small;
             color: $color-text-secondary;
-          }
-        }
-      }
-
-      .cards {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-
-        .item {
-          @include mix.radius-box($radius-sm);
-          margin-bottom: 1.4rem;
-          &:last-child {
-            margin-bottom: 0;
           }
         }
       }
