@@ -246,7 +246,7 @@
         justify-content: center;
         width: 100%;
         height: $button-size;
-        margin-bottom: $gap;
+        margin-bottom: $gap * 2;
 
         .normal {
           margin-right: $gap;
@@ -374,6 +374,7 @@
         color: $color-text-secondary;
 
         &::first-letter {
+          line-height: 1;
           font-size: $font-size-h2;
           font-weight: bold;
           color: $color-text-darker;

@@ -86,7 +86,6 @@ export const i18ns = {
       `嗨！我是 Surmon，法名觉了（jué liǎo），一名野生软件工程师，曾供职于美图秀秀、七牛云、字节跳动、加密交易所。`,
       `如你所见，我有着还不错的设计灵感和编码能力，经常在 GitHub 上开源一些 “没用” 或 “有用” 的小物件。`,
       `当然，如果某些输出恰好帮助了你，也期待你的随喜赞助。`,
-      `｜`,
       `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
       `而这里，我把它称作自己的数字 <a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>，随缘记录。`,
       `祝你在这儿玩得愉快！`,
