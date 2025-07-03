@@ -17,7 +17,7 @@
     "isDynamicEntry": true
   },
   "index.html": {
-    "file": "index-gogCZbK7.js",
+    "file": "index-kHXFN1q7.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -30,7 +30,7 @@
       "_mapbox-gl-C3VWa6uF.js"
     ],
     "css": [
-      "index-DXQPwTxz.css"
+      "index-CHHsqw2U.css"
     ]
   },
   "node_modules/.pnpm/mapbox-gl@3.13.0/node_modules/mapbox-gl/dist/mapbox-gl.css": {
