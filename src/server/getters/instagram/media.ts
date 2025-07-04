@@ -10,6 +10,7 @@ export interface InstagramMediaItem {
   media_url: string
   thumbnail_url?: string
   timestamp: string
+  like_count: number
 }
 
 export interface InstagramMediaListResponse<T = InstagramMediaItem> {
@@ -30,10 +31,10 @@ export interface InstagramMediaGetterOptions {
   after?: string
 }
 
-// https://developers.facebook.com/docs/instagram-basic-display-api/reference/user/media#reading
+// https://developers.facebook.com/docs/instagram-platform/reference/instagram-media
 export const getInstagramMedias = async <T = InstagramMediaItem>(options?: InstagramMediaGetterOptions) => {
   try {
-    const defaultFields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`
+    const defaultFields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp,like_count`
     const params: Record<string, any> = {
       access_token: INSTAGRAM_TOKEN,
       fields: options?.fields ?? defaultFields,
