@@ -9,10 +9,10 @@ import { isServer, isClient } from '/@/configs/app.env'
 import { useGlobalState } from '/@/app/state'
 
 // onServerPrefetch === async setup
-// onServerPreFetch: https://github.com/vuejs/composition-api/pull/198/files
-// https://github.com/vuejs/vue-next/blob/master/packages/server-renderer/src/render.ts#L96
-// https://github.com/nuxt-community/composition-api/blob/main/src/fetch.ts#L226
-// https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/asyncData.ts
+// https://vuejs.org/api/composition-api-lifecycle#onserverprefetch
+// https://nuxt.com/docs/api/composables/use-fetch
+// https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/composables/asyncData.ts
+// https://github.com/nuxt/framework/blob/main/packages/nuxt/src/app/composables/asyncData.ts
 // https://github.com/nuxt-community/composition-api/blob/main/src/runtime/composables/async.ts
 export const useUniversalFetch = (fetcher: () => Promise<any>) => {
   const globalState = useGlobalState()

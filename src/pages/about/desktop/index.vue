@@ -17,7 +17,7 @@
   import AboutPageBanner from './banner.vue'
   import { useAboutPageMeta, i18ns } from '../shared'
 
-  const { gtag, gState } = useEnhancer()
+  const { gtag, globalState } = useEnhancer()
   const { adminInfo, appOption } = useStores()
 
   const handleGTagEvent = (event: string) => {
@@ -27,17 +27,17 @@
   }
 
   const handleSponsor = () => {
-    gState.toggleSwitcher('sponsor', true)
+    globalState.toggleSwitcher('sponsor', true)
     handleGTagEvent('sponsor_modal')
   }
 
   const handleStatement = () => {
-    gState.toggleSwitcher('statement', true)
+    globalState.toggleSwitcher('statement', true)
     handleGTagEvent('statement_modal')
   }
 
   const handleFeedback = () => {
-    gState.toggleSwitcher('feedback', true)
+    globalState.toggleSwitcher('feedback', true)
     handleGTagEvent('feedback_modal')
   }
 

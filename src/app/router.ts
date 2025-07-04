@@ -335,6 +335,7 @@ export interface RouterCreatorOptions {
   beforeMiddleware?: NavigationGuard | NavigationGuard[]
   afterMiddleware?: NavigationGuardNext | NavigationGuardNext[]
 }
+
 export const createUniversalRouter = (options: RouterCreatorOptions) => {
   const router = createRouter({
     routes,

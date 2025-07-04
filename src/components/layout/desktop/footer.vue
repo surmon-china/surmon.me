@@ -4,9 +4,9 @@
   import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
 
-  const { gState, gtag } = useEnhancer()
+  const { globalState, gtag } = useEnhancer()
   const handleStatementModal = () => {
-    gState.toggleSwitcher('statement', true)
+    globalState.toggleSwitcher('statement', true)
     gtag?.event('statement_modal', {
       event_category: GAEventCategories.Universal
     })

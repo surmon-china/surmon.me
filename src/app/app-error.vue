@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <div class="error" :class="{ dark: isDarkTheme }">
+  <div class="app-error" :class="{ dark: isDarkTheme }">
     <h1 class="code">{{ props.error.code }}</h1>
     <h3 class="message">
       <template v-if="props.error.message">{{ props.error.message }}</template>
@@ -36,7 +36,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .error {
+  .app-error {
     top: 0;
     left: 0;
     width: 100%;

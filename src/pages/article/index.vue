@@ -30,7 +30,7 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, route, gtag, gState } = useEnhancer()
+  const { i18n: _i18n, route, gtag, globalState } = useEnhancer()
   const { identity, comment: commentStore, articleDetail: articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
   const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
@@ -55,7 +55,7 @@
   }
 
   const handleSponsor = () => {
-    gState.toggleSwitcher('sponsor', true)
+    globalState.toggleSwitcher('sponsor', true)
     gtag?.event('article_sponsor', {
       event_category: GAEventCategories.Article
     })
@@ -163,7 +163,9 @@
                   :likes="article.meta.likes"
                   :is-liked="isLiked"
                   :hidden-sponsor="isMobile"
-                  :enabled-parkinson="!isMobile && (gState.userAgent.isChrome || gState.userAgent.isFirefox)"
+                  :enabled-parkinson="
+                    !isMobile && (globalState.userAgent.isChrome || globalState.userAgent.isFirefox)
+                  "
                   @like="handleLike"
                   @sponsor="handleSponsor"
                 />

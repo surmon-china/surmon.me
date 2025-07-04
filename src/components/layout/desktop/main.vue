@@ -23,24 +23,24 @@
   import AsideView from './aside/index.vue'
   import NavView from './nav.vue'
 
-  const { route, gState } = useEnhancer()
-  const { switcher, layoutColumn } = gState
+  const { route, globalState } = useEnhancer()
+  const { switcher, layoutColumn } = globalState
 
   const wallpaperStore = useWallpaperStore()
   const gitHubSponsorsStore = useGitHubSponsorsStore()
   const sponsorState = useSponsorState()
 
   const handlePageTransitionDone = () => {
-    gState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
+    globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
   }
   const handleSponsorModalClose = () => {
-    gState.toggleSwitcher('sponsor', false)
+    globalState.toggleSwitcher('sponsor', false)
   }
   const handleFeedbackModalClose = () => {
-    gState.toggleSwitcher('feedback', false)
+    globalState.toggleSwitcher('feedback', false)
   }
   const handleStatementModalClose = () => {
-    gState.toggleSwitcher('statement', false)
+    globalState.toggleSwitcher('statement', false)
   }
 
   onMounted(() => {

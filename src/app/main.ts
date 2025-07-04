@@ -15,8 +15,8 @@ import { createI18n } from '/@/composables/i18n'
 import { Language, LanguageKey, languages } from '/@/language'
 import { APP_MODE, APP_VERSION } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
-import components from './components'
-import App from './index.vue'
+import register from './register'
+import App from './app.vue'
 
 console.group(`🔵 [APP:INIT]`)
 console.table({ APP_VERSION, APP_MODE, NODE_ENV: process.env.NODE_ENV })
@@ -111,7 +111,7 @@ export const createMainApp = (context: AppCreatorContext) => {
   app.use(theme)
 
   // components and directives
-  app.use(components)
+  app.use(register)
 
   return {
     app,

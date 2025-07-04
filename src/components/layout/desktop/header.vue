@@ -8,9 +8,9 @@
   import { APP_META } from '/@/configs/app.config'
   import { menus } from './menu'
 
-  const { i18n: _i18n, gtag, theme, gState } = useEnhancer()
+  const { i18n: _i18n, gtag, theme, globalState } = useEnhancer()
   // enable header nav bar when full page layout
-  const isEnabledNav = computed(() => !gState.layoutColumn.value.isNormal)
+  const isEnabledNav = computed(() => !globalState.layoutColumn.value.isNormal)
 
   const themeIcon = computed(() => {
     const themeIconMap = {

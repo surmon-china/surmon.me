@@ -1,8 +1,7 @@
-import { useSSRContext, getCurrentInstance } from 'vue'
+import { useSSRContext } from 'vue'
 import { getSSRContextValue } from '/@/universal'
 import type { RenderErrorValue } from './state'
 import { isServer } from '/@/configs/app.env'
-import logger from '/@/utils/logger'
 
 export interface SSRContext {
   requestURL: string
@@ -19,31 +18,28 @@ export interface SSRContext {
 
 export const useSSRContextValue = <T = any>(key: keyof SSRContext): T | void => {
   if (isServer) {
-    if (!getCurrentInstance()) {
-      logger.warn(`useSSRContextValue() can only be used inside setup().`)
-    }
     return useSSRContext<SSRContext>()?.[key]
   } else {
     return getSSRContextValue<SSRContext[typeof key]>(key)
   }
 }
 
-export const useCountry = () => useSSRContextValue<string>('country')
-export const useCacheStatus = () => useSSRContextValue<string>('cacheStatus')
 export const useCdnDomain = () => {
   const domain = useSSRContextValue<string>('cdnDomain')
-  if (!domain) {
-    throw new Error('CDN domain is not defined.')
-  } else {
-    return domain
-  }
+  if (!domain) throw new Error('CDN domain is not defined.')
+  return domain
 }
 
 export const useRequestURL = () => {
   const url = useSSRContextValue<string>('requestURL')
-  if (!url) {
-    throw new Error('Request URL is not defined.')
-  } else {
-    return url
-  }
+  if (!url) throw new Error('Request URL is not defined.')
+  return url
+}
+
+export const useCountry = () => {
+  return useSSRContextValue<string>('country')
+}
+
+export const useCacheStatus = () => {
+  return useSSRContextValue<string>('cacheStatus')
 }

@@ -37,7 +37,7 @@ export const useEnhancer = () => {
     router,
     i18n,
     theme,
-    gState: globalState,
+    globalState,
     cdnDomain: useCdnDomain(),
 
     adConfig,

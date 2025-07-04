@@ -6,7 +6,7 @@
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
 
-  const { i18n: _i18n, gtag, gState } = useEnhancer()
+  const { i18n: _i18n, gtag, globalState } = useEnhancer()
 
   const animationFrameId = ref(0)
   const isTopButtonMouseOver = ref(false)
@@ -19,7 +19,7 @@
   }
 
   const handleFeedback = () => {
-    gState.toggleSwitcher('feedback', true)
+    globalState.toggleSwitcher('feedback', true)
     gtag?.event('feedback_modal', {
       event_category: GAEventCategories.Widget
     })

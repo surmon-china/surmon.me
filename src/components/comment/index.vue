@@ -42,7 +42,7 @@
     plain: false
   })
 
-  const { i18n, gtag, gState, route } = useEnhancer()
+  const { i18n, gtag, route, globalState } = useEnhancer()
   const identityStore = useIdentityStore()
   const commentStore = useCommentStore()
 
@@ -172,7 +172,7 @@
         pid: payload.pid,
         post_id: props.postId,
         content: payload.content,
-        agent: gState.userAgent.original,
+        agent: globalState.userAgent.original,
         author
       })
       // set user profile

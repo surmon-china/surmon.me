@@ -4,7 +4,7 @@
   import EmojiRain from '/@/components/widgets/emoji-rain.vue'
   import DesktopMain from '/@/components/layout/desktop/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
-  import Captured from './error/captured.vue'
+  import AppBoundary from './app-boundary.vue'
 
   const { isMobile } = useEnhancer()
 </script>
@@ -16,12 +16,12 @@
       <emoji-rain />
       <popup-root />
     </client-only>
-    <captured>
+    <app-boundary>
       <responsive>
         <template #desktop><desktop-main /></template>
         <template #mobile><mobile-main /></template>
       </responsive>
-    </captured>
+    </app-boundary>
   </div>
 </template>
 

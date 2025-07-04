@@ -39,13 +39,13 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const { gState } = useEnhancer()
+    const { globalState } = useEnhancer()
     // SSR -> hydrated -> render -> no transition
-    const mounted = ref(gState.isHydrated.value ? true : false)
+    const mounted = ref(globalState.isHydrated.value ? true : false)
 
     onMounted(() => {
       // SSR inited -> mounted -> render -> transition
-      if (!gState.isHydrated.value) {
+      if (!globalState.isHydrated.value) {
         const setRender = () => {
           mounted.value = true
         }

@@ -15,7 +15,7 @@
     article: Article
   }>()
 
-  const { cdnDomain, gState } = useEnhancer()
+  const { cdnDomain, globalState } = useEnhancer()
   const identityStore = useIdentityStore()
   const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
   const isHybrid = computed(() => isHybridType(props.article.origin))
@@ -44,9 +44,9 @@
 <template>
   <ulink
     class="article-item"
-    :to="gState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
-    :href="!gState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
-    :blank="!gState.userAgent.isWechat"
+    :to="globalState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
+    :href="!globalState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
+    :blank="!globalState.userAgent.isWechat"
     :external="false"
   >
     <div class="thumbnail">

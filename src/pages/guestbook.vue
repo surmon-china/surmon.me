@@ -18,12 +18,12 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, gtag, gState, isZhLang } = useEnhancer()
+  const { i18n: _i18n, gtag, globalState, isZhLang } = useEnhancer()
   const { identity, appOption, comment: commentStore } = useStores()
   const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
   // MARK: Only for client-side routing to navigate to this page
-  const isLoading = ref(isClient && gState.isHydrated.value)
+  const isLoading = ref(isClient && globalState.isHydrated.value)
   const bannerImage = `/images/page-guestbook/banner.webp`
 
   const handleLike = async () => {
