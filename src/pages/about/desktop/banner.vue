@@ -52,15 +52,15 @@
         <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
       </p>
       <div class="socials">
-        <ulink class="item icon-only github" :href="VALUABLE_LINKS.GITHUB">
-          <i class="iconfont icon-github" />
+        <ulink class="item icon-only instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <i class="iconfont icon-instagram" />
         </ulink>
         <ulink class="item icon-only threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
           <i class="iconfont icon-threads" />
         </ulink>
-        <ulink class="item with-text instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-          <i class="iconfont icon-instagram" />
-          <span class="text">Instagram</span>
+        <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
+          <i class="iconfont icon-github" />
+          <span class="text">GitHub</span>
         </ulink>
         <ulink class="item icon-only youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
           <i class="iconfont icon-youtube" />

@@ -68,6 +68,7 @@
         padding: 0 $gap-lg;
         border-radius: $radius-mini;
         text-decoration: none;
+        text-wrap: nowrap;
         letter-spacing: 0.5px;
         color: $color-text-secondary;
         will-change: background-color;
