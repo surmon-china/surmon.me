@@ -29,6 +29,6 @@ export const getPageRoute = (routeName: RouteName) => {
 }
 
 export const isArticleDetail = (name: RouteRecordName) => name === RouteName.Article
-export const isSearchFlow = (name: RouteRecordName) => name === RouteName.SearchFlow
+export const isSearchFlow = (name: RouteRecordName) => name === RouteName.SearchListing
 export const isGuestbook = (name: RouteRecordName) => name === RouteName.Guestbook
 export const isApp = (name: RouteRecordName) => name === RouteName.App

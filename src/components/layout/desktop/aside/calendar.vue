@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { humanDateToYMD, HumanDate } from '/@/transforms/moment'
   import { getDateFlowRoute } from '/@/transforms/route'
-  import Calendar from '/@/components/widget/calendar.vue'
+  import Calendar from '/@/components/widgets/calendar.vue'
 
   const { articleCalendar } = useStores()
   const articlesIn = (targetDate: HumanDate) => {

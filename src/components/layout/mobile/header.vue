@@ -50,7 +50,7 @@
     const keyword = searchState.keyword.trim()
     if (keyword) {
       router.push({
-        name: RouteName.SearchFlow,
+        name: RouteName.SearchListing,
         params: { keyword }
       })
     }

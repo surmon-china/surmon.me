@@ -4,8 +4,8 @@
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import ArticleListHeader from '/@/components/flow/desktop/header.vue'
-  import ArticleList from '/@/components/flow/desktop/list.vue'
+  import ArticleListHeader from '/@/components/listing/desktop/header.vue'
+  import ArticleList from '/@/components/listing/desktop/list.vue'
 
   const props = defineProps<{
     date: string

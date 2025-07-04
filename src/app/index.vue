@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import NavProgress from '/@/components/widget/navigation-progress/index.vue'
-  import EmojiRain from '/@/components/widget/emoji-rain.vue'
-  import Captured from '/@/components/root/captured.vue'
+  import NavProgress from '/@/components/widgets/navigation-progress/index.vue'
+  import EmojiRain from '/@/components/widgets/emoji-rain.vue'
   import DesktopMain from '/@/components/layout/desktop/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
+  import Captured from './error/captured.vue'
 
   const { isMobile } = useEnhancer()
 </script>

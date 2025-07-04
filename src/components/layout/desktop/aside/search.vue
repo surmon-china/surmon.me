@@ -23,7 +23,7 @@
     const isSearchPage = isSearchFlow(route.name as string)
     if (inputKeyword && (!isSearchPage || paramsKeyword !== inputKeyword)) {
       router.push({
-        name: RouteName.SearchFlow,
+        name: RouteName.SearchListing,
         params: { keyword: inputKeyword }
       })
       gtag?.event('aside_search', {

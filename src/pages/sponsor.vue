@@ -4,10 +4,10 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useGitHubSponsorsStore } from '/@/stores/sponsors'
-  import { useSponsorState, ProviderId } from '/@/components/widget/sponsor/state'
+  import { useSponsorState, ProviderId } from '/@/components/widgets/sponsor/state'
   import { firstUpperCase } from '/@/transforms/text'
-  import SponsorTabs from '/@/components/widget/sponsor/tabs.vue'
-  import SponsorProvider from '/@/components/widget/sponsor/provider.vue'
+  import SponsorTabs from '/@/components/widgets/sponsor/tabs.vue'
+  import SponsorProvider from '/@/components/widgets/sponsor/provider.vue'
   import PageBanner from '/@/components/common/banner.vue'
 
   const { i18n: _i18n, route, isZhLang } = useEnhancer()

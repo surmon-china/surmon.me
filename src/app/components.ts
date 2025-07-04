@@ -26,7 +26,7 @@ import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
 import {
   vDisabledWallflower,
   DIRECTIVE_NAME as disabledWallflowerDirectiveName
-} from '/@/components/widget/wallflower/directive'
+} from '/@/components/widgets/wallflower/directive'
 
 declare module 'vue' {
   export interface GlobalComponents {

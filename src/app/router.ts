@@ -11,14 +11,14 @@ import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToPageTop } from '/@/utils/scroller'
 import { LayoutColumn } from './state'
 
-// mobile flow
-import MobileFlow from '/@/components/flow/mobile/index.vue'
-// desktop flow
-import IndexFlowPage from '/@/pages/index/index.vue'
-import CategoryFlowPage from '/@/pages/category.vue'
-import TagFlowPage from '/@/pages/tag.vue'
-import DateFlowPage from '/@/pages/date.vue'
-import SearchFlowPage from '/@/pages/search.vue'
+// mobile listing
+import MobileListing from '/@/components/listing/mobile/index.vue'
+// desktop listing
+import IndexPage from '/@/pages/index/index.vue'
+import CategoryListingPage from '/@/pages/category.vue'
+import TagListingPage from '/@/pages/tag.vue'
+import SearchListingPage from '/@/pages/search.vue'
+import DateListingPage from '/@/pages/date.vue'
 
 // core pages
 import DesktopArchivePage from '/@/pages/archive/desktop.vue'
@@ -56,10 +56,10 @@ export enum CategorySlug {
 export enum RouteName {
   Home = 'home',
   Article = 'article-detail',
-  CategoryFlow = 'category-flow',
-  TagFlow = 'tag-flow',
-  DateFlow = 'date-flow',
-  SearchFlow = 'search-flow',
+  CategoryListing = 'category-listing',
+  TagListing = 'tag-listing',
+  DateListing = 'date-listing',
+  SearchListing = 'search-listing',
   Archive = 'archive',
   Guestbook = 'guestbook',
   About = 'about',
@@ -76,8 +76,8 @@ export const routes: RouteRecordRaw[] = [
     path: '/',
     name: RouteName.Home,
     components: {
-      default: IndexFlowPage,
-      mobile: MobileFlow
+      default: IndexPage,
+      mobile: MobileListing
     },
     meta: {
       responsive: true,
@@ -113,10 +113,10 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/category/:category_slug',
-    name: RouteName.CategoryFlow,
+    name: RouteName.CategoryListing,
     components: {
-      default: CategoryFlowPage,
-      mobile: MobileFlow
+      default: CategoryListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ categorySlug: to.params.category_slug }),
@@ -138,10 +138,10 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/tag/:tag_slug',
-    name: RouteName.TagFlow,
+    name: RouteName.TagListing,
     components: {
-      default: TagFlowPage,
-      mobile: MobileFlow
+      default: TagListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ tagSlug: to.params.tag_slug }),
@@ -163,10 +163,10 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/date/:date',
-    name: RouteName.DateFlow,
+    name: RouteName.DateListing,
     components: {
-      default: DateFlowPage,
-      mobile: MobileFlow
+      default: DateListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ date: to.params.date }),
@@ -188,10 +188,10 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: '/search/:keyword',
-    name: RouteName.SearchFlow,
+    name: RouteName.SearchListing,
     components: {
-      default: SearchFlowPage,
-      mobile: MobileFlow
+      default: SearchListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ keyword: to.params.keyword }),

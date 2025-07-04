@@ -8,7 +8,7 @@
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getOriginalProxyURL, getPageURL } from '/@/transforms/url'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
-  import BaseShare, { SocialMedia } from '/@/components/widget/share.vue'
+  import BaseShare, { SocialMedia } from '/@/components/widgets/share.vue'
   import Markdown from '/@/components/common/markdown.vue'
 
   const props = defineProps({

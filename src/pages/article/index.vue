@@ -9,7 +9,7 @@
   import { GAEventCategories } from '/@/constants/gtag'
   import { LanguageKey } from '/@/language'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
-  import { SocialMedia } from '/@/components/widget/share.vue'
+  import { SocialMedia } from '/@/components/widgets/share.vue'
   import { useHead, usePageSeo } from '/@/composables/head'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtendValue } from '/@/transforms/state'

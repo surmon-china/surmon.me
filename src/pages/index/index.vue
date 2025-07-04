@@ -6,7 +6,7 @@
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { APP_META } from '/@/configs/app.config'
-  import ArticleList from '/@/components/flow/desktop/list.vue'
+  import ArticleList from '/@/components/listing/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
 
