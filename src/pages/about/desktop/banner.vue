@@ -52,59 +52,54 @@
         <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
       </p>
       <div class="socials">
-        <span class="normal">
-          <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-            <i class="iconfont icon-instagram" />
-            <span class="text">Instagram</span>
-          </ulink>
-          <ulink class="item threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-            <i class="iconfont icon-threads" />
-            <span class="text">Threads</span>
-          </ulink>
-        </span>
-        <span class="mini">
-          <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
-            <i class="iconfont icon-github" />
-          </ulink>
-          <ulink class="item youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
-            <i class="iconfont icon-youtube" />
-          </ulink>
-          <!-- <ulink class="item twitter" :href="VALUABLE_LINKS.TWITTER">
+        <ulink class="item icon-only github" :href="VALUABLE_LINKS.GITHUB">
+          <i class="iconfont icon-github" />
+        </ulink>
+        <ulink class="item icon-only threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+          <i class="iconfont icon-threads" />
+        </ulink>
+        <ulink class="item with-text instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <i class="iconfont icon-instagram" />
+          <span class="text">Instagram</span>
+        </ulink>
+        <ulink class="item icon-only youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+          <i class="iconfont icon-youtube" />
+        </ulink>
+        <!-- <ulink class="item icon-only twitter" :href="VALUABLE_LINKS.TWITTER">
             <i class="iconfont icon-twitter-x" />
           </ulink> -->
-          <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
-            <i class="iconfont icon-telegram" />
-          </ulink>
-          <button class="item wechat" @click="handleOpenWeChatModal">
-            <i class="iconfont icon-wechat" />
-            <client-only>
-              <popup v-model:visible="wechatModalOpened" :scroll-close="false">
-                <div class="qrcode-modal wechat">
-                  <div class="background"></div>
-                  <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
-                  <span class="text">
-                    <i18n>
-                      <template #en>Friend me on WeChat | Channel</template>
-                      <template #zh>扫码加微 ｜ 关注视频号</template>
-                    </i18n>
-                  </span>
-                </div>
-              </popup>
-            </client-only>
-          </button>
-          <ulink class="item linkedin" :href="VALUABLE_LINKS.LINKEDIN">
-            <i class="iconfont icon-linkedin" />
-          </ulink>
-          <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
-            <i class="iconfont icon-zhihu" />
-          </ulink>
-          <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN">
-            <i class="iconfont icon-douban" />
-          </ulink>
-          <ulink class="item email" :href="emailLink">
-            <i class="iconfont icon-mail" />
-          </ulink>
-        </span>
+        <ulink class="item icon-only telegram" :href="VALUABLE_LINKS.TELEGRAM">
+          <i class="iconfont icon-telegram" />
+        </ulink>
+        <button class="item icon-only wechat" @click="handleOpenWeChatModal">
+          <i class="iconfont icon-wechat" />
+          <client-only>
+            <popup v-model:visible="wechatModalOpened" :scroll-close="false">
+              <div class="qrcode-modal wechat">
+                <div class="background"></div>
+                <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
+                <span class="text">
+                  <i18n>
+                    <template #en>Friend me on WeChat | Channel</template>
+                    <template #zh>扫码加微 ｜ 关注视频号</template>
+                  </i18n>
+                </span>
+              </div>
+            </popup>
+          </client-only>
+        </button>
+        <ulink class="item icon-only linkedin" :href="VALUABLE_LINKS.LINKEDIN">
+          <i class="iconfont icon-linkedin" />
+        </ulink>
+        <ulink class="item icon-only zhihu" :href="VALUABLE_LINKS.ZHIHU">
+          <i class="iconfont icon-zhihu" />
+        </ulink>
+        <ulink class="item icon-only douban" :href="VALUABLE_LINKS.DOUBAN">
+          <i class="iconfont icon-douban" />
+        </ulink>
+        <ulink class="item icon-only email" :href="emailLink">
+          <i class="iconfont icon-mail" />
+        </ulink>
       </div>
       <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
     </div>
@@ -155,7 +150,7 @@
   }
 
   .page-banner {
-    $banner-height: 24rem;
+    $banner-height: 25rem;
 
     .background {
       display: block;
@@ -260,127 +255,119 @@
       }
 
       .socials {
-        z-index: $z-index-normal + 2;
+        margin-bottom: $gap * 6.6;
         $button-size: 3.2rem;
         display: flex;
         justify-content: center;
-        width: 100%;
         height: $button-size;
-        margin-bottom: $gap * 5.6;
+        z-index: $z-index-normal + 2;
 
-        .normal {
+        .item.icon-only {
+          display: inline-block;
+          width: $button-size;
+          height: $button-size;
+          line-height: $button-size;
           margin-right: $gap;
+          text-align: center;
+          border-radius: 100%;
+          color: $white;
+          opacity: 0.8;
+          transition: all $motion-duration-fast;
+          &:hover {
+            opacity: 1;
+          }
 
-          .item {
-            padding: 0 $gap;
-            margin-right: $gap;
-            height: 100%;
-            display: inline-flex;
-            align-items: center;
-            border-radius: $radius-lg * 2;
-            color: $white;
-            transition: all $motion-duration-fast;
-            &:last-child {
-              margin: 0;
-            }
-
-            .iconfont {
-              font-size: $font-size-h4;
-            }
-
-            .text {
-              margin-left: $gap-xs;
-              font-weight: bold;
-            }
-
-            &.youtube {
-              background-color: $youtube-primary;
-              &:hover {
-                background-color: color.mix($black, $youtube-primary, 8%);
-              }
-            }
-            &.instagram {
-              opacity: 0.8;
-              background: $instagram-primary;
-              background: $instagram-gradient;
-              &:hover {
-                opacity: 1;
-              }
-            }
-            &.threads {
-              background-color: $threads-primary;
-              opacity: 0.8;
-              &:hover {
-                opacity: 1;
-              }
-            }
+          .iconfont {
+            font-size: $font-size-h3;
           }
         }
 
-        > .mini {
-          display: flex;
+        .item.with-text {
+          padding: 0 $gap;
+          margin-right: $gap;
+          height: 100%;
+          display: inline-flex;
+          align-items: center;
+          border-radius: $radius-lg * 2;
+          color: $white;
+          transition: all $motion-duration-fast;
+          &:last-child {
+            margin: 0;
+          }
 
-          > .item {
-            display: inline-block;
-            width: $button-size;
-            height: $button-size;
-            line-height: $button-size;
-            margin-right: $gap;
-            text-align: center;
-            border-radius: 100%;
-            color: $white;
+          .iconfont {
+            font-size: $font-size-h4;
+          }
+
+          .text {
+            margin-left: $gap-xs;
+            font-weight: bold;
+          }
+        }
+
+        .item {
+          &.youtube {
+            background-color: $youtube-primary;
+            &:hover {
+              background-color: color.mix($black, $youtube-primary, 8%);
+            }
+          }
+          &.instagram {
             opacity: 0.8;
-            transition: all $motion-duration-fast;
+            background: $instagram-primary;
+            background: $instagram-gradient;
             &:hover {
               opacity: 1;
             }
-
-            .iconfont {
-              font-size: $font-size-h3;
+          }
+          &.threads {
+            background-color: $threads-primary;
+            opacity: 0.8;
+            &:hover {
+              opacity: 1;
             }
-
-            &.github {
-              background-color: $github-primary;
-              &:hover {
-                background-color: $github-primary-hover;
-              }
+          }
+          &.github {
+            background-color: $github-primary;
+            &:hover {
+              background-color: $github-primary-hover;
             }
-            &.twitter {
-              background-color: $twitter-x-primary;
-              &:hover {
-                background-color: $twitter-x-primary-hover;
-              }
+          }
+          &.twitter {
+            background-color: $twitter-x-primary;
+            &:hover {
+              background-color: $twitter-x-primary-hover;
             }
-            &.wechat {
-              background-color: $wechat-primary;
+          }
+          &.wechat {
+            background-color: $wechat-primary;
+          }
+          &.youtube {
+            background-color: $youtube-primary;
+          }
+          &.telegram {
+            background-color: $telegram-primary;
+          }
+          &.douban {
+            background-color: $douban-primary;
+          }
+          &.zhihu {
+            background-color: $zhihu-primary;
+            &:hover {
+              background-color: $zhihu-primary-hover;
             }
-            &.youtube {
-              background-color: $youtube-primary;
-            }
-            &.telegram {
-              background-color: $telegram-primary;
-            }
-            &.douban {
-              background-color: $douban-primary;
-            }
-            &.zhihu {
-              background-color: $zhihu-primary;
-              &:hover {
-                background-color: $zhihu-primary-hover;
-              }
-            }
-            &.stackoverflow {
-              background-color: $stackoverflow-primary;
-            }
-            &.algorithm {
-              background-color: $leetcode-primary;
-            }
-            &.linkedin {
-              background-color: $linkedin-primary;
-            }
-            &.email {
-              background-color: $surmon;
-            }
+          }
+          &.stackoverflow {
+            background-color: $stackoverflow-primary;
+          }
+          &.algorithm {
+            background-color: $leetcode-primary;
+          }
+          &.linkedin {
+            background-color: $linkedin-primary;
+          }
+          &.email {
+            background-color: $surmon;
           }
         }
       }
