@@ -41,67 +41,71 @@
       ></video>
     </div>
     <div class="content">
-      <div class="profile" :class="{ dark: isDarkTheme }">
-        <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
-        <div class="right">
-          <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
-          <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+      <div class="fullwidth">
+        <div class="profile" :class="{ dark: isDarkTheme }">
+          <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
+          <div class="right">
+            <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
+            <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+          </div>
         </div>
-      </div>
-      <p class="description">
-        <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
-      </p>
-      <div class="socials">
-        <ulink class="item icon-only instagram" :href="VALUABLE_LINKS.INSTAGRAM">
-          <i class="iconfont icon-instagram" />
-        </ulink>
-        <ulink class="item icon-only threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
-          <i class="iconfont icon-threads" />
-        </ulink>
-        <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
-          <i class="iconfont icon-github" />
-          <span class="text">GitHub</span>
-        </ulink>
-        <ulink class="item icon-only youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
-          <i class="iconfont icon-youtube" />
-        </ulink>
-        <!-- <ulink class="item icon-only twitter" :href="VALUABLE_LINKS.TWITTER">
+        <p class="description">
+          <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
+        </p>
+        <div class="socials">
+          <ulink class="item icon-only instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+            <i class="iconfont icon-instagram" />
+          </ulink>
+          <ulink class="item icon-only threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+            <i class="iconfont icon-threads" />
+          </ulink>
+          <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
+            <i class="iconfont icon-github" />
+            <span class="text">GitHub</span>
+          </ulink>
+          <ulink class="item icon-only youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+            <i class="iconfont icon-youtube" />
+          </ulink>
+          <!-- <ulink class="item icon-only twitter" :href="VALUABLE_LINKS.TWITTER">
             <i class="iconfont icon-twitter-x" />
           </ulink> -->
-        <ulink class="item icon-only telegram" :href="VALUABLE_LINKS.TELEGRAM">
-          <i class="iconfont icon-telegram" />
-        </ulink>
-        <button class="item icon-only wechat" @click="handleOpenWeChatModal">
-          <i class="iconfont icon-wechat" />
-          <client-only>
-            <popup v-model:visible="wechatModalOpened" :scroll-close="false">
-              <div class="qrcode-modal wechat">
-                <div class="background"></div>
-                <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
-                <span class="text">
-                  <i18n>
-                    <template #en>Friend me on WeChat | Channel</template>
-                    <template #zh>扫码加微 ｜ 关注视频号</template>
-                  </i18n>
-                </span>
-              </div>
-            </popup>
-          </client-only>
-        </button>
-        <ulink class="item icon-only linkedin" :href="VALUABLE_LINKS.LINKEDIN">
-          <i class="iconfont icon-linkedin" />
-        </ulink>
-        <ulink class="item icon-only zhihu" :href="VALUABLE_LINKS.ZHIHU">
-          <i class="iconfont icon-zhihu" />
-        </ulink>
-        <ulink class="item icon-only douban" :href="VALUABLE_LINKS.DOUBAN">
-          <i class="iconfont icon-douban" />
-        </ulink>
-        <ulink class="item icon-only email" :href="emailLink">
-          <i class="iconfont icon-mail" />
-        </ulink>
+          <ulink class="item icon-only telegram" :href="VALUABLE_LINKS.TELEGRAM">
+            <i class="iconfont icon-telegram" />
+          </ulink>
+          <button class="item icon-only wechat" @click="handleOpenWeChatModal">
+            <i class="iconfont icon-wechat" />
+            <client-only>
+              <popup v-model:visible="wechatModalOpened" :scroll-close="false">
+                <div class="qrcode-modal wechat">
+                  <div class="background"></div>
+                  <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
+                  <span class="text">
+                    <i18n>
+                      <template #en>Friend me on WeChat | Channel</template>
+                      <template #zh>扫码加微 ｜ 关注视频号</template>
+                    </i18n>
+                  </span>
+                </div>
+              </popup>
+            </client-only>
+          </button>
+          <ulink class="item icon-only linkedin" :href="VALUABLE_LINKS.LINKEDIN">
+            <i class="iconfont icon-linkedin" />
+          </ulink>
+          <ulink class="item icon-only zhihu" :href="VALUABLE_LINKS.ZHIHU">
+            <i class="iconfont icon-zhihu" />
+          </ulink>
+          <ulink class="item icon-only douban" :href="VALUABLE_LINKS.DOUBAN">
+            <i class="iconfont icon-douban" />
+          </ulink>
+          <ulink class="item icon-only email" :href="emailLink">
+            <i class="iconfont icon-mail" />
+          </ulink>
+        </div>
       </div>
-      <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
+      <div class="container">
+        <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
+      </div>
     </div>
   </div>
 </template>
@@ -186,11 +190,6 @@
 
     .content {
       position: relative;
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      justify-content: flex-start;
-      width: 100%;
       background-color: $module-bg;
       background-image:
         global.surl('/images/page-about/background.png'), linear-gradient($module-bg-opaque 50%, #00000000 100%);
@@ -198,10 +197,18 @@
       background-repeat: repeat-x;
       background-blend-mode: lighten;
 
+      .fullwidth {
+        width: 100%;
+        height: $banner-height;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
       .profile {
         $avatar-size: 5rem;
         z-index: $z-index-normal + 2;
-        margin-top: $gap * 4;
         margin-bottom: $gap * 2;
         padding: $gap-xs $gap-lg $gap-xs $gap-xs;
         display: flex;
@@ -255,7 +262,6 @@
       }
 
       .socials {
-        margin-bottom: $gap * 6.6;
         $button-size: 3.4rem;
         display: flex;
         justify-content: center;
@@ -373,10 +379,10 @@
       }
 
       .biography {
-        width: $container-width;
-        padding: 0 $gap-xs;
-        text-indent: 2em;
+        margin: 0;
+        padding: $gap-lg $gap-xs;
         line-height: $line-height-base * 1.9;
+        text-indent: 2em;
         font-weight: 600;
         color: $color-text-secondary;
 
