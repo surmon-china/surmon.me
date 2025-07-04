@@ -214,8 +214,7 @@
         @include mix.backdrop-blur(3px);
         @include mix.radius-box($avatar-size);
         border-bottom-right-radius: $radius-sm;
-        border-top: 1px solid #ffffff8c;
-        border-left: 1px solid #ffffff8c;
+        border-top: 1px solid rgb(255 255 255 / 40%);
         background-color: rgb(255, 255, 255, 0.14);
         &.dark {
           background-color: rgba(0, 0, 0, 0.05);
