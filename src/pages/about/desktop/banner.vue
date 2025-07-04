@@ -256,7 +256,7 @@
 
       .socials {
         margin-bottom: $gap * 6.6;
-        $button-size: 3.2rem;
+        $button-size: 3.4rem;
         display: flex;
         justify-content: center;
         height: $button-size;
