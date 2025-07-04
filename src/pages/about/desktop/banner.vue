@@ -11,7 +11,7 @@
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { isZhLang, cdnDomain } = useEnhancer()
+  const { isZhLang, isDarkTheme, cdnDomain } = useEnhancer()
   const { adminInfo } = useStores()
   const { appOption } = useStores()
 
@@ -41,14 +41,16 @@
       ></video>
     </div>
     <div class="content">
-      <div class="profile">
+      <div class="profile" :class="{ dark: isDarkTheme }">
         <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
-        <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
-        <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
-        <p class="description">
-          <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
-        </p>
+        <div class="right">
+          <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
+          <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+        </div>
       </div>
+      <p class="description">
+        <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
+      </p>
       <div class="socials">
         <span class="normal">
           <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
@@ -153,7 +155,7 @@
   }
 
   .page-banner {
-    $banner-height: 23rem;
+    $banner-height: 24rem;
 
     .background {
       display: block;
@@ -202,51 +204,68 @@
       background-blend-mode: lighten;
 
       .profile {
-        margin-top: 2.6rem;
-        margin-bottom: 2.2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        $avatar-size: 5rem;
         z-index: $z-index-normal + 2;
-        color: $white;
+        margin-top: $gap * 4;
+        margin-bottom: $gap * 2;
+        padding: $gap-xs $gap-lg $gap-xs $gap-xs;
+        display: flex;
+        align-items: center;
+        @include mix.backdrop-blur(3px);
+        @include mix.radius-box($avatar-size);
+        border-bottom-right-radius: $radius-sm;
+        background-color: rgb(255, 255, 255, 0.14);
+        &.dark {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
 
-        .avatar {
-          $size: 8rem;
-          width: $size;
-          height: $size;
-          box-sizing: content-box;
-          border: 6px solid $module-bg;
-          border-radius: 100%;
-          overflow: hidden;
-          background-color: $module-bg;
-          transition: transform $motion-duration-slow;
-          &:hover {
+        &:hover {
+          .avatar {
             transform: rotate(360deg);
           }
         }
 
+        .avatar {
+          width: $avatar-size;
+          height: $avatar-size;
+          box-sizing: content-box;
+          border: 6px solid $module-bg;
+          border-radius: 100%;
+          overflow: hidden;
+          margin-right: $gap-lg;
+          background-color: $module-bg;
+          transition: transform $motion-duration-slow;
+        }
+
         .name {
-          margin-top: $gap;
-          margin-bottom: $gap-sm;
+          line-height: 1;
+          margin-top: 0;
+          margin-bottom: $gap;
+          color: $white;
         }
 
         .slogan {
+          line-height: 1;
           font-weight: 600;
-          margin-bottom: $gap-lg;
-        }
-
-        .description {
-          font-size: $font-size-h3;
+          margin-bottom: $gap-xs;
+          color: #ffffffbf;
         }
       }
 
+      .description {
+        z-index: $z-index-normal + 2;
+        font-size: $font-size-h3;
+        color: $white;
+      }
+
       .socials {
+        z-index: $z-index-normal + 2;
         $button-size: 3.2rem;
         display: flex;
         justify-content: center;
         width: 100%;
         height: $button-size;
-        margin-bottom: $gap * 2;
+        margin-bottom: $gap * 5.6;
 
         .normal {
           margin-right: $gap;
