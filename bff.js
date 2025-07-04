@@ -372,7 +372,7 @@ const getThreadsProfile = async () => {
 };
 const getInstagramMedias = async (options) => {
   try {
-    const defaultFields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp`;
+    const defaultFields = `id,username,permalink,caption,media_type,media_url,thumbnail_url,timestamp,like_count`;
     const params = {
       access_token: INSTAGRAM_TOKEN,
       fields: options?.fields ?? defaultFields,
