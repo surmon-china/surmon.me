@@ -53,26 +53,26 @@
           <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
         </p>
         <div class="socials">
-          <ulink class="item icon-only instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink class="item icon-only instagram" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram" />
           </ulink>
-          <ulink class="item icon-only threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+          <ulink class="item icon-only threads" title="Threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
             <i class="iconfont icon-threads" />
           </ulink>
           <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
             <i class="iconfont icon-github" />
             <span class="text">GitHub</span>
           </ulink>
-          <ulink class="item icon-only youtube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+          <ulink class="item icon-only youtube" title="YouTube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
             <i class="iconfont icon-youtube" />
           </ulink>
           <!-- <ulink class="item icon-only twitter" :href="VALUABLE_LINKS.TWITTER">
             <i class="iconfont icon-twitter-x" />
           </ulink> -->
-          <ulink class="item icon-only telegram" :href="VALUABLE_LINKS.TELEGRAM">
+          <ulink class="item icon-only telegram" title="Telegram" :href="VALUABLE_LINKS.TELEGRAM">
             <i class="iconfont icon-telegram" />
           </ulink>
-          <button class="item icon-only wechat" @click="handleOpenWeChatModal">
+          <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
             <i class="iconfont icon-wechat" />
             <client-only>
               <popup v-model:visible="wechatModalOpened" :scroll-close="false">
@@ -89,16 +89,16 @@
               </popup>
             </client-only>
           </button>
-          <ulink class="item icon-only linkedin" :href="VALUABLE_LINKS.LINKEDIN">
+          <ulink class="item icon-only linkedin" title="LinkedIn" :href="VALUABLE_LINKS.LINKEDIN">
             <i class="iconfont icon-linkedin" />
           </ulink>
-          <ulink class="item icon-only zhihu" :href="VALUABLE_LINKS.ZHIHU">
+          <ulink class="item icon-only zhihu" title="知乎回答" :href="VALUABLE_LINKS.ZHIHU">
             <i class="iconfont icon-zhihu" />
           </ulink>
-          <ulink class="item icon-only douban" :href="VALUABLE_LINKS.DOUBAN">
+          <ulink class="item icon-only douban" title="豆瓣" :href="VALUABLE_LINKS.DOUBAN">
             <i class="iconfont icon-douban" />
           </ulink>
-          <ulink class="item icon-only email" :href="emailLink">
+          <ulink class="item icon-only email" title="Email me" :href="emailLink">
             <i class="iconfont icon-mail" />
           </ulink>
         </div>
@@ -265,15 +265,41 @@
         $button-size: 3.4rem;
         display: flex;
         justify-content: center;
-        height: $button-size;
         z-index: $z-index-normal + 2;
+
+        .item {
+          position: relative;
+          height: $button-size;
+          line-height: $button-size;
+          margin-right: $gap;
+          &:last-child {
+            margin: 0;
+          }
+
+          &:hover {
+            &::after {
+              @include mix.visible();
+            }
+          }
+
+          &::after {
+            content: attr(title);
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translateX(-50%);
+            display: inline-block;
+            text-wrap-mode: nowrap;
+            font-weight: bold;
+            color: $white;
+            @include mix.hidden();
+            @include mix.visibility-transition();
+          }
+        }
 
         .item.icon-only {
           display: inline-block;
           width: $button-size;
-          height: $button-size;
-          line-height: $button-size;
-          margin-right: $gap;
           text-align: center;
           border-radius: 100%;
           color: $white;
@@ -290,23 +316,18 @@
 
         .item.with-text {
           padding: 0 $gap;
-          margin-right: $gap;
-          height: 100%;
           display: inline-flex;
           align-items: center;
-          border-radius: $radius-lg * 2;
+          border-radius: $radius-lg * 3;
           color: $white;
           transition: all $motion-duration-fast;
-          &:last-child {
-            margin: 0;
-          }
 
           .iconfont {
-            font-size: $font-size-h4;
+            font-size: $font-size-h3;
           }
 
           .text {
-            margin-left: $gap-xs;
+            margin-left: 0.5rem;
             font-weight: bold;
           }
         }
@@ -388,8 +409,8 @@
 
         &::first-letter {
           line-height: 1;
-          font-size: $font-size-h2;
           font-weight: bold;
+          font-size: $font-size-h2;
           color: $color-text-darker;
         }
       }
