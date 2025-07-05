@@ -165,7 +165,7 @@
     </div>
     <div class="pencilbox">
       <div class="stationery">
-        <ulink class="markdown" title="markdown" :href="VALUABLE_LINKS.MARKDOWN">
+        <ulink class="markdown" title="markdown" :href="VALUABLE_LINKS.MARKDOWN_DOC">
           <i class="iconfont icon-markdown" />
         </ulink>
         <template v-if="!hiddenStationery">

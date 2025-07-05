@@ -57,7 +57,7 @@
       <template #default>
         <div class="snippets-content">
           <div class="socials">
-            <ulink class="item" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+            <ulink class="item" :href="VALUABLE_LINKS.THREADS">
               <p class="label">
                 <i class="iconfont icon-threads"></i>
                 <span class="text">Threads</span>

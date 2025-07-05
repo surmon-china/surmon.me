@@ -56,7 +56,7 @@
           <ulink class="item icon-only instagram" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
             <i class="iconfont icon-instagram" />
           </ulink>
-          <ulink class="item icon-only threads" title="Threads" :href="VALUABLE_LINKS.THREADS_FOLLOW">
+          <ulink class="item icon-only threads" title="Threads" :href="VALUABLE_LINKS.THREADS">
             <i class="iconfont icon-threads" />
           </ulink>
           <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
