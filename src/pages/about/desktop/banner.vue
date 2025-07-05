@@ -240,6 +240,10 @@
           transition: transform $motion-duration-slow;
         }
 
+        .right {
+          min-width: 16rem;
+        }
+
         .name {
           line-height: 1;
           margin-top: 0;
