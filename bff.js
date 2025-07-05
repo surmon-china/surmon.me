@@ -49,7 +49,6 @@ const IDENTITIES = Object.freeze({
   MUSIC_163_BGM_ALBUM_ID: "638949385",
   ZHIHU_USERNAME: "surmon",
   DOUBAN_USER_ID: "56647958",
-  GITHUB_USER_NAME: "surmon-china",
   INSTAGRAM_USERNAME: "surmon_sattva",
   BTC_ADDRESS: "bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze",
   ETH_ADDRESS: "0xaD556974D449126efdeF23f4FF581861C301cB77"
@@ -57,33 +56,33 @@ const IDENTITIES = Object.freeze({
 const VALUABLE_LINKS = Object.freeze({
   RSS: "/rss.xml",
   SITE_MAP: "/sitemap.xml",
-  UPTIME_STATUS: "https://redirect.surmon.me/status",
-  NPM_HOMEPAGE: "https://www.npmjs.com/~surmon",
-  PAYPAL: "https://paypal.me/surmon",
-  GITHUB_SPONSORS: `https://github.com/sponsors/${IDENTITIES.GITHUB_USER_NAME}`,
-  GITHUB: `https://github.com/${IDENTITIES.GITHUB_USER_NAME}`,
+  MARKDOWN_DOC: "https://daringfireball.net/projects/markdown/",
   GITHUB_NODEPRESS: "https://github.com/surmon-china/nodepress",
   GITHUB_SURMON_ME: "https://github.com/surmon-china/surmon.me",
   GITHUB_SURMON_ME_NATIVE: "https://github.com/surmon-china/surmon.me.native",
   GITHUB_BLOG_STAR_LIST: "https://github.com/stars/surmon-china/lists/surmon-me",
-  MARKDOWN: "https://daringfireball.net/projects/markdown/",
+  GITHUB_STATISTIC_JSON_URL: "https://raw.githubusercontent.com/surmon-china/surmon-china/release/",
   GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
   GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
-  DISCORD_GROUP: "https://redirect.surmon.me/discord-server",
-  TELEGRAM_GROUP: "https://redirect.surmon.me/telegram-group",
   MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-  YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
-  TELEGRAM: "https://t.me/surmon",
-  OPENSEA: "https://opensea.io/Surmon",
-  XIAOHONGSHU: `https://www.xiaohongshu.com/user/profile/5f2f68cc0000000001001ad5`,
-  ZHIHU: `https://www.zhihu.com/people/${IDENTITIES.ZHIHU_USERNAME}/answers`,
-  DOUBAN: "https://www.douban.com/people/nocower",
-  DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
-  LINKEDIN: "https://www.linkedin.com/in/surmon",
-  TWITTER: "https://x.com/surmon7788",
-  INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-  THREADS: `https://www.threads.net/@${IDENTITIES.INSTAGRAM_USERNAME}`,
-  THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.INSTAGRAM_USERNAME}`
+  UPTIME_STATUS: "https://go.surmon.me/status",
+  NPM_HOMEPAGE: "https://go.surmon.me/npm",
+  PAYPAL: "https://go.surmon.me/paypal",
+  GITHUB: "https://go.surmon.me/github",
+  GITHUB_SPONSORS: "https://go.surmon.me/github-sponsors",
+  DISCORD_GROUP: "https://go.surmon.me/discord-server",
+  TELEGRAM_GROUP: "https://go.surmon.me/telegram-group",
+  YOUTUBE_CHANNEL: "https://go.surmon.me/youtube",
+  TELEGRAM: "https://go.surmon.me/telegram",
+  OPENSEA: "https://go.surmon.me/opensea",
+  ZHIHU: "https://go.surmon.me/zhihu",
+  DOUBAN: "https://go.surmon.me/douban",
+  DOUBAN_MOVIE: "https://go.surmon.me/douban-movie",
+  XIAOHONGSHU: "https://go.surmon.me/xiaohongshu",
+  LINKEDIN: "https://go.surmon.me/linkedin",
+  TWITTER: "https://go.surmon.me/x",
+  INSTAGRAM: "https://go.surmon.me/instagram",
+  THREADS: "https://go.surmon.me/threads"
 });
 const NODE_ENV = process.env.NODE_ENV;
 const isNodeDev = process.env.NODE_ENV === "development";
@@ -486,7 +485,7 @@ const getYouTubeVideoListByPlayerListId = async (playlistId) => {
   return response.data.items;
 };
 const fetchGitHubStatisticJSON = async (fileName) => {
-  const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`;
+  const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`;
   const response = await axios.get(url, { timeout: 6e3 });
   return response.data;
 };

@@ -1,9 +1,9 @@
-import { inject, ref, reactive, computed, readonly, onServerPrefetch, shallowRef, watch, unref, getCurrentInstance, useSSRContext, onMounted, onBeforeUnmount, defineComponent, h, nextTick, mergeProps, resolveComponent, withCtx, createVNode, createBlock, createCommentVNode, openBlock, Fragment, toDisplayString, onBeforeMount, createTextVNode, TransitionGroup, renderList, Transition, resolveDirective, renderSlot, toRaw, createSlots, onUnmounted, onUpdated, resolveDynamicComponent, withDirectives, shallowReactive, useSlots, cloneVNode, onErrorCaptured, Suspense, createSSRApp } from "vue";
+import { inject, ref, computed, reactive, readonly, onServerPrefetch, shallowRef, watch, unref, useSSRContext, onMounted, onBeforeUnmount, defineComponent, h, nextTick, mergeProps, resolveComponent, withCtx, createVNode, createBlock, createCommentVNode, openBlock, Fragment, toDisplayString, onBeforeMount, createTextVNode, TransitionGroup, renderList, Transition, resolveDirective, renderSlot, toRaw, createSlots, onUnmounted, onUpdated, resolveDynamicComponent, withDirectives, shallowReactive, useSlots, cloneVNode, Suspense, onErrorCaptured, createSSRApp } from "vue";
 import { UAParser } from "ua-parser-js";
 import serialize from "serialize-javascript";
-import _isObject from "lodash-es/isObject.js";
-import { useRoute, useRouter, createRouter, RouterLink, createMemoryHistory } from "vue-router";
 import { ssrRenderAttrs, ssrRenderSlot, ssrRenderComponent, ssrRenderClass, ssrRenderAttr, ssrInterpolate, ssrRenderStyle, ssrRenderList, ssrIncludeBooleanAttr, ssrGetDirectiveProps, ssrRenderVNode, ssrLooseEqual, ssrRenderSuspense, renderToString } from "vue/server-renderer";
+import { useRoute, useRouter, createRouter, RouterLink, createMemoryHistory } from "vue-router";
+import { renderSSRHead, createHead } from "@unhead/vue/server";
 import { defineStore, createPinia, storeToRefs } from "pinia";
 import axios, { isAxiosError } from "axios";
 import _escape from "lodash-es/escape.js";
@@ -34,32 +34,30 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import lozad from "lozad";
 import BezierEasing from "bezier-easing";
+import _isObject from "lodash-es/isObject.js";
 import cookies from "js-cookie";
 import { useHead } from "@unhead/vue";
 import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-import { renderSSRHead, createHead } from "@unhead/vue/server";
-const APP_VERSION = "5.0.0-beta.17";
+const APP_VERSION = "5.0.0-beta.18";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
-const SSR_STATE_KEY = "__INITIAL_SSR_STATE__";
-const renderSSRStateScript = (data) => {
-  return `<script>window.${SSR_STATE_KEY} = ${data}<\/script>`;
-};
-const getSSRStateValue = (key) => {
-  return window[SSR_STATE_KEY]?.[key];
-};
-const SSR_CONTEXT_KEY = "__SSR_CONTEXT__";
-const renderSSRContextScript = (data) => {
-  return `<script>window.${SSR_CONTEXT_KEY} = ${data}<\/script>`;
-};
 const SUCCESS = 200;
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
+var LayoutColumn = /* @__PURE__ */ ((LayoutColumn2) => {
+  LayoutColumn2[LayoutColumn2["Normal"] = 0] = "Normal";
+  LayoutColumn2[LayoutColumn2["Wide"] = 1] = "Wide";
+  LayoutColumn2[LayoutColumn2["Full"] = 2] = "Full";
+  return LayoutColumn2;
+})(LayoutColumn || {});
+const getLayoutByRouteMeta = (routeMeta) => {
+  return routeMeta.layout === 1 ? 1 : routeMeta.layout === 2 ? 2 : 0;
+};
 var LanguageKey = /* @__PURE__ */ ((LanguageKey2) => {
   LanguageKey2["APP_SLOGAN"] = "app-slogan";
   LanguageKey2["CATEGORY_INSIGHT"] = "insight";
@@ -187,7 +185,6 @@ const IDENTITIES = Object.freeze({
   MUSIC_163_BGM_ALBUM_ID: "638949385",
   ZHIHU_USERNAME: "surmon",
   DOUBAN_USER_ID: "56647958",
-  GITHUB_USER_NAME: "surmon-china",
   INSTAGRAM_USERNAME: "surmon_sattva",
   BTC_ADDRESS: "bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze",
   ETH_ADDRESS: "0xaD556974D449126efdeF23f4FF581861C301cB77"
@@ -195,33 +192,33 @@ const IDENTITIES = Object.freeze({
 const VALUABLE_LINKS = Object.freeze({
   RSS: "/rss.xml",
   SITE_MAP: "/sitemap.xml",
-  UPTIME_STATUS: "https://redirect.surmon.me/status",
-  NPM_HOMEPAGE: "https://www.npmjs.com/~surmon",
-  PAYPAL: "https://paypal.me/surmon",
-  GITHUB_SPONSORS: `https://github.com/sponsors/${IDENTITIES.GITHUB_USER_NAME}`,
-  GITHUB: `https://github.com/${IDENTITIES.GITHUB_USER_NAME}`,
+  MARKDOWN_DOC: "https://daringfireball.net/projects/markdown/",
   GITHUB_NODEPRESS: "https://github.com/surmon-china/nodepress",
   GITHUB_SURMON_ME: "https://github.com/surmon-china/surmon.me",
   GITHUB_SURMON_ME_NATIVE: "https://github.com/surmon-china/surmon.me.native",
   GITHUB_BLOG_STAR_LIST: "https://github.com/stars/surmon-china/lists/surmon-me",
-  MARKDOWN: "https://daringfireball.net/projects/markdown/",
+  GITHUB_STATISTIC_JSON_URL: "https://raw.githubusercontent.com/surmon-china/surmon-china/release/",
   GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
   GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
-  DISCORD_GROUP: "https://redirect.surmon.me/discord-server",
-  TELEGRAM_GROUP: "https://redirect.surmon.me/telegram-group",
   MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-  YOUTUBE_CHANNEL: `https://www.youtube.com/${IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID}`,
-  TELEGRAM: "https://t.me/surmon",
-  OPENSEA: "https://opensea.io/Surmon",
-  XIAOHONGSHU: `https://www.xiaohongshu.com/user/profile/5f2f68cc0000000001001ad5`,
-  ZHIHU: `https://www.zhihu.com/people/${IDENTITIES.ZHIHU_USERNAME}/answers`,
-  DOUBAN: "https://www.douban.com/people/nocower",
-  DOUBAN_MOVIE: `https://movie.douban.com/people/nocower/collect`,
-  LINKEDIN: "https://www.linkedin.com/in/surmon",
-  TWITTER: "https://x.com/surmon7788",
-  INSTAGRAM: `https://www.instagram.com/${IDENTITIES.INSTAGRAM_USERNAME}`,
-  THREADS: `https://www.threads.net/@${IDENTITIES.INSTAGRAM_USERNAME}`,
-  THREADS_FOLLOW: `https://www.threads.net/intent/follow?username=${IDENTITIES.INSTAGRAM_USERNAME}`
+  UPTIME_STATUS: "https://go.surmon.me/status",
+  NPM_HOMEPAGE: "https://go.surmon.me/npm",
+  PAYPAL: "https://go.surmon.me/paypal",
+  GITHUB: "https://go.surmon.me/github",
+  GITHUB_SPONSORS: "https://go.surmon.me/github-sponsors",
+  DISCORD_GROUP: "https://go.surmon.me/discord-server",
+  TELEGRAM_GROUP: "https://go.surmon.me/telegram-group",
+  YOUTUBE_CHANNEL: "https://go.surmon.me/youtube",
+  TELEGRAM: "https://go.surmon.me/telegram",
+  OPENSEA: "https://go.surmon.me/opensea",
+  ZHIHU: "https://go.surmon.me/zhihu",
+  DOUBAN: "https://go.surmon.me/douban",
+  DOUBAN_MOVIE: "https://go.surmon.me/douban-movie",
+  XIAOHONGSHU: "https://go.surmon.me/xiaohongshu",
+  LINKEDIN: "https://go.surmon.me/linkedin",
+  TWITTER: "https://go.surmon.me/x",
+  INSTAGRAM: "https://go.surmon.me/instagram",
+  THREADS: "https://go.surmon.me/threads"
 });
 const zhLangMap = {
   [LanguageKey.APP_SLOGAN]: APP_META.zh_sub_title,
@@ -433,6 +430,45 @@ const isTargetLanguageUser = (language, targetLang) => {
 const isZhUser = (language) => {
   return language ? isTargetLanguageUser(language, Language.Chinese) : true;
 };
+class AppErrorClass extends Error {
+  code;
+  constructor(message, code) {
+    super(message);
+    this.name = "AppError";
+    this.code = code;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
+const createAppError = (message, code) => {
+  return new AppErrorClass(message, code);
+};
+const normalizeUnknowErrorToAppError = (error, fallbackError) => {
+  if (error instanceof AppErrorClass) {
+    return {
+      code: error.code ?? fallbackError.code,
+      message: error.message
+    };
+  }
+  if (error instanceof Error) {
+    return {
+      code: error.code ?? fallbackError.code,
+      message: error.message
+    };
+  }
+  if (typeof error === "string") {
+    return { ...fallbackError, message: error };
+  }
+  if (_isObject(error)) {
+    return {
+      code: error.code || fallbackError.code,
+      message: error.message || fallbackError.message
+    };
+  }
+  return {
+    code: fallbackError.code,
+    message: JSON.stringify(error)
+  };
+};
 const createLogger = (scope) => ({
   // levels
   log: (...messages) => console.log("⚪", `[${scope}]`, ...messages),
@@ -445,53 +481,31 @@ const createLogger = (scope) => ({
   failure: (...messages) => console.warn("🔴", `[${scope}]`, ...messages)
 });
 const logger$1 = createLogger("APP");
-var LayoutColumn = /* @__PURE__ */ ((LayoutColumn2) => {
-  LayoutColumn2[LayoutColumn2["Normal"] = 0] = "Normal";
-  LayoutColumn2[LayoutColumn2["Wide"] = 1] = "Wide";
-  LayoutColumn2[LayoutColumn2["Full"] = 2] = "Full";
-  return LayoutColumn2;
-})(LayoutColumn || {});
 const GlobalStateSymbol = Symbol("globalState");
-const createGlobalState = (config) => {
-  const renderError2 = ref(config.error ?? null);
-  const defaultError = { code: INTERNAL_SERVER_ERROR };
-  const setRenderError = (error) => {
-    if (!error) {
-      renderError2.value = null;
-    } else if (error instanceof Error) {
-      renderError2.value = {
-        code: error.code ?? defaultError.code,
-        message: error.message
-      };
-    } else if (typeof error === "string") {
-      renderError2.value = {
-        ...defaultError,
-        message: error
-      };
-    } else {
-      renderError2.value = {
-        ...error,
-        code: error.status || error.code || defaultError.code
-      };
-    }
+const createGlobalState = (options) => {
+  const userAgent = {
+    original: options.userAgent,
+    language: options.language,
+    isZhUser: isZhUser(options.language),
+    ...uaParser(options.userAgent)
   };
-  const isHydrated = ref(false);
+  let isHydrated = false;
   const setHydrate = () => {
-    isHydrated.value = true;
+    isHydrated = true;
   };
-  const userAgent = reactive({
-    original: config.userAgent,
-    language: config.language,
-    isZhUser: isZhUser(config.language),
-    ...uaParser(config.userAgent)
-  });
-  const layoutValue = ref(config.layout);
+  const error = ref(options.error ?? null);
+  const setError = (_error) => {
+    error.value = !_error ? null : normalizeUnknowErrorToAppError(_error, {
+      code: INTERNAL_SERVER_ERROR,
+      message: "Unknown Error"
+    });
+  };
+  const layoutValue = ref(options.layout);
   const layoutColumn = computed(() => ({
     layout: layoutValue.value,
-    isNormal: layoutValue.value === 0,
-    isWide: layoutValue.value === 1,
-    isFull: layoutValue.value === 2
-    /* Full */
+    isNormal: layoutValue.value === LayoutColumn.Normal,
+    isWide: layoutValue.value === LayoutColumn.Wide,
+    isFull: layoutValue.value === LayoutColumn.Full
   }));
   const setLayoutColumn = (layout) => {
     if (layout !== layoutValue.value) {
@@ -506,25 +520,20 @@ const createGlobalState = (config) => {
   const toggleSwitcher = (key, value) => {
     switcher[key] = value;
   };
-  const toRawState = () => ({
-    renderError: renderError2.value,
-    userAgent: userAgent.original,
-    language: userAgent.language,
-    layout: layoutValue.value
-  });
   const globalState = {
-    toRawState,
-    // Render error state
-    renderError: readonly(renderError2),
-    setRenderError,
+    // Device state
+    userAgent,
     // Hydrate state
-    isHydrated: readonly(isHydrated),
     setHydrate,
+    get isHydrated() {
+      return isHydrated;
+    },
+    // App error state
+    error: readonly(error),
+    setError,
     // Layout state
     layoutColumn,
     setLayoutColumn,
-    // Device state
-    userAgent: readonly(userAgent),
     // Global switchers
     switcher: readonly(switcher),
     toggleSwitcher
@@ -544,11 +553,22 @@ const useUniversalFetch = (fetcher) => {
   {
     onServerPrefetch(() => {
       return fetcher().catch((error) => {
-        globalState.setRenderError(error);
+        globalState.setError(error);
         return Promise.reject(error);
       });
     });
   }
+};
+const SSR_STATE_KEY = "__INITIAL_SSR_STATE__";
+const renderSSRStateScript = (data) => {
+  return `<script>window.${SSR_STATE_KEY} = ${data}<\/script>`;
+};
+const getSSRStateValue = (key) => {
+  return window[SSR_STATE_KEY]?.[key];
+};
+const SSR_CONTEXT_KEY = "__SSR_CONTEXT__";
+const renderSSRContextScript = (data) => {
+  return `<script>window.${SSR_CONTEXT_KEY} = ${data}<\/script>`;
 };
 const NULL = null;
 const UNDEFINED = void 0;
@@ -1323,20 +1343,16 @@ const useMyGoogleMapStore = defineStore("myGoogleMap", () => {
 });
 const useSSRContextValue = (key) => {
   {
-    if (!getCurrentInstance()) {
-      logger$1.warn(`useSSRContextValue() can only be used inside setup().`);
-    }
     return useSSRContext()?.[key];
   }
 };
-const useCountry = () => useSSRContextValue("country");
 const useCdnDomain = () => {
   const domain = useSSRContextValue("cdnDomain");
-  if (!domain) {
-    throw new Error("CDN domain is not defined.");
-  } else {
-    return domain;
-  }
+  if (!domain) throw new Error("CDN domain is not defined.");
+  return domain;
+};
+const useCountry = () => {
+  return useSSRContextValue("country");
 };
 const HEADER_ELEMENT_ID = "A_header";
 const NAV_ELEMENT_ID = "A_nav";
@@ -2198,7 +2214,6 @@ const useEnhancer = () => {
   const globalState = useGlobalState();
   const appOptionStore = useAppOptionStore();
   const adConfig = computed(() => appOptionStore.adConfig);
-  const isMobile = computed(() => globalState.userAgent.isMobile);
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark);
   const isZhLang = computed(() => i18n.language.value === Language.Chinese);
   return {
@@ -2206,10 +2221,9 @@ const useEnhancer = () => {
     router,
     i18n,
     theme,
-    gState: globalState,
+    globalState,
     cdnDomain: useCdnDomain(),
     adConfig,
-    isMobile,
     isDarkTheme,
     isZhLang,
     defer: UNDEFINED,
@@ -2369,7 +2383,7 @@ const getPageRoute = (routeName) => {
   return `/${routeName}`;
 };
 const isArticleDetail = (name) => name === RouteName.Article;
-const isSearchFlow = (name) => name === RouteName.SearchFlow;
+const isSearchFlow = (name) => name === RouteName.SearchListing;
 const getImgProxyPath = (path, options) => {
   const resize = options.resize ? `resize:fill:${options.width || ""}:${options.height || ""}:0` : "";
   const watermark = options.watermark ? `/${options.watermark}` : "";
@@ -2384,7 +2398,7 @@ const _sfc_main$1S = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { cdnDomain, gState } = useEnhancer();
+    const { cdnDomain, globalState } = useEnhancer();
     const identityStore = useIdentityStore();
     const isLiked = computed(() => identityStore.isLikedPage(props.article.id));
     const isHybrid = computed(() => isHybridType(props.article.origin));
@@ -2412,18 +2426,18 @@ const _sfc_main$1S = /* @__PURE__ */ defineComponent({
       const _component_udate = resolveComponent("udate");
       _push(ssrRenderComponent(_component_ulink, mergeProps({
         class: "article-item",
-        to: unref(gState).userAgent.isWechat ? unref(detailRoutePath) : unref(UNDEFINED),
-        href: !unref(gState).userAgent.isWechat ? unref(detailRoutePath) : unref(UNDEFINED),
-        blank: !unref(gState).userAgent.isWechat,
+        to: unref(globalState).userAgent.isWechat ? unref(detailRoutePath) : unref(UNDEFINED),
+        href: !unref(globalState).userAgent.isWechat ? unref(detailRoutePath) : unref(UNDEFINED),
+        blank: !unref(globalState).userAgent.isWechat,
         external: false
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="thumbnail" data-v-ac22b094${_scopeId}><span class="${ssrRenderClass([{
+            _push2(`<div class="thumbnail" data-v-b026738f${_scopeId}><span class="${ssrRenderClass([{
               original: isOriginal.value,
               reprint: isReprint.value,
               hybrid: isHybrid.value
-            }, "origin"])}" data-v-ac22b094${_scopeId}>`);
+            }, "origin"])}" data-v-b026738f${_scopeId}>`);
             if (isOriginal.value) {
               _push2(ssrRenderComponent(_component_i18n, {
                 k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -2441,7 +2455,7 @@ const _sfc_main$1S = /* @__PURE__ */ defineComponent({
             }
             _push2(`</span>`);
             if (_ctx.article.featured) {
-              _push2(`<span class="featured" data-v-ac22b094${_scopeId}>`);
+              _push2(`<span class="featured" data-v-b026738f${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, {
                 k: unref(LanguageKey).ARTICLE_FEATURED
               }, null, _parent2, _scopeId));
@@ -2449,20 +2463,20 @@ const _sfc_main$1S = /* @__PURE__ */ defineComponent({
             } else {
               _push2(`<!---->`);
             }
-            _push2(`<picture class="picture" data-v-ac22b094${_scopeId}>`);
+            _push2(`<picture class="picture" data-v-b026738f${_scopeId}>`);
             if (unref(isOriginalStaticURL)(_ctx.article.thumbnail)) {
-              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-ac22b094${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-ac22b094${_scopeId}><!--]-->`);
+              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-b026738f${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-b026738f${_scopeId}><!--]-->`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-ac22b094${_scopeId}></picture></div><div class="content" data-v-ac22b094${_scopeId}><div class="body" data-v-ac22b094${_scopeId}><h4 class="title" data-v-ac22b094${_scopeId}><span class="text"${ssrRenderAttr("title", _ctx.article.title)} data-v-ac22b094${_scopeId}>${ssrInterpolate(_ctx.article.title)}</span><span class="language" data-v-ac22b094${_scopeId}>`);
+            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))}${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)} data-v-b026738f${_scopeId}></picture></div><div class="content" data-v-b026738f${_scopeId}><div class="body" data-v-b026738f${_scopeId}><h4 class="title" data-v-b026738f${_scopeId}><span class="text"${ssrRenderAttr("title", _ctx.article.title)} data-v-b026738f${_scopeId}>${ssrInterpolate(_ctx.article.title)}</span><span class="language" data-v-b026738f${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(ArticleLangI18n)[_ctx.article.lang], null, _parent2, _scopeId));
-            _push2(`</span></h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-ac22b094${_scopeId}>${_ctx.article.description ?? ""}</p></div><div class="meta" data-v-ac22b094${_scopeId}><span class="date" data-allow-mismatch data-v-ac22b094${_scopeId}><i class="iconfont icon-clock" data-v-ac22b094${_scopeId}></i><span class="text" data-v-ac22b094${_scopeId}>`);
+            _push2(`</span></h4><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-b026738f${_scopeId}>${_ctx.article.description ?? ""}</p></div><div class="meta" data-v-b026738f${_scopeId}><span class="date" data-allow-mismatch data-v-b026738f${_scopeId}><i class="iconfont icon-clock" data-v-b026738f${_scopeId}></i><span class="text" data-v-b026738f${_scopeId}>`);
             _push2(ssrRenderComponent(_component_udate, {
               to: "ago",
               date: _ctx.article.created_at
             }, null, _parent2, _scopeId));
-            _push2(`</span></span><span class="views" data-v-ac22b094${_scopeId}><i class="iconfont icon-eye" data-v-ac22b094${_scopeId}></i><span class="text" data-v-ac22b094${_scopeId}>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-ac22b094${_scopeId}><i class="iconfont icon-comment" data-v-ac22b094${_scopeId}></i><span class="text" data-v-ac22b094${_scopeId}>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-ac22b094${_scopeId}><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-ac22b094${_scopeId}></i><span class="text" data-v-ac22b094${_scopeId}>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div>`);
+            _push2(`</span></span><span class="views" data-v-b026738f${_scopeId}><i class="iconfont icon-eye" data-v-b026738f${_scopeId}></i><span class="text" data-v-b026738f${_scopeId}>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-b026738f${_scopeId}><i class="iconfont icon-comment" data-v-b026738f${_scopeId}></i><span class="text" data-v-b026738f${_scopeId}>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-b026738f${_scopeId}><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-b026738f${_scopeId}></i><span class="text" data-v-b026738f${_scopeId}>${ssrInterpolate(_ctx.article.meta.likes)}</span></span></div></div>`);
           } else {
             return [
               createVNode("div", { class: "thumbnail" }, [
@@ -2570,10 +2584,10 @@ const _sfc_main$1S = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1S = _sfc_main$1S.setup;
 _sfc_main$1S.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/mobile/item.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/mobile/item.vue");
   return _sfc_setup$1S ? _sfc_setup$1S(props, ctx) : void 0;
 };
-const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1S, [["__scopeId", "data-v-ac22b094"]]);
+const ListItem$1 = /* @__PURE__ */ _export_sfc(_sfc_main$1S, [["__scopeId", "data-v-b026738f"]]);
 const _sfc_main$1R = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -2648,9 +2662,9 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_empty = resolveComponent("empty");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-58c0e03e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-064271e7>`);
       if (_ctx.tagSlug || _ctx.categorySlug || _ctx.date || _ctx.searchKeyword) {
-        _push(`<div class="header" data-v-58c0e03e><div class="content" data-v-58c0e03e>`);
+        _push(`<div class="header" data-v-064271e7><div class="content" data-v-064271e7>`);
         if (_ctx.categorySlug) {
           _push(`<!--[-->`);
           if (filterCategory.value) {
@@ -2676,7 +2690,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
               _: 1
             }, _parent));
           } else {
-            _push(`<span data-v-58c0e03e>${ssrInterpolate(_ctx.categorySlug)}</span>`);
+            _push(`<span data-v-064271e7>${ssrInterpolate(_ctx.categorySlug)}</span>`);
           }
           _push(`<!--]-->`);
         } else {
@@ -2707,7 +2721,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
               _: 1
             }, _parent));
           } else {
-            _push(`<span data-v-58c0e03e>${ssrInterpolate(_ctx.tagSlug)}</span>`);
+            _push(`<span data-v-064271e7>${ssrInterpolate(_ctx.tagSlug)}</span>`);
           }
           _push(`<!--]-->`);
         } else {
@@ -2770,7 +2784,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="iconfont icon-cancel" data-v-58c0e03e${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-cancel" data-v-064271e7${_scopeId}></i>`);
             } else {
               return [
                 createVNode("i", { class: "iconfont icon-cancel" })
@@ -2789,13 +2803,13 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="skeletons" data-v-58c0e03e${_scopeId}><!--[-->`);
+            _push2(`<ul class="skeletons" data-v-064271e7${_scopeId}><!--[-->`);
             ssrRenderList(3, (item) => {
-              _push2(`<li class="item" data-v-58c0e03e${_scopeId}><div class="thumbnail" data-v-58c0e03e${_scopeId}>`);
+              _push2(`<li class="item" data-v-064271e7${_scopeId}><div class="thumbnail" data-v-064271e7${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="content" data-v-58c0e03e${_scopeId}><div class="title" data-v-58c0e03e${_scopeId}>`);
+              _push2(`</div><div class="content" data-v-064271e7${_scopeId}><div class="title" data-v-064271e7${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="description" data-v-58c0e03e${_scopeId}>`);
+              _push2(`</div><div class="description" data-v-064271e7${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
               _push2(`</div></div></li>`);
             });
@@ -2845,11 +2859,11 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div data-v-58c0e03e${_scopeId}><div${ssrRenderAttrs({
+            _push2(`<div data-v-064271e7${_scopeId}><div${ssrRenderAttrs({
               key: "list",
               name: "list",
               class: "list"
-            })} data-v-58c0e03e>`);
+            })} data-v-064271e7>`);
             ssrRenderList(unref(articleListStore).data, (article, index) => {
               _push2(ssrRenderComponent(ListItem$1, {
                 class: "list-item",
@@ -2866,7 +2880,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
             }, {
               normal: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<button class="normal" data-v-58c0e03e${_scopeId2}><i class="iconfont icon-loadmore" data-v-58c0e03e${_scopeId2}></i></button>`);
+                  _push3(`<button class="normal" data-v-064271e7${_scopeId2}><i class="iconfont icon-loadmore" data-v-064271e7${_scopeId2}></i></button>`);
                 } else {
                   return [
                     createVNode("button", {
@@ -2899,7 +2913,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
               }),
               finished: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="finished" data-v-58c0e03e${_scopeId2}>`);
+                  _push3(`<span class="finished" data-v-064271e7${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     k: unref(LanguageKey).LIST_NO_MORE_DATA
                   }, null, _parent3, _scopeId2));
@@ -2981,10 +2995,10 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1R = _sfc_main$1R.setup;
 _sfc_main$1R.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/mobile/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/mobile/index.vue");
   return _sfc_setup$1R ? _sfc_setup$1R(props, ctx) : void 0;
 };
-const MobileFlow = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-58c0e03e"]]);
+const MobileListing = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-064271e7"]]);
 const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
   __name: "item",
   __ssrInlineRender: true,
@@ -3032,7 +3046,7 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
       const _component_placeholder = resolveComponent("placeholder");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-250a7f0b><div class="item-background" style="${ssrRenderStyle({ backgroundImage: finallyThumbnailURL.value ? `url('${finallyThumbnailURL.value}')` : "none" })}" data-v-250a7f0b></div><div class="item-content" data-v-250a7f0b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-item" }, _attrs))} data-v-72330ed9><div class="item-background" style="${ssrRenderStyle({ backgroundImage: finallyThumbnailURL.value ? `url('${finallyThumbnailURL.value}')` : "none" })}" data-v-72330ed9></div><div class="item-content" data-v-72330ed9>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "item-thumbnail",
         to: unref(getArticleDetailRoute)(_ctx.article.id)
@@ -3043,7 +3057,7 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
               original: isOriginal.value,
               hybrid: isHybrid.value,
               reprint: isReprint.value
-            }, "item-origin"])}" data-v-250a7f0b${_scopeId}>`);
+            }, "item-origin"])}" data-v-72330ed9${_scopeId}>`);
             if (isOriginal.value) {
               _push2(ssrRenderComponent(_component_i18n, {
                 k: unref(LanguageKey).ORIGIN_ORIGINAL
@@ -3061,17 +3075,17 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
             }
             _push2(`</span>`);
             if (_ctx.article.featured) {
-              _push2(`<span class="item-featured"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).ARTICLE_FEATURED))} data-v-250a7f0b${_scopeId}><i class="iconfont icon-windmill" data-v-250a7f0b${_scopeId}></i></span>`);
+              _push2(`<span class="item-featured"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).ARTICLE_FEATURED))} data-v-72330ed9${_scopeId}><i class="iconfont icon-windmill" data-v-72330ed9${_scopeId}></i></span>`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(`<picture class="picture" data-v-250a7f0b${_scopeId}>`);
+            _push2(`<picture class="picture" data-v-72330ed9${_scopeId}>`);
             if (unref(isOriginalStaticURL)(_ctx.article.thumbnail)) {
-              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-250a7f0b${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-250a7f0b${_scopeId}><!--]-->`);
+              _push2(`<!--[--><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "avif"))} type="image/avif" data-v-72330ed9${_scopeId}><source${ssrRenderAttr("srcset", getThumbnailURL(_ctx.article.thumbnail, "webp"))} type="image/webp" data-v-72330ed9${_scopeId}><!--]-->`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)}${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))} data-v-250a7f0b${_scopeId}></picture>`);
+            _push2(`<img class="image" loading="lazy" draggable="false"${ssrRenderAttr("alt", _ctx.article.title)}${ssrRenderAttr("title", _ctx.article.title)}${ssrRenderAttr("src", getThumbnailURL(_ctx.article.thumbnail))} data-v-72330ed9${_scopeId}></picture>`);
           } else {
             return [
               createVNode("span", {
@@ -3127,7 +3141,7 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="item-body" data-v-250a7f0b><div class="item-content" data-v-250a7f0b><h5 class="title" data-v-250a7f0b>`);
+      _push(`<div class="item-body" data-v-72330ed9><div class="item-content" data-v-72330ed9><h5 class="title" data-v-72330ed9>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "link",
         to: unref(getArticleDetailRoute)(_ctx.article.id),
@@ -3144,12 +3158,12 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="language" data-v-250a7f0b>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-250a7f0b>${_ctx.article.description ?? ""}</p></div><div class="item-meta" data-v-250a7f0b><span class="date" data-allow-mismatch data-v-250a7f0b><i class="iconfont icon-clock" data-v-250a7f0b></i>`);
+      _push(`<span class="language" data-v-72330ed9>${ssrInterpolate(getLanguageText(_ctx.article.lang))}</span></h5><p class="description" style="${ssrRenderStyle({ "-webkit-box-orient": "vertical" })}" data-v-72330ed9>${_ctx.article.description ?? ""}</p></div><div class="item-meta" data-v-72330ed9><span class="date" data-allow-mismatch data-v-72330ed9><i class="iconfont icon-clock" data-v-72330ed9></i>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: _ctx.article.created_at
       }, null, _parent));
-      _push(`</span><span class="views" data-v-250a7f0b><i class="iconfont icon-eye" data-v-250a7f0b></i><span data-v-250a7f0b>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-250a7f0b><i class="iconfont icon-comment" data-v-250a7f0b></i><span data-v-250a7f0b>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-250a7f0b><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-250a7f0b></i><span data-v-250a7f0b>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-250a7f0b><i class="iconfont icon-category" data-v-250a7f0b></i>`);
+      _push(`</span><span class="views" data-v-72330ed9><i class="iconfont icon-eye" data-v-72330ed9></i><span data-v-72330ed9>${ssrInterpolate(unref(numberSplit)(_ctx.article.meta.views))}</span></span><span class="comments" data-v-72330ed9><i class="iconfont icon-comment" data-v-72330ed9></i><span data-v-72330ed9>${ssrInterpolate(_ctx.article.meta.comments)}</span></span><span class="likes" data-v-72330ed9><i class="${ssrRenderClass([{ liked: isLiked.value }, "iconfont icon-like"])}" data-v-72330ed9></i><span data-v-72330ed9>${ssrInterpolate(_ctx.article.meta.likes)}</span></span><span class="categories" data-v-72330ed9><i class="iconfont icon-category" data-v-72330ed9></i>`);
       _push(ssrRenderComponent(_component_placeholder, {
         transition: false,
         data: _ctx.article.categories.length
@@ -3222,10 +3236,10 @@ const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1Q = _sfc_main$1Q.setup;
 _sfc_main$1Q.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/desktop/item.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/desktop/item.vue");
   return _sfc_setup$1Q ? _sfc_setup$1Q(props, ctx) : void 0;
 };
-const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1Q, [["__scopeId", "data-v-250a7f0b"]]);
+const ListItem = /* @__PURE__ */ _export_sfc(_sfc_main$1Q, [["__scopeId", "data-v-72330ed9"]]);
 const _sfc_main$1P = /* @__PURE__ */ defineComponent({
   __name: "list",
   __ssrInlineRender: true,
@@ -3250,22 +3264,22 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_Adsense = resolveComponent("Adsense");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-db4b059c><div class="article-list" data-v-db4b059c>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-e5b2acf4><div class="article-list" data-v-e5b2acf4>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: _ctx.articles.length,
         loading: !_ctx.articles.length && _ctx.fetching
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="article-list-skeleton" data-v-db4b059c${_scopeId}><!--[-->`);
+            _push2(`<ul class="article-list-skeleton" data-v-e5b2acf4${_scopeId}><!--[-->`);
             ssrRenderList(6, (item) => {
-              _push2(`<li class="item" data-v-db4b059c${_scopeId}><div class="thumbnail" data-v-db4b059c${_scopeId}>`);
+              _push2(`<li class="item" data-v-e5b2acf4${_scopeId}><div class="thumbnail" data-v-e5b2acf4${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="content" data-v-db4b059c${_scopeId}><div class="title" data-v-db4b059c${_scopeId}>`);
+              _push2(`</div><div class="content" data-v-e5b2acf4${_scopeId}><div class="title" data-v-e5b2acf4${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="description" data-v-db4b059c${_scopeId}><!--[-->`);
+              _push2(`</div><div class="description" data-v-e5b2acf4${_scopeId}><!--[-->`);
               ssrRenderList(2, (line) => {
-                _push2(`<div class="line-item" data-v-db4b059c${_scopeId}>`);
+                _push2(`<div class="line-item" data-v-e5b2acf4${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
                 _push2(`</div>`);
               });
@@ -3331,7 +3345,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div data-v-db4b059c${_scopeId}>`);
+            _push2(`<div data-v-e5b2acf4${_scopeId}>`);
             _push2(ssrRenderComponent(_component_client_only, null, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
@@ -3434,13 +3448,13 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><button class="article-load"${ssrIncludeBooleanAttr(_ctx.fetching || !hasMoreData.value) ? " disabled" : ""} data-v-db4b059c><div class="background" data-v-db4b059c><span class="left" data-v-db4b059c></span><span class="right" data-v-db4b059c></span></div><div class="content" data-v-db4b059c><span class="left" data-v-db4b059c>`);
+      _push(`</div><button class="article-load"${ssrIncludeBooleanAttr(_ctx.fetching || !hasMoreData.value) ? " disabled" : ""} data-v-e5b2acf4><div class="background" data-v-e5b2acf4><span class="left" data-v-e5b2acf4></span><span class="right" data-v-e5b2acf4></span></div><div class="content" data-v-e5b2acf4><span class="left" data-v-e5b2acf4>`);
       if (_ctx.fetching) {
         _push(`<!--[-->•••<!--]-->`);
       } else {
         _push(`<!--[-->${ssrInterpolate(_ctx.articles.length)} / ${ssrInterpolate(_ctx.pagination?.total)}<!--]-->`);
       }
-      _push(`</span><span class="right" data-v-db4b059c><span class="${ssrRenderClass([{ zh: unref(isZhLang) }, "text"])}" data-v-db4b059c>`);
+      _push(`</span><span class="right" data-v-e5b2acf4><span class="${ssrRenderClass([{ zh: unref(isZhLang) }, "text"])}" data-v-e5b2acf4>`);
       if (_ctx.fetching) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).ARTICLE_LIST_LOADING
@@ -3456,9 +3470,9 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
       }
       _push(`</span>`);
       if (_ctx.fetching || hasMoreData.value) {
-        _push(`<i class="iconfont icon-loadmore" data-v-db4b059c></i>`);
+        _push(`<i class="iconfont icon-loadmore" data-v-e5b2acf4></i>`);
       } else {
-        _push(`<i class="iconfont icon-stop" data-v-db4b059c></i>`);
+        _push(`<i class="iconfont icon-stop" data-v-e5b2acf4></i>`);
       }
       _push(`</span></div></button></div>`);
     };
@@ -3467,10 +3481,10 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1P = _sfc_main$1P.setup;
 _sfc_main$1P.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/desktop/list.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/desktop/list.vue");
   return _sfc_setup$1P ? _sfc_setup$1P(props, ctx) : void 0;
 };
-const ArticleList = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-db4b059c"]]);
+const ArticleList = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-e5b2acf4"]]);
 Swiper.use([Autoplay, Mousewheel, Mousewheel, Grid, EffectFade]);
 const INITIAL_SLIDE_INDEX = 0;
 const _sfc_main$1O = /* @__PURE__ */ defineComponent({
@@ -4564,6 +4578,9 @@ const _sfc_main$1M = /* @__PURE__ */ defineComponent({
     const loadmoreArticles = async () => {
       const targetPage = articleListStore.pagination.current_page + 1;
       await articleListStore.fetch({ page: targetPage });
+      if (targetPage > 1 && isClient) {
+        scrollToNextScreen();
+      }
     };
     usePageSeo(() => ({
       title: `${APP_META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
@@ -4580,7 +4597,7 @@ const _sfc_main$1M = /* @__PURE__ */ defineComponent({
       ]);
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "index-page" }, _attrs))} data-v-522682bd>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "index-page" }, _attrs))} data-v-38f6ce24>`);
       _push(ssrRenderComponent(Carrousel, {
         class: "carrousel",
         articles: unref(articleListStore).data,
@@ -4609,7 +4626,7 @@ _sfc_main$1M.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/index/index.vue");
   return _sfc_setup$1M ? _sfc_setup$1M(props, ctx) : void 0;
 };
-const IndexFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1M, [["__scopeId", "data-v-522682bd"]]);
+const IndexPage = /* @__PURE__ */ _export_sfc(_sfc_main$1M, [["__scopeId", "data-v-38f6ce24"]]);
 const _sfc_main$1L = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
@@ -4622,10 +4639,10 @@ const _sfc_main$1L = /* @__PURE__ */ defineComponent({
     const cdnDomain = useCdnDomain();
     const defaultImage = getAssetURL(cdnDomain, "/images/thumbnail/carrousel.jpg");
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-c78be276><div class="background" style="${ssrRenderStyle({
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "header" }, _attrs))} data-v-3bdeb7c3><div class="background" style="${ssrRenderStyle({
         backgroundColor: _ctx.backgroundColor,
         backgroundImage: `url(${_ctx.backgroundImage ?? unref(defaultImage)})`
-      })}" data-v-c78be276></div><div class="content" data-v-c78be276><div class="logo" data-v-c78be276><i class="${ssrRenderClass([_ctx.icon, "iconfont"])}" data-v-c78be276></i></div><div class="title" data-v-c78be276><div class="text" data-v-c78be276>`);
+      })}" data-v-3bdeb7c3></div><div class="content" data-v-3bdeb7c3><div class="logo" data-v-3bdeb7c3><i class="${ssrRenderClass([_ctx.icon, "iconfont"])}" data-v-3bdeb7c3></i></div><div class="title" data-v-3bdeb7c3><div class="text" data-v-3bdeb7c3>`);
       ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`</div></div></div></div>`);
     };
@@ -4634,10 +4651,10 @@ const _sfc_main$1L = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1L = _sfc_main$1L.setup;
 _sfc_main$1L.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/flow/desktop/header.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/desktop/header.vue");
   return _sfc_setup$1L ? _sfc_setup$1L(props, ctx) : void 0;
 };
-const ArticleListHeader = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-c78be276"]]);
+const ArticleListHeader = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-3bdeb7c3"]]);
 const _sfc_main$1K = /* @__PURE__ */ defineComponent({
   __name: "category",
   __ssrInlineRender: true,
@@ -4695,7 +4712,7 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-2eba2159>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-baba6f41>`);
       _push(ssrRenderComponent(ArticleListHeader, {
         "background-color": currentCategoryColor.value,
         "background-image": currentCategoryImage.value,
@@ -4707,12 +4724,12 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-2eba2159${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
+                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-2eba2159${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
+                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, toDisplayString(currentCategory.value.name), 1),
@@ -4726,12 +4743,12 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-2eba2159${_scopeId2}>Category</span>`);
+                    _push3(`<span data-v-baba6f41${_scopeId2}>Category</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-2eba2159${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
+                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Category"),
@@ -4790,7 +4807,7 @@ _sfc_main$1K.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/category.vue");
   return _sfc_setup$1K ? _sfc_setup$1K(props, ctx) : void 0;
 };
-const CategoryFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1K, [["__scopeId", "data-v-2eba2159"]]);
+const CategoryListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1K, [["__scopeId", "data-v-baba6f41"]]);
 const _sfc_main$1J = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
@@ -4840,7 +4857,7 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-202eb411>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-3f25e4df>`);
       _push(ssrRenderComponent(ArticleListHeader, {
         "background-color": currentTagColor.value,
         "background-image": currentTagImage.value,
@@ -4849,16 +4866,16 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (currentTag.value) {
-              _push2(`<span class="header" data-v-202eb411${_scopeId}>`);
+              _push2(`<span class="header" data-v-3f25e4df${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-202eb411${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
+                    _push3(`<span data-v-3f25e4df${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-202eb411${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
+                    _push3(`<span data-v-3f25e4df${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "#" + toDisplayString(currentTag.value.name), 1),
@@ -4872,12 +4889,12 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-202eb411${_scopeId2}>Tag</span>`);
+                    _push3(`<span data-v-3f25e4df${_scopeId2}>Tag</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-202eb411${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
+                    _push3(`<span data-v-3f25e4df${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Tag"),
@@ -4942,75 +4959,8 @@ _sfc_main$1J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/tag.vue");
   return _sfc_setup$1J ? _sfc_setup$1J(props, ctx) : void 0;
 };
-const TagFlowPage = /* @__PURE__ */ _export_sfc(_sfc_main$1J, [["__scopeId", "data-v-202eb411"]]);
+const TagListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1J, [["__scopeId", "data-v-3f25e4df"]]);
 const _sfc_main$1I = /* @__PURE__ */ defineComponent({
-  __name: "date",
-  __ssrInlineRender: true,
-  props: {
-    date: {}
-  },
-  setup(__props) {
-    const props = __props;
-    const { articleList: articleListStore } = useStores();
-    const loadmoreArticles = async () => {
-      await articleListStore.fetch({
-        date: props.date,
-        page: articleListStore.pagination.current_page + 1
-      });
-      scrollToNextScreen();
-    };
-    usePageSeo(() => ({
-      pageTitles: [props.date, "Date"],
-      ogType: "website"
-    }));
-    onBeforeMount(() => {
-      watch(
-        () => props.date,
-        (date) => articleListStore.fetch({ date }),
-        { flush: "post" }
-      );
-    });
-    useUniversalFetch(() => {
-      return articleListStore.fetch({ date: props.date });
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "date-flow-page" }, _attrs))}>`);
-      _push(ssrRenderComponent(ArticleListHeader, { icon: "icon-clock" }, {
-        default: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(_component_i18n, {
-              zh: `发布于 ${_ctx.date} 的所有文章`,
-              en: `Articles published at ${_ctx.date}`
-            }, null, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(_component_i18n, {
-                zh: `发布于 ${_ctx.date} 的所有文章`,
-                en: `Articles published at ${_ctx.date}`
-              }, null, 8, ["zh", "en"])
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-      _push(ssrRenderComponent(ArticleList, {
-        fetching: unref(articleListStore).fetching,
-        articles: unref(articleListStore).data,
-        pagination: unref(articleListStore).pagination,
-        onLoadmore: loadmoreArticles
-      }, null, _parent));
-      _push(`</div>`);
-    };
-  }
-});
-const _sfc_setup$1I = _sfc_main$1I.setup;
-_sfc_main$1I.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/date.vue");
-  return _sfc_setup$1I ? _sfc_setup$1I(props, ctx) : void 0;
-};
-const _sfc_main$1H = /* @__PURE__ */ defineComponent({
   __name: "search",
   __ssrInlineRender: true,
   props: {
@@ -5072,10 +5022,77 @@ const _sfc_main$1H = /* @__PURE__ */ defineComponent({
     };
   }
 });
+const _sfc_setup$1I = _sfc_main$1I.setup;
+_sfc_main$1I.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/search.vue");
+  return _sfc_setup$1I ? _sfc_setup$1I(props, ctx) : void 0;
+};
+const _sfc_main$1H = /* @__PURE__ */ defineComponent({
+  __name: "date",
+  __ssrInlineRender: true,
+  props: {
+    date: {}
+  },
+  setup(__props) {
+    const props = __props;
+    const { articleList: articleListStore } = useStores();
+    const loadmoreArticles = async () => {
+      await articleListStore.fetch({
+        date: props.date,
+        page: articleListStore.pagination.current_page + 1
+      });
+      scrollToNextScreen();
+    };
+    usePageSeo(() => ({
+      pageTitles: [props.date, "Date"],
+      ogType: "website"
+    }));
+    onBeforeMount(() => {
+      watch(
+        () => props.date,
+        (date) => articleListStore.fetch({ date }),
+        { flush: "post" }
+      );
+    });
+    useUniversalFetch(() => {
+      return articleListStore.fetch({ date: props.date });
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_i18n = resolveComponent("i18n");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "date-flow-page" }, _attrs))}>`);
+      _push(ssrRenderComponent(ArticleListHeader, { icon: "icon-clock" }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(_component_i18n, {
+              zh: `发布于 ${_ctx.date} 的所有文章`,
+              en: `Articles published at ${_ctx.date}`
+            }, null, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(_component_i18n, {
+                zh: `发布于 ${_ctx.date} 的所有文章`,
+                en: `Articles published at ${_ctx.date}`
+              }, null, 8, ["zh", "en"])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(ArticleList, {
+        fetching: unref(articleListStore).fetching,
+        articles: unref(articleListStore).data,
+        pagination: unref(articleListStore).pagination,
+        onLoadmore: loadmoreArticles
+      }, null, _parent));
+      _push(`</div>`);
+    };
+  }
+});
 const _sfc_setup$1H = _sfc_main$1H.setup;
 _sfc_main$1H.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/search.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/date.vue");
   return _sfc_setup$1H ? _sfc_setup$1H(props, ctx) : void 0;
 };
 const i18ns$1 = {
@@ -5279,7 +5296,7 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-f59ab9cc>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-0a0007c6>`);
       _push(ssrRenderComponent(PageBanner, {
         image: "/images/page-archive/banner.webp",
         "image-position": 34,
@@ -5326,7 +5343,7 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
           if (_push2) {
             _push2(``);
             if (statisticFetching.value) {
-              _push2(`<div class="skeletons" data-v-f59ab9cc${_scopeId}><!--[-->`);
+              _push2(`<div class="skeletons" data-v-0a0007c6${_scopeId}><!--[-->`);
               ssrRenderList(statistics.value.length, (s) => {
                 _push2(ssrRenderComponent(_component_skeleton_base, {
                   class: "item",
@@ -5335,9 +5352,9 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
               });
               _push2(`<!--]--></div>`);
             } else {
-              _push2(`<div class="statistics" data-v-f59ab9cc${_scopeId}><!--[-->`);
+              _push2(`<div class="statistics" data-v-0a0007c6${_scopeId}><!--[-->`);
               ssrRenderList(statistics.value, (s, index) => {
-                _push2(`<div class="item" data-v-f59ab9cc${_scopeId}><i class="${ssrRenderClass([s.icon, "iconfont"])}" data-v-f59ab9cc${_scopeId}></i><div class="content" data-v-f59ab9cc${_scopeId}><p class="label" data-v-f59ab9cc${_scopeId}>${ssrInterpolate(s.label)}</p><div class="value" data-v-f59ab9cc${_scopeId}>${ssrInterpolate(s.value)}</div></div></div>`);
+                _push2(`<div class="item" data-v-0a0007c6${_scopeId}><i class="${ssrRenderClass([s.icon, "iconfont"])}" data-v-0a0007c6${_scopeId}></i><div class="content" data-v-0a0007c6${_scopeId}><p class="label" data-v-0a0007c6${_scopeId}>${ssrInterpolate(s.label)}</p><div class="value" data-v-0a0007c6${_scopeId}>${ssrInterpolate(s.value)}</div></div></div>`);
               });
               _push2(`<!--]--></div>`);
             }
@@ -5433,9 +5450,9 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<ul class="archive-skeleton" data-v-f59ab9cc${_scopeId2}><!--[-->`);
+                  _push3(`<ul class="archive-skeleton" data-v-0a0007c6${_scopeId2}><!--[-->`);
                   ssrRenderList(9, (item) => {
-                    _push3(`<li class="item" data-v-f59ab9cc${_scopeId2}><!--[-->`);
+                    _push3(`<li class="item" data-v-0a0007c6${_scopeId2}><!--[-->`);
                     ssrRenderList(3, (i) => {
                       _push3(ssrRenderComponent(_component_skeleton_line, {
                         key: i,
@@ -5477,7 +5494,7 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
                   }, {
                     title: withCtx(({ title }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<h1 class="archive-title" data-v-f59ab9cc${_scopeId3}>${ssrInterpolate(title)}</h1>`);
+                        _push4(`<h1 class="archive-title" data-v-0a0007c6${_scopeId3}>${ssrInterpolate(title)}</h1>`);
                       } else {
                         return [
                           createVNode("h1", { class: "archive-title" }, toDisplayString(title), 1)
@@ -5486,11 +5503,11 @@ const _sfc_main$1E = /* @__PURE__ */ defineComponent({
                     }),
                     article: withCtx(({ article, day }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<div class="archive-article" data-v-f59ab9cc${_scopeId3}><div class="left" data-v-f59ab9cc${_scopeId3}><h3 class="title" data-v-f59ab9cc${_scopeId3}><span class="date" data-v-f59ab9cc${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-f59ab9cc${_scopeId3}>${ssrInterpolate(article.title)}</a></h3><p class="description" data-v-f59ab9cc${_scopeId3}>${article.description ?? ""}</p></div><div class="metas" data-v-f59ab9cc${_scopeId3}><div class="item views" data-v-f59ab9cc${_scopeId3}><i class="iconfont icon-eye" data-v-f59ab9cc${_scopeId3}></i><span class="text" data-v-f59ab9cc${_scopeId3}>${ssrInterpolate(unref(numberSplit)(article.meta.views))}</span></div>`);
+                        _push4(`<div class="archive-article" data-v-0a0007c6${_scopeId3}><div class="left" data-v-0a0007c6${_scopeId3}><h3 class="title" data-v-0a0007c6${_scopeId3}><span class="date" data-v-0a0007c6${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-0a0007c6${_scopeId3}>${ssrInterpolate(article.title)}</a></h3><p class="description" data-v-0a0007c6${_scopeId3}>${article.description ?? ""}</p></div><div class="metas" data-v-0a0007c6${_scopeId3}><div class="item views" data-v-0a0007c6${_scopeId3}><i class="iconfont icon-eye" data-v-0a0007c6${_scopeId3}></i><span class="text" data-v-0a0007c6${_scopeId3}>${ssrInterpolate(unref(numberSplit)(article.meta.views))}</span></div>`);
                         _push4(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent4, _scopeId3));
-                        _push4(`<div class="item likes" data-v-f59ab9cc${_scopeId3}><i class="like-icon iconfont icon-like" data-v-f59ab9cc${_scopeId3}></i><span class="text" data-v-f59ab9cc${_scopeId3}>${ssrInterpolate(article.meta.likes)}</span></div>`);
+                        _push4(`<div class="item likes" data-v-0a0007c6${_scopeId3}><i class="like-icon iconfont icon-like" data-v-0a0007c6${_scopeId3}></i><span class="text" data-v-0a0007c6${_scopeId3}>${ssrInterpolate(article.meta.likes)}</span></div>`);
                         _push4(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent4, _scopeId3));
-                        _push4(`<div class="item comments" data-v-f59ab9cc${_scopeId3}><i class="iconfont icon-comment" data-v-f59ab9cc${_scopeId3}></i><span class="text" data-v-f59ab9cc${_scopeId3}>${ssrInterpolate(article.meta.comments)}</span></div></div></div>`);
+                        _push4(`<div class="item comments" data-v-0a0007c6${_scopeId3}><i class="iconfont icon-comment" data-v-0a0007c6${_scopeId3}></i><span class="text" data-v-0a0007c6${_scopeId3}>${ssrInterpolate(article.meta.comments)}</span></div></div></div>`);
                       } else {
                         return [
                           createVNode("div", { class: "archive-article" }, [
@@ -5687,7 +5704,7 @@ _sfc_main$1E.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/archive/desktop.vue");
   return _sfc_setup$1E ? _sfc_setup$1E(props, ctx) : void 0;
 };
-const DesktopArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1E, [["__scopeId", "data-v-f59ab9cc"]]);
+const DesktopArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1E, [["__scopeId", "data-v-0a0007c6"]]);
 const _sfc_main$1D = /* @__PURE__ */ defineComponent({
   __name: "mobile",
   __ssrInlineRender: true,
@@ -5710,7 +5727,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
       const _component_divider = resolveComponent("divider");
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_line = resolveComponent("skeleton-line");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-d2fab7e9>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-0bf315c5>`);
       _push(ssrRenderComponent(PageBanner, {
         "is-mobile": true,
         image: "/images/page-archive/banner-mobile.webp",
@@ -5741,14 +5758,14 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-content" data-v-d2fab7e9>`);
+      _push(`<div class="page-content" data-v-0bf315c5>`);
       _push(ssrRenderComponent(_component_container, { class: "statistic-wrapper" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(ssrRenderComponent(_component_placeholder, { loading: statisticFetching.value }, {
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="skeletons" data-v-d2fab7e9${_scopeId2}><!--[-->`);
+                  _push3(`<div class="skeletons" data-v-0bf315c5${_scopeId2}><!--[-->`);
                   ssrRenderList(3, (s) => {
                     _push3(ssrRenderComponent(_component_skeleton_base, {
                       class: "skeleton",
@@ -5774,11 +5791,11 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="statistics" data-v-d2fab7e9${_scopeId2}><div class="item" data-v-d2fab7e9${_scopeId2}><p class="label" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.articles.label)}</p><div class="value" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.articles.value)}</div></div>`);
+                  _push3(`<div class="statistics" data-v-0bf315c5${_scopeId2}><div class="item" data-v-0bf315c5${_scopeId2}><p class="label" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.articles.label)}</p><div class="value" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.articles.value)}</div></div>`);
                   _push3(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent3, _scopeId2));
-                  _push3(`<div class="item" data-v-d2fab7e9${_scopeId2}><p class="label" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.label)}</p><div class="value" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.value)}</div></div>`);
+                  _push3(`<div class="item" data-v-0bf315c5${_scopeId2}><p class="label" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.label)}</p><div class="value" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.value)}</div></div>`);
                   _push3(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent3, _scopeId2));
-                  _push3(`<div class="item" data-v-d2fab7e9${_scopeId2}><p class="label" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.comments.label)}</p><div class="value" data-v-d2fab7e9${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.comments.value)}</div></div></div>`);
+                  _push3(`<div class="item" data-v-0bf315c5${_scopeId2}><p class="label" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.comments.label)}</p><div class="value" data-v-0bf315c5${_scopeId2}>${ssrInterpolate(unref(statisticState).statistics.value.comments.value)}</div></div></div>`);
                 } else {
                   return [
                     createVNode("div", {
@@ -5895,9 +5912,9 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<ul class="archive-skeleton" data-v-d2fab7e9${_scopeId2}><!--[-->`);
+                  _push3(`<ul class="archive-skeleton" data-v-0bf315c5${_scopeId2}><!--[-->`);
                   ssrRenderList(3, (item) => {
-                    _push3(`<li class="item" data-v-d2fab7e9${_scopeId2}><!--[-->`);
+                    _push3(`<li class="item" data-v-0bf315c5${_scopeId2}><!--[-->`);
                     ssrRenderList(2, (i) => {
                       _push3(ssrRenderComponent(_component_skeleton_line, {
                         key: i,
@@ -5939,7 +5956,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
                   }, {
                     title: withCtx(({ title }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<h3 class="archive-title" data-v-d2fab7e9${_scopeId3}>${ssrInterpolate(title)}</h3>`);
+                        _push4(`<h3 class="archive-title" data-v-0bf315c5${_scopeId3}>${ssrInterpolate(title)}</h3>`);
                       } else {
                         return [
                           createVNode("h3", { class: "archive-title" }, toDisplayString(title), 1)
@@ -5948,7 +5965,7 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
                     }),
                     article: withCtx(({ article, day }, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<div class="archive-article" data-v-d2fab7e9${_scopeId3}><h4 class="title" data-v-d2fab7e9${_scopeId3}><span class="date" data-v-d2fab7e9${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-d2fab7e9${_scopeId3}>${ssrInterpolate(article.title)}</a></h4><p class="description" data-v-d2fab7e9${_scopeId3}>${article.description ?? ""}</p></div>`);
+                        _push4(`<div class="archive-article" data-v-0bf315c5${_scopeId3}><h4 class="title" data-v-0bf315c5${_scopeId3}><span class="date" data-v-0bf315c5${_scopeId3}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-0bf315c5${_scopeId3}>${ssrInterpolate(article.title)}</a></h4><p class="description" data-v-0bf315c5${_scopeId3}>${article.description ?? ""}</p></div>`);
                       } else {
                         return [
                           createVNode("div", { class: "archive-article" }, [
@@ -6090,7 +6107,7 @@ _sfc_main$1D.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/archive/mobile.vue");
   return _sfc_setup$1D ? _sfc_setup$1D(props, ctx) : void 0;
 };
-const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-d2fab7e9"]]);
+const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-0bf315c5"]]);
 const stringify = (object, sep = "&", eq = "=") => {
   let str = "";
   for (const k in object) {
@@ -6263,18 +6280,18 @@ const _sfc_main$1C = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-818b5430><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-85305efd><!--[-->`);
       ssrRenderList(enabledSocials.value, (social, index) => {
-        _push(`<button${ssrRenderAttr("title", "Share to: " + social.name)} class="${ssrRenderClass([social.class, "share-ejector"])}" data-v-818b5430><i class="${ssrRenderClass([`icon-${social.iconfont ?? social.class}`, "iconfont"])}" data-v-818b5430></i></button>`);
+        _push(`<button${ssrRenderAttr("title", "Share to: " + social.name)} class="${ssrRenderClass([social.class, "share-ejector"])}" data-v-85305efd><i class="${ssrRenderClass([`icon-${social.iconfont ?? social.class}`, "iconfont"])}" data-v-85305efd></i></button>`);
       });
       _push(`<!--]-->`);
       if (!props.disabledImageShare) {
-        _push(`<button class="share-ejector share-as-image" title="Share as image" data-v-818b5430><i class="iconfont icon-image-share" data-v-818b5430></i></button>`);
+        _push(`<button class="share-ejector share-as-image" title="Share as image" data-v-85305efd><i class="iconfont icon-image-share" data-v-85305efd></i></button>`);
       } else {
         _push(`<!---->`);
       }
       if (!props.disabledCopyLink) {
-        _push(`<button class="share-ejector copy-link" title="Copy link" data-v-818b5430><i class="iconfont icon-link" data-v-818b5430></i></button>`);
+        _push(`<button class="share-ejector copy-link" title="Copy link" data-v-85305efd><i class="iconfont icon-link" data-v-85305efd></i></button>`);
       } else {
         _push(`<!---->`);
       }
@@ -6285,10 +6302,10 @@ const _sfc_main$1C = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1C = _sfc_main$1C.setup;
 _sfc_main$1C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/share.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/share.vue");
   return _sfc_setup$1C ? _sfc_setup$1C(props, ctx) : void 0;
 };
-const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-818b5430"]]);
+const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-85305efd"]]);
 const getChatGPTShareURL = (conversationId) => {
   return `https://chat.openai.com/share/${conversationId}`;
 };
@@ -7757,9 +7774,9 @@ const _sfc_main$1q = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["pen", { bordered: _ctx.bordered }]
-      }, _attrs))} data-v-f4892eed><div class="editor" data-v-f4892eed><div class="input-wrapper"${ssrRenderAttr("data-replicated-value", content.value)} data-v-f4892eed><textarea class="editor-input" required${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrIncludeBooleanAttr(props.autoFocus) ? " autofocus" : ""}${ssrRenderAttr("minlength", unref(MIN_COMMENT_LENGTH))}${ssrRenderAttr("maxlength", unref(MAX_COMMENT_LENGTH))}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_PLACEHOLDER))} data-v-f4892eed></textarea></div>`);
+      }, _attrs))} data-v-8e1ea722><div class="editor" data-v-8e1ea722><div class="input-wrapper"${ssrRenderAttr("data-replicated-value", content.value)} data-v-8e1ea722><textarea class="editor-input" required${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""}${ssrIncludeBooleanAttr(props.autoFocus) ? " autofocus" : ""}${ssrRenderAttr("minlength", unref(MIN_COMMENT_LENGTH))}${ssrRenderAttr("maxlength", unref(MAX_COMMENT_LENGTH))}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).COMMENT_POST_PLACEHOLDER))} data-v-8e1ea722></textarea></div>`);
       if (isPreviewed.value) {
-        _push(`<div class="preview-content" data-v-f4892eed>`);
+        _push(`<div class="preview-content" data-v-8e1ea722>`);
         _push(ssrRenderComponent(_sfc_main$1z, {
           markdown: content.value,
           compact: true,
@@ -7769,15 +7786,15 @@ const _sfc_main$1q = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="pencilbox" data-v-f4892eed><div class="stationery" data-v-f4892eed>`);
+      _push(`</div><div class="pencilbox" data-v-8e1ea722><div class="stationery" data-v-8e1ea722>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "markdown",
         title: "markdown",
-        href: unref(VALUABLE_LINKS).MARKDOWN
+        href: unref(VALUABLE_LINKS).MARKDOWN_DOC
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-markdown" data-v-f4892eed${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-markdown" data-v-8e1ea722${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-markdown" })
@@ -7787,15 +7804,15 @@ const _sfc_main$1q = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (!_ctx.hiddenStationery) {
-        _push(`<!--[--><button class="emoji" title="emoji" type="button"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-f4892eed><i class="iconfont icon-emoji" data-v-f4892eed></i><div class="emoji-box" data-v-f4892eed><ul class="emoji-list" data-v-f4892eed><!--[-->`);
+        _push(`<!--[--><button class="emoji" title="emoji" type="button"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-8e1ea722><i class="iconfont icon-emoji" data-v-8e1ea722></i><div class="emoji-box" data-v-8e1ea722><ul class="emoji-list" data-v-8e1ea722><!--[-->`);
         ssrRenderList(unref(EMOJIS), (emoji, index) => {
-          _push(`<li class="item" data-v-f4892eed><span data-v-f4892eed>${ssrInterpolate(emoji)}</span></li>`);
+          _push(`<li class="item" data-v-8e1ea722><span data-v-8e1ea722>${ssrInterpolate(emoji)}</span></li>`);
         });
-        _push(`<!--]--></ul></div></button><button class="image" title="image"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-f4892eed><i class="iconfont icon-image" data-v-f4892eed></i></button><button class="link" title="link"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-f4892eed><i class="iconfont icon-link" data-v-f4892eed></i></button><button class="code" title="code"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-f4892eed><i class="iconfont icon-code" data-v-f4892eed></i></button><button title="preview" class="${ssrRenderClass([{ actived: isPreviewed.value }, "preview"])}"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-f4892eed><i class="${ssrRenderClass([isPreviewed.value ? "icon-eye-close" : "icon-eye", "iconfont"])}" data-v-f4892eed></i></button><!--]-->`);
+        _push(`<!--]--></ul></div></button><button class="image" title="image"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-8e1ea722><i class="iconfont icon-image" data-v-8e1ea722></i></button><button class="link" title="link"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-8e1ea722><i class="iconfont icon-link" data-v-8e1ea722></i></button><button class="code" title="code"${ssrIncludeBooleanAttr(_ctx.disabled || isPreviewed.value) ? " disabled" : ""} data-v-8e1ea722><i class="iconfont icon-code" data-v-8e1ea722></i></button><button title="preview" class="${ssrRenderClass([{ actived: isPreviewed.value }, "preview"])}"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-8e1ea722><i class="${ssrRenderClass([isPreviewed.value ? "icon-eye-close" : "icon-eye", "iconfont"])}" data-v-8e1ea722></i></button><!--]-->`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><button type="submit" class="submit"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-f4892eed>`);
+      _push(`</div><button type="submit" class="submit"${ssrIncludeBooleanAttr(_ctx.disabled) ? " disabled" : ""} data-v-8e1ea722>`);
       if (_ctx.posting) {
         _push(ssrRenderComponent(_component_i18n, {
           zh: "发布中...",
@@ -7851,7 +7868,7 @@ const _sfc_main$1q = /* @__PURE__ */ defineComponent({
           en: "Publish"
         }, null, _parent));
       }
-      _push(`<i class="iconfont icon-mail-plane" data-v-f4892eed></i></button></div></div>`);
+      _push(`<i class="iconfont icon-mail-plane" data-v-8e1ea722></i></button></div></div>`);
     };
   }
 });
@@ -7861,7 +7878,7 @@ _sfc_main$1q.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/publisher/pen.vue");
   return _sfc_setup$1q ? _sfc_setup$1q(props, ctx) : void 0;
 };
-const CommentPen = /* @__PURE__ */ _export_sfc(_sfc_main$1q, [["__scopeId", "data-v-f4892eed"]]);
+const CommentPen = /* @__PURE__ */ _export_sfc(_sfc_main$1q, [["__scopeId", "data-v-8e1ea722"]]);
 const _sfc_main$1p = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -7872,7 +7889,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { i18n, gState, route } = useEnhancer();
+    const { i18n, route, globalState } = useEnhancer();
     const identityStore = useIdentityStore();
     const commentStore = useCommentStore();
     const isPosting = computed(() => commentStore.posting);
@@ -7976,7 +7993,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
           pid: payload.pid,
           post_id: props.postId,
           content: payload.content,
-          agent: gState.userAgent.original,
+          agent: globalState.userAgent.original,
           author
         });
         if (isGuest) {
@@ -8050,7 +8067,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: COMMENT_ELEMENT_ID,
         class: ["comment-box", { plain: _ctx.plain }]
-      }, _attrs))} data-v-068832ad>`);
+      }, _attrs))} data-v-70c6e270>`);
       _push(ssrRenderComponent(CommentTopbar, {
         total: unref(commentStore).pagination?.total,
         loaded: unref(commentStore).comments.length,
@@ -8327,7 +8344,7 @@ _sfc_main$1p.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/index.vue");
   return _sfc_setup$1p ? _sfc_setup$1p(props, ctx) : void 0;
 };
-const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-068832ad"]]);
+const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-70c6e270"]]);
 const _sfc_main$1o = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -8599,7 +8616,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
       const _component_divider = resolveComponent("divider");
       const _component_uimage = resolveComponent("uimage");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-18691afc>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-5997731d>`);
       _push(ssrRenderComponent(Share, {
         class: "share",
         socials: props.socials,
@@ -8616,9 +8633,9 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-18691afc${_scopeId2}>`);
+                  _push3(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-5997731d${_scopeId2}>`);
                   if (!isRenderedShareImage.value) {
-                    _push3(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-18691afc${_scopeId2}><div class="content" data-v-18691afc${_scopeId2}><div class="header" data-v-18691afc${_scopeId2}><h1 class="title" data-v-18691afc${_scopeId2}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-18691afc${_scopeId2}>`);
+                    _push3(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-5997731d${_scopeId2}><div class="content" data-v-5997731d${_scopeId2}><div class="header" data-v-5997731d${_scopeId2}><h1 class="title" data-v-5997731d${_scopeId2}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-5997731d${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, {
                       zh: "发布于 ",
                       en: "Created at "
@@ -8656,11 +8673,11 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                       }
                     }, null, _parent3, _scopeId2));
                     if (isLongArticle.value) {
-                      _push3(`<div class="read-more-mask" data-v-18691afc${_scopeId2}></div>`);
+                      _push3(`<div class="read-more-mask" data-v-5997731d${_scopeId2}></div>`);
                     } else {
                       _push3(`<!---->`);
                     }
-                    _push3(`</div><div class="footer" data-v-18691afc${_scopeId2}><p class="tip" data-v-18691afc${_scopeId2}>`);
+                    _push3(`</div><div class="footer" data-v-5997731d${_scopeId2}><p class="tip" data-v-5997731d${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, {
                       zh: "长按识别二维码，阅读全文，参与评论",
                       en: "Long-press the QR code to read and discuss"
@@ -8683,7 +8700,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                     _push3(`<!---->`);
                   }
                   if (!isRenderedShareImage.value) {
-                    _push3(`<div class="share-rendering" data-v-18691afc${_scopeId2}>`);
+                    _push3(`<div class="share-rendering" data-v-5997731d${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_loading_indicator, {
                       width: "1.8rem",
                       height: "1.2rem"
@@ -8693,7 +8710,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                     _push3(`<!---->`);
                   }
                   if (isRenderedShareImage.value) {
-                    _push3(`<div class="share-image" data-v-18691afc${_scopeId2}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-18691afc${_scopeId2}></div>`);
+                    _push3(`<div class="share-image" data-v-5997731d${_scopeId2}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-5997731d${_scopeId2}></div>`);
                   } else {
                     _push3(`<!---->`);
                   }
@@ -8919,7 +8936,7 @@ _sfc_main$1m.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/share.vue");
   return _sfc_setup$1m ? _sfc_setup$1m(props, ctx) : void 0;
 };
-const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$1m, [["__scopeId", "data-v-18691afc"]]);
+const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$1m, [["__scopeId", "data-v-5997731d"]]);
 const _sfc_main$1l = /* @__PURE__ */ defineComponent({
   __name: "meta",
   __ssrInlineRender: true,
@@ -9519,7 +9536,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { i18n: _i18n, route, gState } = useEnhancer();
+    const { i18n: _i18n, route, globalState } = useEnhancer();
     const { identity, comment: commentStore, articleDetail: articleDetailStore } = useStores();
     const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore);
     const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)));
@@ -9533,7 +9550,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
     const handleCommentUsernameChatGPTClick = () => {
     };
     const handleSponsor = () => {
-      gState.toggleSwitcher("sponsor", true);
+      globalState.toggleSwitcher("sponsor", true);
     };
     const handleLike = async (callback) => {
       if (isLiked.value) {
@@ -9599,7 +9616,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-d284445e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-388bc2a3>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9619,14 +9636,14 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-d284445e${_scopeId}><div class="module margin background overflow" data-v-d284445e${_scopeId}>`);
+              _push2(`<div data-v-388bc2a3${_scopeId}><div class="module margin background overflow" data-v-388bc2a3${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-d284445e${_scopeId}></div>`);
+              _push2(`<div class="divider" data-v-388bc2a3${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9638,7 +9655,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
                       likes: unref(article).meta.likes,
                       "is-liked": isLiked.value,
                       "hidden-sponsor": _ctx.isMobile,
-                      "enabled-parkinson": !_ctx.isMobile && (unref(gState).userAgent.isChrome || unref(gState).userAgent.isFirefox),
+                      "enabled-parkinson": !_ctx.isMobile && (unref(globalState).userAgent.isChrome || unref(globalState).userAgent.isFirefox),
                       onLike: handleLike,
                       onSponsor: handleSponsor
                     }, null, _parent3, _scopeId2));
@@ -9648,7 +9665,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
                         likes: unref(article).meta.likes,
                         "is-liked": isLiked.value,
                         "hidden-sponsor": _ctx.isMobile,
-                        "enabled-parkinson": !_ctx.isMobile && (unref(gState).userAgent.isChrome || unref(gState).userAgent.isFirefox),
+                        "enabled-parkinson": !_ctx.isMobile && (unref(globalState).userAgent.isChrome || unref(globalState).userAgent.isFirefox),
                         onLike: handleLike,
                         onSponsor: handleSponsor
                       }, null, 8, ["likes", "is-liked", "hidden-sponsor", "enabled-parkinson"])
@@ -9657,19 +9674,19 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-d284445e${_scopeId}><div class="bridge left" data-v-d284445e${_scopeId}></div><div class="bridge right" data-v-d284445e${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-388bc2a3${_scopeId}><div class="bridge left" data-v-388bc2a3${_scopeId}></div><div class="bridge right" data-v-388bc2a3${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
                 "disabled-image-share": _ctx.isMobile,
                 socials: _ctx.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-d284445e${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-388bc2a3${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-d284445e${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-388bc2a3${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: _ctx.isMobile ? 2 : 3,
@@ -9701,7 +9718,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
                         likes: unref(article).meta.likes,
                         "is-liked": isLiked.value,
                         "hidden-sponsor": _ctx.isMobile,
-                        "enabled-parkinson": !_ctx.isMobile && (unref(gState).userAgent.isChrome || unref(gState).userAgent.isFirefox),
+                        "enabled-parkinson": !_ctx.isMobile && (unref(globalState).userAgent.isChrome || unref(globalState).userAgent.isFirefox),
                         onLike: handleLike,
                         onSponsor: handleSponsor
                       }, null, 8, ["likes", "is-liked", "hidden-sponsor", "enabled-parkinson"])
@@ -9739,7 +9756,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-d284445e>`);
+      _push(`<div class="comment" data-v-388bc2a3>`);
       _push(ssrRenderComponent(Comment, {
         plain: _ctx.isMobile,
         fetching: unref(fetching),
@@ -9756,7 +9773,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-d284445e${_scopeId2}></i>`);
+                    _push3(`<i class="iconfont icon-chat-gpt" data-v-388bc2a3${_scopeId2}></i>`);
                   } else {
                     return [
                       createVNode("i", { class: "iconfont icon-chat-gpt" })
@@ -9820,7 +9837,7 @@ _sfc_main$1g.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$1g ? _sfc_setup$1g(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$1g, [["__scopeId", "data-v-d284445e"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$1g, [["__scopeId", "data-v-388bc2a3"]]);
 const StatisticCount = defineComponent({
   name: "StatisticCount",
   props: {
@@ -11440,12 +11457,12 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "page-banner" }, _attrs))} data-v-ae039d30><div class="background" data-v-ae039d30><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""}${ssrRenderAttr("src", unref(getAssetURL)(unref(cdnDomain), "/videos/clips/ocean-1.mp4"))} data-v-ae039d30></video></div><div class="content" data-v-ae039d30><div class="fullwidth" data-v-ae039d30><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "profile"])}" data-v-ae039d30>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "page-banner" }, _attrs))} data-v-f3853f37><div class="background" data-v-f3853f37><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""}${ssrRenderAttr("src", unref(getAssetURL)(unref(cdnDomain), "/videos/clips/ocean-1.mp4"))} data-v-f3853f37></video></div><div class="content" data-v-f3853f37><div class="fullwidth" data-v-f3853f37><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "profile"])}" data-v-f3853f37>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "avatar",
         src: unref(useAdminAvatar)(unref(adminInfo).data?.avatar)
       }, null, _parent));
-      _push(`<div class="right" data-v-ae039d30><h1 class="name" data-v-ae039d30>${ssrInterpolate(unref(adminInfo).data?.name || "-")}</h1><p class="slogan" data-v-ae039d30>${ssrInterpolate(unref(adminInfo).data?.slogan || "-")}</p></div></div><p class="description" data-v-ae039d30>`);
+      _push(`<div class="right" data-v-f3853f37><h1 class="name" data-v-f3853f37>${ssrInterpolate(unref(adminInfo).data?.name || "-")}</h1><p class="slogan" data-v-f3853f37>${ssrInterpolate(unref(adminInfo).data?.slogan || "-")}</p></div></div><p class="description" data-v-f3853f37>`);
       _push(ssrRenderComponent(_component_webfont, { bolder: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -11458,7 +11475,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</p><div class="socials" data-v-ae039d30>`);
+      _push(`</p><div class="socials" data-v-f3853f37>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item icon-only instagram",
         title: "Instagram",
@@ -11466,7 +11483,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-instagram" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-instagram" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-instagram" })
@@ -11478,11 +11495,11 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_component_ulink, {
         class: "item icon-only threads",
         title: "Threads",
-        href: unref(VALUABLE_LINKS).THREADS_FOLLOW
+        href: unref(VALUABLE_LINKS).THREADS
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-threads" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-threads" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-threads" })
@@ -11497,7 +11514,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-ae039d30${_scopeId}></i><span class="text" data-v-ae039d30${_scopeId}>GitHub</span>`);
+            _push2(`<i class="iconfont icon-github" data-v-f3853f37${_scopeId}></i><span class="text" data-v-f3853f37${_scopeId}>GitHub</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" }),
@@ -11514,7 +11531,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-youtube" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-youtube" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-youtube" })
@@ -11530,7 +11547,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-telegram" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-telegram" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-telegram" })
@@ -11539,7 +11556,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="item icon-only wechat" title="WeChat" data-v-ae039d30><i class="iconfont icon-wechat" data-v-ae039d30></i>`);
+      _push(`<button class="item icon-only wechat" title="WeChat" data-v-f3853f37><i class="iconfont icon-wechat" data-v-f3853f37></i>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -11550,13 +11567,13 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="qrcode-modal wechat" data-v-ae039d30${_scopeId2}><div class="background" data-v-ae039d30${_scopeId2}></div>`);
+                  _push3(`<div class="qrcode-modal wechat" data-v-f3853f37${_scopeId2}><div class="background" data-v-f3853f37${_scopeId2}></div>`);
                   _push3(ssrRenderComponent(_component_uimage, {
                     class: "image",
                     cdn: "",
                     src: "/images/qrcodes/wechat.webp"
                   }, null, _parent3, _scopeId2));
-                  _push3(`<span class="text" data-v-ae039d30${_scopeId2}>`);
+                  _push3(`<span class="text" data-v-f3853f37${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, null, {
                     en: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
@@ -11648,7 +11665,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-linkedin" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-linkedin" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-linkedin" })
@@ -11664,7 +11681,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-zhihu" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-zhihu" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-zhihu" })
@@ -11680,7 +11697,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-douban" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-douban" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-douban" })
@@ -11696,7 +11713,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-mail" data-v-ae039d30${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-mail" data-v-f3853f37${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-mail" })
@@ -11705,7 +11722,7 @@ const _sfc_main$13 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="container" data-v-ae039d30><p class="biography" data-v-ae039d30>${(unref(isZhLang) ? unref(i18ns).biography.zh : unref(i18ns).biography.en) ?? ""}</p></div></div></div>`);
+      _push(`</div></div><div class="container" data-v-f3853f37><p class="biography" data-v-f3853f37>${(unref(isZhLang) ? unref(i18ns).biography.zh : unref(i18ns).biography.en) ?? ""}</p></div></div></div>`);
     };
   }
 });
@@ -11715,23 +11732,23 @@ _sfc_main$13.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/banner.vue");
   return _sfc_setup$13 ? _sfc_setup$13(props, ctx) : void 0;
 };
-const AboutPageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-ae039d30"]]);
+const AboutPageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$13, [["__scopeId", "data-v-f3853f37"]]);
 const _sfc_main$12 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
   setup(__props) {
-    const { gState } = useEnhancer();
+    const { globalState } = useEnhancer();
     const { adminInfo, appOption } = useStores();
     const handleGTagEvent = (event) => {
     };
     const handleSponsor = () => {
-      gState.toggleSwitcher("sponsor", true);
+      globalState.toggleSwitcher("sponsor", true);
     };
     const handleStatement = () => {
-      gState.toggleSwitcher("statement", true);
+      globalState.toggleSwitcher("statement", true);
     };
     const handleFeedback = () => {
-      gState.toggleSwitcher("feedback", true);
+      globalState.toggleSwitcher("feedback", true);
     };
     useAboutPageMeta();
     useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]));
@@ -11815,12 +11832,12 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
       const _component_container = resolveComponent("container");
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-5cd6994a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-8532364d>`);
       _push(ssrRenderComponent(AboutPageBanner, { onGTagEvent: handleGTagEvent }, null, _parent));
       _push(ssrRenderComponent(_component_container, { class: "page-content" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-buttons" data-v-5cd6994a${_scopeId}><!--[-->`);
+            _push2(`<div class="module-buttons" data-v-8532364d${_scopeId}><!--[-->`);
             ssrRenderList(moduleButtons, (item, index) => {
               ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(item.onClick ? "button" : "ulink"), {
                 class: ["item", item.class],
@@ -11830,9 +11847,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span class="left" data-v-5cd6994a${_scopeId2}><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-5cd6994a${_scopeId2}></i><span class="text" data-v-5cd6994a${_scopeId2}>`);
+                    _push3(`<span class="left" data-v-8532364d${_scopeId2}><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-8532364d${_scopeId2}></i><span class="text" data-v-8532364d${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, mergeProps({ ref_for: true }, item.i18n), null, _parent3, _scopeId2));
-                    _push3(`</span></span><span class="right" data-v-5cd6994a${_scopeId2}><i class="iconfont icon-next" data-v-5cd6994a${_scopeId2}></i></span>`);
+                    _push3(`</span></span><span class="right" data-v-8532364d${_scopeId2}><i class="iconfont icon-next" data-v-8532364d${_scopeId2}></i></span>`);
                   } else {
                     return [
                       createVNode("span", { class: "left" }, [
@@ -11852,20 +11869,20 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
                 _: 2
               }), _parent2, _scopeId);
             });
-            _push2(`<!--]--></div><div class="statistics" data-v-5cd6994a${_scopeId}>`);
+            _push2(`<!--]--></div><div class="statistics" data-v-8532364d${_scopeId}>`);
             _push2(ssrRenderComponent(_sfc_main$1d, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(NpmStatistic, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$1c, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$1b, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="plogs" data-v-5cd6994a${_scopeId}>`);
+            _push2(`</div><div class="plogs" data-v-8532364d${_scopeId}>`);
             _push2(ssrRenderComponent(InstagramMedia, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="vlogs" data-v-5cd6994a${_scopeId}>`);
+            _push2(`</div><div class="vlogs" data-v-8532364d${_scopeId}>`);
             _push2(ssrRenderComponent(YoutubeMedia, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="footprint" data-v-5cd6994a${_scopeId}>`);
+            _push2(`</div><div class="footprint" data-v-8532364d${_scopeId}>`);
             _push2(ssrRenderComponent(FootprintMap, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="calendar" data-v-5cd6994a${_scopeId}>`);
+            _push2(`</div><div class="calendar" data-v-8532364d${_scopeId}>`);
             _push2(ssrRenderComponent(AggregateCalendar, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="footer-links" data-v-5cd6994a${_scopeId}><div class="friend-links" data-v-5cd6994a${_scopeId}><!--[-->`);
+            _push2(`</div><div class="footer-links" data-v-8532364d${_scopeId}><div class="friend-links" data-v-8532364d${_scopeId}><!--[-->`);
             ssrRenderList(unref(appOption).data?.friend_links || [], (link, index) => {
               _push2(`<!--[-->`);
               if (index !== 0) {
@@ -11876,9 +11893,9 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<a${ssrRenderAttr("href", link.value)} class="item" target="_blank" rel="external nofollow noopener" data-v-5cd6994a${_scopeId}>${ssrInterpolate(link.name)}</a><!--]-->`);
+              _push2(`<a${ssrRenderAttr("href", link.value)} class="item" target="_blank" rel="external nofollow noopener" data-v-8532364d${_scopeId}>${ssrInterpolate(link.name)}</a><!--]-->`);
             });
-            _push2(`<!--]--></div><div class="special-links" data-v-5cd6994a${_scopeId}><!--[-->`);
+            _push2(`<!--]--></div><div class="special-links" data-v-8532364d${_scopeId}><!--[-->`);
             ssrRenderList(unref(specialLinks), (item, index) => {
               _push2(`<!--[-->`);
               if (index !== 0) {
@@ -11889,7 +11906,7 @@ const _sfc_main$12 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!---->`);
               }
-              _push2(`<a${ssrRenderAttr("href", item.url)} class="item" target="_blank" rel="external nofollow noopener" data-v-5cd6994a${_scopeId}>${ssrInterpolate(item.name)}</a><!--]-->`);
+              _push2(`<a${ssrRenderAttr("href", item.url)} class="item" target="_blank" rel="external nofollow noopener" data-v-8532364d${_scopeId}>${ssrInterpolate(item.name)}</a><!--]-->`);
             });
             _push2(`<!--]--></div></div>`);
           } else {
@@ -11989,7 +12006,7 @@ _sfc_main$12.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/index.vue");
   return _sfc_setup$12 ? _sfc_setup$12(props, ctx) : void 0;
 };
-const DesktopAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-5cd6994a"]]);
+const DesktopAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$12, [["__scopeId", "data-v-8532364d"]]);
 const _sfc_main$11 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -12004,7 +12021,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       const _component_webfont = resolveComponent("webfont");
       const _component_ulink = resolveComponent("ulink");
       const _component_router_link = resolveComponent("router-link");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-d1e111f9>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "about-page" }, _attrs))} data-v-7c7db43d>`);
       _push(ssrRenderComponent(PageBanner, {
         "is-mobile": true,
         image: "/images/page-about/banner-mobile.webp",
@@ -12026,12 +12043,12 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="profile" data-v-d1e111f9><div class="avatar" data-v-d1e111f9>`);
+      _push(`<div class="profile" data-v-7c7db43d><div class="avatar" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "image",
         src: unref(useAdminAvatar)(unref(adminInfo).data?.avatar)
       }, null, _parent));
-      _push(`</div><h2 class="name" data-v-d1e111f9>${ssrInterpolate(unref(adminInfo).data?.name || "-")}</h2><h5 class="slogan" data-v-d1e111f9>${ssrInterpolate(unref(adminInfo).data?.slogan || "-")}</h5><h4 class="description" data-v-d1e111f9>`);
+      _push(`</div><h2 class="name" data-v-7c7db43d>${ssrInterpolate(unref(adminInfo).data?.name || "-")}</h2><h5 class="slogan" data-v-7c7db43d>${ssrInterpolate(unref(adminInfo).data?.slogan || "-")}</h5><h4 class="description" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_webfont, { bolder: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -12044,14 +12061,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</h4><div class="socials" data-v-d1e111f9>`);
+      _push(`</h4><div class="socials" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item github",
         href: unref(VALUABLE_LINKS).GITHUB
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-github" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" })
@@ -12066,7 +12083,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-instagram" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-instagram" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-instagram" })
@@ -12077,11 +12094,11 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, _parent));
       _push(ssrRenderComponent(_component_ulink, {
         class: "item threads",
-        href: unref(VALUABLE_LINKS).THREADS_FOLLOW
+        href: unref(VALUABLE_LINKS).THREADS
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-threads" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-threads" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-threads" })
@@ -12096,7 +12113,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-telegram" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-telegram" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-telegram" })
@@ -12111,7 +12128,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-zhihu" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-zhihu" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-zhihu" })
@@ -12126,7 +12143,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-douban" data-v-d1e111f9${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-douban" data-v-7c7db43d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-douban" })
@@ -12135,14 +12152,14 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="biography" data-v-d1e111f9><div class="bridge left" data-v-d1e111f9></div><div class="bridge right" data-v-d1e111f9></div><p class="content" data-v-d1e111f9>${(unref(isZhLang) ? unref(i18ns).biography.zh : unref(i18ns).biography.en) ?? ""}</p></div><div class="buttons" data-v-d1e111f9>`);
+      _push(`</div></div><div class="biography" data-v-7c7db43d><div class="bridge left" data-v-7c7db43d></div><div class="bridge right" data-v-7c7db43d></div><p class="content" data-v-7c7db43d>${(unref(isZhLang) ? unref(i18ns).biography.zh : unref(i18ns).biography.en) ?? ""}</p></div><div class="buttons" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "item",
         to: unref(getPageRoute)(unref(RouteName).Archive)
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-quill" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-quill" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).archive, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12162,7 +12179,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-buddhism" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-buddhism" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).snippets, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12182,7 +12199,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-comment" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-comment" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).guestbook, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12202,7 +12219,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-discord" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-discord" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).discordGroup, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12222,7 +12239,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-telegram" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-telegram" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).telegramGroup, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12242,7 +12259,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-rss" data-v-d1e111f9${_scopeId}></i><span class="label" data-v-d1e111f9${_scopeId}>`);
+            _push2(`<i class="iconfont icon-rss" data-v-7c7db43d${_scopeId}></i><span class="label" data-v-7c7db43d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, unref(i18ns).rss, null, _parent2, _scopeId));
             _push2(`</span>`);
           } else {
@@ -12256,13 +12273,13 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><div class="qrcodes" data-v-d1e111f9><div class="item" data-v-d1e111f9>`);
+      _push(`</div><div class="qrcodes" data-v-7c7db43d><div class="item" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         class: "image",
         src: "/images/qrcodes/whatsapp.webp"
       }, null, _parent));
-      _push(`</div><div class="item" data-v-d1e111f9>`);
+      _push(`</div><div class="item" data-v-7c7db43d>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         class: "image",
@@ -12278,7 +12295,7 @@ _sfc_main$11.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/mobile/index.vue");
   return _sfc_setup$11 ? _sfc_setup$11(props, ctx) : void 0;
 };
-const MobileAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-d1e111f9"]]);
+const MobileAboutPage = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-7c7db43d"]]);
 const bannerImage = `/images/page-guestbook/banner.webp`;
 const _sfc_main$10 = /* @__PURE__ */ defineComponent({
   __name: "guestbook",
@@ -12332,17 +12349,17 @@ const _sfc_main$10 = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-c9674ca7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-aac3f7ed>`);
       _push(ssrRenderComponent(_component_responsive, null, {
         desktop: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="desktop-banner" data-v-c9674ca7${_scopeId}>`);
+            _push2(`<div class="desktop-banner" data-v-aac3f7ed${_scopeId}>`);
             _push2(ssrRenderComponent(_component_uimage, {
               class: "image",
               src: bannerImage,
               cdn: ""
             }, null, _parent2, _scopeId));
-            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-c9674ca7${_scopeId}><i class="icon iconfont icon-heart" data-v-c9674ca7${_scopeId}></i><span class="count" data-v-c9674ca7${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-c9674ca7${_scopeId}>`);
+            _push2(`<button class="${ssrRenderClass([{ liked: isLiked.value }, "like"])}"${ssrIncludeBooleanAttr(isLiked.value) ? " disabled" : ""} data-v-aac3f7ed${_scopeId}><i class="icon iconfont icon-heart" data-v-aac3f7ed${_scopeId}></i><span class="count" data-v-aac3f7ed${_scopeId}>${ssrInterpolate(isLiked.value ? `${siteLikes.value - 1} + 1` : siteLikes.value)}</span></button><span class="slogan" data-v-aac3f7ed${_scopeId}>`);
             _push2(ssrRenderComponent(_component_webfont, { class: "text" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
@@ -12453,7 +12470,7 @@ const _sfc_main$10 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-c9674ca7>`);
+      _push(`<div class="comment" data-v-aac3f7ed>`);
       _push(ssrRenderComponent(Comment, {
         "post-id": 0,
         plain: props.isMobile,
@@ -12469,7 +12486,7 @@ _sfc_main$10.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/guestbook.vue");
   return _sfc_setup$10 ? _sfc_setup$10(props, ctx) : void 0;
 };
-const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["__scopeId", "data-v-c9674ca7"]]);
+const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["__scopeId", "data-v-aac3f7ed"]]);
 const APP_LOGO_URL = "/images/page-app/logo.png";
 const _sfc_main$$ = /* @__PURE__ */ defineComponent({
   __name: "app",
@@ -12703,9 +12720,9 @@ const _sfc_main$_ = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["sponsor-tabs", _ctx.state.activeId]
-      }, _attrs))} data-v-2a7c1b99><!--[-->`);
+      }, _attrs))} data-v-706f35ac><!--[-->`);
       ssrRenderList(unref(PROVIDERS), (provider, index) => {
-        _push(`<button class="${ssrRenderClass([[provider.id, { active: _ctx.state.activeId.value === provider.id }], "item"])}"${ssrRenderAttr("title", provider.title)} data-v-2a7c1b99><span class="logo" data-v-2a7c1b99>`);
+        _push(`<button class="${ssrRenderClass([[provider.id, { active: _ctx.state.activeId.value === provider.id }], "item"])}"${ssrRenderAttr("title", provider.title)} data-v-706f35ac><span class="logo" data-v-706f35ac>`);
         _push(ssrRenderComponent(_component_uimage, {
           class: "image",
           alt: provider.title,
@@ -12714,7 +12731,7 @@ const _sfc_main$_ = /* @__PURE__ */ defineComponent({
         }, null, _parent));
         _push(`</span>`);
         if (!_ctx.hideTitle) {
-          _push(`<span class="title" data-v-2a7c1b99>${ssrInterpolate(provider.title)}</span>`);
+          _push(`<span class="title" data-v-706f35ac>${ssrInterpolate(provider.title)}</span>`);
         } else {
           _push(`<!---->`);
         }
@@ -12727,10 +12744,10 @@ const _sfc_main$_ = /* @__PURE__ */ defineComponent({
 const _sfc_setup$_ = _sfc_main$_.setup;
 _sfc_main$_.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/tabs.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/tabs.vue");
   return _sfc_setup$_ ? _sfc_setup$_(props, ctx) : void 0;
 };
-const SponsorTabs = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["__scopeId", "data-v-2a7c1b99"]]);
+const SponsorTabs = /* @__PURE__ */ _export_sfc(_sfc_main$_, [["__scopeId", "data-v-706f35ac"]]);
 const _sfc_main$Z = /* @__PURE__ */ defineComponent({
   __name: "_crypto",
   __ssrInlineRender: true,
@@ -12742,17 +12759,17 @@ const _sfc_main$Z = /* @__PURE__ */ defineComponent({
     const props = __props;
     useEnhancer();
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "crypto-provider" }, _attrs))} data-v-19b8d90b><code class="address" data-v-19b8d90b>${ssrInterpolate(props.address)}</code><i class="iconfont icon-qrcode" data-v-19b8d90b></i></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "crypto-provider" }, _attrs))} data-v-686dab3f><code class="address" data-v-686dab3f>${ssrInterpolate(props.address)}</code><i class="iconfont icon-qrcode" data-v-686dab3f></i></div>`);
     };
   }
 });
 const _sfc_setup$Z = _sfc_main$Z.setup;
 _sfc_main$Z.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/_crypto.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/_crypto.vue");
   return _sfc_setup$Z ? _sfc_setup$Z(props, ctx) : void 0;
 };
-const CryptoProvider = /* @__PURE__ */ _export_sfc(_sfc_main$Z, [["__scopeId", "data-v-19b8d90b"]]);
+const CryptoProvider = /* @__PURE__ */ _export_sfc(_sfc_main$Z, [["__scopeId", "data-v-686dab3f"]]);
 const _sfc_main$Y = /* @__PURE__ */ defineComponent({
   __name: "_qrcode",
   __ssrInlineRender: true,
@@ -12763,13 +12780,13 @@ const _sfc_main$Y = /* @__PURE__ */ defineComponent({
     const props = __props;
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "qrcode-provider" }, _attrs))} data-v-d981bc2e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "qrcode-provider" }, _attrs))} data-v-0c3e2eef>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "qrcode",
         src: props.qrcode,
         cdn: ""
       }, null, _parent));
-      _push(`<div class="content" data-v-d981bc2e>`);
+      _push(`<div class="content" data-v-0c3e2eef>`);
       ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`</div></div>`);
     };
@@ -12778,10 +12795,10 @@ const _sfc_main$Y = /* @__PURE__ */ defineComponent({
 const _sfc_setup$Y = _sfc_main$Y.setup;
 _sfc_main$Y.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/_qrcode.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/_qrcode.vue");
   return _sfc_setup$Y ? _sfc_setup$Y(props, ctx) : void 0;
 };
-const QrcodeProvider = /* @__PURE__ */ _export_sfc(_sfc_main$Y, [["__scopeId", "data-v-d981bc2e"]]);
+const QrcodeProvider = /* @__PURE__ */ _export_sfc(_sfc_main$Y, [["__scopeId", "data-v-0c3e2eef"]]);
 const _sfc_main$X = /* @__PURE__ */ defineComponent({
   __name: "paypal",
   __ssrInlineRender: true,
@@ -12805,7 +12822,7 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-link" data-v-31fe0dfa${_scopeId2}></i>`);
+                  _push3(`<i class="iconfont icon-link" data-v-ea9fdc4e${_scopeId2}></i>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-link" })
@@ -12836,10 +12853,10 @@ const _sfc_main$X = /* @__PURE__ */ defineComponent({
 const _sfc_setup$X = _sfc_main$X.setup;
 _sfc_main$X.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/paypal.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/paypal.vue");
   return _sfc_setup$X ? _sfc_setup$X(props, ctx) : void 0;
 };
-const PaypalProvider = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["__scopeId", "data-v-31fe0dfa"]]);
+const PaypalProvider = /* @__PURE__ */ _export_sfc(_sfc_main$X, [["__scopeId", "data-v-ea9fdc4e"]]);
 const _sfc_main$W = /* @__PURE__ */ defineComponent({
   __name: "alipay",
   __ssrInlineRender: true,
@@ -12856,7 +12873,7 @@ const _sfc_main$W = /* @__PURE__ */ defineComponent({
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="text" data-v-23e703c4${_scopeId}><i class="iconfont icon-qrcode" data-v-23e703c4${_scopeId}></i><span data-v-23e703c4${_scopeId}>${ssrInterpolate(props.text)}</span></div>`);
+            _push2(`<div class="text" data-v-0ee50abf${_scopeId}><i class="iconfont icon-qrcode" data-v-0ee50abf${_scopeId}></i><span data-v-0ee50abf${_scopeId}>${ssrInterpolate(props.text)}</span></div>`);
           } else {
             return [
               createVNode("div", { class: "text" }, [
@@ -12874,10 +12891,10 @@ const _sfc_main$W = /* @__PURE__ */ defineComponent({
 const _sfc_setup$W = _sfc_main$W.setup;
 _sfc_main$W.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/alipay.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/alipay.vue");
   return _sfc_setup$W ? _sfc_setup$W(props, ctx) : void 0;
 };
-const AlipayProvider = /* @__PURE__ */ _export_sfc(_sfc_main$W, [["__scopeId", "data-v-23e703c4"]]);
+const AlipayProvider = /* @__PURE__ */ _export_sfc(_sfc_main$W, [["__scopeId", "data-v-0ee50abf"]]);
 const _sfc_main$V = /* @__PURE__ */ defineComponent({
   __name: "wechat-pay",
   __ssrInlineRender: true,
@@ -12894,7 +12911,7 @@ const _sfc_main$V = /* @__PURE__ */ defineComponent({
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="text" data-v-048a6728${_scopeId}><i class="iconfont icon-qrcode" data-v-048a6728${_scopeId}></i><span data-v-048a6728${_scopeId}>${ssrInterpolate(props.text)}</span></div>`);
+            _push2(`<div class="text" data-v-d4191234${_scopeId}><i class="iconfont icon-qrcode" data-v-d4191234${_scopeId}></i><span data-v-d4191234${_scopeId}>${ssrInterpolate(props.text)}</span></div>`);
           } else {
             return [
               createVNode("div", { class: "text" }, [
@@ -12912,10 +12929,10 @@ const _sfc_main$V = /* @__PURE__ */ defineComponent({
 const _sfc_setup$V = _sfc_main$V.setup;
 _sfc_main$V.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/wechat-pay.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/wechat-pay.vue");
   return _sfc_setup$V ? _sfc_setup$V(props, ctx) : void 0;
 };
-const WechatpayProvider = /* @__PURE__ */ _export_sfc(_sfc_main$V, [["__scopeId", "data-v-048a6728"]]);
+const WechatpayProvider = /* @__PURE__ */ _export_sfc(_sfc_main$V, [["__scopeId", "data-v-d4191234"]]);
 const _sfc_main$U = /* @__PURE__ */ defineComponent({
   __name: "github-sponsors",
   __ssrInlineRender: true,
@@ -12944,7 +12961,7 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "github-sponsors" }, _attrs))} data-v-bf198f46>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "github-sponsors" }, _attrs))} data-v-e44b15d6>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "link",
         href: unref(VALUABLE_LINKS).GITHUB_SPONSORS
@@ -12956,7 +12973,7 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
               src: "/images/third-party/github-sponsors-heart.svg",
               alt: "GitHub Sponsors"
             }, null, _parent2, _scopeId));
-            _push2(`<span class="text" data-v-bf198f46${_scopeId}>`);
+            _push2(`<span class="text" data-v-e44b15d6${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               en: "Sponsor me on GitHub",
               zh: "通过 GitHub Sponsor 赞助我"
@@ -12981,11 +12998,11 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (props.listData && allSponsors.value.length) {
-        _push(`<div class="sponsor-box" data-v-bf198f46><p class="total" data-v-bf198f46>`);
+        _push(`<div class="sponsor-box" data-v-e44b15d6><p class="total" data-v-e44b15d6>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` 我在 GitHub Sponsors 累计已得到 <span class="active-total" data-v-bf198f46${_scopeId}>${ssrInterpolate(props.listData.currentSponsors.length)}</span> + ${ssrInterpolate(props.listData.pastSponsors.length)} 位赞助者的支持 `);
+              _push2(` 我在 GitHub Sponsors 累计已得到 <span class="active-total" data-v-e44b15d6${_scopeId}>${ssrInterpolate(props.listData.currentSponsors.length)}</span> + ${ssrInterpolate(props.listData.pastSponsors.length)} 位赞助者的支持 `);
             } else {
               return [
                 createTextVNode(" 我在 GitHub Sponsors 累计已得到 "),
@@ -12996,7 +13013,7 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
           }),
           en: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` I have accumulated <span class="active-total" data-v-bf198f46${_scopeId}>${ssrInterpolate(props.listData.currentSponsors.length)}</span> + ${ssrInterpolate(props.listData.pastSponsors.length)} backers on GitHub Sponsors `);
+              _push2(` I have accumulated <span class="active-total" data-v-e44b15d6${_scopeId}>${ssrInterpolate(props.listData.currentSponsors.length)}</span> + ${ssrInterpolate(props.listData.pastSponsors.length)} backers on GitHub Sponsors `);
             } else {
               return [
                 createTextVNode(" I have accumulated "),
@@ -13007,7 +13024,7 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
           }),
           _: 1
         }, _parent));
-        _push(`</p><div class="sponsors" data-v-bf198f46><!--[-->`);
+        _push(`</p><div class="sponsors" data-v-e44b15d6><!--[-->`);
         ssrRenderList(allSponsors.value.slice(0, props.maxCount), ({ _: item, active }, index) => {
           _push(ssrRenderComponent(_component_ulink, {
             href: item.url,
@@ -13066,10 +13083,10 @@ const _sfc_main$U = /* @__PURE__ */ defineComponent({
 const _sfc_setup$U = _sfc_main$U.setup;
 _sfc_main$U.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/providers/github-sponsors.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/providers/github-sponsors.vue");
   return _sfc_setup$U ? _sfc_setup$U(props, ctx) : void 0;
 };
-const GithubSponsorsProvider = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-bf198f46"]]);
+const GithubSponsorsProvider = /* @__PURE__ */ _export_sfc(_sfc_main$U, [["__scopeId", "data-v-e44b15d6"]]);
 const _sfc_main$T = /* @__PURE__ */ defineComponent({
   __name: "provider",
   __ssrInlineRender: true,
@@ -13084,7 +13101,7 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["sponsor-provider", activeProvider.value.id]
-      }, _attrs))} data-v-7ff5f144>`);
+      }, _attrs))} data-v-8f352464>`);
       if (activeProvider.value.id == unref(ProviderId).GitHub) {
         _push(ssrRenderComponent(GithubSponsorsProvider, {
           "list-data": props.githubSponsorsData,
@@ -13140,10 +13157,10 @@ const _sfc_main$T = /* @__PURE__ */ defineComponent({
 const _sfc_setup$T = _sfc_main$T.setup;
 _sfc_main$T.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/sponsor/provider.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/sponsor/provider.vue");
   return _sfc_setup$T ? _sfc_setup$T(props, ctx) : void 0;
 };
-const SponsorProvider = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-7ff5f144"]]);
+const SponsorProvider = /* @__PURE__ */ _export_sfc(_sfc_main$T, [["__scopeId", "data-v-8f352464"]]);
 const _sfc_main$S = /* @__PURE__ */ defineComponent({
   __name: "sponsor",
   __ssrInlineRender: true,
@@ -13169,7 +13186,7 @@ const _sfc_main$S = /* @__PURE__ */ defineComponent({
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
       const _component_container = resolveComponent("container");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "sponsor-page" }, _attrs))} data-v-9fc559d7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "sponsor-page" }, _attrs))} data-v-623cad12>`);
       _push(ssrRenderComponent(PageBanner, {
         image: "/images/page-sponsor/banner.webp",
         cdn: ""
@@ -13225,7 +13242,7 @@ const _sfc_main$S = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-content" data-v-9fc559d7>`);
+      _push(`<div class="page-content" data-v-623cad12>`);
       _push(ssrRenderComponent(_component_container, { class: "tabs-wrapper" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -13259,7 +13276,7 @@ _sfc_main$S.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/sponsor.vue");
   return _sfc_setup$S ? _sfc_setup$S(props, ctx) : void 0;
 };
-const SponsorPage = /* @__PURE__ */ _export_sfc(_sfc_main$S, [["__scopeId", "data-v-9fc559d7"]]);
+const SponsorPage = /* @__PURE__ */ _export_sfc(_sfc_main$S, [["__scopeId", "data-v-623cad12"]]);
 const _sfc_main$R = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -13713,7 +13730,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_container = resolveComponent("container");
       const _component_empty = resolveComponent("empty");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube-page" }, _attrs))} data-v-eef432df>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube-page" }, _attrs))} data-v-6e6359e8>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/lake-1.mp4",
@@ -13756,7 +13773,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-eef432df${_scopeId}>`);
+            _push2(`<div class="links" data-v-6e6359e8${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item youtube",
               title: "YouTube Channel",
@@ -13764,7 +13781,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-eef432df${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span>`);
+                  _push3(`<span class="username" data-v-6e6359e8${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1)
@@ -13797,11 +13814,11 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_component_container, { class: "page-content" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-content" data-v-eef432df${_scopeId}>`);
+            _push2(`<div class="module-content" data-v-6e6359e8${_scopeId}>`);
             _push2(ssrRenderComponent(YoutubePlaylist, { playlists: youtubePlaylistData.value }, {
               title: withCtx(({ list }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<h4 class="module-title youtube" data-v-eef432df${_scopeId2}>`);
+                  _push3(`<h4 class="module-title youtube" data-v-6e6359e8${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_ulink, {
                     class: "link",
                     href: unref(getYouTubePlaylistURL)(list.id)
@@ -13823,7 +13840,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_2, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<i class="iconfont icon-youtube" data-v-eef432df${_scopeId3}></i><span class="text" data-v-eef432df${_scopeId3}>YouTube · Channel</span>`);
+                        _push4(`<i class="iconfont icon-youtube" data-v-6e6359e8${_scopeId3}></i><span class="text" data-v-6e6359e8${_scopeId3}>YouTube · Channel</span>`);
                       } else {
                         return [
                           createVNode("i", { class: "iconfont icon-youtube" }),
@@ -13988,7 +14005,7 @@ _sfc_main$N.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/youtube/index.vue");
   return _sfc_setup$N ? _sfc_setup$N(props, ctx) : void 0;
 };
-const YoutubePage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-eef432df"]]);
+const YoutubePage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-6e6359e8"]]);
 const _sfc_main$M = /* @__PURE__ */ defineComponent({
   __name: "album",
   __ssrInlineRender: true,
@@ -14350,7 +14367,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_base = resolveComponent("skeleton-base");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-6e1b32bf>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-3cc2724e>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/ocean-5.mp4",
@@ -14393,7 +14410,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-6e1b32bf${_scopeId}>`);
+            _push2(`<div class="links" data-v-3cc2724e${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item instagram",
               title: "Instagram",
@@ -14401,7 +14418,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-6e1b32bf${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
+                  _push3(`<span class="username" data-v-3cc2724e${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, "@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME), 1)
@@ -14422,7 +14439,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-xiaohongshu" data-v-6e1b32bf${_scopeId2}></i>`);
+                  _push3(`<i class="iconfont icon-xiaohongshu" data-v-3cc2724e${_scopeId2}></i>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-xiaohongshu" })
@@ -14513,9 +14530,9 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-6e1b32bf${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-3cc2724e${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-6e1b32bf${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-3cc2724e${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -14540,7 +14557,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-6e1b32bf${_scopeId2}>`);
+                  _push3(`<div data-v-3cc2724e${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramLatestMedias).fetching && !finished.value) {
                     _push3(ssrRenderComponent(Loadmore, {
@@ -14550,7 +14567,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
                     }, {
                       normal: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<button class="normal" data-v-6e1b32bf${_scopeId3}><i class="iconfont icon-loadmore" data-v-6e1b32bf${_scopeId3}></i></button>`);
+                          _push4(`<button class="normal" data-v-3cc2724e${_scopeId3}><i class="iconfont icon-loadmore" data-v-3cc2724e${_scopeId3}></i></button>`);
                         } else {
                           return [
                             createVNode("button", {
@@ -14701,7 +14718,7 @@ _sfc_main$J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$J ? _sfc_setup$J(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-6e1b32bf"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-3cc2724e"]]);
 const _sfc_main$I = /* @__PURE__ */ defineComponent({
   __name: "masonry-wall",
   __ssrInlineRender: true,
@@ -14988,7 +15005,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-08bbc167>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-4aa3ad8c>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/forest-1.mp4",
@@ -15022,7 +15039,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-08bbc167${_scopeId}>`);
+            _push2(`<div class="links" data-v-4aa3ad8c${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item threads",
               title: "Threads",
@@ -15030,7 +15047,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-08bbc167${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
+                  _push3(`<span class="username" data-v-4aa3ad8c${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, "@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME), 1)
@@ -15051,7 +15068,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-zhihu-full" data-v-08bbc167${_scopeId2}></i>`);
+                  _push3(`<i class="iconfont icon-zhihu-full" data-v-4aa3ad8c${_scopeId2}></i>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-zhihu-full" })
@@ -15142,11 +15159,11 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="data-loading" data-v-08bbc167${_scopeId2}><!--[-->`);
+                  _push3(`<div class="data-loading" data-v-4aa3ad8c${_scopeId2}><!--[-->`);
                   ssrRenderList(3 * 3, (item) => {
-                    _push3(`<div class="item" data-v-08bbc167${_scopeId2}><!--[-->`);
+                    _push3(`<div class="item" data-v-4aa3ad8c${_scopeId2}><!--[-->`);
                     ssrRenderList(3, (i) => {
-                      _push3(`<div class="item-skeleton" data-v-08bbc167${_scopeId2}>`);
+                      _push3(`<div class="item-skeleton" data-v-4aa3ad8c${_scopeId2}>`);
                       _push3(ssrRenderComponent(_component_skeleton_line, null, null, _parent3, _scopeId2));
                       _push3(`</div>`);
                     });
@@ -15180,7 +15197,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-08bbc167${_scopeId2}>`);
+                  _push3(`<div data-v-4aa3ad8c${_scopeId2}>`);
                   _push3(ssrRenderComponent(MasonryWall, {
                     columns: 3,
                     "row-gap": "2.8rem",
@@ -15243,7 +15260,7 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
                     }, {
                       normal: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<button class="normal" data-v-08bbc167${_scopeId3}><i class="iconfont icon-loadmore" data-v-08bbc167${_scopeId3}></i></button>`);
+                          _push4(`<button class="normal" data-v-4aa3ad8c${_scopeId3}><i class="iconfont icon-loadmore" data-v-4aa3ad8c${_scopeId3}></i></button>`);
                         } else {
                           return [
                             createVNode("button", {
@@ -15451,7 +15468,7 @@ _sfc_main$F.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/snippets/desktop/index.vue");
   return _sfc_setup$F ? _sfc_setup$F(props, ctx) : void 0;
 };
-const DesktopSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-08bbc167"]]);
+const DesktopSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-4aa3ad8c"]]);
 const _sfc_main$E = /* @__PURE__ */ defineComponent({
   __name: "card-threads",
   __ssrInlineRender: true,
@@ -15560,7 +15577,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_divider = resolveComponent("divider");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-1ce1eb0d>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-160fee00>`);
       _push(ssrRenderComponent(PageBanner, {
         "is-mobile": true,
         image: "/images/page-snippets/banner-mobile.webp",
@@ -15597,16 +15614,16 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="snippets-loading" data-v-1ce1eb0d${_scopeId}><div class="socials" data-v-1ce1eb0d${_scopeId}><!--[-->`);
+            _push2(`<div class="snippets-loading" data-v-160fee00${_scopeId}><div class="socials" data-v-160fee00${_scopeId}><!--[-->`);
             ssrRenderList(3, (s) => {
               _push2(ssrRenderComponent(_component_skeleton_base, {
                 class: "item",
                 key: s
               }, null, _parent2, _scopeId));
             });
-            _push2(`<!--]--></div><div class="cards" data-v-1ce1eb0d${_scopeId}><!--[-->`);
+            _push2(`<!--]--></div><div class="cards" data-v-160fee00${_scopeId}><!--[-->`);
             ssrRenderList(4, (i) => {
-              _push2(`<div class="item" data-v-1ce1eb0d${_scopeId}>`);
+              _push2(`<div class="item" data-v-160fee00${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_paragraph, {
                 lines: 4,
                 "line-height": "1.2rem"
@@ -15647,14 +15664,14 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="snippets-content" data-v-1ce1eb0d${_scopeId}><div class="socials" data-v-1ce1eb0d${_scopeId}>`);
+            _push2(`<div class="snippets-content" data-v-160fee00${_scopeId}><div class="socials" data-v-160fee00${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item",
-              href: unref(VALUABLE_LINKS).THREADS_FOLLOW
+              href: unref(VALUABLE_LINKS).THREADS
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<p class="label" data-v-1ce1eb0d${_scopeId2}><i class="iconfont icon-threads" data-v-1ce1eb0d${_scopeId2}></i><span class="text" data-v-1ce1eb0d${_scopeId2}>Threads</span></p><p class="username" data-v-1ce1eb0d${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</p>`);
+                  _push3(`<p class="label" data-v-160fee00${_scopeId2}><i class="iconfont icon-threads" data-v-160fee00${_scopeId2}></i><span class="text" data-v-160fee00${_scopeId2}>Threads</span></p><p class="username" data-v-160fee00${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</p>`);
                 } else {
                   return [
                     createVNode("p", { class: "label" }, [
@@ -15674,7 +15691,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<p class="label" data-v-1ce1eb0d${_scopeId2}><i class="iconfont icon-zhihu-full" data-v-1ce1eb0d${_scopeId2}></i><span class="text" data-v-1ce1eb0d${_scopeId2}>回答</span></p><p class="username" data-v-1ce1eb0d${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).ZHIHU_USERNAME)}</p>`);
+                  _push3(`<p class="label" data-v-160fee00${_scopeId2}><i class="iconfont icon-zhihu-full" data-v-160fee00${_scopeId2}></i><span class="text" data-v-160fee00${_scopeId2}>回答</span></p><p class="username" data-v-160fee00${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).ZHIHU_USERNAME)}</p>`);
                 } else {
                   return [
                     createVNode("p", { class: "label" }, [
@@ -15721,7 +15738,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
               }, {
                 normal: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<button class="normal" data-v-1ce1eb0d${_scopeId2}><i class="iconfont icon-loadmore" data-v-1ce1eb0d${_scopeId2}></i></button>`);
+                    _push3(`<button class="normal" data-v-160fee00${_scopeId2}><i class="iconfont icon-loadmore" data-v-160fee00${_scopeId2}></i></button>`);
                   } else {
                     return [
                       createVNode("button", {
@@ -15764,7 +15781,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
                 createVNode("div", { class: "socials" }, [
                   createVNode(_component_ulink, {
                     class: "item",
-                    href: unref(VALUABLE_LINKS).THREADS_FOLLOW
+                    href: unref(VALUABLE_LINKS).THREADS
                   }, {
                     default: withCtx(() => [
                       createVNode("p", { class: "label" }, [
@@ -15846,7 +15863,7 @@ _sfc_main$D.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/snippets/mobile/index.vue");
   return _sfc_setup$D ? _sfc_setup$D(props, ctx) : void 0;
 };
-const MobileSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-1ce1eb0d"]]);
+const MobileSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-160fee00"]]);
 var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
   CategorySlug2["Code"] = "code";
   CategorySlug2["Insight"] = "insight";
@@ -15855,10 +15872,10 @@ var CategorySlug = /* @__PURE__ */ ((CategorySlug2) => {
 var RouteName = /* @__PURE__ */ ((RouteName2) => {
   RouteName2["Home"] = "home";
   RouteName2["Article"] = "article-detail";
-  RouteName2["CategoryFlow"] = "category-flow";
-  RouteName2["TagFlow"] = "tag-flow";
-  RouteName2["DateFlow"] = "date-flow";
-  RouteName2["SearchFlow"] = "search-flow";
+  RouteName2["CategoryListing"] = "category-listing";
+  RouteName2["TagListing"] = "tag-listing";
+  RouteName2["DateListing"] = "date-listing";
+  RouteName2["SearchListing"] = "search-listing";
   RouteName2["Archive"] = "archive";
   RouteName2["Guestbook"] = "guestbook";
   RouteName2["About"] = "about";
@@ -15875,8 +15892,8 @@ const routes = [
     path: "/",
     name: "home",
     components: {
-      default: IndexFlowPage,
-      mobile: MobileFlow
+      default: IndexPage,
+      mobile: MobileListing
     },
     meta: {
       responsive: true,
@@ -15914,10 +15931,10 @@ const routes = [
   },
   {
     path: "/category/:category_slug",
-    name: "category-flow",
+    name: "category-listing",
     components: {
-      default: CategoryFlowPage,
-      mobile: MobileFlow
+      default: CategoryListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ categorySlug: to.params.category_slug }),
@@ -15940,10 +15957,10 @@ const routes = [
   },
   {
     path: "/tag/:tag_slug",
-    name: "tag-flow",
+    name: "tag-listing",
     components: {
-      default: TagFlowPage,
-      mobile: MobileFlow
+      default: TagListingPage,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ tagSlug: to.params.tag_slug }),
@@ -15966,10 +15983,10 @@ const routes = [
   },
   {
     path: "/date/:date",
-    name: "date-flow",
+    name: "date-listing",
     components: {
-      default: _sfc_main$1I,
-      mobile: MobileFlow
+      default: _sfc_main$1H,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ date: to.params.date }),
@@ -15991,10 +16008,10 @@ const routes = [
   },
   {
     path: "/search/:keyword",
-    name: "search-flow",
+    name: "search-listing",
     components: {
-      default: _sfc_main$1H,
-      mobile: MobileFlow
+      default: _sfc_main$1I,
+      mobile: MobileListing
     },
     props: {
       default: (to) => ({ keyword: to.params.keyword }),
@@ -16504,10 +16521,10 @@ const ClientOnly = defineComponent({
     }
   },
   setup(props, context) {
-    const { gState } = useEnhancer();
-    const mounted = ref(gState.isHydrated.value ? true : false);
+    const { globalState } = useEnhancer();
+    const mounted = ref(globalState.isHydrated);
     onMounted(() => {
-      if (!gState.isHydrated.value) {
+      if (!globalState.isHydrated) {
         const setRender = () => {
           mounted.value = true;
         };
@@ -16710,7 +16727,7 @@ const vDisabledWallflower = {
     element.removeAttribute(ATTRIBUTE_NAME);
   }
 };
-function components(app) {
+function register(app) {
   app.component("Webfont", Webfont);
   app.component("Spin", Spin);
   app.component("Empty", Empty);
@@ -16816,12 +16833,12 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
         id: "navigation-progress",
         class: { visible: unref(state).isLoading.value },
         style: { "--height": props.height + "px" }
-      }, _attrs))} data-v-c52e35af><div class="progress" style="${ssrRenderStyle({
+      }, _attrs))} data-v-33438192><div class="progress" style="${ssrRenderStyle({
         background: props.color || unref(UNDEFINED),
         transform: `scaleX(${unref(state).progress.value}%)`
-      })}" data-v-c52e35af></div>`);
+      })}" data-v-33438192></div>`);
       if (props.spin) {
-        _push(`<div class="spin" data-v-c52e35af><div class="spin-ring" data-v-c52e35af><div data-v-c52e35af></div><div data-v-c52e35af></div><div data-v-c52e35af></div><div data-v-c52e35af></div></div></div>`);
+        _push(`<div class="spin" data-v-33438192><div class="spin-ring" data-v-33438192><div data-v-33438192></div><div data-v-33438192></div><div data-v-33438192></div><div data-v-33438192></div></div></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -16832,10 +16849,10 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
 const _sfc_setup$v = _sfc_main$v.setup;
 _sfc_main$v.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/navigation-progress/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/navigation-progress/index.vue");
   return _sfc_setup$v ? _sfc_setup$v(props, ctx) : void 0;
 };
-const NavProgress = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-c52e35af"]]);
+const NavProgress = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-33438192"]]);
 const _sfc_main$u = /* @__PURE__ */ defineComponent({
   __name: "emoji-rain",
   __ssrInlineRender: true,
@@ -16878,9 +16895,9 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: "emoji-rain",
         class: { active: state.kichikuing }
-      }, _attrs))} data-v-7d2644b0>`);
+      }, _attrs))} data-v-48a8a783>`);
       if (state.chambering) {
-        _push(`<canvas class="rain-base" data-v-7d2644b0></canvas>`);
+        _push(`<canvas class="rain-base" data-v-48a8a783></canvas>`);
       } else {
         _push(`<!---->`);
       }
@@ -16891,106 +16908,10 @@ const _sfc_main$u = /* @__PURE__ */ defineComponent({
 const _sfc_setup$u = _sfc_main$u.setup;
 _sfc_main$u.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/emoji-rain.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/emoji-rain.vue");
   return _sfc_setup$u ? _sfc_setup$u(props, ctx) : void 0;
 };
-const EmojiRain = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["__scopeId", "data-v-7d2644b0"]]);
-const getLayoutByRouteMeta = (routeMeta) => {
-  return routeMeta.layout === LayoutColumn.Wide ? LayoutColumn.Wide : routeMeta.layout === LayoutColumn.Full ? LayoutColumn.Full : LayoutColumn.Normal;
-};
-const _sfc_main$t = /* @__PURE__ */ defineComponent({
-  __name: "error",
-  __ssrInlineRender: true,
-  props: {
-    error: {}
-  },
-  emits: ["resolve"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const { isDarkTheme } = useEnhancer();
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_i18n = resolveComponent("i18n");
-      const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["error", { dark: unref(isDarkTheme) }]
-      }, _attrs))} data-v-425464b5><h1 class="code" data-v-425464b5>${ssrInterpolate(props.error.code)}</h1><h3 class="message" data-v-425464b5>`);
-      if (props.error.message) {
-        _push(`<!--[-->${ssrInterpolate(props.error.message)}<!--]-->`);
-      } else {
-        _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LanguageKey).NOT_FOUND
-        }, null, _parent));
-      }
-      _push(`</h3><p class="link" data-v-425464b5>`);
-      ssrRenderSlot(_ctx.$slots, "resolve-text", {}, null, _push, _parent);
-      _push(`</p>`);
-      _push(ssrRenderComponent(_component_uimage, {
-        cdn: "",
-        class: "logo",
-        src: "/images/logo.svg"
-      }, null, _parent));
-      _push(`</div>`);
-    };
-  }
-});
-const _sfc_setup$t = _sfc_main$t.setup;
-_sfc_main$t.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/root/error.vue");
-  return _sfc_setup$t ? _sfc_setup$t(props, ctx) : void 0;
-};
-const ErrorComponent = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-425464b5"]]);
-const _sfc_main$s = /* @__PURE__ */ defineComponent({
-  __name: "captured",
-  __ssrInlineRender: true,
-  setup(__props) {
-    const { router, gState } = useEnhancer();
-    const handleResolveRoute = () => {
-      router.push({ name: RouteName.Home }).then(() => {
-        gState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta));
-        gState.setRenderError(null);
-      });
-    };
-    onErrorCaptured((_error) => {
-      gState.setRenderError(_error);
-      return false;
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "captured" }, _attrs))}>`);
-      if (unref(gState).renderError.value) {
-        _push(ssrRenderComponent(ErrorComponent, {
-          error: unref(gState).renderError.value,
-          onResolve: handleResolveRoute
-        }, {
-          "resolve-text": withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(ssrRenderComponent(_component_i18n, {
-                k: unref(LanguageKey).BACK_TO_HOME_PAGE
-              }, null, _parent2, _scopeId));
-            } else {
-              return [
-                createVNode(_component_i18n, {
-                  k: unref(LanguageKey).BACK_TO_HOME_PAGE
-                }, null, 8, ["k"])
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
-      }
-      _push(`</div>`);
-    };
-  }
-});
-const _sfc_setup$s = _sfc_main$s.setup;
-_sfc_main$s.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/root/captured.vue");
-  return _sfc_setup$s ? _sfc_setup$s(props, ctx) : void 0;
-};
+const EmojiRain = /* @__PURE__ */ _export_sfc(_sfc_main$u, [["__scopeId", "data-v-48a8a783"]]);
 const MusicPlayerSymbol = Symbol("music-player");
 const useMusic = () => {
   return inject(MusicPlayerSymbol);
@@ -16998,7 +16919,7 @@ const useMusic = () => {
 const useCoverArtURL = (url) => {
   return url ? getProxyURL(useCdnDomain(), `${url}?param=300y300`) : url;
 };
-const _sfc_main$r = /* @__PURE__ */ defineComponent({
+const _sfc_main$t = /* @__PURE__ */ defineComponent({
   __name: "player",
   __ssrInlineRender: true,
   setup(__props) {
@@ -17025,20 +16946,20 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "music-player" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-8a34d48a><div class="panel" data-v-8a34d48a><div class="song" data-v-8a34d48a><img class="cover"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} draggable="false" data-v-8a34d48a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "music-player" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-bc8c1740><div class="panel" data-v-bc8c1740><div class="song" data-v-bc8c1740><img class="cover"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} draggable="false" data-v-bc8c1740>`);
       if (unref(currentSong)) {
-        _push(`<div class="info" data-v-8a34d48a><p class="title" data-v-8a34d48a><span class="name" data-v-8a34d48a>${ssrInterpolate(unref(currentSong).name)}</span><span class="artist" data-v-8a34d48a>${ssrInterpolate(unref(currentSong).artist)}</span></p><p class="duration" data-v-8a34d48a><span data-v-8a34d48a>${ssrInterpolate(getSecondsView(unref(state).currentTime))}</span><span data-v-8a34d48a> / </span><span data-v-8a34d48a>${ssrInterpolate(getSecondsView(unref(currentSong).duration / 1e3))}</span></p></div>`);
+        _push(`<div class="info" data-v-bc8c1740><p class="title" data-v-bc8c1740><span class="name" data-v-bc8c1740>${ssrInterpolate(unref(currentSong).name)}</span><span class="artist" data-v-bc8c1740>${ssrInterpolate(unref(currentSong).artist)}</span></p><p class="duration" data-v-bc8c1740><span data-v-bc8c1740>${ssrInterpolate(getSecondsView(unref(state).currentTime))}</span><span data-v-bc8c1740> / </span><span data-v-bc8c1740>${ssrInterpolate(getSecondsView(unref(currentSong).duration / 1e3))}</span></p></div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="control" data-v-8a34d48a><button class="cut-song prev"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-8a34d48a><i class="iconfont icon-music-prev" data-v-8a34d48a></i></button><button class="toggle-play"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-8a34d48a><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-8a34d48a></i></button><button class="cut-song next"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-8a34d48a><i class="iconfont icon-music-next" data-v-8a34d48a></i></button></div><div class="tools" data-v-8a34d48a><span class="indexed" data-v-8a34d48a>${ssrInterpolate(unref(state).index + 1)} / ${ssrInterpolate(unref(playlist).total)}</span>`);
+      _push(`</div><div class="control" data-v-bc8c1740><button class="cut-song prev"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-bc8c1740><i class="iconfont icon-music-prev" data-v-bc8c1740></i></button><button class="toggle-play"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-bc8c1740><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-bc8c1740></i></button><button class="cut-song next"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-bc8c1740><i class="iconfont icon-music-next" data-v-bc8c1740></i></button></div><div class="tools" data-v-bc8c1740><span class="indexed" data-v-bc8c1740>${ssrInterpolate(unref(state).index + 1)} / ${ssrInterpolate(unref(playlist).total)}</span>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "playlist-link",
         href: unref(VALUABLE_LINKS).MUSIC_163
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-new-window-s" data-v-8a34d48a${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-new-window-s" data-v-bc8c1740${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-new-window-s" })
@@ -17047,13 +16968,13 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="toggle-muted"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-8a34d48a><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-8a34d48a></i></button><input class="volume" type="range" min="0.1" max="1" step="0.1"${ssrRenderAttr("value", unref(state).volume)} data-v-8a34d48a></div></div><div class="progress" data-v-8a34d48a><div class="played" style="${ssrRenderStyle({ width: `${unref(state).progress * 100}%` })}" data-v-8a34d48a></div></div><div class="songs" data-v-8a34d48a><ul class="list" data-v-8a34d48a><!--[-->`);
+      _push(`<button class="toggle-muted"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-bc8c1740><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-bc8c1740></i></button><input class="volume" type="range" min="0.1" max="1" step="0.1"${ssrRenderAttr("value", unref(state).volume)} data-v-bc8c1740></div></div><div class="progress" data-v-bc8c1740><div class="played" style="${ssrRenderStyle({ width: `${unref(state).progress * 100}%` })}" data-v-bc8c1740></div></div><div class="songs" data-v-bc8c1740><ul class="list" data-v-bc8c1740><!--[-->`);
       ssrRenderList(unref(playlist).songs, (song, index) => {
-        _push(`<li class="${ssrRenderClass([{ playing: unref(state).index === index, unplayable: isUnPlayableSong(index) }, "item"])}" data-v-8a34d48a><div class="index" data-v-8a34d48a>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</div>`);
+        _push(`<li class="${ssrRenderClass([{ playing: unref(state).index === index, unplayable: isUnPlayableSong(index) }, "item"])}" data-v-bc8c1740><div class="index" data-v-bc8c1740>${ssrInterpolate(String(index + 1).padStart(2, "0"))}</div>`);
         if (unref(state).index === index) {
-          _push(`<span class="play" data-v-8a34d48a><i class="iconfont icon-music-unmuted" data-v-8a34d48a></i></span>`);
+          _push(`<span class="play" data-v-bc8c1740><i class="iconfont icon-music-unmuted" data-v-bc8c1740></i></span>`);
         } else {
-          _push(`<button class="play"${ssrIncludeBooleanAttr(isUnPlayableSong(index)) ? " disabled" : ""} data-v-8a34d48a><i class="iconfont icon-music-play" data-v-8a34d48a></i></button>`);
+          _push(`<button class="play"${ssrIncludeBooleanAttr(isUnPlayableSong(index)) ? " disabled" : ""} data-v-bc8c1740><i class="iconfont icon-music-play" data-v-bc8c1740></i></button>`);
         }
         _push(ssrRenderComponent(_component_ulink, {
           class: "name",
@@ -17062,7 +16983,7 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<span class="text" data-v-8a34d48a${_scopeId}>${ssrInterpolate(song.name)}</span><i class="iconfont icon-new-window-s" data-v-8a34d48a${_scopeId}></i>`);
+              _push2(`<span class="text" data-v-bc8c1740${_scopeId}>${ssrInterpolate(song.name)}</span><i class="iconfont icon-new-window-s" data-v-bc8c1740${_scopeId}></i>`);
             } else {
               return [
                 createVNode("span", { class: "text" }, toDisplayString(song.name), 1),
@@ -17072,20 +16993,20 @@ const _sfc_main$r = /* @__PURE__ */ defineComponent({
           }),
           _: 2
         }, _parent));
-        _push(`<div class="artist"${ssrRenderAttr("title", song.artist)} data-v-8a34d48a>${ssrInterpolate(song.artist)}</div><div class="duration" data-v-8a34d48a>${ssrInterpolate(getSecondsView(song.duration / 1e3))}</div></li>`);
+        _push(`<div class="artist"${ssrRenderAttr("title", song.artist)} data-v-bc8c1740>${ssrInterpolate(song.artist)}</div><div class="duration" data-v-bc8c1740>${ssrInterpolate(getSecondsView(song.duration / 1e3))}</div></li>`);
       });
       _push(`<!--]--></ul></div></div>`);
     };
   }
 });
-const _sfc_setup$r = _sfc_main$r.setup;
-_sfc_main$r.setup = (props, ctx) => {
+const _sfc_setup$t = _sfc_main$t.setup;
+_sfc_main$t.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/music-player/player.vue");
-  return _sfc_setup$r ? _sfc_setup$r(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/music-player/player.vue");
+  return _sfc_setup$t ? _sfc_setup$t(props, ctx) : void 0;
 };
-const MusicPlayer = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["__scopeId", "data-v-8a34d48a"]]);
-const _sfc_main$q = /* @__PURE__ */ defineComponent({
+const MusicPlayer = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-bc8c1740"]]);
+const _sfc_main$s = /* @__PURE__ */ defineComponent({
   __name: "handle",
   __ssrInlineRender: true,
   setup(__props) {
@@ -17104,15 +17025,15 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
       _push(`<!--[--><div${ssrRenderAttrs(mergeProps({
         id: "player",
         class: { playing: unref(state).playing }
-      }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-c5458913><div class="panel" data-v-c5458913><div class="control" data-v-c5458913><button class="prev-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c5458913><i class="iconfont icon-music-prev" data-v-c5458913></i></button><button class="next-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c5458913><i class="iconfont icon-music-next" data-v-c5458913></i></button><button class="muted-toggle button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c5458913><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-c5458913></i></button><button class="player button" data-v-c5458913><i class="iconfont icon-netease-music" data-v-c5458913></i></button></div><button class="song-link" data-v-c5458913>`);
+      }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a8c9cf95><div class="panel" data-v-a8c9cf95><div class="control" data-v-a8c9cf95><button class="prev-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-a8c9cf95><i class="iconfont icon-music-prev" data-v-a8c9cf95></i></button><button class="next-song button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-a8c9cf95><i class="iconfont icon-music-next" data-v-a8c9cf95></i></button><button class="muted-toggle button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-a8c9cf95><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-a8c9cf95></i></button><button class="player button" data-v-a8c9cf95><i class="iconfont icon-netease-music" data-v-a8c9cf95></i></button></div><button class="song-link" data-v-a8c9cf95>`);
       if (unref(currentSong)) {
-        _push(`<span data-v-c5458913>${ssrInterpolate(unref(currentSong).name)}</span>`);
+        _push(`<span data-v-a8c9cf95>${ssrInterpolate(unref(currentSong).name)}</span>`);
       } else {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LanguageKey).MUSIC_PLACEHOLDER
         }, null, _parent));
       }
-      _push(`</button></div><div class="cd" data-v-c5458913><img class="image"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} data-v-c5458913><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-c5458913><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-c5458913></i></button></div><div class="trigger" data-v-c5458913><i class="iconfont icon-music" data-v-c5458913></i></div></div>`);
+      _push(`</button></div><div class="cd" data-v-a8c9cf95><img class="image"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} data-v-a8c9cf95><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-a8c9cf95><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-a8c9cf95></i></button></div><div class="trigger" data-v-a8c9cf95><i class="iconfont icon-music" data-v-a8c9cf95></i></div></div>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -17153,14 +17074,14 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$q = _sfc_main$q.setup;
-_sfc_main$q.setup = (props, ctx) => {
+const _sfc_setup$s = _sfc_main$s.setup;
+_sfc_main$s.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/music-player/handle.vue");
-  return _sfc_setup$q ? _sfc_setup$q(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/music-player/handle.vue");
+  return _sfc_setup$s ? _sfc_setup$s(props, ctx) : void 0;
 };
-const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-c5458913"]]);
-const _sfc_main$p = /* @__PURE__ */ defineComponent({
+const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$s, [["__scopeId", "data-v-a8c9cf95"]]);
+const _sfc_main$r = /* @__PURE__ */ defineComponent({
   __name: "flower",
   __ssrInlineRender: true,
   props: {
@@ -17208,7 +17129,7 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
       _push(`<li${ssrRenderAttrs(mergeProps({
         class: ["flower-item", { playing: state.playing }],
         style: styles.value
-      }, _attrs))} data-v-fb2b784a>`);
+      }, _attrs))} data-v-ee721d00>`);
       _push(ssrRenderComponent(_component_webfont, { bolder: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -17225,14 +17146,14 @@ const _sfc_main$p = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$p = _sfc_main$p.setup;
-_sfc_main$p.setup = (props, ctx) => {
+const _sfc_setup$r = _sfc_main$r.setup;
+_sfc_main$r.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/wallflower/flower.vue");
-  return _sfc_setup$p ? _sfc_setup$p(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/wallflower/flower.vue");
+  return _sfc_setup$r ? _sfc_setup$r(props, ctx) : void 0;
 };
-const Flower = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["__scopeId", "data-v-fb2b784a"]]);
-const _sfc_main$o = /* @__PURE__ */ defineComponent({
+const Flower = /* @__PURE__ */ _export_sfc(_sfc_main$r, [["__scopeId", "data-v-ee721d00"]]);
+const _sfc_main$q = /* @__PURE__ */ defineComponent({
   __name: "garden",
   __ssrInlineRender: true,
   setup(__props) {
@@ -17273,9 +17194,9 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
     onMounted(() => window.addEventListener("click", handleClick));
     onBeforeUnmount(() => window.removeEventListener("click", handleClick));
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "wallflower" }, _attrs))} data-v-c10e8a92>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "wallflower" }, _attrs))} data-v-8c966f2d>`);
       if (state.flowers.length) {
-        _push(`<ul class="garden-box" data-v-c10e8a92><!--[-->`);
+        _push(`<ul class="garden-box" data-v-8c966f2d><!--[-->`);
         ssrRenderList(state.flowers, (flower, index) => {
           _push(ssrRenderComponent(Flower, {
             key: flower.id,
@@ -17295,14 +17216,14 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$o = _sfc_main$o.setup;
-_sfc_main$o.setup = (props, ctx) => {
+const _sfc_setup$q = _sfc_main$q.setup;
+_sfc_main$q.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/wallflower/garden.vue");
-  return _sfc_setup$o ? _sfc_setup$o(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/wallflower/garden.vue");
+  return _sfc_setup$q ? _sfc_setup$q(props, ctx) : void 0;
 };
-const Wallflower = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["__scopeId", "data-v-c10e8a92"]]);
-const _sfc_main$n = /* @__PURE__ */ defineComponent({
+const Wallflower = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-8c966f2d"]]);
+const _sfc_main$p = /* @__PURE__ */ defineComponent({
   __name: "wall",
   __ssrInlineRender: true,
   setup(__props, { emit: __emit }) {
@@ -17314,13 +17235,13 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "wall" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-fc0fed8d><div class="picture-box"${ssrRenderAttr("title", activePaper.value.copyright)} style="${ssrRenderStyle({ backgroundImage: `url(${activePaper.value.humanizedImageUrl})` })}" data-v-fc0fed8d></div><div class="story-box" data-v-fc0fed8d>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "wall" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-75adf6df><div class="picture-box"${ssrRenderAttr("title", activePaper.value.copyright)} style="${ssrRenderStyle({ backgroundImage: `url(${activePaper.value.humanizedImageUrl})` })}" data-v-75adf6df></div><div class="story-box" data-v-75adf6df>`);
       if (activePaper.value.title) {
-        _push(`<!--[--><h2 class="title" data-v-fc0fed8d>${ssrInterpolate(activePaper.value.title)}</h2><p class="sub-title" data-v-fc0fed8d>${ssrInterpolate(activePaper.value.copyright)}</p><!--]-->`);
+        _push(`<!--[--><h2 class="title" data-v-75adf6df>${ssrInterpolate(activePaper.value.title)}</h2><p class="sub-title" data-v-75adf6df>${ssrInterpolate(activePaper.value.copyright)}</p><!--]-->`);
       } else {
-        _push(`<h2 class="title lonely" data-v-fc0fed8d>${ssrInterpolate(activePaper.value.copyright)}</h2>`);
+        _push(`<h2 class="title lonely" data-v-75adf6df>${ssrInterpolate(activePaper.value.copyright)}</h2>`);
       }
-      _push(`<p class="desc" data-v-fc0fed8d>${ssrInterpolate(activePaper.value.desc)}</p><div class="tools" data-v-fc0fed8d>`);
+      _push(`<p class="desc" data-v-75adf6df>${ssrInterpolate(activePaper.value.desc)}</p><div class="tools" data-v-75adf6df>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "button",
         href: activePaper.value.humanizedCopyrightUrl,
@@ -17328,7 +17249,7 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-bing" data-v-fc0fed8d${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-bing" data-v-75adf6df${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-bing" })
@@ -17337,18 +17258,18 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="button" title="Prev"${ssrIncludeBooleanAttr(index.value <= 0) ? " disabled" : ""} data-v-fc0fed8d><i class="iconfont icon-prev" data-v-fc0fed8d></i></button><button class="button" title="Next"${ssrIncludeBooleanAttr(index.value >= wallpapers.value.length - 1) ? " disabled" : ""} data-v-fc0fed8d><i class="iconfont icon-next" data-v-fc0fed8d></i></button><button class="button" title="Close" data-v-fc0fed8d><i class="iconfont icon-cancel" data-v-fc0fed8d></i></button></div></div></div>`);
+      _push(`<button class="button" title="Prev"${ssrIncludeBooleanAttr(index.value <= 0) ? " disabled" : ""} data-v-75adf6df><i class="iconfont icon-prev" data-v-75adf6df></i></button><button class="button" title="Next"${ssrIncludeBooleanAttr(index.value >= wallpapers.value.length - 1) ? " disabled" : ""} data-v-75adf6df><i class="iconfont icon-next" data-v-75adf6df></i></button><button class="button" title="Close" data-v-75adf6df><i class="iconfont icon-cancel" data-v-75adf6df></i></button></div></div></div>`);
     };
   }
 });
-const _sfc_setup$n = _sfc_main$n.setup;
-_sfc_main$n.setup = (props, ctx) => {
+const _sfc_setup$p = _sfc_main$p.setup;
+_sfc_main$p.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/wallpaper/wall.vue");
-  return _sfc_setup$n ? _sfc_setup$n(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/wallpaper/wall.vue");
+  return _sfc_setup$p ? _sfc_setup$p(props, ctx) : void 0;
 };
-const Wallpapers = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-fc0fed8d"]]);
-const _sfc_main$m = /* @__PURE__ */ defineComponent({
+const Wallpapers = /* @__PURE__ */ _export_sfc(_sfc_main$p, [["__scopeId", "data-v-75adf6df"]]);
+const _sfc_main$o = /* @__PURE__ */ defineComponent({
   __name: "switcher",
   __ssrInlineRender: true,
   setup(__props) {
@@ -17362,7 +17283,7 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<!--[--><div${ssrRenderAttrs(mergeProps({ id: "wallpaper" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-5a01b877><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "switcher"])}" data-v-5a01b877><div class="title" data-v-5a01b877><i class="iconfont icon-bing" data-v-5a01b877></i><span class="text" data-v-5a01b877>BING</span></div></div></div>`);
+      _push(`<!--[--><div${ssrRenderAttrs(mergeProps({ id: "wallpaper" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-260e9a3d><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "switcher"])}" data-v-260e9a3d><div class="title" data-v-260e9a3d><i class="iconfont icon-bing" data-v-260e9a3d></i><span class="text" data-v-260e9a3d>BING</span></div></div></div>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -17405,32 +17326,32 @@ const _sfc_main$m = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$m = _sfc_main$m.setup;
-_sfc_main$m.setup = (props, ctx) => {
+const _sfc_setup$o = _sfc_main$o.setup;
+_sfc_main$o.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/wallpaper/switcher.vue");
-  return _sfc_setup$m ? _sfc_setup$m(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/wallpaper/switcher.vue");
+  return _sfc_setup$o ? _sfc_setup$o(props, ctx) : void 0;
 };
-const Wallpaper = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["__scopeId", "data-v-5a01b877"]]);
-const _sfc_main$l = /* @__PURE__ */ defineComponent({
+const Wallpaper = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["__scopeId", "data-v-260e9a3d"]]);
+const _sfc_main$n = /* @__PURE__ */ defineComponent({
   __name: "background",
   __ssrInlineRender: true,
   setup(__props) {
     const { cdnDomain, isDarkTheme } = useEnhancer();
     const backgroundImage = getAssetURL(cdnDomain, "/images/background.png");
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "background" }, _attrs))} data-v-af6bc253><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "image"])}" style="${ssrRenderStyle({ backgroundImage: `url('${unref(backgroundImage)}')` })}" data-v-af6bc253></div></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "background" }, _attrs))} data-v-53df6962><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "image"])}" style="${ssrRenderStyle({ backgroundImage: `url('${unref(backgroundImage)}')` })}" data-v-53df6962></div></div>`);
     };
   }
 });
-const _sfc_setup$l = _sfc_main$l.setup;
-_sfc_main$l.setup = (props, ctx) => {
+const _sfc_setup$n = _sfc_main$n.setup;
+_sfc_main$n.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/background.vue");
-  return _sfc_setup$l ? _sfc_setup$l(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/background.vue");
+  return _sfc_setup$n ? _sfc_setup$n(props, ctx) : void 0;
 };
-const Background = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["__scopeId", "data-v-af6bc253"]]);
-const _sfc_main$k = /* @__PURE__ */ defineComponent({
+const Background = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-53df6962"]]);
+const _sfc_main$m = /* @__PURE__ */ defineComponent({
   __name: "toolbox",
   __ssrInlineRender: true,
   setup(__props) {
@@ -17443,7 +17364,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-d83204bb><div class="container" data-v-d83204bb><div class="tools" data-v-d83204bb>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-c2659b3e><div class="container" data-v-c2659b3e><div class="tools" data-v-c2659b3e>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "rss",
         href: unref(VALUABLE_LINKS).RSS,
@@ -17451,7 +17372,7 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-rss" data-v-d83204bb${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-rss" data-v-c2659b3e${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-rss" })
@@ -17460,18 +17381,18 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="feedback"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).FEEDBACK))} data-v-d83204bb><i class="iconfont icon-mail-plane" data-v-d83204bb></i></button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_TOP))} data-v-d83204bb><i class="iconfont icon-totop" data-v-d83204bb></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_BOTTOM))} data-v-d83204bb><i class="iconfont icon-tobottom" data-v-d83204bb></i></button></div></div></div>`);
+      _push(`<button class="feedback"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).FEEDBACK))} data-v-c2659b3e><i class="iconfont icon-mail-plane" data-v-c2659b3e></i></button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_TOP))} data-v-c2659b3e><i class="iconfont icon-totop" data-v-c2659b3e></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LanguageKey).TO_BOTTOM))} data-v-c2659b3e><i class="iconfont icon-tobottom" data-v-c2659b3e></i></button></div></div></div>`);
     };
   }
 });
-const _sfc_setup$k = _sfc_main$k.setup;
-_sfc_main$k.setup = (props, ctx) => {
+const _sfc_setup$m = _sfc_main$m.setup;
+_sfc_main$m.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/toolbox.vue");
-  return _sfc_setup$k ? _sfc_setup$k(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/toolbox.vue");
+  return _sfc_setup$m ? _sfc_setup$m(props, ctx) : void 0;
 };
-const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-d83204bb"]]);
-const _sfc_main$j = /* @__PURE__ */ defineComponent({
+const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$m, [["__scopeId", "data-v-c2659b3e"]]);
+const _sfc_main$l = /* @__PURE__ */ defineComponent({
   __name: "feedback",
   __ssrInlineRender: true,
   setup(__props, { emit: __emit }) {
@@ -17495,9 +17416,9 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "feedback" }, _attrs))} data-v-077f773d>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "feedback" }, _attrs))} data-v-7fafa844>`);
       if (state.submitted) {
-        _push(`<div class="submitted" data-v-077f773d><div class="icon" data-v-077f773d><i class="iconfont icon-success" data-v-077f773d></i></div><div class="text" data-v-077f773d>`);
+        _push(`<div class="submitted" data-v-7fafa844><div class="icon" data-v-7fafa844><i class="iconfont icon-success" data-v-7fafa844></i></div><div class="text" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -17519,14 +17440,14 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
           }),
           _: 1
         }, _parent));
-        _push(`</div><button class="close" data-v-077f773d>`);
+        _push(`</div><button class="close" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "关闭窗口",
           en: "Close"
         }, null, _parent));
         _push(`</button></div>`);
       } else {
-        _push(`<!--[--><div class="title" data-v-077f773d>`);
+        _push(`<!--[--><div class="title" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -17548,34 +17469,34 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
           }),
           _: 1
         }, _parent));
-        _push(`</div><div class="emotions" data-v-077f773d><!--[-->`);
+        _push(`</div><div class="emotions" data-v-7fafa844><!--[-->`);
         ssrRenderList(EMOTIONS, (emotion) => {
-          _push(`<li class="item" data-v-077f773d><label data-v-077f773d><input class="radio" type="radio"${ssrRenderAttr("value", emotion.value)}${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrIncludeBooleanAttr(ssrLooseEqual(state.emotion, emotion.value)) ? " checked" : ""} data-v-077f773d><div class="${ssrRenderClass([{ activated: state.emotion === emotion.value }, "button"])}" data-v-077f773d><span class="emoji" data-v-077f773d>${ssrInterpolate(emotion.emoji)}</span><span class="text" data-v-077f773d>`);
+          _push(`<li class="item" data-v-7fafa844><label data-v-7fafa844><input class="radio" type="radio"${ssrRenderAttr("value", emotion.value)}${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrIncludeBooleanAttr(ssrLooseEqual(state.emotion, emotion.value)) ? " checked" : ""} data-v-7fafa844><div class="${ssrRenderClass([{ activated: state.emotion === emotion.value }, "button"])}" data-v-7fafa844><span class="emoji" data-v-7fafa844>${ssrInterpolate(emotion.emoji)}</span><span class="text" data-v-7fafa844>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: emotion.zh,
             en: emotion.en
           }, null, _parent));
           _push(`</span></div></label>`);
           if (state.emotion === emotion.value) {
-            _push(`<div class="arrow" data-v-077f773d></div>`);
+            _push(`<div class="arrow" data-v-7fafa844></div>`);
           } else {
             _push(`<!---->`);
           }
           _push(`</li>`);
         });
-        _push(`<!--]--></div><div class="input" data-v-077f773d><textarea class="textarea" name="feedback" id="feedback" rows="10" autofocus${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(isZhLang) ? "你可在此畅所欲言，这将仅对博主可见" : "Tell me about your opinion...")} data-v-077f773d>${ssrInterpolate(state.content)}</textarea><div class="buttons" data-v-077f773d><button class="item cancel"${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""} data-v-077f773d><span class="text" data-v-077f773d>`);
+        _push(`<!--]--></div><div class="input" data-v-7fafa844><textarea class="textarea" name="feedback" id="feedback" rows="10" autofocus${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(isZhLang) ? "你可在此畅所欲言，这将仅对博主可见" : "Tell me about your opinion...")} data-v-7fafa844>${ssrInterpolate(state.content)}</textarea><div class="buttons" data-v-7fafa844><button class="item cancel"${ssrIncludeBooleanAttr(state.submitting) ? " disabled" : ""} data-v-7fafa844><span class="text" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "取消",
           en: "Cancel"
         }, null, _parent));
-        _push(`</span></button><button class="item submit"${ssrIncludeBooleanAttr(!isSubmitable.value || state.submitting) ? " disabled" : ""} data-v-077f773d><i class="iconfont icon-mail-plane" data-v-077f773d></i><span class="text" data-v-077f773d>`);
+        _push(`</span></button><button class="item submit"${ssrIncludeBooleanAttr(!isSubmitable.value || state.submitting) ? " disabled" : ""} data-v-7fafa844><i class="iconfont icon-mail-plane" data-v-7fafa844></i><span class="text" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: state.submitting ? unref(LanguageKey).SUBMITTING : unref(LanguageKey).SUBMIT
         }, null, _parent));
         _push(`</span></button></div></div><!--]-->`);
       }
       if (unref(identity).feedbacks.length) {
-        _push(`<div class="history" data-v-077f773d>`);
+        _push(`<div class="history" data-v-7fafa844>`);
         _push(ssrRenderComponent(_component_i18n, null, {
           zh: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -17605,27 +17526,27 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$j = _sfc_main$j.setup;
-_sfc_main$j.setup = (props, ctx) => {
+const _sfc_setup$l = _sfc_main$l.setup;
+_sfc_main$l.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/feedback.vue");
-  return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/feedback.vue");
+  return _sfc_setup$l ? _sfc_setup$l(props, ctx) : void 0;
 };
-const Feedback = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-077f773d"]]);
-const _sfc_main$i = /* @__PURE__ */ defineComponent({
+const Feedback = /* @__PURE__ */ _export_sfc(_sfc_main$l, [["__scopeId", "data-v-7fafa844"]]);
+const _sfc_main$k = /* @__PURE__ */ defineComponent({
   __name: "statement",
   __ssrInlineRender: true,
   setup(__props) {
     const { appOption } = useStores();
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "statement" }, _attrs))} data-v-92ec684d><div class="content" data-v-92ec684d>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "statement" }, _attrs))} data-v-366d2a43><div class="content" data-v-366d2a43>`);
       _push(ssrRenderComponent(_sfc_main$1z, {
         markdown: unref(appOption).data?.statement,
         compact: true
       }, null, _parent));
-      _push(`<br data-v-92ec684d><hr data-v-92ec684d>`);
+      _push(`<br data-v-366d2a43><hr data-v-366d2a43>`);
       if (unref(appOption).data) {
-        _push(`<p class="email" data-v-92ec684d><a${ssrRenderAttr("href", unref(getEmailLink)(unref(appOption).data.site_email))} class="link" target="_blank" data-v-92ec684d><i class="iconfont icon-mail" data-v-92ec684d></i><span class="text" data-v-92ec684d>${ssrInterpolate(unref(appOption).data.site_email)}</span></a></p>`);
+        _push(`<p class="email" data-v-366d2a43><a${ssrRenderAttr("href", unref(getEmailLink)(unref(appOption).data.site_email))} class="link" target="_blank" data-v-366d2a43><i class="iconfont icon-mail" data-v-366d2a43></i><span class="text" data-v-366d2a43>${ssrInterpolate(unref(appOption).data.site_email)}</span></a></p>`);
       } else {
         _push(`<!---->`);
       }
@@ -17633,13 +17554,13 @@ const _sfc_main$i = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$i = _sfc_main$i.setup;
-_sfc_main$i.setup = (props, ctx) => {
+const _sfc_setup$k = _sfc_main$k.setup;
+_sfc_main$k.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/statement.vue");
-  return _sfc_setup$i ? _sfc_setup$i(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/statement.vue");
+  return _sfc_setup$k ? _sfc_setup$k(props, ctx) : void 0;
 };
-const Statement = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["__scopeId", "data-v-92ec684d"]]);
+const Statement = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-366d2a43"]]);
 const menus = [
   {
     id: RouteName.Home,
@@ -17706,12 +17627,12 @@ const menus = [
   //   divider: true
   // }
 ];
-const _sfc_main$h = /* @__PURE__ */ defineComponent({
+const _sfc_main$j = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
   setup(__props) {
-    const { i18n: _i18n, theme, gState } = useEnhancer();
-    const isEnabledNav = computed(() => !gState.layoutColumn.value.isNormal);
+    const { i18n: _i18n, theme, globalState } = useEnhancer();
+    const isEnabledNav = computed(() => !globalState.layoutColumn.value.isNormal);
     const themeIcon = computed(() => {
       const themeIconMap = {
         [Theme.Light]: "icon-sun",
@@ -17738,7 +17659,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
       _push(`<header${ssrRenderAttrs(mergeProps({
         id: unref(HEADER_ELEMENT_ID),
         class: ["header", { "enable-nav": isEnabledNav.value }]
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-daf4df20><div class="header-container container" data-v-daf4df20><div class="header-header" data-v-daf4df20>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-373ee760><div class="header-container container" data-v-373ee760><div class="header-header" data-v-373ee760>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         src: "/images/logo.svg",
@@ -17767,17 +17688,17 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
         title: unref(APP_META).title,
         onMousedown: handleRootNavEvent
       }, null, _parent));
-      _push(`</div><div class="toolbox" data-v-daf4df20>`);
+      _push(`</div><div class="toolbox" data-v-373ee760>`);
       if (isEnabledNav.value) {
-        _push(`<button class="button menu" data-v-daf4df20><i class="iconfont icon-top-menu" data-v-daf4df20></i></button>`);
+        _push(`<button class="button menu" data-v-373ee760><i class="iconfont icon-top-menu" data-v-373ee760></i></button>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="button language" title="Switch language" data-v-daf4df20><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-daf4df20></i></button><button class="${ssrRenderClass([unref(theme).theme.value, "button theme"])}" data-v-daf4df20><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-daf4df20></i></button></div></div><div class="header-nav" data-v-daf4df20><nav class="nav-list container" data-v-daf4df20><!--[-->`);
+      _push(`<button class="button language" title="Switch language" data-v-373ee760><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-373ee760></i></button><button class="${ssrRenderClass([unref(theme).theme.value, "button theme"])}" data-v-373ee760><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-373ee760></i></button></div></div><div class="header-nav" data-v-373ee760><nav class="nav-list container" data-v-373ee760><!--[-->`);
       ssrRenderList(unref(menus), (menu, index) => {
         _push(`<!--[-->`);
         if (index > 0) {
-          _push(`<span class="divider" data-v-daf4df20></span>`);
+          _push(`<span class="divider" data-v-373ee760></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -17794,7 +17715,7 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
                   src: menu.imageIcon
                 }, null, _parent2, _scopeId));
               } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-daf4df20${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-373ee760${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -17819,12 +17740,12 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.hot) {
-                _push2(`<span class="superscript" data-v-daf4df20${_scopeId}><i class="iconfont icon-hot-fill" data-v-daf4df20${_scopeId}></i></span>`);
+                _push2(`<span class="superscript" data-v-373ee760${_scopeId}><i class="iconfont icon-hot-fill" data-v-373ee760${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.newWindow) {
-                _push2(`<span class="new-window" data-v-daf4df20${_scopeId}><i class="iconfont icon-new-window-s" data-v-daf4df20${_scopeId}></i></span>`);
+                _push2(`<span class="new-window" data-v-373ee760${_scopeId}><i class="iconfont icon-new-window-s" data-v-373ee760${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -17873,20 +17794,20 @@ const _sfc_main$h = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$h = _sfc_main$h.setup;
-_sfc_main$h.setup = (props, ctx) => {
+const _sfc_setup$j = _sfc_main$j.setup;
+_sfc_main$j.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/header.vue");
-  return _sfc_setup$h ? _sfc_setup$h(props, ctx) : void 0;
+  return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
 };
-const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-daf4df20"]]);
-const _sfc_main$g = /* @__PURE__ */ defineComponent({
+const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-373ee760"]]);
+const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
   setup(__props) {
-    const { gState } = useEnhancer();
+    const { globalState } = useEnhancer();
     const handleStatementModal = () => {
-      gState.toggleSwitcher("statement", true);
+      globalState.toggleSwitcher("statement", true);
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_container = resolveComponent("container");
@@ -17960,7 +17881,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
               en: ""
             }, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent2, _scopeId));
-            _push2(`<a class="statement" href="javascript:void(0)" data-v-87fecb09${_scopeId}>`);
+            _push2(`<a class="statement" href="javascript:void(0)" data-v-7c5d6d39${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               zh: "周知",
               en: "FAQ"
@@ -18060,14 +17981,14 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$g = _sfc_main$g.setup;
-_sfc_main$g.setup = (props, ctx) => {
+const _sfc_setup$i = _sfc_main$i.setup;
+_sfc_main$i.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/footer.vue");
-  return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
+  return _sfc_setup$i ? _sfc_setup$i(props, ctx) : void 0;
 };
-const FooterView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-87fecb09"]]);
-const _sfc_main$f = /* @__PURE__ */ defineComponent({
+const FooterView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$i, [["__scopeId", "data-v-7c5d6d39"]]);
+const _sfc_main$h = /* @__PURE__ */ defineComponent({
   __name: "search",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18081,14 +18002,14 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_router_link = resolveComponent("router-link");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "search" }, _attrs))} data-v-5cee2f70><form class="search-box" data-v-5cee2f70><input id="keyword" required type="search" name="search" maxlength="16" autocomplete="off"${ssrRenderAttr("value", keyword.value)} class="${ssrRenderClass([unref(_i18n).language, "search-input"])}"${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))} data-v-5cee2f70><button type="submit" class="search-btn" data-v-5cee2f70><i class="iconfont icon-search" data-v-5cee2f70></i></button></form>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "search" }, _attrs))} data-v-dc0d9ff0><form class="search-box" data-v-dc0d9ff0><input id="keyword" required type="search" name="search" maxlength="16" autocomplete="off"${ssrRenderAttr("value", keyword.value)} class="${ssrRenderClass([unref(_i18n).language, "search-input"])}"${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))} data-v-dc0d9ff0><button type="submit" class="search-btn" data-v-dc0d9ff0><i class="iconfont icon-search" data-v-dc0d9ff0></i></button></form>`);
       _push(ssrRenderComponent(_component_router_link, {
         class: "extra-btn",
         to: { name: unref(RouteName).Sponsor }
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-peachblossom" data-v-5cee2f70${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-peachblossom" data-v-dc0d9ff0${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-peachblossom" })
@@ -18101,14 +18022,14 @@ const _sfc_main$f = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$f = _sfc_main$f.setup;
-_sfc_main$f.setup = (props, ctx) => {
+const _sfc_setup$h = _sfc_main$h.setup;
+_sfc_main$h.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/search.vue");
-  return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
+  return _sfc_setup$h ? _sfc_setup$h(props, ctx) : void 0;
 };
-const AsideSearch = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-5cee2f70"]]);
-const _sfc_main$e = /* @__PURE__ */ defineComponent({
+const AsideSearch = /* @__PURE__ */ _export_sfc(_sfc_main$h, [["__scopeId", "data-v-dc0d9ff0"]]);
+const _sfc_main$g = /* @__PURE__ */ defineComponent({
   __name: "statistic",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18219,14 +18140,14 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$e = _sfc_main$e.setup;
-_sfc_main$e.setup = (props, ctx) => {
+const _sfc_setup$g = _sfc_main$g.setup;
+_sfc_main$g.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/statistic.vue");
-  return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
+  return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
 };
-const AsideStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-87aa04b9"]]);
-const _sfc_main$d = /* @__PURE__ */ defineComponent({
+const AsideStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-87aa04b9"]]);
+const _sfc_main$f = /* @__PURE__ */ defineComponent({
   __name: "article",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18397,14 +18318,14 @@ const _sfc_main$d = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$d = _sfc_main$d.setup;
-_sfc_main$d.setup = (props, ctx) => {
+const _sfc_setup$f = _sfc_main$f.setup;
+_sfc_main$f.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/article.vue");
-  return _sfc_setup$d ? _sfc_setup$d(props, ctx) : void 0;
+  return _sfc_setup$f ? _sfc_setup$f(props, ctx) : void 0;
 };
-const AsideArticle = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-b648e00c"]]);
-const _sfc_main$c = /* @__PURE__ */ defineComponent({
+const AsideArticle = /* @__PURE__ */ _export_sfc(_sfc_main$f, [["__scopeId", "data-v-b648e00c"]]);
+const _sfc_main$e = /* @__PURE__ */ defineComponent({
   __name: "mammon",
   __ssrInlineRender: true,
   props: {
@@ -18559,14 +18480,14 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$c = _sfc_main$c.setup;
-_sfc_main$c.setup = (props, ctx) => {
+const _sfc_setup$e = _sfc_main$e.setup;
+_sfc_main$e.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/mammon.vue");
-  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
+  return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
 };
-const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-89797c1e"]]);
-const _sfc_main$b = /* @__PURE__ */ defineComponent({
+const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-89797c1e"]]);
+const _sfc_main$d = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18684,14 +18605,14 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$b = _sfc_main$b.setup;
-_sfc_main$b.setup = (props, ctx) => {
+const _sfc_setup$d = _sfc_main$d.setup;
+_sfc_main$d.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/tag.vue");
-  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
+  return _sfc_setup$d ? _sfc_setup$d(props, ctx) : void 0;
 };
-const AsideTag = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-0fe3f145"]]);
-const _sfc_main$a = /* @__PURE__ */ defineComponent({
+const AsideTag = /* @__PURE__ */ _export_sfc(_sfc_main$d, [["__scopeId", "data-v-0fe3f145"]]);
+const _sfc_main$c = /* @__PURE__ */ defineComponent({
   __name: "anchor",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18784,14 +18705,14 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$a = _sfc_main$a.setup;
-_sfc_main$a.setup = (props, ctx) => {
+const _sfc_setup$c = _sfc_main$c.setup;
+_sfc_main$c.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/anchor.vue");
-  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
+  return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
 };
-const AsideAnchor = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-9528abff"]]);
-const _sfc_main$9 = /* @__PURE__ */ defineComponent({
+const AsideAnchor = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-9528abff"]]);
+const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "calendar",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18846,13 +18767,13 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
       month: today.month
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "calendar" }, _attrs))} data-v-a84727e5><div class="header" data-v-a84727e5><button class="item arrow" data-v-a84727e5><i class="iconfont icon-prev" data-v-a84727e5></i></button><span class="item year-month" data-v-a84727e5>${ssrInterpolate(headerText.value)}</span><button class="item arrow" data-v-a84727e5><i class="iconfont icon-next" data-v-a84727e5></i></button></div><ul class="weekdays" data-v-a84727e5><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "calendar" }, _attrs))} data-v-221e71b2><div class="header" data-v-221e71b2><button class="item arrow" data-v-221e71b2><i class="iconfont icon-prev" data-v-221e71b2></i></button><span class="item year-month" data-v-221e71b2>${ssrInterpolate(headerText.value)}</span><button class="item arrow" data-v-221e71b2><i class="iconfont icon-next" data-v-221e71b2></i></button></div><ul class="weekdays" data-v-221e71b2><!--[-->`);
       ssrRenderList(weekDayTexts.value, (day, index) => {
-        _push(`<li data-v-a84727e5>${ssrInterpolate(day)}</li>`);
+        _push(`<li data-v-221e71b2>${ssrInterpolate(day)}</li>`);
       });
-      _push(`<!--]--></ul><ul class="days" data-v-a84727e5><!--[-->`);
+      _push(`<!--]--></ul><ul class="days" data-v-221e71b2><!--[-->`);
       ssrRenderList(tableView.table, (item, index) => {
-        _push(`<li data-v-a84727e5><div class="${ssrRenderClass([{ today: isToday(item), other: item.month !== tableView.month }, "item"])}" data-v-a84727e5>`);
+        _push(`<li data-v-221e71b2><div class="${ssrRenderClass([{ today: isToday(item), other: item.month !== tableView.month }, "item"])}" data-v-221e71b2>`);
         ssrRenderSlot(_ctx.$slots, "day", mergeProps({ ref_for: true }, item), () => {
           _push(`${ssrInterpolate(item.day)}`);
         }, _push, _parent);
@@ -18862,14 +18783,14 @@ const _sfc_main$9 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$9 = _sfc_main$9.setup;
-_sfc_main$9.setup = (props, ctx) => {
+const _sfc_setup$b = _sfc_main$b.setup;
+_sfc_main$b.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widget/calendar.vue");
-  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/calendar.vue");
+  return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
 };
-const Calendar = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-a84727e5"]]);
-const _sfc_main$8 = /* @__PURE__ */ defineComponent({
+const Calendar = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-221e71b2"]]);
+const _sfc_main$a = /* @__PURE__ */ defineComponent({
   __name: "calendar",
   __ssrInlineRender: true,
   setup(__props) {
@@ -18901,7 +18822,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
             } else {
-              _push2(`<span class="date-span" data-v-e2b3124d${_scopeId}>${ssrInterpolate(humanDate.day)}</span>`);
+              _push2(`<span class="date-span" data-v-c32a8bbf${_scopeId}>${ssrInterpolate(humanDate.day)}</span>`);
             }
           } else {
             return [
@@ -18926,14 +18847,14 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$8 = _sfc_main$8.setup;
-_sfc_main$8.setup = (props, ctx) => {
+const _sfc_setup$a = _sfc_main$a.setup;
+_sfc_main$a.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/calendar.vue");
-  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
+  return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
 };
-const AsideCalendar = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-e2b3124d"]]);
-const _sfc_main$7 = /* @__PURE__ */ defineComponent({
+const AsideCalendar = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-c32a8bbf"]]);
+const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
   setup(__props) {
@@ -19013,14 +18934,14 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$7 = _sfc_main$7.setup;
-_sfc_main$7.setup = (props, ctx) => {
+const _sfc_setup$9 = _sfc_main$9.setup;
+_sfc_main$9.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/index.vue");
-  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
+  return _sfc_setup$9 ? _sfc_setup$9(props, ctx) : void 0;
 };
-const AsideView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-cbfd1f1c"]]);
-const _sfc_main$6 = /* @__PURE__ */ defineComponent({
+const AsideView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$9, [["__scopeId", "data-v-cbfd1f1c"]]);
+const _sfc_main$8 = /* @__PURE__ */ defineComponent({
   __name: "nav",
   __ssrInlineRender: true,
   setup(__props) {
@@ -19178,33 +19099,33 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$6 = _sfc_main$6.setup;
-_sfc_main$6.setup = (props, ctx) => {
+const _sfc_setup$8 = _sfc_main$8.setup;
+_sfc_main$8.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/nav.vue");
-  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
+  return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-d1e64463"]]);
-const _sfc_main$5 = /* @__PURE__ */ defineComponent({
+const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-d1e64463"]]);
+const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
   setup(__props) {
-    const { route, gState } = useEnhancer();
-    const { switcher, layoutColumn } = gState;
+    const { route, globalState } = useEnhancer();
+    const { switcher, layoutColumn } = globalState;
     const wallpaperStore = useWallpaperStore();
     const gitHubSponsorsStore = useGitHubSponsorsStore();
     const sponsorState = useSponsorState();
     const handlePageTransitionDone = () => {
-      gState.setLayoutColumn(getLayoutByRouteMeta(route.meta));
+      globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta));
     };
     const handleSponsorModalClose = () => {
-      gState.toggleSwitcher("sponsor", false);
+      globalState.toggleSwitcher("sponsor", false);
     };
     const handleFeedbackModalClose = () => {
-      gState.toggleSwitcher("feedback", false);
+      globalState.toggleSwitcher("feedback", false);
     };
     const handleStatementModalClose = () => {
-      gState.toggleSwitcher("statement", false);
+      globalState.toggleSwitcher("statement", false);
     };
     onMounted(() => {
       wallpaperStore.fetch().catch((error) => {
@@ -19222,7 +19143,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-3a6063a0>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-main" }, _attrs))} data-v-d208f472>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -19234,7 +19155,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-3a6063a0${_scopeId2}><div class="sponsor" data-v-3a6063a0${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-d208f472${_scopeId2}><div class="sponsor" data-v-d208f472${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -19378,7 +19299,7 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       _push(ssrRenderComponent(HeaderView$1, null, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-3a6063a0>`);
+      _push(`<main${ssrRenderAttr("id", unref(MAIN_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(layoutColumn).isFull }, "main-container"])}" data-v-d208f472>`);
       if (unref(layoutColumn).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -19393,11 +19314,11 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(layoutColumn).isNormal,
         "layout-wide": unref(layoutColumn).isWide,
         "layout-full": unref(layoutColumn).isFull
-      }, "main-view"])}" data-v-3a6063a0>`);
+      }, "main-view"])}" data-v-d208f472>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-3a6063a0${_scopeId}>`);
+            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-d208f472${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -19441,14 +19362,14 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$5 = _sfc_main$5.setup;
-_sfc_main$5.setup = (props, ctx) => {
+const _sfc_setup$7 = _sfc_main$7.setup;
+_sfc_main$7.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/main.vue");
-  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
+  return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-3a6063a0"]]);
-const _sfc_main$4 = /* @__PURE__ */ defineComponent({
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-d208f472"]]);
+const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
   props: {
@@ -19492,7 +19413,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       _push(`<header${ssrRenderAttrs(mergeProps({
         class: ["header", { search: searchState.open }]
-      }, _attrs))} data-v-aafd649a><nav class="navbar" data-v-aafd649a><button class="navbar-menu" data-v-aafd649a><i class="iconfont icon-menu" data-v-aafd649a></i></button>`);
+      }, _attrs))} data-v-63e0e0be><nav class="navbar" data-v-63e0e0be><button class="navbar-menu" data-v-63e0e0be><i class="iconfont icon-menu" data-v-63e0e0be></i></button>`);
       _push(ssrRenderComponent(_component_router_link, {
         to: "/",
         class: "navbar-logo"
@@ -19516,11 +19437,11 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="navbar-search" data-v-aafd649a><i class="iconfont icon-search" data-v-aafd649a></i></button></nav>`);
+      _push(`<button class="navbar-search" data-v-63e0e0be><i class="iconfont icon-search" data-v-63e0e0be></i></button></nav>`);
       if (searchState.open) {
-        _push(`<div class="search" data-v-aafd649a><div class="search-bar" data-v-aafd649a><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-aafd649a><span class="close" data-v-aafd649a><i class="iconfont icon-cancel" data-v-aafd649a></i></span></div><div class="search-tags" data-v-aafd649a>`);
+        _push(`<div class="search" data-v-63e0e0be><div class="search-bar" data-v-63e0e0be><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LanguageKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-63e0e0be><span class="close" data-v-63e0e0be><i class="iconfont icon-cancel" data-v-63e0e0be></i></span></div><div class="search-tags" data-v-63e0e0be>`);
         if (unref(tagStore).sorted) {
-          _push(`<div class="${ssrRenderClass([{ "input-focused": searchState.focused }, "tag-list"])}" data-v-aafd649a><!--[-->`);
+          _push(`<div class="${ssrRenderClass([{ "input-focused": searchState.focused }, "tag-list"])}" data-v-63e0e0be><!--[-->`);
           ssrRenderList(unref(tagStore).sorted, (tag, index) => {
             _push(ssrRenderComponent(_component_router_link, {
               class: "item",
@@ -19530,12 +19451,12 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag), "iconfont"])}" data-v-aafd649a${_scopeId}></i><span class="name" data-v-aafd649a${_scopeId}>`);
+                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag), "iconfont"])}" data-v-63e0e0be${_scopeId}></i><span class="name" data-v-63e0e0be${_scopeId}>`);
                   _push2(ssrRenderComponent(_component_i18n, {
                     zh: tag.name,
                     en: unref(getTagEnName)(tag)
                   }, null, _parent2, _scopeId));
-                  _push2(`</span><span class="count" data-v-aafd649a${_scopeId}>${ssrInterpolate(tag.article_count || 0)}</span>`);
+                  _push2(`</span><span class="count" data-v-63e0e0be${_scopeId}>${ssrInterpolate(tag.article_count || 0)}</span>`);
                 } else {
                   return [
                     createVNode("i", {
@@ -19566,14 +19487,14 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$4 = _sfc_main$4.setup;
-_sfc_main$4.setup = (props, ctx) => {
+const _sfc_setup$6 = _sfc_main$6.setup;
+_sfc_main$6.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/header.vue");
-  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
+  return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
-const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-aafd649a"]]);
-const _sfc_main$3 = /* @__PURE__ */ defineComponent({
+const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-63e0e0be"]]);
+const _sfc_main$5 = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
   setup(__props) {
@@ -19584,14 +19505,14 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$3 = _sfc_main$3.setup;
-_sfc_main$3.setup = (props, ctx) => {
+const _sfc_setup$5 = _sfc_main$5.setup;
+_sfc_main$5.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/footer.vue");
-  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+  return _sfc_setup$5 ? _sfc_setup$5(props, ctx) : void 0;
 };
-const FooterView = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-9944df09"]]);
-const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+const FooterView = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-9944df09"]]);
+const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "aside",
   __ssrInlineRender: true,
   setup(__props) {
@@ -19621,13 +19542,13 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_router_link = resolveComponent("router-link");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<aside${ssrRenderAttrs(mergeProps({ class: "aside" }, _attrs))} data-v-d58412ec><div class="aside-user" data-v-d58412ec>`);
+      _push(`<aside${ssrRenderAttrs(mergeProps({ class: "aside" }, _attrs))} data-v-0c9dc0ed><div class="aside-user" data-v-0c9dc0ed>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "avatar",
         src: adminAvatar.value,
         alt: unref(APP_META).author
       }, null, _parent));
-      _push(`<div class="profile" data-v-d58412ec><h3 class="name" data-v-d58412ec>${ssrInterpolate(unref(APP_META).author)}</h3>`);
+      _push(`<div class="profile" data-v-0c9dc0ed><h3 class="name" data-v-0c9dc0ed>${ssrInterpolate(unref(APP_META).author)}</h3>`);
       _push(ssrRenderComponent(_component_webfont, { class: "slogan" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -19644,14 +19565,14 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="aside-tool" data-v-d58412ec><button class="item" data-v-d58412ec><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-d58412ec></i></button><div class="separator" data-v-d58412ec></div><button class="item" data-v-d58412ec><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-d58412ec></i></button></div><div class="aside-nav" data-v-d58412ec><nav class="nav-list" data-v-d58412ec>`);
+      _push(`</div></div><div class="aside-tool" data-v-0c9dc0ed><button class="item" data-v-0c9dc0ed><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-0c9dc0ed></i></button><div class="separator" data-v-0c9dc0ed></div><button class="item" data-v-0c9dc0ed><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-0c9dc0ed></i></button></div><div class="aside-nav" data-v-0c9dc0ed><nav class="nav-list" data-v-0c9dc0ed>`);
       _push(ssrRenderComponent(_component_router_link, {
         to: "/",
         class: "item"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-home" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-home" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19696,7 +19617,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-code" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-code" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19741,7 +19662,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-insight" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-insight" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19786,7 +19707,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-buddhism" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-buddhism" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19831,7 +19752,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-quill" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-quill" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19876,7 +19797,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-comment" data-v-d58412ec${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-comment" data-v-0c9dc0ed${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -19966,14 +19887,14 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</nav></div><div class="aside-source-link" data-v-d58412ec>`);
+      _push(`</nav></div><div class="aside-source-link" data-v-0c9dc0ed>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "link",
         href: unref(VALUABLE_LINKS).GITHUB_SURMON_ME
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-d58412ec${_scopeId}></i><span class="label" data-v-d58412ec${_scopeId}>Source Code</span><span class="new-window" data-v-d58412ec${_scopeId}><i class="iconfont icon-new-window-s" data-v-d58412ec${_scopeId}></i></span>`);
+            _push2(`<i class="iconfont icon-github" data-v-0c9dc0ed${_scopeId}></i><span class="label" data-v-0c9dc0ed${_scopeId}>Source Code</span><span class="new-window" data-v-0c9dc0ed${_scopeId}><i class="iconfont icon-new-window-s" data-v-0c9dc0ed${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" }),
@@ -19990,14 +19911,14 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$2 = _sfc_main$2.setup;
-_sfc_main$2.setup = (props, ctx) => {
+const _sfc_setup$4 = _sfc_main$4.setup;
+_sfc_main$4.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/aside.vue");
-  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+  return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const AsideView = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-d58412ec"]]);
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+const AsideView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-0c9dc0ed"]]);
+const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
   setup(__props) {
@@ -20083,18 +20004,111 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
+const _sfc_setup$3 = _sfc_main$3.setup;
+_sfc_main$3.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/main.vue");
+  return _sfc_setup$3 ? _sfc_setup$3(props, ctx) : void 0;
+};
+const MobileMain = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-1b57236e"]]);
+const _sfc_main$2 = /* @__PURE__ */ defineComponent({
+  __name: "app-error",
+  __ssrInlineRender: true,
+  props: {
+    error: {}
+  },
+  emits: ["resolve"],
+  setup(__props, { emit: __emit }) {
+    const props = __props;
+    const { isDarkTheme } = useEnhancer();
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_i18n = resolveComponent("i18n");
+      const _component_uimage = resolveComponent("uimage");
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        class: ["app-error", { dark: unref(isDarkTheme) }]
+      }, _attrs))} data-v-fd8511da><h1 class="code" data-v-fd8511da>${ssrInterpolate(props.error.code)}</h1><h3 class="message" data-v-fd8511da>`);
+      if (props.error.message) {
+        _push(`<!--[-->${ssrInterpolate(props.error.message)}<!--]-->`);
+      } else {
+        _push(ssrRenderComponent(_component_i18n, {
+          k: unref(LanguageKey).NOT_FOUND
+        }, null, _parent));
+      }
+      _push(`</h3><p class="link" data-v-fd8511da>`);
+      ssrRenderSlot(_ctx.$slots, "resolve-text", {}, null, _push, _parent);
+      _push(`</p>`);
+      _push(ssrRenderComponent(_component_uimage, {
+        class: "logo",
+        src: "/images/logo.svg",
+        cdn: ""
+      }, null, _parent));
+      _push(`</div>`);
+    };
+  }
+});
+const _sfc_setup$2 = _sfc_main$2.setup;
+_sfc_main$2.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/app-error.vue");
+  return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
+};
+const AppError = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-fd8511da"]]);
+const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+  __name: "app-boundary",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const { router, globalState } = useEnhancer();
+    const handleResolveRoute = () => {
+      router.push({ name: RouteName.Home }).then(() => {
+        globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta));
+        globalState.setError(null);
+      });
+    };
+    onErrorCaptured((error) => {
+      globalState.setError(error);
+      return false;
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_i18n = resolveComponent("i18n");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "app-boundary" }, _attrs))}>`);
+      if (unref(globalState).error.value) {
+        _push(ssrRenderComponent(AppError, {
+          error: unref(globalState).error.value,
+          onResolve: handleResolveRoute
+        }, {
+          "resolve-text": withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(ssrRenderComponent(_component_i18n, {
+                k: unref(LanguageKey).BACK_TO_HOME_PAGE
+              }, null, _parent2, _scopeId));
+            } else {
+              return [
+                createVNode(_component_i18n, {
+                  k: unref(LanguageKey).BACK_TO_HOME_PAGE
+                }, null, 8, ["k"])
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      } else {
+        ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
+      }
+      _push(`</div>`);
+    };
+  }
+});
 const _sfc_setup$1 = _sfc_main$1.setup;
 _sfc_main$1.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/main.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/app-boundary.vue");
   return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
 };
-const MobileMain = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-1b57236e"]]);
 const _sfc_main = /* @__PURE__ */ defineComponent({
-  __name: "index",
+  __name: "app",
   __ssrInlineRender: true,
   setup(__props) {
-    const { isMobile } = useEnhancer();
+    const { globalState } = useEnhancer();
     return (_ctx, _push, _parent, _attrs) => {
       const _component_client_only = resolveComponent("client-only");
       const _component_popup_root = resolveComponent("popup-root");
@@ -20104,14 +20118,14 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(ssrRenderComponent(NavProgress, {
-              spin: !unref(isMobile)
+              spin: !unref(globalState).userAgent.isMobile
             }, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(EmojiRain, null, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_popup_root, null, null, _parent2, _scopeId));
           } else {
             return [
               createVNode(NavProgress, {
-                spin: !unref(isMobile)
+                spin: !unref(globalState).userAgent.isMobile
               }, null, 8, ["spin"]),
               createVNode(EmojiRain),
               createVNode(_component_popup_root)
@@ -20120,7 +20134,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(ssrRenderComponent(_sfc_main$s, null, {
+      _push(ssrRenderComponent(_sfc_main$1, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(ssrRenderComponent(_component_responsive, null, {
@@ -20167,7 +20181,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/app.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
 console.group(`🔵 [APP:INIT]`);
@@ -20182,7 +20196,7 @@ const createMainApp = (context) => {
     userAgent: context.userAgent || "",
     language: context.language || "",
     layout: context.layout ?? LayoutColumn.Normal,
-    error: context.error
+    error: context.error ?? null
   });
   const store = createUniversalStore({ globalState });
   const router = createUniversalRouter({
@@ -20204,15 +20218,12 @@ const createMainApp = (context) => {
       "data-device": globalState.userAgent.isMobile ? "mobile" : "desktop"
     }
   });
-  app.config.errorHandler = (error) => globalState.setRenderError(error);
-  router.onError((error) => globalState.setRenderError(error));
+  app.config.errorHandler = (error) => globalState.setError(error);
+  router.onError((error) => globalState.setError(error));
   router.beforeEach((to, _, next) => {
     if (to.meta.validator) {
       to.meta.validator({ route: to, i18n, store }).then(next).catch((error) => {
-        const newError = new Error();
-        newError.code = error.code;
-        newError.message = error.message;
-        next(newError);
+        next(createAppError(error.message, error.code));
       });
     } else {
       next();
@@ -20223,7 +20234,7 @@ const createMainApp = (context) => {
   app.use(globalState);
   app.use(i18n);
   app.use(theme);
-  app.use(components);
+  app.use(register);
   return {
     app,
     router,
@@ -20238,7 +20249,7 @@ const devDebug = (...messages) => isDev;
 const getRegionByCountryCode = (country) => {
   return country && isCNCode(country) ? "cn" : "global";
 };
-const createSSRContext = (requestContext, error) => {
+const createSSRContext = (requestContext, error = null) => {
   const { headers, cookies: cookies2, url } = requestContext;
   const country = headers["country-code"];
   const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL;
@@ -20276,15 +20287,15 @@ const createSSRMainApp = (ssrContext) => {
   return [mainApp, head];
 };
 const renderError = async (requestContext, error) => {
-  const renderError2 = {
-    code: error.code ?? INTERNAL_SERVER_ERROR,
-    message: error instanceof Error ? error.message : _isObject(error) ? error["message"] : JSON.stringify(error)
-  };
-  const ssrContext = createSSRContext(requestContext, renderError2);
+  const appError = normalizeUnknowErrorToAppError(error, {
+    code: INTERNAL_SERVER_ERROR,
+    message: "Unknown Error"
+  });
+  const ssrContext = createSSRContext(requestContext, appError);
   const [{ app, theme }, head] = createSSRMainApp(ssrContext);
-  head.push({ title: `Server Error: ${renderError2.message || "unknow"}` });
+  head.push({ title: `Server Error: ${appError.message}` });
   return {
-    code: renderError2.code,
+    code: appError.code,
     appHTML: await renderToString(app, ssrContext),
     headHTML: await renderSSRHead(head),
     assetsPrefix: ssrContext.assetsPrefix,
@@ -20324,10 +20335,8 @@ const renderApp = async (requestContext, cache) => {
     globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta));
     devDebug("- 4. renderToString");
     const appHTML = await renderToString(app, { ...ssrContext });
-    if (globalState.renderError.value) {
-      const newError = new Error(globalState.renderError.value.message);
-      newError.code = globalState.renderError.value.code;
-      throw newError;
+    if (globalState.error.value) {
+      throw toRaw(globalState.error.value);
     }
     devDebug("- 5. renderSSRHead");
     const headHTML = await renderSSRHead(head);
@@ -20342,7 +20351,7 @@ const renderApp = async (requestContext, cache) => {
       })
     );
     devDebug("rendered:", Date.now() - startTime, "ms");
-    const cacheableRendered = {
+    const renderedForCache = {
       appHTML,
       headHTML,
       stateScripts,
@@ -20350,10 +20359,10 @@ const renderApp = async (requestContext, cache) => {
     };
     const cacheTTL = router.currentRoute.value.meta?.ssrCacheTTL;
     if (cacheTTL !== false && typeof cacheTTL === "number" && cacheTTL > 0) {
-      cacheTTL === Infinity ? cache.set(cacheKey, cacheableRendered) : cache.set(cacheKey, cacheableRendered, cacheTTL);
+      cacheTTL === Infinity ? cache.set(cacheKey, renderedForCache) : cache.set(cacheKey, renderedForCache, cacheTTL);
     }
     return {
-      ...cacheableRendered,
+      ...renderedForCache,
       contextScripts,
       code: SUCCESS
     };
