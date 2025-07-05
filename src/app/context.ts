@@ -1,7 +1,7 @@
 import { useSSRContext } from 'vue'
-import { getSSRContextValue } from '/@/universal'
-import type { RenderErrorValue } from './state'
 import { isServer } from '/@/configs/app.env'
+import { getSSRContextValue } from './universal'
+import type { AppErrorValue } from './state'
 
 export interface SSRContext {
   requestURL: string
@@ -12,7 +12,7 @@ export interface SSRContext {
   cdnDomain: string
   assetsPrefix: string
   cacheStatus?: string
-  error?: RenderErrorValue
+  error: AppErrorValue
   [key: string]: any
 }
 

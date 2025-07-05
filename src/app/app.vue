@@ -6,13 +6,13 @@
   import MobileMain from '/@/components/layout/mobile/main.vue'
   import AppBoundary from './app-boundary.vue'
 
-  const { isMobile } = useEnhancer()
+  const { globalState } = useEnhancer()
 </script>
 
 <template>
   <div class="app-root" v-cloak>
     <client-only>
-      <nav-progress :spin="!isMobile" />
+      <nav-progress :spin="!globalState.userAgent.isMobile" />
       <emoji-rain />
       <popup-root />
     </client-only>

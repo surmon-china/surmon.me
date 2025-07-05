@@ -2,7 +2,7 @@
   import { computed, watch, shallowRef, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useStores } from '/@/stores'
   import * as ANCHORS from '/@/constants/anchor'
   import * as URL_HASHES from '/@/constants/anchor'

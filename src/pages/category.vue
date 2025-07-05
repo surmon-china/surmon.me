@@ -2,7 +2,7 @@
   import { computed, watch, onBeforeMount } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useStores } from '/@/stores'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'

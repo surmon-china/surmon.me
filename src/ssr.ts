@@ -5,22 +5,23 @@
  */
 
 import serialize from 'serialize-javascript'
-import _isObject from 'lodash-es/isObject'
-import { createMemoryHistory } from 'vue-router'
+import { toRaw } from 'vue'
 import { renderToString } from 'vue/server-renderer'
-import { createMainApp, MainApp } from '/@/app/main'
+import { createMemoryHistory } from 'vue-router'
 import { createHead, renderSSRHead } from '@unhead/vue/server'
+import { createMainApp, MainApp } from '/@/app/main'
 import type { IncomingHttpHeaders } from 'http'
 import type { SSRHeadPayload, VueHeadClient } from '@unhead/vue/server'
 import type { SSRContext } from '/@/app/context'
-import type { RenderErrorValue } from '/@/app/state'
 import type { CacheStore } from '@/server/services/cache'
-import { renderSSRStateScript, renderSSRContextScript } from '/@/universal'
+import type { AppErrorValue } from '/@/app/state'
+import { normalizeUnknowErrorToAppError } from '/@/app/error'
+import { renderSSRStateScript, renderSSRContextScript } from '/@/app/universal'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import * as HTTP_CODES from '/@/constants/http-code'
 import { createLogger } from '/@/utils/logger'
+import { getLayoutByRouteMeta } from '/@/constants/layout'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
-import { getLayoutByRouteMeta } from '/@/transforms/layout'
 import { isCNCode } from '/@/transforms/region'
 import { isDev } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
@@ -38,7 +39,7 @@ export interface RequestContext {
   url: string
 }
 
-const createSSRContext = (requestContext: RequestContext, error?: RenderErrorValue): SSRContext => {
+const createSSRContext = (requestContext: RequestContext, error: AppErrorValue = null): SSRContext => {
   const { headers, cookies, url } = requestContext
   const country = headers['country-code'] as string
   const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
@@ -102,15 +103,15 @@ export interface RenderResult {
  * 3. router validate/404 error
  */
 export const renderError = async (requestContext: RequestContext, error: unknown): Promise<RenderResult> => {
-  const renderError: RenderErrorValue = {
-    code: (error as any).code ?? HTTP_CODES.INTERNAL_SERVER_ERROR,
-    message: error instanceof Error ? error.message : _isObject(error) ? error['message'] : JSON.stringify(error)
-  }
-  const ssrContext = createSSRContext(requestContext, renderError)
+  const appError: AppErrorValue = normalizeUnknowErrorToAppError(error, {
+    code: HTTP_CODES.INTERNAL_SERVER_ERROR,
+    message: 'Unknown Error'
+  })
+  const ssrContext = createSSRContext(requestContext, appError)
   const [{ app, theme }, head] = createSSRMainApp(ssrContext)
-  head.push({ title: `Server Error: ${renderError.message || 'unknow'}` })
+  head.push({ title: `Server Error: ${appError.message}` })
   return {
-    code: renderError.code,
+    code: appError.code,
     appHTML: await renderToString(app, ssrContext),
     headHTML: await renderSSRHead(head),
     assetsPrefix: ssrContext.assetsPrefix,
@@ -162,19 +163,17 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     devDebug('- 3. set layout')
     globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
 
-    devDebug('- 4. renderToString')
     // MARK: `vite-plugin-vue` introduces a side effect on `ssrContext.modules`,
     // even though it's not needed in production environments.
     // This is not an issue with `vite-plugin-vue` itself — the `context` argument in `renderToString`
     // is designed specifically for the rendering process, not for passing data into the SSR script.
     // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/packages/plugin-vue/src/main.ts#L184
     // https://github.com/vitejs/vite-plugin-vue/blob/9be175d9f192ebd864faf688022e235aa047a3cf/playground/ssr-vue/src/entry-server.js#L12
+    devDebug('- 4. renderToString')
     const appHTML = await renderToString(app, { ...ssrContext })
     // WORKAROUND: `async setup` | `onServerPrefetch` can't break `renderToString`, resulting in empty HTML, so need to re-render based on manual markup.
-    if (globalState.renderError.value) {
-      const newError = new Error(globalState.renderError.value.message)
-      ;(newError as any).code = globalState.renderError.value.code
-      throw newError
+    if (globalState.error.value) {
+      throw toRaw(globalState.error.value)
     }
 
     devDebug('- 5. renderSSRHead')
@@ -193,7 +192,7 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
 
     devDebug('rendered:', Date.now() - startTime, 'ms')
 
-    const cacheableRendered = {
+    const renderedForCache = {
       appHTML,
       headHTML,
       stateScripts,
@@ -204,12 +203,12 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     const cacheTTL = router.currentRoute.value.meta?.ssrCacheTTL
     if (cacheTTL !== false && typeof cacheTTL === 'number' && cacheTTL > 0) {
       cacheTTL === Infinity
-        ? cache.set(cacheKey, cacheableRendered)
-        : cache.set(cacheKey, cacheableRendered, cacheTTL)
+        ? cache.set(cacheKey, renderedForCache)
+        : cache.set(cacheKey, renderedForCache, cacheTTL)
     }
 
     return {
-      ...cacheableRendered,
+      ...renderedForCache,
       contextScripts,
       code: HTTP_CODES.SUCCESS
     }

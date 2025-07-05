@@ -6,7 +6,7 @@
 
 import { createPinia } from 'pinia'
 import { GlobalState } from '/@/app/state'
-import { getSSRStateValue } from '/@/universal'
+import { getSSRStateValue } from '/@/app/universal'
 import { useStores } from './_hook'
 export { useStores } from './_hook'
 

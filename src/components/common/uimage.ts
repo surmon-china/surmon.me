@@ -7,7 +7,7 @@
 import { defineComponent, ref, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getAssetURL, getProxyURL } from '/@/transforms/url'
-import { onClient } from '/@/universal'
+import { isClient } from '/@/configs/app.env'
 
 export default defineComponent({
   name: 'Uimage',
@@ -33,11 +33,11 @@ export default defineComponent({
     const { defer, cdnDomain } = useEnhancer()
     const deferRenderable = ref(false)
     if (props.defer) {
-      onClient(() => {
+      if (isClient) {
         defer.addTask(() => {
           deferRenderable.value = true
         })
-      })
+      }
     }
 
     return () => {

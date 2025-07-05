@@ -28,7 +28,6 @@ export const useEnhancer = () => {
   const appOptionStore = useAppOptionStore()
 
   const adConfig = computed(() => appOptionStore.adConfig)
-  const isMobile = computed(() => globalState.userAgent.isMobile)
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
   const isZhLang = computed(() => i18n.language.value === Language.Chinese)
 
@@ -41,7 +40,6 @@ export const useEnhancer = () => {
     cdnDomain: useCdnDomain(),
 
     adConfig,
-    isMobile,
     isDarkTheme,
     isZhLang,
 

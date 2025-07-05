@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { isClient } from '/@/configs/app.env'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
@@ -23,7 +23,7 @@
   const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
   const siteLikes = computed(() => appOption.data?.meta.likes || 0)
   // MARK: Only for client-side routing to navigate to this page
-  const isLoading = ref(isClient && globalState.isHydrated.value)
+  const isLoading = ref(isClient && globalState.isHydrated)
   const bannerImage = `/images/page-guestbook/banner.webp`
 
   const handleLike = async () => {

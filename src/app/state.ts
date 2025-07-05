@@ -6,86 +6,72 @@
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INTERNAL_SERVER_ERROR } from '/@/constants/http-code'
+import { LayoutColumn } from '/@/constants/layout'
 import { uaParser, isZhUser } from '/@/transforms/ua'
-import { onClient } from '/@/universal'
+import { isClient } from '/@/configs/app.env'
+import { normalizeUnknowErrorToAppError } from './error'
+import type { AppError } from './error'
 import logger from '/@/utils/logger'
 
-export type RenderErrorValue = RenderError | null
-export interface RenderError {
-  code: number
-  message: string
-}
+export type AppErrorValue = AppError | null
 
-export enum LayoutColumn {
-  Normal = 0,
-  Wide = 1, // 3 column
-  Full = 2 // full page
-}
-
-export interface GlobalRawState {
-  renderError: RenderErrorValue
+export interface GlobalStateOptions {
   userAgent: string
   language: string
   layout: LayoutColumn
-}
-
-export interface GlobalStateConfig {
-  userAgent: string
-  language: string
-  layout: LayoutColumn
-  error?: RenderErrorValue
+  error: AppErrorValue
 }
 
 const GlobalStateSymbol = Symbol('globalState')
 export type GlobalState = ReturnType<typeof createGlobalState>
-export const createGlobalState = (config: GlobalStateConfig) => {
-  // Render error
-  const renderError = ref<RenderErrorValue>(config.error ?? null)
-  const defaultError = { code: INTERNAL_SERVER_ERROR }
-  const setRenderError = (error: any) => {
-    onClient(() => {
-      logger.failure('error:', error)
-    })
-    if (!error) {
-      // clear error
-      renderError.value = null
-    } else if (error instanceof Error) {
-      // new Error
-      renderError.value = {
-        code: (error as any).code ?? defaultError.code,
-        message: error.message
-      }
-    } else if (typeof error === 'string') {
-      // error message
-      renderError.value = {
-        ...defaultError,
-        message: error
-      }
-    } else {
-      // error object -> axios | component
-      renderError.value = {
-        ...error,
-        code: error.status || error.code || defaultError.code
-      }
-    }
+export const createGlobalState = (options: GlobalStateOptions) => {
+  // User agent state
+  // This state is used to store the user agent string and parsed device information.
+  // It is initialized with the user agent string passed in the options.
+  // It also includes the original user agent string, language, and a flag
+  // indicating whether the user is a Chinese user (based on the language).
+  // The `uaParser` function is used to parse the user agent string and extract device
+  // information such as browser, OS, and device type.
+  const userAgent = {
+    original: options.userAgent,
+    language: options.language,
+    isZhUser: isZhUser(options.language),
+    ...uaParser(options.userAgent)
   }
 
-  // Hydrated
-  const isHydrated = ref(false)
+  // Hydrated state
+  // This state is used to determine whether the app has been hydrated on the client side.
+  // It is initialized to false, and set to true after the first hydration.
+  // This is useful for avoiding unnecessary data fetching on the client side after hydration.
+  // It is also used to determine whether the app is in the hydration phase.
+  // The `isHydrated` state is not reactive, so it can be used in computed properties without causing unnecessary re-renders.
+  // It is set to true in the `setHydrate` method, which is called after the first hydration.
+  // This state is not used in the SSR context, so it is only used in the client-side app.
+  let isHydrated = false
   const setHydrate = () => {
-    isHydrated.value = true
+    isHydrated = true
   }
 
-  // UserAgent & device info
-  const userAgent = reactive({
-    original: config.userAgent,
-    language: config.language,
-    isZhUser: isZhUser(config.language),
-    ...uaParser(config.userAgent)
-  })
+  // App error state
+  // This state is used to store the global error that occurs in the app.
+  // It is initialized with the error passed in the options, or null if no error is provided.
+  // The `error` state is reactive, so it can be used in computed properties and templates.
+  // The `setError` method is used to update the error state.
+  // It accepts an error object, string, or null, and updates the `error` state accordingly.
+  const error = ref<AppErrorValue>(options.error ?? null)
+  const setError = (_error: unknown) => {
+    if (isClient) logger.failure('error:', _error)
+    // If the error is null, it clears the error state.
+    error.value = !_error
+      ? null
+      : normalizeUnknowErrorToAppError(_error, {
+          code: INTERNAL_SERVER_ERROR,
+          message: 'Unknown Error'
+        })
+  }
 
   // UI layout
-  const layoutValue = ref(config.layout)
+  const layoutValue = ref(options.layout)
   const layoutColumn = computed(() => ({
     layout: layoutValue.value,
     isNormal: layoutValue.value === LayoutColumn.Normal,
@@ -108,27 +94,24 @@ export const createGlobalState = (config: GlobalStateConfig) => {
     switcher[key] = value
   }
 
-  // export state
-  const toRawState = (): GlobalRawState => ({
-    renderError: renderError.value,
-    userAgent: userAgent.original,
-    language: userAgent.language,
-    layout: layoutValue.value
-  })
-
   const globalState = {
-    toRawState,
-    // Render error state
-    renderError: readonly(renderError),
-    setRenderError,
+    // Device state
+    userAgent,
+
     // Hydrate state
-    isHydrated: readonly(isHydrated),
     setHydrate,
+    get isHydrated() {
+      return isHydrated
+    },
+
+    // App error state
+    error: readonly(error),
+    setError,
+
     // Layout state
     layoutColumn,
     setLayoutColumn,
-    // Device state
-    userAgent: readonly(userAgent),
+
     // Global switchers
     switcher: readonly(switcher),
     toggleSwitcher

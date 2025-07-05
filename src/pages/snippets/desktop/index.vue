@@ -6,7 +6,7 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsLatestMediasStore } from '/@/stores/media'
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'

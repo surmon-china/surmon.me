@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import { RenderError } from '/@/app/state'
   import { LanguageKey } from '/@/language'
+  import type { AppError } from './error'
 
   const props = defineProps<{
-    error: RenderError
+    error: AppError
   }>()
 
   const emit = defineEmits<{
@@ -27,7 +27,7 @@
     <p class="link" @click="handleResolveRoute">
       <slot name="resolve-text" />
     </p>
-    <uimage cdn class="logo" src="/images/logo.svg" />
+    <uimage class="logo" src="/images/logo.svg" cdn />
   </div>
 </template>
 
@@ -105,7 +105,7 @@
 
     .code {
       text-transform: uppercase;
-      font-size: 10em;
+      font-size: 12em;
       font-weight: normal;
       margin: 0;
       background-image: global.surl('/images/page-error/wave.png');

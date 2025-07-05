@@ -4,23 +4,25 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory, createRouter } from 'vue-router'
+import { createRouter } from 'vue-router'
+import type { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory } from 'vue-router'
 import { LanguageKey } from '/@/language'
+import { LayoutColumn } from '/@/constants/layout'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/http-code'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToPageTop } from '/@/utils/scroller'
-import { LayoutColumn } from './state'
 
-// mobile listing
+// Mobile listing
 import MobileListing from '/@/components/listing/mobile/index.vue'
-// desktop listing
+
+// Desktop listing
 import IndexPage from '/@/pages/index/index.vue'
 import CategoryListingPage from '/@/pages/category.vue'
 import TagListingPage from '/@/pages/tag.vue'
 import SearchListingPage from '/@/pages/search.vue'
 import DateListingPage from '/@/pages/date.vue'
 
-// core pages
+// BIZ pages
 import DesktopArchivePage from '/@/pages/archive/desktop.vue'
 import MobileArchivePage from '/@/pages/archive/mobile.vue'
 import ArticleDetailPage from '/@/pages/article/index.vue'
@@ -29,7 +31,7 @@ import MobileAboutPage from '/@/pages/about/mobile/index.vue'
 import GuestbookPage from '/@/pages/guestbook.vue'
 import AppPage from '/@/pages/app.vue'
 
-// third pages
+// Third pages
 import SponsorPage from '/@/pages/sponsor.vue'
 import YoutubePage from '/@/pages/youtube/index.vue'
 import PhotographyPage from '/@/pages/photography/index.vue'

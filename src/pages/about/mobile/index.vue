@@ -4,7 +4,7 @@
   import { RouteName } from '/@/app/router'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminInfoStore } from '/@/stores/basic'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'

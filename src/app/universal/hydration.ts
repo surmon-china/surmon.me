@@ -1,13 +1,10 @@
-/**
- * @file Universal hydration
- * @module universal/hydration
- * @author Surmon <https://github.com/surmon-china>
- */
-
-// https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
 import { useSSRContext, watchEffect } from 'vue'
 import { isClient, isServer } from '/@/configs/app.env'
-import { SSRData, getSSRContextValue } from './context'
+import { SSRData, getSSRContextValue } from './script'
+
+// https://github.com/nuxt/framework/blob/main/packages/nitro/src/runtime/app/render.ts
+// https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/hydrate.ts
+// https://github.com/nuxt/nuxt/blob/main/packages/nuxt/src/app/composables/state.ts
 
 /**
  * Allows full control of the hydration cycle to set and receive data from the server.
@@ -15,7 +12,6 @@ import { SSRData, getSSRContextValue } from './context'
  * @param key a unique key to identify the data in the Nuxt payload
  * @param get a function that returns the value to set the initial data
  * @param set a function that will receive the data on the client-side
- * @link https://github.com/nuxt/framework/blob/main/packages/nuxt3/src/app/composables/hydrate.ts
  * @example
     useHydration(
       'store',

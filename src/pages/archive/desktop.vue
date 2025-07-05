@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useArchiveStore } from '/@/stores/archive'
   import { LanguageKey } from '/@/language'
   import { numberSplit } from '/@/transforms/text'

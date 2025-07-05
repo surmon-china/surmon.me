@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useArticleListStore } from '/@/stores/article'

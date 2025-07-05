@@ -4,7 +4,7 @@
   import { usePopupWithRoot } from './hook'
 
   const element = ref<HTMLElement>(null as any)
-  const { isDarkTheme, isMobile } = useEnhancer()
+  const { isDarkTheme, globalState } = useEnhancer()
   const { state, image, hidden } = usePopupWithRoot(() => element.value)
   const handleWindowScroll = () => hidden()
   const handleMaskClick = () => {
@@ -20,7 +20,12 @@
 </script>
 
 <template>
-  <div id="popup" class="popup" :class="{ mobile: isMobile, dark: isDarkTheme }" v-disabled-wallflower>
+  <div
+    id="popup"
+    class="popup"
+    :class="{ dark: isDarkTheme, mobile: globalState.userAgent.isMobile }"
+    v-disabled-wallflower
+  >
     <transition name="module">
       <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
         <div ref="element" class="wrapper" :class="{ border: state.border }">

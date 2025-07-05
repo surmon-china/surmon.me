@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
   import { usePageSeo } from '/@/composables/head'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { LanguageKey } from '/@/language'
   import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'

@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
+  import { isClient } from '/@/configs/app.env'
   import { APP_META } from '/@/configs/app.config'
   import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useArticleListStore } from '/@/stores/article'
   import { useTagStore, getTagEnName } from '/@/stores/tag'
   import { useCategoryStore } from '/@/stores/category'
@@ -73,7 +74,9 @@
     fetchArticles({
       page: articleListStore.pagination!.current_page + 1
     }).then(() => {
-      onClient(scrollToNextScreen)
+      if (isClient) {
+        scrollToNextScreen()
+      }
     })
   }
 

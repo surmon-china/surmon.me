@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { watch, onBeforeMount } from 'vue'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { scrollToNextScreen } from '/@/utils/scroller'

@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
   import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { getLayoutByRouteMeta } from '/@/transforms/layout'
+  import { getLayoutByRouteMeta } from '/@/constants/layout'
   import logger from '/@/utils/logger'
   import MusicPlayerHandle from '/@/components/widgets/music-player/handle.vue'
   import Wallflower from '/@/components/widgets/wallflower/garden.vue'

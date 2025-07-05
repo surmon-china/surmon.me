@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { RouteName } from '/@/app/router'
   import { GAEventCategories } from '/@/constants/gtag'
   import { VALUABLE_LINKS } from '/@/configs/app.config'

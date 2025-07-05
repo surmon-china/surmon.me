@@ -2,10 +2,11 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useUniversalFetch, onClient } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { LanguageKey } from '/@/language'
   import { APP_META } from '/@/configs/app.config'
+  import { isClient } from '/@/configs/app.env'
   import ArticleList from '/@/components/listing/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
@@ -16,8 +17,8 @@
   const loadmoreArticles = async () => {
     const targetPage = articleListStore.pagination!.current_page + 1
     await articleListStore.fetch({ page: targetPage })
-    if (targetPage > 1) {
-      onClient(scrollToNextScreen)
+    if (targetPage > 1 && isClient) {
+      scrollToNextScreen()
     }
   }
 

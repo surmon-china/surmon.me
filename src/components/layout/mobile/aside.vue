@@ -5,7 +5,7 @@
   import { RouteName, CategorySlug } from '/@/app/router'
   import { Theme } from '/@/composables/theme'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { useAdminInfoStore } from '/@/stores/basic'
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'

@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useUniversalFetch } from '/@/universal'
+  import { useUniversalFetch } from '/@/app/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
   import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'

@@ -9,9 +9,11 @@ import type { RouterHistory } from 'vue-router'
 import type { SerializableHead } from '@unhead/vue'
 import { createUniversalStore } from '/@/stores'
 import { createUniversalRouter, RouterCreatorOptions } from './router'
-import { createGlobalState, LayoutColumn, RenderErrorValue } from './state'
+import { createGlobalState, AppErrorValue } from './state'
+import { createAppError } from './error'
 import { createTheme, Theme } from '/@/composables/theme'
 import { createI18n } from '/@/composables/i18n'
+import { LayoutColumn } from '/@/constants/layout'
 import { Language, LanguageKey, languages } from '/@/language'
 import { APP_MODE, APP_VERSION } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
@@ -32,7 +34,7 @@ export interface AppCreatorContext {
   language: string
   userAgent: string
   layout?: LayoutColumn
-  error?: RenderErrorValue
+  error?: AppErrorValue
   routerHistoryCreator(base?: string): RouterHistory
   routerBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
   routerAfterMiddleware?(globalState: any): RouterCreatorOptions['afterMiddleware']
@@ -48,7 +50,7 @@ export const createMainApp = (context: AppCreatorContext) => {
     userAgent: context.userAgent || '',
     language: context.language || '',
     layout: context.layout ?? LayoutColumn.Normal,
-    error: context.error
+    error: context.error ?? null
   })
 
   // 3. store
@@ -80,23 +82,21 @@ export const createMainApp = (context: AppCreatorContext) => {
   })
 
   // handle global error: https://vuejs.org/api/application#app-config-errorhandler
-  app.config.errorHandler = (error) => globalState.setRenderError(error)
+  app.config.errorHandler = (error) => globalState.setError(error)
   // handle router error: https://router.vuejs.org/api/interfaces/Router.html#onError-
-  router.onError((error) => globalState.setRenderError(error))
+  router.onError((error) => globalState.setError(error))
 
   // handle router validate error & 404 error
-  // https://next.router.vuejs.org/guide/advanced/navigation-guards.html#optional-third-argument-next
+  // https://router.vuejs.org/guide/advanced/navigation-guards.html#Optional-third-argument-next
   router.beforeEach((to, _, next) => {
     if (to.meta.validator) {
       to.meta
         .validator({ route: to, i18n, store })
         .then(next)
         .catch((error) => {
-          // next(error) > router error > global state error
-          const newError: any = new Error()
-          newError.code = error.code
-          newError.message = error.message
-          next(newError)
+          // client: next(error) > router error > global state error
+          // server: next(error) > router error > render catch error
+          next(createAppError(error.message, error.code))
         })
     } else {
       next()
