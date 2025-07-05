@@ -5,10 +5,10 @@
  */
 
 import axios from '@/server/services/axios'
-import { IDENTITIES } from '@/configs/app.config'
+import { VALUABLE_LINKS } from '@/configs/app.config'
 
 export const fetchGitHubStatisticJSON = async <T = any>(fileName: string): Promise<T> => {
-  const url = `https://raw.githubusercontent.com/${IDENTITIES.GITHUB_USER_NAME}/${IDENTITIES.GITHUB_USER_NAME}/release/${fileName}`
+  const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`
   const response = await axios.get<T>(url, { timeout: 6000 })
   return response.data
 }
