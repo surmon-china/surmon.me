@@ -18,11 +18,11 @@ import adsense from '/@/composables/adsense'
 import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
-import { runTitler, resetTitler } from '/@/effects/titler'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
+import { setStaticTitler, resetTitler } from '/@/effects/titler'
 import { getLayoutByRouteMeta } from '/@/constants/layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
 import { Language, LanguageKey } from '/@/language'
@@ -130,7 +130,7 @@ router.isReady().finally(() => {
             { favicon: '🌱', title: APP_META.en_sub_title }
           ]
           const index = Math.floor(Math.random() * surprises.length)
-          isHidden ? runTitler(surprises[index]) : resetTitler()
+          isHidden ? setStaticTitler(surprises[index]) : resetTitler()
         },
         false
       )

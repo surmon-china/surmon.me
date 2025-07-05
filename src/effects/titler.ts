@@ -8,14 +8,14 @@ import { renderTextToDataURL } from '/@/transforms/text-2-image'
 
 // title
 let rollTimer: number
-const setTitle = (title: string) => {
+const rollTitle = (title: string) => {
   document.title = title
   if (title.length <= 10) {
     return false
   }
   const [first, ...content] = title.split('')
   const newTitle = [...content, first].join('')
-  rollTimer = window.setTimeout(() => setTitle(newTitle), 366)
+  rollTimer = window.setTimeout(() => rollTitle(newTitle), 366)
 }
 
 // favicon
@@ -41,9 +41,16 @@ export const resetTitler = () => {
   window.clearTimeout(rollTimer)
 }
 
-export const runTitler = async ({ favicon, title }) => {
+export const setStaticTitler = async ({ favicon, title }) => {
   cache.title = document.title
   cache.favicon = getFavicon()!
-  setTitle(title + ' ')
-  setFavicon(await renderTextToDataURL(favicon, 28))
+  document.title = title
+  setFavicon(await renderTextToDataURL(favicon, 26))
+}
+
+export const runDynamicTitler = async ({ favicon, title }) => {
+  cache.title = document.title
+  cache.favicon = getFavicon()!
+  rollTitle(title + ' ')
+  setFavicon(await renderTextToDataURL(favicon, 26))
 }
