@@ -51,7 +51,9 @@ export default defineComponent({
         imageSrc = getProxyURL(cdnDomain, src)
       }
       if (defer && !deferRenderable.value) {
-        return null
+        // render a placeholder image (1x1 pixel transparent PNG)
+        imageSrc =
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII='
       }
 
       return h('img', {
