@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, reactive, Plugin } from 'vue'
+import { App, inject, ref, Plugin } from 'vue'
 
 declare global {
   interface Window {
@@ -17,29 +17,34 @@ declare global {
 export type Defer = ReturnType<typeof createDeferStore>
 export type DeferTask = () => any
 const createDeferStore = () => {
-  const state = reactive({
-    loaded: false,
-    tasks: [] as Array<DeferTask>
-  })
+  const loaded = ref<boolean>(document.readyState === 'complete')
+  const tasks: DeferTask[] = []
 
   const doTask = (task: DeferTask) => {
     Promise.resolve().then(task)
   }
 
   const handleLoaded = () => {
-    state.loaded = true
-    state.tasks.forEach((task) => doTask(task))
+    loaded.value = true
+    tasks.forEach((task) => doTask(task))
+    tasks.length = 0
   }
 
   const addTask = (task: DeferTask) => {
-    state.tasks.push(task)
-    if (state.loaded) {
+    if (!loaded.value) {
+      tasks.push(task)
+    } else {
       doTask(task)
     }
   }
 
-  window.addEventListener('load', handleLoaded)
-  return { state, addTask }
+  if (document.readyState === 'complete') {
+    handleLoaded()
+  } else {
+    window.addEventListener('load', handleLoaded)
+  }
+
+  return { loaded, tasks, addTask }
 }
 
 const DeferSymbol = Symbol('defer')
