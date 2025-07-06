@@ -58,7 +58,7 @@
           <ulink class="item icon-only threads" title="Threads" :href="goLink.map.threads">
             <i class="iconfont icon-threads" />
           </ulink>
-          <ulink class="item with-text github" title="GitHub" :href="goLink.map.github">
+          <ulink class="item with-text github" :href="goLink.map.github">
             <i class="iconfont icon-github" />
             <span class="text">GitHub</span>
           </ulink>
