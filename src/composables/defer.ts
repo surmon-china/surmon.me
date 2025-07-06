@@ -23,7 +23,7 @@ const createDeferStore = () => {
   })
 
   const doTask = (task: DeferTask) => {
-    window.setTimeout(task, 666)
+    Promise.resolve().then(task)
   }
 
   const handleLoaded = () => {
