@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
   import { getEmailLink } from '/@/transforms/email'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META } from '/@/configs/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
   const emit = defineEmits<{
@@ -12,8 +12,7 @@
   }>()
 
   const { isZhLang, isDarkTheme, cdnDomain } = useEnhancer()
-  const { adminInfo } = useStores()
-  const { appOption } = useStores()
+  const { adminInfo, appOption, goLink } = useStores()
 
   const emailLink = getEmailLink({
     email: appOption.data?.site_email!,
@@ -53,23 +52,20 @@
           <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
         </p>
         <div class="socials">
-          <ulink class="item icon-only instagram" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink class="item icon-only instagram" title="Instagram" :href="goLink.map.instagram">
             <i class="iconfont icon-instagram" />
           </ulink>
-          <ulink class="item icon-only threads" title="Threads" :href="VALUABLE_LINKS.THREADS">
+          <ulink class="item icon-only threads" title="Threads" :href="goLink.map.threads">
             <i class="iconfont icon-threads" />
           </ulink>
-          <ulink class="item with-text github" :href="VALUABLE_LINKS.GITHUB">
+          <ulink class="item with-text github" title="GitHub" :href="goLink.map.github">
             <i class="iconfont icon-github" />
             <span class="text">GitHub</span>
           </ulink>
-          <ulink class="item icon-only youtube" title="YouTube" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+          <ulink class="item icon-only youtube" title="YouTube" :href="goLink.map.youtube">
             <i class="iconfont icon-youtube" />
           </ulink>
-          <!-- <ulink class="item icon-only twitter" :href="VALUABLE_LINKS.TWITTER">
-            <i class="iconfont icon-twitter-x" />
-          </ulink> -->
-          <ulink class="item icon-only telegram" title="Telegram" :href="VALUABLE_LINKS.TELEGRAM">
+          <ulink class="item icon-only telegram" title="Telegram" :href="goLink.map.telegram">
             <i class="iconfont icon-telegram" />
           </ulink>
           <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
@@ -89,13 +85,13 @@
               </popup>
             </client-only>
           </button>
-          <ulink class="item icon-only linkedin" title="LinkedIn" :href="VALUABLE_LINKS.LINKEDIN">
+          <ulink class="item icon-only linkedin" title="LinkedIn" :href="goLink.map.linkedin">
             <i class="iconfont icon-linkedin" />
           </ulink>
-          <ulink class="item icon-only zhihu" title="知乎回答" :href="VALUABLE_LINKS.ZHIHU">
+          <ulink class="item icon-only zhihu" title="知乎回答" :href="goLink.map.zhihu">
             <i class="iconfont icon-zhihu" />
           </ulink>
-          <ulink class="item icon-only douban" title="豆瓣" :href="VALUABLE_LINKS.DOUBAN">
+          <ulink class="item icon-only douban" title="豆瓣" :href="goLink.map.douban">
             <i class="iconfont icon-douban" />
           </ulink>
           <ulink class="item icon-only email" title="Email me" :href="emailLink">

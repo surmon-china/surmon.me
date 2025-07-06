@@ -4,7 +4,7 @@
   import EmojiRain from '/@/components/widgets/emoji-rain.vue'
   import DesktopMain from '/@/components/layout/desktop/main.vue'
   import MobileMain from '/@/components/layout/mobile/main.vue'
-  import AppBoundary from './app-boundary.vue'
+  import AppBoundary from './root/boundary.vue'
 
   const { globalState } = useEnhancer()
 </script>

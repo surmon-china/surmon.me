@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
-  import type { AppError } from './error'
+  import type { AppError } from '../error'
 
   const props = defineProps<{
     error: AppError

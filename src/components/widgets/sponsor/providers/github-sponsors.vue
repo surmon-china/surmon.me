@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { useStores } from '/@/stores'
   import type { GitHubSponsorsResponse } from '/@/server/getters/github'
 
   const props = defineProps<{
@@ -8,6 +8,7 @@
     listData: GitHubSponsorsResponse | null
   }>()
 
+  const { goLink } = useStores()
   const allSponsors = computed(() => {
     if (!props.listData) {
       return []
@@ -28,7 +29,7 @@
 
 <template>
   <div class="github-sponsors">
-    <ulink class="link" :href="VALUABLE_LINKS.GITHUB_SPONSORS">
+    <ulink class="link" :href="goLink.map['github-sponsors']">
       <uimage class="icon" src="/images/third-party/github-sponsors-heart.svg" alt="GitHub Sponsors" />
       <span class="text">
         <i18n en="Sponsor me on GitHub" zh="通过 GitHub Sponsor 赞助我" />
@@ -60,11 +61,7 @@
           >
             <uimage class="avatar" :src="item.avatarUrl" :alt="'@' + item.login" />
           </ulink>
-          <ulink
-            class="more-link"
-            :href="VALUABLE_LINKS.GITHUB_SPONSORS"
-            v-if="allSponsors.length > props.maxCount"
-          >
+          <ulink v-if="allSponsors.length > props.maxCount" class="more-link" :href="goLink.map['github-sponsors']">
             + {{ allSponsors.length - props.maxCount }}
           </ulink>
         </div>

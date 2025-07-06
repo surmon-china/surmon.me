@@ -67,27 +67,37 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
   GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
   GITHUB_BLOG_STAR_LIST: 'https://github.com/stars/surmon-china/lists/surmon-me',
-  GITHUB_STATISTIC_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
-  GOOGLE_MY_MAP: `https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3`,
-  GOOGLE_MY_MAP_KML: `https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w`,
-  MUSIC_163: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
+  GOOGLE_MY_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
+  MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
 
-  UPTIME_STATUS: 'https://go.surmon.me/status',
-  NPM_HOMEPAGE: 'https://go.surmon.me/npm',
-  PAYPAL: 'https://go.surmon.me/paypal',
-  GITHUB: 'https://go.surmon.me/github',
-  GITHUB_SPONSORS: 'https://go.surmon.me/github-sponsors',
-  DISCORD_GROUP: 'https://go.surmon.me/discord-server',
-  TELEGRAM_GROUP: 'https://go.surmon.me/telegram-group',
-  YOUTUBE_CHANNEL: 'https://go.surmon.me/youtube',
-  TELEGRAM: 'https://go.surmon.me/telegram',
-  OPENSEA: 'https://go.surmon.me/opensea',
-  ZHIHU: 'https://go.surmon.me/zhihu',
-  DOUBAN: 'https://go.surmon.me/douban',
-  DOUBAN_MOVIE: 'https://go.surmon.me/douban-movie',
-  XIAOHONGSHU: 'https://go.surmon.me/xiaohongshu',
-  LINKEDIN: 'https://go.surmon.me/linkedin',
-  TWITTER: 'https://go.surmon.me/x',
-  INSTAGRAM: 'https://go.surmon.me/instagram',
-  THREADS: 'https://go.surmon.me/threads'
+  GITHUB_STATISTIC_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
+  GOOGLE_MY_MAP_KML_URL: 'https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
+  GO_LINK_MAP_ENDPOINT: 'https://go.surmon.me'
 })
+
+export const GO_LINK_MAP_KEYS = Object.freeze([
+  'status',
+  'npm',
+  'paypal',
+  'github',
+  'github-sponsors',
+  'discord-server',
+  'telegram-group',
+  'youtube',
+  'telegram',
+  'opensea',
+  'zhihu',
+  'douban',
+  'douban-movie',
+  'xiaohongshu',
+  'linkedin',
+  'instagram',
+  'threads',
+  'x'
+] as const)
+
+export type GoLinkMap = Record<(typeof GO_LINK_MAP_KEYS)[number], string>
+export const GO_LINK_MAP = GO_LINK_MAP_KEYS.reduce<GoLinkMap>(
+  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINK_MAP_ENDPOINT}/${key}` }),
+  {} as GoLinkMap
+)

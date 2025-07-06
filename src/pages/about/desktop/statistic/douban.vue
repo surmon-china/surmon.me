@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useDoubanMoviesStore } from '/@/stores/media'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import StatisticBase, { StatisticCount } from './base.vue'
 
+  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
   const store = useDoubanMoviesStore()
   const totalSpent = computed(() => Math.trunc(store.data?.total_spent ?? 0))
@@ -23,7 +24,7 @@
     icon="icon-douban"
     :data="store.data"
     :fetching="fetching"
-    :href="VALUABLE_LINKS.DOUBAN_MOVIE"
+    :href="goLink.map['douban-movie']"
     :platform="isZhLang ? '我在豆瓣' : 'Douban Movie'"
   >
     <p>

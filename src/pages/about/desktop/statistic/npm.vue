@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useNpmStatisticStore } from '/@/stores/statistic'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import StatisticBase, { StatisticCount } from './base.vue'
 
+  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
   const store = useNpmStatisticStore()
   const fetching = ref(true)
@@ -21,7 +22,7 @@
     icon="icon-npm"
     :data="store.data"
     :fetching="fetching"
-    :href="VALUABLE_LINKS.NPM_HOMEPAGE"
+    :href="goLink.map.npm"
     :platform="isZhLang ? '我在 NPM' : 'NPM'"
   >
     <p class="line-1">

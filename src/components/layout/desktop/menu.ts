@@ -1,8 +1,7 @@
-import { VALUABLE_LINKS } from '/@/configs/app.config'
 import { LanguageKey } from '/@/language'
 import { RouteName, CategorySlug } from '/@/app/router'
 import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
-import { getPageURL } from '/@/transforms/url'
+import { GO_LINK_MAP } from '/@/configs/app.config'
 
 export interface MenuItem {
   id: string
@@ -38,7 +37,7 @@ export const menus: Array<MenuItem> = [
   },
   {
     id: 'github',
-    url: VALUABLE_LINKS.GITHUB,
+    url: GO_LINK_MAP.github,
     icon: 'icon-github',
     i18nKey: LanguageKey.PAGE_GITHUB,
     newWindow: true

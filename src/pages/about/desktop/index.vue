@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { computed } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
@@ -18,7 +19,7 @@
   import { useAboutPageMeta, i18ns } from '../shared'
 
   const { gtag, globalState } = useEnhancer()
-  const { adminInfo, appOption } = useStores()
+  const { adminInfo, appOption, goLink } = useStores()
 
   const handleGTagEvent = (event: string) => {
     gtag?.event(event, {
@@ -46,7 +47,7 @@
   // prefetch
   useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]))
 
-  const moduleButtons = [
+  const moduleButtons = computed(() => [
     {
       class: 'photography',
       icon: 'icon-lens',
@@ -81,13 +82,13 @@
       class: 'telegram',
       icon: 'icon-telegram',
       i18n: i18ns.telegramGroup,
-      href: VALUABLE_LINKS.TELEGRAM_GROUP
+      href: goLink.map['telegram-group']
     },
     {
       class: 'discord',
       icon: 'icon-discord',
       i18n: i18ns.discordGroup,
-      href: VALUABLE_LINKS.DISCORD_GROUP
+      href: goLink.map['discord-server']
     },
     {
       class: 'sponsor',
@@ -107,7 +108,7 @@
       i18n: i18ns.rss,
       href: VALUABLE_LINKS.RSS
     }
-  ]
+  ])
 
   const specialLinks = Object.freeze([
     {

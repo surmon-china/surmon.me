@@ -11,6 +11,7 @@ import { useArchiveStore } from './archive'
 import { useCommentStore } from './comment'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
+import { useGoLinkStore } from './go-link'
 import { useIdentityStore } from './identity'
 import { useWallpaperStore } from './wallpaper'
 import { useGitHubSponsorsStore } from './sponsors'
@@ -50,6 +51,9 @@ export const useStores = (pinia?: Pinia) => ({
   adminInfo: useAdminInfoStore(pinia),
   appOption: useAppOptionStore(pinia),
   wallpaper: useWallpaperStore(pinia),
+
+  // link map
+  goLink: useGoLinkStore(pinia),
 
   // sponsor
   githubSponsors: useGitHubSponsorsStore(pinia),

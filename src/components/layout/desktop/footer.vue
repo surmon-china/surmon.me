@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/gtag'
   import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
 
+  const { goLink } = useStores()
   const { globalState, gtag } = useEnhancer()
   const handleStatementModal = () => {
     globalState.toggleSwitcher('statement', true)
@@ -27,7 +29,7 @@
       <i18n zh="周知" en="FAQ" />
     </a>
     <divider type="vertical" />
-    <ulink :href="VALUABLE_LINKS.UPTIME_STATUS">
+    <ulink :href="goLink.map.status">
       <i18n zh="实态" en="STATUS" />
     </ulink>
   </container>

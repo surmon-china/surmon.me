@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { GAEventCategories } from '/@/constants/gtag'
-import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+import { IDENTITIES, GO_LINK_MAP } from '/@/configs/app.config'
 
 export enum ProviderId {
   GitHub = 'github',
@@ -24,7 +24,7 @@ export const PROVIDERS = [
     title: 'PayPal me',
     logo: '/images/third-party/paypal-logo.svg',
     qrcode: '/images/third-party/paypal-qrcode.webp',
-    link: VALUABLE_LINKS.PAYPAL
+    link: GO_LINK_MAP.paypal
   },
   {
     id: ProviderId.Alipay,

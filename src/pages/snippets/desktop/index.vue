@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { IDENTITIES } from '/@/configs/app.config'
   import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
   import { LanguageKey } from '/@/language'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsLatestMediasStore } from '/@/stores/media'
@@ -14,6 +15,7 @@
   import ListItemCard from './card.vue'
   import ThreadsBody from './body-threads.vue'
 
+  const { goLink } = useStores()
   const { popup } = useEnhancer()
   const { fetching, fetchMedias } = useThreadsMediasRequest()
   const latestThreadsStore = useThreadsLatestMediasStore()
@@ -44,11 +46,11 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item threads" title="Threads" :href="VALUABLE_LINKS.THREADS">
+          <ulink class="item threads" title="Threads" :href="goLink.map.threads">
             <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
-          <ulink class="item zhihu" title="知乎" :href="VALUABLE_LINKS.ZHIHU">
+          <ulink class="item zhihu" title="知乎" :href="goLink.map.zhihu">
             <i class="iconfont icon-zhihu-full"></i>
           </ulink>
         </div>

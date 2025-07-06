@@ -63,7 +63,7 @@ const globalHeadEntry = head.push(globalHeadRef)
 watch(globalHeadRef, (newValue) => globalHeadEntry.patch(newValue))
 
 // init: store (from SSR context or fetch)
-store.hydrate()
+store.hydrateOnClient()
 
 // init: plugins & services
 app.use(head)
@@ -115,6 +115,8 @@ router.isReady().finally(() => {
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init user identity state
     store.stores.identity.initOnClient()
+    // init go url map state
+    store.stores.goLink.fetchRemoteLinkMap()
     // title surprise (desktop only)
     if (!globalState.userAgent.isMobile) {
       document.addEventListener(

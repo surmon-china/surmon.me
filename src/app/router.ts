@@ -352,6 +352,7 @@ export const createUniversalRouter = (options: RouterCreatorOptions) => {
       ? options.beforeMiddleware.forEach(router.beforeResolve)
       : router.beforeResolve(options.beforeMiddleware)
   }
+
   if (options.afterMiddleware) {
     Array.isArray(options.afterMiddleware)
       ? options.afterMiddleware.forEach(router.afterEach)

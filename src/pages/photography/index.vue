@@ -6,7 +6,7 @@
   import { useUniversalFetch } from '/@/app/universal'
   import { Language, LanguageKey } from '/@/language'
   import { firstUpperCase } from '/@/transforms/text'
-  import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, IDENTITIES } from '/@/configs/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
   import { isClient } from '/@/configs/app.env'
   import { delayPromise } from '/@/utils/delayer'
@@ -16,8 +16,8 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
 
-  const { instagramLatestMedias } = useStores()
   const { i18n: _i18n, isZhLang } = useEnhancer()
+  const { instagramLatestMedias, goLink } = useStores()
 
   const loading = ref(false)
   const medias = shallowReactive<Array<InstagramMediaItem>>([])
@@ -65,11 +65,11 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item instagram" title="Instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+          <ulink class="item instagram" title="Instagram" :href="goLink.map.instagram">
             <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
-          <ulink class="item xiaohongshu" title="小红书" :href="VALUABLE_LINKS.XIAOHONGSHU">
+          <ulink class="item xiaohongshu" title="小红书" :href="goLink.map.xiaohongshu">
             <i class="iconfont icon-xiaohongshu"></i>
           </ulink>
         </div>

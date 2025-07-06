@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, shallowRef } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/gtag'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
@@ -14,6 +14,7 @@
     fetching: boolean
   }>()
 
+  const { goLink } = useStores()
   const { gtag } = useEnhancer()
   const swiperRef = shallowRef<SwiperClass>()
   const prevSlide = () => swiperRef.value?.slidePrev()
@@ -53,7 +54,7 @@
       <template #default>
         <div class="threads-content" key="content">
           <div class="profile" v-if="profile" :title="profile.name">
-            <ulink class="link" :href="VALUABLE_LINKS.THREADS" @mousedown="handleGtagEvent('threads_homepage')">
+            <ulink class="link" :href="goLink.map.threads" @mousedown="handleGtagEvent('threads_homepage')">
               <uimage class="avatar" proxy :src="profile.avatar" />
               <span class="logo"><i class="iconfont icon-threads" /></span>
             </ulink>

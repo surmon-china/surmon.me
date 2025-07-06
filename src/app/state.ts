@@ -6,8 +6,8 @@
 
 import { App, inject, ref, computed, reactive, readonly } from 'vue'
 import { INTERNAL_SERVER_ERROR } from '/@/constants/http-code'
-import { LayoutColumn } from '/@/constants/layout'
 import { uaParser, isZhUser } from '/@/transforms/ua'
+import { LayoutColumn } from '/@/constants/layout'
 import { isClient } from '/@/configs/app.env'
 import { normalizeUnknowErrorToAppError } from './error'
 import type { AppError } from './error'
@@ -78,6 +78,7 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     isWide: layoutValue.value === LayoutColumn.Wide,
     isFull: layoutValue.value === LayoutColumn.Full
   }))
+
   const setLayoutColumn = (layout: LayoutColumn) => {
     if (layout !== layoutValue.value) {
       layoutValue.value = layout
@@ -90,6 +91,7 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     feedback: false,
     statement: false
   })
+
   const toggleSwitcher = (key: keyof typeof switcher, value: boolean) => {
     switcher[key] = value
   }

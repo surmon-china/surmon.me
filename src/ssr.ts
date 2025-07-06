@@ -157,7 +157,7 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     await router.isReady()
 
     devDebug('- 2. store.serverInit')
-    await store.serverPrefetch()
+    await store.prefetchOnServer()
 
     // because the layout func set has by animation done
     devDebug('- 3. set layout')

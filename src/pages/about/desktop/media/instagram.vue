@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useCountry } from '/@/app/context'
   import { isCNCode } from '/@/transforms/region'
@@ -7,9 +8,9 @@
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getProxyURL } from '/@/transforms/url'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
 
   const fetching = ref(true)
+  const { goLink } = useStores()
   const { cdnDomain } = useEnhancer()
   const igLatestMediasStore = useInstagramLatestMediasStore()
   const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
@@ -58,7 +59,7 @@
           </ulink>
         </li>
         <li class="item">
-          <ulink class="link more" :href="VALUABLE_LINKS.INSTAGRAM">•••</ulink>
+          <ulink class="link more" :href="goLink.map.instagram">•••</ulink>
         </li>
       </ul>
     </template>

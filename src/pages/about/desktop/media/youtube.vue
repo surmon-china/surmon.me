@@ -1,9 +1,11 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
+  import { useStores } from '/@/stores'
   import { useYouTubePlayListStore } from '/@/stores/media'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { IDENTITIES } from '/@/configs/app.config'
 
+  const { goLink } = useStores()
   const youtubeStore = useYouTubePlayListStore()
   onMounted(() => youtubeStore.fetch().catch(() => []))
 </script>
@@ -35,7 +37,7 @@
         </ulink>
       </li>
       <li class="item">
-        <ulink class="link more" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+        <ulink class="link more" :href="goLink.map.youtube">
           <i class="iconfont icon-youtube"></i>
           <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
           <span class="text">•••</span>

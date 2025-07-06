@@ -1,10 +1,11 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useGitHubStatisticStore } from '/@/stores/statistic'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import StatisticBase, { StatisticCount } from './base.vue'
 
+  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
   const store = useGitHubStatisticStore()
   const fetching = ref(true)
@@ -21,7 +22,7 @@
     icon="icon-github"
     :data="store.data"
     :fetching="fetching"
-    :href="VALUABLE_LINKS.GITHUB"
+    :href="goLink.map.github"
     :platform="isZhLang ? '我在 GitHub' : 'GitHub'"
   >
     <p>

@@ -4,7 +4,7 @@
   import { RouteName } from '/@/app/router'
   import { useEnhancer } from '/@/app/enhancer'
   import { getLayoutByRouteMeta } from '/@/constants/layout'
-  import AppError from './app-error.vue'
+  import AppError from './error.vue'
 
   const { router, globalState } = useEnhancer()
   const handleResolveRoute = () => {

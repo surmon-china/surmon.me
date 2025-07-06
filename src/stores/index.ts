@@ -16,15 +16,17 @@ export interface UniversalStoreConfig {
 
 export const createUniversalStore = (config: UniversalStoreConfig) => {
   const pinia = createPinia()
+
+  // Fetch basic store data on the server side
+  // This is used to prefetch data before rendering the page
+  // and to hydrate the store on the client side
   const fetchBasicStore = () => {
-    // https://pinia.esm.dev/ssr/#using-the-store-outside-of-setup
+    // https://pinia.vuejs.org/ssr/#using-the-store-outside-of-setup
     const stores = useStores(pinia)
     const initFetchTasks = [
-      // app basic configuration
-      stores.appOption.fetch(),
-      // basic data
-      stores.category.fetch(),
-      stores.tag.fetch()
+      stores.appOption.fetch(), // app basic configuration
+      stores.category.fetch(), // basic categories data
+      stores.tag.fetch() // basic tags data
     ]
     // fetch hot articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
@@ -39,8 +41,8 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     },
     state: pinia.state,
     install: pinia.install,
-    serverPrefetch: fetchBasicStore,
-    hydrate() {
+    prefetchOnServer: fetchBasicStore,
+    hydrateOnClient() {
       const contextStore = getSSRStateValue('store')
       if (contextStore) {
         // The data passed from the SSR server is used to initialize the pinia

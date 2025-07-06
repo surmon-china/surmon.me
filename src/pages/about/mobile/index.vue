@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { LanguageKey } from '/@/language'
   import { RouteName } from '/@/app/router'
@@ -9,6 +10,7 @@
   import PageBanner from '/@/components/common/banner.vue'
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'
 
+  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
   const adminInfo = useAdminInfoStore()
 
@@ -33,22 +35,22 @@
         <webfont bolder>{{ isZhLang ? APP_META.zh_description_short : APP_META.en_description }}</webfont>
       </h4>
       <div class="socials">
-        <ulink class="item github" :href="VALUABLE_LINKS.GITHUB">
+        <ulink class="item github" :href="goLink.map.github">
           <i class="iconfont icon-github" />
         </ulink>
-        <ulink class="item instagram" :href="VALUABLE_LINKS.INSTAGRAM">
+        <ulink class="item instagram" :href="goLink.map.instagram">
           <i class="iconfont icon-instagram" />
         </ulink>
-        <ulink class="item threads" :href="VALUABLE_LINKS.THREADS">
+        <ulink class="item threads" :href="goLink.map.threads">
           <i class="iconfont icon-threads" />
         </ulink>
-        <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM">
+        <ulink class="item telegram" :href="goLink.map.telegram">
           <i class="iconfont icon-telegram" />
         </ulink>
-        <ulink class="item zhihu" :href="VALUABLE_LINKS.ZHIHU">
+        <ulink class="item zhihu" :href="goLink.map.zhihu">
           <i class="iconfont icon-zhihu" />
         </ulink>
-        <ulink class="item douban" :href="VALUABLE_LINKS.DOUBAN_MOVIE">
+        <ulink class="item douban" :href="goLink.map['douban-movie']">
           <i class="iconfont icon-douban" />
         </ulink>
       </div>
@@ -71,11 +73,11 @@
         <i class="iconfont icon-comment" />
         <span class="label"><i18n v-bind="i18ns.guestbook" /></span>
       </router-link>
-      <ulink class="item discord" :href="VALUABLE_LINKS.DISCORD_GROUP">
+      <ulink class="item discord" :href="goLink.map['discord-server']">
         <i class="iconfont icon-discord" />
         <span class="label"><i18n v-bind="i18ns.discordGroup" /></span>
       </ulink>
-      <ulink class="item telegram" :href="VALUABLE_LINKS.TELEGRAM_GROUP">
+      <ulink class="item telegram" :href="goLink.map['telegram-group']">
         <i class="iconfont icon-telegram" />
         <span class="label"><i18n v-bind="i18ns.telegramGroup" /></span>
       </ulink>

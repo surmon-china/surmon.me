@@ -1,18 +1,20 @@
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
-  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
-  import PageBanner from '/@/components/common/banner.vue'
-  import Loadmore from '/@/components/common/loadmore.vue'
-  import { IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { IDENTITIES } from '/@/configs/app.config'
   import { LanguageKey } from '/@/language'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsLatestMediasStore } from '/@/stores/media'
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
+  import PageBanner from '/@/components/common/banner.vue'
+  import Loadmore from '/@/components/common/loadmore.vue'
   import ThreadsCard from './card-threads.vue'
 
+  const { goLink } = useStores()
   const { popup } = useEnhancer()
   const { fetching, fetchMedias } = useThreadsMediasRequest()
   const latestThreadsStore = useThreadsLatestMediasStore()
@@ -57,7 +59,7 @@
       <template #default>
         <div class="snippets-content">
           <div class="socials">
-            <ulink class="item" :href="VALUABLE_LINKS.THREADS">
+            <ulink class="item" :href="goLink.map.threads">
               <p class="label">
                 <i class="iconfont icon-threads"></i>
                 <span class="text">Threads</span>
@@ -65,7 +67,7 @@
               <p class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</p>
             </ulink>
             <divider type="vertical" />
-            <ulink class="item" :href="VALUABLE_LINKS.ZHIHU">
+            <ulink class="item" :href="goLink.map.zhihu">
               <p class="label">
                 <i class="iconfont icon-zhihu-full"></i>
                 <span class="text">回答</span>

@@ -1,18 +1,18 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
+  import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
   import { LanguageKey } from '/@/language'
-  import { APP_META, IDENTITIES, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_META, IDENTITIES } from '/@/configs/app.config'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
   import YoutubeSkeleton from './skeleton.vue'
   import YoutubePlaylist from './playlist.vue'
 
   const { isZhLang } = useEnhancer()
-  const { youtubePlayList } = useStores()
+  const { youtubePlayList, goLink } = useStores()
   const youtubePlaylistData = computed(() => {
     return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
   })
@@ -37,7 +37,7 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item youtube" title="YouTube Channel" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+          <ulink class="item youtube" title="YouTube Channel" :href="goLink.map.youtube">
             <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
           </ulink>
         </div>
@@ -53,7 +53,7 @@
                 {{ list.snippet.title }}
                 ({{ list.contentDetails.itemCount }})
               </ulink>
-              <ulink class="brand" :href="VALUABLE_LINKS.YOUTUBE_CHANNEL">
+              <ulink class="brand" :href="goLink.map.youtube">
                 <i class="iconfont icon-youtube"></i>
                 <span class="text">YouTube · Channel</span>
               </ulink>

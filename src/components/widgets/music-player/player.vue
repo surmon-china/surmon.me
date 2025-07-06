@@ -65,7 +65,7 @@
       </div>
       <div class="tools">
         <span class="indexed">{{ state.index + 1 }} / {{ playlist.total }}</span>
-        <ulink class="playlist-link" :href="VALUABLE_LINKS.MUSIC_163">
+        <ulink class="playlist-link" :href="VALUABLE_LINKS.MUSIC_163_PLAYLIST">
           <i class="iconfont icon-new-window-s"></i>
         </ulink>
         <button class="toggle-muted" :disabled="!state.initialized" @click="player.toggleMuted">
