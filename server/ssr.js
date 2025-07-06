@@ -41,7 +41,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.0.4";
+const APP_VERSION = "5.0.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
