@@ -49,6 +49,11 @@ body {
   position: relative !important;
   // Firefox: https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-width
   scrollbar-width: thin;
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering
+  // text-rendering: optimizeLegibility;
+  // iOS reflow: https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 @include mix.scrollbar-style(
