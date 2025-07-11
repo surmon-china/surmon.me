@@ -40,7 +40,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.1.0";
+const APP_VERSION = "5.1.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -1366,8 +1366,8 @@ const useCdnDomain = () => {
   if (!domain) throw new Error("CDN domain is not defined.");
   return domain;
 };
-const useCountry = () => {
-  return useSSRContextValue("country");
+const useCountryCode = () => {
+  return useSSRContextValue("countryCode");
 };
 const HEADER_ELEMENT_ID = "A_header";
 const NAV_ELEMENT_ID = "A_nav";
@@ -10564,7 +10564,7 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
     const igLatestMediasStore = useInstagramLatestMediasStore();
     const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? []);
     const getMediaThumbnail = (media) => {
-      const countryCode = useCountry();
+      const countryCode = useCountryCode();
       const url = getInstagramCoverURL(media);
       return isCNCode(countryCode ?? "") ? getProxyURL(cdnDomain, url) : url;
     };
@@ -10585,9 +10585,9 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
       }, _attrs), {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="list" data-v-a4566cde${_scopeId}><!--[-->`);
+            _push2(`<ul class="list" data-v-781a2083${_scopeId}><!--[-->`);
             ssrRenderList(24, (i) => {
-              _push2(`<li class="item" data-v-a4566cde${_scopeId}>`);
+              _push2(`<li class="item" data-v-781a2083${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
               _push2(`</li>`);
             });
@@ -10624,9 +10624,9 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="list" data-v-a4566cde${_scopeId}><!--[-->`);
+            _push2(`<ul class="list" data-v-781a2083${_scopeId}><!--[-->`);
             ssrRenderList(igMedias.value, (media, index) => {
-              _push2(`<li class="item" data-v-a4566cde${_scopeId}>`);
+              _push2(`<li class="item" data-v-781a2083${_scopeId}>`);
               _push2(ssrRenderComponent(_component_ulink, {
                 class: "link",
                 href: media.permalink,
@@ -10639,19 +10639,19 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
                       alt: media.caption,
                       src: getMediaThumbnail(media)
                     }, null, _parent3, _scopeId2));
-                    _push3(`<div class="type-icon" data-v-a4566cde${_scopeId2}>`);
+                    _push3(`<div class="type-icon" data-v-781a2083${_scopeId2}>`);
                     if (unref(isVideoMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-video" data-v-a4566cde${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-video" data-v-781a2083${_scopeId2}></i>`);
                     } else if (unref(isAlbumMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-album" data-v-a4566cde${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-album" data-v-781a2083${_scopeId2}></i>`);
                     } else {
-                      _push3(`<i class="iconfont icon-camera" data-v-a4566cde${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-camera" data-v-781a2083${_scopeId2}></i>`);
                     }
-                    _push3(`</div><div class="mask" data-v-a4566cde${_scopeId2}>`);
+                    _push3(`</div><div class="mask" data-v-781a2083${_scopeId2}>`);
                     if (unref(isVideoMediaIns)(media)) {
-                      _push3(`<i class="iconfont icon-music-play" data-v-a4566cde${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-music-play" data-v-781a2083${_scopeId2}></i>`);
                     } else {
-                      _push3(`<i class="iconfont icon-eye" data-v-a4566cde${_scopeId2}></i>`);
+                      _push3(`<i class="iconfont icon-eye" data-v-781a2083${_scopeId2}></i>`);
                     }
                     _push3(`</div>`);
                   } else {
@@ -10689,7 +10689,7 @@ const _sfc_main$1a = /* @__PURE__ */ defineComponent({
               }, _parent2, _scopeId));
               _push2(`</li>`);
             });
-            _push2(`<!--]--><li class="item" data-v-a4566cde${_scopeId}>`);
+            _push2(`<!--]--><li class="item" data-v-781a2083${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "link more",
               href: unref(goLink).map.instagram
@@ -10777,7 +10777,7 @@ _sfc_main$1a.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/media/instagram.vue");
   return _sfc_setup$1a ? _sfc_setup$1a(props, ctx) : void 0;
 };
-const InstagramMedia = /* @__PURE__ */ _export_sfc(_sfc_main$1a, [["__scopeId", "data-v-a4566cde"]]);
+const InstagramMedia = /* @__PURE__ */ _export_sfc(_sfc_main$1a, [["__scopeId", "data-v-781a2083"]]);
 const _sfc_main$19 = /* @__PURE__ */ defineComponent({
   __name: "youtube",
   __ssrInlineRender: true,
@@ -14092,15 +14092,15 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
       isLoaded.value = true;
     };
     const getMediaUrl = (url) => {
-      const countryCode = useCountry();
-      const isCNUser = Boolean(countryCode && isCNCode(countryCode));
+      const countryCode = useCountryCode();
+      const isCNUser = isCNCode(countryCode ?? "");
       return isCNUser ? getProxyURL(cdnDomain, url) : url;
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_udate = resolveComponent("udate");
       const _component_spin = resolveComponent("spin");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-a6f68ca7><div class="topbar" data-v-a6f68ca7><div class="left" data-v-a6f68ca7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-032550e5><div class="topbar" data-v-032550e5><div class="left" data-v-032550e5>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "type-link",
         href: _ctx.media.permalink
@@ -14108,11 +14108,11 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(isVideoMediaIns)(_ctx.media)) {
-              _push2(`<i class="iconfont icon-video" data-v-a6f68ca7${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-video" data-v-032550e5${_scopeId}></i>`);
             } else if (unref(isAlbumMediaIns)(_ctx.media)) {
-              _push2(`<i class="iconfont icon-album" data-v-a6f68ca7${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-album" data-v-032550e5${_scopeId}></i>`);
             } else {
-              _push2(`<i class="iconfont icon-camera" data-v-a6f68ca7${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-camera" data-v-032550e5${_scopeId}></i>`);
             }
           } else {
             return [
@@ -14131,22 +14131,22 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><div class="center" data-v-a6f68ca7><span class="pagination" data-v-a6f68ca7>${ssrInterpolate(_ctx.index + 1)} / ${ssrInterpolate(_ctx.count)}</span></div><div class="right" data-v-a6f68ca7><span class="timestamp" data-v-a6f68ca7>`);
+      _push(`</div><div class="center" data-v-032550e5><span class="pagination" data-v-032550e5>${ssrInterpolate(_ctx.index + 1)} / ${ssrInterpolate(_ctx.count)}</span></div><div class="right" data-v-032550e5><span class="timestamp" data-v-032550e5>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "YMDm",
         date: _ctx.media.timestamp,
         separator: "/"
       }, null, _parent));
-      _push(`</span></div></div><div class="${ssrRenderClass([{ loaded: isLoaded.value }, "content"])}" data-v-a6f68ca7>`);
+      _push(`</span></div></div><div class="${ssrRenderClass([{ loaded: isLoaded.value }, "content"])}" data-v-032550e5>`);
       if (!isLoaded.value) {
-        _push(`<div class="loading" data-v-a6f68ca7>`);
+        _push(`<div class="loading" data-v-032550e5>`);
         _push(ssrRenderComponent(_component_spin, null, null, _parent));
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
       if (unref(isVideoMediaIns)(_ctx.media)) {
-        _push(`<video class="video"${ssrRenderAttr("src", getMediaUrl(_ctx.media.media_url))} autoplay data-v-a6f68ca7></video>`);
+        _push(`<video class="video"${ssrRenderAttr("src", getMediaUrl(_ctx.media.media_url))} autoplay data-v-032550e5></video>`);
       } else if (unref(isAlbumMediaIns)(_ctx.media)) {
         _push(ssrRenderComponent(InstagramAlbum, {
           class: "album",
@@ -14156,12 +14156,12 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
           child: withCtx(({ activeMedia }, _push2, _parent2, _scopeId) => {
             if (_push2) {
               if (unref(isImageMediaIns)(activeMedia)) {
-                _push2(`<img class="image"${ssrRenderAttr("src", getMediaUrl(activeMedia?.media_url))}${ssrRenderAttr("alt", activeMedia?.caption)} draggable="false" data-v-a6f68ca7${_scopeId}>`);
+                _push2(`<img class="image"${ssrRenderAttr("src", getMediaUrl(activeMedia?.media_url))}${ssrRenderAttr("alt", activeMedia?.caption)} draggable="false" data-v-032550e5${_scopeId}>`);
               } else {
                 _push2(`<!---->`);
               }
               if (unref(isVideoMediaIns)(activeMedia)) {
-                _push2(`<video class="video" autoplay${ssrRenderAttr("src", getMediaUrl(activeMedia?.media_url))} data-v-a6f68ca7${_scopeId}></video>`);
+                _push2(`<video class="video" autoplay${ssrRenderAttr("src", getMediaUrl(activeMedia?.media_url))} data-v-032550e5${_scopeId}></video>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -14186,10 +14186,10 @@ const _sfc_main$L = /* @__PURE__ */ defineComponent({
           _: 1
         }, _parent));
       } else {
-        _push(`<img class="image"${ssrRenderAttr("src", getMediaUrl(_ctx.media?.media_url))}${ssrRenderAttr("alt", _ctx.media.caption)} draggable="false" loading="lazy" data-v-a6f68ca7>`);
+        _push(`<img class="image"${ssrRenderAttr("src", getMediaUrl(_ctx.media?.media_url))}${ssrRenderAttr("alt", _ctx.media.caption)} draggable="false" loading="lazy" data-v-032550e5>`);
       }
       if (_ctx.media.caption) {
-        _push(`<p class="caption" data-v-a6f68ca7>${_ctx.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
+        _push(`<p class="caption" data-v-032550e5>${_ctx.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
       } else {
         _push(`<!---->`);
       }
@@ -14218,7 +14218,7 @@ _sfc_main$L.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/gallery.vue");
   return _sfc_setup$L ? _sfc_setup$L(props, ctx) : void 0;
 };
-const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$L, [["__scopeId", "data-v-a6f68ca7"]]);
+const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$L, [["__scopeId", "data-v-032550e5"]]);
 const _sfc_main$K = /* @__PURE__ */ defineComponent({
   __name: "grid",
   __ssrInlineRender: true,
@@ -14241,9 +14241,8 @@ const _sfc_main$K = /* @__PURE__ */ defineComponent({
     };
     const getMediaThumbnail = (media) => {
       const url = getInstagramCoverURL(media);
-      const countryCode = useCountry();
-      const isCNUser = Boolean(countryCode && isCNCode(countryCode));
-      return isCNUser ? getProxyURL(cdnDomain, url) : url;
+      const countryCode = useCountryCode();
+      return isCNCode(countryCode ?? "") ? getProxyURL(cdnDomain, url) : url;
     };
     return (_ctx, _push, _parent, _attrs) => {
       const _component_udate = resolveComponent("udate");
@@ -14251,29 +14250,29 @@ const _sfc_main$K = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _directive_lozad = resolveDirective("lozad");
       let _temp0;
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-eb60a1c7><ul${ssrRenderAttrs({
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-grid" }, _attrs))} data-v-82838427><ul${ssrRenderAttrs({
         name: "list",
         class: "medias"
-      })} data-v-eb60a1c7>`);
+      })} data-v-82838427>`);
       ssrRenderList(_ctx.medias, (media, index) => {
-        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-eb60a1c7><div class="content" data-v-eb60a1c7><div${ssrRenderAttrs(_temp0 = mergeProps({
+        _push(`<li${ssrRenderAttr("title", getPureCaption(media.caption))} class="${ssrRenderClass([unref(isVideoMediaIns)(media) ? "video" : "photo", "item"])}" data-v-82838427><div class="content" data-v-82838427><div${ssrRenderAttrs(_temp0 = mergeProps({
           class: "background",
           "data-background-image": getMediaThumbnail(media)
-        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-eb60a1c7>${"textContent" in _temp0 ? ssrInterpolate(_temp0.textContent) : _temp0.innerHTML ?? ""}</div><div class="mask" data-v-eb60a1c7><span class="icon" data-v-eb60a1c7>`);
+        }, ssrGetDirectiveProps(_ctx, _directive_lozad)))} data-v-82838427>${"textContent" in _temp0 ? ssrInterpolate(_temp0.textContent) : _temp0.innerHTML ?? ""}</div><div class="mask" data-v-82838427><span class="icon" data-v-82838427>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-music-play" data-v-eb60a1c7></i>`);
+          _push(`<i class="iconfont icon-music-play" data-v-82838427></i>`);
         } else {
-          _push(`<i class="iconfont icon-eye" data-v-eb60a1c7></i>`);
+          _push(`<i class="iconfont icon-eye" data-v-82838427></i>`);
         }
-        _push(`</span></div><div class="type-icon" data-v-eb60a1c7>`);
+        _push(`</span></div><div class="type-icon" data-v-82838427>`);
         if (unref(isVideoMediaIns)(media)) {
-          _push(`<i class="iconfont icon-video" data-v-eb60a1c7></i>`);
+          _push(`<i class="iconfont icon-video" data-v-82838427></i>`);
         } else if (unref(isAlbumMediaIns)(media)) {
-          _push(`<i class="iconfont icon-album" data-v-eb60a1c7></i>`);
+          _push(`<i class="iconfont icon-album" data-v-82838427></i>`);
         } else {
-          _push(`<i class="iconfont icon-camera" data-v-eb60a1c7></i>`);
+          _push(`<i class="iconfont icon-camera" data-v-82838427></i>`);
         }
-        _push(`</div><span class="date" data-v-eb60a1c7>`);
+        _push(`</div><span class="date" data-v-82838427>`);
         _push(ssrRenderComponent(_component_udate, {
           to: "YMD",
           date: media.timestamp,
@@ -14346,7 +14345,7 @@ _sfc_main$K.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/grid.vue");
   return _sfc_setup$K ? _sfc_setup$K(props, ctx) : void 0;
 };
-const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$K, [["__scopeId", "data-v-eb60a1c7"]]);
+const InstagramGrid = /* @__PURE__ */ _export_sfc(_sfc_main$K, [["__scopeId", "data-v-82838427"]]);
 const _sfc_main$J = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -14749,9 +14748,8 @@ const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", 
 const useThreadsMediaUrl = (url) => {
   if (!url) return null;
   const { cdnDomain } = useEnhancer();
-  const countryCode = useCountry();
-  const isCNUser = isCNCode(countryCode ?? "");
-  return isCNUser ? getProxyURL(cdnDomain, url) : url;
+  const countryCode = useCountryCode();
+  return isCNCode(countryCode ?? "") ? getProxyURL(cdnDomain, url) : url;
 };
 const useThreadsMediasRequest = () => {
   const fetching = shallowRef(false);
