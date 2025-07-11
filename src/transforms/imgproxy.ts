@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { normalizePath } from '/@/transforms/url'
+import { normalizePath } from './url'
 
 export type ImgProxyFormat = 'webp' | 'avif'
 

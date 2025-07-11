@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
+  import { LocaleKey } from '/@/locales'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
 
   const { i18n: _i18n, gtag, globalState } = useEnhancer()
 
@@ -75,12 +75,12 @@
         <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
           <i class="iconfont icon-rss" />
         </ulink>
-        <button class="feedback" :title="_i18n.t(LanguageKey.FEEDBACK)" @click="handleFeedback">
+        <button class="feedback" :title="_i18n.t(LocaleKey.FEEDBACK)" @click="handleFeedback">
           <i class="iconfont icon-mail-plane" />
         </button>
         <button
           class="to-page-top"
-          :title="_i18n.t(LanguageKey.TO_TOP)"
+          :title="_i18n.t(LocaleKey.TO_TOP)"
           @click="scrollToPageTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
@@ -89,7 +89,7 @@
         </button>
         <button
           class="to-page-bottom"
-          :title="_i18n.t(LanguageKey.TO_BOTTOM)"
+          :title="_i18n.t(LocaleKey.TO_BOTTOM)"
           @click="scrollToNextScreen"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"

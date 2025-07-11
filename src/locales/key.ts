@@ -1,10 +1,10 @@
 /**
- * @file Language keys
- * @module language/key
+ * @file Locale keys
+ * @module locale/key
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export enum LanguageKey {
+export enum LocaleKey {
   APP_SLOGAN = 'app-slogan',
   CATEGORY_INSIGHT = 'insight',
   CATEGORY_CODE = 'code',

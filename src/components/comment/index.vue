@@ -14,13 +14,12 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import * as ANCHORS from '/@/constants/anchor'
-  import * as URL_HASHS from '/@/constants/anchor'
+  import { GAEventCategories } from '/@/constants/google-analytics'
+  import * as ANCHORS from '/@/constants/element-anchor'
   import { UNDEFINED } from '/@/constants/value'
-  import { SortType } from '/@/constants/state'
+  import { SortType } from '/@/constants/biz-state'
   import { Author } from '/@/interfaces/comment'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { MAX_COMMENT_LENGTH, luanchEmojiRain, logger } from './helper'
   import CommentTopbar from './topbar.vue'
@@ -134,10 +133,10 @@
 
     // content length
     if (!payload.content || !payload.content.trim()) {
-      throw `${i18n.t(LanguageKey.COMMENT_POST_CONTENT)} ?`
+      throw `${i18n.t(LocaleKey.COMMENT_POST_CONTENT)} ?`
     }
     if (payload.content.length > MAX_COMMENT_LENGTH) {
-      throw `${i18n.t(LanguageKey.COMMENT_POST_ERROR_CONTENT)} ?`
+      throw `${i18n.t(LocaleKey.COMMENT_POST_ERROR_CONTENT)} ?`
     }
 
     // temp user profile
@@ -145,10 +144,10 @@
     const guestProfileValue = guestProfile.value
     if (isGuest) {
       if (!guestProfileValue.name) {
-        throw i18n.t(LanguageKey.COMMENT_POST_NAME) + '?'
+        throw i18n.t(LocaleKey.COMMENT_POST_NAME) + '?'
       }
       if (!guestProfileValue.email) {
-        throw i18n.t(LanguageKey.COMMENT_POST_EMAIL) + '?'
+        throw i18n.t(LocaleKey.COMMENT_POST_EMAIL) + '?'
       }
     }
 
@@ -242,8 +241,8 @@
 
   onMounted(() => {
     const urlHash = route.hash.slice(1)
-    if (urlHash.startsWith(URL_HASHS.COMMENT_ITEM_URL_HASH_PREFIX)) {
-      const commentId = URL_HASHS.getCommentIdByUrlHash(urlHash)
+    if (urlHash.startsWith(ANCHORS.COMMENT_ITEM_URL_HASH_PREFIX)) {
+      const commentId = ANCHORS.getCommentIdByUrlHash(urlHash)
       const elementId = ANCHORS.getCommentItemElementId(commentId)
       if (elementId && document.getElementById(elementId)) {
         setTimeout(() => scrollToAnchor(elementId), 400)

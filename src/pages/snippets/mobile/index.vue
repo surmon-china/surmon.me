@@ -1,14 +1,14 @@
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
-  import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
-  import { IDENTITIES } from '/@/configs/app.config'
-  import { LanguageKey } from '/@/language'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsLatestMediasStore } from '/@/stores/media'
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import { LocaleKey } from '/@/locales'
+  import { IDENTITIES } from '/@/configs/app.config'
+  import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
   import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import PageBanner from '/@/components/common/banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
@@ -40,7 +40,7 @@
 <template>
   <div class="snippets-page">
     <page-banner :is-mobile="true" image="/images/page-snippets/banner-mobile.webp" :image-position="80" cdn>
-      <template #title><i18n :k="LanguageKey.PAGE_SNIPPETS" /></template>
+      <template #title><i18n :k="LocaleKey.PAGE_SNIPPETS" /></template>
       <template #description><i18n v-bind="i18nTitle" /></template>
     </page-banner>
     <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">

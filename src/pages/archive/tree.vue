@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+  import { Language } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Language } from '/@/language'
+  import { I18nLocaleMap } from '/@/composables/i18n'
   import { numberToChinese } from '/@/transforms/text'
-  import { I18nLanguageMap } from '/@/composables/i18n'
-  import { ArchiveTreeList } from '/@/stores/archive'
+  import type { ArchiveTreeList } from '/@/stores/archive'
 
   const props = defineProps<{
     tree: ArchiveTreeList
@@ -12,7 +12,7 @@
   const { isZhLang } = useEnhancer()
 
   const ms = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const monthNameI18ns: Array<I18nLanguageMap<Language>> = ms.map((month, index) => ({
+  const monthNameI18ns: Array<I18nLocaleMap<Language>> = ms.map((month, index) => ({
     [Language.English]: month,
     [Language.Chinese]:
       index === 9 ? '十月' : index == 10 ? '十一' : index == 11 ? '十二' : numberToChinese(index + 1) + '月'

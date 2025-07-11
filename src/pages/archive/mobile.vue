@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
   import { useArchiveStore } from '/@/stores/archive'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
   import ArchiveTree from './tree.vue'
@@ -24,7 +24,7 @@
 <template>
   <div class="archive-page">
     <page-banner :is-mobile="true" image="/images/page-archive/banner-mobile.webp" :image-position="80" cdn>
-      <template #title><i18n :k="LanguageKey.PAGE_ARCHIVE" /></template>
+      <template #title><i18n :k="LocaleKey.PAGE_ARCHIVE" /></template>
       <template #description><i18n v-bind="i18ns.title" /></template>
     </page-banner>
     <div class="page-content">
@@ -59,7 +59,7 @@
         <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
           <template #placeholder>
             <empty class="archive-empty" key="empty">
-              <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
+              <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
             </empty>
           </template>
           <template #loading>

@@ -4,11 +4,12 @@ import { getSSRContextValue } from './universal'
 import type { AppErrorValue } from './state'
 
 export interface SSRContext {
-  requestURL: string
-  country?: string
-  language?: string
+  requestUrl: string
   userAgent?: string
+  acceptLanguage?: string
   cookieTheme?: string
+  countryName?: string
+  countryCode?: string
   cdnDomain: string
   assetsPrefix: string
   cacheStatus?: string
@@ -28,12 +29,6 @@ export const useCdnDomain = () => {
   const domain = useSSRContextValue<string>('cdnDomain')
   if (!domain) throw new Error('CDN domain is not defined.')
   return domain
-}
-
-export const useRequestURL = () => {
-  const url = useSSRContextValue<string>('requestURL')
-  if (!url) throw new Error('Request URL is not defined.')
-  return url
 }
 
 export const useCountry = () => {

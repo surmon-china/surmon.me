@@ -11,13 +11,13 @@ export const bundleServerRender = async (paths) => {
       emptyOutDir: false,
       outDir: paths.server,
       rollupOptions: {
-        input: path.join(paths.src, 'ssr'),
+        input: path.join(paths.src, 'server-entry'),
         output: {
-          entryFileNames: '[name].js',
-          chunkFileNames: '[name].js',
           // always outputs a single file
           inlineDynamicImports: false,
-          manualChunks: () => 'ssr'
+          manualChunks: () => 'ssr',
+          entryFileNames: 'ssr.js',
+          chunkFileNames: 'ssr.js'
         }
       }
     }

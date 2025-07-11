@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminInfoStore } from '/@/stores/basic'
@@ -22,7 +22,7 @@
   <div class="about-page">
     <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.webp" :image-position="70" cdn>
       <template #title>
-        <i18n :k="LanguageKey.PAGE_ABOUT" />
+        <i18n :k="LocaleKey.PAGE_ABOUT" />
       </template>
     </page-banner>
     <div class="profile">

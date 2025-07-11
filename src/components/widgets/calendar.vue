@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { reactive, computed } from 'vue'
-  import { Language } from '/@/language'
+  import { Language } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import {
     cloneDate,

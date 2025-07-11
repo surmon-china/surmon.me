@@ -3,7 +3,7 @@
   import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { isSearchFlow } from '/@/transforms/route'
   import { getTagFlowRoute } from '/@/transforms/route'
   import { onBeforeMount } from 'vue'
@@ -97,7 +97,7 @@
           type="text"
           maxlength="24"
           required
-          :placeholder="_i18n.t(LanguageKey.SEARCH_PLACEHOLDER)"
+          :placeholder="_i18n.t(LocaleKey.SEARCH_PLACEHOLDER)"
           v-model.trim="searchState.keyword"
           @keyup.enter.stop.prevent="submitSearch"
           @focus="searchState.focused = true"

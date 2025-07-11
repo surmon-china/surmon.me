@@ -6,8 +6,8 @@
 
 import { createRouter } from 'vue-router'
 import type { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory } from 'vue-router'
-import { LanguageKey } from '/@/language'
-import { LayoutColumn } from '/@/constants/layout'
+import { LocaleKey } from '/@/locales'
+import { PageLayout } from '/@/constants/page-layout'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/http-code'
 import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToPageTop } from '/@/utils/scroller'
@@ -43,7 +43,7 @@ import 'vue-router'
 declare module 'vue-router' {
   interface RouteMeta {
     responsive?: boolean
-    layout?: LayoutColumn
+    layout?: PageLayout
     validator?: (params: any) => Promise<any>
     /** seconds | infinity | false: disabled  */
     ssrCacheTTL: number | false
@@ -107,7 +107,7 @@ export const routes: RouteRecordRaw[] = [
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
           })
         }
       }
@@ -132,7 +132,7 @@ export const routes: RouteRecordRaw[] = [
         if (!category_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
           })
         }
       }
@@ -157,7 +157,7 @@ export const routes: RouteRecordRaw[] = [
         if (!tag_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
           })
         }
       }
@@ -182,7 +182,7 @@ export const routes: RouteRecordRaw[] = [
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
           })
         }
       }
@@ -206,7 +206,7 @@ export const routes: RouteRecordRaw[] = [
         if (!route.params.keyword) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LanguageKey.QUERY_PARAMS_ERROR) + 'Keywords ?'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Keywords ?'
           })
         }
       }
@@ -221,7 +221,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: 60 * 60 // 1 hours
     }
   },
@@ -234,7 +234,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: 60 * 60 * 4 // 4 hours
     }
   },
@@ -269,7 +269,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: Infinity
     }
   },
@@ -279,7 +279,7 @@ export const routes: RouteRecordRaw[] = [
     component: PhotographyPage,
     meta: {
       responsive: false,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: 60 * 60 * 1 // 1 hours
     }
   },
@@ -292,7 +292,7 @@ export const routes: RouteRecordRaw[] = [
     },
     meta: {
       responsive: true,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: 60 * 60 * 6 // 6 hours
     }
   },
@@ -302,7 +302,7 @@ export const routes: RouteRecordRaw[] = [
     component: YoutubePage,
     meta: {
       responsive: false,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: false
     }
   },
@@ -312,7 +312,7 @@ export const routes: RouteRecordRaw[] = [
     component: SponsorPage,
     meta: {
       responsive: false,
-      layout: LayoutColumn.Full,
+      layout: PageLayout.Full,
       ssrCacheTTL: Infinity
     }
   },
@@ -325,7 +325,7 @@ export const routes: RouteRecordRaw[] = [
       async validator({ i18n }) {
         return Promise.reject({
           code: NOT_FOUND,
-          message: i18n.t(LanguageKey.NOT_FOUND)
+          message: i18n.t(LocaleKey.NOT_FOUND)
         })
       }
     }

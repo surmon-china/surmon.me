@@ -1,5 +1,5 @@
-import { OriginState } from '/@/constants/state'
-import { Language } from '/@/language'
+import { Language } from '/@/locales'
+import { OriginState } from '/@/constants/biz-state'
 import { UniversalKeyValue } from './common'
 import { Category } from './category'
 import { Tag } from './tag'

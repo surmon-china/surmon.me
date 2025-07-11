@@ -6,7 +6,8 @@
 
 import axios from '@/server/services/axios'
 import { Readable } from 'stream'
-import { SitemapStream, streamToPromise, SitemapItemLoose, EnumChangefreq } from 'sitemap'
+import { SitemapStream, streamToPromise, EnumChangefreq } from 'sitemap'
+import type { SitemapItemLoose } from 'sitemap'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressResult } from '@/services/nodepress'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'

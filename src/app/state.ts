@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, computed, reactive, readonly } from 'vue'
-import { INTERNAL_SERVER_ERROR } from '/@/constants/http-code'
+import { type App, inject, ref, computed, reactive, readonly } from 'vue'
 import { uaParser, isZhUser } from '/@/transforms/ua'
-import { LayoutColumn } from '/@/constants/layout'
+import { PageLayout } from '/@/constants/page-layout'
+import { APP_CONFIG } from '/@/configs/app.config'
 import { isClient } from '/@/configs/app.env'
-import { normalizeUnknowErrorToAppError } from './error'
+import { formatErrorToAppError } from './error'
 import type { AppError } from './error'
 import logger from '/@/utils/logger'
 
@@ -17,8 +17,8 @@ export type AppErrorValue = AppError | null
 
 export interface GlobalStateOptions {
   userAgent: string
-  language: string
-  layout: LayoutColumn
+  languages: string[]
+  layout: PageLayout
   error: AppErrorValue
 }
 
@@ -34,8 +34,8 @@ export const createGlobalState = (options: GlobalStateOptions) => {
   // information such as browser, OS, and device type.
   const userAgent = {
     original: options.userAgent,
-    language: options.language,
-    isZhUser: isZhUser(options.language),
+    languages: options.languages,
+    isZhUser: isZhUser(options.languages),
     ...uaParser(options.userAgent)
   }
 
@@ -64,24 +64,24 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     // If the error is null, it clears the error state.
     error.value = !_error
       ? null
-      : normalizeUnknowErrorToAppError(_error, {
-          code: INTERNAL_SERVER_ERROR,
+      : formatErrorToAppError(_error, {
+          code: APP_CONFIG.default_error_code,
           message: 'Unknown Error'
         })
   }
 
   // UI layout
-  const layoutValue = ref(options.layout)
-  const layoutColumn = computed(() => ({
-    layout: layoutValue.value,
-    isNormal: layoutValue.value === LayoutColumn.Normal,
-    isWide: layoutValue.value === LayoutColumn.Wide,
-    isFull: layoutValue.value === LayoutColumn.Full
+  const pageLayoutValue = ref(options.layout)
+  const pageLayout = computed(() => ({
+    layout: pageLayoutValue.value,
+    isNormal: pageLayoutValue.value === PageLayout.Normal,
+    isWide: pageLayoutValue.value === PageLayout.Wide,
+    isFull: pageLayoutValue.value === PageLayout.Full
   }))
 
-  const setLayoutColumn = (layout: LayoutColumn) => {
-    if (layout !== layoutValue.value) {
-      layoutValue.value = layout
+  const setPageLayout = (layout: PageLayout) => {
+    if (layout !== pageLayoutValue.value) {
+      pageLayoutValue.value = layout
     }
   }
 
@@ -111,8 +111,8 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     setError,
 
     // Layout state
-    layoutColumn,
-    setLayoutColumn,
+    pageLayout,
+    setPageLayout,
 
     // Global switchers
     switcher: readonly(switcher),

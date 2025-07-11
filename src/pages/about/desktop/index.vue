@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
   import { RouteName } from '/@/app/router'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { getPageRoute } from '/@/transforms/route'
   import NpmStatistic from './statistic/npm.vue'

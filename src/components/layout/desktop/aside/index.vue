@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useRoute } from 'vue-router'
   import { computed } from 'vue'
-  import { ASIDE_ELEMENT_ID } from '/@/constants/anchor'
+  import { ASIDE_ELEMENT_ID } from '/@/constants/element-anchor'
   import { isArticleDetail } from '/@/transforms/route'
   import AsideSearch from './search.vue'
   import AsideStatistic from './statistic.vue'

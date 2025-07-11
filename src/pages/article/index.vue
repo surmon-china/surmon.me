@@ -4,13 +4,12 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
   import { useStores } from '/@/stores'
-  import * as ANCHORS from '/@/constants/anchor'
-  import * as URL_HASHES from '/@/constants/anchor'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
+  import { useHead, usePageSeo } from '/@/composables/head'
+  import { LocaleKey } from '/@/locales'
+  import * as ANCHORS from '/@/constants/element-anchor'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widgets/share.vue'
-  import { useHead, usePageSeo } from '/@/composables/head'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtendValue } from '/@/transforms/state'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -74,7 +73,7 @@
       identity.likePage(article.value!.id)
       callback?.()
     } catch (error) {
-      const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
+      const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
       logger.failure(message, error)
       alert(message)
     }
@@ -130,7 +129,7 @@
       ...(articleDetailStore.moreContent?.headings ?? [])
     ]
     const elementId =
-      urlHash === URL_HASHES.COMMENTS_URL_HASH
+      urlHash === ANCHORS.COMMENTS_URL_HASH
         ? ANCHORS.COMMENT_ELEMENT_ID
         : articleHeadings.find(({ anchor }) => anchor === urlHash)?.id
 

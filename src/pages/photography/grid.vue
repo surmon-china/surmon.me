@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useCountry } from '/@/app/context'
   import { UNDEFINED, isNil } from '/@/constants/value'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { getProxyURL } from '/@/transforms/url'
   import { isCNCode } from '/@/transforms/region'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'

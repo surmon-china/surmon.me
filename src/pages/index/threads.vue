@@ -3,7 +3,7 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { UNDEFINED } from '/@/constants/value'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import type { ThreadsProfile, ThreadsMedia } from '/@/server/getters/threads'
   import { unescape } from '/@/transforms/text'

@@ -13,8 +13,8 @@ import { createGlobalState, AppErrorValue } from './state'
 import { createAppError } from './error'
 import { createTheme, Theme } from '/@/composables/theme'
 import { createI18n } from '/@/composables/i18n'
-import { LayoutColumn } from '/@/constants/layout'
-import { Language, LanguageKey, languages } from '/@/language'
+import { PageLayout } from '/@/constants/page-layout'
+import { Language, LocaleKey, locales } from '/@/locales'
 import { APP_MODE, APP_VERSION } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
 import register from './register'
@@ -31,9 +31,9 @@ console.groupEnd()
 export interface AppCreatorContext {
   theme: Theme
   region: string
-  language: string
-  userAgent: string
-  layout?: LayoutColumn
+  languages: string[]
+  userAgent: string | undefined
+  layout?: PageLayout
   error?: AppErrorValue
   routerHistoryCreator(base?: string): RouterHistory
   routerBeforeMiddleware?(globalState: any): RouterCreatorOptions['beforeMiddleware']
@@ -48,8 +48,8 @@ export const createMainApp = (context: AppCreatorContext) => {
   // 2. global state
   const globalState = createGlobalState({
     userAgent: context.userAgent || '',
-    language: context.language || '',
-    layout: context.layout ?? LayoutColumn.Normal,
+    languages: context.languages || [],
+    layout: context.layout ?? PageLayout.Normal,
     error: context.error ?? null
   })
 
@@ -67,8 +67,8 @@ export const createMainApp = (context: AppCreatorContext) => {
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Chinese : Language.English,
-    keys: Object.values(LanguageKey),
-    languages
+    keys: Object.values(LocaleKey),
+    locales
   })
 
   // get global head attributes: for CSR / SSR

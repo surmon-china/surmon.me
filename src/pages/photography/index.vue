@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { Language, LanguageKey } from '/@/language'
+  import { Language, LocaleKey } from '/@/locales'
   import { firstUpperCase } from '/@/transforms/text'
   import { APP_META, IDENTITIES } from '/@/configs/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
@@ -26,7 +26,7 @@
   const fetchMoreMedias = async () => {
     try {
       loading.value = true
-      const request = tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
+      const request = tunnel.fetch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
         after: lastPaging.value?.cursors.after ?? instagramLatestMedias.data?.paging?.cursors.after
       })
       const response = await (isClient ? delayPromise(360, request) : request)
@@ -43,8 +43,8 @@
   })
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${APP_META.author} 的摄影作品` : `${APP_META.author}'s photographs`
     return {
       pageTitles: titles,
@@ -80,7 +80,7 @@
       <placeholder :data="instagramLatestMedias.data?.data" :loading="instagramLatestMedias.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
-            <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+            <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>

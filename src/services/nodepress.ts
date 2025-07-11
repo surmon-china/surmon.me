@@ -4,7 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import axios, { AxiosInstance, Method as AxiosMethod } from 'axios'
+import axios from 'axios'
+import type { AxiosInstance, Method as AxiosMethod } from 'axios'
+import type { AppError } from '/@/app/error'
 import { BAD_REQUEST } from '/@/constants/http-code'
 import { isClient } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
@@ -37,33 +39,14 @@ nodepress.interceptors.response.use(
     return response.data
   },
   (error) => {
-    const errorJSON = error.toJSON()
-    const errorInfo = {
-      ...errorJSON,
-      config: error.config,
-      code: errorJSON.status || error.response?.status || BAD_REQUEST,
-      message: error.response?.data?.error || error.response?.statusText || errorJSON.message
-    }
-
-    // const serverErrorInfo = {
-    //   axiosName: errorJSON.name,
-    //   axiosMessage: errorJSON.message,
-    //   npError: errorInfo.message,
-    //   npMessage: error.response?.data?.message || '',
-    //   status: errorInfo.code,
-    //   method: errorJSON.config.method,
-    //   baseURL: errorJSON.config.baseURL,
-    //   url: errorJSON.config.url,
-    //   params: errorJSON.config.params,
-    //   data: errorJSON.config.data,
-    //   headers: errorJSON.config.headers
-    // }
-
     if (isClient) {
       logger.debug('axios error:', error)
     }
 
-    return Promise.reject(errorInfo)
+    return Promise.reject({
+      code: error?.status ?? error.response?.status ?? BAD_REQUEST,
+      message: error.response?.data?.error || error.response?.statusText || error?.message
+    } as AppError)
   }
 )
 

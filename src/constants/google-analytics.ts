@@ -1,6 +1,6 @@
 /**
- * @file GTag constant
- * @module constant/gtag
+ * @file Google Analytics constant
+ * @module constant/google-analytics
  * @author Surmon <https://github.com/surmon-china>
  */
 

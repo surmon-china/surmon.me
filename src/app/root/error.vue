@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import type { AppError } from '../error'
 
   const props = defineProps<{
@@ -22,12 +22,11 @@
     <h1 class="code">{{ props.error.code }}</h1>
     <h3 class="message">
       <template v-if="props.error.message">{{ props.error.message }}</template>
-      <i18n v-else :k="LanguageKey.NOT_FOUND" />
+      <i18n v-else :k="LocaleKey.NOT_FOUND" />
     </h3>
     <p class="link" @click="handleResolveRoute">
       <slot name="resolve-text" />
     </p>
-    <uimage class="logo" src="/images/logo.svg" cdn />
   </div>
 </template>
 
@@ -66,14 +65,6 @@
         opacity: 1;
         transform: translate3d(0, 0, 0);
       }
-    }
-
-    .logo {
-      width: 8rem;
-      opacity: 0.1;
-      position: fixed;
-      bottom: 2rem;
-      filter: $theme-logo-rotate;
     }
 
     .code,

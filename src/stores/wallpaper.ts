@@ -6,16 +6,16 @@
 
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
-import { createFetchStore } from './_fetch'
-import { Language } from '/@/language'
+import { Language } from '/@/locales'
 import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
+import { createFetchStore } from './_fetch'
 
 export type Wallpaper = Record<Language, Array<any>>
 
 export const useWallpaperStore = defineStore('wallpaper', () => {
   const fetchStore = createFetchStore<Wallpaper | null>({
-    fetcher: () => tunnel.dispatch<Wallpaper>(TunnelModule.BingWallpaper),
+    fetcher: () => tunnel.fetch<Wallpaper>(TunnelModule.BingWallpaper),
     once: true,
     data: null
   })

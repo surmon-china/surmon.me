@@ -2,8 +2,8 @@
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { Language } from '/@/language'
+  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { Language } from '/@/locales'
   import Wallpapers from './wall.vue'
 
   const { i18n: _i18n, gtag, isDarkTheme } = useEnhancer()

@@ -1,22 +1,20 @@
 /**
  * @file BFF Server proxy
- * @module server/service/proxy
+ * @module server/proxy
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import http from 'http'
 import https from 'https'
 import { pipeline } from 'stream/promises'
-import type { RequestHandler, Request } from 'express'
 import { base64UrlEncode, base64UrlDecode } from '@/transforms/base64'
-import { FORBIDDEN, BAD_REQUEST, INTERNAL_SERVER_ERROR, GATEWAY_TIMEOUT } from '@/constants/http-code'
-import { APP_META, BFF_CONFIG } from '@/configs/app.config'
-import { isNodeProd } from '@/configs/bff.env'
-import { STATIC_URL } from '@/configs/bff.api'
 import { createLogger } from '@/utils/logger'
+import { respondWith } from './responder'
+import { MIME_TYPES } from '@/constants/mime-type'
+import * as HTTP_CODES from '@/constants/http-code'
+import type { RequestContext } from './index'
 
 export const logger = createLogger('BFF:Proxy')
-export const PROXY_ROUTE_PATH = `${BFF_CONFIG.proxy_url_prefix}/*url`
 
 // Timeout (in milliseconds) when proxy receives no response from target.
 const PROXY_REQUEST_TIMEOUT = 10_000
@@ -26,49 +24,58 @@ const RESPONSE_TIMEOUT = 15_000
 const PROXY_UA =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3223.8 Safari/'
 
-const getProxyUrlFromRequest = (request: Request) => base64UrlDecode(String(request.params.url))
-const makeRedirectLocation = (location: string) => `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(location)}`
+export interface ProxifierOptions {
+  prefix: string
+  allowedSourceRegexp?: RegExp
+  shouldBlockTargetUrl?: (url: URL) => boolean
+}
 
-export const proxifier = (): RequestHandler => {
-  return async (request, response) => {
+export const createProxifier = (options: ProxifierOptions) => {
+  const decodeProxyUrl = (url: string) => base64UrlDecode(url)
+  const makeRedirectLocation = (location: string) => {
+    const slash = options.prefix.endsWith('/')
+    return `${options.prefix}${slash ? '' : '/'}${base64UrlEncode(location)}`
+  }
+
+  return async (context: RequestContext) => {
+    const { request, response } = context
     let targetURL: string | null = null
     let parsedURL: URL | null = null
 
-    // Helper: unified error response
-    const sendError = (message: string, statusCode = INTERNAL_SERVER_ERROR) => {
-      if (!response.headersSent) {
-        response.writeHead(statusCode, { 'Content-Type': 'text/plain' })
-      }
-      response.end(`Proxy error: ${message}`)
-    }
-
     // Step 1: Decode target URL
     try {
-      targetURL = getProxyUrlFromRequest(request)
+      targetURL = decodeProxyUrl(context.path.replace(options.prefix, ''))
       response.setHeader('x-original-url', targetURL)
       parsedURL = new URL(targetURL)
     } catch (error: any) {
-      sendError(error?.message || 'Invalid target URL', BAD_REQUEST)
-      return
+      return respondWith(response, {
+        status: HTTP_CODES.BAD_REQUEST,
+        body: error?.message || 'Invalid target URL',
+        contentType: MIME_TYPES.text
+      })
     }
 
-    // Step 2: Block internal app requests
-    if (parsedURL.hostname.endsWith(APP_META.domain)) {
-      if (parsedURL.hostname !== new URL(STATIC_URL).hostname) {
-        sendError('Invalid internal URL', BAD_REQUEST)
-        return
-      }
+    // Step 2: Block target url
+    if (options.shouldBlockTargetUrl?.(parsedURL)) {
+      return respondWith(response, {
+        status: HTTP_CODES.FORBIDDEN,
+        body: 'Forbidden target URL',
+        contentType: MIME_TYPES.text
+      })
     }
 
-    // Step 3: Check referer/origin in prod
-    if (isNodeProd) {
+    // Step 3: Check referer/origin
+    if (options.allowedSourceRegexp) {
       const origin = request.headers.origin
-      const referer = (request.headers.referrer as string) || request.headers.referer
-      const isAllowedReferer = !referer || BFF_CONFIG.proxy_allow_list_regexp.test(referer)
-      const isAllowedOrigin = !origin || BFF_CONFIG.proxy_allow_list_regexp.test(origin)
+      const referer = request.headers.referer
+      const isAllowedReferer = !referer || options.allowedSourceRegexp.test(referer)
+      const isAllowedOrigin = !origin || options.allowedSourceRegexp.test(origin)
       if (!isAllowedReferer || !isAllowedOrigin) {
-        sendError('Forbidden', FORBIDDEN)
-        return
+        return respondWith(response, {
+          status: HTTP_CODES.FORBIDDEN,
+          body: 'Forbidden source',
+          contentType: MIME_TYPES.text
+        })
       }
     }
 
@@ -81,7 +88,7 @@ export const proxifier = (): RequestHandler => {
         hostname: parsedURL.hostname,
         path: parsedURL.pathname + (parsedURL.search || ''),
         port: parsedURL.port,
-        method: request.method,
+        method: 'GET',
         headers: {
           ...request.headers,
           host: parsedURL.hostname,
@@ -90,7 +97,7 @@ export const proxifier = (): RequestHandler => {
       },
       async (proxyResponse) => {
         // If the target resource redirects, the proxy server still needs to encode the format of the redirection.
-        const statusCode = proxyResponse.statusCode || INTERNAL_SERVER_ERROR
+        const statusCode = proxyResponse.statusCode || HTTP_CODES.INTERNAL_SERVER_ERROR
         if ([301, 302, 307, 308].includes(statusCode)) {
           const location = proxyResponse.headers.location
           if (location) {
@@ -104,15 +111,17 @@ export const proxifier = (): RequestHandler => {
         }
 
         // Pipe response headers
-        response.writeHead(proxyResponse.statusCode || INTERNAL_SERVER_ERROR, proxyResponse.headers)
+        response.writeHead(proxyResponse.statusCode || HTTP_CODES.INTERNAL_SERVER_ERROR, proxyResponse.headers)
 
         try {
           // Use pipeline to handle response stream
           await pipeline(proxyResponse, response)
         } catch (error: any) {
-          // Handle response stream errors
-          // logger.warn(`Response pipeline failed: ${error.message}`)
-          sendError(error.message)
+          respondWith(response, {
+            status: HTTP_CODES.INTERNAL_SERVER_ERROR,
+            body: error.message,
+            contentType: MIME_TYPES.text
+          })
         }
       }
     )
@@ -120,28 +129,43 @@ export const proxifier = (): RequestHandler => {
     // Step 5: Handle request error
     proxyRequest.on('error', (error: any) => {
       logger.failure(`Request failed: ${error.message} > ${targetURL}`)
-      sendError(error.message)
+      respondWith(response, {
+        status: HTTP_CODES.INTERNAL_SERVER_ERROR,
+        body: error.message,
+        contentType: MIME_TYPES.text
+      })
     })
 
     // Step 6: Timeout handling
     proxyRequest.setTimeout(PROXY_REQUEST_TIMEOUT, () => {
       logger.failure(`Proxy request timeout: ${parsedURL.href}`)
       proxyRequest.destroy()
-      sendError('Proxy request timeout', GATEWAY_TIMEOUT)
+      respondWith(response, {
+        status: HTTP_CODES.GATEWAY_TIMEOUT,
+        body: 'Proxy request timeout',
+        contentType: MIME_TYPES.text
+      })
     })
 
     response.setTimeout(RESPONSE_TIMEOUT, () => {
       if (!response.headersSent && !response.writableEnded) {
         logger.debug(`Response timeout`)
-        sendError('Response timeout', GATEWAY_TIMEOUT)
+        respondWith(response, {
+          status: HTTP_CODES.GATEWAY_TIMEOUT,
+          body: 'Response timeout',
+          contentType: MIME_TYPES.text
+        })
       }
     })
 
     try {
       await pipeline(request, proxyRequest)
     } catch (error: any) {
-      // logger.warn(`Request pipeline failed: ${error.message}`)
-      sendError(error.message)
+      respondWith(response, {
+        status: HTTP_CODES.INTERNAL_SERVER_ERROR,
+        body: error.message,
+        contentType: MIME_TYPES.text
+      })
     }
   }
 }

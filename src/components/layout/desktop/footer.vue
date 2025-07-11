@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { FOOTER_ELEMENT_ID } from '/@/constants/anchor'
+  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { FOOTER_ELEMENT_ID } from '/@/constants/element-anchor'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
 
   const { goLink } = useStores()

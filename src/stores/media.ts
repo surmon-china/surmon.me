@@ -18,7 +18,7 @@ export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
   return createFetchStore({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch(TunnelModule.DoubanMovies)
+    fetcher: () => tunnel.fetch(TunnelModule.DoubanMovies)
   })
 })
 
@@ -26,7 +26,7 @@ export const useDoubanMoviesStore = defineStore('doubanMovies', () => {
 export const useThreadsProfileStore = defineStore('threadsProfile', () => {
   return createFetchStore<ThreadsProfile | null>({
     data: null,
-    fetcher: () => tunnel.dispatch<ThreadsProfile>(TunnelModule.ThreadsProfile)
+    fetcher: () => tunnel.fetch<ThreadsProfile>(TunnelModule.ThreadsProfile)
   })
 })
 
@@ -35,7 +35,7 @@ export const useThreadsLatestMediasStore = defineStore('threadsLatestMedias', ()
   return createFetchStore<ThreadsMediaListResponse | null>({
     data: null,
     fetcher: () => {
-      const request = tunnel.dispatch<ThreadsMediaListResponse>(TunnelModule.ThreadsMedias)
+      const request = tunnel.fetch<ThreadsMediaListResponse>(TunnelModule.ThreadsMedias)
       return isClient ? delayPromise(480, request) : request
     }
   })
@@ -45,7 +45,7 @@ export const useThreadsLatestMediasStore = defineStore('threadsLatestMedias', ()
 export const useInstagramProfileStore = defineStore('instagramProfile', () => {
   return createFetchStore<InstagramProfile | null>({
     data: null,
-    fetcher: () => tunnel.dispatch<InstagramProfile>(TunnelModule.InstagramProfile)
+    fetcher: () => tunnel.fetch<InstagramProfile>(TunnelModule.InstagramProfile)
   })
 })
 
@@ -54,7 +54,7 @@ export const useInstagramLatestMediasStore = defineStore('instagramLatestMedias'
   return createFetchStore<InstagramMediaListResponse | null>({
     data: null,
     fetcher: () => {
-      const request = tunnel.dispatch<InstagramMediaListResponse>(TunnelModule.InstagramMedias)
+      const request = tunnel.fetch<InstagramMediaListResponse>(TunnelModule.InstagramMedias)
       return isClient ? delayPromise(480, request) : request
     }
   })
@@ -65,7 +65,7 @@ export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
   return createFetchStore<Array<any>>({
     data: [],
     async fetcher() {
-      const response = await tunnel.dispatch<Array<any>>(TunnelModule.YouTubePlaylist)
+      const response = await tunnel.fetch<Array<any>>(TunnelModule.YouTubePlaylist)
       response.sort((a, b) => a.snippet.position - b.snippet.position)
       return response
     }
@@ -77,6 +77,6 @@ export const useMyGoogleMapStore = defineStore('myGoogleMap', () => {
   return createFetchStore({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch(TunnelModule.MyGoogleMap)
+    fetcher: () => tunnel.fetch(TunnelModule.MyGoogleMap)
   })
 })

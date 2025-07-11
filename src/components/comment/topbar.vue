@@ -2,13 +2,13 @@
   import { computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { APP_META } from '/@/configs/app.config'
-  import { LanguageKey } from '/@/language'
-  import { SortType } from '/@/constants/state'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { LocaleKey } from '/@/locales'
+  import { SortType } from '/@/constants/biz-state'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { UserType, useIdentityStore } from '/@/stores/identity'
-  import nodepress from '/@/services/nodepress'
   import { openPopupWindow, openNewWindow } from '/@/utils/opener'
   import { logger, CommentEvents } from './helper'
+  import nodepress from '/@/services/nodepress'
 
   interface Props {
     postId: number
@@ -127,13 +127,13 @@
             <span class="icon">▼</span>
             <select class="select" name="sort" :value="sort" @change="handleSort($event.target)">
               <option :value="SortType.Desc">
-                <i18n :k="LanguageKey.COMMENT_SORT_NEW" />
+                <i18n :k="LocaleKey.COMMENT_SORT_NEW" />
               </option>
               <option :value="SortType.Hottest">
-                <i18n :k="LanguageKey.COMMENT_SORT_HOT" />
+                <i18n :k="LocaleKey.COMMENT_SORT_HOT" />
               </option>
               <option :value="SortType.Asc">
-                <i18n :k="LanguageKey.COMMENT_SORT_OLD" />
+                <i18n :k="LocaleKey.COMMENT_SORT_OLD" />
               </option>
             </select>
           </label>

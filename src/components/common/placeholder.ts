@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, h, Transition, PropType } from 'vue'
-import { LanguageKey } from '/@/language'
+import { defineComponent, h, Transition, type PropType } from 'vue'
 import { isUndefined } from '/@/constants/value'
+import { LocaleKey } from '/@/locales'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
 
@@ -16,7 +16,7 @@ export enum Events {
 
 /**
  * @example
- *  <placeholder :loading="false" :data="data.length" :i18n-key="LanguageKey.XXX">
+ *  <placeholder :loading="false" :data="data.length" :i18n-key="LocaleKey.XXX">
  *    <component />
  *  </placeholder>
  * @example
@@ -46,7 +46,7 @@ export default defineComponent({
       default: 'module'
     },
     placeholder: String,
-    i18nKey: String as PropType<LanguageKey>,
+    i18nKey: String as PropType<LocaleKey>,
     loading: Boolean
   },
   emits: [Events.AfterEnter],

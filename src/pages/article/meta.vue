@@ -72,7 +72,7 @@
       <i class="icon iconfont icon-creative-commons"></i>
       <i18n>
         <template #zh>
-          <ulink class="link copyright" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh">
+          <ulink class="link copyright" href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh-hans">
             署名 - 非商业性使用 4.0 国际
           </ulink>
         </template>

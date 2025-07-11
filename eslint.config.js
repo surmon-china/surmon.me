@@ -15,7 +15,8 @@ const tsRules = {
   '@typescript-eslint/no-unused-vars': 0,
   '@typescript-eslint/no-non-null-assertion': 0,
   '@typescript-eslint/no-non-null-asserted-optional-chain': 0,
-  '@typescript-eslint/no-unused-expressions': 0
+  '@typescript-eslint/no-unused-expressions': 0,
+  '@typescript-eslint/no-unsafe-function-type': 0
 }
 
 const vueRules = {

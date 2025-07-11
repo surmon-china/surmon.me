@@ -13,9 +13,11 @@ export const BFF_CONFIG = Object.freeze({
 })
 
 export const APP_CONFIG = Object.freeze({
-  article_fake_render_delay: 468,
   article_image_share_long_threshold: 6688,
   render_long_article_threshold: 16688,
+  desktop_aside_article_list_count: 8,
+  default_error_code: 500,
+  default_comment_avatar: '/images/gravatar.png',
   default_og_image: '/images/og-social-card.jpg',
   title_separator: ' | ',
   primary_color: '#0088f5'

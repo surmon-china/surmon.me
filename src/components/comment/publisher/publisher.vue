@@ -2,11 +2,12 @@
   import { storeToRefs } from 'pinia'
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { Author } from '/@/interfaces/comment'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { APP_CONFIG } from '/@/configs/app.config'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
+  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { CommentEvents } from '../helper'
 
@@ -37,7 +38,7 @@
 
   const { i18n: _i18n, gtag, cdnDomain } = useEnhancer()
   const { user } = storeToRefs(useIdentityStore())
-  const defaultAvatar = getAssetURL(cdnDomain, DEFAULT_AVATAR)
+  const defaultAvatar = getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
   const avatar = computed(() => {
     // local user
     if (user.value.type === UserType.Local) {
@@ -93,7 +94,7 @@
             name="name"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_NAME) + ' *'"
+            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_NAME) + ' *'"
           />
         </div>
         <div class="email">
@@ -105,7 +106,7 @@
             name="email"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_EMAIL) + ' *'"
+            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_EMAIL) + ' *'"
           />
         </div>
         <div class="site">
@@ -116,7 +117,7 @@
             name="url"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LanguageKey.COMMENT_POST_SITE)"
+            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_SITE)"
           />
         </div>
       </div>

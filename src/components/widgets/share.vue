@@ -13,12 +13,12 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { LocaleKey } from '/@/locales'
   import { APP_META } from '/@/configs/app.config'
   import { UNDEFINED } from '/@/constants/value'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { getPageURL } from '/@/transforms/url'
-  import { stringify } from '/@/transforms/qs'
+  import { stringify } from '/@/transforms/query-string'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { openPopupWindow } from '/@/utils/opener'
   import { copy } from '/@/utils/clipboard'
@@ -162,7 +162,7 @@
   const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? UNDEFINED
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
-    return pageDescription || _i18n.t(LanguageKey.APP_SLOGAN)!
+    return pageDescription || _i18n.t(LocaleKey.APP_SLOGAN)!
   }
 
   const copyPageURL = () => {

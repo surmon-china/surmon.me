@@ -4,8 +4,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { LanguageKey } from '/@/language'
   import { APP_META, IDENTITIES } from '/@/configs/app.config'
+  import { LocaleKey } from '/@/locales'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
   import YoutubeSkeleton from './skeleton.vue'
@@ -64,7 +64,7 @@
           </template>
           <template #empty>
             <empty class="module-empty" key="empty">
-              <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+              <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
             </empty>
           </template>
         </youtube-playlist>

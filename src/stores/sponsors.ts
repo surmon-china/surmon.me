@@ -12,7 +12,7 @@ import tunnel from '/@/services/tunnel'
 
 export const useGitHubSponsorsStore = defineStore('githubSponsors', () => {
   return createFetchStore<GitHubSponsorsResponse | null>({
-    fetcher: () => tunnel.dispatch<GitHubSponsorsResponse>(TunnelModule.GitHubSponsors),
+    fetcher: () => tunnel.fetch<GitHubSponsorsResponse>(TunnelModule.GitHubSponsors),
     once: true,
     data: null
   })

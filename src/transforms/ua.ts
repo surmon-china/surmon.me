@@ -5,7 +5,7 @@
  */
 
 import { UAParser } from 'ua-parser-js'
-import { Language } from '/@/language'
+import { Language } from '/@/locales'
 
 export const uaParser = (userAgent: string) => {
   const parsed = UAParser(userAgent || '')
@@ -28,7 +28,8 @@ export const uaParser = (userAgent: string) => {
   }
 }
 
-const isTargetLanguageUser = (language: UaLanguage, targetLang: string) => {
+type UaLanguageInput = string | string[]
+const isTargetLanguageUser = (language: UaLanguageInput, targetLang: string) => {
   if (typeof language === 'string') {
     return language.includes(targetLang)
   }
@@ -38,8 +39,17 @@ const isTargetLanguageUser = (language: UaLanguage, targetLang: string) => {
   return false
 }
 
-export type UaLanguage = string | string[]
-export const isEnUser = (language: UaLanguage) => isTargetLanguageUser(language, Language.English)
-export const isZhUser = (language: UaLanguage) => {
-  return language ? isTargetLanguageUser(language, Language.Chinese) : true
+export const isEnUser = (language: UaLanguageInput) => {
+  return isTargetLanguageUser(language, Language.English)
+}
+
+export const isZhUser = (language: UaLanguageInput) => {
+  // default to true if no language is provided
+  return Array.isArray(language)
+    ? language.length
+      ? isTargetLanguageUser(language, Language.Chinese)
+      : true
+    : language
+      ? isTargetLanguageUser(language, Language.Chinese)
+      : true
 }

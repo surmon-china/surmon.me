@@ -5,9 +5,9 @@
  */
 
 import crypto from 'crypto'
-import type { CacheStore, Seconds } from '../services/cache'
-import { getErrorMessage } from './responder'
+import type { CacheStore, Seconds } from '@/server/services/cache'
 import { createLogger } from '@/utils/logger'
+import { getErrorMessage } from './error'
 
 export const logger = createLogger('BFF:Cacher')
 
@@ -52,13 +52,9 @@ const passive = async <T = any>(cache: CacheStore, opts: CacherOptions<T>): Prom
     logger.success('passive succeed:', `"${opts.key}" | ttl: ${humanizeSeconds(options.ttl)}`)
     return result
   } catch (error) {
-    logger.failure(
-      'passive failure:',
-      `"${opts.key}"`,
-      `| ttl: ${humanizeSeconds(options.ttl)}`,
-      `| "${getErrorMessage(error)}"`
-    )
-    return Promise.reject(error)
+    const message = getErrorMessage(error)
+    logger.failure('passive failure:', `"${opts.key}" | ttl: ${humanizeSeconds(options.ttl)} | "${message}"`)
+    throw error instanceof Error ? error : new Error(message)
   }
 }
 
@@ -135,7 +131,7 @@ const interval = <T>(cache: CacheStore, opts: IntervalCacherOptions<T>) => {
     if (await cache.has(options.key)) {
       return await cache.get<T>(options.key)
     } else {
-      throw `No cached data for "${opts.key}".`
+      throw new Error(`No cached data for "${opts.key}".`)
     }
   }
 }

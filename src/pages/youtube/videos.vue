@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { isClient } from '/@/configs/app.env'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { TunnelModule } from '/@/constants/tunnel'
   import { getProxyURL } from '/@/transforms/url'
   import { delayPromise } from '/@/utils/delayer'
@@ -27,7 +27,7 @@
   const fetchVideos = async () => {
     try {
       fetching.value = true
-      const request = tunnel.dispatch<Array<any>>(TunnelModule.YouTubeVideoList, { id: props.playlistId })
+      const request = tunnel.fetch<Array<any>>(TunnelModule.YouTubeVideoList, { id: props.playlistId })
       videos.value = await (isClient ? delayPromise(480, request) : request)
     } catch (error) {
       videos.value = []

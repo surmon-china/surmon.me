@@ -10,20 +10,22 @@ import { renderToString } from 'vue/server-renderer'
 import { createMemoryHistory } from 'vue-router'
 import { createHead, renderSSRHead } from '@unhead/vue/server'
 import { createMainApp, MainApp } from '/@/app/main'
-import type { IncomingHttpHeaders } from 'http'
+import { createLogger } from '/@/utils/logger'
 import type { SSRHeadPayload, VueHeadClient } from '@unhead/vue/server'
 import type { SSRContext } from '/@/app/context'
-import type { CacheStore } from '@/server/services/cache'
 import type { AppErrorValue } from '/@/app/state'
-import { normalizeUnknowErrorToAppError } from '/@/app/error'
+import type { RequestContext } from '@/server/main'
+import type { CacheStore } from '@/server/services/cache'
+import { parseAcceptLanguage } from '/@/server/utils/accept-language'
+import { formatErrorToAppError } from '/@/app/error'
 import { renderSSRStateScript, renderSSRContextScript } from '/@/app/universal'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import * as HTTP_CODES from '/@/constants/http-code'
-import { createLogger } from '/@/utils/logger'
-import { getLayoutByRouteMeta } from '/@/constants/layout'
+import { resolvePageLayout } from '/@/constants/page-layout'
 import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
 import { isCNCode } from '/@/transforms/region'
 import { isDev } from '/@/configs/app.env'
+import { APP_CONFIG } from '/@/configs/app.config'
 import API_CONFIG from '/@/configs/app.api'
 
 const renderLogger = createLogger('SSR:Render')
@@ -33,23 +35,19 @@ const getRegionByCountryCode = (country?: string) => {
   return country && isCNCode(country) ? 'cn' : 'global'
 }
 
-export interface RequestContext {
-  headers: IncomingHttpHeaders
-  cookies: Record<string, any>
-  url: string
-}
-
-const createSSRContext = (requestContext: RequestContext, error: AppErrorValue = null): SSRContext => {
-  const { headers, cookies, url } = requestContext
-  const country = headers['country-code'] as string
-  const cdnDomain = isCNCode(country) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
+const createSSRContext = (context: RequestContext, error: AppErrorValue = null): SSRContext => {
+  // 'country-xxx' header is provided by the Nginx server
+  const countryName = context.headers['country-name']!
+  const countryCode = context.headers['country-code']!
+  const cdnDomain = isCNCode(countryCode) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
   const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets)
   return {
-    requestURL: url,
-    language: headers['accept-language'],
-    userAgent: headers['user-agent'],
-    cookieTheme: cookies[THEME_STORAGE_KEY],
-    country,
+    requestUrl: context.url,
+    userAgent: context.headers['user-agent'],
+    acceptLanguage: context.headers['accept-language'],
+    cookieTheme: context.cookies[THEME_STORAGE_KEY],
+    countryName,
+    countryCode,
     cdnDomain,
     assetsPrefix,
     error
@@ -59,10 +57,10 @@ const createSSRContext = (requestContext: RequestContext, error: AppErrorValue =
 const createSSRMainApp = (ssrContext: SSRContext): [MainApp, VueHeadClient] => {
   const mainApp = createMainApp({
     routerHistoryCreator: createMemoryHistory,
-    language: ssrContext.language!,
-    userAgent: ssrContext.userAgent!,
+    languages: parseAcceptLanguage(ssrContext.acceptLanguage, { ignoreWildcard: true }),
+    userAgent: ssrContext.userAgent,
     theme: (ssrContext.cookieTheme as Theme) ?? Theme.Light,
-    region: getRegionByCountryCode(ssrContext.country),
+    region: getRegionByCountryCode(ssrContext.countryCode),
     error: ssrContext.error
   })
 
@@ -102,12 +100,12 @@ export interface RenderResult {
  * 2. render fetch error
  * 3. router validate/404 error
  */
-export const renderError = async (requestContext: RequestContext, error: unknown): Promise<RenderResult> => {
-  const appError: AppErrorValue = normalizeUnknowErrorToAppError(error, {
-    code: HTTP_CODES.INTERNAL_SERVER_ERROR,
-    message: 'Unknown Error'
+export const renderError = async (context: RequestContext, error: unknown): Promise<RenderResult> => {
+  const appError: AppErrorValue = formatErrorToAppError(error, {
+    code: APP_CONFIG.default_error_code,
+    message: 'Unknown Render Error'
   })
-  const ssrContext = createSSRContext(requestContext, appError)
+  const ssrContext = createSSRContext(context, appError)
   const [{ app, theme }, head] = createSSRMainApp(ssrContext)
   head.push({ title: `Server Error: ${appError.message}` })
   return {
@@ -119,23 +117,23 @@ export const renderError = async (requestContext: RequestContext, error: unknown
     stateScripts: renderSSRStateScript(
       serialize({
         theme: theme.theme.value,
-        region: getRegionByCountryCode(ssrContext.country)
+        region: getRegionByCountryCode(ssrContext.countryCode)
       })
     )
   }
 }
 
 // App page renderer
-export const renderApp = async (requestContext: RequestContext, cache: CacheStore): Promise<RenderResult> => {
-  const ssrContext = createSSRContext(requestContext)
+export const renderApp = async (context: RequestContext, cache: CacheStore): Promise<RenderResult> => {
+  const ssrContext = createSSRContext(context)
   const [{ app, router, store, theme, i18n, globalState }, head] = createSSRMainApp(ssrContext)
 
   // Make cache Key
   const language = i18n.language.value
   const themeName = theme.theme.value
   const deviceType = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
-  const regionCode = getRegionByCountryCode(ssrContext.country)
-  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${themeName}_${ssrContext.requestURL}`
+  const regionCode = getRegionByCountryCode(ssrContext.countryCode)
+  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${themeName}_${ssrContext.requestUrl}`
 
   // Return cached result if exists
   const isCached = await cache.has(cacheKey)
@@ -152,8 +150,8 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
     // Try to render the main app
     const startTime = Date.now()
 
-    devDebug(`- 1. route.push.validate: ${ssrContext.requestURL}`)
-    await router.push(ssrContext.requestURL)
+    devDebug(`- 1. route.push.validate: ${ssrContext.requestUrl}`)
+    await router.push(ssrContext.requestUrl)
     await router.isReady()
 
     devDebug('- 2. store.serverInit')
@@ -161,7 +159,7 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
 
     // because the layout func set has by animation done
     devDebug('- 3. set layout')
-    globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
+    globalState.setPageLayout(resolvePageLayout(router.currentRoute.value.meta.layout))
 
     // MARK: `vite-plugin-vue` introduces a side effect on `ssrContext.modules`,
     // even though it's not needed in production environments.
@@ -185,8 +183,8 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
       serialize({
         store: store.state.value,
         theme: theme.theme.value,
-        layout: globalState.layoutColumn.value.layout,
-        region: getRegionByCountryCode(ssrContext.country)
+        layout: globalState.pageLayout.value.layout,
+        region: getRegionByCountryCode(ssrContext.countryCode)
       })
     )
 
@@ -213,6 +211,6 @@ export const renderApp = async (requestContext: RequestContext, cache: CacheStor
       code: HTTP_CODES.SUCCESS
     }
   } catch (error: any) {
-    return renderError(requestContext, error)
+    return renderError(context, error)
   }
 }

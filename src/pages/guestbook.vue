@@ -1,15 +1,15 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  import { isClient } from '/@/configs/app.env'
   import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
-  import { Language, LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { CommentPostId } from '/@/constants/state'
-  import { firstUpperCase } from '/@/transforms/text'
   import { APP_META } from '/@/configs/app.config'
+  import { Language, LocaleKey } from '/@/locales'
+  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { CommentPostId } from '/@/constants/biz-state'
+  import { firstUpperCase } from '/@/transforms/text'
+  import { isClient } from '/@/configs/app.env'
   import logger from '/@/utils/logger'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -39,7 +39,7 @@
       await appOption.postSiteLike()
       identity.likePage(CommentPostId.Guestbook)
     } catch (error) {
-      const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
+      const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
       logger.warn(message, error)
       alert(message)
     }
@@ -54,8 +54,8 @@
   }
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_GUESTBOOK, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_GUESTBOOK, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `给 ${APP_META.author} 留言` : 'Leave a comment'
     return {
       pageTitles: titles,
@@ -82,7 +82,7 @@
           </button>
           <span class="slogan">
             <webfont class="text">
-              <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
+              <i18n :k="LocaleKey.GUESTBOOK_SLOGAN" />
             </webfont>
           </span>
         </div>
@@ -90,10 +90,10 @@
       <template #mobile>
         <page-banner class="mobile-banner" :is-mobile="true" :image="bannerImage" :image-position="70" cdn>
           <template #title>
-            <i18n :k="LanguageKey.PAGE_GUESTBOOK" />
+            <i18n :k="LocaleKey.PAGE_GUESTBOOK" />
           </template>
           <template #description>
-            <i18n :k="LanguageKey.GUESTBOOK_SLOGAN" />
+            <i18n :k="LocaleKey.GUESTBOOK_SLOGAN" />
           </template>
         </page-banner>
       </template>

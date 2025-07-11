@@ -23,9 +23,9 @@ import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { setStaticTitler, resetTitler } from '/@/effects/titler'
-import { getLayoutByRouteMeta } from '/@/constants/layout'
+import { resolvePageLayout } from '/@/constants/page-layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
-import { Language, LanguageKey } from '/@/language'
+import { Language, LocaleKey } from '/@/locales'
 import { APP_VERSION, isDev, isProd } from './configs/app.env'
 import { APP_META, IDENTITIES } from '/@/configs/app.config'
 import API_CONFIG from '/@/configs/app.api'
@@ -43,7 +43,7 @@ console.groupEnd()
 // init: app
 const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
   routerHistoryCreator: createWebHistory,
-  language: navigator.language,
+  languages: navigator.languages as string[],
   userAgent: navigator.userAgent,
   region: getSSRStateValue('region')!,
   layout: getSSRStateValue('layout')!,
@@ -106,7 +106,7 @@ if (isProd) {
 // router ready -> mount
 router.isReady().finally(() => {
   // UI layout: set UI layout by route (for SPA)
-  globalState.setLayoutColumn(getLayoutByRouteMeta(router.currentRoute.value.meta))
+  globalState.setPageLayout(resolvePageLayout(router.currentRoute.value.meta.layout))
   // mount (force hydrate)
   app.mount('#app', true).$nextTick(() => {
     // set hydration state
@@ -139,7 +139,7 @@ router.isReady().finally(() => {
     }
     // production only
     if (isProd) {
-      consoleSlogan(i18n.t(LanguageKey.APP_SLOGAN)!, store.stores.appOption.data?.site_email)
+      consoleSlogan(i18n.t(LocaleKey.APP_SLOGAN)!, store.stores.appOption.data?.site_email)
     }
   })
 })

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useArticleDetailStore } from '/@/stores/article'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { ArticleLangI18n } from '/@/interfaces/article'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { numberSplit } from '/@/transforms/text'
-  import * as ANCHORS from '/@/constants/anchor'
+  import * as ANCHORS from '/@/constants/element-anchor'
 
   const store = useArticleDetailStore()
   const headings = computed(() => {
@@ -57,7 +57,7 @@
           @click="scrollToAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
         >
           <i class="level iconfont icon-loadmore"></i>
-          <span class="text"><i18n :k="LanguageKey.ARTICLE_READ_ALL" /></span>
+          <span class="text"><i18n :k="LocaleKey.ARTICLE_READ_ALL" /></span>
         </li>
       </ul>
     </div>

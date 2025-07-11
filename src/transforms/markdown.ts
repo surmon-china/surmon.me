@@ -13,9 +13,9 @@ import { sanitizeUrl } from '@braintree/sanitize-url'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
-import { getOriginalProxyURL } from '/@/transforms/url'
-import { escape } from '/@/transforms/text'
 import { APP_META } from '/@/configs/app.config'
+import { getOriginalProxyURL } from './url'
+import { escape } from './text'
 
 // https://marked.js.org
 const highlightLangPrefix = 'language-'

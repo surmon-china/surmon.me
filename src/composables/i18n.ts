@@ -7,11 +7,11 @@
 import { App, inject, computed, ref, readonly, defineComponent } from 'vue'
 
 export type I18nValueRender = (...args: any[]) => string
-export type I18nLanguageMap<Lang extends string, V = string> = {
+export type I18nLocaleMap<Lang extends string, V = string> = {
   [code in Lang]: V
 }
 
-export interface I18nLanguage<K extends string> {
+export interface I18nLocale<K extends string> {
   code: string
   iso: string
   name: string
@@ -23,20 +23,20 @@ export interface I18nLanguage<K extends string> {
 interface I18nConfig<K extends string> {
   default: string
   keys: Array<K>
-  languages: I18nLanguage<K>[]
+  locales: I18nLocale<K>[]
 }
 
 const I18nSymbol = Symbol('i18n')
 const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
   const language = ref(config.default)
-  const languageCodes = config.languages.map((lang) => lang.code)
-  const l = computed(() => config.languages.find((l) => l.code === language.value))
-  const languageMap = config.keys.reduce<{
-    [key in K]: I18nLanguageMap<string, string | I18nValueRender>
+  const languageCodes = config.locales.map((lang) => lang.code)
+  const l = computed(() => config.locales.find((l) => l.code === language.value))
+  const localeMap = config.keys.reduce<{
+    [key in K]: I18nLocaleMap<string, string | I18nValueRender>
   }>(
     (map, key) => ({
       ...map,
-      [key]: config.languages.reduce(
+      [key]: config.locales.reduce(
         (result, language) => ({
           ...result,
           [language.code]: language.data[key]
@@ -62,7 +62,7 @@ const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
   }
 
   const translate = <T extends K>(key: T, targetLanguage?: string | null, ...args) => {
-    const content = languageMap[key]?.[targetLanguage ?? language.value]
+    const content = localeMap[key]?.[targetLanguage ?? language.value]
     if (!content) {
       return
     }
@@ -80,8 +80,8 @@ const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
 }
 
 /**
- * @example <span>{{ i18n.t(LanguageKey.SOME_KEY) }}</span>
- * @example <i18n :k="LanguageKey.SOME_KEY" />
+ * @example <span>{{ i18n.t(LocaleKey.SOME_KEY) }}</span>
+ * @example <i18n :k="LocaleKey.SOME_KEY" />
  * @example <i18n zh="你好，世界" en="hello, world!" />
  * @example (
  *  <i18n>

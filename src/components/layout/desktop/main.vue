@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/anchor'
+  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
   import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { getLayoutByRouteMeta } from '/@/constants/layout'
+  import { resolvePageLayout } from '/@/constants/page-layout'
   import logger from '/@/utils/logger'
   import MusicPlayerHandle from '/@/components/widgets/music-player/handle.vue'
   import Wallflower from '/@/components/widgets/wallflower/garden.vue'
@@ -24,14 +24,14 @@
   import NavView from './nav.vue'
 
   const { route, globalState } = useEnhancer()
-  const { switcher, layoutColumn } = globalState
+  const { switcher, pageLayout } = globalState
 
   const wallpaperStore = useWallpaperStore()
   const gitHubSponsorsStore = useGitHubSponsorsStore()
   const sponsorState = useSponsorState()
 
   const handlePageTransitionDone = () => {
-    globalState.setLayoutColumn(getLayoutByRouteMeta(route.meta))
+    globalState.setPageLayout(resolvePageLayout(route.meta.layout))
   }
   const handleSponsorModalClose = () => {
     globalState.toggleSwitcher('sponsor', false)
@@ -91,7 +91,7 @@
         <statement />
       </popup>
     </client-only>
-    <template v-if="!layoutColumn.isFull">
+    <template v-if="!pageLayout.isFull">
       <share class="main-share" disabled-image-share />
       <wallpaper />
       <toolbox />
@@ -100,17 +100,17 @@
       </client-only>
     </template>
     <header-view />
-    <main :id="MAIN_ELEMENT_ID" class="main-container" :class="{ 'full-page': layoutColumn.isFull }">
+    <main :id="MAIN_ELEMENT_ID" class="main-container" :class="{ 'full-page': pageLayout.isFull }">
       <!-- MARK: keep order > long content > flicker -->
-      <nav-view class="nav-view" v-if="layoutColumn.isNormal" />
-      <aside-view class="aside-view" v-if="layoutColumn.isNormal" />
+      <nav-view class="nav-view" v-if="pageLayout.isNormal" />
+      <aside-view class="aside-view" v-if="pageLayout.isNormal" />
       <div
         :id="MAIN_CONTENT_ELEMENT_ID"
         class="main-view"
         :class="{
-          'layout-normal': layoutColumn.isNormal,
-          'layout-wide': layoutColumn.isWide,
-          'layout-full': layoutColumn.isFull
+          'layout-normal': pageLayout.isNormal,
+          'layout-wide': pageLayout.isWide,
+          'layout-full': pageLayout.isFull
         }"
       >
         <!-- unuse suspense -> async route component -> can't extract style to css file -->

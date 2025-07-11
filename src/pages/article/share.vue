@@ -48,30 +48,23 @@
   const shareImageUrl = shallowRef<string | null>(null)
   const isRenderedShareImage = computed(() => Boolean(shareImageUrl.value))
 
-  const renderShareTemplate = async (element: HTMLElement) => {
-    // generate QRcode
-    const url = getPageURL(getArticleDetailRoute(props.article.id))
-    shareTemplateQRCode.value = await renderTextToQRCodeDataURL(url, { errorCorrectionLevel: 'M' })
-    // ensure all images loaded
-    const images = element.querySelectorAll('img')
-    await Promise.all(
-      Array.from(images).map((image) => {
+  const resolveShareTemplateImages = (element: HTMLElement) => {
+    return Promise.all(
+      Array.from(element.querySelectorAll('img')).map((image) => {
+        if (image.complete) return Promise.resolve()
         return new Promise((resolve) => {
           image.addEventListener('load', resolve)
           image.addEventListener('error', resolve)
         })
       })
     )
-    // wait for browser render
-    await new Promise((resolve) => setTimeout(resolve, APP_CONFIG.article_fake_render_delay))
   }
 
-  const renderShareImage = async (element: HTMLElement) => {
+  const resolveShareImage = async (element: HTMLElement) => {
     const htmlToImage = await import('html-to-image')
     const blob = await htmlToImage.toBlob(element, {
       quality: 1,
       skipAutoScale: true,
-      cacheBust: true,
       skipFonts: true,
       fetchRequestInit: { mode: 'no-cors', cache: 'no-cache' },
       filter: (element) => !['IFRAME', 'VIDEO', 'AUDIO'].includes(element.tagName)
@@ -80,7 +73,7 @@
     if (!blob) {
       throw new Error('Failed to generate share image')
     } else {
-      shareImageUrl.value = URL.createObjectURL(blob)
+      return URL.createObjectURL(blob)
     }
   }
 
@@ -93,8 +86,15 @@
     shareImageVisibility.value = true
     nextTick(async () => {
       if (shareTemplateElementRef.value) {
-        await renderShareTemplate(shareTemplateElementRef.value)
-        await renderShareImage(shareTemplateElementRef.value)
+        // Generate QRcode
+        shareTemplateQRCode.value = await renderTextToQRCodeDataURL(
+          getPageURL(getArticleDetailRoute(props.article.id)),
+          { errorCorrectionLevel: 'M' }
+        )
+        // Ensure all images loaded
+        await resolveShareTemplateImages(shareTemplateElementRef.value)
+        // Render share image from template
+        shareImageUrl.value = await resolveShareImage(shareTemplateElementRef.value)
       }
     })
   }

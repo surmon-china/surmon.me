@@ -31,9 +31,7 @@ export const useInstagramCalendarStore = defineStore('instagramCalendar', () => 
   return createFetchStore<CalendarDay[]>({
     once: true,
     data: [],
-    fetcher: () => {
-      return tunnel.dispatch<Array<CalendarDay>>(TunnelModule.InstagramCalendar)
-    }
+    fetcher: () => tunnel.fetch<Array<CalendarDay>>(TunnelModule.InstagramCalendar)
   })
 })
 
@@ -41,7 +39,7 @@ export const useGitHubCalendarStore = defineStore('githubContributionsCalendar',
   const fetchStore = createFetchStore({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch<GitHubContributionsResponse>(TunnelModule.GitHubContributions)
+    fetcher: () => tunnel.fetch<GitHubContributionsResponse>(TunnelModule.GitHubContributions)
   })
 
   const days = computed<Array<{ date: string; count: number; color: string }>>(() => {

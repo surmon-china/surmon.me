@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, shallowRef, onMounted } from 'vue'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { Article, ArticleLang, ArticleLangI18n } from '/@/interfaces/article'
@@ -70,11 +70,11 @@
             reprint: isReprint
           }"
         >
-          <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-          <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-          <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+          <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+          <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+          <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
         </span>
-        <span class="item-featured" v-if="article.featured" :title="_i18n.t(LanguageKey.ARTICLE_FEATURED)">
+        <span class="item-featured" v-if="article.featured" :title="_i18n.t(LocaleKey.ARTICLE_FEATURED)">
           <i class="iconfont icon-windmill"></i>
         </span>
         <picture class="picture">
@@ -125,7 +125,7 @@
             <i class="iconfont icon-category"></i>
             <placeholder :transition="false" :data="article.categories.length">
               <template #placeholder>
-                <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+                <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
               </template>
               <template #default>
                 <router-link

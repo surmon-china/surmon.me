@@ -5,6 +5,7 @@
  */
 
 import { APP_META } from '/@/configs/app.config'
+import { MIME_TYPES } from '/@/constants/mime-type'
 
 declare global {
   interface Window {
@@ -41,8 +42,8 @@ export const initCopyrighter = () => {
     if (!window.getSelection) return
     if (window.__isEnabledCopyrighter) {
       const content = window.getSelection()?.toString()
-      event.clipboardData?.setData('text/plain', buildText(content))
-      event.clipboardData?.setData('text/html', buildHTML(content))
+      event.clipboardData?.setData(MIME_TYPES.text, buildText(content))
+      event.clipboardData?.setData(MIME_TYPES.html, buildHTML(content))
       event.preventDefault()
     }
   })

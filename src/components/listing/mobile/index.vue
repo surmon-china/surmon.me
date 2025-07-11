@@ -1,8 +1,7 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
-  import { isClient } from '/@/configs/app.env'
+  import { LocaleKey } from '/@/locales'
   import { APP_META } from '/@/configs/app.config'
-  import { LanguageKey } from '/@/language'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
@@ -12,6 +11,7 @@
   import { useAppOptionStore } from '/@/stores/basic'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
+  import { isClient } from '/@/configs/app.env'
   import Loadmore from '/@/components/common/loadmore.vue'
   import ListItem from './item.vue'
 
@@ -53,7 +53,7 @@
 
     // index page
     return {
-      title: `${APP_META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
+      title: `${APP_META.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
       description: isZhLang.value ? APP_META.zh_description : APP_META.en_description,
       keywords: appOptionStore.data?.keywords.join(','),
       ogType: 'website'
@@ -144,7 +144,7 @@
         </ul>
       </template>
       <template #placeholder>
-        <empty bold :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
+        <empty bold :i18n-key="LocaleKey.ARTICLE_PLACEHOLDER" />
       </template>
       <template #default>
         <div>
@@ -172,7 +172,7 @@
             </template>
             <template #finished>
               <span class="finished">
-                <i18n :k="LanguageKey.LIST_NO_MORE_DATA" />
+                <i18n :k="LocaleKey.LIST_NO_MORE_DATA" />
               </span>
             </template>
           </loadmore>

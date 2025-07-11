@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
-import { CommentPostId } from '/@/constants/state'
+import { CommentPostId } from '/@/constants/biz-state'
 import { UNDEFINED } from '/@/constants/value'
 import { AdminInfo, AppOption, AppAdConfig } from '/@/interfaces/option'
 import { useIdentityStore, UserType } from './identity'

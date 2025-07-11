@@ -142,7 +142,7 @@ const createMusicPlayer = (config: PlayerConfig) => {
   const init = async () => {
     try {
       playlist.fetching = true
-      playlist.songs = await tunnel.dispatch<Song[]>(TunnelModule.NetEaseMusic)
+      playlist.songs = await tunnel.fetch<Song[]>(TunnelModule.NetEaseMusic)
       playlist.total = playlist.songs.length
       if (playlist.total) {
         audio.src = playlist.songs[state.index].url

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { ref, shallowRef } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { Announcement } from '/@/interfaces/announcement'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import { LocaleKey } from '/@/locales'
+  import type { Announcement } from '/@/interfaces/announcement'
   import Markdown from '/@/components/common/markdown.vue'
 
   defineProps<{
@@ -30,7 +30,7 @@
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
-          <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+          <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>

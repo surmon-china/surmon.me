@@ -2,7 +2,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
   import { useArchiveStore } from '/@/stores/archive'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { numberSplit } from '/@/transforms/text'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
@@ -59,7 +59,7 @@
       <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
         <template #placeholder>
           <empty class="archive-empty" bold key="empty">
-            <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
+            <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>

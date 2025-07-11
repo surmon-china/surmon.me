@@ -36,7 +36,7 @@ export const useGitHubStatisticStore = defineStore('githubStatistic', () => {
   return createFetchStore<GitHubStatistic | null>({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch(TunnelModule.StatisticGitHubJson)
+    fetcher: () => tunnel.fetch(TunnelModule.StatisticGitHubJson)
   })
 })
 
@@ -44,6 +44,6 @@ export const useNpmStatisticStore = defineStore('npmStatistic', () => {
   return createFetchStore<NpmStatistic | null>({
     once: true,
     data: null,
-    fetcher: () => tunnel.dispatch<NpmStatistic>(TunnelModule.StatisticNpmJson)
+    fetcher: () => tunnel.fetch<NpmStatistic>(TunnelModule.StatisticNpmJson)
   })
 })

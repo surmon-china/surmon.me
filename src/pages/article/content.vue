@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, computed, nextTick, onMounted, onUpdated } from 'vue'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { Article } from '/@/interfaces/article'
   import { useArticleDetailStore } from '/@/stores/article'
   import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
@@ -57,15 +57,15 @@
         hybrid: isHybrid
       }"
     >
-      <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-      <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-      <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+      <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+      <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+      <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
     </div>
     <div class="knowledge" key="knowledge">
       <h2 class="title">
         <span class="text">{{ article.title }}</span>
         <span class="featured" v-if="article.featured">
-          <i18n :k="LanguageKey.ARTICLE_FEATURED_SHORT" />
+          <i18n :k="LocaleKey.ARTICLE_FEATURED_SHORT" />
         </span>
       </h2>
       <div class="meta">
@@ -85,14 +85,14 @@
         <span>
           <i class="iconfont icon-eye"></i>
           <span>{{ numberSplit(article.meta.views) }}&nbsp;</span>
-          <i18n :k="LanguageKey.ARTICLE_VIEWS" />
+          <i18n :k="LocaleKey.ARTICLE_VIEWS" />
         </span>
       </div>
       <markdown :html="ctxStore.defaultContent?.html" />
       <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
-            <i18n :k="isRenderMoreContent ? LanguageKey.ARTICLE_RENDERING : LanguageKey.ARTICLE_READ_ALL" />
+            <i18n :k="isRenderMoreContent ? LocaleKey.ARTICLE_RENDERING : LocaleKey.ARTICLE_READ_ALL" />
             <i class="iconfont icon-loadmore"></i>
           </button>
         </div>

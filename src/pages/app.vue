@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { Language, LanguageKey } from '/@/language'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { firstUpperCase } from '/@/transforms/text'
+  import { Language, LocaleKey } from '/@/locales'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { firstUpperCase } from '/@/transforms/text'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
   const props = defineProps<{
@@ -19,8 +19,8 @@
   }
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LanguageKey.PAGE_APP, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LanguageKey.PAGE_APP)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_APP, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_APP)!, enTitle] : [enTitle]
     return {
       pageTitles: titles,
       description: `${APP_META.title} App ${isZhLang.value ? '下载' : 'download'}`,
@@ -37,7 +37,7 @@
       </div>
       <h2 class="title">{{ APP_META.title }}</h2>
       <p class="description">
-        <webfont><i18n :k="LanguageKey.APP_SLOGAN" /></webfont>
+        <webfont><i18n :k="LocaleKey.APP_SLOGAN" /></webfont>
       </p>
       <div class="screen">
         <uimage alt="app-hot" class="screen-img" src="/images/page-app/hot.webp" cdn />

@@ -2,9 +2,9 @@
   import { reactive, computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language/key'
+  import { LocaleKey } from '/@/locales/key'
   import { APP_META } from '/@/configs/app.config'
+  import { GAEventCategories } from '/@/constants/google-analytics'
 
   enum Event {
     Close = 'close'
@@ -121,7 +121,7 @@
           <button class="item submit" :disabled="!isSubmitable || state.submitting" @click="handleSubmit">
             <i class="iconfont icon-mail-plane" />
             <span class="text">
-              <i18n :k="state.submitting ? LanguageKey.SUBMITTING : LanguageKey.SUBMIT" />
+              <i18n :k="state.submitting ? LocaleKey.SUBMITTING : LocaleKey.SUBMIT" />
             </span>
           </button>
         </div>

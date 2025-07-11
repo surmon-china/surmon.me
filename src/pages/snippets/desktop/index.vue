@@ -1,10 +1,7 @@
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
   import { IDENTITIES } from '/@/configs/app.config'
-  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
-  import PageBanner from '/@/components/common/banner.vue'
-  import Loadmore from '/@/components/common/loadmore.vue'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
@@ -12,6 +9,9 @@
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
+  import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
+  import PageBanner from '/@/components/common/banner.vue'
+  import Loadmore from '/@/components/common/loadmore.vue'
   import ListItemCard from './card.vue'
   import ThreadsBody from './body-threads.vue'
 
@@ -61,7 +61,7 @@
       <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
         <template #placeholder>
           <empty class="data-empty" key="empty">
-            <i18n :k="LanguageKey.EMPTY_PLACEHOLDER" />
+            <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>

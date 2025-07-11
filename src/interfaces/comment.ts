@@ -1,4 +1,4 @@
-import { CommentParentId } from '/@/constants/state'
+import { CommentParentId } from '/@/constants/biz-state'
 import { UniversalKeyValue } from './common'
 
 export interface Author {

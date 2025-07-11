@@ -2,10 +2,10 @@
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
+  import { LocaleKey } from '/@/locales'
   import { Comment } from '/@/interfaces/comment'
   import { CommentTreeItem } from '/@/stores/comment'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { LanguageKey } from '/@/language'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { CommentEvents, logger } from '../helper'
   import CommentItem from './item.vue'
 
@@ -80,7 +80,7 @@
           await commentStore.postCommentVote(commentId, isLike ? 1 : -1)
           isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
         } catch (error) {
-          const message = _i18n.t(LanguageKey.POST_ACTION_ERROR)
+          const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
           logger.failure(message, error)
           alert(message)
         }

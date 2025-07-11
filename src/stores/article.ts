@@ -9,10 +9,10 @@ import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { useIdentityStore } from './identity'
 import { useCdnDomain } from '/@/app/context'
-import { SortType } from '/@/constants/state'
+import { SortType } from '/@/constants/biz-state'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
-import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/anchor'
+import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/element-anchor'
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
@@ -22,12 +22,12 @@ import nodepress from '/@/services/nodepress'
 
 export const ARTICLE_API_PATH = '/article'
 
-const createSpecialArticleListStore = (_params: Record<string, any>, perPage: number = 8) => {
+const createSpecialArticleListStore = (_params: Record<string, any>) => {
   return createFetchStore<Article[]>({
     once: true,
     data: [],
     async fetcher() {
-      const params = { ..._params, per_page: perPage }
+      const params = { ..._params, per_page: APP_CONFIG.desktop_aside_article_list_count }
       const response = await nodepress.get<PaginationList<Article>>(ARTICLE_API_PATH, { params })
       return response.result.data
     }

@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import _isObject from 'lodash-es/isObject'
+import { isAxiosError } from 'axios'
 
 export interface AppError {
   code: number
@@ -25,7 +25,15 @@ export const createAppError = (message: string, code: number) => {
   return new AppErrorClass(message, code)
 }
 
-export const normalizeUnknowErrorToAppError = (error: unknown, fallbackError: AppError): AppError => {
+export const formatErrorToAppError = (error: unknown, fallbackError: AppError): AppError => {
+  // If the error is an Axios error, it extracts the response data and message.
+  if (isAxiosError(error)) {
+    return {
+      code: error.status ?? fallbackError.code,
+      message: error.response?.data?.message || error.message || fallbackError.message
+    }
+  }
+
   // If the error is an instance of AppErrorClass, it extracts the code and message from the error.
   if (error instanceof AppErrorClass) {
     return {
@@ -47,9 +55,9 @@ export const normalizeUnknowErrorToAppError = (error: unknown, fallbackError: Ap
   }
 
   // If the error is an object, it extracts the code and message from the object, using a default code if not provided.
-  if (_isObject(error)) {
+  if (typeof error === 'object') {
     return {
-      code: (error as any).code || fallbackError.code,
+      code: (error as any).code ?? fallbackError.code,
       message: (error as any).message || fallbackError.message
     }
   }

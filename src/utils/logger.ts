@@ -4,6 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+export type Logger = ReturnType<typeof createLogger>
+
 export const createLogger = (scope: string) => ({
   // levels
   log: (...messages) => console.log('⚪', `[${scope}]`, ...messages),

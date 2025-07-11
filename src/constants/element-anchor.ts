@@ -1,6 +1,6 @@
 /**
- * @file Anchor constant
- * @module constant/anchor
+ * @file Element anchors
+ * @module constant/element-anchor
  * @author Surmon <https://github.com/surmon-china>
  */
 

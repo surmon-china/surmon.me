@@ -3,12 +3,13 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useCommentStore } from '/@/stores/comment'
   import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { getCommentItemElementId } from '/@/constants/anchor'
-  import { getCommentUrlHashById } from '/@/constants/anchor'
-  import { LanguageKey } from '/@/language'
+  import { getCommentItemElementId } from '/@/constants/element-anchor'
+  import { getCommentUrlHashById } from '/@/constants/element-anchor'
+  import { LocaleKey } from '/@/locales'
+  import { APP_CONFIG } from '/@/configs/app.config'
   import { UNDEFINED } from '/@/constants/value'
   import { Comment } from '/@/interfaces/comment'
-  import { getGravatarByHash, getDisqusAvatarByUsername, DEFAULT_AVATAR } from '/@/transforms/avatar'
+  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getPageURL, getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
@@ -66,7 +67,7 @@
       ? getOriginalProxyURL(getDisqusAvatarByUsername(disqusUsername.value))
       : props.comment.author.email_hash
         ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
-        : getAssetURL(cdnDomain, DEFAULT_AVATAR)
+        : getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
   })
 
   const authorURL = computed(() => {
@@ -110,7 +111,7 @@
   }
 
   const handleDelete = () => {
-    if (window.confirm(_i18n.t(LanguageKey.COMMENT_DELETE_CONFIRM))) {
+    if (window.confirm(_i18n.t(LocaleKey.COMMENT_DELETE_CONFIRM))) {
       emit(CommentEvents.Delete, props.comment.id)
     }
   }
@@ -152,7 +153,7 @@
               {{ firstUpperCase(comment.author.name) }}
             </comment-link>
             <span class="moderator" v-if="isAdminAuthor">
-              <i18n :k="LanguageKey.COMMENT_MODERATOR" />
+              <i18n :k="LocaleKey.COMMENT_MODERATOR" />
             </span>
             <span class="author-info">
               <template v-if="comment.ip_location && !hiddenLocation">
@@ -170,7 +171,7 @@
         <div class="cm-content">
           <p v-if="comment.pid" class="reply">
             <span class="text">
-              <i18n :k="LanguageKey.COMMENT_REPLY" />
+              <i18n :k="LocaleKey.COMMENT_REPLY" />
             </span>
             <button class="parent" @click="scrollToCommentItem(comment.pid)">
               {{ getReplyParentCommentText(comment.pid) }}
@@ -200,7 +201,7 @@
               @click="handleVote(true)"
             >
               <i class="iconfont icon-like" />
-              <i18n :k="LanguageKey.COMMENT_UPVOTE" v-if="!plainVote" />
+              <i18n :k="LocaleKey.COMMENT_UPVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.likes }})</span>
             </button>
             <button
@@ -213,22 +214,22 @@
               @click="handleVote(false)"
             >
               <i class="iconfont icon-dislike" />
-              <i18n :k="LanguageKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
+              <i18n :k="LocaleKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
             <button class="reply" @click="handleCancelReply" v-if="isReply">
               <i class="iconfont icon-cancel" />
-              <i18n :k="LanguageKey.COMMENT_REPLY_CANCEL" />
+              <i18n :k="LocaleKey.COMMENT_REPLY_CANCEL" />
             </button>
             <button class="reply" @click="handleReply" v-else>
               <i class="iconfont icon-reply" />
-              <i18n :k="LanguageKey.COMMENT_REPLY" />
+              <i18n :k="LocaleKey.COMMENT_REPLY" />
             </button>
           </div>
           <div class="right">
             <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeletable">
               <i class="iconfont icon-delete" />
-              <i18n :k="LanguageKey.COMMENT_DELETE" />
+              <i18n :k="LocaleKey.COMMENT_DELETE" />
             </button>
           </div>
         </div>

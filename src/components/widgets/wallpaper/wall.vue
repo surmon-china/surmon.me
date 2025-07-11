@@ -2,7 +2,7 @@
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useWallpaperStore } from '/@/stores/wallpaper'
-  import { Language } from '/@/language'
+  import { Language } from '/@/locales'
 
   enum WallEvents {
     Close = 'close'

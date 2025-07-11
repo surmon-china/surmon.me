@@ -77,7 +77,6 @@ export default defineConfig(({ mode }) => {
               '@unhead/vue',
               'pinia',
               'axios',
-              'qs',
               'swiper',
               'lozad',
               'qrcode',

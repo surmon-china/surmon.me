@@ -15,7 +15,7 @@ import { useDefer, Defer } from '/@/composables/defer'
 import type { Popup } from '/@/composables/popup'
 import { usePopup } from '/@/composables/popup/hook'
 import { useAppOptionStore } from '/@/stores/basic'
-import { Language } from '/@/language'
+import { Language } from '/@/locales'
 import { UNDEFINED } from '/@/constants/value'
 import { isClient } from '/@/configs/app.env'
 

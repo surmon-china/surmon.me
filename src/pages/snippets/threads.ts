@@ -22,7 +22,7 @@ export const useThreadsMediasRequest = () => {
   const fetchMedias = async (afterToken?: string) => {
     try {
       fetching.value = true
-      const request = tunnel.dispatch<ThreadsMediaListResponse>(TunnelModule.ThreadsMedias, {
+      const request = tunnel.fetch<ThreadsMediaListResponse>(TunnelModule.ThreadsMedias, {
         after: afterToken
       })
       return await (isClient ? delayPromise(360, request) : request)

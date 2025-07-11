@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { Article } from '/@/interfaces/article'
   import { Pagination } from '/@/interfaces/common'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import ListItem from './item.vue'
 
   enum Events {
@@ -61,7 +61,7 @@
           </ul>
         </template>
         <template #placeholder>
-          <empty class="empty" bold size="large" :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER" />
+          <empty class="empty" bold size="large" :i18n-key="LocaleKey.ARTICLE_PLACEHOLDER" />
         </template>
         <template #default>
           <div key="list">
@@ -109,9 +109,9 @@
         </span>
         <span class="right">
           <span class="text" :class="{ zh: isZhLang }">
-            <i18n v-if="fetching" :k="LanguageKey.ARTICLE_LIST_LOADING" />
-            <i18n v-else-if="hasMoreData" :k="LanguageKey.ARTICLE_LIST_LOADMORE" />
-            <i18n v-else :k="LanguageKey.LIST_NO_MORE_DATA" />
+            <i18n v-if="fetching" :k="LocaleKey.ARTICLE_LIST_LOADING" />
+            <i18n v-else-if="hasMoreData" :k="LocaleKey.ARTICLE_LIST_LOADMORE" />
+            <i18n v-else :k="LocaleKey.LIST_NO_MORE_DATA" />
           </span>
           <i v-if="fetching || hasMoreData" class="iconfont icon-loadmore"></i>
           <i v-else class="iconfont icon-stop"></i>

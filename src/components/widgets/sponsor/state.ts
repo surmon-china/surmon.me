@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { GAEventCategories } from '/@/constants/gtag'
+import { GAEventCategories } from '/@/constants/google-analytics'
 import { IDENTITIES, GO_LINK_MAP } from '/@/configs/app.config'
 
 export enum ProviderId {

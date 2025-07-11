@@ -6,7 +6,7 @@
 
 import { UniversalKeyValue } from '/@/interfaces/common'
 import { UNDEFINED, isNull, isUndefined } from '/@/constants/value'
-import { OriginState } from '/@/constants/state'
+import { OriginState } from '/@/constants/biz-state'
 
 export const isOriginalType = (originState?: OriginState) => {
   return isNull(originState) || isUndefined(null) || originState === OriginState.Original

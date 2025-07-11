@@ -1,6 +1,6 @@
 /**
  * @file State constant
- * @module constant/state
+ * @module constant/biz-state
  * @author Surmon <https://github.com/surmon-china>
  */
 

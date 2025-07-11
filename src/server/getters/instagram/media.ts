@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from '@/server/services/axios'
+import axios from '@/server/services/axios'
 import { INSTAGRAM_TOKEN } from '@/configs/bff.args'
 
 export interface InstagramMediaItem {
@@ -56,8 +56,8 @@ export const getInstagramMedias = async <T = InstagramMediaItem>(options?: Insta
     })
 
     return response.data
-  } catch (error) {
-    throw isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error
+  } catch (error: any) {
+    throw error?.response?.data?.error?.message ?? error
   }
 }
 
@@ -71,7 +71,5 @@ export const getInstagramMediaChildren = (mediaId: string) => {
   return axios
     .get<InstagramMediaListResponse>(url, { timeout: 8000, params })
     .then((response) => response.data.data)
-    .catch((error) => {
-      return Promise.reject(isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error)
-    })
+    .catch((error) => Promise.reject(error?.response?.data?.error?.message ?? error))
 }

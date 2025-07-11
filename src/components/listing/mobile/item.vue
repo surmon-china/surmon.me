@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { UNDEFINED } from '/@/constants/value'
   import { Article, ArticleLangI18n } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
@@ -58,12 +58,12 @@
           hybrid: isHybrid
         }"
       >
-        <i18n :k="LanguageKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-        <i18n :k="LanguageKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-        <i18n :k="LanguageKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+        <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+        <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </span>
       <span class="featured" v-if="article.featured">
-        <i18n :k="LanguageKey.ARTICLE_FEATURED" />
+        <i18n :k="LocaleKey.ARTICLE_FEATURED" />
       </span>
       <picture class="picture">
         <template v-if="isOriginalStaticURL(article.thumbnail)">

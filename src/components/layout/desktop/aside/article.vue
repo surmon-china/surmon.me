@@ -2,7 +2,8 @@
   import { ref, computed } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Language, LanguageKey } from '/@/language'
+  import { Language, LocaleKey } from '/@/locales'
+  import { APP_CONFIG } from '/@/configs/app.config'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToKilo } from '/@/transforms/text'
   import { dateToYMD } from '/@/transforms/moment'
@@ -29,8 +30,8 @@
     {
       zh_title: '群贤毕至',
       en_title: 'Featured',
-      zh_label: _i18n.t(LanguageKey.ARTICLE_FEATURED_SHORT, Language.Chinese),
-      en_label: _i18n.t(LanguageKey.ARTICLE_FEATURED_SHORT, Language.English),
+      zh_label: _i18n.t(LocaleKey.ARTICLE_FEATURED_SHORT, Language.Chinese),
+      en_label: _i18n.t(LocaleKey.ARTICLE_FEATURED_SHORT, Language.English),
       icon: 'icon-windmill',
       store: featuredArticleList
     }
@@ -68,7 +69,7 @@
     <placeholder
       :data="activatedTab.store.data"
       :loading="activatedTab.store.fetching"
-      :i18n-key="LanguageKey.ARTICLE_PLACEHOLDER"
+      :i18n-key="LocaleKey.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
@@ -79,7 +80,11 @@
       </template>
       <template #default>
         <ul class="article-list" key="list">
-          <li v-for="(article, i) in activatedTab.store.data.slice(0, 8)" :key="article.id" class="item">
+          <li
+            v-for="(article, i) in activatedTab.store.data.slice(0, APP_CONFIG.desktop_aside_article_list_count)"
+            :key="article.id"
+            class="item"
+          >
             <span class="index" :data-index="i + 1">{{ i + 1 }}{{ i > 2 ? '.' : '' }}</span>
             <div class="content">
               <router-link class="title" :to="getArticleDetailRoute(article.id)" :title="article.title">

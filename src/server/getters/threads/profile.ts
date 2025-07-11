@@ -1,4 +1,4 @@
-import axios, { isAxiosError } from '@/server/services/axios'
+import axios from '@/server/services/axios'
 import { THREADS_TOKEN } from '@/configs/bff.args'
 
 export interface ThreadsProfile {
@@ -33,8 +33,8 @@ const getThreadsUserProfile = async () => {
       avatar: response.data.threads_profile_picture_url,
       biography: response.data.threads_biography
     }
-  } catch (error) {
-    throw isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error
+  } catch (error: any) {
+    throw error.response?.data?.error?.message ?? error
   }
 }
 
@@ -55,8 +55,8 @@ const getThreadsUserInsights = async () => {
       totalQuotes: response.data.data[2].total_value.value,
       followersCount: response.data.data[3].total_value.value
     }
-  } catch (error) {
-    throw isAxiosError(error) ? (error.response?.data?.error ?? error.toJSON()) : error
+  } catch (error: any) {
+    throw error.response?.data?.error?.message ?? error
   }
 }
 

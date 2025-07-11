@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { stringify } from '/@/transforms/qs'
+import { stringify } from './query-string'
 
 export interface EmailLinkOptions {
   email: string

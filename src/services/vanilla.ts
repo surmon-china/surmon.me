@@ -6,7 +6,7 @@
 
 import axios from 'axios'
 
-// Can do something in feature
+// Do something in feature
 const vanilla = axios.create()
 
 export default vanilla

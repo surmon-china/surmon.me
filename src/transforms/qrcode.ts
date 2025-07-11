@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import QRCode, { QRCodeToDataURLOptions } from 'qrcode'
+import QRCode, { type QRCodeToDataURLOptions } from 'qrcode'
 
-export async function renderTextToQRCodeDataURL(value: string, options?: QRCodeToDataURLOptions) {
-  return await QRCode.toDataURL(value, {
+export const renderTextToQRCodeDataURL = (value: string, options?: QRCodeToDataURLOptions) => {
+  return QRCode.toDataURL(value, {
     errorCorrectionLevel: 'H',
-    type: 'image/jpeg',
+    type: 'image/png',
     width: 260,
     ...options
   })

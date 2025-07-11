@@ -2,7 +2,7 @@
   import { computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
-  import { GAEventCategories } from '/@/constants/gtag'
+  import { GAEventCategories } from '/@/constants/google-analytics'
   import { dateToHuman, HumanDate, humanDateToYMD } from '/@/transforms/moment'
   import CalendarDay from './day.vue'
 

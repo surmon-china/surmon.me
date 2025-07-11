@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { NAV_ELEMENT_ID } from '/@/constants/anchor'
+  import { NAV_ELEMENT_ID } from '/@/constants/element-anchor'
   import { useEnhancer } from '/@/app/enhancer'
   import { menus } from './menu'
 

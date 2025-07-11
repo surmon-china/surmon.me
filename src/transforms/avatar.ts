@@ -3,8 +3,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export const DEFAULT_AVATAR = '/images/gravatar.png'
-
 export const getGravatarByHash = (hash: string) => {
   return `https://www.gravatar.com/avatar/${hash}`
 }

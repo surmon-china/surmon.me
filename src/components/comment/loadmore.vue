@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { Pagination } from '/@/interfaces/common'
-  import { GAEventCategories } from '/@/constants/gtag'
-  import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/anchor'
+  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/element-anchor'
   import { CommentEvents } from './helper'
 
   const props = defineProps<{
@@ -47,7 +47,7 @@
       </i18n>
     </button>
     <span class="finished" v-else>
-      <i18n :k="LanguageKey.LIST_NO_MORE_DATA" />
+      <i18n :k="LocaleKey.LIST_NO_MORE_DATA" />
     </span>
   </div>
 </template>

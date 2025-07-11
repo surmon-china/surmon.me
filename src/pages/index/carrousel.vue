@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { shallowRef, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LanguageKey } from '/@/language'
-  import { Article } from '/@/interfaces/article'
-  import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
+  import { LocaleKey } from '/@/locales'
   import { UNDEFINED } from '/@/constants/value'
+  import type { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
@@ -67,7 +67,7 @@
       title: article.title,
       route: getArticleDetailRoute(article.id),
       image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg'),
-      subscript: article.featured ? _i18n.t(LanguageKey.ARTICLE_FEATURED) : UNDEFINED
+      subscript: article.featured ? _i18n.t(LocaleKey.ARTICLE_FEATURED) : UNDEFINED
     }))
     if (!result.length) {
       return []
@@ -80,7 +80,7 @@
         title: config.title,
         image: config.src,
         route: config.url,
-        subscript: _i18n.t(LanguageKey.AD)
+        subscript: _i18n.t(LocaleKey.AD)
       })
     }
     return result
@@ -92,7 +92,7 @@
     <placeholder :data="slides.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" bold key="empty">
-          <i18n :k="LanguageKey.ARTICLE_PLACEHOLDER" />
+          <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>

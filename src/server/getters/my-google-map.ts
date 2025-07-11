@@ -9,7 +9,7 @@ import { XMLParser } from 'fast-xml-parser'
 import { VALUABLE_LINKS } from '@/configs/app.config'
 
 export const getMyGoogleMap = () => {
-  const parser = new XMLParser({
+  const xmlParser = new XMLParser({
     ignoreAttributes: false,
     allowBooleanAttributes: true,
     attributeNamePrefix: '@'
@@ -17,5 +17,5 @@ export const getMyGoogleMap = () => {
 
   return axios
     .get<any>(VALUABLE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 6000 })
-    .then((response) => parser.parse(response.data).kml.Document)
+    .then((response) => xmlParser.parse(response.data).kml.Document)
 }

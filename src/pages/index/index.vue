@@ -3,10 +3,10 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { scrollToNextScreen } from '/@/utils/scroller'
-  import { LanguageKey } from '/@/language'
+  import { LocaleKey } from '/@/locales'
   import { APP_META } from '/@/configs/app.config'
   import { isClient } from '/@/configs/app.env'
+  import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleList from '/@/components/listing/desktop/list.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
@@ -23,7 +23,7 @@
   }
 
   usePageSeo(() => ({
-    title: `${APP_META.title} - ${_i18n.t(LanguageKey.APP_SLOGAN)}`,
+    title: `${APP_META.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
     description: isZhLang.value ? APP_META.zh_description : APP_META.en_description,
     keywords: appOption.data?.keywords.join(',')
   }))
