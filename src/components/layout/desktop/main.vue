@@ -1,17 +1,18 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useMusic } from '/@/composables/music'
+  import { useSponsorState } from '/@/components/widgets/sponsor/state'
+  import { useGitHubSponsorsStore } from '/@/stores/sponsors'
   import { useWallpaperStore } from '/@/stores/wallpaper'
+  import { useMusic } from '/@/composables/music'
   import { resolvePageLayout } from '/@/constants/page-layout'
+  import { isDev } from '/@/configs/app.env'
   import logger from '/@/utils/logger'
+  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
   import MusicPlayerHandle from '/@/components/widgets/music-player/handle.vue'
   import Wallflower from '/@/components/widgets/wallflower/garden.vue'
   import Wallpaper from '/@/components/widgets/wallpaper/switcher.vue'
   import Background from '/@/components/widgets/background.vue'
-  import { useGitHubSponsorsStore } from '/@/stores/sponsors'
-  import { useSponsorState } from '/@/components/widgets/sponsor/state'
   import SponsorTabs from '/@/components/widgets/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/widgets/sponsor/provider.vue'
   import Share from '/@/components/widgets/share.vue'
@@ -53,7 +54,7 @@
       logger.failure('GitHub sponsors fetch failed!', error)
     })
     // Music player (163) only for CN users
-    if (isCNUser) {
+    if (isCNUser || isDev) {
       useMusic()
         .init()
         .catch((error) => {
@@ -98,7 +99,7 @@
       <wallpaper />
       <toolbox />
       <client-only>
-        <music-player-handle v-if="isCNUser" />
+        <music-player-handle v-if="isCNUser || isDev" />
       </client-only>
     </template>
     <header-view />
