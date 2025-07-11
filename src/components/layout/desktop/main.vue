@@ -23,12 +23,12 @@
   import AsideView from './aside/index.vue'
   import NavView from './nav.vue'
 
-  const { route, globalState } = useEnhancer()
+  const { route, globalState, isCNUser } = useEnhancer()
   const { switcher, pageLayout } = globalState
 
-  const wallpaperStore = useWallpaperStore()
-  const gitHubSponsorsStore = useGitHubSponsorsStore()
   const sponsorState = useSponsorState()
+  const gitHubSponsorsStore = useGitHubSponsorsStore()
+  const wallpaperStore = useWallpaperStore()
 
   const handlePageTransitionDone = () => {
     globalState.setPageLayout(resolvePageLayout(route.meta.layout))
@@ -44,20 +44,22 @@
   }
 
   onMounted(() => {
-    // bing wallpaper
+    // Bing wallpaper
     wallpaperStore.fetch().catch((error) => {
       logger.failure('bing wallpaper fetch failed!', error)
     })
-    // github sponsors
+    // GitHub sponsors
     gitHubSponsorsStore.fetch().catch((error) => {
       logger.failure('GitHub sponsors fetch failed!', error)
     })
-    // music player
-    useMusic()
-      .init()
-      .catch((error) => {
-        logger.failure('player init failed!', error)
-      })
+    // Music player (163) only for CN users
+    if (isCNUser) {
+      useMusic()
+        .init()
+        .catch((error) => {
+          logger.failure('player init failed!', error)
+        })
+    }
   })
 </script>
 
@@ -96,7 +98,7 @@
       <wallpaper />
       <toolbox />
       <client-only>
-        <music-player-handle />
+        <music-player-handle v-if="isCNUser" />
       </client-only>
     </template>
     <header-view />

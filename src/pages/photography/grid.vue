@@ -1,11 +1,9 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCountryCode } from '/@/app/context'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getProxyURL } from '/@/transforms/url'
-  import { isCNCode } from '/@/transforms/region'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import InsGallery from './gallery.vue'
@@ -14,7 +12,7 @@
     medias: Array<InstagramMediaItem>
   }>()
 
-  const { gtag, cdnDomain } = useEnhancer()
+  const { gtag, cdnDomain, isCNUser } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
     return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
@@ -38,8 +36,7 @@
 
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const url = getInstagramCoverURL(media)
-    const countryCode = useCountryCode()
-    return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
+    return isCNUser ? getProxyURL(cdnDomain, url) : url
   }
 </script>
 

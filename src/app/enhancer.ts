@@ -6,8 +6,8 @@
 
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useCdnDomain, useCountryCode } from '/@/app/context'
 import { useGlobalState } from '/@/app/state'
-import { useCdnDomain } from '/@/app/context'
 import { useI18n } from '/@/composables/i18n'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useTheme, Theme } from '/@/composables/theme'
@@ -17,6 +17,7 @@ import { usePopup } from '/@/composables/popup/hook'
 import { useAppOptionStore } from '/@/stores/basic'
 import { Language } from '/@/locales'
 import { UNDEFINED } from '/@/constants/value'
+import { isCNCode } from '/@/transforms/region'
 import { isClient } from '/@/configs/app.env'
 
 export const useEnhancer = () => {
@@ -26,6 +27,9 @@ export const useEnhancer = () => {
   const theme = useTheme()
   const globalState = useGlobalState()
   const appOptionStore = useAppOptionStore()
+
+  const cdnDomain = useCdnDomain()
+  const countryCode = useCountryCode()
 
   const adConfig = computed(() => appOptionStore.adConfig)
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
@@ -37,7 +41,10 @@ export const useEnhancer = () => {
     i18n,
     theme,
     globalState,
-    cdnDomain: useCdnDomain(),
+
+    cdnDomain,
+    countryCode,
+    isCNUser: isCNCode(countryCode || 'GLOBAL'),
 
     adConfig,
     isDarkTheme,

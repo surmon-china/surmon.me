@@ -1,8 +1,6 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCountryCode } from '/@/app/context'
-  import { isCNCode } from '/@/transforms/region'
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { IDENTITIES } from '/@/configs/app.config'
@@ -15,15 +13,13 @@
     count: number
   }>()
 
-  const { cdnDomain } = useEnhancer()
+  const { cdnDomain, isCNUser } = useEnhancer()
   const isLoaded = ref(false)
   const mediaLoaded = () => {
     isLoaded.value = true
   }
 
   const getMediaUrl = (url: string) => {
-    const countryCode = useCountryCode()
-    const isCNUser = isCNCode(countryCode ?? '')
     return isCNUser ? getProxyURL(cdnDomain, url) : url
   }
 </script>
