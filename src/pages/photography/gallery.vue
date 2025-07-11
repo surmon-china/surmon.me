@@ -1,7 +1,7 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCountry } from '/@/app/context'
+  import { useCountryCode } from '/@/app/context'
   import { isCNCode } from '/@/transforms/region'
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
@@ -22,8 +22,8 @@
   }
 
   const getMediaUrl = (url: string) => {
-    const countryCode = useCountry()
-    const isCNUser = Boolean(countryCode && isCNCode(countryCode))
+    const countryCode = useCountryCode()
+    const isCNUser = isCNCode(countryCode ?? '')
     return isCNUser ? getProxyURL(cdnDomain, url) : url
   }
 </script>

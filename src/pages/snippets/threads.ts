@@ -1,6 +1,6 @@
 import { shallowRef } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { useCountry } from '/@/app/context'
+import { useCountryCode } from '/@/app/context'
 import type { ThreadsMediaListResponse } from '/@/server/getters/threads'
 import { TunnelModule } from '/@/constants/tunnel'
 import { getProxyURL } from '/@/transforms/url'
@@ -12,9 +12,8 @@ import tunnel from '/@/services/tunnel'
 export const useThreadsMediaUrl = (url?: string) => {
   if (!url) return null
   const { cdnDomain } = useEnhancer()
-  const countryCode = useCountry()
-  const isCNUser = isCNCode(countryCode ?? '')
-  return isCNUser ? getProxyURL(cdnDomain, url) : url
+  const countryCode = useCountryCode()
+  return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
 }
 
 export const useThreadsMediasRequest = () => {

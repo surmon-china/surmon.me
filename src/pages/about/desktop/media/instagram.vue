@@ -2,7 +2,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCountry } from '/@/app/context'
+  import { useCountryCode } from '/@/app/context'
   import { isCNCode } from '/@/transforms/region'
   import { useInstagramLatestMediasStore } from '/@/stores/media'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
@@ -15,7 +15,7 @@
   const igLatestMediasStore = useInstagramLatestMediasStore()
   const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
-    const countryCode = useCountry()
+    const countryCode = useCountryCode()
     const url = getInstagramCoverURL(media)
     return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
   }

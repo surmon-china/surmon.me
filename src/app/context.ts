@@ -5,11 +5,11 @@ import type { AppErrorValue } from './state'
 
 export interface SSRContext {
   requestUrl: string
-  userAgent?: string
-  acceptLanguage?: string
-  cookieTheme?: string
-  countryName?: string
-  countryCode?: string
+  userAgent: string | undefined
+  acceptLanguage: string | undefined
+  cookieTheme: string | undefined
+  countryName: string | undefined
+  countryCode: string | undefined
   cdnDomain: string
   assetsPrefix: string
   cacheStatus?: string
@@ -31,10 +31,6 @@ export const useCdnDomain = () => {
   return domain
 }
 
-export const useCountry = () => {
-  return useSSRContextValue<string>('country')
-}
-
-export const useCacheStatus = () => {
-  return useSSRContextValue<string>('cacheStatus')
+export const useCountryCode = () => {
+  return useSSRContextValue<string>('countryCode')
 }

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCountry } from '/@/app/context'
+  import { useCountryCode } from '/@/app/context'
   import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getProxyURL } from '/@/transforms/url'
@@ -38,9 +38,8 @@
 
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const url = getInstagramCoverURL(media)
-    const countryCode = useCountry()
-    const isCNUser = Boolean(countryCode && isCNCode(countryCode))
-    return isCNUser ? getProxyURL(cdnDomain, url) : url
+    const countryCode = useCountryCode()
+    return isCNCode(countryCode ?? '') ? getProxyURL(cdnDomain, url) : url
   }
 </script>
 
