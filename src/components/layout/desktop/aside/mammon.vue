@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+  import _isNil from 'lodash-es/isNil'
   import { shallowRef } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { isNil } from '/@/constants/value'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
 
   interface Props {
@@ -37,7 +37,7 @@
     const realIndex = swiperRef.value?.realIndex
     emit(AsideMammonEvent.UpdateIndex, realIndex)
     emit(AsideMammonEvent.IndexChange, realIndex)
-    if (!isNil(realIndex)) {
+    if (!_isNil(realIndex)) {
       activeIndex.value = realIndex
     }
   }

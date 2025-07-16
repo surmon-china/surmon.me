@@ -4,11 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import _isNil from 'lodash-es/isNil'
 import type { ServerResponse } from 'http'
 import { APP_CONFIG } from '@/configs/app.config'
 import { MIME_TYPES } from '@/constants/mime-type'
 import { SUCCESS } from '@/constants/http-code'
-import { isNil } from '@/constants/value'
 import { getErrorMessage } from '../utils/error'
 
 export interface RequestResult {
@@ -20,7 +20,7 @@ export interface RequestResult {
 
 export const respondWith = (response: ServerResponse, result: RequestResult) => {
   const headers = { 'Content-Type': result.contentType, ...result.headers }
-  const body = isNil(result.body)
+  const body = _isNil(result.body)
     ? ''
     : Buffer.isBuffer(result.body)
       ? result.body

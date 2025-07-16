@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import _isUndefined from 'lodash-es/isUndefined'
 import { defineComponent, h, Transition, type PropType } from 'vue'
-import { isUndefined } from '/@/constants/value'
 import { LocaleKey } from '/@/locales'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
@@ -53,7 +53,7 @@ export default defineComponent({
   setup(props, context) {
     return () => {
       const { data, placeholder, i18nKey, loading, transition, transitionName } = props
-      const isEmptyData = !isUndefined(data) && ((Array.isArray(data) && !(data as any).length) || !data)
+      const isEmptyData = !_isUndefined(data) && ((Array.isArray(data) && !(data as any).length) || !data)
 
       const getPlaceholderView = () => {
         return placeholder || i18nKey ? h(Empty, { placeholder, i18nKey }) : context.slots.placeholder?.()

@@ -10,10 +10,9 @@
 import '@dotenvx/dotenvx/config'
 
 import { STATIC_URL } from '@/configs/bff.api'
-import { PUBLIC_PATH, NODE_ENV, isNodeProd } from '@/configs/bff.env'
 import { APP_META, BFF_CONFIG } from '@/configs/app.config'
+import { PUBLIC_PATH, NODE_ENV, isNodeProd } from '@/configs/bff.env'
 import { INTERNAL_SERVER_ERROR, BAD_REQUEST } from '@/constants/http-code'
-import { UNDEFINED } from '@/constants/value'
 import { TunnelModule } from '@/constants/tunnel'
 
 import { createBFFServerApp } from './server/main'
@@ -61,7 +60,7 @@ const app = createBFFServerApp({
   poweredBy: APP_META.title,
   proxy: {
     prefix: BFF_CONFIG.proxy_url_prefix + '/',
-    allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : UNDEFINED,
+    allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : undefined,
     shouldBlockTargetUrl: (url) => {
       if (url.hostname.endsWith(APP_META.domain)) {
         return url.hostname !== new URL(STATIC_URL).hostname

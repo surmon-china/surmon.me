@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import _isUndefined from 'lodash-es/isUndefined'
 import { Ref, ref, shallowRef } from 'vue'
-import { isUndefined } from '/@/constants/value'
 
 export interface FetchStoreOptions<Data> {
   data: Data
@@ -17,7 +17,7 @@ export interface FetchStoreOptions<Data> {
 
 export const createFetchStore = <Data>(options: FetchStoreOptions<Data>) => {
   // default: shallow
-  const isShallow = isUndefined(options.shallow) ? true : options.shallow
+  const isShallow = _isUndefined(options.shallow) ? true : options.shallow
   const refWrapper = isShallow ? shallowRef : ref
   const fetching = ref(false)
   const fetched = ref(false)

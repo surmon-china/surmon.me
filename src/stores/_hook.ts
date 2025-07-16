@@ -15,7 +15,7 @@ import { useGoLinkStore } from './go-link'
 import { useIdentityStore } from './identity'
 import { useWallpaperStore } from './wallpaper'
 import { useGitHubSponsorsStore } from './sponsors'
-import { useAdminInfoStore, useAppOptionStore } from './basic'
+import { useAdminProfileStore, useAppOptionStore } from './basic'
 import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticStore } from './statistic'
 import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
 import {
@@ -48,7 +48,7 @@ export const useStores = (pinia?: Pinia) => ({
   comment: useCommentStore(pinia),
   archive: useArchiveStore(pinia),
   identity: useIdentityStore(pinia),
-  adminInfo: useAdminInfoStore(pinia),
+  adminProfile: useAdminProfileStore(pinia),
   appOption: useAppOptionStore(pinia),
   wallpaper: useWallpaperStore(pinia),
 

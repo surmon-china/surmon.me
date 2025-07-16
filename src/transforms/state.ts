@@ -4,12 +4,12 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import _isNil from 'lodash-es/isNil'
 import { UniversalKeyValue } from '/@/interfaces/common'
-import { UNDEFINED, isNull, isUndefined } from '/@/constants/value'
 import { OriginState } from '/@/constants/biz-state'
 
 export const isOriginalType = (originState?: OriginState) => {
-  return isNull(originState) || isUndefined(null) || originState === OriginState.Original
+  return _isNil(originState) || originState === OriginState.Original
 }
 
 export const isHybridType = (originState: OriginState) => {
@@ -25,5 +25,5 @@ export const getExtendsObject = (kvs: UniversalKeyValue[] | void): { [key: strin
 }
 
 export const getExtendValue = (kvs: UniversalKeyValue[], key: string) => {
-  return kvs.length ? getExtendsObject(kvs)[key] : UNDEFINED
+  return kvs.length ? getExtendsObject(kvs)[key] : undefined
 }

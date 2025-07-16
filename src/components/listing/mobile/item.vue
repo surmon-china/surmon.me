@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { LocaleKey } from '/@/locales'
-  import { UNDEFINED } from '/@/constants/value'
   import { Article, ArticleLangI18n } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
@@ -44,8 +43,8 @@
 <template>
   <ulink
     class="article-item"
-    :to="globalState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
-    :href="!globalState.userAgent.isWechat ? detailRoutePath : UNDEFINED"
+    :to="globalState.userAgent.isWechat ? detailRoutePath : undefined"
+    :href="!globalState.userAgent.isWechat ? detailRoutePath : undefined"
     :blank="!globalState.userAgent.isWechat"
     :external="false"
   >

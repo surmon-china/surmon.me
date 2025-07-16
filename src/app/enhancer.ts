@@ -15,10 +15,9 @@ import { useDefer, Defer } from '/@/composables/defer'
 import type { Popup } from '/@/composables/popup'
 import { usePopup } from '/@/composables/popup/hook'
 import { useAppOptionStore } from '/@/stores/basic'
-import { Language } from '/@/locales'
-import { UNDEFINED } from '/@/constants/value'
 import { isCNCode } from '/@/transforms/region'
 import { isClient } from '/@/configs/app.env'
+import { Language } from '/@/locales'
 
 export const useEnhancer = () => {
   const route = useRoute()
@@ -50,8 +49,8 @@ export const useEnhancer = () => {
     isDarkTheme,
     isZhLang,
 
-    defer: (isClient ? useDefer() : UNDEFINED) as Defer,
-    popup: (isClient ? usePopup() : UNDEFINED) as Popup,
-    gtag: (isClient ? useGtag() : UNDEFINED) as Gtag
+    defer: (isClient ? useDefer() : undefined) as Defer,
+    popup: (isClient ? usePopup() : undefined) as Popup,
+    gtag: (isClient ? useGtag() : undefined) as Gtag
   }
 }

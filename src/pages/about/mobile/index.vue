@@ -4,7 +4,7 @@
   import { LocaleKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
-  import { useAdminInfoStore } from '/@/stores/basic'
+  import { useAdminProfileStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
@@ -12,10 +12,10 @@
 
   const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
-  const adminInfo = useAdminInfoStore()
+  const adminProfile = useAdminProfileStore()
 
   useAboutPageMeta()
-  useUniversalFetch(() => adminInfo.fetch())
+  useUniversalFetch(() => adminProfile.fetch())
 </script>
 
 <template>
@@ -27,10 +27,10 @@
     </page-banner>
     <div class="profile">
       <div class="avatar">
-        <uimage class="image" :src="useAdminAvatar(adminInfo.data?.avatar)" />
+        <uimage class="image" :src="useAdminAvatar(adminProfile.data?.avatar)" />
       </div>
-      <h2 class="name">{{ adminInfo.data?.name || '-' }}</h2>
-      <h5 class="slogan">{{ adminInfo.data?.slogan || '-' }}</h5>
+      <h2 class="name">{{ adminProfile.data?.name || '-' }}</h2>
+      <h5 class="slogan">{{ adminProfile.data?.slogan || '-' }}</h5>
       <h4 class="description">
         <webfont bolder>{{ isZhLang ? APP_META.zh_description_short : APP_META.en_description }}</webfont>
       </h4>

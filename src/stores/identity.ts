@@ -96,7 +96,7 @@ export const useIdentityStore = defineStore('identity', () => {
   }
 
   const fetchDisqusLogout = async () => {
-    await nodepress.get('/disqus/oauth-logout')
+    await nodepress.post('/disqus/oauth-logout')
     user.type = UserType.Null
     user.disqusProfile = null
   }

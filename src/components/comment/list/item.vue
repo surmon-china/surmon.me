@@ -5,16 +5,15 @@
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/element-anchor'
   import { getCommentUrlHashById } from '/@/constants/element-anchor'
-  import { LocaleKey } from '/@/locales'
   import { APP_CONFIG } from '/@/configs/app.config'
-  import { UNDEFINED } from '/@/constants/value'
-  import { Comment } from '/@/interfaces/comment'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getPageURL, getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { copy } from '/@/utils/clipboard'
+  import { Comment } from '/@/interfaces/comment'
+  import { LocaleKey } from '/@/locales'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -77,7 +76,7 @@
     if (disqusUsername.value) {
       return getDisqusUserURL(disqusUsername.value)
     }
-    return UNDEFINED
+    return undefined
   })
 
   const isDeletable = computed(() => {

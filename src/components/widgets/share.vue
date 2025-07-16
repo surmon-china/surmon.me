@@ -15,7 +15,6 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
   import { APP_META } from '/@/configs/app.config'
-  import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getPageURL } from '/@/transforms/url'
   import { stringify } from '/@/transforms/query-string'
@@ -159,7 +158,7 @@
 
   const getURL = () => getPageURL(route.fullPath)
   const getTitle = () => document.title || APP_META.title
-  const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? UNDEFINED
+  const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
     return pageDescription || _i18n.t(LocaleKey.APP_SLOGAN)!

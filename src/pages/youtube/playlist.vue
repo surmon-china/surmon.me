@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  import { UNDEFINED } from '/@/constants/value'
   import { getYouTubeVideoEmbedURL } from '/@/transforms/media'
   import YoutubeVideoList from './videos.vue'
 
@@ -13,7 +12,7 @@
   const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
   const youTubeModalURL = computed(() => {
     const video = youtubeModalVideo.value
-    return video ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId) : UNDEFINED
+    return video ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId) : undefined
   })
 
   const openYouTubeModal = (video: any) => {

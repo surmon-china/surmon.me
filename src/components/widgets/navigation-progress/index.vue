@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { onBeforeUnmount } from 'vue'
   import { useRouter } from 'vue-router'
-  import { UNDEFINED } from '/@/constants/value'
   import { createNavigationProgress } from './state'
 
   const props = defineProps({
@@ -38,7 +37,7 @@
     <div
       class="progress"
       :style="{
-        background: props.color || UNDEFINED,
+        background: props.color || undefined,
         transform: `scaleX(${state.progress.value}%)`
       }"
     />

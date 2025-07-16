@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { isNil } from './value'
+import _isNil from 'lodash-es/isNil'
 
 export enum PageLayout {
   Normal = 0,
@@ -14,8 +14,8 @@ export enum PageLayout {
 
 export const PAGE_LAYOUTS = Object.freeze([PageLayout.Normal, PageLayout.Wide, PageLayout.Full])
 
-export const resolvePageLayout = (input: PageLayout | undefined | void): PageLayout => {
-  if (isNil(input)) {
+export const resolvePageLayout = (input: PageLayout | undefined | null): PageLayout => {
+  if (_isNil(input)) {
     return PageLayout.Normal
   } else {
     return PAGE_LAYOUTS.includes(input) ? input : PageLayout.Normal

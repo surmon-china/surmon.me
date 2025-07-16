@@ -6,14 +6,14 @@
   import { Theme } from '/@/composables/theme'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
-  import { useAdminInfoStore } from '/@/stores/basic'
+  import { useAdminProfileStore } from '/@/stores/basic'
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
 
   const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
-  const adminInfoStore = useAdminInfoStore()
+  const adminProfileStore = useAdminProfileStore()
   const adminAvatar = computed(() => {
-    return adminInfoStore.data?.avatar || getAssetURL(cdnDomain, '/images/anonymous.png')
+    return adminProfileStore.data?.avatar || getAssetURL(cdnDomain, '/images/anonymous.png')
   })
 
   const themeIcon = computed(() => {
@@ -32,7 +32,7 @@
     return languageIconMap[_i18n.language.value]
   })
 
-  useUniversalFetch(() => adminInfoStore.fetch())
+  useUniversalFetch(() => adminProfileStore.fetch())
 </script>
 
 <template>

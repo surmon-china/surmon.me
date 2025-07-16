@@ -19,7 +19,7 @@
   import { useAboutPageMeta, i18ns } from '../shared'
 
   const { gtag, globalState } = useEnhancer()
-  const { adminInfo, appOption, goLink } = useStores()
+  const { adminProfile, appOption, goLink } = useStores()
 
   const handleGTagEvent = (event: string) => {
     gtag?.event(event, {
@@ -45,7 +45,7 @@
   // meta
   useAboutPageMeta()
   // prefetch
-  useUniversalFetch(() => Promise.all([adminInfo.fetch(), appOption.fetch()]))
+  useUniversalFetch(() => Promise.all([adminProfile.fetch(), appOption.fetch()]))
 
   const moduleButtons = computed(() => [
     {

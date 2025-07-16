@@ -9,12 +9,12 @@ import axios from '@/server/services/axios'
 import { APP_META } from '@/configs/app.config'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
 import type { Archive } from '@/interfaces/archive'
-import type { NodePressResult } from '@/services/nodepress'
+import type { NodePressSuccessResponse } from '@/services/nodepress'
 import { getArticleURL } from '../utils/url'
 
 export const getRssXml = async () => {
   const api = `${NODEPRESS_API_URL}/archive`
-  const response = await axios.get<NodePressResult<Archive>>(api, { timeout: 6000 })
+  const response = await axios.get<NodePressSuccessResponse<Archive>>(api, { timeout: 6000 })
   const archive = response.data.result
   const feed = new RSS({
     title: APP_META.title,

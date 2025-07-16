@@ -13,7 +13,7 @@ export const useAdminAvatar = (avatar?: string) => {
 
 export const useAboutPageMeta = () => {
   const { i18n, isZhLang } = useEnhancer()
-  const { adminInfo } = useStores()
+  const { adminProfile } = useStores()
 
   return usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English)!)
@@ -22,7 +22,7 @@ export const useAboutPageMeta = () => {
       pageTitles: titles,
       description: `${isZhLang.value ? '关于' : 'About'} ${APP_META.author}`,
       ogType: 'profile',
-      ogImage: adminInfo.data?.avatar
+      ogImage: adminProfile.data?.avatar
     }
   })
 }

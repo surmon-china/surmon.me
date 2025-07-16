@@ -11,3 +11,5 @@ export const NOT_FOUND = 404
 export const METHOD_NOT_ALLOWED = 405
 export const INTERNAL_SERVER_ERROR = 500
 export const GATEWAY_TIMEOUT = 504
+
+export const NETWORK_ERROR = 499

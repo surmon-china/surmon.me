@@ -3,7 +3,6 @@
   import { shallowRef, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
-  import { UNDEFINED } from '/@/constants/value'
   import type { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -67,7 +66,7 @@
       title: article.title,
       route: getArticleDetailRoute(article.id),
       image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg'),
-      subscript: article.featured ? _i18n.t(LocaleKey.ARTICLE_FEATURED) : UNDEFINED
+      subscript: article.featured ? _i18n.t(LocaleKey.ARTICLE_FEATURED) : undefined
     }))
     if (!result.length) {
       return []

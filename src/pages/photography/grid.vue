@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+  import _isNil from 'lodash-es/isNil'
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { UNDEFINED, isNil } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getProxyURL } from '/@/transforms/url'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
@@ -15,7 +15,7 @@
   const { gtag, cdnDomain, isCNUser } = useEnhancer()
   const galleryActiveIndex = ref<number>()
   const galleryActiveMedia = computed(() => {
-    return isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
+    return _isNil(galleryActiveIndex.value) ? null : props.medias[galleryActiveIndex.value]
   })
 
   const openMediaGallery = (index: number) => {
@@ -26,7 +26,7 @@
   }
 
   const closeMediaGallery = () => {
-    galleryActiveIndex.value = UNDEFINED
+    galleryActiveIndex.value = undefined
   }
 
   const getPureCaption = (caption?: string) => {

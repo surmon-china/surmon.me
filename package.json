@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "5.1.4",
+  "version": "5.2.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -60,7 +60,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.x",
-    "@sentry/vite-plugin": "^3.5.x",
+    "@sentry/vite-plugin": "^3.6.x",
     "@types/fs-extra": "^11.x",
     "@types/lodash-es": "^4.17.12",
     "@types/lozad": "^1.16.4",

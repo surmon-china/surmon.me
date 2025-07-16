@@ -38,7 +38,7 @@ export interface AppOption {
   ad_config: string
 }
 
-export interface AdminInfo {
+export interface AdminProfile {
   name: string
   slogan: string
   avatar: string

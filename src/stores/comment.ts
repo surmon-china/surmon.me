@@ -11,7 +11,6 @@ import { isClient } from '/@/configs/app.env'
 import { Comment } from '/@/interfaces/comment'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { SortType, CommentParentId } from '/@/constants/biz-state'
-import { UNDEFINED } from '/@/constants/value'
 import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
 
@@ -52,7 +51,7 @@ export const useCommentStore = defineStore('comment', () => {
 
     const findRootParentId = (pid: number): number | void => {
       const target = fullMap.get(pid)
-      return !target ? UNDEFINED : target.pid === CommentParentId.Self ? target.id : findRootParentId(target.pid)
+      return !target ? undefined : target.pid === CommentParentId.Self ? target.id : findRootParentId(target.pid)
     }
 
     children.forEach((comment) => {

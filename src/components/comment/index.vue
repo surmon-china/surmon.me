@@ -1,22 +1,11 @@
 <script lang="ts" setup>
-  import {
-    ref,
-    reactive,
-    computed,
-    watch,
-    toRaw,
-    onBeforeMount,
-    onMounted,
-    onBeforeUnmount,
-    onUnmounted,
-    nextTick
-  } from 'vue'
+  import { ref, reactive, computed, watch, toRaw } from 'vue'
+  import { onBeforeMount, onMounted, onBeforeUnmount, onUnmounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import * as ANCHORS from '/@/constants/element-anchor'
-  import { UNDEFINED } from '/@/constants/value'
   import { SortType } from '/@/constants/biz-state'
   import { Author } from '/@/interfaces/comment'
   import { LocaleKey } from '/@/locales'
@@ -206,7 +195,7 @@
     } catch (error: any) {
       alert(error)
     } finally {
-      postingKey.value = UNDEFINED
+      postingKey.value = undefined
     }
   }
 
@@ -219,7 +208,7 @@
     } catch (error: any) {
       alert(error)
     } finally {
-      postingKey.value = UNDEFINED
+      postingKey.value = undefined
     }
   }
 

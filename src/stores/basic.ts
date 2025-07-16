@@ -8,16 +8,15 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { CommentPostId } from '/@/constants/biz-state'
-import { UNDEFINED } from '/@/constants/value'
-import { AdminInfo, AppOption, AppAdConfig } from '/@/interfaces/option'
+import { AdminProfile, AppOption, AppAdConfig } from '/@/interfaces/option'
 import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
-export const useAdminInfoStore = defineStore('adminInfo', () => {
-  return createFetchStore<AdminInfo | null>({
+export const useAdminProfileStore = defineStore('adminProfile', () => {
+  return createFetchStore<AdminProfile | null>({
     data: null,
     async fetcher() {
-      const response = await nodepress.get<AdminInfo>('/auth/admin')
+      const response = await nodepress.get<AdminProfile>('/admin/profile')
       return response.result
     }
   })
@@ -36,7 +35,7 @@ export const useAppOptionStore = defineStore('appOption', () => {
   const adConfig = computed<AppAdConfig>(() => {
     const adConfig = fetchStore.data.value?.ad_config
     return {
-      PC_CARROUSEL: UNDEFINED,
+      PC_CARROUSEL: undefined,
       PC_NAV: [],
       PC_ASIDE_SWIPER: [],
       ...(adConfig ? JSON.parse(adConfig) : {})

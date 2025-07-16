@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import _isUndefined from 'lodash-es/isUndefined'
 import { App, Plugin, inject, readonly, reactive, computed, unref, toRaw } from 'vue'
 import type { Song } from '/@/server/getters/netease-music'
-import { UNDEFINED, isUndefined } from '/@/constants/value'
 import { TunnelModule } from '/@/constants/tunnel'
 import { createLogger } from '/@/utils/logger'
 import tunnel from '/@/services/tunnel'
@@ -46,10 +46,10 @@ const createMusicPlayer = (config: PlayerConfig) => {
   })
 
   const currentSong = computed(() => {
-    if (state.initialized && !isUndefined(state.index)) {
+    if (state.initialized && !_isUndefined(state.index)) {
       return playlist.songs[state.index]
     } else {
-      return UNDEFINED
+      return undefined
     }
   })
 

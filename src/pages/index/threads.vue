@@ -2,7 +2,6 @@
   import { ref, shallowRef } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { UNDEFINED } from '/@/constants/value'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import type { ThreadsProfile, ThreadsMedia } from '/@/server/getters/threads'
@@ -41,7 +40,7 @@
 
 <template>
   <div class="threads">
-    <placeholder :data="profile ?? UNDEFINED" :loading="fetching">
+    <placeholder :data="profile ?? undefined" :loading="fetching">
       <template #placeholder>
         <empty class="threads-empty" bold key="empty" />
       </template>

@@ -12,7 +12,7 @@
   }>()
 
   const { isZhLang, isDarkTheme, cdnDomain } = useEnhancer()
-  const { adminInfo, appOption, goLink } = useStores()
+  const { adminProfile, appOption, goLink } = useStores()
 
   const emailLink = getEmailLink({
     email: appOption.data?.site_email!,
@@ -42,10 +42,10 @@
     <div class="content">
       <div class="fullwidth">
         <div class="profile" :class="{ dark: isDarkTheme }">
-          <uimage class="avatar" :src="useAdminAvatar(adminInfo.data?.avatar)" />
+          <uimage class="avatar" :src="useAdminAvatar(adminProfile.data?.avatar)" />
           <div class="right">
-            <h1 class="name">{{ adminInfo.data?.name || '-' }}</h1>
-            <p class="slogan">{{ adminInfo.data?.slogan || '-' }}</p>
+            <h1 class="name">{{ adminProfile.data?.name || '-' }}</h1>
+            <p class="slogan">{{ adminProfile.data?.slogan || '-' }}</p>
           </div>
         </div>
         <p class="description">
