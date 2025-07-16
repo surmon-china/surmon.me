@@ -4,6 +4,7 @@ import http from "http";
 import cookie from "cookie";
 import https from "https";
 import { pipeline } from "stream/promises";
+import _isNil from "lodash-es/isNil.js";
 import _axios, { isAxiosError } from "axios";
 import { LRUCache } from "lru-cache";
 import { createClient } from "@redis/client";
@@ -117,11 +118,6 @@ const NOT_FOUND = 404;
 const METHOD_NOT_ALLOWED = 405;
 const INTERNAL_SERVER_ERROR = 500;
 const GATEWAY_TIMEOUT = 504;
-const NULL = null;
-const UNDEFINED = void 0;
-const isNull = (value) => value === NULL;
-const isUndefined = (value) => value === UNDEFINED;
-const isNil = (value) => isNull(value) || isUndefined(value);
 var TunnelModule = /* @__PURE__ */ ((TunnelModule2) => {
   TunnelModule2["WebFont"] = "webfont";
   TunnelModule2["MyGoogleMap"] = "my_google_map";
@@ -218,7 +214,7 @@ const getErrorMessage = (error) => {
 };
 const respondWith = (response, result) => {
   const headers = { "Content-Type": result.contentType, ...result.headers };
-  const body = isNil(result.body) ? "" : Buffer.isBuffer(result.body) ? result.body : typeof result.body === "object" && headers["Content-Type"]?.includes(MIME_TYPES.json) ? JSON.stringify(result.body) : String(result.body);
+  const body = _isNil(result.body) ? "" : Buffer.isBuffer(result.body) ? result.body : typeof result.body === "object" && headers["Content-Type"]?.includes(MIME_TYPES.json) ? JSON.stringify(result.body) : String(result.body);
   if (!response.headersSent) {
     response.writeHead(result.status, headers);
   }
@@ -1134,7 +1130,7 @@ const app = createBFFServerApp({
   poweredBy: APP_META.title,
   proxy: {
     prefix: BFF_CONFIG.proxy_url_prefix + "/",
-    allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : UNDEFINED,
+    allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : void 0,
     shouldBlockTargetUrl: (url) => {
       if (url.hostname.endsWith(APP_META.domain)) {
         return url.hostname !== new URL(STATIC_URL).hostname;
