@@ -15,17 +15,19 @@ import { createTheme, Theme } from '/@/composables/theme'
 import { createI18n } from '/@/composables/i18n'
 import { PageLayout } from '/@/constants/page-layout'
 import { Language, LocaleKey, locales } from '/@/locales'
-import { APP_MODE, APP_VERSION } from '/@/configs/app.env'
+import { APP_MODE, APP_VERSION, isServer } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
 import register from './register'
 import App from './app.vue'
 
+const consoleTable = isServer ? console.info : console.table
+
 console.group(`🔵 [APP:INIT]`)
-console.table({ APP_VERSION, APP_MODE, NODE_ENV: process.env.NODE_ENV })
+consoleTable({ APP_VERSION, APP_MODE, NODE_ENV: process.env.NODE_ENV })
 console.groupEnd()
 
 console.group(`🔵 [APP:API]`)
-console.table(API_CONFIG)
+consoleTable(API_CONFIG)
 console.groupEnd()
 
 export interface AppCreatorContext {
