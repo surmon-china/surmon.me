@@ -28,7 +28,6 @@ import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/
 import { Language, LocaleKey } from '/@/locales'
 import { APP_VERSION, isDev, isProd } from './configs/app.env'
 import { APP_META, IDENTITIES } from '/@/configs/app.config'
-import API_CONFIG from '/@/configs/app.api'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
@@ -99,7 +98,9 @@ if (isProd) {
     // replaysOnErrorSampleRate: 1.0,
     // MARK: replayIntegration ≈ 110kb+, so disabled by default `Sentry.replayIntegration()`
     integrations: [Sentry.browserTracingIntegration({ router })],
-    tracePropagationTargets: ['localhost', /^\//, new RegExp('^' + API_CONFIG.NODEPRESS.replaceAll('.', '\\.'))]
+    // Disabling distributed tracing to ensure no trace headers ('sentry-trace', 'baggage') are sent.
+    // https://docs.sentry.io/platforms/javascript/tracing/distributed-tracing/#disabling-distributed-tracing
+    tracePropagationTargets: []
   })
 }
 
