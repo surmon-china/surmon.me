@@ -22,7 +22,7 @@ import { renderSSRStateScript, renderSSRContextScript } from '/@/app/universal'
 import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
 import * as HTTP_CODES from '/@/constants/http-code'
 import { resolvePageLayout } from '/@/constants/page-layout'
-import { CDNPrefix, getCDNPrefixURL } from '/@/transforms/url'
+import { CDNPrefix, getCDNPrefix } from '/@/transforms/url'
 import { isCNCode } from '/@/transforms/region'
 import { isDev } from '/@/configs/app.env'
 import { APP_CONFIG } from '/@/configs/app.config'
@@ -40,7 +40,7 @@ const createSSRContext = (context: RequestContext, error: AppErrorValue = null):
   const countryName = context.headers['country-name']!
   const countryCode = context.headers['country-code']!
   const cdnDomain = isCNCode(countryCode) ? API_CONFIG.CDN_CHINA : API_CONFIG.CDN_GLOBAL
-  const assetsPrefix = getCDNPrefixURL(cdnDomain, CDNPrefix.Assets)
+  const assetsPrefix = getCDNPrefix(cdnDomain, CDNPrefix.Assets)
   return {
     requestUrl: context.url,
     userAgent: context.headers['user-agent'],

@@ -4,7 +4,7 @@
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { IDENTITIES } from '/@/configs/app.config'
-  import { getProxyURL } from '/@/transforms/url'
+  import { getCdnProxyURL } from '/@/transforms/url'
   import InstagramAlbum from './album.vue'
 
   defineProps<{
@@ -20,7 +20,7 @@
   }
 
   const getMediaUrl = (url: string) => {
-    return isCNUser ? getProxyURL(cdnDomain, url) : url
+    return isCNUser ? getCdnProxyURL(cdnDomain, url) : url
   }
 </script>
 

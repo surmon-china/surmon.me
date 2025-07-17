@@ -3,7 +3,7 @@
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/google-analytics'
-  import { getProxyURL } from '/@/transforms/url'
+  import { getCdnProxyURL } from '/@/transforms/url'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import InsGallery from './gallery.vue'
@@ -36,7 +36,7 @@
 
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const url = getInstagramCoverURL(media)
-    return isCNUser ? getProxyURL(cdnDomain, url) : url
+    return isCNUser ? getCdnProxyURL(cdnDomain, url) : url
   }
 </script>
 

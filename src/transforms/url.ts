@@ -16,7 +16,7 @@ export enum CDNPrefix {
   ImgProxy = 'imgproxy'
 }
 
-export const getCDNPrefixURL = (domain: string, prefix: CDNPrefix) => {
+export const getCDNPrefix = (domain: string, prefix: CDNPrefix) => {
   return `${domain}/${prefix}`
 }
 
@@ -26,15 +26,15 @@ export const normalizePath = (path: string) => {
 
 export const getAssetURL = (domain: string, path: string) => {
   const normalizedPath = normalizePath(path)
-  return isDev ? normalizedPath : `${getCDNPrefixURL(domain, CDNPrefix.Assets)}${normalizedPath}`
+  return isDev ? normalizedPath : `${getCDNPrefix(domain, CDNPrefix.Assets)}${normalizedPath}`
 }
 
 export const getStaticURL = (domain: string, path: string) => {
-  return `${getCDNPrefixURL(domain, CDNPrefix.Static)}${normalizePath(path)}`
+  return `${getCDNPrefix(domain, CDNPrefix.Static)}${normalizePath(path)}`
 }
 
 export const getImgProxyURL = (domain: string, path: string) => {
-  return `${getCDNPrefixURL(domain, CDNPrefix.ImgProxy)}${normalizePath(path)}`
+  return `${getCDNPrefix(domain, CDNPrefix.ImgProxy)}${normalizePath(path)}`
 }
 
 export const isOriginalStaticURL = (url?: string) => {
@@ -49,8 +49,12 @@ export const getOriginalProxyURL = (url: string) => {
   return `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(url)}`
 }
 
-export const getProxyURL = (domain: string, url: string) => {
-  return isDev ? getOriginalProxyURL(url) : `${getCDNPrefixURL(domain, CDNPrefix.Proxy)}/${base64UrlEncode(url)}`
+export const getCdnProxyURL = (domain: string, url: string) => {
+  if (isDev) {
+    return getOriginalProxyURL(url)
+  } else {
+    return `${getCDNPrefix(domain, CDNPrefix.Proxy)}/${base64UrlEncode(url)}`
+  }
 }
 
 export const getPageURL = (path: string, hash?: string) => {

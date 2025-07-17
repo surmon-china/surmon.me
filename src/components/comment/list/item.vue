@@ -7,7 +7,7 @@
   import { getCommentUrlHashById } from '/@/constants/element-anchor'
   import { APP_CONFIG } from '/@/configs/app.config'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
-  import { getPageURL, getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
+  import { getPageURL, getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtendValue } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -40,7 +40,7 @@
     (e: CommentEvents.CancelReply, commentId: number): void
   }>()
 
-  const { route, i18n: _i18n, cdnDomain } = useEnhancer()
+  const { route, i18n: _i18n, cdnDomain, isCNUser } = useEnhancer()
   const commentStore = useCommentStore()
   const identityStore = useIdentityStore()
   const isDeleting = computed(() => commentStore.deleting)
@@ -62,11 +62,15 @@
   })
 
   const authorAvatar = computed(() => {
-    return disqusUsername.value
-      ? getOriginalProxyURL(getDisqusAvatarByUsername(disqusUsername.value))
-      : props.comment.author.email_hash
-        ? getProxyURL(cdnDomain, getGravatarByHash(props.comment.author.email_hash))
-        : getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
+    if (disqusUsername.value) {
+      const avatar = getDisqusAvatarByUsername(disqusUsername.value)
+      return isCNUser ? getOriginalProxyURL(avatar) : avatar
+    } else {
+      const emailHash = props.comment.author.email_hash
+      if (!emailHash) return getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
+      const gravatar = getGravatarByHash(emailHash)
+      return isCNUser ? getCdnProxyURL(cdnDomain, gravatar) : gravatar
+    }
   })
 
   const authorURL = computed(() => {

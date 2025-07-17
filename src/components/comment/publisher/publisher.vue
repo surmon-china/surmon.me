@@ -8,7 +8,7 @@
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
-  import { getAssetURL, getProxyURL, getOriginalProxyURL } from '/@/transforms/url'
+  import { getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { CommentEvents } from '../helper'
 
   enum PublisherEvents {
@@ -36,18 +36,21 @@
     (e: PublisherEvents.UpdateProfile, profile: Author): void
   }>()
 
-  const { i18n: _i18n, gtag, cdnDomain } = useEnhancer()
+  const { i18n: _i18n, gtag, cdnDomain, isCNUser } = useEnhancer()
   const { user } = storeToRefs(useIdentityStore())
   const defaultAvatar = getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
   const avatar = computed(() => {
     // local user
     if (user.value.type === UserType.Local) {
       const hash = user.value.localProfile?.email_hash
-      return hash ? getProxyURL(cdnDomain, getGravatarByHash(hash)) : defaultAvatar
+      if (!hash) return defaultAvatar
+      const gravatar = getGravatarByHash(hash)
+      return isCNUser ? getCdnProxyURL(cdnDomain, gravatar) : gravatar
     }
     // disqus user
     if (user.value.type === UserType.Disqus) {
-      return getOriginalProxyURL(getDisqusAvatarByUsername(user.value.disqusProfile?.username))
+      const avatar = getDisqusAvatarByUsername(user.value.disqusProfile?.username)
+      return isCNUser ? getOriginalProxyURL(avatar) : avatar
     }
     // temp user
     return defaultAvatar

@@ -4,7 +4,7 @@
   import { isClient } from '/@/configs/app.env'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { TunnelModule } from '/@/constants/tunnel'
-  import { getProxyURL } from '/@/transforms/url'
+  import { getCdnProxyURL } from '/@/transforms/url'
   import { delayPromise } from '/@/utils/delayer'
   import tunnel from '/@/services/tunnel'
   import ListSwiper from './swiper.vue'
@@ -38,7 +38,7 @@
 
   const getThumbnailURL = (thumbnails: any) => {
     const url = thumbnails.high?.url || thumbnails.medium?.url || thumbnails.defult?.url
-    return url ? getProxyURL(cdnDomain, url) : ''
+    return url ? getCdnProxyURL(cdnDomain, url) : ''
   }
 
   const handleView = (video: any) => {

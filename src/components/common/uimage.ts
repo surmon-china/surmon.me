@@ -6,7 +6,7 @@
 
 import { defineComponent, ref, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { getAssetURL, getProxyURL } from '/@/transforms/url'
+import { getAssetURL, getCdnProxyURL } from '/@/transforms/url'
 import { isClient } from '/@/configs/app.env'
 
 export default defineComponent({
@@ -48,7 +48,7 @@ export default defineComponent({
         imageSrc = getAssetURL(cdnDomain, src)
       }
       if (proxy) {
-        imageSrc = getProxyURL(cdnDomain, src)
+        imageSrc = getCdnProxyURL(cdnDomain, src)
       }
       if (defer && !deferRenderable.value) {
         // render a placeholder image (1x1 pixel transparent PNG)

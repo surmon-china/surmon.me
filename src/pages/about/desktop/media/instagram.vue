@@ -5,7 +5,7 @@
   import { useInstagramLatestMediasStore } from '/@/stores/media'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
-  import { getProxyURL } from '/@/transforms/url'
+  import { getCdnProxyURL } from '/@/transforms/url'
 
   const fetching = ref(true)
   const { goLink } = useStores()
@@ -14,7 +14,7 @@
   const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const url = getInstagramCoverURL(media)
-    return isCNUser ? getProxyURL(cdnDomain, url) : url
+    return isCNUser ? getCdnProxyURL(cdnDomain, url) : url
   }
 
   onMounted(() => {
