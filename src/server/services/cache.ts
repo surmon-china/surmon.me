@@ -18,6 +18,7 @@ export interface CacheStore {
   has(key: string): Promise<boolean>
   del(key: string): Promise<any>
   clear(): Promise<void>
+  withoutNamespace?(): CacheStore
 }
 
 const createLRUStore = (): CacheStore => {
@@ -49,41 +50,42 @@ const createRedisStore = async (options?: CacheStoreOptions): Promise<CacheStore
   client.on('error', (error) => logger.failure('Redis client error!', error.message || error))
   await client.connect()
 
-  const getCacheKey = (key: string) => {
-    const _namespace = options?.namespace ?? 'ssr_app'
-    return `${_namespace}:${key}`
-  }
+  const buildStore = (namespace?: string): CacheStore => {
+    const getCacheKey = (key: string) => (namespace ? `${namespace}:${key}` : key)
 
-  const set: CacheStore['set'] = async (key, value, ttl) => {
-    const _value = value ? JSON.stringify(value) : ''
-    if (ttl) {
-      // EX — Set the specified expire time, in seconds.
-      await client.set(getCacheKey(key), _value, { expiration: { type: 'EX', value: ttl } })
-    } else {
-      await client.set(getCacheKey(key), _value)
+    const set: CacheStore['set'] = async (key, value, ttl) => {
+      const _value = value === undefined ? '' : JSON.stringify(value)
+      if (ttl) {
+        // EX — Set the specified expire time, in seconds.
+        await client.set(getCacheKey(key), _value, { expiration: { type: 'EX', value: ttl } })
+      } else {
+        await client.set(getCacheKey(key), _value)
+      }
     }
-  }
 
-  const get: CacheStore['get'] = async (key) => {
-    const value = await client.get(getCacheKey(key))
-    return value ? JSON.parse(value) : value
-  }
-
-  const has: CacheStore['has'] = async (key) => {
-    const value = await client.exists(getCacheKey(key))
-    return Boolean(value)
-  }
-
-  const del: CacheStore['del'] = (key) => client.del(getCacheKey(key))
-
-  const clear: CacheStore['clear'] = async () => {
-    const keys = await client.keys(getCacheKey('*'))
-    if (keys.length) {
-      await client.del(keys)
+    const get: CacheStore['get'] = async (key) => {
+      const value = await client.get(getCacheKey(key))
+      return value ? JSON.parse(value) : value
     }
+
+    const has: CacheStore['has'] = async (key) => {
+      const value = await client.exists(getCacheKey(key))
+      return Boolean(value)
+    }
+
+    const del: CacheStore['del'] = (key) => client.del(getCacheKey(key))
+
+    const clear: CacheStore['clear'] = async () => {
+      const keys = await client.keys(getCacheKey('*'))
+      if (keys.length) {
+        await client.del(keys)
+      }
+    }
+
+    return { set, get, has, del, clear, withoutNamespace: () => buildStore() }
   }
 
-  return { set, get, has, del, clear }
+  return buildStore(options?.namespace ?? 'ssr_app')
 }
 
 export interface CacheStoreOptions {

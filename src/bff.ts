@@ -77,12 +77,12 @@ const app = createBFFServerApp({
 
 // sitemap.xml
 app.usePathRequest('/sitemap.xml', async () => {
-  return respond.xml(await getSitemapXml())
+  return respond.xml(await getSitemapXml(cache))
 })
 
 // rss.xml
 app.usePathRequest('/rss.xml', async () => {
-  return respond.xml(await getRssXml())
+  return respond.xml(await getRssXml(cache))
 })
 
 // gtag script

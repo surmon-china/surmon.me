@@ -8,16 +8,22 @@ import axios from '@/server/services/axios'
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, EnumChangefreq } from 'sitemap'
 import type { SitemapItemLoose } from 'sitemap'
+import type { CacheStore } from '@/server/services/cache'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressSuccessResponse } from '@/services/nodepress'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
 import { APP_META } from '@/configs/app.config'
 import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../utils/url'
 
-export const getSitemapXml = async () => {
-  const api = `${NODEPRESS_API_URL}/archive`
-  const response = await axios.get<NodePressSuccessResponse<Archive>>(api, { timeout: 6000 })
-  const archive = response.data.result
+export const getSitemapXml = async (cache: CacheStore) => {
+  // HACK: use cache to avoid frequent API requests
+  let archiveData = await cache.withoutNamespace?.().get<Archive>('nodepress:archive')
+  if (!archiveData) {
+    const api = `${NODEPRESS_API_URL}/archive`
+    const response = await axios.get<NodePressSuccessResponse<Archive>>(api, { timeout: 6000 })
+    archiveData = response.data.result
+  }
+
   const sitemapStream = new SitemapStream({
     hostname: APP_META.url
   })
@@ -41,7 +47,7 @@ export const getSitemapXml = async () => {
     }
   ]
 
-  archive.categories.forEach((category) => {
+  archiveData.categories.forEach((category) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
@@ -49,7 +55,7 @@ export const getSitemapXml = async () => {
     })
   })
 
-  archive.tags.forEach((tag) => {
+  archiveData.tags.forEach((tag) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
@@ -57,7 +63,7 @@ export const getSitemapXml = async () => {
     })
   })
 
-  archive.articles.forEach((article) => {
+  archiveData.articles.forEach((article) => {
     sitemapItemList.push({
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
