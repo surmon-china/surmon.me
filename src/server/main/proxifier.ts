@@ -55,6 +55,34 @@ export const createProxifier = (options: ProxifierOptions) => {
       })
     }
 
+    const { protocol, hostname } = parsedURL
+
+    if (protocol !== 'http:' && protocol !== 'https:') {
+      return respondWith(response, {
+        status: HTTP_CODES.BAD_REQUEST,
+        body: 'Unsupported protocol',
+        contentType: MIME_TYPES.text
+      })
+    }
+
+    if (
+      !hostname ||
+      !hostname.includes('.') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.endsWith('.local') ||
+      hostname.endsWith('.lan') ||
+      /^10\./.test(hostname) ||
+      /^192\.168\./.test(hostname) ||
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) // private IP range
+    ) {
+      return respondWith(response, {
+        status: HTTP_CODES.BAD_REQUEST,
+        body: 'Invalid or disallowed hostname',
+        contentType: MIME_TYPES.text
+      })
+    }
+
     // Step 2: Block target url
     if (options.shouldBlockTargetUrl?.(parsedURL)) {
       return respondWith(response, {
