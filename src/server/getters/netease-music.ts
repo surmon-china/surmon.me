@@ -22,7 +22,7 @@ const PLAY_LIST_LIMIT = 168
 export const getSongList = async (): Promise<Array<Song>> => {
   // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/a0500ec648f22a1dd20fc7b529126f813aa26935/module/playlist_track_all.js
   const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`
-  const playlistDetail = await axios.get<any>(playlistURL, { timeout: 6000 })
+  const playlistDetail = await axios.get<any>(playlistURL, { timeout: 8000 })
   if (playlistDetail.data.code < 0) {
     throw new Error(playlistDetail.data.message)
   }
@@ -33,7 +33,7 @@ export const getSongList = async (): Promise<Array<Song>> => {
     .map((id) => `{id:${id.id}}`)
     .join(',')
   const songListURL = `https://music.163.com/api/v3/song/detail?c=[${idsParams}]`
-  const songListDetail = await axios.get<any>(songListURL, { timeout: 6000 })
+  const songListDetail = await axios.get<any>(songListURL, { timeout: 8000 })
   if (!songListDetail.data.songs) {
     throw new Error(songListDetail.data)
   }

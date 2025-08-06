@@ -9,7 +9,7 @@ import { VALUABLE_LINKS } from '@/configs/app.config'
 
 export const fetchGitHubStatisticJSON = async <T = any>(fileName: string): Promise<T> => {
   const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`
-  const response = await axios.get<T>(url, { timeout: 6000 })
+  const response = await axios.get<T>(url, { timeout: 8000 })
   return response.data
 }
 
