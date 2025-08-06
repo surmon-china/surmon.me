@@ -825,7 +825,7 @@ const getGaScriptURL = (measurementId) => {
 };
 const getGTagScript = async () => {
   const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
-  const response = await axios.get(url, { timeout: 6e3 });
+  const response = await axios.get(url, { timeout: 8e3 });
   return response.data;
 };
 const getWallpapers = async (params) => {
@@ -861,11 +861,11 @@ const getMyGoogleMap = () => {
     allowBooleanAttributes: true,
     attributeNamePrefix: "@"
   });
-  return axios.get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 6e3 }).then((response) => xmlParser.parse(response.data).kml.Document);
+  return axios.get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 8e3 }).then((response) => xmlParser.parse(response.data).kml.Document);
 };
 const fetchGitHubStatisticJSON = async (fileName) => {
   const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`;
-  const response = await axios.get(url, { timeout: 6e3 });
+  const response = await axios.get(url, { timeout: 8e3 });
   return response.data;
 };
 const getGitHubStatistic = () => {
@@ -915,14 +915,14 @@ const getDoubanMovies = async () => {
 const PLAY_LIST_LIMIT = 168;
 const getSongList = async () => {
   const playlistURL = `https://music.163.com/api/v6/playlist/detail?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`;
-  const playlistDetail = await axios.get(playlistURL, { timeout: 6e3 });
+  const playlistDetail = await axios.get(playlistURL, { timeout: 8e3 });
   if (playlistDetail.data.code < 0) {
     throw new Error(playlistDetail.data.message);
   }
   const trackIds = playlistDetail.data.playlist?.trackIds || [];
   const idsParams = trackIds.slice(0, PLAY_LIST_LIMIT).map((id) => `{id:${id.id}}`).join(",");
   const songListURL = `https://music.163.com/api/v3/song/detail?c=[${idsParams}]`;
-  const songListDetail = await axios.get(songListURL, { timeout: 6e3 });
+  const songListDetail = await axios.get(songListURL, { timeout: 8e3 });
   if (!songListDetail.data.songs) {
     throw new Error(songListDetail.data);
   }
