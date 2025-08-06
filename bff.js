@@ -279,6 +279,21 @@ const createProxifier = (options) => {
         contentType: MIME_TYPES.text
       });
     }
+    const { protocol, hostname } = parsedURL;
+    if (protocol !== "http:" && protocol !== "https:") {
+      return respondWith(response, {
+        status: BAD_REQUEST,
+        body: "Unsupported protocol",
+        contentType: MIME_TYPES.text
+      });
+    }
+    if (!hostname || !hostname.includes(".") || hostname === "localhost" || hostname === "127.0.0.1" || hostname.endsWith(".local") || hostname.endsWith(".lan") || /^10\./.test(hostname) || /^192\.168\./.test(hostname) || /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname)) {
+      return respondWith(response, {
+        status: BAD_REQUEST,
+        body: "Invalid or disallowed hostname",
+        contentType: MIME_TYPES.text
+      });
+    }
     if (options.shouldBlockTargetUrl?.(parsedURL)) {
       return respondWith(response, {
         status: FORBIDDEN,
@@ -478,34 +493,34 @@ const createRedisStore = async (options) => {
   client.on("ready", () => logger$2.success("Redis readied."));
   client.on("error", (error) => logger$2.failure("Redis client error!", error.message || error));
   await client.connect();
-  const getCacheKey2 = (key) => {
-    const _namespace = options?.namespace ?? "ssr_app";
-    return `${_namespace}:${key}`;
+  const buildStore = (namespace) => {
+    const getCacheKey2 = (key) => namespace ? `${namespace}:${key}` : key;
+    const set = async (key, value, ttl) => {
+      const _value = value === void 0 ? "" : JSON.stringify(value);
+      if (ttl) {
+        await client.set(getCacheKey2(key), _value, { expiration: { type: "EX", value: ttl } });
+      } else {
+        await client.set(getCacheKey2(key), _value);
+      }
+    };
+    const get = async (key) => {
+      const value = await client.get(getCacheKey2(key));
+      return value ? JSON.parse(value) : value;
+    };
+    const has = async (key) => {
+      const value = await client.exists(getCacheKey2(key));
+      return Boolean(value);
+    };
+    const del = (key) => client.del(getCacheKey2(key));
+    const clear = async () => {
+      const keys = await client.keys(getCacheKey2("*"));
+      if (keys.length) {
+        await client.del(keys);
+      }
+    };
+    return { set, get, has, del, clear, withoutNamespace: () => buildStore() };
   };
-  const set = async (key, value, ttl) => {
-    const _value = value ? JSON.stringify(value) : "";
-    if (ttl) {
-      await client.set(getCacheKey2(key), _value, { expiration: { type: "EX", value: ttl } });
-    } else {
-      await client.set(getCacheKey2(key), _value);
-    }
-  };
-  const get = async (key) => {
-    const value = await client.get(getCacheKey2(key));
-    return value ? JSON.parse(value) : value;
-  };
-  const has = async (key) => {
-    const value = await client.exists(getCacheKey2(key));
-    return Boolean(value);
-  };
-  const del = (key) => client.del(getCacheKey2(key));
-  const clear = async () => {
-    const keys = await client.keys(getCacheKey2("*"));
-    if (keys.length) {
-      await client.del(keys);
-    }
-  };
-  return { set, get, has, del, clear };
+  return buildStore(options?.namespace ?? "ssr_app");
 };
 const createCacheStore = async (options) => {
   let cacheStore = null;
@@ -714,10 +729,13 @@ const getTagURL = (tag) => `${APP_META.url}/tag/${tag}`;
 const getCategoryURL = (category) => `${APP_META.url}/category/${category}`;
 const getArticleURL = (id) => `${APP_META.url}/article/${id}`;
 const getPageURL = (page) => `${APP_META.url}/${page}`;
-const getRssXml = async () => {
-  const api = `${NODEPRESS_API_URL}/archive`;
-  const response = await axios.get(api, { timeout: 6e3 });
-  const archive = response.data.result;
+const getRssXml = async (cache2) => {
+  let archiveData = await cache2.withoutNamespace?.().get("nodepress:archive");
+  if (!archiveData) {
+    const api = `${NODEPRESS_API_URL}/archive`;
+    const response = await axios.get(api, { timeout: 6e3 });
+    archiveData = response.data.result;
+  }
   const feed = new RSS({
     title: APP_META.title,
     description: APP_META.zh_sub_title,
@@ -727,12 +745,12 @@ const getRssXml = async () => {
     managingEditor: APP_META.author,
     webMaster: APP_META.author,
     generator: `${APP_META.domain}`,
-    categories: archive.categories.map((category) => category.slug),
+    categories: archiveData.categories.map((category) => category.slug),
     copyright: `${(/* @__PURE__ */ new Date()).getFullYear()} ${APP_META.title}`,
     language: "zh",
     ttl: 60
   });
-  archive.articles.forEach((article) => {
+  archiveData.articles.forEach((article) => {
     return feed.item({
       title: article.title,
       description: article.description,
@@ -748,10 +766,13 @@ const getRssXml = async () => {
   });
   return feed.xml({ indent: true });
 };
-const getSitemapXml = async () => {
-  const api = `${NODEPRESS_API_URL}/archive`;
-  const response = await axios.get(api, { timeout: 6e3 });
-  const archive = response.data.result;
+const getSitemapXml = async (cache2) => {
+  let archiveData = await cache2.withoutNamespace?.().get("nodepress:archive");
+  if (!archiveData) {
+    const api = `${NODEPRESS_API_URL}/archive`;
+    const response = await axios.get(api, { timeout: 6e3 });
+    archiveData = response.data.result;
+  }
   const sitemapStream = new SitemapStream({
     hostname: APP_META.url
   });
@@ -773,21 +794,21 @@ const getSitemapXml = async () => {
       priority: 1
     }
   ];
-  archive.categories.forEach((category) => {
+  archiveData.categories.forEach((category) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
       url: getCategoryURL(category.slug)
     });
   });
-  archive.tags.forEach((tag) => {
+  archiveData.tags.forEach((tag) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
       url: getTagURL(tag.slug)
     });
   });
-  archive.articles.forEach((article) => {
+  archiveData.articles.forEach((article) => {
     sitemapItemList.push({
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
@@ -1145,10 +1166,10 @@ const app = createBFFServerApp({
   }
 });
 app.usePathRequest("/sitemap.xml", async () => {
-  return respond.xml(await getSitemapXml());
+  return respond.xml(await getSitemapXml(cache));
 });
 app.usePathRequest("/rss.xml", async () => {
-  return respond.xml(await getRssXml());
+  return respond.xml(await getRssXml(cache));
 });
 const getGtagCache = cacher.interval(cache, {
   key: "gtag",
