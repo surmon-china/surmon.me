@@ -6,7 +6,7 @@
 
 import API_CONFIG from '/@/configs/app.api'
 import { BFF_CONFIG } from '/@/configs/app.config'
-import { base64UrlEncode } from '/@/transforms/base64'
+import { safeBase64UrlEncode } from '/@/transforms/base64'
 import { isDev } from '/@/configs/app.env'
 
 export enum CDNPrefix {
@@ -46,14 +46,14 @@ export const getStaticPath = (url: string) => {
 }
 
 export const getOriginalProxyURL = (url: string) => {
-  return `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(url)}`
+  return `${BFF_CONFIG.proxy_url_prefix}/${safeBase64UrlEncode(url)}`
 }
 
 export const getCdnProxyURL = (domain: string, url: string) => {
   if (isDev) {
     return getOriginalProxyURL(url)
   } else {
-    return `${getCDNPrefix(domain, CDNPrefix.Proxy)}/${base64UrlEncode(url)}`
+    return `${getCDNPrefix(domain, CDNPrefix.Proxy)}/${safeBase64UrlEncode(url)}`
   }
 }
 

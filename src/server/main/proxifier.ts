@@ -7,7 +7,7 @@
 import http from 'http'
 import https from 'https'
 import { pipeline } from 'stream/promises'
-import { base64UrlEncode, base64UrlDecode } from '@/transforms/base64'
+import { safeBase64UrlEncode, safeBase64UrlDecode } from '@/transforms/base64'
 import { createLogger } from '@/utils/logger'
 import { respondWith } from './responder'
 import { MIME_TYPES } from '@/constants/mime-type'
@@ -17,7 +17,7 @@ import type { RequestContext } from './index'
 export const logger = createLogger('BFF:Proxy')
 
 // Timeout (in milliseconds) when proxy receives no response from target.
-const PROXY_REQUEST_TIMEOUT = 10_000
+const PROXY_REQUEST_TIMEOUT = 15_000
 // Timeout (in milliseconds) when proxy receives no response from target.
 const RESPONSE_TIMEOUT = 15_000
 // User-Agent used by the proxy server.
@@ -31,10 +31,10 @@ export interface ProxifierOptions {
 }
 
 export const createProxifier = (options: ProxifierOptions) => {
-  const decodeProxyUrl = (url: string) => base64UrlDecode(url)
+  const decodeProxyUrl = (url: string) => safeBase64UrlDecode(url)
   const makeRedirectLocation = (location: string) => {
     const slash = options.prefix.endsWith('/')
-    return `${options.prefix}${slash ? '' : '/'}${base64UrlEncode(location)}`
+    return `${options.prefix}${slash ? '' : '/'}${safeBase64UrlEncode(location)}`
   }
 
   return async (context: RequestContext) => {
@@ -45,8 +45,8 @@ export const createProxifier = (options: ProxifierOptions) => {
     // Step 1: Decode target URL
     try {
       targetURL = decodeProxyUrl(context.path.replace(options.prefix, ''))
-      response.setHeader('x-original-url', targetURL)
       parsedURL = new URL(targetURL)
+      response.setHeader('x-original-url', targetURL)
     } catch (error: any) {
       return respondWith(response, {
         status: HTTP_CODES.BAD_REQUEST,
