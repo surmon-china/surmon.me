@@ -156,15 +156,25 @@ const MIME_TYPES = {
 };
 const base64Encode = btoa;
 const base64Decode = atob;
-const base64UrlEncode = (value) => {
-  return base64Encode(value).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+const BASE64_STD = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const BASE64_CUSTOM = "ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz0123456789-_=";
+const safeBase64UrlEncode = (value) => {
+  const base64 = base64Encode(value);
+  const customMapped = [...base64].map((c) => {
+    const idx = BASE64_STD.indexOf(c);
+    return idx === -1 ? c : BASE64_CUSTOM[idx];
+  }).join("");
+  return customMapped.replace(/=+$/, "");
 };
-const base64UrlDecode = (value) => {
+const safeBase64UrlDecode = (value) => {
   try {
-    const base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-    const paddedBase64 = base64.padEnd(base64.length + (4 - base64.length % 4) % 4, "=");
-    return base64Decode(paddedBase64);
-  } catch (error) {
+    const padded = value.padEnd(value.length + (4 - value.length % 4) % 4, "=");
+    const stdMapped = [...padded].map((c) => {
+      const idx = BASE64_CUSTOM.indexOf(c);
+      return idx === -1 ? c : BASE64_STD[idx];
+    }).join("");
+    return base64Decode(stdMapped);
+  } catch {
     throw new Error("Illegal Base64URL string!");
   }
 };
@@ -255,14 +265,14 @@ const respond = {
   })
 };
 const logger$3 = createLogger("BFF:Proxy");
-const PROXY_REQUEST_TIMEOUT = 1e4;
+const PROXY_REQUEST_TIMEOUT = 15e3;
 const RESPONSE_TIMEOUT = 15e3;
 const PROXY_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3223.8 Safari/";
 const createProxifier = (options) => {
-  const decodeProxyUrl = (url) => base64UrlDecode(url);
+  const decodeProxyUrl = (url) => safeBase64UrlDecode(url);
   const makeRedirectLocation = (location) => {
     const slash = options.prefix.endsWith("/");
-    return `${options.prefix}${slash ? "" : "/"}${base64UrlEncode(location)}`;
+    return `${options.prefix}${slash ? "" : "/"}${safeBase64UrlEncode(location)}`;
   };
   return async (context) => {
     const { request, response } = context;
@@ -270,8 +280,8 @@ const createProxifier = (options) => {
     let parsedURL = null;
     try {
       targetURL = decodeProxyUrl(context.path.replace(options.prefix, ""));
-      response.setHeader("x-original-url", targetURL);
       parsedURL = new URL(targetURL);
+      response.setHeader("x-original-url", targetURL);
     } catch (error) {
       return respondWith(response, {
         status: BAD_REQUEST,

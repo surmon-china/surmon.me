@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.3.1";
+const APP_VERSION = "5.4.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -1533,8 +1533,15 @@ const getLoadingIndicatorHTML = (options = {}) => {
   `;
 };
 const base64Encode = btoa;
-const base64UrlEncode = (value) => {
-  return base64Encode(value).replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
+const BASE64_STD = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+const BASE64_CUSTOM = "ZYXWVUTSRQPONMLKJIHGFEDCBAabcdefghijklmnopqrstuvwxyz0123456789-_=";
+const safeBase64UrlEncode = (value) => {
+  const base64 = base64Encode(value);
+  const customMapped = [...base64].map((c) => {
+    const idx = BASE64_STD.indexOf(c);
+    return idx === -1 ? c : BASE64_CUSTOM[idx];
+  }).join("");
+  return customMapped.replace(/=+$/, "");
 };
 var CDNPrefix = /* @__PURE__ */ ((CDNPrefix2) => {
   CDNPrefix2["Proxy"] = "proxy";
@@ -1578,7 +1585,7 @@ const getStaticPath = (url) => {
   return url.replace(API_CONFIG.STATIC, "");
 };
 const getOriginalProxyURL = (url) => {
-  return `${BFF_CONFIG.proxy_url_prefix}/${base64UrlEncode(url)}`;
+  return `${BFF_CONFIG.proxy_url_prefix}/${safeBase64UrlEncode(url)}`;
 };
 const getCdnProxyURL = (domain, url) => {
   {
@@ -1586,7 +1593,7 @@ const getCdnProxyURL = (domain, url) => {
       domain,
       "proxy"
       /* Proxy */
-    )}/${base64UrlEncode(url)}`;
+    )}/${safeBase64UrlEncode(url)}`;
   }
 };
 const getPageURL = (path, hash) => {
