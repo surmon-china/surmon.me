@@ -26,7 +26,7 @@
     "@sentry/vue": "^10.x",
     "@unhead/vue": "^2.x",
     "agentkeepalive": "^4.6.x",
-    "axios": "^1.11.x",
+    "axios": "^1.12.x",
     "bezier-easing": "^2.1.0",
     "cookie": "^1.0.x",
     "emoji-233333": "^0.3.2",
