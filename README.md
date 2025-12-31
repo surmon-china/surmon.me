@@ -18,17 +18,15 @@
 &nbsp;
 [![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.svg?style=for-the-badge)](/LICENSE)
 
-**My personal website and blog, powered by [Vue(3)](https://vuejs.org), API services provided by [NodePress](https://github.com/surmon-china/nodepress).**
+**My personal website and blog, built with [Vue](https://vuejs.org). API services are provided by [NodePress](https://github.com/surmon-china/nodepress).**
 
 **[surmon.me](https://surmon.me)**
 
----
-
 **[Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
-- **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
-- **Blog admin site:** [`surmon.me.admin`](https://github.com/surmon-china/surmon.me.admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
-- **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) powered by react-native
+- **RESTful API service:** [`NodePress`](https://github.com/surmon-china/nodepress) built with NestJS.
+- **Blog admin site:** [`surmon.me.admin`](https://github.com/surmon-china/surmon.me.admin) built with React and [`Veact`](https://github.com/veactjs/veact).
+- **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) built with React Native.
 
 ## Screenshot
 
