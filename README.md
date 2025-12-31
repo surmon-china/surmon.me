@@ -27,7 +27,7 @@
 **[Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
 - **RESTful API service for blog:** [`nodepress`](https://github.com/surmon-china/nodepress) powered by nestjs
-- **Blog admin site:** [`surmon.admin`](https://github.com/surmon-china/surmon.admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
+- **Blog admin site:** [`surmon.me.admin`](https://github.com/surmon-china/surmon.me.admin) powered by React & [`Veact`](https://github.com/veactjs/veact)
 - **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) powered by react-native
 
 ## Screenshot
