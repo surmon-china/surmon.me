@@ -20,7 +20,7 @@
 
 **My personal website and blog, built with [Vue](https://vuejs.org). API services are provided by [NodePress](https://github.com/surmon-china/nodepress).**
 
-**[surmon.me](https://surmon.me)**
+**[Surmon.me](https://surmon.me)**
 
 **[Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
