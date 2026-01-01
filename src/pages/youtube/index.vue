@@ -32,7 +32,7 @@
     <page-banner class="page-banner" video="/videos/clips/lake-1.mp4" :video-position="58" cdn>
       <template #title>
         <webfont>
-          <i18n zh="山河入梦，春尽江南" :en="`${APP_META.author}'s YouTube videos`" />
+          <i18n zh="山河入夢，春盡江南" :en="`${APP_META.author}'s YouTube videos`" />
         </webfont>
       </template>
       <template #description>

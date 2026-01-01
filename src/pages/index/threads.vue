@@ -59,10 +59,10 @@
             </ulink>
             <div class="count">
               <p class="title">
-                <i18n en="Latest" zh="碎碎" />
+                <i18n en="Latest" zh="幻海" />
               </p>
               <p class="secondary">
-                <i18n en="threads" zh="清风念" />
+                <i18n en="threads" zh="一念舟" />
               </p>
             </div>
           </div>

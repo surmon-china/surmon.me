@@ -5,7 +5,7 @@ import { usePageSeo } from '/@/composables/head'
 import { firstUpperCase } from '/@/transforms/text'
 
 export const i18nTitle = {
-  [Language.Chinese]: '广行饶益，利乐有情',
+  [Language.Chinese]: '廣行饒益，利樂有情',
   [Language.English]: `${APP_META.author}'s snippets`
 } as const
 

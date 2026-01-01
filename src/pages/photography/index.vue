@@ -60,7 +60,7 @@
     <page-banner class="page-banner" video="/videos/clips/ocean-5.mp4" :video-position="72" cdn>
       <template #title>
         <webfont>
-          <i18n zh="大千同在，万象共栖" :en="`${APP_META.author}'s photographs`" />
+          <i18n zh="大千同在，萬象共棲" :en="`${APP_META.author}'s photographs`" />
         </webfont>
       </template>
       <template #description>

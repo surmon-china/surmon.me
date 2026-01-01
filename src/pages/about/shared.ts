@@ -96,7 +96,7 @@ export const i18ns = {
       `I have developed strong design inspiration and coding skills.`,
       `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
       `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
-      `I call this place my own digital vihara. Have fun here!`
+      `I call this place my own digital vihāra. Have fun here!`
     ].join(' ')
   }
 }

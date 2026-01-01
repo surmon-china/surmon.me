@@ -37,7 +37,7 @@
     <page-banner image="/images/page-sponsor/banner.webp" cdn>
       <template #title>
         <webfont>
-          <i18n zh="赠吾玫瑰，手留余香" en="Become a sponsor to me" />
+          <i18n zh="隨喜一念，各得其安" en="Become a sponsor to me" />
         </webfont>
       </template>
       <template #description>

@@ -162,18 +162,18 @@
       overflow: hidden;
       z-index: $z-index-normal + 1;
       background-color: $module-bg-darker-1;
-      &::before {
-        content: '';
-        position: absolute;
-        display: block;
-        height: 1rem;
-        bottom: -0.5rem;
-        left: 0;
-        right: 0;
-        background-image: radial-gradient(circle, transparent 70%, $color-text-reversal 70%);
-        background-size: 0.7em 1em;
-        background-position: 0 -0.5em;
-      }
+      // &::before {
+      //   content: '';
+      //   position: absolute;
+      //   display: block;
+      //   height: 1rem;
+      //   bottom: -0.5rem;
+      //   left: 0;
+      //   right: 0;
+      //   background-image: radial-gradient(circle, transparent 70%, $color-text-reversal 70%);
+      //   background-size: 0.7em 1em;
+      //   background-position: 0 -0.5em;
+      // }
 
       .video {
         width: 100%;
@@ -187,11 +187,12 @@
     .content {
       position: relative;
       background-color: $module-bg;
-      background-image:
-        global.surl('/images/page-about/background.png'), linear-gradient($module-bg-opaque 50%, #00000000 100%);
-      background-size: contain;
-      background-repeat: repeat-x;
-      background-blend-mode: lighten;
+      background-image: linear-gradient($module-bg-opaque 50%, #00000000 100%);
+      // background-image:
+      //   global.surl('/images/page-about/background.png'), linear-gradient($module-bg-opaque 50%, #00000000 100%);
+      // background-size: contain;
+      // background-repeat: repeat-x;
+      // background-blend-mode: lighten;
 
       .fullwidth {
         width: 100%;
@@ -262,7 +263,7 @@
       }
 
       .socials {
-        $button-size: 3.4rem;
+        $button-size: 3.2rem;
         display: flex;
         justify-content: center;
         z-index: $z-index-normal + 2;
@@ -401,11 +402,15 @@
 
       .biography {
         margin: 0;
-        padding: $gap-lg $gap-xs;
+        padding: $gap * 1.8 $gap;
         line-height: $line-height-base * 1.9;
         text-indent: 2em;
         font-weight: 600;
         color: $color-text-secondary;
+        @include mix.color-transition($motion-duration-mid);
+        &:hover {
+          color: $color-text;
+        }
 
         &::first-letter {
           line-height: 1;

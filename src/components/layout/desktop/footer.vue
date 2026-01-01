@@ -19,11 +19,11 @@
   <container tag="footer" :id="FOOTER_ELEMENT_ID" v-disabled-wallflower class="footer">
     <ulink class="sitemap-btn" :href="VALUABLE_LINKS.SITE_MAP">sitemap.xml</ulink>
     <divider type="vertical" />
-    <i18n zh="由 " en="Powered By " />
-    <ulink class="item" :href="VALUABLE_LINKS.GITHUB_BLOG_STAR_LIST">NodePress</ulink>
+    <i18n zh="构建于 " en="Built with " />
+    <ulink class="item" :href="VALUABLE_LINKS.GITHUB_NODEPRESS">NodePress</ulink>
     <i18n zh="、" en=", " />
     <ulink class="item" :href="VALUABLE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
-    <i18n zh=" 和 日月星辰 强力驱动" en="" />
+    <i18n zh=" 和 日月星辰" en="" />
     <divider type="vertical" />
     <a class="statement" href="javascript:void(0)" @click="handleStatementModal">
       <i18n zh="周知" en="FAQ" />

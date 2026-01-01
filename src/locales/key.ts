@@ -43,7 +43,6 @@ export enum LocaleKey {
   CATEGORY_UNCATEGORIZED = 'category-uncategorized',
   TAG_PLACEHOLDER = 'tag-placeholder',
   LIST_NO_MORE_DATA = 'no-more',
-  ARTICLE_TITLE = 'article-title',
   ARTICLE_VIEWS = 'article-views',
   ARTICLE_PLACEHOLDER = 'article-empty-placeholder',
   ARTICLE_READ_ALL = 'read-all-article-content',

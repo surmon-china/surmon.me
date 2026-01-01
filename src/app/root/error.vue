@@ -112,13 +112,15 @@
     }
 
     .message {
-      font-weight: normal;
+      font-weight: bold;
+      color: $color-text-divider;
       margin-top: 0;
       margin-bottom: 2rem;
     }
 
     .link {
       cursor: pointer;
+      color: $color-text-divider;
       margin-bottom: 4rem;
       @include mix.text-underline(0.5em);
       @include mix.color-transition();

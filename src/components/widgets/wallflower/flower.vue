@@ -72,6 +72,7 @@
     transition: opacity 0.5s;
     color: $primary;
     font-size: $font-size-h3;
+    font-family: 'webfont-bolder';
     white-space: nowrap;
 
     @keyframes flower-playing {
