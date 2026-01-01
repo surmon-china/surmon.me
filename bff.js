@@ -48,10 +48,10 @@ const APP_CONFIG = Object.freeze({
 });
 const APP_META = Object.freeze({
   title: "Surmon.me",
-  zh_sub_title: "斯是陋室，唯吾芳馨",
-  en_sub_title: `Surmon's digital vihara`,
-  zh_description: "本是浪蝶游蜂，无智无德无明；幸闻佛道开化，志利有情众生",
-  zh_description_short: "本为蝶蜂，无德无明；幸闻佛道，志利众生",
+  zh_sub_title: "足下何人，來此作甚",
+  en_sub_title: `Surmon's digital vihāra`,
+  zh_description: "本是浪蝶遊蜂，自留半畝石池，但求直抒胸臆，揮墨九雲之中。",
+  zh_description_short: "本為蝶蜂，自築石池；但求抒臆，揮墨雲中",
   en_description: "Either write something worth reading or do something worth writing.",
   url: "https://surmon.me",
   domain: "surmon.me",
@@ -80,7 +80,6 @@ const VALUABLE_LINKS = Object.freeze({
   GITHUB_NODEPRESS: "https://github.com/surmon-china/nodepress",
   GITHUB_SURMON_ME: "https://github.com/surmon-china/surmon.me",
   GITHUB_SURMON_ME_NATIVE: "https://github.com/surmon-china/surmon.me.native",
-  GITHUB_BLOG_STAR_LIST: "https://github.com/stars/surmon-china/lists/surmon-me",
   GOOGLE_MY_MAP: "https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3",
   MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
   GITHUB_STATISTIC_JSON_URL: "https://raw.githubusercontent.com/surmon-china/surmon-china/release/",
