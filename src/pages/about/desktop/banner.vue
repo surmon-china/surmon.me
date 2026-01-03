@@ -406,6 +406,7 @@
         line-height: $line-height-base * 1.9;
         text-indent: 2em;
         font-weight: 600;
+        font-size: $font-size-base + 1;
         color: $color-text-secondary;
         @include mix.color-transition($motion-duration-mid);
         &:hover {

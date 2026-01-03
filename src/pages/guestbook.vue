@@ -90,10 +90,10 @@
       <template #mobile>
         <page-banner class="mobile-banner" :is-mobile="true" :image="bannerImage" :image-position="70" cdn>
           <template #title>
-            <i18n :k="LocaleKey.PAGE_GUESTBOOK" />
+            <webfont bolder><i18n :k="LocaleKey.PAGE_GUESTBOOK" /></webfont>
           </template>
           <template #description>
-            <i18n :k="LocaleKey.GUESTBOOK_SLOGAN" />
+            <webfont><i18n :k="LocaleKey.GUESTBOOK_SLOGAN" /></webfont>
           </template>
         </page-banner>
       </template>

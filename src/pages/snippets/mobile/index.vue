@@ -40,8 +40,12 @@
 <template>
   <div class="snippets-page">
     <page-banner :is-mobile="true" image="/images/page-snippets/banner-mobile.webp" :image-position="80" cdn>
-      <template #title><i18n :k="LocaleKey.PAGE_SNIPPETS" /></template>
-      <template #description><i18n v-bind="i18nTitle" /></template>
+      <template #title>
+        <webfont bolder><i18n :k="LocaleKey.PAGE_SNIPPETS" /></webfont>
+      </template>
+      <template #description>
+        <webfont><i18n v-bind="i18nTitle" /></webfont>
+      </template>
     </page-banner>
     <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
       <template #loading>

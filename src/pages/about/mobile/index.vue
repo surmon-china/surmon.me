@@ -22,7 +22,7 @@
   <div class="about-page">
     <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.webp" :image-position="70" cdn>
       <template #title>
-        <i18n :k="LocaleKey.PAGE_ABOUT" />
+        <webfont bolder><i18n :k="LocaleKey.PAGE_ABOUT" /></webfont>
       </template>
     </page-banner>
     <div class="profile">

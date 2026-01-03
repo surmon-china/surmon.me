@@ -24,8 +24,12 @@
 <template>
   <div class="archive-page">
     <page-banner :is-mobile="true" image="/images/page-archive/banner-mobile.webp" :image-position="80" cdn>
-      <template #title><i18n :k="LocaleKey.PAGE_ARCHIVE" /></template>
-      <template #description><i18n v-bind="i18ns.title" /></template>
+      <template #title>
+        <webfont bolder><i18n :k="LocaleKey.PAGE_ARCHIVE" /></webfont>
+      </template>
+      <template #description>
+        <webfont><i18n v-bind="i18ns.title" /></webfont>
+      </template>
     </page-banner>
     <div class="page-content">
       <container class="statistic-wrapper">
