@@ -201,7 +201,7 @@
       position: relative;
       padding-top: $gap-sm;
       padding-bottom: $gap-lg;
-      padding-inline: $gap * 2;
+      padding-inline: $gap-sm * 3;
       border-radius: $radius-sm;
       background-color: $module-bg-opaque;
 
@@ -223,6 +223,7 @@
       .content {
         margin-bottom: 0;
         line-height: $line-height-base * 1.4;
+        font-size: $font-size-base + 1;
         text-indent: 1em;
 
         &::first-letter {

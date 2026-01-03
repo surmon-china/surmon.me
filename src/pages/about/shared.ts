@@ -87,7 +87,7 @@ export const i18ns = {
       `如你所见，我有着还不错的设计灵感和编码能力，我会经常在 GitHub 上开源一些「没用」或「有用」的小物件。`,
       `如果某些输出恰好帮助了你，期待你的随喜赞助～ `,
       `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
-      `而这里，我把它称作自己的数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>，随缘记录。`,
+      `而这里，我把它称作自己的「数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>」，随缘记录。`,
       `祝你在这儿玩得愉快！`,
       `（俗生履历：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
     ].join(''),

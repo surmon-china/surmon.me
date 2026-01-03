@@ -2,7 +2,11 @@
 @use 'variables' as *;
 
 @function is-important($important) {
-  @return #{if($important, '!important', '')};
+  @if $important {
+    @return unquote('!important');
+  } @else {
+    @return null;
+  }
 }
 
 @function toRGBValue($color) {

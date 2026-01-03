@@ -45,7 +45,6 @@ export default defineConfig(({ mode }) => {
         scss: {
           charset: false,
           importers: [new sass.NodePackageImporter()],
-          silenceDeprecations: ['mixed-decls'],
           // https://sass-lang.com/documentation/at-rules/use/#configuration
           additionalData: `@use '/src/styles/base/_global' as global with ($source-url: '${TARGET_MODE_ENV_CONFIG.VITE_FE_URL}');`
         }

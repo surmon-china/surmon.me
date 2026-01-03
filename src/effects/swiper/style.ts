@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// https://swiperjs.com/swiper-api#css-styles
-import 'swiper/scss'
-import 'swiper/scss/grid'
-import 'swiper/scss/autoplay'
-import 'swiper/scss/mousewheel'
-import 'swiper/scss/effect-fade'
+// https://swiperjs.com/swiper-api#styles
+import 'swiper/css'
+import 'swiper/css/grid'
+import 'swiper/css/autoplay'
+import 'swiper/css/mousewheel'
+import 'swiper/css/effect-fade'
