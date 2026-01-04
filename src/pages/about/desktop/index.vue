@@ -116,12 +116,12 @@
       url: 'https://github.com'
     },
     {
-      name: 'Vite',
-      url: 'https://vitejs.dev/'
+      name: 'Cloudflare',
+      url: 'https://www.cloudflare.com'
     },
     {
-      name: 'Disqus',
-      url: 'https://disqus.com/'
+      name: 'MongoDB',
+      url: 'https://www.mongodb.com'
     }
   ])
 </script>

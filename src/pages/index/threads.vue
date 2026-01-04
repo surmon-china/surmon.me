@@ -59,10 +59,10 @@
             </ulink>
             <div class="count">
               <p class="title">
-                <i18n en="Latest" zh="幻海" />
+                <i18n en="Latest" zh="近时" />
               </p>
               <p class="secondary">
-                <i18n en="threads" zh="一念舟" />
+                <i18n en="threads" zh="一念" />
               </p>
             </div>
           </div>
@@ -235,7 +235,7 @@
       }
 
       .count {
-        min-width: 4rem;
+        min-width: 3rem;
         margin-left: 1.5rem;
         position: relative;
         display: inline-flex;
@@ -246,11 +246,11 @@
         border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &::before {
-          $size: 5px;
+          $size: 4px;
           content: '';
           position: absolute;
           left: -$size * 2;
-          top: 20%;
+          top: 25%;
           width: 0;
           height: 0;
           border-top: $size solid transparent;
