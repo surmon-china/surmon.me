@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.5.0";
+const APP_VERSION = "5.5.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17841,7 +17841,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
       _push(`<header${ssrRenderAttrs(mergeProps({
         id: unref(HEADER_ELEMENT_ID),
         class: ["header", { "enable-nav": isEnabledNav.value }]
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-ede7e629><div class="header-container container" data-v-ede7e629><div class="header-header" data-v-ede7e629>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-8188b165><div class="header-container container" data-v-8188b165><div class="header-header" data-v-8188b165>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         src: "/images/logo.svg",
@@ -17870,17 +17870,17 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
         title: unref(APP_META).title,
         onMousedown: handleRootNavEvent
       }, null, _parent));
-      _push(`</div><div class="toolbox" data-v-ede7e629>`);
+      _push(`</div><div class="toolbox" data-v-8188b165>`);
       if (isEnabledNav.value) {
-        _push(`<button class="button menu" data-v-ede7e629><i class="iconfont icon-top-menu" data-v-ede7e629></i></button>`);
+        _push(`<button class="button menu" data-v-8188b165><i class="iconfont icon-top-menu" data-v-8188b165></i></button>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="button language" title="Switch language" data-v-ede7e629><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-ede7e629></i></button><button class="${ssrRenderClass([unref(theme).theme.value, "button theme"])}" data-v-ede7e629><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-ede7e629></i></button></div></div><div class="header-nav" data-v-ede7e629><nav class="nav-list container" data-v-ede7e629><!--[-->`);
+      _push(`<button class="button language" title="Switch language" data-v-8188b165><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-8188b165></i></button><button class="${ssrRenderClass([unref(theme).theme.value, "button theme"])}" data-v-8188b165><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-8188b165></i></button></div></div><div class="header-nav" data-v-8188b165><nav class="nav-list container" data-v-8188b165><!--[-->`);
       ssrRenderList(unref(menus), (menu, index) => {
         _push(`<!--[-->`);
         if (index > 0) {
-          _push(`<span class="divider" data-v-ede7e629></span>`);
+          _push(`<span class="divider" data-v-8188b165></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -17897,7 +17897,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
                   src: menu.imageIcon
                 }, null, _parent2, _scopeId));
               } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-ede7e629${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-8188b165${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -17922,12 +17922,12 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.hot) {
-                _push2(`<span class="superscript" data-v-ede7e629${_scopeId}><i class="iconfont icon-hot-fill" data-v-ede7e629${_scopeId}></i></span>`);
+                _push2(`<span class="superscript" data-v-8188b165${_scopeId}><i class="iconfont icon-hot" data-v-8188b165${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.newWindow) {
-                _push2(`<span class="new-window" data-v-ede7e629${_scopeId}><i class="iconfont icon-new-window-s" data-v-ede7e629${_scopeId}></i></span>`);
+                _push2(`<span class="new-window" data-v-8188b165${_scopeId}><i class="iconfont icon-new-window-s" data-v-8188b165${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -17957,7 +17957,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
                   key: 2,
                   class: "superscript"
                 }, [
-                  createVNode("i", { class: "iconfont icon-hot-fill" })
+                  createVNode("i", { class: "iconfont icon-hot" })
                 ])) : createCommentVNode("", true),
                 menu.newWindow ? (openBlock(), createBlock("span", {
                   key: 3,
@@ -17982,7 +17982,7 @@ _sfc_main$j.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/header.vue");
   return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
 };
-const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-ede7e629"]]);
+const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-8188b165"]]);
 const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
@@ -19138,11 +19138,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: unref(NAV_ELEMENT_ID),
         class: "desktop-nav"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a6e975f8><nav class="nav-list" data-v-a6e975f8><!--[-->`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-4088e633><nav class="nav-list" data-v-4088e633><!--[-->`);
       ssrRenderList(unref(menus), (menu) => {
         _push(`<!--[-->`);
         if (menu.divider) {
-          _push(`<span class="divider" data-v-a6e975f8></span>`);
+          _push(`<span class="divider" data-v-4088e633></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -19159,7 +19159,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                   src: menu.imageIcon
                 }, null, _parent2, _scopeId));
               } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-a6e975f8${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-4088e633${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -19184,12 +19184,12 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.newWindow) {
-                _push2(`<span class="superscript new-window" data-v-a6e975f8${_scopeId}><i class="iconfont icon-new-window-s" data-v-a6e975f8${_scopeId}></i></span>`);
+                _push2(`<span class="superscript new-window" data-v-4088e633${_scopeId}><i class="iconfont icon-new-window-s" data-v-4088e633${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.hot) {
-                _push2(`<span class="superscript hot" data-v-a6e975f8${_scopeId}><i class="iconfont icon-hot-fill" data-v-a6e975f8${_scopeId}></i></span>`);
+                _push2(`<span class="superscript hot" data-v-4088e633${_scopeId}><i class="iconfont icon-hot" data-v-4088e633${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -19225,7 +19225,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                   key: 3,
                   class: "superscript hot"
                 }, [
-                  createVNode("i", { class: "iconfont icon-hot-fill" })
+                  createVNode("i", { class: "iconfont icon-hot" })
                 ])) : createCommentVNode("", true)
               ];
             }
@@ -19236,7 +19236,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       });
       _push(`<!--]--><!--[-->`);
       ssrRenderList(unref(adConfig).PC_NAV, (ad, index) => {
-        _push(`<!--[--><span class="divider" data-v-a6e975f8></span>`);
+        _push(`<!--[--><span class="divider" data-v-4088e633></span>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "item",
           href: ad.url,
@@ -19244,7 +19244,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="${ssrRenderClass([ad.icon, "font-icon iconfont"])}" data-v-a6e975f8${_scopeId}></i><span class="ad-text" data-v-a6e975f8${_scopeId}>`);
+              _push2(`<i class="${ssrRenderClass([ad.icon, "font-icon iconfont"])}" data-v-4088e633${_scopeId}></i><span class="ad-text" data-v-4088e633${_scopeId}>`);
               if (ad.i18n) {
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: ad.i18n.zh,
@@ -19253,7 +19253,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!--[-->${ssrInterpolate(ad.text)}<!--]-->`);
               }
-              _push2(`</span><span class="superscript" data-v-a6e975f8${_scopeId}><i class="iconfont icon-ad" data-v-a6e975f8${_scopeId}></i></span>`);
+              _push2(`</span><span class="superscript" data-v-4088e633${_scopeId}><i class="iconfont icon-ad" data-v-4088e633${_scopeId}></i></span>`);
             } else {
               return [
                 createVNode("i", {
@@ -19288,7 +19288,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/nav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-a6e975f8"]]);
+const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-4088e633"]]);
 const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
