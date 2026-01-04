@@ -21,7 +21,7 @@
             <i class="iconfont icon-new-window-s"></i>
           </span>
           <span class="superscript hot" v-if="menu.hot">
-            <i class="iconfont icon-hot-fill"></i>
+            <i class="iconfont icon-hot"></i>
           </span>
         </ulink>
       </template>

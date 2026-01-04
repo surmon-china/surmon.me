@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_elpkz38tzkm.woff2?t=1751402572090') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_elpkz38tzkm.woff?t=1751402572090') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_elpkz38tzkm.ttf?t=1751402572090') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.woff2?t=1767537738210') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.woff?t=1767537738210') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.ttf?t=1767537738210') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-website:before {
+  content: '\e6f5';
+}
+
+.icon-react:before {
+  content: '\e728';
+}
+
+.icon-llm:before {
+  content: '\e9f7';
+}
+
+.icon-emotion-face:before {
+  content: '\e88e';
 }
 
 .icon-xiaohongshu:before {
@@ -28,14 +44,6 @@
 
 .icon-threads:before {
   content: '\e6eb';
-}
-
-.icon-lotus:before {
-  content: '\e651';
-}
-
-.icon-quora-full:before {
-  content: '\e633';
 }
 
 .icon-zhihu:before {
@@ -68,10 +76,6 @@
 
 .icon-tencent-cloud:before {
   content: '\e64f';
-}
-
-.icon-wan:before {
-  content: '\e64e';
 }
 
 .icon-stop:before {
@@ -306,10 +310,6 @@
   content: '\e6fc';
 }
 
-.icon-math:before {
-  content: '\e63a';
-}
-
 .icon-h-1:before {
   content: '\e786';
 }
@@ -332,10 +332,6 @@
 
 .icon-h-5:before {
   content: '\e78b';
-}
-
-.icon-list:before {
-  content: '\e604';
 }
 
 .icon-share:before {
@@ -498,10 +494,6 @@
   content: '\ea14';
 }
 
-.icon-hot-fill:before {
-  content: '\e69a';
-}
-
 .icon-copyright:before {
   content: '\f879';
 }
@@ -540,10 +532,6 @@
 
 .icon-dollar:before {
   content: '\e764';
-}
-
-.icon-1111-bdage:before {
-  content: '\e68a';
 }
 
 .icon-upwork:before {
@@ -590,16 +578,8 @@
   content: '\e64d';
 }
 
-.icon-study:before {
-  content: '\e610';
-}
-
 .icon-ai:before {
   content: '\e662';
-}
-
-.icon-vr:before {
-  content: '\e648';
 }
 
 .icon-markdown:before {
@@ -608,10 +588,6 @@
 
 .icon-safe:before {
   content: '\e66a';
-}
-
-.icon-react:before {
-  content: '\e695';
 }
 
 .icon-taichi:before {
@@ -664,10 +640,6 @@
 
 .icon-aliyun:before {
   content: '\e829';
-}
-
-.icon-taobao:before {
-  content: '\e6b5';
 }
 
 .icon-instagram:before {

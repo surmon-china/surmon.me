@@ -84,7 +84,7 @@
               <i18n :k="menu.i18nKey" />
             </webfont>
             <span v-if="menu.hot" class="superscript">
-              <i class="iconfont icon-hot-fill"></i>
+              <i class="iconfont icon-hot"></i>
             </span>
             <span v-if="menu.newWindow" class="new-window">
               <i class="iconfont icon-new-window-s"></i>
