@@ -56,7 +56,7 @@ const APP_META = Object.freeze({
   url: "https://surmon.me",
   domain: "surmon.me",
   author: "Surmon",
-  about_page_geo_zh_title: "长居亚洲，游走热带",
+  about_page_geo_zh_title: "在东八区，靠近赤道",
   about_page_geo_en_title: "UTC +07:00 ~ +09:00",
   about_page_geo_coordinates: [103.830391822121, 1.340863]
 });

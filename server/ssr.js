@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.5.2";
+const APP_VERSION = "5.6.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -153,7 +153,7 @@ const APP_META = Object.freeze({
   url: "https://surmon.me",
   domain: "surmon.me",
   author: "Surmon",
-  about_page_geo_zh_title: "长居亚洲，游走热带",
+  about_page_geo_zh_title: "在东八区，靠近赤道",
   about_page_geo_en_title: "UTC +07:00 ~ +09:00",
   about_page_geo_coordinates: [103.830391822121, 1.340863]
 });
@@ -1350,13 +1350,6 @@ const useYouTubePlayListStore = defineStore("youtubePlaylist", () => {
       response.sort((a, b) => a.snippet.position - b.snippet.position);
       return response;
     }
-  });
-});
-const useMyGoogleMapStore = defineStore("myGoogleMap", () => {
-  return createFetchStore({
-    once: true,
-    data: null,
-    fetcher: () => tunnel$1.fetch(TunnelModule.MyGoogleMap)
   });
 });
 const useSSRContextValue = (key) => {
@@ -11057,26 +11050,70 @@ _sfc_main$17.setup = (props, ctx) => {
   return _sfc_setup$17 ? _sfc_setup$17(props, ctx) : void 0;
 };
 const AggregateCalendar = /* @__PURE__ */ _export_sfc(_sfc_main$17, [["__scopeId", "data-v-0f6ba0ff"]]);
-const gmmFoldersToGeoJSON = (folders) => ({
-  type: "FeatureCollection",
-  features: folders.map((folder) => folder.placemarks).flat().map((placemark) => {
-    return {
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: placemark.coordinates
-      },
-      properties: {
-        ...placemark,
-        icon: placemark.image ? "attraction" : "veterinary"
-      }
-    };
-  })
-});
-const geoJSONFeatureToLayer = (layerId, source) => {
+const PLACEMARK_LAYER_ID = "placemarks";
+const useMapPlacemarks = () => {
+  const kmlJson = shallowRef(null);
+  const fetchKmlJson = () => {
+    return kmlJson.value ? Promise.resolve() : tunnel$1.fetch(TunnelModule.MyGoogleMap).then((data) => {
+      kmlJson.value = data;
+    });
+  };
+  const folders = computed(() => {
+    const folderData = kmlJson.value?.Folder;
+    const foldersArray = Array.isArray(folderData) ? folderData : folderData ? [folderData] : [];
+    foldersArray.reverse();
+    return foldersArray.map((folder, fi) => {
+      const placemark = folder.Placemark ?? [];
+      const placemarks = Array.isArray(placemark) ? placemark : [placemark];
+      return {
+        name: folder.name,
+        placemarks: placemarks.map((placemark2, pi) => {
+          const [longitude, latitude] = placemark2.Point.coordinates.split(",").map(Number);
+          return {
+            index: pi,
+            id: `placemark-${fi}-${pi}`,
+            icon: "veterinary",
+            name: placemark2.name,
+            description: placemark2.description,
+            coordinates: [longitude, latitude]
+          };
+        })
+      };
+    });
+  });
+  const geoJson = computed(() => ({
+    type: "FeatureCollection",
+    features: folders.value.map((folder) => folder.placemarks).flat().map((placemark) => {
+      const { coordinates, ...properties } = placemark;
+      return {
+        type: "Feature",
+        properties,
+        geometry: {
+          type: "Point",
+          coordinates
+        }
+      };
+    })
+  }));
   return {
-    id: layerId,
-    source,
+    kmlJson,
+    fetchKmlJson,
+    folders,
+    geoJson
+  };
+};
+const createPlacemarkPopup = (lib, coordinates, html) => {
+  return new lib.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` }).setLngLat(coordinates).setHTML(html || "-");
+};
+const addPlacemarksLayerToMap = (lib, map, geoJson) => {
+  if (!geoJson.features.length) return;
+  if (map.getLayer(PLACEMARK_LAYER_ID)) return;
+  map.addLayer({
+    id: PLACEMARK_LAYER_ID,
+    source: {
+      type: "geojson",
+      data: geoJson
+    },
     type: "symbol",
     layout: {
       "icon-allow-overlap": true,
@@ -11094,33 +11131,584 @@ const geoJSONFeatureToLayer = (layerId, source) => {
       "text-halo-color": "#fff",
       "text-halo-width": 2
     }
+  });
+  map.on("mouseenter", PLACEMARK_LAYER_ID, () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+  map.on("mouseleave", PLACEMARK_LAYER_ID, () => {
+    map.getCanvas().style.cursor = "";
+  });
+  map.on("click", PLACEMARK_LAYER_ID, (event) => {
+    const coordinates = event.features[0].geometry.coordinates.slice();
+    const description = event.features[0].properties.description;
+    while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+    createPlacemarkPopup(lib, coordinates, description).addTo(map);
+  });
+};
+var TripRouteTransport = /* @__PURE__ */ ((TripRouteTransport2) => {
+  TripRouteTransport2[TripRouteTransport2["Null"] = 0] = "Null";
+  TripRouteTransport2[TripRouteTransport2["Flight"] = 1] = "Flight";
+  TripRouteTransport2[TripRouteTransport2["Train"] = 2] = "Train";
+  TripRouteTransport2[TripRouteTransport2["Bus"] = 3] = "Bus";
+  TripRouteTransport2[TripRouteTransport2["Ship"] = 4] = "Ship";
+  TripRouteTransport2[TripRouteTransport2["Motorcycle"] = 5] = "Motorcycle";
+  TripRouteTransport2[TripRouteTransport2["Bicycle"] = 6] = "Bicycle";
+  TripRouteTransport2[TripRouteTransport2["Walk"] = 7] = "Walk";
+  return TripRouteTransport2;
+})(TripRouteTransport || {});
+const getRouteLineId = (routeId) => `trip-route-line-${routeId}`;
+const getRouteLineHighlightId = (routeId) => `${getRouteLineId(routeId)}-highlight`;
+const getRouteLineActiveId = (routeId) => `${getRouteLineId(routeId)}-active`;
+const getRoutePointsId = (routeId) => `trip-route-points-${routeId}`;
+const getRoutePointsActiveId = (routeId) => `${getRoutePointsId(routeId)}-active`;
+let lastActiveRouteId = null;
+const resetActiveTripRoute = (map) => {
+  if (lastActiveRouteId) {
+    map.setLayoutProperty(getRouteLineHighlightId(lastActiveRouteId), "visibility", "none");
+    map.setLayoutProperty(getRouteLineActiveId(lastActiveRouteId), "visibility", "none");
+    map.setLayoutProperty(getRoutePointsActiveId(lastActiveRouteId), "visibility", "none");
+    lastActiveRouteId = null;
+  }
+};
+const activateTripRoute = (map, route) => {
+  resetActiveTripRoute(map);
+  lastActiveRouteId = route.id;
+  map.setLayoutProperty(getRouteLineHighlightId(route.id), "visibility", "visible");
+  map.setLayoutProperty(getRouteLineActiveId(route.id), "visibility", "visible");
+  map.setLayoutProperty(getRoutePointsActiveId(route.id), "visibility", "visible");
+  map.fitBounds([route.coordinates.at(-1), route.coordinates[0]], {
+    padding: {
+      top: 80,
+      bottom: 80,
+      left: 80,
+      right: 380
+    }
+  });
+};
+const useMapTripRoutes = () => {
+  const configJson = shallowRef([]);
+  const fetchConfigJson = () => {
+    return configJson.value.length ? Promise.resolve() : vanilla.get("/data/footprint-trip-routes.json").then((result) => {
+      configJson.value = result.data;
+    });
+  };
+  const geoJsonCollections = computed(() => {
+    return configJson.value.map((route) => {
+      const { coordinates, ...properties } = route;
+      const startPoint = coordinates[0];
+      const endPoint = coordinates[coordinates.length - 1];
+      return {
+        id: properties.id,
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            id: getRouteLineId(properties.id),
+            properties: {
+              ...properties,
+              role: "line"
+            },
+            geometry: {
+              type: "LineString",
+              coordinates
+            }
+          },
+          {
+            type: "Feature",
+            id: getRoutePointsId(properties.id),
+            properties: {
+              ...properties,
+              role: "points"
+            },
+            geometry: {
+              type: "MultiPoint",
+              coordinates: [startPoint, endPoint]
+            }
+          }
+        ]
+      };
+    });
+  });
+  return {
+    configJson,
+    fetchConfigJson,
+    geoJsonCollections
   };
 };
-const newMapboxPopup = (mapboxgl, coordinates, html) => {
-  return new mapboxgl.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` }).setLngLat(coordinates).setHTML(html);
+const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
+  geoJsonCollections.forEach((collection) => {
+    if (!map.getSource(collection.id)) {
+      map.addSource(collection.id, {
+        type: "geojson",
+        data: collection
+      });
+    }
+    if (!map.getLayer(getRouteLineId(collection.id))) {
+      map.addLayer({
+        id: getRouteLineId(collection.id),
+        type: "line",
+        source: collection.id,
+        filter: ["==", ["get", "role"], "line"],
+        layout: {
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": APP_CONFIG.primary_color,
+          "line-width": 3,
+          "line-dasharray": [1, 2],
+          "line-opacity": 0.3
+        }
+      });
+      map.addLayer({
+        id: getRouteLineHighlightId(collection.id),
+        type: "line",
+        source: collection.id,
+        filter: ["==", ["get", "role"], "line"],
+        layout: {
+          visibility: "none",
+          "line-join": "round",
+          "line-cap": "round"
+        },
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": 6,
+          "line-opacity": 0.8
+        }
+      });
+      map.addLayer({
+        id: getRouteLineActiveId(collection.id),
+        type: "line",
+        source: collection.id,
+        filter: ["==", ["get", "role"], "line"],
+        layout: {
+          visibility: "none"
+        },
+        paint: {
+          "line-color": APP_CONFIG.primary_color,
+          "line-width": 4,
+          "line-opacity": 1
+        }
+      });
+      map.addLayer({
+        id: getRoutePointsId(collection.id),
+        type: "circle",
+        source: collection.id,
+        filter: ["==", ["get", "role"], "points"],
+        paint: {
+          "circle-radius": 6,
+          "circle-color": APP_CONFIG.primary_color,
+          "circle-opacity": 0.4,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 2,
+          "circle-stroke-opacity": 0.4
+        }
+      });
+      map.addLayer({
+        id: getRoutePointsActiveId(collection.id),
+        type: "circle",
+        source: collection.id,
+        filter: ["==", ["get", "role"], "points"],
+        layout: {
+          visibility: "none"
+        },
+        paint: {
+          "circle-radius": 8,
+          "circle-color": APP_CONFIG.primary_color,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 3
+        }
+      });
+    }
+  });
+  const routeMap = new Map(routes2.map((r) => [r.id, r]));
+  const touchableLayerIds = geoJsonCollections.map((collection) => collection.id).flatMap((id) => [
+    getRouteLineId(id),
+    getRouteLineHighlightId(id),
+    getRouteLineActiveId(id),
+    getRoutePointsId(id),
+    getRoutePointsActiveId(id)
+  ]);
+  map.on("click", (e) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: touchableLayerIds });
+    if (features.length) {
+      const routeId = features[0].properties?.id;
+      const route = routeMap.get(routeId);
+      if (route) {
+        activateTripRoute(map, route);
+      }
+    } else {
+      resetActiveTripRoute(map);
+    }
+  });
 };
-const GOOGLE_MAP_LINKS = [
-  {
-    zh: "我的美食地图",
-    en: `My Foodie Map`,
-    url: "https://goo.gl/maps/fzHHMCjuSbbJgBVt9"
-  },
-  {
-    zh: "我的地图点评",
-    en: "My map reviews",
-    url: "https://google.com/maps/contrib/101107919754452588990/reviews"
-  },
-  {
-    zh: "我去过的地方",
-    en: `Places I've been to`,
-    url: "https://goo.gl/maps/kLVRWTMhZbbY4DNa7"
-  },
-  {
-    zh: "我想去的地方",
-    en: `Places I want to go`,
-    url: "https://goo.gl/maps/SpB4JJm9HYUiqjtc6"
+const importMapbox = () => {
+  Promise.resolve().then(() => mapboxGl);
+  return Promise.all([
+    import("mapbox-gl").then((result) => result.default),
+    new Promise((resolve) => window.setTimeout(resolve, 460))
+  ]).then(([mapboxgl]) => mapboxgl);
+};
+const addLivingMarkerToMap = (lib, map) => {
+  return new lib.Marker({
+    color: APP_CONFIG.primary_color,
+    anchor: "bottom"
+  }).setLngLat(APP_META.about_page_geo_coordinates).addTo(map);
+};
+const _sfc_main$16 = /* @__PURE__ */ defineComponent({
+  __name: "box-base",
+  __ssrInlineRender: true,
+  emits: ["load", "style-load"],
+  setup(__props, { emit: __emit }) {
+    const emit = __emit;
+    const { isDarkTheme } = useEnhancer();
+    const container = shallowRef();
+    const lib = shallowRef();
+    const map = shallowRef();
+    const getMapStyle = () => {
+      return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
+    };
+    onBeforeMount(() => {
+      watch(
+        () => isDarkTheme.value,
+        () => map.value?.setStyle(getMapStyle())
+      );
+    });
+    onBeforeUnmount(() => {
+      map.value?.remove();
+    });
+    onMounted(async () => {
+      const _lib = await importMapbox();
+      _lib.accessToken = MAPBOX_CONFIG.TOKEN;
+      const _map = new _lib.Map({
+        container: container.value,
+        center: MAPBOX_CONFIG.CENTER,
+        zoom: MAPBOX_CONFIG.ZOOM,
+        minZoom: 2.2,
+        attributionControl: false,
+        style: getMapStyle()
+      });
+      addLivingMarkerToMap(_lib, _map);
+      _map.on("style.load", () => {
+        emit("style-load", { map: _map, lib: _lib });
+      });
+      _map.on("load", () => {
+        emit("load", { map: _map, lib: _lib });
+      });
+      lib.value = _lib;
+      map.value = _map;
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        class: "mapbox",
+        ref_key: "container",
+        ref: container
+      }, _attrs))} data-v-d8eb939b></div>`);
+    };
   }
-];
+});
+const _sfc_setup$16 = _sfc_main$16.setup;
+_sfc_main$16.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
+  return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
+};
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-d8eb939b"]]);
+const _sfc_main$15 = /* @__PURE__ */ defineComponent({
+  __name: "box-modal",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const lib = shallowRef();
+    const map = shallowRef();
+    const mapPms = useMapPlacemarks();
+    const mapTrs = useMapTripRoutes();
+    const handleMapboxLoad = (payload) => {
+      lib.value = payload.lib;
+      map.value = payload.map;
+      mapPms.fetchKmlJson().then(() => {
+        addPlacemarksLayerToMap(payload.lib, payload.map, mapPms.geoJson.value);
+      });
+      mapTrs.fetchConfigJson().then(() => {
+        addTripRoutesLayersToMap(payload.map, mapTrs.configJson.value, mapTrs.geoJsonCollections.value);
+      });
+    };
+    onMounted(() => {
+      mapPms.fetchKmlJson();
+      mapTrs.fetchConfigJson();
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_uimage = resolveComponent("uimage");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-a363152a>`);
+      _push(ssrRenderComponent(Mapbox, {
+        class: "mapbox",
+        onLoad: handleMapboxLoad
+      }, null, _parent));
+      _push(`<div class="panel" data-v-a363152a><div class="head" data-v-a363152a><h3 class="title" data-v-a363152a>${ssrInterpolate(unref(mapPms).kmlJson.value?.name ?? "-")}</h3><p class="description" data-v-a363152a>${ssrInterpolate(unref(mapPms).kmlJson.value?.description ?? "-")}</p></div><div class="content" data-v-a363152a><ul class="routes" data-v-a363152a><!--[-->`);
+      ssrRenderList(unref(mapTrs).configJson.value, (route, index) => {
+        _push(`<li class="route-item" data-v-a363152a><h5 class="title" data-v-a363152a>`);
+        if (route.transport === unref(TripRouteTransport).Flight) {
+          _push(`<i class="iconfont icon-transport-flight" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Train) {
+          _push(`<i class="iconfont icon-transport-train" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Bus) {
+          _push(`<i class="iconfont icon-transport-bus" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Ship) {
+          _push(`<i class="iconfont icon-transport-ship" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Motorcycle) {
+          _push(`<i class="iconfont icon-transport-helmet" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Bicycle) {
+          _push(`<i class="iconfont icon-transport-bicycle" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Walk) {
+          _push(`<i class="iconfont icon-transport-walk" data-v-a363152a></i>`);
+        } else if (route.transport === unref(TripRouteTransport).Null) {
+          _push(`<i class="iconfont icon-route" data-v-a363152a></i>`);
+        } else {
+          _push(`<i class="iconfont icon-route" data-v-a363152a></i>`);
+        }
+        _push(`<span class="text" data-v-a363152a>${ssrInterpolate(route.name)}</span></h5><p class="description" data-v-a363152a>${ssrInterpolate(route.description)}</p></li>`);
+      });
+      _push(`<!--]--></ul><ul class="folders" data-v-a363152a><!--[-->`);
+      ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
+        _push(`<li class="folder-item" data-v-a363152a><h5 class="title" data-v-a363152a><i class="iconfont icon-map" data-v-a363152a></i><span class="text" data-v-a363152a>${ssrInterpolate(folder.name)}</span><span class="count" data-v-a363152a>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+        if (!folder.placemarks.length) {
+          _push(`<div class="empty" data-v-a363152a>null</div>`);
+        } else {
+          _push(`<ul class="placemarks" data-v-a363152a><!--[-->`);
+          ssrRenderList(folder.placemarks, (placemark, i) => {
+            _push(`<li class="placemark-item" data-v-a363152a>`);
+            _push(ssrRenderComponent(_component_uimage, {
+              class: "icon",
+              cdn: true,
+              src: "/images/third-party/mapbox-veterinary.svg"
+            }, null, _parent));
+            _push(`<span class="text" data-v-a363152a>${ssrInterpolate(placemark.name)}</span></li>`);
+          });
+          _push(`<!--]--></ul>`);
+        }
+        _push(`</li>`);
+      });
+      _push(`<!--]--></ul></div></div></div>`);
+    };
+  }
+});
+const _sfc_setup$15 = _sfc_main$15.setup;
+_sfc_main$15.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
+  return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
+};
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-a363152a"]]);
+const _sfc_main$14 = /* @__PURE__ */ defineComponent({
+  __name: "index",
+  __ssrInlineRender: true,
+  setup(__props) {
+    const modalVisible = shallowRef(false);
+    const map = shallowRef();
+    const handleMapboxLoad = (payload) => {
+      map.value = payload.map;
+    };
+    return (_ctx, _push, _parent, _attrs) => {
+      const _component_client_only = resolveComponent("client-only");
+      const _component_popup = resolveComponent("popup");
+      const _component_ulink = resolveComponent("ulink");
+      const _component_i18n = resolveComponent("i18n");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-75440903>`);
+      _push(ssrRenderComponent(_component_client_only, null, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(ssrRenderComponent(_component_popup, {
+              visible: modalVisible.value,
+              "onUpdate:visible": ($event) => modalVisible.value = $event,
+              "scroll-close": false
+            }, {
+              default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                if (_push3) {
+                  _push3(ssrRenderComponent(MapboxModal, { class: "footprint-modal" }, null, _parent3, _scopeId2));
+                } else {
+                  return [
+                    createVNode(MapboxModal, { class: "footprint-modal" })
+                  ];
+                }
+              }),
+              _: 1
+            }, _parent2, _scopeId));
+          } else {
+            return [
+              createVNode(_component_popup, {
+                visible: modalVisible.value,
+                "onUpdate:visible": ($event) => modalVisible.value = $event,
+                "scroll-close": false
+              }, {
+                default: withCtx(() => [
+                  createVNode(MapboxModal, { class: "footprint-modal" })
+                ]),
+                _: 1
+              }, 8, ["visible", "onUpdate:visible"])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`<div class="mapbox-wrapper" data-v-75440903>`);
+      _push(ssrRenderComponent(Mapbox, {
+        class: "mapbox",
+        onLoad: handleMapboxLoad
+      }, null, _parent));
+      _push(`<div class="toolbar" data-v-75440903>`);
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "button",
+        href: unref(VALUABLE_LINKS).GOOGLE_MY_MAP
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="iconfont icon-google-maps" data-v-75440903${_scopeId}></i>`);
+          } else {
+            return [
+              createVNode("i", { class: "iconfont icon-google-maps" })
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`<button class="button" data-v-75440903><i class="iconfont icon-fullscreen" data-v-75440903></i></button></div></div><div class="legends" data-v-75440903><div class="buttons" data-v-75440903><button class="item" data-v-75440903><i class="iconfont icon-location" data-v-75440903></i><span class="text" data-v-75440903>`);
+      _push(ssrRenderComponent(_component_i18n, {
+        zh: unref(APP_META).about_page_geo_zh_title,
+        en: unref(APP_META).about_page_geo_en_title
+      }, null, _parent));
+      _push(`</span></button><button class="item" data-v-75440903><i class="iconfont icon-route" data-v-75440903></i><span class="text" data-v-75440903>`);
+      _push(ssrRenderComponent(_component_i18n, {
+        zh: "我的旅行足迹",
+        en: "My Journeys"
+      }, null, _parent));
+      _push(`</span></button></div><div class="links" data-v-75440903>`);
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "item",
+        href: "https://goo.gl/maps/fzHHMCjuSbbJgBVt9"
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(ssrRenderComponent(_component_i18n, {
+              zh: "我的美食地图",
+              en: "My Foodie Map"
+            }, null, _parent2, _scopeId));
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+          } else {
+            return [
+              createVNode("i", { class: "iconfont icon-map" }),
+              createVNode("span", { class: "text" }, [
+                createVNode(_component_i18n, {
+                  zh: "我的美食地图",
+                  en: "My Foodie Map"
+                }),
+                createVNode("i", { class: "new-window-icon iconfont icon-new-window-s" })
+              ])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "item",
+        href: "https://google.com/maps/contrib/101107919754452588990/reviews"
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(ssrRenderComponent(_component_i18n, {
+              zh: "我的环球点评",
+              en: "My Map Reviews"
+            }, null, _parent2, _scopeId));
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+          } else {
+            return [
+              createVNode("i", { class: "iconfont icon-map" }),
+              createVNode("span", { class: "text" }, [
+                createVNode(_component_i18n, {
+                  zh: "我的环球点评",
+                  en: "My Map Reviews"
+                }),
+                createVNode("i", { class: "new-window-icon iconfont icon-new-window-s" })
+              ])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "item",
+        href: "https://goo.gl/maps/kLVRWTMhZbbY4DNa7"
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(ssrRenderComponent(_component_i18n, {
+              zh: "我去过的地方",
+              en: "Places I've Been"
+            }, null, _parent2, _scopeId));
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+          } else {
+            return [
+              createVNode("i", { class: "iconfont icon-map" }),
+              createVNode("span", { class: "text" }, [
+                createVNode(_component_i18n, {
+                  zh: "我去过的地方",
+                  en: "Places I've Been"
+                }),
+                createVNode("i", { class: "new-window-icon iconfont icon-new-window-s" })
+              ])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(ssrRenderComponent(_component_ulink, {
+        class: "item",
+        href: "https://goo.gl/maps/SpB4JJm9HYUiqjtc6"
+      }, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(ssrRenderComponent(_component_i18n, {
+              zh: "我想去的地方",
+              en: "Places I Want to Go"
+            }, null, _parent2, _scopeId));
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+          } else {
+            return [
+              createVNode("i", { class: "iconfont icon-map" }),
+              createVNode("span", { class: "text" }, [
+                createVNode(_component_i18n, {
+                  zh: "我想去的地方",
+                  en: "Places I Want to Go"
+                }),
+                createVNode("i", { class: "new-window-icon iconfont icon-new-window-s" })
+              ])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</div></div></div>`);
+    };
+  }
+});
+const _sfc_setup$14 = _sfc_main$14.setup;
+_sfc_main$14.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/index.vue");
+  return _sfc_setup$14 ? _sfc_setup$14(props, ctx) : void 0;
+};
+const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-75440903"]]);
+const getEmailLink = (email) => {
+  if (typeof email === "string") {
+    return `mailto:${email}`;
+  }
+  const { email: _email, ...content } = email;
+  return `mailto:${_email}?` + stringify(content);
+};
 const useAdminAvatar = (avatar) => {
   return avatar || getAssetURL(useCdnDomain(), "/images/anonymous.png");
 };
@@ -11205,323 +11793,6 @@ const i18ns = {
       `I call this place my own digital vihāra. Have fun here!`
     ].join(" ")
   }
-};
-const _sfc_main$16 = /* @__PURE__ */ defineComponent({
-  __name: "mapbox",
-  __ssrInlineRender: true,
-  props: {
-    gmGeoJson: {}
-  },
-  emits: ["ready"],
-  setup(__props, { emit: __emit }) {
-    const props = __props;
-    const emit = __emit;
-    const { isDarkTheme } = useEnhancer();
-    const mapboxRef = shallowRef();
-    const lib = shallowRef();
-    const map = shallowRef();
-    const loaded = shallowRef(false);
-    const getMapStyle = () => {
-      return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
-    };
-    const makeSureSourceLayer = () => {
-      if (loaded.value) {
-        if (props.gmGeoJson?.features.length) {
-          const _map = map.value;
-          const layerId = "placemarks";
-          if (!_map.getLayer(layerId)) {
-            _map.addLayer(
-              geoJSONFeatureToLayer(layerId, {
-                type: "geojson",
-                data: props.gmGeoJson
-              })
-            );
-            _map.on("mouseenter", layerId, () => {
-              _map.getCanvas().style.cursor = "pointer";
-            });
-            _map.on("mouseleave", layerId, () => {
-              _map.getCanvas().style.cursor = "";
-            });
-            _map.on("click", layerId, (event) => {
-              const coordinates = event.features[0].geometry.coordinates.slice();
-              const description = event.features[0].properties.description;
-              while (Math.abs(event.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += event.lngLat.lng > coordinates[0] ? 360 : -360;
-              }
-              newMapboxPopup(lib.value, coordinates, description).addTo(_map);
-            });
-          }
-        }
-      }
-    };
-    onBeforeMount(() => {
-      watch(
-        () => isDarkTheme.value,
-        () => map.value?.setStyle(getMapStyle())
-      );
-    });
-    onBeforeMount(() => {
-      watch(
-        () => props.gmGeoJson,
-        () => makeSureSourceLayer()
-      );
-    });
-    onMounted(() => {
-      Promise.resolve().then(() => mapboxGl);
-      Promise.all([
-        // dynamic import lib
-        import("mapbox-gl").then((result) => result.default),
-        new Promise((resolve) => window.setTimeout(resolve, 600))
-      ]).then(([mapboxgl]) => {
-        mapboxgl.accessToken = MAPBOX_CONFIG.TOKEN;
-        lib.value = mapboxgl;
-        map.value = new mapboxgl.Map({
-          container: mapboxRef.value,
-          center: MAPBOX_CONFIG.CENTER,
-          zoom: MAPBOX_CONFIG.ZOOM,
-          minZoom: 2.2,
-          attributionControl: false,
-          style: getMapStyle()
-        });
-        new mapboxgl.Marker({
-          color: APP_CONFIG.primary_color,
-          anchor: "bottom"
-        }).setLngLat(APP_META.about_page_geo_coordinates).addTo(map.value);
-        map.value.on("style.load", () => {
-          makeSureSourceLayer();
-        });
-        map.value.on("load", () => {
-          loaded.value = true;
-          makeSureSourceLayer();
-          emit("ready", { map: map.value, lib: lib.value });
-        });
-      });
-    });
-    onBeforeUnmount(() => {
-      map.value?.remove();
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({
-        class: "mapbox",
-        ref_key: "mapboxRef",
-        ref: mapboxRef
-      }, _attrs))} data-v-e260a998></div>`);
-    };
-  }
-});
-const _sfc_setup$16 = _sfc_main$16.setup;
-_sfc_main$16.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/mapbox.vue");
-  return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
-};
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-e260a998"]]);
-const _sfc_main$15 = /* @__PURE__ */ defineComponent({
-  __name: "modal",
-  __ssrInlineRender: true,
-  props: {
-    name: {},
-    description: {},
-    gmGeoJson: {},
-    gmFolders: {}
-  },
-  setup(__props) {
-    const lib = shallowRef();
-    const map = shallowRef();
-    const handleMapboxReady = (payload) => {
-      lib.value = payload.lib;
-      map.value = payload.map;
-    };
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-ed6eeb46>`);
-      _push(ssrRenderComponent(Mapbox, {
-        class: "mapbox",
-        "gm-geo-json": __props.gmGeoJson,
-        onReady: handleMapboxReady
-      }, null, _parent));
-      _push(`<div class="panel" data-v-ed6eeb46><div class="info" data-v-ed6eeb46><h3 class="title" data-v-ed6eeb46>${ssrInterpolate(__props.name ?? "-")}</h3><p class="description" data-v-ed6eeb46>${ssrInterpolate(__props.description ?? "-")}</p></div><ul class="folders" data-v-ed6eeb46><!--[-->`);
-      ssrRenderList(__props.gmFolders, (folder, index) => {
-        _push(`<li class="folder" data-v-ed6eeb46><div class="title" data-v-ed6eeb46><i class="iconfont icon-route" data-v-ed6eeb46></i><span class="text" data-v-ed6eeb46>${ssrInterpolate(folder.name)}</span><span class="count" data-v-ed6eeb46>(${ssrInterpolate(folder.placemarks.length)})</span></div>`);
-        if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-ed6eeb46>null</div>`);
-        } else {
-          _push(`<ul class="placemarks" data-v-ed6eeb46><!--[-->`);
-          ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark" data-v-ed6eeb46>`);
-            _push(ssrRenderComponent(_component_uimage, {
-              class: "icon",
-              cdn: true,
-              src: `/images/third-party/mapbox-${placemark.image ? "attraction" : "veterinary"}.svg`
-            }, null, _parent));
-            _push(`<span class="text" data-v-ed6eeb46>${ssrInterpolate(placemark.name)}</span></li>`);
-          });
-          _push(`<!--]--></ul>`);
-        }
-        _push(`</li>`);
-      });
-      _push(`<!--]--></ul></div></div>`);
-    };
-  }
-});
-const _sfc_setup$15 = _sfc_main$15.setup;
-_sfc_main$15.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/modal.vue");
-  return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
-};
-const FootprintModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-ed6eeb46"]]);
-const _sfc_main$14 = /* @__PURE__ */ defineComponent({
-  __name: "index",
-  __ssrInlineRender: true,
-  setup(__props) {
-    const map = shallowRef();
-    const modalVisible = shallowRef(false);
-    const gmStore = useMyGoogleMapStore();
-    const { isZhLang } = useEnhancer();
-    const gmFolders = computed(() => {
-      const folders = [...gmStore.data?.Folder ?? []];
-      folders.reverse();
-      return folders.map((folder, fi) => {
-        const placemark = folder.Placemark ?? [];
-        const placemarks = Array.isArray(placemark) ? placemark : [placemark];
-        return {
-          name: folder.name,
-          placemarks: placemarks.map((placemark2, pi) => {
-            const [longitude, latitude] = placemark2.Point.coordinates.split(",").map(Number);
-            const extendedData = placemark2.ExtendedData?.Data;
-            return {
-              index: pi,
-              id: `placemark-${fi}-${pi}`,
-              name: placemark2.name,
-              description: placemark2.description,
-              coordinates: [longitude, latitude],
-              image: extendedData?.["@name"] === "gx_media_links" ? extendedData?.value : null
-            };
-          })
-        };
-      });
-    });
-    const gmGeoJson = computed(() => {
-      return gmmFoldersToGeoJSON(gmFolders.value);
-    });
-    const handleMapboxReady = (payload) => {
-      map.value = payload.map;
-    };
-    onMounted(() => gmStore.fetch());
-    return (_ctx, _push, _parent, _attrs) => {
-      const _component_client_only = resolveComponent("client-only");
-      const _component_popup = resolveComponent("popup");
-      const _component_ulink = resolveComponent("ulink");
-      const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-d2b2b8d3>`);
-      _push(ssrRenderComponent(_component_client_only, null, {
-        default: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(_component_popup, {
-              visible: modalVisible.value,
-              "onUpdate:visible": ($event) => modalVisible.value = $event,
-              "scroll-close": false
-            }, {
-              default: withCtx((_2, _push3, _parent3, _scopeId2) => {
-                if (_push3) {
-                  _push3(ssrRenderComponent(FootprintModal, {
-                    class: "footprint-modal",
-                    name: unref(gmStore).data?.name,
-                    description: unref(gmStore).data?.description,
-                    "gm-folders": gmFolders.value,
-                    "gm-geo-json": gmGeoJson.value
-                  }, null, _parent3, _scopeId2));
-                } else {
-                  return [
-                    createVNode(FootprintModal, {
-                      class: "footprint-modal",
-                      name: unref(gmStore).data?.name,
-                      description: unref(gmStore).data?.description,
-                      "gm-folders": gmFolders.value,
-                      "gm-geo-json": gmGeoJson.value
-                    }, null, 8, ["name", "description", "gm-folders", "gm-geo-json"])
-                  ];
-                }
-              }),
-              _: 1
-            }, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(_component_popup, {
-                visible: modalVisible.value,
-                "onUpdate:visible": ($event) => modalVisible.value = $event,
-                "scroll-close": false
-              }, {
-                default: withCtx(() => [
-                  createVNode(FootprintModal, {
-                    class: "footprint-modal",
-                    name: unref(gmStore).data?.name,
-                    description: unref(gmStore).data?.description,
-                    "gm-folders": gmFolders.value,
-                    "gm-geo-json": gmGeoJson.value
-                  }, null, 8, ["name", "description", "gm-folders", "gm-geo-json"])
-                ]),
-                _: 1
-              }, 8, ["visible", "onUpdate:visible"])
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-      _push(`<div class="mapbox-wrapper"${ssrRenderAttr("placeholder", unref(isZhLang) ? unref(i18ns).footprint.zh : unref(i18ns).footprint.en)} data-v-d2b2b8d3>`);
-      _push(ssrRenderComponent(Mapbox, {
-        class: "mapbox",
-        "gm-geo-json": gmGeoJson.value,
-        onReady: handleMapboxReady
-      }, null, _parent));
-      _push(`<div class="toolbar" data-v-d2b2b8d3>`);
-      _push(ssrRenderComponent(_component_ulink, {
-        class: "button",
-        href: unref(VALUABLE_LINKS).GOOGLE_MY_MAP
-      }, {
-        default: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(`<i class="iconfont icon-google-maps" data-v-d2b2b8d3${_scopeId}></i>`);
-          } else {
-            return [
-              createVNode("i", { class: "iconfont icon-google-maps" })
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
-      _push(`<button class="button" data-v-d2b2b8d3><i class="iconfont icon-fullscreen" data-v-d2b2b8d3></i></button></div></div><div class="legends" data-v-d2b2b8d3><div class="now" data-v-d2b2b8d3><i class="iconfont icon-location" data-v-d2b2b8d3></i><span class="text" data-v-d2b2b8d3>${ssrInterpolate(unref(isZhLang) ? unref(APP_META).about_page_geo_zh_title : unref(APP_META).about_page_geo_en_title)}</span></div><ul class="folders" data-v-d2b2b8d3><li class="item" data-v-d2b2b8d3><i class="iconfont icon-route" data-v-d2b2b8d3></i><span class="text" data-v-d2b2b8d3>`);
-      _push(ssrRenderComponent(_component_i18n, {
-        zh: "我的旅行足迹",
-        en: "My footprints"
-      }, null, _parent));
-      _push(`</span></li><!--[-->`);
-      ssrRenderList(unref(GOOGLE_MAP_LINKS), (link, index) => {
-        _push(`<li class="item" data-v-d2b2b8d3><i class="iconfont icon-map" data-v-d2b2b8d3></i><span class="text" data-v-d2b2b8d3>`);
-        _push(ssrRenderComponent(_component_i18n, {
-          zh: link.zh,
-          en: link.en
-        }, null, _parent));
-        _push(`<i class="new-window-icon iconfont icon-new-window-s" data-v-d2b2b8d3></i></span></li>`);
-      });
-      _push(`<!--]--></ul></div></div>`);
-    };
-  }
-});
-const _sfc_setup$14 = _sfc_main$14.setup;
-_sfc_main$14.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/index.vue");
-  return _sfc_setup$14 ? _sfc_setup$14(props, ctx) : void 0;
-};
-const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-d2b2b8d3"]]);
-const getEmailLink = (email) => {
-  if (typeof email === "string") {
-    return `mailto:${email}`;
-  }
-  const { email: _email, ...content } = email;
-  return `mailto:${_email}?` + stringify(content);
 };
 const _sfc_main$13 = /* @__PURE__ */ defineComponent({
   __name: "banner",
