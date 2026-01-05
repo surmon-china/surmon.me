@@ -71,12 +71,3 @@ export const useYouTubePlayListStore = defineStore('youtubePlaylist', () => {
     }
   })
 })
-
-// My Google map
-export const useMyGoogleMapStore = defineStore('myGoogleMap', () => {
-  return createFetchStore({
-    once: true,
-    data: null,
-    fetcher: () => tunnel.fetch(TunnelModule.MyGoogleMap)
-  })
-})

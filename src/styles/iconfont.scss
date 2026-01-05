@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.woff2?t=1767537738210') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.woff?t=1767537738210') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_dhkio8c42c.ttf?t=1767537738210') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_6fmu4l84z2t.woff2?t=1767653549199') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_6fmu4l84z2t.woff?t=1767653549199') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_6fmu4l84z2t.ttf?t=1767653549199') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,38 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-transport-helmet:before {
+  content: '\e648';
+}
+
+.icon-transport-motocycle:before {
+  content: '\e654';
+}
+
+.icon-transport-train:before {
+  content: '\e633';
+}
+
+.icon-transport-flight:before {
+  content: '\e610';
+}
+
+.icon-transport-bicycle:before {
+  content: '\e64e';
+}
+
+.icon-transport-walk:before {
+  content: '\e63a';
+}
+
+.icon-transport-bus:before {
+  content: '\e9cd';
+}
+
+.icon-transport-ship:before {
+  content: '\e721';
 }
 
 .icon-website:before {

@@ -1,82 +1,31 @@
 <script lang="ts" setup>
   import type { Map } from 'mapbox-gl'
-  import { shallowRef, computed, onMounted } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { useMyGoogleMapStore } from '/@/stores/media'
+  import { shallowRef } from 'vue'
   import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
-  import { openNewWindow } from '/@/utils/opener'
-  import { gmmFoldersToGeoJSON, FeatureCollectionJSON, GoogleMyMapFolder } from './helper'
-  import { GOOGLE_MAP_LINKS } from './google-map'
-  import { i18ns } from '../../shared'
-  import Mapbox from './mapbox.vue'
-  import FootprintModal from './modal.vue'
+  import { flyToLivingMarker } from './mapbox-living-now'
+  import MapboxModal from './box-modal.vue'
+  import Mapbox from './box-base.vue'
 
-  const map = shallowRef<Map>()
   const modalVisible = shallowRef(false)
-  const gmStore = useMyGoogleMapStore()
-  const { isZhLang } = useEnhancer()
-
-  const gmFolders = computed<Array<GoogleMyMapFolder>>(() => {
-    const folders = [...(gmStore.data?.Folder ?? [])]
-    folders.reverse()
-    return folders.map((folder, fi) => {
-      const placemark = folder.Placemark ?? []
-      const placemarks = Array.isArray(placemark) ? placemark : [placemark]
-      return {
-        name: folder.name,
-        placemarks: placemarks.map((placemark, pi) => {
-          const [longitude, latitude] = placemark.Point.coordinates.split(',').map(Number)
-          const extendedData = placemark.ExtendedData?.Data
-          return {
-            index: pi,
-            id: `placemark-${fi}-${pi}`,
-            name: placemark.name,
-            description: placemark.description,
-            coordinates: [longitude, latitude],
-            image: extendedData?.['@name'] === 'gx_media_links' ? extendedData?.value : null
-          }
-        })
-      }
-    })
-  })
-
-  const gmGeoJson = computed<FeatureCollectionJSON>(() => {
-    return gmmFoldersToGeoJSON(gmFolders.value)
-  })
-
   const openModal = () => {
     modalVisible.value = true
   }
 
-  const handleMapboxReady = (payload: { map: Map }) => {
+  const map = shallowRef<Map>()
+  const handleMapboxLoad = (payload: { map: Map }) => {
     map.value = payload.map
   }
-
-  const handleLivingNow = () => {
-    map.value?.flyTo({
-      center: APP_META.about_page_geo_coordinates as any,
-      zoom: 14
-    })
-  }
-
-  onMounted(() => gmStore.fetch())
 </script>
 
 <template>
   <div class="footprint-map">
     <client-only>
       <popup v-model:visible="modalVisible" :scroll-close="false">
-        <footprint-modal
-          class="footprint-modal"
-          :name="gmStore.data?.name"
-          :description="gmStore.data?.description"
-          :gm-folders="gmFolders"
-          :gm-geo-json="gmGeoJson"
-        />
+        <mapbox-modal class="footprint-modal" />
       </popup>
     </client-only>
-    <div class="mapbox-wrapper" :placeholder="isZhLang ? i18ns.footprint.zh : i18ns.footprint.en">
-      <mapbox class="mapbox" :gm-geo-json="gmGeoJson" @ready="handleMapboxReady" />
+    <div class="mapbox-wrapper">
+      <mapbox class="mapbox" @load="handleMapboxLoad" />
       <div class="toolbar">
         <ulink class="button" :href="VALUABLE_LINKS.GOOGLE_MY_MAP">
           <i class="iconfont icon-google-maps"></i>
@@ -87,27 +36,50 @@
       </div>
     </div>
     <div class="legends">
-      <div class="now">
-        <i class="iconfont icon-location"></i>
-        <span class="text" @click="handleLivingNow">
-          {{ isZhLang ? APP_META.about_page_geo_zh_title : APP_META.about_page_geo_en_title }}
-        </span>
-      </div>
-      <ul class="folders">
-        <li class="item" @click="openModal">
+      <div class="buttons">
+        <button class="item" @click="flyToLivingMarker(map!)">
+          <i class="iconfont icon-location"></i>
+          <span class="text">
+            <i18n :zh="APP_META.about_page_geo_zh_title" :en="APP_META.about_page_geo_en_title" />
+          </span>
+        </button>
+        <button class="item" @click="openModal">
           <i class="iconfont icon-route"></i>
           <span class="text">
-            <i18n zh="我的旅行足迹" en="My footprints"></i18n>
+            <i18n zh="我的旅行足迹" en="My Journeys"></i18n>
           </span>
-        </li>
-        <li class="item" :key="index" v-for="(link, index) in GOOGLE_MAP_LINKS" @click="openNewWindow(link.url)">
+        </button>
+      </div>
+      <div class="links">
+        <ulink class="item" href="https://goo.gl/maps/fzHHMCjuSbbJgBVt9">
           <i class="iconfont icon-map"></i>
           <span class="text">
-            <i18n :zh="link.zh" :en="link.en"></i18n>
+            <i18n zh="我的美食地图" en="My Foodie Map"></i18n>
             <i class="new-window-icon iconfont icon-new-window-s"></i>
           </span>
-        </li>
-      </ul>
+        </ulink>
+        <ulink class="item" href="https://google.com/maps/contrib/101107919754452588990/reviews">
+          <i class="iconfont icon-map"></i>
+          <span class="text">
+            <i18n zh="我的环球点评" en="My Map Reviews"></i18n>
+            <i class="new-window-icon iconfont icon-new-window-s"></i>
+          </span>
+        </ulink>
+        <ulink class="item" href="https://goo.gl/maps/kLVRWTMhZbbY4DNa7">
+          <i class="iconfont icon-map"></i>
+          <span class="text">
+            <i18n zh="我去过的地方" en="Places I've Been"></i18n>
+            <i class="new-window-icon iconfont icon-new-window-s"></i>
+          </span>
+        </ulink>
+        <ulink class="item" href="https://goo.gl/maps/SpB4JJm9HYUiqjtc6">
+          <i class="iconfont icon-map"></i>
+          <span class="text">
+            <i18n zh="我想去的地方" en="Places I Want to Go"></i18n>
+            <i class="new-window-icon iconfont icon-new-window-s"></i>
+          </span>
+        </ulink>
+      </div>
     </div>
   </div>
 </template>
@@ -126,11 +98,11 @@
     position: relative;
     display: flex;
     width: 100%;
-    $map-width: 790px;
+    $map-width: 810px;
     $map-height: 220px;
 
-    .legends .folders,
-    .legends .now {
+    .legends .buttons,
+    .legends .links {
       @include mix.common-bg-module();
       @include mix.radius-box($radius-lg);
     }
@@ -141,36 +113,40 @@
       flex-direction: column;
       margin-left: $gap * 2;
 
-      .now {
+      .buttons {
         flex-shrink: 0;
-        display: inline-flex;
         margin-bottom: $gap-lg;
-        padding: 0 $gap;
+        padding: $gap-xs $gap;
         width: 100%;
-        line-height: 3.4em;
-        cursor: pointer;
-        color: $color-text-secondary;
-        &:hover {
-          color: $color-text;
-        }
 
-        .iconfont {
-          margin-right: $gap-sm;
-        }
-        .text {
-          font-weight: bold;
+        .item {
+          display: block;
+          width: 100%;
+          text-align: left;
+          line-height: 2.6em;
+          color: $color-text-secondary;
+          &:hover {
+            color: $color-text;
+          }
+
+          .iconfont {
+            margin-right: $gap-sm;
+          }
+          .text {
+            font-weight: bold;
+          }
         }
       }
 
-      .folders {
+      .links {
         flex: 1;
         list-style: none;
         margin: 0;
         padding: $gap-sm $gap;
 
         .item {
+          display: block;
           line-height: 2.4em;
-          cursor: pointer;
           color: $color-text-secondary;
           &:hover {
             color: $color-text;
