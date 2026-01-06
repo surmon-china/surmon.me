@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.0";
+const APP_VERSION = "5.6.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -159,7 +159,8 @@ const APP_META = Object.freeze({
 });
 const MAPBOX_CONFIG = Object.freeze({
   // readonly token
-  TOKEN: "pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg",
+  TOKEN: "pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDRlcnI1bjAyaGQzY3BqMHIzaGdldXYifQ._vCAbYCLjSc-c0UbnaOjxg",
+  // TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
   STYLE_LIGHT: "mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4",
   STYLE_DARK: "mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k",
   ZOOM: 12.4374,
@@ -11102,8 +11103,8 @@ const useMapPlacemarks = () => {
     geoJson
   };
 };
-const createPlacemarkPopup = (lib, coordinates, html) => {
-  return new lib.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` }).setLngLat(coordinates).setHTML(html || "-");
+const createPlacemarkPopup = (lib, coordinates, content) => {
+  return new lib.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` }).setLngLat(coordinates).setHTML(content ? markdownToHTML(content) : "-");
 };
 const addPlacemarksLayerToMap = (lib, map, geoJson) => {
   if (!geoJson.features.length) return;
@@ -11158,6 +11159,22 @@ var TripRouteTransport = /* @__PURE__ */ ((TripRouteTransport2) => {
   TripRouteTransport2[TripRouteTransport2["Walk"] = 7] = "Walk";
   return TripRouteTransport2;
 })(TripRouteTransport || {});
+const getCoordinatesBounds = (coordinates) => {
+  let minLng = Infinity;
+  let minLat = Infinity;
+  let maxLng = -Infinity;
+  let maxLat = -Infinity;
+  for (const [lng, lat] of coordinates) {
+    if (lng < minLng) minLng = lng;
+    if (lat < minLat) minLat = lat;
+    if (lng > maxLng) maxLng = lng;
+    if (lat > maxLat) maxLat = lat;
+  }
+  return [
+    [minLng, minLat],
+    [maxLng, maxLat]
+  ];
+};
 const getRouteLineId = (routeId) => `trip-route-line-${routeId}`;
 const getRouteLineHighlightId = (routeId) => `${getRouteLineId(routeId)}-highlight`;
 const getRouteLineActiveId = (routeId) => `${getRouteLineId(routeId)}-active`;
@@ -11174,11 +11191,12 @@ const resetActiveTripRoute = (map) => {
 };
 const activateTripRoute = (map, route) => {
   resetActiveTripRoute(map);
+  if (!route.coordinates.length) return;
   lastActiveRouteId = route.id;
   map.setLayoutProperty(getRouteLineHighlightId(route.id), "visibility", "visible");
   map.setLayoutProperty(getRouteLineActiveId(route.id), "visibility", "visible");
   map.setLayoutProperty(getRoutePointsActiveId(route.id), "visibility", "visible");
-  map.fitBounds([route.coordinates.at(-1), route.coordinates[0]], {
+  map.fitBounds(getCoordinatesBounds(route.coordinates), {
     padding: {
       top: 80,
       bottom: 80,
@@ -11405,7 +11423,7 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
         class: "mapbox",
         ref_key: "container",
         ref: container
-      }, _attrs))} data-v-d8eb939b></div>`);
+      }, _attrs))} data-v-439ba1e2></div>`);
     };
   }
 });
@@ -11415,7 +11433,7 @@ _sfc_main$16.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
   return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-d8eb939b"]]);
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-439ba1e2"]]);
 const _sfc_main$15 = /* @__PURE__ */ defineComponent({
   __name: "box-modal",
   __ssrInlineRender: true,
@@ -11440,50 +11458,50 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-a363152a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-b9151fee>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="panel" data-v-a363152a><div class="head" data-v-a363152a><h3 class="title" data-v-a363152a>${ssrInterpolate(unref(mapPms).kmlJson.value?.name ?? "-")}</h3><p class="description" data-v-a363152a>${ssrInterpolate(unref(mapPms).kmlJson.value?.description ?? "-")}</p></div><div class="content" data-v-a363152a><ul class="routes" data-v-a363152a><!--[-->`);
+      _push(`<div class="panel" data-v-b9151fee><div class="head" data-v-b9151fee><h3 class="title" data-v-b9151fee>${ssrInterpolate(unref(mapPms).kmlJson.value?.name ?? "-")}</h3><p class="description" data-v-b9151fee>${ssrInterpolate(unref(mapPms).kmlJson.value?.description ?? "-")}</p></div><div class="content" data-v-b9151fee><ul class="routes" data-v-b9151fee><!--[-->`);
       ssrRenderList(unref(mapTrs).configJson.value, (route, index) => {
-        _push(`<li class="route-item" data-v-a363152a><h5 class="title" data-v-a363152a>`);
+        _push(`<li class="route-item" data-v-b9151fee><h5 class="title" data-v-b9151fee>`);
         if (route.transport === unref(TripRouteTransport).Flight) {
-          _push(`<i class="iconfont icon-transport-flight" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-flight" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Train) {
-          _push(`<i class="iconfont icon-transport-train" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-train" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Bus) {
-          _push(`<i class="iconfont icon-transport-bus" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-bus" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Ship) {
-          _push(`<i class="iconfont icon-transport-ship" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-ship" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Motorcycle) {
-          _push(`<i class="iconfont icon-transport-helmet" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-helmet" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Bicycle) {
-          _push(`<i class="iconfont icon-transport-bicycle" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-bicycle" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Walk) {
-          _push(`<i class="iconfont icon-transport-walk" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-transport-walk" data-v-b9151fee></i>`);
         } else if (route.transport === unref(TripRouteTransport).Null) {
-          _push(`<i class="iconfont icon-route" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-route" data-v-b9151fee></i>`);
         } else {
-          _push(`<i class="iconfont icon-route" data-v-a363152a></i>`);
+          _push(`<i class="iconfont icon-route" data-v-b9151fee></i>`);
         }
-        _push(`<span class="text" data-v-a363152a>${ssrInterpolate(route.name)}</span></h5><p class="description" data-v-a363152a>${ssrInterpolate(route.description)}</p></li>`);
+        _push(`<span class="text" data-v-b9151fee>${ssrInterpolate(route.name)}</span></h5><p class="description" data-v-b9151fee>${unref(markdownToHTML)(route.description) ?? ""}</p></li>`);
       });
-      _push(`<!--]--></ul><ul class="folders" data-v-a363152a><!--[-->`);
+      _push(`<!--]--></ul><ul class="folders" data-v-b9151fee><!--[-->`);
       ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
-        _push(`<li class="folder-item" data-v-a363152a><h5 class="title" data-v-a363152a><i class="iconfont icon-map" data-v-a363152a></i><span class="text" data-v-a363152a>${ssrInterpolate(folder.name)}</span><span class="count" data-v-a363152a>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+        _push(`<li class="folder-item" data-v-b9151fee><h5 class="title" data-v-b9151fee><i class="iconfont icon-map" data-v-b9151fee></i><span class="text" data-v-b9151fee>${ssrInterpolate(folder.name)}</span><span class="count" data-v-b9151fee>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
         if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-a363152a>null</div>`);
+          _push(`<div class="empty" data-v-b9151fee>null</div>`);
         } else {
-          _push(`<ul class="placemarks" data-v-a363152a><!--[-->`);
+          _push(`<ul class="placemarks" data-v-b9151fee><!--[-->`);
           ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark-item" data-v-a363152a>`);
+            _push(`<li class="placemark-item" data-v-b9151fee>`);
             _push(ssrRenderComponent(_component_uimage, {
               class: "icon",
               cdn: true,
               src: "/images/third-party/mapbox-veterinary.svg"
             }, null, _parent));
-            _push(`<span class="text" data-v-a363152a>${ssrInterpolate(placemark.name)}</span></li>`);
+            _push(`<span class="text" data-v-b9151fee>${ssrInterpolate(placemark.name)}</span></li>`);
           });
           _push(`<!--]--></ul>`);
         }
@@ -11499,7 +11517,7 @@ _sfc_main$15.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
   return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
 };
-const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-a363152a"]]);
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-b9151fee"]]);
 const _sfc_main$14 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
