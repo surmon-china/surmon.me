@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.1";
+const APP_VERSION = "5.6.2";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -159,8 +159,7 @@ const APP_META = Object.freeze({
 });
 const MAPBOX_CONFIG = Object.freeze({
   // readonly token
-  TOKEN: "pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDRlcnI1bjAyaGQzY3BqMHIzaGdldXYifQ._vCAbYCLjSc-c0UbnaOjxg",
-  // TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
+  TOKEN: "pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg",
   STYLE_LIGHT: "mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4",
   STYLE_DARK: "mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k",
   ZOOM: 12.4374,
