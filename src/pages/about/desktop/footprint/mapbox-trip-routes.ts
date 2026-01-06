@@ -1,4 +1,4 @@
-import type { Map as MB_Map } from 'mapbox-gl'
+import type { Map as MB_Map, LngLatBoundsLike } from 'mapbox-gl'
 import { shallowRef, computed } from 'vue'
 import { APP_CONFIG } from '/@/configs/app.config'
 import vanilla from '/@/services/vanilla'
@@ -22,6 +22,25 @@ export interface TripRouteItem {
   coordinates: [number, number][]
 }
 
+const getCoordinatesBounds = (coordinates: [number, number][]): LngLatBoundsLike => {
+  let minLng = Infinity
+  let minLat = Infinity
+  let maxLng = -Infinity
+  let maxLat = -Infinity
+
+  for (const [lng, lat] of coordinates) {
+    if (lng < minLng) minLng = lng
+    if (lat < minLat) minLat = lat
+    if (lng > maxLng) maxLng = lng
+    if (lat > maxLat) maxLat = lat
+  }
+
+  return [
+    [minLng, minLat],
+    [maxLng, maxLat]
+  ]
+}
+
 const getRouteLineId = (routeId: string) => `trip-route-line-${routeId}`
 const getRouteLineHighlightId = (routeId: string) => `${getRouteLineId(routeId)}-highlight`
 const getRouteLineActiveId = (routeId: string) => `${getRouteLineId(routeId)}-active`
@@ -42,11 +61,12 @@ export const resetActiveTripRoute = (map: MB_Map) => {
 
 export const activateTripRoute = (map: MB_Map, route: TripRouteItem) => {
   resetActiveTripRoute(map)
+  if (!route.coordinates.length) return
   lastActiveRouteId = route.id
   map.setLayoutProperty(getRouteLineHighlightId(route.id), 'visibility', 'visible')
   map.setLayoutProperty(getRouteLineActiveId(route.id), 'visibility', 'visible')
   map.setLayoutProperty(getRoutePointsActiveId(route.id), 'visibility', 'visible')
-  map.fitBounds([route.coordinates.at(-1)!, route.coordinates[0]], {
+  map.fitBounds(getCoordinatesBounds(route.coordinates), {
     padding: {
       top: 80,
       bottom: 80,

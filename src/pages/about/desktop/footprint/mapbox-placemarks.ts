@@ -1,6 +1,7 @@
 import type { Map, Popup, LngLatLike } from 'mapbox-gl'
 import type { MapboxGL } from './mapbox-lib'
 import { shallowRef, computed } from 'vue'
+import { markdownToHTML } from '/@/transforms/markdown'
 import { TunnelModule } from '/@/constants/tunnel'
 import tunnel from '/@/services/tunnel'
 
@@ -86,10 +87,10 @@ export const useMapPlacemarks = () => {
   }
 }
 
-export const createPlacemarkPopup = (lib: MapboxGL, coordinates: LngLatLike, html: string) => {
+export const createPlacemarkPopup = (lib: MapboxGL, coordinates: LngLatLike, content: string) => {
   return new lib.Popup({ closeButton: false, offset: [0, -16], maxWidth: `280px` })
     .setLngLat(coordinates)
-    .setHTML(html || '-')
+    .setHTML(content ? markdownToHTML(content) : '-')
 }
 
 let lastPlacemarkPopup: Popup | null = null

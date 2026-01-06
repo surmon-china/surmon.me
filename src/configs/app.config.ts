@@ -40,7 +40,8 @@ export const APP_META = Object.freeze({
 
 export const MAPBOX_CONFIG = Object.freeze({
   // readonly token
-  TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
+  TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDRlcnI1bjAyaGQzY3BqMHIzaGdldXYifQ._vCAbYCLjSc-c0UbnaOjxg',
+  // TOKEN: 'pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg',
   STYLE_LIGHT: 'mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4',
   STYLE_DARK: 'mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k',
   ZOOM: 12.4374,

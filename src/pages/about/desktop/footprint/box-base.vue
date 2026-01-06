@@ -107,6 +107,10 @@
         overflow-y: auto;
         font-family: $font-family-normal;
         color: #555555;
+
+        p:last-child {
+          margin: 0;
+        }
       }
     }
   }

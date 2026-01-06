@@ -2,6 +2,7 @@
   import { shallowRef, onMounted } from 'vue'
   import type { Map } from 'mapbox-gl'
   import type { MapboxGL } from './mapbox-lib'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { useMapPlacemarks, addPlacemarksLayerToMap, activatePlacemark } from './mapbox-placemarks'
   import {
     TripRouteTransport,
@@ -69,7 +70,7 @@
               <i class="iconfont icon-route" v-else></i>
               <span class="text">{{ route.name }}</span>
             </h5>
-            <p class="description">{{ route.description }}</p>
+            <p class="description" v-html="markdownToHTML(route.description)"></p>
           </li>
         </ul>
         <ul class="folders">
@@ -174,6 +175,11 @@
             line-height: 1.8em;
             font-size: $font-size-small;
             color: $color-text-secondary;
+            ::v-deep(p) {
+              &:last-child {
+                margin-bottom: 0;
+              }
+            }
           }
         }
       }
