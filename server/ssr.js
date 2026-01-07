@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.4";
+const APP_VERSION = "5.6.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -11226,7 +11226,7 @@ const getTransportIconName = (transport) => {
   if (transport === 2) return "icon-transport-train";
   if (transport === 3) return "icon-transport-bus";
   if (transport === 4) return "icon-transport-ship";
-  if (transport === 5) return "icon-transport-helmet";
+  if (transport === 5) return "icon-transport-motocycle";
   if (transport === 6) return "icon-transport-bicycle";
   if (transport === 7) return "icon-transport-walk";
   if (transport === 8) return "icon-transport-hiking";
@@ -11577,18 +11577,18 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-7481aa86>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-a8b15715>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="panel" data-v-7481aa86><div class="head" data-v-7481aa86><h3 class="title" data-v-7481aa86>`);
+      _push(`<div class="panel" data-v-a8b15715><div class="head" data-v-a8b15715><h3 class="title" data-v-a8b15715>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintTitle, null, _parent));
-      _push(`</h3><p class="description" data-v-7481aa86>`);
+      _push(`</h3><p class="description" data-v-a8b15715>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintDescription, null, _parent));
       _push(`</p></div>`);
       if (!loaded.value) {
-        _push(`<div class="content-skeleton" data-v-7481aa86><!--[-->`);
+        _push(`<div class="content-skeleton" data-v-a8b15715><!--[-->`);
         ssrRenderList(5, (i) => {
           _push(ssrRenderComponent(_component_skeleton_line, {
             class: "skeleton-item",
@@ -11597,29 +11597,29 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
         });
         _push(`<!--]--></div>`);
       } else {
-        _push(`<div class="content" data-v-7481aa86><ul class="group-list" data-v-7481aa86><!--[-->`);
+        _push(`<div class="content" data-v-a8b15715><ul class="group-list" data-v-a8b15715><!--[-->`);
         ssrRenderList(unref(mapTss).configJson.value, (trip) => {
-          _push(`<li class="group" data-v-7481aa86><h5 class="title" data-v-7481aa86><i class="iconfont icon-route" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-7481aa86><!--[-->`);
+          _push(`<li class="group" data-v-a8b15715><h5 class="title" data-v-a8b15715><i class="iconfont icon-route" data-v-a8b15715></i><span class="text" data-v-a8b15715>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-a8b15715><!--[-->`);
           ssrRenderList(trip.segments, (segment, index) => {
-            _push(`<li class="${ssrRenderClass([{ actived: unref(getFlatSegmentId)(trip.id, index) === unref(lastActiveSegmentId) }, "item"])}"${ssrRenderAttr("title", segment.name)} data-v-7481aa86><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(segment.name)}</span></li>`);
+            _push(`<li class="${ssrRenderClass([{ actived: unref(getFlatSegmentId)(trip.id, index) === unref(lastActiveSegmentId) }, "item"])}"${ssrRenderAttr("title", segment.name)} data-v-a8b15715><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-a8b15715></i><span class="text" data-v-a8b15715>${ssrInterpolate(segment.name)}</span></li>`);
           });
           _push(`<!--]--></ul></li>`);
         });
-        _push(`<!--]--></ul><ul class="group-list" data-v-7481aa86><!--[-->`);
+        _push(`<!--]--></ul><ul class="group-list" data-v-a8b15715><!--[-->`);
         ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
-          _push(`<li class="group" data-v-7481aa86><h5 class="title" data-v-7481aa86><i class="iconfont icon-map" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(folder.name)}</span><span class="count" data-v-7481aa86>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+          _push(`<li class="group" data-v-a8b15715><h5 class="title" data-v-a8b15715><i class="iconfont icon-map" data-v-a8b15715></i><span class="text" data-v-a8b15715>${ssrInterpolate(folder.name)}</span><span class="count" data-v-a8b15715>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
           if (!folder.placemarks.length) {
-            _push(`<div class="empty" data-v-7481aa86>null</div>`);
+            _push(`<div class="empty" data-v-a8b15715>null</div>`);
           } else {
-            _push(`<ul class="child-list placemarks" data-v-7481aa86><!--[-->`);
+            _push(`<ul class="child-list placemarks" data-v-a8b15715><!--[-->`);
             ssrRenderList(folder.placemarks, (placemark, i) => {
-              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-7481aa86>`);
+              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-a8b15715>`);
               _push(ssrRenderComponent(_component_uimage, {
                 class: "icon",
                 cdn: true,
                 src: "/images/third-party/mapbox-veterinary.svg"
               }, null, _parent));
-              _push(`<span class="text" data-v-7481aa86>${ssrInterpolate(placemark.name)}</span></li>`);
+              _push(`<span class="text" data-v-a8b15715>${ssrInterpolate(placemark.name)}</span></li>`);
             });
             _push(`<!--]--></ul>`);
           }
@@ -11637,7 +11637,7 @@ _sfc_main$15.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
   return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
 };
-const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-7481aa86"]]);
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-a8b15715"]]);
 const _sfc_main$14 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
