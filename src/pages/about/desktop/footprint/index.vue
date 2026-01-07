@@ -43,6 +43,7 @@
             <i18n :zh="APP_META.about_page_geo_zh_title" :en="APP_META.about_page_geo_en_title" />
           </span>
         </button>
+        <div class="divider"></div>
         <button class="item" @click="openModal">
           <i class="iconfont icon-route"></i>
           <span class="text">
@@ -116,10 +117,15 @@
       .buttons {
         flex-shrink: 0;
         margin-bottom: $gap-lg;
-        padding: $gap-xs $gap;
+        padding: $gap-xs 0;
         width: 100%;
 
+        .divider {
+          border-top: 1px dashed $module-bg-darker-1;
+        }
+
         .item {
+          padding: 0 $gap;
           display: block;
           width: 100%;
           text-align: left;
@@ -142,10 +148,13 @@
         flex: 1;
         list-style: none;
         margin: 0;
-        padding: $gap-sm $gap;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
         .item {
           display: block;
+          padding: 0 $gap;
           line-height: 2.4em;
           color: $color-text-secondary;
           &:hover {

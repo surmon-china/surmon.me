@@ -3,6 +3,16 @@ import { shallowRef, computed } from 'vue'
 import { APP_CONFIG } from '/@/configs/app.config'
 import vanilla from '/@/services/vanilla'
 
+// Bangkok: [100.54126850944652, 13.731420002813918]
+// ChiangMai: [98.99340695630075, 18.78774164878941]
+// WatSuanSantidham: [101.07954818227795, 13.179610565376864]
+// SiemReap: [103.85948194767982, 13.44170711791299]
+// DEKL: [101.88414, 3.02675]
+// Xi'an: [108.94234176114963, 34.261012869752534]
+// Lhasa: [91.11735015436409, 29.65794847599321]
+// TibetGar: [80.12582, 32.49448]
+// Delingha: [97.37135478972726, 37.36417118624104]
+
 export enum TripSegmentTransport {
   Meditation = -1,
   Nil = 0,
@@ -70,6 +80,8 @@ const getCoordinatesBounds = (coordinates: [number, number][]): LngLatBoundsLike
   ]
 }
 
+export const getFlatSegmentId = (tripId: string, index: number) => `${tripId}-${index}`
+
 const getSegmentLineId = (segmentId: string) => `trip-segment-line-${segmentId}`
 const getSegmentLineHighlightId = (segmentId: string) => `${getSegmentLineId(segmentId)}-highlight`
 const getSegmentLineActiveId = (segmentId: string) => `${getSegmentLineId(segmentId)}-active`
@@ -77,25 +89,26 @@ const getSegmentLineActiveId = (segmentId: string) => `${getSegmentLineId(segmen
 const getSegmentPointsId = (segmentId: string) => `trip-segment-points-${segmentId}}`
 const getSegmentPointsActiveId = (segmentId: string) => `${getSegmentPointsId(segmentId)}-active`
 
-let lastActiveSegmentId: string | null = null
+export const lastActiveSegmentId = shallowRef<string | null>(null)
 
 export const resetActiveTripSegment = (map: MB_Map) => {
-  if (lastActiveSegmentId) {
-    map.setLayoutProperty(getSegmentLineHighlightId(lastActiveSegmentId), 'visibility', 'none')
-    map.setLayoutProperty(getSegmentLineActiveId(lastActiveSegmentId), 'visibility', 'none')
-    map.setLayoutProperty(getSegmentPointsActiveId(lastActiveSegmentId), 'visibility', 'none')
-    lastActiveSegmentId = null
+  if (lastActiveSegmentId.value) {
+    map.setLayoutProperty(getSegmentLineHighlightId(lastActiveSegmentId.value), 'visibility', 'none')
+    map.setLayoutProperty(getSegmentLineActiveId(lastActiveSegmentId.value), 'visibility', 'none')
+    map.setLayoutProperty(getSegmentPointsActiveId(lastActiveSegmentId.value), 'visibility', 'none')
+    lastActiveSegmentId.value = null
   }
 }
 
 export const activateTripSegment = (map: MB_Map, segment: TripSegmentFlat) => {
   resetActiveTripSegment(map)
   if (!segment.coordinates.length) return
-  lastActiveSegmentId = segment.id
+  lastActiveSegmentId.value = segment.id
   map.setLayoutProperty(getSegmentLineHighlightId(segment.id), 'visibility', 'visible')
   map.setLayoutProperty(getSegmentLineActiveId(segment.id), 'visibility', 'visible')
   map.setLayoutProperty(getSegmentPointsActiveId(segment.id), 'visibility', 'visible')
   map.fitBounds(getCoordinatesBounds(segment.coordinates), {
+    maxDuration: 8000,
     padding: {
       top: 80,
       bottom: 80,
@@ -119,20 +132,16 @@ export const useMapTripSegments = () => {
     return configJson.value.flatMap((trip) => {
       return trip.segments.map((segment, index) => ({
         ...segment,
-        id: `${trip.id}-${index}`,
+        id: getFlatSegmentId(trip.id, index),
         tripId: trip.id,
         tripName: trip.name
       }))
     })
   })
 
-  const segmentsMap = computed<SegmentsMap>(() => {
+  const flatSegmentsMap = computed<SegmentsMap>(() => {
     return new Map(flatSegments.value.map((r) => [r.id, r]))
   })
-
-  const findFlatSegment = (tripId: string, index: number) => {
-    return segmentsMap.value.get(`${tripId}-${index}`)
-  }
 
   const geoJson = computed(() => {
     return flatSegments.value.map((segment) => {
@@ -176,8 +185,7 @@ export const useMapTripSegments = () => {
     configJson,
     fetchConfigJson,
     flatSegments,
-    findFlatSegment,
-    segmentsMap,
+    flatSegmentsMap,
     geoJson
   }
 }

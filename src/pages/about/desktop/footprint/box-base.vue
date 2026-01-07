@@ -111,6 +111,12 @@
         p:last-child {
           margin: 0;
         }
+
+        a {
+          color: #333333;
+          text-decoration: underline;
+          text-underline-offset: 4px;
+        }
       }
     }
   }

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-  import { shallowRef, onMounted } from 'vue'
+  import { shallowRef, onMounted, onBeforeUnmount } from 'vue'
   import type { Map } from 'mapbox-gl'
   import type { MapboxGL } from './mapbox-lib'
   import Mapbox from './box-base.vue'
   import { useMapPlacemarks, addPlacemarksLayerToMap, activatePlacemark } from './mapbox-placemarks'
+  import { lastActiveSegmentId, activateTripSegment, resetActiveTripSegment } from './mapbox-trip-segments'
   import { useMapTripSegments, addTripSegmentsLayersToMap } from './mapbox-trip-segments'
-  import { activateTripSegment, getTransportIconName } from './mapbox-trip-segments'
+  import { getFlatSegmentId, getTransportIconName } from './mapbox-trip-segments'
   import { i18ns } from '../../shared'
 
   const loaded = shallowRef(false)
@@ -24,7 +25,7 @@
       addTripSegmentsLayersToMap(
         payload.map,
         mapTss.flatSegments.value,
-        mapTss.segmentsMap.value,
+        mapTss.flatSegmentsMap.value,
         mapTss.geoJson.value
       )
     })
@@ -38,6 +39,10 @@
   onMounted(() => {
     mapPms.fetchKmlJson()
     mapTss.fetchConfigJson()
+  })
+
+  onBeforeUnmount(() => {
+    resetActiveTripSegment(map.value!)
   })
 </script>
 
@@ -62,10 +67,13 @@
             <ul class="child-list">
               <li
                 class="item"
+                :class="{ actived: getFlatSegmentId(trip.id, index) === lastActiveSegmentId }"
                 :key="index"
                 :title="segment.name"
                 v-for="(segment, index) in trip.segments"
-                @click="activateTripSegment(map!, mapTss.findFlatSegment(trip.id, index)!)"
+                @click="
+                  activateTripSegment(map!, mapTss.flatSegmentsMap.value.get(getFlatSegmentId(trip.id, index))!)
+                "
               >
                 <i class="iconfont" :class="getTransportIconName(segment.transport)"></i>
                 <span class="text">{{ segment.name }}</span>
@@ -197,6 +205,9 @@
                 cursor: pointer;
                 &:hover {
                   color: $color-text;
+                }
+                &.actived {
+                  color: $surmon;
                 }
 
                 .icon {
