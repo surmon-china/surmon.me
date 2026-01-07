@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.3";
+const APP_VERSION = "5.6.4";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -11111,7 +11111,7 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
         class: "mapbox",
         ref_key: "container",
         ref: container
-      }, _attrs))} data-v-439ba1e2></div>`);
+      }, _attrs))} data-v-21805cc8></div>`);
     };
   }
 });
@@ -11121,7 +11121,7 @@ _sfc_main$16.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
   return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-439ba1e2"]]);
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-21805cc8"]]);
 const PLACEMARK_LAYER_ID = "placemarks";
 const useMapPlacemarks = () => {
   const kmlJson = shallowRef(null);
@@ -11248,28 +11248,30 @@ const getCoordinatesBounds = (coordinates) => {
     [maxLng, maxLat]
   ];
 };
+const getFlatSegmentId = (tripId, index) => `${tripId}-${index}`;
 const getSegmentLineId = (segmentId) => `trip-segment-line-${segmentId}`;
 const getSegmentLineHighlightId = (segmentId) => `${getSegmentLineId(segmentId)}-highlight`;
 const getSegmentLineActiveId = (segmentId) => `${getSegmentLineId(segmentId)}-active`;
 const getSegmentPointsId = (segmentId) => `trip-segment-points-${segmentId}}`;
 const getSegmentPointsActiveId = (segmentId) => `${getSegmentPointsId(segmentId)}-active`;
-let lastActiveSegmentId = null;
+const lastActiveSegmentId = shallowRef(null);
 const resetActiveTripSegment = (map) => {
-  if (lastActiveSegmentId) {
-    map.setLayoutProperty(getSegmentLineHighlightId(lastActiveSegmentId), "visibility", "none");
-    map.setLayoutProperty(getSegmentLineActiveId(lastActiveSegmentId), "visibility", "none");
-    map.setLayoutProperty(getSegmentPointsActiveId(lastActiveSegmentId), "visibility", "none");
-    lastActiveSegmentId = null;
+  if (lastActiveSegmentId.value) {
+    map.setLayoutProperty(getSegmentLineHighlightId(lastActiveSegmentId.value), "visibility", "none");
+    map.setLayoutProperty(getSegmentLineActiveId(lastActiveSegmentId.value), "visibility", "none");
+    map.setLayoutProperty(getSegmentPointsActiveId(lastActiveSegmentId.value), "visibility", "none");
+    lastActiveSegmentId.value = null;
   }
 };
 const activateTripSegment = (map, segment) => {
   resetActiveTripSegment(map);
   if (!segment.coordinates.length) return;
-  lastActiveSegmentId = segment.id;
+  lastActiveSegmentId.value = segment.id;
   map.setLayoutProperty(getSegmentLineHighlightId(segment.id), "visibility", "visible");
   map.setLayoutProperty(getSegmentLineActiveId(segment.id), "visibility", "visible");
   map.setLayoutProperty(getSegmentPointsActiveId(segment.id), "visibility", "visible");
   map.fitBounds(getCoordinatesBounds(segment.coordinates), {
+    maxDuration: 8e3,
     padding: {
       top: 80,
       bottom: 80,
@@ -11289,18 +11291,15 @@ const useMapTripSegments = () => {
     return configJson.value.flatMap((trip) => {
       return trip.segments.map((segment, index) => ({
         ...segment,
-        id: `${trip.id}-${index}`,
+        id: getFlatSegmentId(trip.id, index),
         tripId: trip.id,
         tripName: trip.name
       }));
     });
   });
-  const segmentsMap = computed(() => {
+  const flatSegmentsMap = computed(() => {
     return new Map(flatSegments.value.map((r) => [r.id, r]));
   });
-  const findFlatSegment = (tripId, index) => {
-    return segmentsMap.value.get(`${tripId}-${index}`);
-  };
   const geoJson = computed(() => {
     return flatSegments.value.map((segment) => {
       const { coordinates, ...baseProperties } = segment;
@@ -11342,8 +11341,7 @@ const useMapTripSegments = () => {
     configJson,
     fetchConfigJson,
     flatSegments,
-    findFlatSegment,
-    segmentsMap,
+    flatSegmentsMap,
     geoJson
   };
 };
@@ -11559,7 +11557,7 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
         addTripSegmentsLayersToMap(
           payload.map,
           mapTss.flatSegments.value,
-          mapTss.segmentsMap.value,
+          mapTss.flatSegmentsMap.value,
           mapTss.geoJson.value
         );
       });
@@ -11572,22 +11570,25 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
       mapPms.fetchKmlJson();
       mapTss.fetchConfigJson();
     });
+    onBeforeUnmount(() => {
+      resetActiveTripSegment(map.value);
+    });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-17a9518b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-7481aa86>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="panel" data-v-17a9518b><div class="head" data-v-17a9518b><h3 class="title" data-v-17a9518b>`);
+      _push(`<div class="panel" data-v-7481aa86><div class="head" data-v-7481aa86><h3 class="title" data-v-7481aa86>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintTitle, null, _parent));
-      _push(`</h3><p class="description" data-v-17a9518b>`);
+      _push(`</h3><p class="description" data-v-7481aa86>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintDescription, null, _parent));
       _push(`</p></div>`);
       if (!loaded.value) {
-        _push(`<div class="content-skeleton" data-v-17a9518b><!--[-->`);
+        _push(`<div class="content-skeleton" data-v-7481aa86><!--[-->`);
         ssrRenderList(5, (i) => {
           _push(ssrRenderComponent(_component_skeleton_line, {
             class: "skeleton-item",
@@ -11596,29 +11597,29 @@ const _sfc_main$15 = /* @__PURE__ */ defineComponent({
         });
         _push(`<!--]--></div>`);
       } else {
-        _push(`<div class="content" data-v-17a9518b><ul class="group-list" data-v-17a9518b><!--[-->`);
+        _push(`<div class="content" data-v-7481aa86><ul class="group-list" data-v-7481aa86><!--[-->`);
         ssrRenderList(unref(mapTss).configJson.value, (trip) => {
-          _push(`<li class="group" data-v-17a9518b><h5 class="title" data-v-17a9518b><i class="iconfont icon-route" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-17a9518b><!--[-->`);
+          _push(`<li class="group" data-v-7481aa86><h5 class="title" data-v-7481aa86><i class="iconfont icon-route" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-7481aa86><!--[-->`);
           ssrRenderList(trip.segments, (segment, index) => {
-            _push(`<li class="item"${ssrRenderAttr("title", segment.name)} data-v-17a9518b><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(segment.name)}</span></li>`);
+            _push(`<li class="${ssrRenderClass([{ actived: unref(getFlatSegmentId)(trip.id, index) === unref(lastActiveSegmentId) }, "item"])}"${ssrRenderAttr("title", segment.name)} data-v-7481aa86><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(segment.name)}</span></li>`);
           });
           _push(`<!--]--></ul></li>`);
         });
-        _push(`<!--]--></ul><ul class="group-list" data-v-17a9518b><!--[-->`);
+        _push(`<!--]--></ul><ul class="group-list" data-v-7481aa86><!--[-->`);
         ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
-          _push(`<li class="group" data-v-17a9518b><h5 class="title" data-v-17a9518b><i class="iconfont icon-map" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(folder.name)}</span><span class="count" data-v-17a9518b>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+          _push(`<li class="group" data-v-7481aa86><h5 class="title" data-v-7481aa86><i class="iconfont icon-map" data-v-7481aa86></i><span class="text" data-v-7481aa86>${ssrInterpolate(folder.name)}</span><span class="count" data-v-7481aa86>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
           if (!folder.placemarks.length) {
-            _push(`<div class="empty" data-v-17a9518b>null</div>`);
+            _push(`<div class="empty" data-v-7481aa86>null</div>`);
           } else {
-            _push(`<ul class="child-list placemarks" data-v-17a9518b><!--[-->`);
+            _push(`<ul class="child-list placemarks" data-v-7481aa86><!--[-->`);
             ssrRenderList(folder.placemarks, (placemark, i) => {
-              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-17a9518b>`);
+              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-7481aa86>`);
               _push(ssrRenderComponent(_component_uimage, {
                 class: "icon",
                 cdn: true,
                 src: "/images/third-party/mapbox-veterinary.svg"
               }, null, _parent));
-              _push(`<span class="text" data-v-17a9518b>${ssrInterpolate(placemark.name)}</span></li>`);
+              _push(`<span class="text" data-v-7481aa86>${ssrInterpolate(placemark.name)}</span></li>`);
             });
             _push(`<!--]--></ul>`);
           }
@@ -11636,7 +11637,7 @@ _sfc_main$15.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
   return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
 };
-const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-17a9518b"]]);
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-7481aa86"]]);
 const _sfc_main$14 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -11651,7 +11652,7 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_ulink = resolveComponent("ulink");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-75440903>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "footprint-map" }, _attrs))} data-v-969e784d>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -11688,19 +11689,19 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="mapbox-wrapper" data-v-75440903>`);
+      _push(`<div class="mapbox-wrapper" data-v-969e784d>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="toolbar" data-v-75440903>`);
+      _push(`<div class="toolbar" data-v-969e784d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "button",
         href: unref(VALUABLE_LINKS).GOOGLE_MY_MAP
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-google-maps" data-v-75440903${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-google-maps" data-v-969e784d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-google-maps" })
@@ -11709,29 +11710,29 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="button" data-v-75440903><i class="iconfont icon-fullscreen" data-v-75440903></i></button></div></div><div class="legends" data-v-75440903><div class="buttons" data-v-75440903><button class="item" data-v-75440903><i class="iconfont icon-location" data-v-75440903></i><span class="text" data-v-75440903>`);
+      _push(`<button class="button" data-v-969e784d><i class="iconfont icon-fullscreen" data-v-969e784d></i></button></div></div><div class="legends" data-v-969e784d><div class="buttons" data-v-969e784d><button class="item" data-v-969e784d><i class="iconfont icon-location" data-v-969e784d></i><span class="text" data-v-969e784d>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: unref(APP_META).about_page_geo_zh_title,
         en: unref(APP_META).about_page_geo_en_title
       }, null, _parent));
-      _push(`</span></button><button class="item" data-v-75440903><i class="iconfont icon-route" data-v-75440903></i><span class="text" data-v-75440903>`);
+      _push(`</span></button><div class="divider" data-v-969e784d></div><button class="item" data-v-969e784d><i class="iconfont icon-route" data-v-969e784d></i><span class="text" data-v-969e784d>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "我的旅行足迹",
         en: "My Journeys"
       }, null, _parent));
-      _push(`</span></button></div><div class="links" data-v-75440903>`);
+      _push(`</span></button></div><div class="links" data-v-969e784d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item",
         href: "https://goo.gl/maps/fzHHMCjuSbbJgBVt9"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(`<i class="iconfont icon-map" data-v-969e784d${_scopeId}></i><span class="text" data-v-969e784d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               zh: "我的美食地图",
               en: "My Foodie Map"
             }, null, _parent2, _scopeId));
-            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-969e784d${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-map" }),
@@ -11753,12 +11754,12 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(`<i class="iconfont icon-map" data-v-969e784d${_scopeId}></i><span class="text" data-v-969e784d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               zh: "我的环球点评",
               en: "My Map Reviews"
             }, null, _parent2, _scopeId));
-            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-969e784d${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-map" }),
@@ -11780,12 +11781,12 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(`<i class="iconfont icon-map" data-v-969e784d${_scopeId}></i><span class="text" data-v-969e784d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               zh: "我去过的地方",
               en: "Places I've Been"
             }, null, _parent2, _scopeId));
-            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-969e784d${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-map" }),
@@ -11807,12 +11808,12 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-map" data-v-75440903${_scopeId}></i><span class="text" data-v-75440903${_scopeId}>`);
+            _push2(`<i class="iconfont icon-map" data-v-969e784d${_scopeId}></i><span class="text" data-v-969e784d${_scopeId}>`);
             _push2(ssrRenderComponent(_component_i18n, {
               zh: "我想去的地方",
               en: "Places I Want to Go"
             }, null, _parent2, _scopeId));
-            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-75440903${_scopeId}></i></span>`);
+            _push2(`<i class="new-window-icon iconfont icon-new-window-s" data-v-969e784d${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-map" }),
@@ -11838,7 +11839,7 @@ _sfc_main$14.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/index.vue");
   return _sfc_setup$14 ? _sfc_setup$14(props, ctx) : void 0;
 };
-const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-75440903"]]);
+const FootprintMap = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-969e784d"]]);
 const getEmailLink = (email) => {
   if (typeof email === "string") {
     return `mailto:${email}`;
