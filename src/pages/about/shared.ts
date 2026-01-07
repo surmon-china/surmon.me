@@ -33,10 +33,6 @@ export interface AboutI18nConfig {
 }
 
 export const i18ns = {
-  footprint: {
-    [Language.Chinese]: '路为纸，地成册，行作笔，心当墨；思无界，行有疆',
-    [Language.English]: 'Every path i went astray built up my Rome.'
-  },
   sponsor: {
     [Language.Chinese]: '随喜赞助',
     [Language.English]: 'Sponsor'
@@ -80,6 +76,14 @@ export const i18ns = {
   telegramGroup: {
     [Language.Chinese]: '自由报社',
     [Language.English]: 'TG Group'
+  },
+  footprintTitle: {
+    [Language.Chinese]: '行脚所至',
+    [Language.English]: 'On the Way'
+  },
+  footprintDescription: {
+    [Language.Chinese]: '路为纸，地成册；思无界，行有疆',
+    [Language.English]: 'Not arrival, but passing through.'
   },
   biography: {
     [Language.Chinese]: [

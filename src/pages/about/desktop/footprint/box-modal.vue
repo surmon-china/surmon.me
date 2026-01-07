@@ -2,37 +2,42 @@
   import { shallowRef, onMounted } from 'vue'
   import type { Map } from 'mapbox-gl'
   import type { MapboxGL } from './mapbox-lib'
-  import { markdownToHTML } from '/@/transforms/markdown'
-  import { useMapPlacemarks, addPlacemarksLayerToMap, activatePlacemark } from './mapbox-placemarks'
-  import {
-    TripRouteTransport,
-    useMapTripRoutes,
-    addTripRoutesLayersToMap,
-    activateTripRoute
-  } from './mapbox-trip-routes'
   import Mapbox from './box-base.vue'
+  import { useMapPlacemarks, addPlacemarksLayerToMap, activatePlacemark } from './mapbox-placemarks'
+  import { useMapTripSegments, addTripSegmentsLayersToMap } from './mapbox-trip-segments'
+  import { activateTripSegment, getTransportIconName } from './mapbox-trip-segments'
+  import { i18ns } from '../../shared'
 
+  const loaded = shallowRef(false)
   const lib = shallowRef<MapboxGL>()
   const map = shallowRef<Map>()
   const mapPms = useMapPlacemarks()
-  const mapTrs = useMapTripRoutes()
+  const mapTss = useMapTripSegments()
 
   const handleMapboxLoad = (payload: { lib: MapboxGL; map: Map }) => {
-    // initialize mapbox lib and map instance
+    // Initialize mapbox lib and map instance
     lib.value = payload.lib
     map.value = payload.map
-    // fetch sources and add layers
-    mapPms.fetchKmlJson().then(() => {
-      addPlacemarksLayerToMap(payload.lib, payload.map, mapPms.geoJson.value)
+    // Fetch sources and add layers
+    const pmsRequest = mapPms.fetchKmlJson()
+    const tssRequest = mapTss.fetchConfigJson().then(() => {
+      addTripSegmentsLayersToMap(
+        payload.map,
+        mapTss.flatSegments.value,
+        mapTss.segmentsMap.value,
+        mapTss.geoJson.value
+      )
     })
-    mapTrs.fetchConfigJson().then(() => {
-      addTripRoutesLayersToMap(payload.map, mapTrs.configJson.value, mapTrs.geoJsonCollections.value)
+    Promise.all([pmsRequest, tssRequest]).finally(() => {
+      // To ensure that placemarks layer are always on the top level
+      addPlacemarksLayerToMap(payload.lib, payload.map, mapPms.geoJson.value)
+      loaded.value = true
     })
   }
 
   onMounted(() => {
     mapPms.fetchKmlJson()
-    mapTrs.fetchConfigJson()
+    mapTss.fetchConfigJson()
   })
 </script>
 
@@ -41,50 +46,46 @@
     <mapbox class="mapbox" @load="handleMapboxLoad" />
     <div class="panel">
       <div class="head">
-        <h3 class="title">{{ mapPms.kmlJson.value?.name ?? '-' }}</h3>
-        <p class="description">{{ mapPms.kmlJson.value?.description ?? '-' }}</p>
+        <h3 class="title"><i18n v-bind="i18ns.footprintTitle" /></h3>
+        <p class="description"><i18n v-bind="i18ns.footprintDescription" /></p>
       </div>
-      <div class="content">
-        <ul class="routes">
-          <li
-            class="route-item"
-            :key="index"
-            v-for="(route, index) in mapTrs.configJson.value"
-            @click="activateTripRoute(map!, route)"
-          >
+      <div class="content-skeleton" key="skeleton" v-if="!loaded">
+        <skeleton-line class="skeleton-item" :key="i" v-for="i in 5" />
+      </div>
+      <div class="content" key="content" v-else>
+        <ul class="group-list">
+          <li class="group" :key="trip.id" v-for="trip in mapTss.configJson.value">
             <h5 class="title">
-              <i class="iconfont icon-transport-flight" v-if="route.transport === TripRouteTransport.Flight"></i>
-              <i class="iconfont icon-transport-train" v-else-if="route.transport === TripRouteTransport.Train"></i>
-              <i class="iconfont icon-transport-bus" v-else-if="route.transport === TripRouteTransport.Bus"></i>
-              <i class="iconfont icon-transport-ship" v-else-if="route.transport === TripRouteTransport.Ship"></i>
-              <i
-                class="iconfont icon-transport-helmet"
-                v-else-if="route.transport === TripRouteTransport.Motorcycle"
-              ></i>
-              <i
-                class="iconfont icon-transport-bicycle"
-                v-else-if="route.transport === TripRouteTransport.Bicycle"
-              ></i>
-              <i class="iconfont icon-transport-walk" v-else-if="route.transport === TripRouteTransport.Walk"></i>
-              <i class="iconfont icon-route" v-else-if="route.transport === TripRouteTransport.Null"></i>
-              <i class="iconfont icon-route" v-else></i>
-              <span class="text">{{ route.name }}</span>
+              <i class="iconfont icon-route"></i>
+              <span class="text">{{ trip.name }}</span>
             </h5>
-            <p class="description" v-html="markdownToHTML(route.description)"></p>
+            <ul class="child-list">
+              <li
+                class="item"
+                :key="index"
+                :title="segment.name"
+                v-for="(segment, index) in trip.segments"
+                @click="activateTripSegment(map!, mapTss.findFlatSegment(trip.id, index)!)"
+              >
+                <i class="iconfont" :class="getTransportIconName(segment.transport)"></i>
+                <span class="text">{{ segment.name }}</span>
+              </li>
+            </ul>
           </li>
         </ul>
-        <ul class="folders">
-          <li class="folder-item" :key="index" v-for="(folder, index) in mapPms.folders.value">
+        <ul class="group-list">
+          <li class="group" :key="index" v-for="(folder, index) in mapPms.folders.value">
             <h5 class="title">
               <i class="iconfont icon-map"></i>
               <span class="text">{{ folder.name }}</span>
               <span class="count">({{ folder.placemarks.length }})</span>
             </h5>
             <div class="empty" v-if="!folder.placemarks.length">null</div>
-            <ul class="placemarks" v-else>
+            <ul class="child-list placemarks" v-else>
               <li
-                class="placemark-item"
+                class="item"
                 :key="i"
+                :title="placemark.name"
                 v-for="(placemark, i) in folder.placemarks"
                 @click="activatePlacemark(lib!, map!, placemark)"
               >
@@ -126,7 +127,7 @@
       box-shadow: 0px 0px 8px 4px rgb(0 0 0 / 10%);
 
       .head {
-        margin-bottom: 2rem;
+        margin-bottom: $gap-lg;
         padding-bottom: $gap-lg;
         border-bottom: 1px solid $module-bg-darker-1;
 
@@ -141,106 +142,78 @@
         }
       }
 
-      .content {
-        overflow: auto;
-      }
-
-      .routes {
-        list-style: none;
-        padding: 0;
-
-        .route-item {
-          scroll-snap-align: start;
-          margin-bottom: $gap-lg;
-
-          &:hover {
-            cursor: pointer;
-            .description {
-              color: $color-text;
-            }
-          }
-
-          .title {
-            margin-top: 0;
-            margin-bottom: $gap-sm;
-
-            .text {
-              margin-left: $gap-sm;
-            }
-          }
-
-          .description {
-            margin: 0;
-            padding-left: $gap-xs * 6;
-            line-height: 1.8em;
-            font-size: $font-size-small;
-            color: $color-text-secondary;
-            ::v-deep(p) {
-              &:last-child {
-                margin-bottom: 0;
-              }
-            }
-          }
+      .content-skeleton {
+        .skeleton-item {
+          margin-bottom: $gap;
         }
       }
 
-      .folders {
-        list-style: none;
-        padding: 0;
+      .content {
+        overflow: auto;
 
-        .folder-item {
-          scroll-snap-align: start;
-
+        .group-list {
+          list-style: none;
+          padding: 0;
           &:last-child {
-            .placemarks {
-              &:last-child {
+            margin-bottom: 0;
+          }
+
+          .group {
+            &:last-child {
+              .child-list:last-child {
                 margin-bottom: 0;
               }
             }
-          }
 
-          .title {
-            margin-bottom: $gap-sm;
+            .title {
+              margin-top: 0;
+              margin-bottom: $gap-sm;
 
-            .iconfont {
-              font-weight: normal;
-            }
-
-            .text {
-              margin-left: $gap-sm;
-              margin-right: $gap-xs;
-            }
-          }
-
-          .empty,
-          .placemarks {
-            padding-left: 1rem;
-            margin-bottom: $gap;
-            color: $color-text-secondary;
-          }
-
-          .placemarks {
-            list-style: none;
-            overflow: hidden;
-
-            .placemark-item {
-              display: flex;
-              scroll-snap-align: start;
-              line-height: 2.2;
-              cursor: pointer;
-              &:hover {
-                color: $color-text;
-              }
-
-              .icon {
-                width: 1.4em;
-                margin-top: -2px;
+              .iconfont {
+                font-weight: normal;
               }
 
               .text {
                 margin-left: $gap-sm;
-                max-width: 80%;
-                @include mix.text-overflow();
+                margin-right: $gap-xs;
+              }
+            }
+
+            .empty,
+            .child-list {
+              padding-left: 1rem;
+              margin-bottom: $gap;
+              color: $color-text-secondary;
+            }
+
+            .child-list {
+              list-style: none;
+              overflow: hidden;
+
+              .item {
+                display: flex;
+                scroll-snap-align: start;
+                line-height: 2.2;
+                cursor: pointer;
+                &:hover {
+                  color: $color-text;
+                }
+
+                .icon {
+                  width: 1.4em;
+                  margin-top: -2px;
+                }
+
+                .iconfont {
+                  width: 1.4em;
+                  text-align: center;
+                }
+
+                .text {
+                  margin-left: $gap-sm;
+                  max-width: 80%;
+                  @include mix.text-overflow();
+                }
               }
             }
           }
