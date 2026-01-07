@@ -176,6 +176,7 @@
             .title {
               margin-top: 0;
               margin-bottom: $gap-sm;
+              font-weight: bold;
 
               .iconfont {
                 font-weight: normal;

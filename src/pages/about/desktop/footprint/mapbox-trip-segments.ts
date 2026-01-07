@@ -33,7 +33,7 @@ export const getTransportIconName = (transport: TripSegmentTransport) => {
   if (transport === TripSegmentTransport.Train) return 'icon-transport-train'
   if (transport === TripSegmentTransport.Bus) return 'icon-transport-bus'
   if (transport === TripSegmentTransport.Ship) return 'icon-transport-ship'
-  if (transport === TripSegmentTransport.Motorcycle) return 'icon-transport-helmet'
+  if (transport === TripSegmentTransport.Motorcycle) return 'icon-transport-motocycle'
   if (transport === TripSegmentTransport.Bicycle) return 'icon-transport-bicycle'
   if (transport === TripSegmentTransport.Walk) return 'icon-transport-walk'
   if (transport === TripSegmentTransport.Hiking) return 'icon-transport-hiking'
