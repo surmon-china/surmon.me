@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.2";
+const APP_VERSION = "5.6.3";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -11050,6 +11050,78 @@ _sfc_main$17.setup = (props, ctx) => {
   return _sfc_setup$17 ? _sfc_setup$17(props, ctx) : void 0;
 };
 const AggregateCalendar = /* @__PURE__ */ _export_sfc(_sfc_main$17, [["__scopeId", "data-v-0f6ba0ff"]]);
+const importMapbox = () => {
+  Promise.resolve().then(() => mapboxGl);
+  return Promise.all([
+    import("mapbox-gl").then((result) => result.default),
+    new Promise((resolve) => window.setTimeout(resolve, 460))
+  ]).then(([mapboxgl]) => mapboxgl);
+};
+const addLivingMarkerToMap = (lib, map) => {
+  return new lib.Marker({
+    color: APP_CONFIG.primary_color,
+    anchor: "bottom"
+  }).setLngLat(APP_META.about_page_geo_coordinates).addTo(map);
+};
+const _sfc_main$16 = /* @__PURE__ */ defineComponent({
+  __name: "box-base",
+  __ssrInlineRender: true,
+  emits: ["load", "style-load"],
+  setup(__props, { emit: __emit }) {
+    const emit = __emit;
+    const { isDarkTheme } = useEnhancer();
+    const container = shallowRef();
+    const lib = shallowRef();
+    const map = shallowRef();
+    const getMapStyle = () => {
+      return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
+    };
+    onBeforeMount(() => {
+      watch(
+        () => isDarkTheme.value,
+        () => map.value?.setStyle(getMapStyle())
+      );
+    });
+    onBeforeUnmount(() => {
+      map.value?.remove();
+    });
+    onMounted(async () => {
+      const _lib = await importMapbox();
+      _lib.accessToken = MAPBOX_CONFIG.TOKEN;
+      const _map = new _lib.Map({
+        container: container.value,
+        center: MAPBOX_CONFIG.CENTER,
+        zoom: MAPBOX_CONFIG.ZOOM,
+        minZoom: 2.2,
+        attributionControl: false,
+        style: getMapStyle()
+      });
+      addLivingMarkerToMap(_lib, _map);
+      _map.on("style.load", () => {
+        emit("style-load", { map: _map, lib: _lib });
+      });
+      _map.on("load", () => {
+        emit("load", { map: _map, lib: _lib });
+      });
+      lib.value = _lib;
+      map.value = _map;
+    });
+    return (_ctx, _push, _parent, _attrs) => {
+      _push(`<div${ssrRenderAttrs(mergeProps({
+        class: "mapbox",
+        ref_key: "container",
+        ref: container
+      }, _attrs))} data-v-439ba1e2></div>`);
+    };
+  }
+});
+const _sfc_setup$16 = _sfc_main$16.setup;
+_sfc_main$16.setup = (props, ctx) => {
+  const ssrContext = useSSRContext();
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
+  return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
+};
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-439ba1e2"]]);
 const PLACEMARK_LAYER_ID = "placemarks";
 const useMapPlacemarks = () => {
   const kmlJson = shallowRef(null);
@@ -11147,17 +11219,19 @@ const addPlacemarksLayerToMap = (lib, map, geoJson) => {
     createPlacemarkPopup(lib, coordinates, description).addTo(map);
   });
 };
-var TripRouteTransport = /* @__PURE__ */ ((TripRouteTransport2) => {
-  TripRouteTransport2[TripRouteTransport2["Null"] = 0] = "Null";
-  TripRouteTransport2[TripRouteTransport2["Flight"] = 1] = "Flight";
-  TripRouteTransport2[TripRouteTransport2["Train"] = 2] = "Train";
-  TripRouteTransport2[TripRouteTransport2["Bus"] = 3] = "Bus";
-  TripRouteTransport2[TripRouteTransport2["Ship"] = 4] = "Ship";
-  TripRouteTransport2[TripRouteTransport2["Motorcycle"] = 5] = "Motorcycle";
-  TripRouteTransport2[TripRouteTransport2["Bicycle"] = 6] = "Bicycle";
-  TripRouteTransport2[TripRouteTransport2["Walk"] = 7] = "Walk";
-  return TripRouteTransport2;
-})(TripRouteTransport || {});
+const getTransportIconName = (transport) => {
+  if (transport === -1) return "icon-meditation";
+  if (transport === 0) return "icon-route";
+  if (transport === 1) return "icon-transport-flight";
+  if (transport === 2) return "icon-transport-train";
+  if (transport === 3) return "icon-transport-bus";
+  if (transport === 4) return "icon-transport-ship";
+  if (transport === 5) return "icon-transport-helmet";
+  if (transport === 6) return "icon-transport-bicycle";
+  if (transport === 7) return "icon-transport-walk";
+  if (transport === 8) return "icon-transport-hiking";
+  return "icon-route";
+};
 const getCoordinatesBounds = (coordinates) => {
   let minLng = Infinity;
   let minLat = Infinity;
@@ -11174,28 +11248,28 @@ const getCoordinatesBounds = (coordinates) => {
     [maxLng, maxLat]
   ];
 };
-const getRouteLineId = (routeId) => `trip-route-line-${routeId}`;
-const getRouteLineHighlightId = (routeId) => `${getRouteLineId(routeId)}-highlight`;
-const getRouteLineActiveId = (routeId) => `${getRouteLineId(routeId)}-active`;
-const getRoutePointsId = (routeId) => `trip-route-points-${routeId}`;
-const getRoutePointsActiveId = (routeId) => `${getRoutePointsId(routeId)}-active`;
-let lastActiveRouteId = null;
-const resetActiveTripRoute = (map) => {
-  if (lastActiveRouteId) {
-    map.setLayoutProperty(getRouteLineHighlightId(lastActiveRouteId), "visibility", "none");
-    map.setLayoutProperty(getRouteLineActiveId(lastActiveRouteId), "visibility", "none");
-    map.setLayoutProperty(getRoutePointsActiveId(lastActiveRouteId), "visibility", "none");
-    lastActiveRouteId = null;
+const getSegmentLineId = (segmentId) => `trip-segment-line-${segmentId}`;
+const getSegmentLineHighlightId = (segmentId) => `${getSegmentLineId(segmentId)}-highlight`;
+const getSegmentLineActiveId = (segmentId) => `${getSegmentLineId(segmentId)}-active`;
+const getSegmentPointsId = (segmentId) => `trip-segment-points-${segmentId}}`;
+const getSegmentPointsActiveId = (segmentId) => `${getSegmentPointsId(segmentId)}-active`;
+let lastActiveSegmentId = null;
+const resetActiveTripSegment = (map) => {
+  if (lastActiveSegmentId) {
+    map.setLayoutProperty(getSegmentLineHighlightId(lastActiveSegmentId), "visibility", "none");
+    map.setLayoutProperty(getSegmentLineActiveId(lastActiveSegmentId), "visibility", "none");
+    map.setLayoutProperty(getSegmentPointsActiveId(lastActiveSegmentId), "visibility", "none");
+    lastActiveSegmentId = null;
   }
 };
-const activateTripRoute = (map, route) => {
-  resetActiveTripRoute(map);
-  if (!route.coordinates.length) return;
-  lastActiveRouteId = route.id;
-  map.setLayoutProperty(getRouteLineHighlightId(route.id), "visibility", "visible");
-  map.setLayoutProperty(getRouteLineActiveId(route.id), "visibility", "visible");
-  map.setLayoutProperty(getRoutePointsActiveId(route.id), "visibility", "visible");
-  map.fitBounds(getCoordinatesBounds(route.coordinates), {
+const activateTripSegment = (map, segment) => {
+  resetActiveTripSegment(map);
+  if (!segment.coordinates.length) return;
+  lastActiveSegmentId = segment.id;
+  map.setLayoutProperty(getSegmentLineHighlightId(segment.id), "visibility", "visible");
+  map.setLayoutProperty(getSegmentLineActiveId(segment.id), "visibility", "visible");
+  map.setLayoutProperty(getSegmentPointsActiveId(segment.id), "visibility", "visible");
+  map.fitBounds(getCoordinatesBounds(segment.coordinates), {
     padding: {
       top: 80,
       bottom: 80,
@@ -11204,27 +11278,43 @@ const activateTripRoute = (map, route) => {
     }
   });
 };
-const useMapTripRoutes = () => {
+const useMapTripSegments = () => {
   const configJson = shallowRef([]);
   const fetchConfigJson = () => {
-    return configJson.value.length ? Promise.resolve() : vanilla.get("/data/footprint-trip-routes.json").then((result) => {
+    return configJson.value.length ? Promise.resolve() : vanilla.get("/data/footprint-trips.json").then((result) => {
       configJson.value = result.data;
     });
   };
-  const geoJsonCollections = computed(() => {
-    return configJson.value.map((route) => {
-      const { coordinates, ...properties } = route;
-      const startPoint = coordinates[0];
-      const endPoint = coordinates[coordinates.length - 1];
+  const flatSegments = computed(() => {
+    return configJson.value.flatMap((trip) => {
+      return trip.segments.map((segment, index) => ({
+        ...segment,
+        id: `${trip.id}-${index}`,
+        tripId: trip.id,
+        tripName: trip.name
+      }));
+    });
+  });
+  const segmentsMap = computed(() => {
+    return new Map(flatSegments.value.map((r) => [r.id, r]));
+  });
+  const findFlatSegment = (tripId, index) => {
+    return segmentsMap.value.get(`${tripId}-${index}`);
+  };
+  const geoJson = computed(() => {
+    return flatSegments.value.map((segment) => {
+      const { coordinates, ...baseProperties } = segment;
+      const startPoint = segment.coordinates[0];
+      const endPoint = segment.coordinates.at(-1);
       return {
-        id: properties.id,
+        id: segment.id,
         type: "FeatureCollection",
         features: [
           {
             type: "Feature",
-            id: getRouteLineId(properties.id),
+            id: getSegmentLineId(segment.id),
             properties: {
-              ...properties,
+              ...baseProperties,
               role: "line"
             },
             geometry: {
@@ -11234,9 +11324,9 @@ const useMapTripRoutes = () => {
           },
           {
             type: "Feature",
-            id: getRoutePointsId(properties.id),
+            id: getSegmentPointsId(segment.id),
             properties: {
-              ...properties,
+              ...baseProperties,
               role: "points"
             },
             geometry: {
@@ -11251,20 +11341,23 @@ const useMapTripRoutes = () => {
   return {
     configJson,
     fetchConfigJson,
-    geoJsonCollections
+    flatSegments,
+    findFlatSegment,
+    segmentsMap,
+    geoJson
   };
 };
-const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
-  geoJsonCollections.forEach((collection) => {
+const addTripSegmentsLayersToMap = (map, flatSegments, segmentsMap, geoJson) => {
+  geoJson.forEach((collection) => {
     if (!map.getSource(collection.id)) {
       map.addSource(collection.id, {
         type: "geojson",
         data: collection
       });
     }
-    if (!map.getLayer(getRouteLineId(collection.id))) {
+    if (!map.getLayer(getSegmentLineId(collection.id))) {
       map.addLayer({
-        id: getRouteLineId(collection.id),
+        id: getSegmentLineId(collection.id),
         type: "line",
         source: collection.id,
         filter: ["==", ["get", "role"], "line"],
@@ -11276,11 +11369,11 @@ const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
           "line-color": APP_CONFIG.primary_color,
           "line-width": 3,
           "line-dasharray": [1, 2],
-          "line-opacity": 0.3
+          "line-opacity": 0.2
         }
       });
       map.addLayer({
-        id: getRouteLineHighlightId(collection.id),
+        id: getSegmentLineHighlightId(collection.id),
         type: "line",
         source: collection.id,
         filter: ["==", ["get", "role"], "line"],
@@ -11296,7 +11389,7 @@ const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
         }
       });
       map.addLayer({
-        id: getRouteLineActiveId(collection.id),
+        id: getSegmentLineActiveId(collection.id),
         type: "line",
         source: collection.id,
         filter: ["==", ["get", "role"], "line"],
@@ -11310,7 +11403,7 @@ const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
         }
       });
       map.addLayer({
-        id: getRoutePointsId(collection.id),
+        id: getSegmentPointsId(collection.id),
         type: "circle",
         source: collection.id,
         filter: ["==", ["get", "role"], "points"],
@@ -11320,11 +11413,11 @@ const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
           "circle-opacity": 0.4,
           "circle-stroke-color": "#ffffff",
           "circle-stroke-width": 2,
-          "circle-stroke-opacity": 0.4
+          "circle-stroke-opacity": 0.3
         }
       });
       map.addLayer({
-        id: getRoutePointsActiveId(collection.id),
+        id: getSegmentPointsActiveId(collection.id),
         type: "circle",
         source: collection.id,
         filter: ["==", ["get", "role"], "points"],
@@ -11340,173 +11433,200 @@ const addTripRoutesLayersToMap = (map, routes2, geoJsonCollections) => {
       });
     }
   });
-  const routeMap = new Map(routes2.map((r) => [r.id, r]));
-  const touchableLayerIds = geoJsonCollections.map((collection) => collection.id).flatMap((id) => [
-    getRouteLineId(id),
-    getRouteLineHighlightId(id),
-    getRouteLineActiveId(id),
-    getRoutePointsId(id),
-    getRoutePointsActiveId(id)
+  const touchableLayerIds = geoJson.map((collection) => collection.id).flatMap((id) => [
+    getSegmentLineId(id),
+    getSegmentLineHighlightId(id),
+    getSegmentLineActiveId(id),
+    getSegmentPointsId(id),
+    getSegmentPointsActiveId(id)
   ]);
   map.on("click", (e) => {
     const features = map.queryRenderedFeatures(e.point, { layers: touchableLayerIds });
     if (features.length) {
-      const routeId = features[0].properties?.id;
-      const route = routeMap.get(routeId);
-      if (route) {
-        activateTripRoute(map, route);
+      const segmentId = features[0].properties?.id;
+      const segment = segmentsMap.get(segmentId);
+      if (segment) {
+        activateTripSegment(map, segment);
       }
     } else {
-      resetActiveTripRoute(map);
+      resetActiveTripSegment(map);
     }
   });
 };
-const importMapbox = () => {
-  Promise.resolve().then(() => mapboxGl);
-  return Promise.all([
-    import("mapbox-gl").then((result) => result.default),
-    new Promise((resolve) => window.setTimeout(resolve, 460))
-  ]).then(([mapboxgl]) => mapboxgl);
+const useAdminAvatar = (avatar) => {
+  return avatar || getAssetURL(useCdnDomain(), "/images/anonymous.png");
 };
-const addLivingMarkerToMap = (lib, map) => {
-  return new lib.Marker({
-    color: APP_CONFIG.primary_color,
-    anchor: "bottom"
-  }).setLngLat(APP_META.about_page_geo_coordinates).addTo(map);
+const useAboutPageMeta = () => {
+  const { i18n, isZhLang } = useEnhancer();
+  const { adminProfile } = useStores();
+  return usePageSeo(() => {
+    const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English));
+    const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ABOUT), enTitle] : [enTitle];
+    return {
+      pageTitles: titles,
+      description: `${isZhLang.value ? "关于" : "About"} ${APP_META.author}`,
+      ogType: "profile",
+      ogImage: adminProfile.data?.avatar
+    };
+  });
 };
-const _sfc_main$16 = /* @__PURE__ */ defineComponent({
-  __name: "box-base",
-  __ssrInlineRender: true,
-  emits: ["load", "style-load"],
-  setup(__props, { emit: __emit }) {
-    const emit = __emit;
-    const { isDarkTheme } = useEnhancer();
-    const container = shallowRef();
-    const lib = shallowRef();
-    const map = shallowRef();
-    const getMapStyle = () => {
-      return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
-    };
-    onBeforeMount(() => {
-      watch(
-        () => isDarkTheme.value,
-        () => map.value?.setStyle(getMapStyle())
-      );
-    });
-    onBeforeUnmount(() => {
-      map.value?.remove();
-    });
-    onMounted(async () => {
-      const _lib = await importMapbox();
-      _lib.accessToken = MAPBOX_CONFIG.TOKEN;
-      const _map = new _lib.Map({
-        container: container.value,
-        center: MAPBOX_CONFIG.CENTER,
-        zoom: MAPBOX_CONFIG.ZOOM,
-        minZoom: 2.2,
-        attributionControl: false,
-        style: getMapStyle()
-      });
-      addLivingMarkerToMap(_lib, _map);
-      _map.on("style.load", () => {
-        emit("style-load", { map: _map, lib: _lib });
-      });
-      _map.on("load", () => {
-        emit("load", { map: _map, lib: _lib });
-      });
-      lib.value = _lib;
-      map.value = _map;
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({
-        class: "mapbox",
-        ref_key: "container",
-        ref: container
-      }, _attrs))} data-v-439ba1e2></div>`);
-    };
+const i18ns = {
+  sponsor: {
+    [Language.Chinese]: "随喜赞助",
+    [Language.English]: "Sponsor"
+  },
+  statement: {
+    [Language.Chinese]: "众而周知",
+    [Language.English]: "Statement"
+  },
+  feedback: {
+    [Language.Chinese]: "向我反馈",
+    [Language.English]: "Feedback"
+  },
+  archive: {
+    [Language.Chinese]: "笔文存档",
+    [Language.English]: "Archive"
+  },
+  photography: {
+    [Language.Chinese]: "行行摄摄",
+    [Language.English]: "PhotoGram"
+  },
+  guestbook: {
+    [Language.Chinese]: "给我留言",
+    [Language.English]: "Guestbook"
+  },
+  snippets: {
+    [Language.Chinese]: "利乐有情",
+    [Language.English]: "Snippets"
+  },
+  nft: {
+    [Language.Chinese]: "数字藏品",
+    [Language.English]: "NFTs"
+  },
+  rss: {
+    [Language.Chinese]: "长期订阅",
+    [Language.English]: "Subscribe"
+  },
+  discordGroup: {
+    [Language.Chinese]: "国际联谊",
+    [Language.English]: "Discord"
+  },
+  telegramGroup: {
+    [Language.Chinese]: "自由报社",
+    [Language.English]: "TG Group"
+  },
+  footprintTitle: {
+    [Language.Chinese]: "行脚所至",
+    [Language.English]: "On the Way"
+  },
+  footprintDescription: {
+    [Language.Chinese]: "路为纸，地成册；思无界，行有疆",
+    [Language.English]: "Not arrival, but passing through."
+  },
+  biography: {
+    [Language.Chinese]: [
+      `嗨！我是 Surmon，法名觉了（jué liǎo），一名野生软件工程师，曾供职于美图秀秀、七牛云、字节跳动、加密交易所。`,
+      `如你所见，我有着还不错的设计灵感和编码能力，我会经常在 GitHub 上开源一些「没用」或「有用」的小物件。`,
+      `如果某些输出恰好帮助了你，期待你的随喜赞助～ `,
+      `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
+      `而这里，我把它称作自己的「数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>」，随缘记录。`,
+      `祝你在这儿玩得愉快！`,
+      `（俗生履历：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
+    ].join(""),
+    [Language.English]: [
+      `Hi! I'm Surmon, a software engineer who has worked at Meitu Inc., Qiniu Cloud, ByteDance, and Crypto Exchange.`,
+      `I have developed strong design inspiration and coding skills.`,
+      `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
+      `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
+      `I call this place my own digital vihāra. Have fun here!`
+    ].join(" ")
   }
-});
-const _sfc_setup$16 = _sfc_main$16.setup;
-_sfc_main$16.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
-  return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-439ba1e2"]]);
 const _sfc_main$15 = /* @__PURE__ */ defineComponent({
   __name: "box-modal",
   __ssrInlineRender: true,
   setup(__props) {
+    const loaded = shallowRef(false);
     const lib = shallowRef();
     const map = shallowRef();
     const mapPms = useMapPlacemarks();
-    const mapTrs = useMapTripRoutes();
+    const mapTss = useMapTripSegments();
     const handleMapboxLoad = (payload) => {
       lib.value = payload.lib;
       map.value = payload.map;
-      mapPms.fetchKmlJson().then(() => {
-        addPlacemarksLayerToMap(payload.lib, payload.map, mapPms.geoJson.value);
+      const pmsRequest = mapPms.fetchKmlJson();
+      const tssRequest = mapTss.fetchConfigJson().then(() => {
+        addTripSegmentsLayersToMap(
+          payload.map,
+          mapTss.flatSegments.value,
+          mapTss.segmentsMap.value,
+          mapTss.geoJson.value
+        );
       });
-      mapTrs.fetchConfigJson().then(() => {
-        addTripRoutesLayersToMap(payload.map, mapTrs.configJson.value, mapTrs.geoJsonCollections.value);
+      Promise.all([pmsRequest, tssRequest]).finally(() => {
+        addPlacemarksLayerToMap(payload.lib, payload.map, mapPms.geoJson.value);
+        loaded.value = true;
       });
     };
     onMounted(() => {
       mapPms.fetchKmlJson();
-      mapTrs.fetchConfigJson();
+      mapTss.fetchConfigJson();
     });
     return (_ctx, _push, _parent, _attrs) => {
+      const _component_i18n = resolveComponent("i18n");
+      const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-b9151fee>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-17a9518b>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="panel" data-v-b9151fee><div class="head" data-v-b9151fee><h3 class="title" data-v-b9151fee>${ssrInterpolate(unref(mapPms).kmlJson.value?.name ?? "-")}</h3><p class="description" data-v-b9151fee>${ssrInterpolate(unref(mapPms).kmlJson.value?.description ?? "-")}</p></div><div class="content" data-v-b9151fee><ul class="routes" data-v-b9151fee><!--[-->`);
-      ssrRenderList(unref(mapTrs).configJson.value, (route, index) => {
-        _push(`<li class="route-item" data-v-b9151fee><h5 class="title" data-v-b9151fee>`);
-        if (route.transport === unref(TripRouteTransport).Flight) {
-          _push(`<i class="iconfont icon-transport-flight" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Train) {
-          _push(`<i class="iconfont icon-transport-train" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Bus) {
-          _push(`<i class="iconfont icon-transport-bus" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Ship) {
-          _push(`<i class="iconfont icon-transport-ship" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Motorcycle) {
-          _push(`<i class="iconfont icon-transport-helmet" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Bicycle) {
-          _push(`<i class="iconfont icon-transport-bicycle" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Walk) {
-          _push(`<i class="iconfont icon-transport-walk" data-v-b9151fee></i>`);
-        } else if (route.transport === unref(TripRouteTransport).Null) {
-          _push(`<i class="iconfont icon-route" data-v-b9151fee></i>`);
-        } else {
-          _push(`<i class="iconfont icon-route" data-v-b9151fee></i>`);
-        }
-        _push(`<span class="text" data-v-b9151fee>${ssrInterpolate(route.name)}</span></h5><p class="description" data-v-b9151fee>${unref(markdownToHTML)(route.description) ?? ""}</p></li>`);
-      });
-      _push(`<!--]--></ul><ul class="folders" data-v-b9151fee><!--[-->`);
-      ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
-        _push(`<li class="folder-item" data-v-b9151fee><h5 class="title" data-v-b9151fee><i class="iconfont icon-map" data-v-b9151fee></i><span class="text" data-v-b9151fee>${ssrInterpolate(folder.name)}</span><span class="count" data-v-b9151fee>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
-        if (!folder.placemarks.length) {
-          _push(`<div class="empty" data-v-b9151fee>null</div>`);
-        } else {
-          _push(`<ul class="placemarks" data-v-b9151fee><!--[-->`);
-          ssrRenderList(folder.placemarks, (placemark, i) => {
-            _push(`<li class="placemark-item" data-v-b9151fee>`);
-            _push(ssrRenderComponent(_component_uimage, {
-              class: "icon",
-              cdn: true,
-              src: "/images/third-party/mapbox-veterinary.svg"
-            }, null, _parent));
-            _push(`<span class="text" data-v-b9151fee>${ssrInterpolate(placemark.name)}</span></li>`);
+      _push(`<div class="panel" data-v-17a9518b><div class="head" data-v-17a9518b><h3 class="title" data-v-17a9518b>`);
+      _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintTitle, null, _parent));
+      _push(`</h3><p class="description" data-v-17a9518b>`);
+      _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintDescription, null, _parent));
+      _push(`</p></div>`);
+      if (!loaded.value) {
+        _push(`<div class="content-skeleton" data-v-17a9518b><!--[-->`);
+        ssrRenderList(5, (i) => {
+          _push(ssrRenderComponent(_component_skeleton_line, {
+            class: "skeleton-item",
+            key: i
+          }, null, _parent));
+        });
+        _push(`<!--]--></div>`);
+      } else {
+        _push(`<div class="content" data-v-17a9518b><ul class="group-list" data-v-17a9518b><!--[-->`);
+        ssrRenderList(unref(mapTss).configJson.value, (trip) => {
+          _push(`<li class="group" data-v-17a9518b><h5 class="title" data-v-17a9518b><i class="iconfont icon-route" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-17a9518b><!--[-->`);
+          ssrRenderList(trip.segments, (segment, index) => {
+            _push(`<li class="item"${ssrRenderAttr("title", segment.name)} data-v-17a9518b><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(segment.name)}</span></li>`);
           });
-          _push(`<!--]--></ul>`);
-        }
-        _push(`</li>`);
-      });
-      _push(`<!--]--></ul></div></div></div>`);
+          _push(`<!--]--></ul></li>`);
+        });
+        _push(`<!--]--></ul><ul class="group-list" data-v-17a9518b><!--[-->`);
+        ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
+          _push(`<li class="group" data-v-17a9518b><h5 class="title" data-v-17a9518b><i class="iconfont icon-map" data-v-17a9518b></i><span class="text" data-v-17a9518b>${ssrInterpolate(folder.name)}</span><span class="count" data-v-17a9518b>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+          if (!folder.placemarks.length) {
+            _push(`<div class="empty" data-v-17a9518b>null</div>`);
+          } else {
+            _push(`<ul class="child-list placemarks" data-v-17a9518b><!--[-->`);
+            ssrRenderList(folder.placemarks, (placemark, i) => {
+              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-17a9518b>`);
+              _push(ssrRenderComponent(_component_uimage, {
+                class: "icon",
+                cdn: true,
+                src: "/images/third-party/mapbox-veterinary.svg"
+              }, null, _parent));
+              _push(`<span class="text" data-v-17a9518b>${ssrInterpolate(placemark.name)}</span></li>`);
+            });
+            _push(`<!--]--></ul>`);
+          }
+          _push(`</li>`);
+        });
+        _push(`<!--]--></ul></div>`);
+      }
+      _push(`</div></div>`);
     };
   }
 });
@@ -11516,7 +11636,7 @@ _sfc_main$15.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
   return _sfc_setup$15 ? _sfc_setup$15(props, ctx) : void 0;
 };
-const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-b9151fee"]]);
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$15, [["__scopeId", "data-v-17a9518b"]]);
 const _sfc_main$14 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -11725,91 +11845,6 @@ const getEmailLink = (email) => {
   }
   const { email: _email, ...content } = email;
   return `mailto:${_email}?` + stringify(content);
-};
-const useAdminAvatar = (avatar) => {
-  return avatar || getAssetURL(useCdnDomain(), "/images/anonymous.png");
-};
-const useAboutPageMeta = () => {
-  const { i18n, isZhLang } = useEnhancer();
-  const { adminProfile } = useStores();
-  return usePageSeo(() => {
-    const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English));
-    const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ABOUT), enTitle] : [enTitle];
-    return {
-      pageTitles: titles,
-      description: `${isZhLang.value ? "关于" : "About"} ${APP_META.author}`,
-      ogType: "profile",
-      ogImage: adminProfile.data?.avatar
-    };
-  });
-};
-const i18ns = {
-  footprint: {
-    [Language.Chinese]: "路为纸，地成册，行作笔，心当墨；思无界，行有疆",
-    [Language.English]: "Every path i went astray built up my Rome."
-  },
-  sponsor: {
-    [Language.Chinese]: "随喜赞助",
-    [Language.English]: "Sponsor"
-  },
-  statement: {
-    [Language.Chinese]: "众而周知",
-    [Language.English]: "Statement"
-  },
-  feedback: {
-    [Language.Chinese]: "向我反馈",
-    [Language.English]: "Feedback"
-  },
-  archive: {
-    [Language.Chinese]: "笔文存档",
-    [Language.English]: "Archive"
-  },
-  photography: {
-    [Language.Chinese]: "行行摄摄",
-    [Language.English]: "PhotoGram"
-  },
-  guestbook: {
-    [Language.Chinese]: "给我留言",
-    [Language.English]: "Guestbook"
-  },
-  snippets: {
-    [Language.Chinese]: "利乐有情",
-    [Language.English]: "Snippets"
-  },
-  nft: {
-    [Language.Chinese]: "数字藏品",
-    [Language.English]: "NFTs"
-  },
-  rss: {
-    [Language.Chinese]: "长期订阅",
-    [Language.English]: "Subscribe"
-  },
-  discordGroup: {
-    [Language.Chinese]: "国际联谊",
-    [Language.English]: "Discord"
-  },
-  telegramGroup: {
-    [Language.Chinese]: "自由报社",
-    [Language.English]: "TG Group"
-  },
-  biography: {
-    [Language.Chinese]: [
-      `嗨！我是 Surmon，法名觉了（jué liǎo），一名野生软件工程师，曾供职于美图秀秀、七牛云、字节跳动、加密交易所。`,
-      `如你所见，我有着还不错的设计灵感和编码能力，我会经常在 GitHub 上开源一些「没用」或「有用」的小物件。`,
-      `如果某些输出恰好帮助了你，期待你的随喜赞助～ `,
-      `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
-      `而这里，我把它称作自己的「数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>」，随缘记录。`,
-      `祝你在这儿玩得愉快！`,
-      `（俗生履历：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
-    ].join(""),
-    [Language.English]: [
-      `Hi! I'm Surmon, a software engineer who has worked at Meitu Inc., Qiniu Cloud, ByteDance, and Crypto Exchange.`,
-      `I have developed strong design inspiration and coding skills.`,
-      `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
-      `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
-      `I call this place my own digital vihāra. Have fun here!`
-    ].join(" ")
-  }
 };
 const _sfc_main$13 = /* @__PURE__ */ defineComponent({
   __name: "banner",
