@@ -4,6 +4,7 @@
   import { RouteName } from '/@/app/router'
   import { LocaleKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { isSearchFlow } from '/@/transforms/route'
 
   const { i18n: _i18n, gtag, route, router } = useEnhancer()
@@ -60,9 +61,9 @@
         <i class="iconfont icon-search" />
       </button>
     </form>
-    <router-link class="extra-btn" :to="{ name: RouteName.Sponsor }">
-      <i class="iconfont icon-peachblossom" />
-    </router-link>
+    <ulink class="rss-btn" :external="false" :href="VALUABLE_LINKS.RSS">
+      <i class="iconfont icon-rss" />
+    </ulink>
   </div>
 </template>
 
@@ -81,22 +82,26 @@
 
     .search-input,
     .search-btn,
-    .extra-btn {
+    .rss-btn {
       height: 2em;
       line-height: 2em;
-      background-color: $module-bg-darker-1;
-      @include mix.background-transition();
-      &:hover {
-        background-color: $module-bg-hover;
-      }
     }
 
     .search-box {
+      flex-grow: 1;
+      display: flex;
+
       .search-input {
-        width: 11em;
+        flex-grow: 1;
+        min-width: 11em;
         margin-right: 0;
         padding: 0;
         text-indent: 0.5em;
+        @include mix.background-transition();
+        background-color: $module-bg-darker-1;
+        &:hover {
+          background-color: $module-bg-hover;
+        }
         &::-webkit-calendar-picker-indicator {
           display: none;
         }
@@ -104,23 +109,26 @@
 
       .search-btn {
         width: 3em;
-        background-color: $module-bg-hover;
         @include mix.background-transition();
+        background-color: $module-bg-hover;
         &:hover {
           background-color: $module-bg-darker-3;
         }
       }
     }
 
-    .extra-btn {
-      flex-grow: 1;
+    .rss-btn {
+      width: 3em;
       display: inline-block;
       margin-left: $gap-sm;
       text-align: center;
       border-radius: $radius-mini;
-
-      .iconfont {
-        font-size: $font-size-h4;
+      @include mix.background-transition();
+      background-color: $module-bg-hover;
+      color: $color-text;
+      &:hover {
+        background-color: $rss-primary;
+        color: $white;
       }
     }
   }

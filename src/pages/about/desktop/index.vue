@@ -74,7 +74,7 @@
     },
     {
       class: 'feedback',
-      icon: 'icon-mail-plane',
+      icon: 'icon-feedback',
       i18n: i18ns.feedback,
       onClick: handleFeedback
     },

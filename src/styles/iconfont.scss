@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_ej0dfsc136l.woff2?t=1767815274394') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_ej0dfsc136l.woff?t=1767815274394') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_ej0dfsc136l.ttf?t=1767815274394') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_ej455oett9l.woff2?t=1767914999715') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_ej455oett9l.woff?t=1767914999715') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_ej455oett9l.ttf?t=1767914999715') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-meditation-2:before {
+  content: '\e664';
+}
+
+.icon-robot:before {
+  content: '\e7a2';
+}
+
+.icon-feedback:before {
+  content: '\e667';
 }
 
 .icon-transport-hiking:before {

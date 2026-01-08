@@ -12,13 +12,14 @@
   const isTopButtonMouseOver = ref(false)
   const isBottomButtonMouseOver = ref(false)
 
-  const handleRSS = () => {
-    gtag?.event('rss', {
+  const handleAiClick = () => {
+    alert('Coming soon!')
+    gtag?.event('ai_modal', {
       event_category: GAEventCategories.Widget
     })
   }
 
-  const handleFeedback = () => {
+  const handleFeedbackClick = () => {
     globalState.toggleSwitcher('feedback', true)
     gtag?.event('feedback_modal', {
       event_category: GAEventCategories.Widget
@@ -72,11 +73,12 @@
   <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
-        <ulink class="rss" :href="VALUABLE_LINKS.RSS" @mousedown="handleRSS">
-          <i class="iconfont icon-rss" />
-        </ulink>
-        <button class="feedback" :title="_i18n.t(LocaleKey.FEEDBACK)" @click="handleFeedback">
-          <i class="iconfont icon-mail-plane" />
+        <button class="feedback" :title="_i18n.t(LocaleKey.FEEDBACK)" @click="handleFeedbackClick">
+          <i class="iconfont icon-feedback" />
+        </button>
+        <button class="ai" @click="handleAiClick">
+          <!-- <uimage class="icon" src="/images/third-party/google-gemini-color.svg" cdn /> -->
+          <i class="iconfont icon-meditation-2" />
         </button>
         <button
           class="to-page-top"
@@ -131,10 +133,10 @@
           border-bottom-right-radius: $radius-xs;
         }
 
-        .rss,
+        .ai,
+        .feedback,
         .to-page-top,
-        .to-page-bottom,
-        .feedback {
+        .to-page-bottom {
           display: block;
           width: $size;
           height: $size;
@@ -143,37 +145,35 @@
           @include mix.common-bg-module($motion-duration-fast);
         }
 
-        .rss {
-          color: $rss-primary;
-          &:hover {
-            background-color: $rss-primary;
-            color: $white;
-          }
-        }
-
-        @keyframes feedback-button {
+        @keyframes ai-button {
           0% {
             background-position: 92% 0%;
+            background-size: 100% 300%;
           }
           50% {
-            background-position: 9% 100%;
+            background-position: 4% 100%;
+            background-size: 400% 100%;
           }
           100% {
-            background-position: 92% 0%;
+            background-position: 96% 0%;
+            background-size: 100% 200%;
           }
         }
 
-        .feedback {
+        .ai {
           color: $white;
           opacity: 0.8;
           background-color: $primary-lighter;
-          background: linear-gradient(1deg, $surmon, #9d0f98);
-          background-size: 400% 400%;
-          animation: feedback-button 3s ease infinite;
+          background: linear-gradient(45deg, #fa4340, $surmon, #19ba64);
+          animation: ai-button 4s ease infinite;
           transition: opacity $motion-duration-fast;
 
+          .icon {
+            width: 50%;
+          }
+
           .iconfont {
-            display: inline-block;
+            font-size: $font-size-h4 + 1;
           }
 
           &:hover {
