@@ -188,11 +188,6 @@
       position: relative;
       background-color: $module-bg;
       background-image: linear-gradient($module-bg-opaque 50%, #00000000 100%);
-      // background-image:
-      //   global.surl('/images/page-about/background.png'), linear-gradient($module-bg-opaque 50%, #00000000 100%);
-      // background-size: contain;
-      // background-repeat: repeat-x;
-      // background-blend-mode: lighten;
 
       .fullwidth {
         width: 100%;
