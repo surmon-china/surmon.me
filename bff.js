@@ -41,7 +41,7 @@ const APP_CONFIG = Object.freeze({
   render_long_article_threshold: 16688,
   desktop_aside_article_list_count: 8,
   default_error_code: 500,
-  default_comment_avatar: "/images/gravatar.png",
+  default_comment_avatar: "/images/gravatar.webp",
   default_og_image: "/images/og-social-card.jpg",
   title_separator: " | ",
   primary_color: "#0088f5"
