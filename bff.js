@@ -46,19 +46,35 @@ const APP_CONFIG = Object.freeze({
   title_separator: " | ",
   primary_color: "#0088f5"
 });
-const APP_META = Object.freeze({
+const APP_PROFILE = Object.freeze({
   title: "Surmon.me",
-  zh_sub_title: "足下何人，來此作甚",
-  en_sub_title: `Surmon's digital vihāra`,
-  zh_description: "本是浪蝶遊蜂，自留半畝石池，但求直抒胸臆，揮墨九雲之中。",
-  zh_description_short: "本為蝶蜂，自築石池；但求抒臆，揮墨雲中",
-  en_description: "Either write something worth reading or do something worth writing.",
-  url: "https://surmon.me",
-  domain: "surmon.me",
   author: "Surmon",
-  about_page_geo_zh_title: "在东八区，靠近赤道",
-  about_page_geo_en_title: "UTC +07:00 ~ +09:00",
-  about_page_geo_coordinates: [103.830391822121, 1.340863]
+  domain: "surmon.me",
+  url: "https://surmon.me",
+  sub_title_zh: "足下何人，來此作甚",
+  sub_title_en: `Surmon's digital vihāra`,
+  description_zh: "本是浪蝶遊蜂，自留半畝石池，但求直抒胸臆，揮墨九雲之中。",
+  description_en: "Either write something worth reading or do something worth writing.",
+  description_short_zh: "本為蝶蜂，自築石池；但求抒臆，揮墨雲中",
+  about_page_geo_title_zh: "在东八区，靠近赤道",
+  about_page_geo_title_en: "UTC +07:00 ~ +09:00",
+  about_page_geo_coordinates: [103.830391822121, 1.340863],
+  about_page_biography_zh: [
+    `嗨！我是 Surmon，法名觉了（jué liǎo），一名野生软件工程师，曾供职于美图秀秀、七牛云、字节跳动、加密交易所。`,
+    `如你所见，我有着还不错的设计灵感和编码能力，我会经常在 GitHub 上开源一些「没用」或「有用」的小物件。`,
+    `如果某些输出恰好帮助了你，期待你的随喜赞助～ `,
+    `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
+    `而这里，我把它称作自己的「数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>」，随缘记录。`,
+    `祝你在这儿玩得愉快！`,
+    `（俗生履历：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
+  ].join(""),
+  about_page_biography_en: [
+    `Hi! I'm Surmon, a software engineer who has worked at Meitu Inc., Qiniu Cloud, ByteDance, and Crypto Exchange.`,
+    `I have developed strong design inspiration and coding skills.`,
+    `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
+    `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
+    `I call this place my own digital vihāra. Have fun here!`
+  ].join(" ")
 });
 const IDENTITIES = Object.freeze({
   GOOGLE_ANALYTICS_MEASUREMENT_ID: "G-R40DDTSYNQ",
@@ -734,10 +750,10 @@ const axios = _axios.create({
     keepAliveMsecs: 6e4
   })
 });
-const getTagURL = (tag) => `${APP_META.url}/tag/${tag}`;
-const getCategoryURL = (category) => `${APP_META.url}/category/${category}`;
-const getArticleURL = (id) => `${APP_META.url}/article/${id}`;
-const getPageURL = (page) => `${APP_META.url}/${page}`;
+const getTagURL = (tag) => `${APP_PROFILE.url}/tag/${tag}`;
+const getCategoryURL = (category) => `${APP_PROFILE.url}/category/${category}`;
+const getArticleURL = (id) => `${APP_PROFILE.url}/article/${id}`;
+const getPageURL = (page) => `${APP_PROFILE.url}/${page}`;
 const getRssXml = async (cache2) => {
   let archiveData = await cache2.withoutNamespace?.().get("nodepress:archive");
   if (!archiveData) {
@@ -746,16 +762,16 @@ const getRssXml = async (cache2) => {
     archiveData = response.data.result;
   }
   const feed = new RSS({
-    title: APP_META.title,
-    description: APP_META.zh_sub_title,
-    site_url: APP_META.url,
-    feed_url: `${APP_META.url}/rss.xml`,
-    image_url: `${APP_META.url}/icon.png`,
-    managingEditor: APP_META.author,
-    webMaster: APP_META.author,
-    generator: `${APP_META.domain}`,
+    title: APP_PROFILE.title,
+    description: APP_PROFILE.sub_title_zh,
+    site_url: APP_PROFILE.url,
+    feed_url: `${APP_PROFILE.url}/rss.xml`,
+    image_url: `${APP_PROFILE.url}/icon.png`,
+    managingEditor: APP_PROFILE.author,
+    webMaster: APP_PROFILE.author,
+    generator: `${APP_PROFILE.domain}`,
     categories: archiveData.categories.map((category) => category.slug),
-    copyright: `${(/* @__PURE__ */ new Date()).getFullYear()} ${APP_META.title}`,
+    copyright: `${(/* @__PURE__ */ new Date()).getFullYear()} ${APP_PROFILE.title}`,
     language: "zh",
     ttl: 60
   });
@@ -766,7 +782,7 @@ const getRssXml = async (cache2) => {
       url: getArticleURL(article.id),
       guid: String(article.id),
       categories: article.categories.map((category) => category.slug),
-      author: APP_META.author,
+      author: APP_PROFILE.author,
       date: article.created_at,
       enclosure: {
         url: article.thumbnail
@@ -783,10 +799,10 @@ const getSitemapXml = async (cache2) => {
     archiveData = response.data.result;
   }
   const sitemapStream = new SitemapStream({
-    hostname: APP_META.url
+    hostname: APP_PROFILE.url
   });
   const sitemapItemList = [
-    { url: APP_META.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
+    { url: APP_PROFILE.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
     {
       url: getPageURL("about"),
       changefreq: EnumChangefreq.YEARLY,
@@ -1153,16 +1169,16 @@ const getInstagramProfile = () => {
 };
 const logger = createLogger("BFF");
 const cache = await createCacheStore({
-  namespace: APP_META.domain.replace(/\./gi, "_")
+  namespace: APP_PROFILE.domain.replace(/\./gi, "_")
 });
 const app = createBFFServerApp({
   cache,
-  poweredBy: APP_META.title,
+  poweredBy: APP_PROFILE.title,
   proxy: {
     prefix: BFF_CONFIG.proxy_url_prefix + "/",
     allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : void 0,
     shouldBlockTargetUrl: (url) => {
-      if (url.hostname.endsWith(APP_META.domain)) {
+      if (url.hostname.endsWith(APP_PROFILE.domain)) {
         return url.hostname !== new URL(STATIC_URL).hostname;
       } else {
         return false;
@@ -1416,7 +1432,7 @@ if (isNodeProd) {
 }
 app.listen(BFF_CONFIG.server_port, (addressInfo) => {
   logger.success(
-    `${APP_META.title} app is running!`,
+    `${APP_PROFILE.title} app is running!`,
     `| env: ${NODE_ENV}`,
     `| port: ${addressInfo.port}`,
     `| address: ${addressInfo.address}`,
