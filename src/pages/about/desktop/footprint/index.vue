@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { Map } from 'mapbox-gl'
   import { shallowRef } from 'vue'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { flyToLivingMarker } from './mapbox-living-now'
   import MapboxModal from './box-modal.vue'
   import Mapbox from './box-base.vue'
@@ -40,7 +40,7 @@
         <button class="item" @click="flyToLivingMarker(map!)">
           <i class="iconfont icon-location"></i>
           <span class="text">
-            <i18n :zh="APP_META.about_page_geo_zh_title" :en="APP_META.about_page_geo_en_title" />
+            <i18n :zh="APP_PROFILE.about_page_geo_title_zh" :en="APP_PROFILE.about_page_geo_title_en" />
           </span>
         </button>
         <div class="divider"></div>

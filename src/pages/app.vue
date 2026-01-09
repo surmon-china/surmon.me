@@ -3,7 +3,7 @@
   import { usePageSeo } from '/@/composables/head'
   import { Language, LocaleKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { firstUpperCase } from '/@/transforms/text'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
@@ -23,7 +23,7 @@
     const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_APP)!, enTitle] : [enTitle]
     return {
       pageTitles: titles,
-      description: `${APP_META.title} App ${isZhLang.value ? '下载' : 'download'}`,
+      description: `${APP_PROFILE.title} App ${isZhLang.value ? '下载' : 'download'}`,
       ogImage: APP_LOGO_URL
     }
   })
@@ -35,7 +35,7 @@
       <div class="logo">
         <uimage alt="app-logo" :src="APP_LOGO_URL" cdn />
       </div>
-      <h2 class="title">{{ APP_META.title }}</h2>
+      <h2 class="title">{{ APP_PROFILE.title }}</h2>
       <p class="description">
         <webfont><i18n :k="LocaleKey.APP_SLOGAN" /></webfont>
       </p>

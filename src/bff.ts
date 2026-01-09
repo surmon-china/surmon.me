@@ -10,7 +10,7 @@
 import '@dotenvx/dotenvx/config'
 
 import { STATIC_URL } from '@/configs/bff.api'
-import { APP_META, BFF_CONFIG } from '@/configs/app.config'
+import { APP_PROFILE, BFF_CONFIG } from '@/configs/app.config'
 import { PUBLIC_PATH, NODE_ENV, isNodeProd } from '@/configs/bff.env'
 import { INTERNAL_SERVER_ERROR, BAD_REQUEST } from '@/constants/http-code'
 import { TunnelModule } from '@/constants/tunnel'
@@ -51,18 +51,18 @@ export const logger = createLogger('BFF')
 
 // Init BFF server cache service
 const cache = await createCacheStore({
-  namespace: APP_META.domain.replace(/\./gi, '_')
+  namespace: APP_PROFILE.domain.replace(/\./gi, '_')
 })
 
 // Create server app
 const app = createBFFServerApp({
   cache,
-  poweredBy: APP_META.title,
+  poweredBy: APP_PROFILE.title,
   proxy: {
     prefix: BFF_CONFIG.proxy_url_prefix + '/',
     allowedSourceRegexp: isNodeProd ? BFF_CONFIG.proxy_allow_list_regexp : undefined,
     shouldBlockTargetUrl: (url) => {
-      if (url.hostname.endsWith(APP_META.domain)) {
+      if (url.hostname.endsWith(APP_PROFILE.domain)) {
         return url.hostname !== new URL(STATIC_URL).hostname
       } else {
         return false
@@ -387,7 +387,7 @@ if (isNodeProd) {
 // Run server
 app.listen(BFF_CONFIG.server_port, (addressInfo) => {
   logger.success(
-    `${APP_META.title} app is running!`,
+    `${APP_PROFILE.title} app is running!`,
     `| env: ${NODE_ENV}`,
     `| port: ${addressInfo.port}`,
     `| address: ${addressInfo.address}`,

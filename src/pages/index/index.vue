@@ -4,7 +4,7 @@
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
   import { LocaleKey } from '/@/locales'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { isClient } from '/@/configs/app.env'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleList from '/@/components/listing/desktop/list.vue'
@@ -23,8 +23,8 @@
   }
 
   usePageSeo(() => ({
-    title: `${APP_META.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
-    description: isZhLang.value ? APP_META.zh_description : APP_META.en_description,
+    title: `${APP_PROFILE.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
+    description: isZhLang.value ? APP_PROFILE.description_zh : APP_PROFILE.description_en,
     keywords: appOption.data?.keywords.join(',')
   }))
 

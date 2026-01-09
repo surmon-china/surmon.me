@@ -112,7 +112,7 @@
     position: fixed;
     z-index: $z-index-toolbox;
     width: 100%;
-    bottom: 28rem;
+    bottom: 26rem;
 
     .container {
       $size: $gap-lg * 2.8;

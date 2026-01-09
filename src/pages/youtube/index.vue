@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { APP_META, IDENTITIES } from '/@/configs/app.config'
+  import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
   import { LocaleKey } from '/@/locales'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
@@ -20,7 +20,7 @@
   usePageSeo(() => {
     return {
       pageTitle: 'YouTube',
-      description: isZhLang.value ? `${APP_META.author} 的视频` : `${APP_META.author}'s YouTube`
+      description: isZhLang.value ? `${APP_PROFILE.author} 的视频` : `${APP_PROFILE.author}'s YouTube`
     }
   })
 
@@ -32,7 +32,7 @@
     <page-banner class="page-banner" video="/videos/clips/lake-1.mp4" :video-position="58" cdn>
       <template #title>
         <webfont>
-          <i18n zh="山河入夢，春盡江南" :en="`${APP_META.author}'s YouTube videos`" />
+          <i18n zh="山河入夢，春盡江南" :en="`${APP_PROFILE.author}'s YouTube videos`" />
         </webfont>
       </template>
       <template #description>

@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
   import { getEmailLink } from '/@/transforms/email'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { useAdminAvatar, i18ns } from '../shared'
 
   const emit = defineEmits<{
@@ -16,7 +16,7 @@
 
   const emailLink = getEmailLink({
     email: appOption.data?.site_email!,
-    subject: `Hello, ${APP_META.author}!`,
+    subject: `Hello, ${APP_PROFILE.author}!`,
     body: 'Hi, I am writing to you from your website.'
   })
 
@@ -49,7 +49,7 @@
           </div>
         </div>
         <p class="description">
-          <webfont bolder>{{ isZhLang ? APP_META.zh_description : APP_META.en_description }}</webfont>
+          <webfont bolder>{{ isZhLang ? APP_PROFILE.description_zh : APP_PROFILE.description_en }}</webfont>
         </p>
         <div class="socials">
           <ulink class="item icon-only instagram" title="Instagram" :href="goLink.map.instagram">
@@ -100,7 +100,10 @@
         </div>
       </div>
       <div class="container">
-        <p class="biography" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
+        <p
+          class="biography"
+          v-html="isZhLang ? APP_PROFILE.about_page_biography_zh : APP_PROFILE.about_page_biography_en"
+        ></p>
       </div>
     </div>
   </div>

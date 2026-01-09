@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
   import { LocaleKey } from '/@/locales/key'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
 
   enum Event {
@@ -79,8 +79,8 @@
     <template v-else>
       <div class="title">
         <i18n>
-          <template #zh>你认为 {{ APP_META.title }} 整体怎么样？</template>
-          <template #en>How would you rate {{ APP_META.title }}?</template>
+          <template #zh>你认为 {{ APP_PROFILE.title }} 整体怎么样？</template>
+          <template #en>How would you rate {{ APP_PROFILE.title }}?</template>
         </i18n>
       </div>
       <div class="emotions">

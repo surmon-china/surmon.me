@@ -12,7 +12,7 @@ import type { CacheStore } from '@/server/services/cache'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressSuccessResponse } from '@/services/nodepress'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
-import { APP_META } from '@/configs/app.config'
+import { APP_PROFILE } from '@/configs/app.config'
 import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../utils/url'
 
 export const getSitemapXml = async (cache: CacheStore) => {
@@ -25,11 +25,11 @@ export const getSitemapXml = async (cache: CacheStore) => {
   }
 
   const sitemapStream = new SitemapStream({
-    hostname: APP_META.url
+    hostname: APP_PROFILE.url
   })
 
   const sitemapItemList: SitemapItemLoose[] = [
-    { url: APP_META.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
+    { url: APP_PROFILE.url, changefreq: EnumChangefreq.ALWAYS, priority: 1 },
     {
       url: getPageURL('about'),
       changefreq: EnumChangefreq.YEARLY,

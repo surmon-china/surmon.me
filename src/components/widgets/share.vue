@@ -14,7 +14,7 @@
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getPageURL } from '/@/transforms/url'
   import { stringify } from '/@/transforms/query-string'
@@ -157,7 +157,7 @@
   })
 
   const getURL = () => getPageURL(route.fullPath)
-  const getTitle = () => document.title || APP_META.title
+  const getTitle = () => document.title || APP_PROFILE.title
   const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
@@ -199,7 +199,7 @@
     if (social.handler) {
       social.handler(shareParams)
     } else {
-      openPopupWindow(social.url!(shareParams), { name: `Share: ${APP_META.title}` })
+      openPopupWindow(social.url!(shareParams), { name: `Share: ${APP_PROFILE.title}` })
     }
   }
 </script>

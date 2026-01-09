@@ -5,7 +5,7 @@
   import { Language, LocaleKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { HEADER_ELEMENT_ID } from '/@/constants/element-anchor'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { menus } from './menu'
 
   const { i18n: _i18n, gtag, theme, globalState } = useEnhancer()
@@ -55,11 +55,11 @@
   <header :id="HEADER_ELEMENT_ID" v-disabled-wallflower class="header" :class="{ 'enable-nav': isEnabledNav }">
     <div class="header-container container">
       <div class="header-header">
-        <uimage cdn src="/images/logo.svg" class="header-logo" :alt="APP_META.title" />
+        <uimage cdn src="/images/logo.svg" class="header-logo" :alt="APP_PROFILE.title" />
         <webfont class="header-slogan">
           <i18n :k="LocaleKey.APP_SLOGAN" />
         </webfont>
-        <router-link to="/" class="header-link" :title="APP_META.title" @mousedown="handleRootNavEvent" />
+        <router-link to="/" class="header-link" :title="APP_PROFILE.title" @mousedown="handleRootNavEvent" />
       </div>
       <div class="toolbox">
         <button class="button menu" v-if="isEnabledNav">

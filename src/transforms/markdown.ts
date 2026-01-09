@@ -13,7 +13,7 @@ import { sanitizeUrl } from '@braintree/sanitize-url'
 import { CUSTOM_ELEMENT_LIST } from '/@/effects/elements'
 import { LOZAD_CLASS_NAME } from '/@/composables/lozad'
 import { getLoadingIndicatorHTML } from '/@/components/common/loading-indicator'
-import { APP_META } from '/@/configs/app.config'
+import { APP_PROFILE } from '/@/configs/app.config'
 import { getOriginalProxyURL } from './url'
 import { escape } from './text'
 
@@ -125,7 +125,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   renderer.link = ({ href, title, tokens }) => {
     const text = renderer.parser.parseInline(tokens)
     const isImageLink = text.includes('<img')
-    const isSelf = href.startsWith(APP_META.url)
+    const isSelf = href.startsWith(APP_PROFILE.url)
     const textValue = options?.sanitize ? escape(text) : text
     const hrefValue = options?.sanitize ? sanitizeUrl(href) : href
     const titleValue = options?.sanitize ? escape(title!) : title

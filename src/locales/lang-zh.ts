@@ -1,9 +1,9 @@
 import type { LocaleMap } from '.'
 import { LocaleKey } from './key'
-import { APP_META } from '/@/configs/app.config'
+import { APP_PROFILE } from '/@/configs/app.config'
 
 export const zhLangMap: LocaleMap = {
-  [LocaleKey.APP_SLOGAN]: APP_META.zh_sub_title,
+  [LocaleKey.APP_SLOGAN]: APP_PROFILE.sub_title_zh,
   [LocaleKey.PAGE_HOME]: '明殿',
   [LocaleKey.PAGE_GITHUB]: '工巧',
   [LocaleKey.CATEGORY_INSIGHT]: '不二門',

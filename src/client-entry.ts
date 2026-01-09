@@ -27,7 +27,7 @@ import { resolvePageLayout } from '/@/constants/page-layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
 import { Language, LocaleKey } from '/@/locales'
 import { APP_VERSION, isDev, isProd } from './configs/app.env'
-import { APP_META, IDENTITIES } from '/@/configs/app.config'
+import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
@@ -130,7 +130,7 @@ router.isReady().finally(() => {
             // { favicon: '🌝', title: '​' },
             // { favicon: '⛔️', title: 'FORBIDDEN' },
             // { favicon: '⭕️', title: 'FBI WARNING' },
-            { favicon: '🌱', title: APP_META.en_sub_title }
+            { favicon: '🌱', title: APP_PROFILE.sub_title_en }
           ]
           const index = Math.floor(Math.random() * surprises.length)
           isHidden ? setStaticTitler(surprises[index]) : resetTitler()

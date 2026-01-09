@@ -1,9 +1,9 @@
 import type { LocaleMap } from '.'
 import { LocaleKey } from './key'
-import { APP_META } from '/@/configs/app.config'
+import { APP_PROFILE } from '/@/configs/app.config'
 
 export const enLangMap: LocaleMap = {
-  [LocaleKey.APP_SLOGAN]: APP_META.en_sub_title,
+  [LocaleKey.APP_SLOGAN]: APP_PROFILE.sub_title_en,
   [LocaleKey.PAGE_HOME]: 'Home',
   [LocaleKey.CATEGORY_INSIGHT]: 'Insight',
   [LocaleKey.CATEGORY_CODE]: 'Code',

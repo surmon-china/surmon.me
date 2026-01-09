@@ -9,7 +9,7 @@ import { computed, ComputedGetter } from 'vue'
 import { useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getPageURL } from '/@/transforms/url'
-import { APP_META, APP_CONFIG } from '/@/configs/app.config'
+import { APP_PROFILE, APP_CONFIG } from '/@/configs/app.config'
 
 export { useHead, useSeoMeta } from '@unhead/vue'
 
@@ -49,7 +49,7 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     const { title, pageTitle, pageTitles, ...rest } = value
     const separator = APP_CONFIG.title_separator
     const pureTitle = pageTitle ?? pageTitles?.join(separator)
-    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_META.title].join(separator) : APP_META.title)
+    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_PROFILE.title].join(separator) : APP_PROFILE.title)
     return { pureTitle, fullTitle, ...rest }
   })
 
@@ -67,7 +67,7 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     ogImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
     ogImageWidth: () => _.value.ogImageWidth ?? (_.value.ogImage ? null : '1000'),
     ogImageHeight: () => _.value.ogImageHeight ?? (_.value.ogImage ? null : '526'),
-    ogSiteName: () => APP_META.title,
+    ogSiteName: () => APP_PROFILE.title,
     ogLocale: () => i18n.l.value?.iso,
     // Twitter
     twitterTitle: () => _.value.ogTitle ?? _.value.fullTitle,

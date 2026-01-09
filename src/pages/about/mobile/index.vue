@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useAdminProfileStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
@@ -32,7 +32,7 @@
       <h2 class="name">{{ adminProfile.data?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminProfile.data?.slogan || '-' }}</h5>
       <h4 class="description">
-        <webfont bolder>{{ isZhLang ? APP_META.zh_description_short : APP_META.en_description }}</webfont>
+        <webfont bolder>{{ isZhLang ? APP_PROFILE.description_short_zh : APP_PROFILE.description_en }}</webfont>
       </h4>
       <div class="socials">
         <ulink class="item github" :href="goLink.map.github">
@@ -58,7 +58,10 @@
     <div class="biography">
       <div class="bridge left"></div>
       <div class="bridge right"></div>
-      <p class="content" v-html="isZhLang ? i18ns.biography.zh : i18ns.biography.en"></p>
+      <p
+        class="content"
+        v-html="isZhLang ? APP_PROFILE.about_page_biography_zh : APP_PROFILE.about_page_biography_en"
+      ></p>
     </div>
     <div class="buttons">
       <router-link class="item" :to="getPageRoute(RouteName.Archive)">

@@ -6,7 +6,7 @@
 
 import RSS from 'rss'
 import axios from '@/server/services/axios'
-import { APP_META } from '@/configs/app.config'
+import { APP_PROFILE } from '@/configs/app.config'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
 import type { Archive } from '@/interfaces/archive'
 import type { NodePressSuccessResponse } from '@/services/nodepress'
@@ -23,16 +23,16 @@ export const getRssXml = async (cache: CacheStore) => {
   }
 
   const feed = new RSS({
-    title: APP_META.title,
-    description: APP_META.zh_sub_title,
-    site_url: APP_META.url,
-    feed_url: `${APP_META.url}/rss.xml`,
-    image_url: `${APP_META.url}/icon.png`,
-    managingEditor: APP_META.author,
-    webMaster: APP_META.author,
-    generator: `${APP_META.domain}`,
+    title: APP_PROFILE.title,
+    description: APP_PROFILE.sub_title_zh,
+    site_url: APP_PROFILE.url,
+    feed_url: `${APP_PROFILE.url}/rss.xml`,
+    image_url: `${APP_PROFILE.url}/icon.png`,
+    managingEditor: APP_PROFILE.author,
+    webMaster: APP_PROFILE.author,
+    generator: `${APP_PROFILE.domain}`,
     categories: archiveData.categories.map((category) => category.slug),
-    copyright: `${new Date().getFullYear()} ${APP_META.title}`,
+    copyright: `${new Date().getFullYear()} ${APP_PROFILE.title}`,
     language: 'zh',
     ttl: 60
   })
@@ -44,7 +44,7 @@ export const getRssXml = async (cache: CacheStore) => {
       url: getArticleURL(article.id),
       guid: String(article.id),
       categories: article.categories.map((category) => category.slug),
-      author: APP_META.author,
+      author: APP_PROFILE.author,
       date: article.created_at,
       enclosure: {
         url: article.thumbnail

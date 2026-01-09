@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
   import { LocaleKey } from '/@/locales'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
@@ -53,8 +53,8 @@
 
     // index page
     return {
-      title: `${APP_META.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
-      description: isZhLang.value ? APP_META.zh_description : APP_META.en_description,
+      title: `${APP_PROFILE.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
+      description: isZhLang.value ? APP_PROFILE.description_zh : APP_PROFILE.description_en,
       keywords: appOptionStore.data?.keywords.join(','),
       ogType: 'website'
     }

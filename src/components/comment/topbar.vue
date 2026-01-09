@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { LocaleKey } from '/@/locales'
   import { SortType } from '/@/constants/biz-state'
   import { GAEventCategories } from '/@/constants/google-analytics'
@@ -74,7 +74,7 @@
     })
 
     openPopupWindow(identity.disqusConfig.authorize_url, {
-      name: `Disqus Auth ${APP_META.title}`,
+      name: `Disqus Auth ${APP_PROFILE.title}`,
       onClose: () => {
         identity.fetchDisqusUserInfo()
         logger.info('disqus logined', toRaw(identity.user))

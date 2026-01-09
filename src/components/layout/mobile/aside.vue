@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { APP_META, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { Language, LocaleKey } from '/@/locales'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { Theme } from '/@/composables/theme'
@@ -38,9 +38,9 @@
 <template>
   <aside class="aside">
     <div class="aside-user">
-      <uimage class="avatar" :src="adminAvatar" :alt="APP_META.author" />
+      <uimage class="avatar" :src="adminAvatar" :alt="APP_PROFILE.author" />
       <div class="profile">
-        <h3 class="name">{{ APP_META.author }}</h3>
+        <h3 class="name">{{ APP_PROFILE.author }}</h3>
         <webfont class="slogan">
           <i18n :k="LocaleKey.APP_SLOGAN" />
         </webfont>

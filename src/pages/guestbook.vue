@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
-  import { APP_META } from '/@/configs/app.config'
+  import { APP_PROFILE } from '/@/configs/app.config'
   import { Language, LocaleKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { CommentPostId } from '/@/constants/biz-state'
@@ -56,7 +56,7 @@
   usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_GUESTBOOK, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
-    const description = isZhLang.value ? `给 ${APP_META.author} 留言` : 'Leave a comment'
+    const description = isZhLang.value ? `给 ${APP_PROFILE.author} 留言` : 'Leave a comment'
     return {
       pageTitles: titles,
       description,

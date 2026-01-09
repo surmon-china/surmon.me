@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { APP_META } from '/@/configs/app.config'
+import { APP_PROFILE } from '/@/configs/app.config'
 import { MIME_TYPES } from '/@/constants/mime-type'
 
 declare global {
@@ -28,9 +28,9 @@ export const initCopyrighter = () => {
     return [
       '',
       '',
-      `作者：${APP_META.author}`,
+      `作者：${APP_PROFILE.author}`,
       `链接：${location.href}`,
-      `来源：${APP_META.title}`,
+      `来源：${APP_PROFILE.title}`,
       '著作权归作者所有，商业转载请联系作者获得授权，非商业转载请注明出处。'
     ].join('\n')
   }
