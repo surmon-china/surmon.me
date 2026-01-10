@@ -439,6 +439,12 @@
           color: $color-text-darker;
         }
 
+        ::v-deep(a) {
+          text-decoration: underline;
+          text-underline-offset: 0.4em;
+          text-decoration-style: dotted;
+        }
+
         ::v-deep(p) {
           &:last-child {
             margin-bottom: 0;

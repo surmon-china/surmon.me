@@ -75,7 +75,6 @@
   .search {
     padding: $gap-sm;
     width: 100%;
-    height: 3em;
     overflow: hidden;
     display: flex;
     justify-content: space-between;
@@ -83,17 +82,16 @@
     .search-input,
     .search-btn,
     .rss-btn {
-      height: 2em;
-      line-height: 2em;
+      $height: 2.4rem;
+      height: $height;
+      line-height: $height;
     }
 
     .search-box {
-      flex-grow: 1;
-      display: flex;
+      display: inline-flex;
 
       .search-input {
-        flex-grow: 1;
-        min-width: 11em;
+        width: 13.6rem;
         margin-right: 0;
         padding: 0;
         text-indent: 0.5em;
@@ -108,7 +106,7 @@
       }
 
       .search-btn {
-        width: 3em;
+        width: 3.4rem;
         @include mix.background-transition();
         background-color: $module-bg-hover;
         &:hover {
@@ -118,8 +116,9 @@
     }
 
     .rss-btn {
-      width: 3em;
+      flex-grow: 1;
       display: inline-block;
+      min-width: 3rem;
       margin-left: $gap-sm;
       text-align: center;
       border-radius: $radius-mini;
