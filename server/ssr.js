@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.6.7";
+const APP_VERSION = "5.7.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -1223,13 +1223,14 @@ const useAppOptionStore = defineStore("appOption", () => {
       return response.result;
     }
   });
-  const adConfig = computed(() => {
-    const adConfig2 = fetchStore.data.value?.ad_config;
+  const appConfig = computed(() => {
+    const configString = fetchStore.data.value?.app_config;
+    const configJson = configString ? JSON.parse(configString) : {};
     return {
-      PC_CARROUSEL: void 0,
-      PC_NAV: [],
-      PC_ASIDE_SWIPER: [],
-      ...adConfig2 ? JSON.parse(adConfig2) : {}
+      AD_PC_CARROUSEL: void 0,
+      AD_PC_NAV: [],
+      AD_PC_ASIDE_SWIPER: [],
+      ...configJson
     };
   });
   const postSiteLike = () => {
@@ -1256,7 +1257,7 @@ const useAppOptionStore = defineStore("appOption", () => {
   };
   return {
     ...fetchStore,
-    adConfig,
+    appConfig,
     postSiteLike,
     postFeedback
   };
@@ -2257,7 +2258,7 @@ const useEnhancer = () => {
   const appOptionStore = useAppOptionStore();
   const cdnDomain = useCdnDomain();
   const countryCode = useCountryCode();
-  const adConfig = computed(() => appOptionStore.adConfig);
+  const appConfig = computed(() => appOptionStore.appConfig);
   const isDarkTheme = computed(() => theme.theme.value === Theme.Dark);
   const isZhLang = computed(() => i18n.language.value === Language.Chinese);
   return {
@@ -2269,7 +2270,7 @@ const useEnhancer = () => {
     cdnDomain,
     countryCode,
     isCNUser: isCNCode(countryCode || "GLOBAL"),
-    adConfig,
+    appConfig,
     isDarkTheme,
     isZhLang,
     defer: void 0,
@@ -3543,7 +3544,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { i18n: _i18n, adConfig, cdnDomain, isDarkTheme } = useEnhancer();
+    const { i18n: _i18n, appConfig, cdnDomain, isDarkTheme } = useEnhancer();
     const getPictureURL = (url, format) => {
       if (!isOriginalStaticURL(url)) {
         return url;
@@ -3584,12 +3585,12 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
       if (!result.length) {
         return [];
       }
-      if (adConfig.value.PC_CARROUSEL) {
-        const config = adConfig.value.PC_CARROUSEL;
+      if (appConfig.value.AD_PC_CARROUSEL) {
+        const config = appConfig.value.AD_PC_CARROUSEL;
         result.splice(config.index, 0, {
           title: config.title,
           image: config.src,
-          route: config.url,
+          url: config.url,
           subscript: _i18n.t(LocaleKey.AD)
         });
       }
@@ -3602,7 +3603,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_ulink = resolveComponent("ulink");
       const _component_client_only = resolveComponent("client-only");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-6cd91920>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-44f7b7e2>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: slides.value.length,
         loading: __props.fetching
@@ -3648,13 +3649,13 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="article-skeleton" data-v-6cd91920${_scopeId}><div class="title" data-v-6cd91920${_scopeId}>`);
+            _push2(`<div class="article-skeleton" data-v-44f7b7e2${_scopeId}><div class="title" data-v-44f7b7e2${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="content" data-v-6cd91920${_scopeId}><div class="first" data-v-6cd91920${_scopeId}>`);
+            _push2(`</div><div class="content" data-v-44f7b7e2${_scopeId}><div class="first" data-v-44f7b7e2${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
             _push2(`</div><!--[-->`);
             ssrRenderList(3, (index) => {
-              _push2(`<div class="line" data-v-6cd91920${_scopeId}>`);
+              _push2(`<div class="line" data-v-44f7b7e2${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "line-item" }, null, _parent2, _scopeId));
               _push2(`</div>`);
             });
@@ -3706,9 +3707,9 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(_component_client_only, null, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<div class="swiper-pagination" data-v-6cd91920${_scopeId3}><!--[-->`);
+                        _push4(`<div class="swiper-pagination" data-v-44f7b7e2${_scopeId3}><!--[-->`);
                         ssrRenderList(slides.value.slice(0, 9), (slide, index) => {
-                          _push4(`<div${ssrRenderAttr("aria-label", `Go to article ${slide.title}`)} class="${ssrRenderClass([{ active: index === activatedSlideIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-6cd91920${_scopeId3}><span class="bullet-progress" data-v-6cd91920${_scopeId3}></span></div>`);
+                          _push4(`<div${ssrRenderAttr("aria-label", `Go to article ${slide.title}`)} class="${ssrRenderClass([{ active: index === activatedSlideIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-44f7b7e2${_scopeId3}><span class="bullet-progress" data-v-44f7b7e2${_scopeId3}></span></div>`);
                         });
                         _push4(`<!--]--></div>`);
                       } else {
@@ -3761,7 +3762,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(SwiperSlide), { key: index }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="content" data-v-6cd91920${_scopeId3}>`);
+                          _push4(`<div class="content" data-v-44f7b7e2${_scopeId3}>`);
                           _push4(ssrRenderComponent(_component_ulink, {
                             class: "link",
                             href: slide.url,
@@ -3769,15 +3770,15 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`<picture class="picture" data-v-6cd91920${_scopeId4}>`);
+                                _push5(`<picture class="picture" data-v-44f7b7e2${_scopeId4}>`);
                                 if (unref(isOriginalStaticURL)(slide.image)) {
-                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-6cd91920${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-6cd91920${_scopeId4}><!--]-->`);
+                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-44f7b7e2${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-44f7b7e2${_scopeId4}><!--]-->`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
-                                _push5(`<img class="image" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-6cd91920${_scopeId4}></picture><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "title"])}"${ssrRenderAttr("title", slide.title)} data-v-6cd91920${_scopeId4}><div class="background" data-v-6cd91920${_scopeId4}></div><div class="prospect" data-v-6cd91920${_scopeId4}><span class="text" data-v-6cd91920${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
+                                _push5(`<img class="image" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-44f7b7e2${_scopeId4}></picture><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "title"])}"${ssrRenderAttr("title", slide.title)} data-v-44f7b7e2${_scopeId4}><div class="background" data-v-44f7b7e2${_scopeId4}></div><div class="prospect" data-v-44f7b7e2${_scopeId4}><span class="text" data-v-44f7b7e2${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
                                 if (slide.subscript) {
-                                  _push5(`<span class="subscript" data-v-6cd91920${_scopeId4}>${ssrInterpolate(slide.subscript)}</span>`);
+                                  _push5(`<span class="subscript" data-v-44f7b7e2${_scopeId4}>${ssrInterpolate(slide.subscript)}</span>`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
@@ -4031,7 +4032,7 @@ _sfc_main$1O.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/index/carrousel.vue");
   return _sfc_setup$1O ? _sfc_setup$1O(props, ctx) : void 0;
 };
-const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1O, [["__scopeId", "data-v-6cd91920"]]);
+const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1O, [["__scopeId", "data-v-44f7b7e2"]]);
 const _sfc_main$1N = /* @__PURE__ */ defineComponent({
   __name: "threads",
   __ssrInlineRender: true,
@@ -18820,7 +18821,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
   setup(__props, { emit: __emit }) {
     const props = __props;
     const emit = __emit;
-    const { adConfig } = useEnhancer();
+    const { appConfig } = useEnhancer();
     const swiperRef = shallowRef();
     const activeIndex = shallowRef(props.index);
     const setSwiper = (_swiper) => {
@@ -18838,7 +18839,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-23fb4d4e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-f6051300>`);
       _push(ssrRenderComponent(unref(Swiper$1), {
         class: "swiper",
         direction: "vertical",
@@ -18855,15 +18856,15 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
       }, {
         "container-end": withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="swiper-pagination" data-v-23fb4d4e${_scopeId}><!--[-->`);
-            ssrRenderList(unref(adConfig).PC_ASIDE_SWIPER, (__, _index) => {
-              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${_index}`)} class="${ssrRenderClass([{ active: _index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-23fb4d4e${_scopeId}><span class="bullet-progress" data-v-23fb4d4e${_scopeId}></span></div>`);
+            _push2(`<div class="swiper-pagination" data-v-f6051300${_scopeId}><!--[-->`);
+            ssrRenderList(unref(appConfig).AD_PC_ASIDE_SWIPER, (__, _index) => {
+              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${_index}`)} class="${ssrRenderClass([{ active: _index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-f6051300${_scopeId}><span class="bullet-progress" data-v-f6051300${_scopeId}></span></div>`);
             });
             _push2(`<!--]--></div>`);
           } else {
             return [
               createVNode("div", { class: "swiper-pagination" }, [
-                (openBlock(true), createBlock(Fragment, null, renderList(unref(adConfig).PC_ASIDE_SWIPER, (__, _index) => {
+                (openBlock(true), createBlock(Fragment, null, renderList(unref(appConfig).AD_PC_ASIDE_SWIPER, (__, _index) => {
                   return openBlock(), createBlock("div", {
                     key: _index,
                     "aria-label": `Go to slide ${_index}`,
@@ -18880,7 +18881,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(`<!--[-->`);
-            ssrRenderList(unref(adConfig).PC_ASIDE_SWIPER, (ad, _index) => {
+            ssrRenderList(unref(appConfig).AD_PC_ASIDE_SWIPER, (ad, _index) => {
               _push2(ssrRenderComponent(unref(SwiperSlide), {
                 class: "swiper-slide",
                 key: _index
@@ -18897,7 +18898,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
                             src: ad.src,
                             alt: "aside-swiper-ad"
                           }, null, _parent4, _scopeId3));
-                          _push4(`<i class="iconfont icon-ad" data-v-23fb4d4e${_scopeId3}></i>`);
+                          _push4(`<i class="iconfont icon-ad" data-v-f6051300${_scopeId3}></i>`);
                         } else {
                           return [
                             createVNode(_component_uimage, {
@@ -18934,7 +18935,7 @@ const _sfc_main$e = /* @__PURE__ */ defineComponent({
             _push2(`<!--]-->`);
           } else {
             return [
-              (openBlock(true), createBlock(Fragment, null, renderList(unref(adConfig).PC_ASIDE_SWIPER, (ad, _index) => {
+              (openBlock(true), createBlock(Fragment, null, renderList(unref(appConfig).AD_PC_ASIDE_SWIPER, (ad, _index) => {
                 return openBlock(), createBlock(unref(SwiperSlide), {
                   class: "swiper-slide",
                   key: _index
@@ -18972,7 +18973,7 @@ _sfc_main$e.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/mammon.vue");
   return _sfc_setup$e ? _sfc_setup$e(props, ctx) : void 0;
 };
-const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-23fb4d4e"]]);
+const AsideMammon = /* @__PURE__ */ _export_sfc(_sfc_main$e, [["__scopeId", "data-v-f6051300"]]);
 const _sfc_main$d = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
@@ -19431,7 +19432,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
   __name: "nav",
   __ssrInlineRender: true,
   setup(__props) {
-    const { adConfig } = useEnhancer();
+    const { appConfig } = useEnhancer();
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
@@ -19441,11 +19442,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: unref(NAV_ELEMENT_ID),
         class: "desktop-nav"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-4088e633><nav class="nav-list" data-v-4088e633><!--[-->`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-5459cf51><nav class="nav-list" data-v-5459cf51><!--[-->`);
       ssrRenderList(unref(menus), (menu) => {
         _push(`<!--[-->`);
         if (menu.divider) {
-          _push(`<span class="divider" data-v-4088e633></span>`);
+          _push(`<span class="divider" data-v-5459cf51></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -19462,7 +19463,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                   src: menu.imageIcon
                 }, null, _parent2, _scopeId));
               } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-4088e633${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-5459cf51${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -19487,12 +19488,12 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.newWindow) {
-                _push2(`<span class="superscript new-window" data-v-4088e633${_scopeId}><i class="iconfont icon-new-window-s" data-v-4088e633${_scopeId}></i></span>`);
+                _push2(`<span class="superscript new-window" data-v-5459cf51${_scopeId}><i class="iconfont icon-new-window-s" data-v-5459cf51${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.hot) {
-                _push2(`<span class="superscript hot" data-v-4088e633${_scopeId}><i class="iconfont icon-hot" data-v-4088e633${_scopeId}></i></span>`);
+                _push2(`<span class="superscript hot" data-v-5459cf51${_scopeId}><i class="iconfont icon-hot" data-v-5459cf51${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -19538,8 +19539,8 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         _push(`<!--]-->`);
       });
       _push(`<!--]--><!--[-->`);
-      ssrRenderList(unref(adConfig).PC_NAV, (ad, index) => {
-        _push(`<!--[--><span class="divider" data-v-4088e633></span>`);
+      ssrRenderList(unref(appConfig).AD_PC_NAV, (ad, index) => {
+        _push(`<!--[--><span class="divider" data-v-5459cf51></span>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "item",
           href: ad.url,
@@ -19547,7 +19548,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="${ssrRenderClass([ad.icon, "font-icon iconfont"])}" data-v-4088e633${_scopeId}></i><span class="ad-text" data-v-4088e633${_scopeId}>`);
+              _push2(`<i class="${ssrRenderClass([ad.icon, "font-icon iconfont"])}" data-v-5459cf51${_scopeId}></i><span class="ad-text" data-v-5459cf51${_scopeId}>`);
               if (ad.i18n) {
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: ad.i18n.zh,
@@ -19556,7 +19557,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!--[-->${ssrInterpolate(ad.text)}<!--]-->`);
               }
-              _push2(`</span><span class="superscript" data-v-4088e633${_scopeId}><i class="iconfont icon-ad" data-v-4088e633${_scopeId}></i></span>`);
+              _push2(`</span><span class="superscript" data-v-5459cf51${_scopeId}><i class="iconfont icon-ad" data-v-5459cf51${_scopeId}></i></span>`);
             } else {
               return [
                 createVNode("i", {
@@ -19591,7 +19592,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/nav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-4088e633"]]);
+const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-5459cf51"]]);
 const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
