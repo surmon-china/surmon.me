@@ -233,8 +233,15 @@
         margin-bottom: 0;
         line-height: $line-height-base * 1.4;
         font-size: $font-size-base + 1;
-        font-weight: 500;
         text-indent: 1em;
+
+        &.zh {
+          font-weight: 500;
+        }
+
+        &.en {
+          font-weight: bold;
+        }
 
         &::first-letter {
           color: $color-text-darker;
