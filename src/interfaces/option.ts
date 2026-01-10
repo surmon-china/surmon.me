@@ -1,13 +1,14 @@
 import { UniversalKeyValue } from './common'
 
-export interface AppAdConfig {
-  PC_CARROUSEL?: {
+export interface AppRemoteConfig {
+  [key: string]: any
+  AD_PC_CARROUSEL?: {
     index: number
     url: string
     src: string
     title: string
   }
-  PC_NAV?: Array<{
+  AD_PC_NAV?: Array<{
     icon: string
     color: string
     url: string
@@ -17,7 +18,7 @@ export interface AppAdConfig {
       zh: string
     }
   }>
-  PC_ASIDE_SWIPER?: Array<{
+  AD_PC_ASIDE_SWIPER?: Array<{
     url: string
     src: string
   }>
@@ -28,14 +29,12 @@ export interface AppOption {
   sub_title: string
   description: string
   keywords: Array<string>
-  statement: string
   site_url: string
   site_email: string
-  meta: {
-    likes: number
-  }
+  meta: { likes: number }
+  statement: string
   friend_links: Array<UniversalKeyValue>
-  ad_config: string
+  app_config: string
 }
 
 export interface AdminProfile {

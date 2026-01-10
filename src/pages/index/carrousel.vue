@@ -26,7 +26,7 @@
     count: 9
   })
 
-  const { i18n: _i18n, adConfig, cdnDomain, isDarkTheme } = useEnhancer()
+  const { i18n: _i18n, appConfig, cdnDomain, isDarkTheme } = useEnhancer()
   const getPictureURL = (url: string, format?: ImgProxyFormat) => {
     if (!isOriginalStaticURL(url)) {
       return url
@@ -73,12 +73,12 @@
     }
 
     // advertisement
-    if (adConfig.value.PC_CARROUSEL) {
-      const config = adConfig.value.PC_CARROUSEL
+    if (appConfig.value.AD_PC_CARROUSEL) {
+      const config = appConfig.value.AD_PC_CARROUSEL
       result.splice(config.index, 0, {
         title: config.title,
         image: config.src,
-        route: config.url,
+        url: config.url,
         subscript: _i18n.t(LocaleKey.AD)
       })
     }

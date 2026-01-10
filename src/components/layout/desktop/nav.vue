@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { menus } from './menu'
 
-  const { adConfig } = useEnhancer()
+  const { appConfig } = useEnhancer()
 </script>
 
 <template>
@@ -26,7 +26,7 @@
         </ulink>
       </template>
       <!-- AD -->
-      <template v-for="(ad, index) in adConfig.PC_NAV" :key="index">
+      <template v-for="(ad, index) in appConfig.AD_PC_NAV" :key="index">
         <span class="divider"></span>
         <ulink class="item" :href="ad.url" :style="{ color: ad.color }">
           <i class="font-icon iconfont" :class="ad.icon"></i>

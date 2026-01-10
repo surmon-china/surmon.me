@@ -8,7 +8,7 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { CommentPostId } from '/@/constants/biz-state'
-import { AdminProfile, AppOption, AppAdConfig } from '/@/interfaces/option'
+import { AdminProfile, AppOption, AppRemoteConfig } from '/@/interfaces/option'
 import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
@@ -32,13 +32,14 @@ export const useAppOptionStore = defineStore('appOption', () => {
     }
   })
 
-  const adConfig = computed<AppAdConfig>(() => {
-    const adConfig = fetchStore.data.value?.ad_config
+  const appConfig = computed<AppRemoteConfig>(() => {
+    const configString = fetchStore.data.value?.app_config
+    const configJson = configString ? JSON.parse(configString) : {}
     return {
-      PC_CARROUSEL: undefined,
-      PC_NAV: [],
-      PC_ASIDE_SWIPER: [],
-      ...(adConfig ? JSON.parse(adConfig) : {})
+      AD_PC_CARROUSEL: undefined,
+      AD_PC_NAV: [],
+      AD_PC_ASIDE_SWIPER: [],
+      ...configJson
     }
   })
 
@@ -70,7 +71,7 @@ export const useAppOptionStore = defineStore('appOption', () => {
 
   return {
     ...fetchStore,
-    adConfig,
+    appConfig,
     postSiteLike,
     postFeedback
   }

@@ -25,7 +25,7 @@
   }>()
 
   // emits: [AsideMammonEvent.Ready, AsideMammonEvent.UpdateIndex, AsideMammonEvent.IndexChange]
-  const { adConfig } = useEnhancer()
+  const { appConfig } = useEnhancer()
   const swiperRef = shallowRef<SwiperClass>()
   const activeIndex = shallowRef(props.index)
   const setSwiper = (_swiper: SwiperClass) => {
@@ -59,7 +59,7 @@
       @slide-change="handleSlideChange"
       @swiper="setSwiper"
     >
-      <swiper-slide class="swiper-slide" :key="_index" v-for="(ad, _index) in adConfig.PC_ASIDE_SWIPER">
+      <swiper-slide class="swiper-slide" :key="_index" v-for="(ad, _index) in appConfig.AD_PC_ASIDE_SWIPER">
         <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aside-swiper-ad" />
           <i class="iconfont icon-ad"></i>
@@ -68,7 +68,7 @@
       <template #container-end>
         <div class="swiper-pagination">
           <div
-            v-for="(__, _index) in adConfig.PC_ASIDE_SWIPER"
+            v-for="(__, _index) in appConfig.AD_PC_ASIDE_SWIPER"
             :key="_index"
             :aria-label="`Go to slide ${_index}`"
             :class="{ active: _index === activeIndex }"
