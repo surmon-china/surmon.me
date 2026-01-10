@@ -103,10 +103,9 @@
       <div class="container">
         <div
           class="biography"
-          :class="[
-            isZhLang ? 'zh' : 'en',
-            { 'en-hack': globalState.userAgent.isFirefox || globalState.userAgent.isSafari }
-          ]"
+          :class="
+            isZhLang ? 'zh' : globalState.userAgent.isFirefox || globalState.userAgent.isSafari ? 'en-hack' : 'en'
+          "
           v-html="
             markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
               sanitize: false
@@ -426,10 +425,11 @@
         &.en {
           font-size: $font-size-base + 2;
           line-height: $line-height-base * 1.8;
-          &.en-hack {
-            font-size: $font-size-base + 1.4;
-            line-height: $line-height-base * 1.9;
-          }
+        }
+
+        &.en-hack {
+          font-size: $font-size-base + 1.4;
+          line-height: $line-height-base * 1.9;
         }
 
         &::first-letter {
