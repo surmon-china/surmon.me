@@ -12,8 +12,8 @@
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { isZhLang, isDarkTheme, cdnDomain, appConfig } = useEnhancer()
   const { adminProfile, appOption, goLink } = useStores()
+  const { isZhLang, isDarkTheme, cdnDomain, appConfig, globalState } = useEnhancer()
 
   const emailLink = getEmailLink({
     email: appOption.data?.site_email!,
@@ -103,11 +103,13 @@
       <div class="container">
         <div
           class="biography"
-          :class="isZhLang ? 'zh' : 'en'"
+          :class="[
+            isZhLang ? 'zh' : 'en',
+            { 'en-hack': globalState.userAgent.isFirefox || globalState.userAgent.isSafari }
+          ]"
           v-html="
             markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
-              sanitize: false,
-              codeLineNumbers: false
+              sanitize: false
             })
           "
         ></div>
@@ -424,6 +426,10 @@
         &.en {
           font-size: $font-size-base + 2;
           line-height: $line-height-base * 1.8;
+          &.en-hack {
+            font-size: $font-size-base + 1.4;
+            line-height: $line-height-base * 1.9;
+          }
         }
 
         &::first-letter {
