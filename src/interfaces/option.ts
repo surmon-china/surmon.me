@@ -2,6 +2,11 @@ import { UniversalKeyValue } from './common'
 
 export interface AppRemoteConfig {
   [key: string]: any
+  ABOUT_BIOGRAPHY_ZH?: string
+  ABOUT_BIOGRAPHY_EN?: string
+  ABOUT_GEO_TITLE_ZH?: string
+  ABOUT_GEO_TITLE_EN?: string
+  ABOUT_GEO_COORDINATES?: [number, number]
   AD_PC_CARROUSEL?: {
     index: number
     url: string

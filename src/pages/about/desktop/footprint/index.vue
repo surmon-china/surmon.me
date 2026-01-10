@@ -2,10 +2,12 @@
   import type { Map } from 'mapbox-gl'
   import { shallowRef } from 'vue'
   import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { useEnhancer } from '/@/app/enhancer'
   import { flyToLivingMarker } from './mapbox-living-now'
   import MapboxModal from './box-modal.vue'
   import Mapbox from './box-base.vue'
 
+  const { appConfig } = useEnhancer()
   const modalVisible = shallowRef(false)
   const openModal = () => {
     modalVisible.value = true
@@ -37,10 +39,10 @@
     </div>
     <div class="legends">
       <div class="buttons">
-        <button class="item" @click="flyToLivingMarker(map!)">
+        <button class="item" @click="flyToLivingMarker(map!, appConfig.ABOUT_GEO_COORDINATES!)">
           <i class="iconfont icon-location"></i>
           <span class="text">
-            <i18n :zh="APP_PROFILE.about_page_geo_title_zh" :en="APP_PROFILE.about_page_geo_title_en" />
+            <i18n :zh="appConfig.ABOUT_GEO_TITLE_ZH" :en="appConfig.ABOUT_GEO_TITLE_EN" />
           </span>
         </button>
         <div class="divider"></div>

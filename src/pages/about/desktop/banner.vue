@@ -4,14 +4,15 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { getAssetURL } from '/@/transforms/url'
   import { getEmailLink } from '/@/transforms/email'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { APP_PROFILE } from '/@/configs/app.config'
-  import { useAdminAvatar, i18ns } from '../shared'
+  import { useAdminAvatar } from '../shared'
 
   const emit = defineEmits<{
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { isZhLang, isDarkTheme, cdnDomain } = useEnhancer()
+  const { isZhLang, isDarkTheme, cdnDomain, appConfig } = useEnhancer()
   const { adminProfile, appOption, goLink } = useStores()
 
   const emailLink = getEmailLink({
@@ -100,10 +101,16 @@
         </div>
       </div>
       <div class="container">
-        <p
+        <div
           class="biography"
-          v-html="isZhLang ? APP_PROFILE.about_page_biography_zh : APP_PROFILE.about_page_biography_en"
-        ></p>
+          :class="isZhLang ? 'zh' : 'en'"
+          v-html="
+            markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
+              sanitize: false,
+              codeLineNumbers: false
+            })
+          "
+        ></div>
       </div>
     </div>
   </div>
@@ -401,14 +408,22 @@
       .biography {
         margin: 0;
         padding: $gap * 1.8 $gap;
-        line-height: $line-height-base * 1.9;
         text-indent: 2em;
         font-weight: 600;
-        font-size: $font-size-base + 1;
         color: $color-text-secondary;
         @include mix.color-transition($motion-duration-mid);
         &:hover {
           color: $color-text;
+        }
+
+        &.zh {
+          font-size: $font-size-base + 1;
+          line-height: $line-height-base * 1.9;
+        }
+
+        &.en {
+          font-size: $font-size-base + 2;
+          line-height: $line-height-base * 1.8;
         }
 
         &::first-letter {
@@ -416,6 +431,12 @@
           font-weight: bold;
           font-size: $font-size-h2;
           color: $color-text-darker;
+        }
+
+        ::v-deep(p) {
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
     }

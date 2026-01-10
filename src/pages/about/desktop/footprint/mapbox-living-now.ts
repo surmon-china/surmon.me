@@ -1,19 +1,19 @@
 import type { Map } from 'mapbox-gl'
 import type { MapboxGL } from './mapbox-lib'
-import { APP_PROFILE, APP_CONFIG } from '/@/configs/app.config'
+import { APP_CONFIG } from '/@/configs/app.config'
 
-export const addLivingMarkerToMap = (lib: MapboxGL, map: Map) => {
+export const addLivingMarkerToMap = (lib: MapboxGL, map: Map, coordinates: [number, number]) => {
   return new lib.Marker({
     color: APP_CONFIG.primary_color,
     anchor: 'bottom'
   })
-    .setLngLat(APP_PROFILE.about_page_geo_coordinates as any)
+    .setLngLat(coordinates)
     .addTo(map)
 }
 
-export const flyToLivingMarker = (map: Map) => {
+export const flyToLivingMarker = (map: Map, coordinates: [number, number]) => {
   return map.flyTo({
-    center: APP_PROFILE.about_page_geo_coordinates as any,
+    center: coordinates,
     zoom: 14
   })
 }

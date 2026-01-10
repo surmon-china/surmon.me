@@ -17,6 +17,11 @@ export const getTagIconName = (tag: Tag) => {
 }
 
 export const getTagEnName = (tag: Tag) => {
+  // tag extras custom en-name
+  const tagEnName = tag.extends.find((item) => item.name === 'en-name')
+  if (tagEnName) {
+    return tagEnName.value
+  }
   // english name
   if (!/.*[\u4e00-\u9fa5]+.*$/.test(tag.name)) {
     return tag.name

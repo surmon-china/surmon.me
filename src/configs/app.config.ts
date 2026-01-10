@@ -32,26 +32,7 @@ export const APP_PROFILE = Object.freeze({
   sub_title_en: `Surmon's digital vihāra`,
   description_zh: '本是浪蝶遊蜂，自留半畝石池，但求直抒胸臆，揮墨九雲之中。',
   description_en: 'Either write something worth reading or do something worth writing.',
-  description_short_zh: '本為蝶蜂，自築石池；但求抒臆，揮墨雲中',
-  about_page_geo_title_zh: '在东八区，靠近赤道',
-  about_page_geo_title_en: 'UTC +07:00 ~ +09:00',
-  about_page_geo_coordinates: [103.830391822121, 1.340863],
-  about_page_biography_zh: [
-    `嗨！我是 Surmon，法名觉了（jué liǎo），一名野生软件工程师，曾供职于美图秀秀、七牛云、字节跳动、加密交易所。`,
-    `如你所见，我有着还不错的设计灵感和编码能力，我会经常在 GitHub 上开源一些「没用」或「有用」的小物件。`,
-    `如果某些输出恰好帮助了你，期待你的随喜赞助～ `,
-    `在流动的当下，我有时亦以 <a href="https://en.wikipedia.org/wiki/Theravada" target="_blank">上座部佛教</a> 僧侣的形象示现。`,
-    `而这里，我把它称作自己的「数字<a href="https://zh.wikipedia.org/wiki/%E7%B2%BE%E8%88%8D" target="_blank">精舍</a>」，随缘记录。`,
-    `祝你在这儿玩得愉快！`,
-    `（俗生履历：<a href="https://surmon.me/article/144" target="_blank">《何以为家》</a>`
-  ].join(''),
-  about_page_biography_en: [
-    `Hi! I'm Surmon, a software engineer who has worked at Meitu Inc., Qiniu Cloud, ByteDance, and Crypto Exchange.`,
-    `I have developed strong design inspiration and coding skills.`,
-    `I'm passionate about open-source software and problem-solving, and I hope my contributions can help you.`,
-    `I've been a self-taught programmer since 2015, and if you're interested in my journey, you can find the answers in this <a href="https://surmon.me/article/144" target="_blank">article</a> (Chinese).`,
-    `I call this place my own digital vihāra. Have fun here!`
-  ].join(' ')
+  description_short_zh: '本為蝶蜂，自築石池；但求抒臆，揮墨雲中'
 })
 
 export const MAPBOX_CONFIG = Object.freeze({

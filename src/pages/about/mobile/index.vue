@@ -4,6 +4,7 @@
   import { LocaleKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
   import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
+  import { markdownToHTML } from '/@/transforms/markdown'
   import { useAdminProfileStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
@@ -11,7 +12,7 @@
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'
 
   const { goLink } = useStores()
-  const { isZhLang } = useEnhancer()
+  const { isZhLang, appConfig } = useEnhancer()
   const adminProfile = useAdminProfileStore()
 
   useAboutPageMeta()
@@ -58,10 +59,15 @@
     <div class="biography">
       <div class="bridge left"></div>
       <div class="bridge right"></div>
-      <p
+      <div
         class="content"
-        v-html="isZhLang ? APP_PROFILE.about_page_biography_zh : APP_PROFILE.about_page_biography_en"
-      ></p>
+        :class="isZhLang ? 'zh' : 'en'"
+        v-html="
+          markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
+            sanitize: false
+          })
+        "
+      ></div>
     </div>
     <div class="buttons">
       <router-link class="item" :to="getPageRoute(RouteName.Archive)">
@@ -227,6 +233,7 @@
         margin-bottom: 0;
         line-height: $line-height-base * 1.4;
         font-size: $font-size-base + 1;
+        font-weight: 500;
         text-indent: 1em;
 
         &::first-letter {
@@ -238,7 +245,14 @@
         ::v-deep(a) {
           font-weight: bold;
           text-decoration: underline;
-          text-underline-offset: 0.2em;
+          text-underline-offset: 0.3em;
+          text-decoration-style: dotted;
+        }
+
+        ::v-deep(p) {
+          &:last-child {
+            margin-bottom: 0;
+          }
         }
       }
     }
