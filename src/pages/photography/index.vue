@@ -43,7 +43,7 @@
   })
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY, Language.English)!)
+    const enTitle = 'Photography'
     const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${APP_PROFILE.author} 的摄影作品` : `${APP_PROFILE.author}'s photographs`
     return {

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-  import { watch, onBeforeMount } from 'vue'
+  import { watch, onBeforeMount, computed } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
+  import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { scrollToNextScreen } from '/@/utils/scroller'
@@ -11,6 +12,7 @@
     date: string
   }>()
 
+  const { isZhLang } = useEnhancer()
   const { articleList: articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
@@ -21,8 +23,13 @@
     scrollToNextScreen()
   }
 
+  const pageDescription = computed(() => {
+    return isZhLang.value ? `发布于 ${props.date} 的文章` : `Articles from ${props.date}`
+  })
+
   usePageSeo(() => ({
-    pageTitles: [props.date, 'Date'],
+    pageTitles: [props.date, isZhLang.value ? '日期' : 'Date'],
+    description: pageDescription.value,
     ogType: 'website'
   }))
 
@@ -42,7 +49,7 @@
 <template>
   <div class="date-flow-page">
     <article-list-header icon="icon-clock">
-      <i18n :zh="`发布于 ${date} 的所有文章`" :en="`Articles published at ${date}`" />
+      {{ pageDescription }}
     </article-list-header>
     <article-list
       :fetching="articleListStore.fetching"

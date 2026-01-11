@@ -47,9 +47,10 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
   const _ = computed(() => {
     const value = typeof input === 'function' ? input() : input
     const { title, pageTitle, pageTitles, ...rest } = value
-    const separator = APP_CONFIG.title_separator
-    const pureTitle = pageTitle ?? pageTitles?.join(separator)
-    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_PROFILE.title].join(separator) : APP_PROFILE.title)
+    const pureTitle = pageTitle ?? pageTitles?.join(APP_CONFIG.page_title_separator)
+    const fullTitle =
+      title ??
+      (pureTitle ? [pureTitle, APP_PROFILE.title].join(APP_CONFIG.root_title_separator) : APP_PROFILE.title)
     return { pureTitle, fullTitle, ...rest }
   })
 

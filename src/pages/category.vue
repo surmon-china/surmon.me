@@ -23,16 +23,12 @@
   const currentCategoryIcon = computed(() => {
     return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
   })
-  const currentCategoryColor = computed(() => {
+  const currentCategoryBgColor = computed(() => {
     return getExtendValue(currentCategory.value?.extends || [], 'bgcolor')
   })
-  const currentCategoryImage = computed(() => {
-    const value = getExtendValue(currentCategory.value?.extends || [], 'background')
-    if (isOriginalStaticURL(value)) {
-      return getStaticURL(cdnDomain, getStaticPath(value!))
-    } else {
-      return value
-    }
+  const currentCategoryBgImage = computed(() => {
+    const imageUrl = getExtendValue(currentCategory.value?.extends || [], 'background')
+    return isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl!)) : imageUrl
   })
 
   const loadmoreArticles = async () => {
@@ -47,9 +43,10 @@
     const enTitle = firstUpperCase(props.categorySlug)
     const zhTitle = _i18n.t(props.categorySlug)!
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle]
+    const description = currentCategory.value?.description || titles.join(',')
     return {
       pageTitles: titles,
-      description: currentCategory.value?.description || titles.join(','),
+      description,
       ogType: 'website'
     }
   })
@@ -70,8 +67,8 @@
 <template>
   <div class="category-flow-page">
     <article-list-header
-      :background-color="currentCategoryColor"
-      :background-image="currentCategoryImage"
+      :background-color="currentCategoryBgColor"
+      :background-image="currentCategoryBgImage"
       :icon="currentCategoryIcon"
     >
       <i18n v-if="currentCategory">

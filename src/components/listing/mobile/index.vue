@@ -42,13 +42,17 @@
   usePageSeo(() => {
     // filters page
     if (props.date) {
-      return { pageTitles: [props.date, 'Date'] }
+      return { pageTitles: [props.date, isZhLang.value ? '日期' : 'Date'] }
     } else if (props.searchKeyword) {
-      return { pageTitles: [`"${props.searchKeyword}"`, 'Search'] }
+      return isZhLang.value
+        ? { pageTitles: [`“${props.searchKeyword}”`, '搜索'] }
+        : { pageTitles: [`"${props.searchKeyword}"`, 'Search'] }
     } else if (filterCategory.value) {
-      return { pageTitles: [filterCategory.value.name, filterCategory.value.slug] }
+      return { pageTitles: [filterCategory.value.name, firstUpperCase(filterCategory.value.slug)] }
     } else if (filterTag.value) {
-      return { pageTitles: [filterTag.value.name, filterTag.value.slug] }
+      const tagZhName = filterTag.value.name
+      const tagEnName = getTagEnName(filterTag.value)
+      return { pageTitles: isZhLang.value ? [tagZhName, tagEnName] : [tagEnName, 'Tag'] }
     }
 
     // index page
@@ -97,25 +101,25 @@
       <div class="content">
         <template v-if="categorySlug">
           <i18n v-if="filterCategory">
-            <template #zh>分类 “{{ filterCategory.name }}” 的过滤结果</template>
-            <template #en>Category "{{ firstUpperCase(filterCategory.slug) }}" 's result</template>
+            <template #zh>分类 “{{ filterCategory.name }}” 下的所有文章</template>
+            <template #en>Articles in category "{{ firstUpperCase(filterCategory.slug) }}"</template>
           </i18n>
           <span v-else>{{ categorySlug }}</span>
         </template>
         <template v-if="tagSlug">
           <i18n v-if="filterTag">
-            <template #zh>标签 “{{ filterTag.name }}” 的过滤结果</template>
-            <template #en>Tag "{{ getTagEnName(filterTag) }}" 's result</template>
+            <template #zh>标签 “{{ filterTag.name }}” 的相关文章</template>
+            <template #en>Articles tagged "{{ getTagEnName(filterTag) }}"</template>
           </i18n>
           <span v-else>{{ tagSlug }}</span>
         </template>
         <i18n v-if="date">
-          <template #zh>日期 “{{ date }}” 的过滤结果</template>
-          <template #en>Date "{{ date }}" 's result</template>
+          <template #zh>发布于 {{ date }} 的文章</template>
+          <template #en>Articles from {{ date }}</template>
         </i18n>
         <i18n v-if="searchKeyword">
-          <template #zh>关键词 “{{ searchKeyword }}” 的过滤结果</template>
-          <template #en>Search keyword "{{ searchKeyword }}" 's result</template>
+          <template #zh>关键词 “{{ searchKeyword }}” 的搜索结果</template>
+          <template #en>Search results for "{{ searchKeyword }}"</template>
         </i18n>
       </div>
       <router-link to="/" class="close">

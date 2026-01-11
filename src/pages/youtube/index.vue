@@ -20,7 +20,7 @@
   usePageSeo(() => {
     return {
       pageTitle: 'YouTube',
-      description: isZhLang.value ? `${APP_PROFILE.author} 的视频` : `${APP_PROFILE.author}'s YouTube`
+      description: isZhLang.value ? `${APP_PROFILE.author} 的长视频` : `${APP_PROFILE.author}'s YouTube`
     }
   })
 

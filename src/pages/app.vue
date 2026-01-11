@@ -21,9 +21,10 @@
   usePageSeo(() => {
     const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_APP, Language.English)!)
     const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_APP)!, enTitle] : [enTitle]
+    const description = `${APP_PROFILE.title} App ${isZhLang.value ? '下载' : 'download'}`
     return {
       pageTitles: titles,
-      description: `${APP_PROFILE.title} App ${isZhLang.value ? '下载' : 'download'}`,
+      description,
       ogImage: APP_LOGO_URL
     }
   })

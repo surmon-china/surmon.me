@@ -12,7 +12,7 @@ export const i18ns = {
     [Language.English]: `Surmon's writing archive`
   },
   description: {
-    [Language.Chinese]: `书字字之方便，开众善之法门`,
+    [Language.Chinese]: '书字字之方便，开众善之法门',
     [Language.English]: 'Either write something worth reading or do something worth writing'
   }
 } as const
@@ -22,10 +22,8 @@ export const useArchivePageMeta = () => {
   usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ARCHIVE, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ARCHIVE)!, enTitle] : [enTitle]
-    return {
-      pageTitles: titles,
-      description: `${APP_PROFILE.title} ${isZhLang.value ? '数据归档' : 'archives'}`
-    }
+    const description = `${APP_PROFILE.title} ${isZhLang.value ? '数据归档' : 'archives'}`
+    return { pageTitles: titles, description }
   })
 }
 

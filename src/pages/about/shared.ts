@@ -18,9 +18,10 @@ export const useAboutPageMeta = () => {
   return usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ABOUT)!, enTitle] : [enTitle]
+    const description = `${isZhLang.value ? '关于' : 'About'} ${APP_PROFILE.author}`
     return {
       pageTitles: titles,
-      description: `${isZhLang.value ? '关于' : 'About'} ${APP_PROFILE.author}`,
+      description,
       ogType: 'profile',
       ogImage: adminProfile.data?.avatar
     }
