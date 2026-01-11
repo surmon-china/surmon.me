@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.8.4";
+const APP_VERSION = "5.8.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -6378,7 +6378,7 @@ _sfc_main$1C.setup = (props, ctx) => {
 };
 const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-69960c9a"]]);
 const getChatGPTShareURL = (conversationId) => {
-  return `https://chat.openai.com/share/${conversationId}`;
+  return `https://chatgpt.com/share/${conversationId}`;
 };
 const logger = createLogger("APP:Comment");
 const EMOJIS = [
@@ -9516,7 +9516,7 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       emit("click-link");
     };
     const avatarURL = computed(() => {
-      const fileName = props.gptModel?.includes("4") ? "4.0" : "3.5";
+      const fileName = props.gptModel?.includes("3") ? "3.5" : "4.0";
       return `/images/chatgpt/${fileName}.png`;
     });
     return (_ctx, _push, _parent, _attrs) => {
@@ -9525,9 +9525,9 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       const _component_udate = resolveComponent("udate");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["gpt-comment", { "hide-avatar": __props.hiddenAvatar }]
-      }, _attrs))} data-v-8ddf8471>`);
+      }, _attrs))} data-v-1016ded2>`);
       if (!__props.hiddenAvatar) {
-        _push(`<div class="gpt-avatar" data-v-8ddf8471>`);
+        _push(`<div class="gpt-avatar" data-v-1016ded2>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "link",
           href: unref(getChatGPTShareURL)(__props.gptId),
@@ -9558,7 +9558,7 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="gpt-body" data-v-8ddf8471><div class="gpt-header" data-v-8ddf8471><div class="left" data-v-8ddf8471>`);
+      _push(`<div class="gpt-body" data-v-1016ded2><div class="gpt-header" data-v-1016ded2><div class="left" data-v-1016ded2>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "username",
         href: unref(getChatGPTShareURL)(__props.gptId),
@@ -9576,13 +9576,13 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (__props.gptModel) {
-        _push(`<span class="model" data-v-8ddf8471><i class="iconfont icon-cpu" data-v-8ddf8471></i><span data-v-8ddf8471>${ssrInterpolate(__props.gptModel)}</span></span>`);
+        _push(`<span class="model" data-v-1016ded2><i class="iconfont icon-cpu" data-v-1016ded2></i><span data-v-1016ded2>${ssrInterpolate(__props.gptModel)}</span></span>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="right" data-v-8ddf8471>`);
+      _push(`</div><div class="right" data-v-1016ded2>`);
       if (__props.gptTimestamp) {
-        _push(`<span class="created" data-allow-mismatch data-v-8ddf8471>`);
+        _push(`<span class="created" data-allow-mismatch data-v-1016ded2>`);
         _push(ssrRenderComponent(_component_udate, {
           date: Number(__props.gptTimestamp) * 1e3,
           to: "ago"
@@ -9591,7 +9591,7 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</div></div><div class="gpt-content" data-v-8ddf8471><div class="markdown" data-v-8ddf8471>`);
+      _push(`</div></div><div class="gpt-content" data-v-1016ded2><div class="markdown" data-v-1016ded2>`);
       _push(ssrRenderComponent(_sfc_main$1z, {
         markdown: props.gptResponse,
         compact: true,
@@ -9607,7 +9607,7 @@ _sfc_main$1h.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/chatgpt.vue");
   return _sfc_setup$1h ? _sfc_setup$1h(props, ctx) : void 0;
 };
-const ArticleChatgpt = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-8ddf8471"]]);
+const ArticleChatgpt = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-1016ded2"]]);
 const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
