@@ -20,7 +20,7 @@
   }
 
   const avatarURL = computed(() => {
-    const fileName = props.gptModel?.includes('4') ? '4.0' : '3.5'
+    const fileName = props.gptModel?.includes('3') ? '3.5' : '4.0'
     return `/images/chatgpt/${fileName}.png`
   })
 </script>
