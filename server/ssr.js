@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.8.5";
+const APP_VERSION = "5.8.6";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -140,7 +140,9 @@ const APP_CONFIG = Object.freeze({
   default_error_code: 500,
   default_comment_avatar: "/images/gravatar.webp",
   default_og_image: "/images/og-social-card.jpg",
-  title_separator: " | ",
+  root_title_separator: " | ",
+  page_title_separator: " • ",
+  // page_title_separator: ' · ',
   primary_color: "#0088f5"
 });
 const APP_PROFILE = Object.freeze({
@@ -2268,9 +2270,8 @@ function usePageSeo(input) {
   const _ = computed(() => {
     const value = typeof input === "function" ? input() : input;
     const { title, pageTitle, pageTitles, ...rest } = value;
-    const separator = APP_CONFIG.title_separator;
-    const pureTitle = pageTitle ?? pageTitles?.join(separator);
-    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_PROFILE.title].join(separator) : APP_PROFILE.title);
+    const pureTitle = pageTitle ?? pageTitles?.join(APP_CONFIG.page_title_separator);
+    const fullTitle = title ?? (pureTitle ? [pureTitle, APP_PROFILE.title].join(APP_CONFIG.root_title_separator) : APP_PROFILE.title);
     return { pureTitle, fullTitle, ...rest };
   });
   return useHead({
@@ -2648,13 +2649,15 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
     });
     usePageSeo(() => {
       if (props.date) {
-        return { pageTitles: [props.date, "Date"] };
+        return { pageTitles: [props.date, isZhLang.value ? "日期" : "Date"] };
       } else if (props.searchKeyword) {
-        return { pageTitles: [`"${props.searchKeyword}"`, "Search"] };
+        return isZhLang.value ? { pageTitles: [`“${props.searchKeyword}”`, "搜索"] } : { pageTitles: [`"${props.searchKeyword}"`, "Search"] };
       } else if (filterCategory.value) {
-        return { pageTitles: [filterCategory.value.name, filterCategory.value.slug] };
+        return { pageTitles: [filterCategory.value.name, firstUpperCase(filterCategory.value.slug)] };
       } else if (filterTag.value) {
-        return { pageTitles: [filterTag.value.name, filterTag.value.slug] };
+        const tagZhName = filterTag.value.name;
+        const tagEnName = getTagEnName(filterTag.value);
+        return { pageTitles: isZhLang.value ? [tagZhName, tagEnName] : [tagEnName, "Tag"] };
       }
       return {
         title: `${APP_PROFILE.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
@@ -2694,35 +2697,35 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_empty = resolveComponent("empty");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-a4245d8f>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-ee831184>`);
       if (__props.tagSlug || __props.categorySlug || __props.date || __props.searchKeyword) {
-        _push(`<div class="header" data-v-a4245d8f><div class="content" data-v-a4245d8f>`);
+        _push(`<div class="header" data-v-ee831184><div class="content" data-v-ee831184>`);
         if (__props.categorySlug) {
           _push(`<!--[-->`);
           if (filterCategory.value) {
             _push(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`分类 “${ssrInterpolate(filterCategory.value.name)}” 的过滤结果`);
+                  _push2(`分类 “${ssrInterpolate(filterCategory.value.name)}” 下的所有文章`);
                 } else {
                   return [
-                    createTextVNode("分类 “" + toDisplayString(filterCategory.value.name) + "” 的过滤结果", 1)
+                    createTextVNode("分类 “" + toDisplayString(filterCategory.value.name) + "” 下的所有文章", 1)
                   ];
                 }
               }),
               en: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`Category &quot;${ssrInterpolate(unref(firstUpperCase)(filterCategory.value.slug))}&quot; &#39;s result`);
+                  _push2(`Articles in category &quot;${ssrInterpolate(unref(firstUpperCase)(filterCategory.value.slug))}&quot;`);
                 } else {
                   return [
-                    createTextVNode('Category "' + toDisplayString(unref(firstUpperCase)(filterCategory.value.slug)) + `" 's result`, 1)
+                    createTextVNode('Articles in category "' + toDisplayString(unref(firstUpperCase)(filterCategory.value.slug)) + '"', 1)
                   ];
                 }
               }),
               _: 1
             }, _parent));
           } else {
-            _push(`<span data-v-a4245d8f>${ssrInterpolate(__props.categorySlug)}</span>`);
+            _push(`<span data-v-ee831184>${ssrInterpolate(__props.categorySlug)}</span>`);
           }
           _push(`<!--]-->`);
         } else {
@@ -2734,26 +2737,26 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
             _push(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`标签 “${ssrInterpolate(filterTag.value.name)}” 的过滤结果`);
+                  _push2(`标签 “${ssrInterpolate(filterTag.value.name)}” 的相关文章`);
                 } else {
                   return [
-                    createTextVNode("标签 “" + toDisplayString(filterTag.value.name) + "” 的过滤结果", 1)
+                    createTextVNode("标签 “" + toDisplayString(filterTag.value.name) + "” 的相关文章", 1)
                   ];
                 }
               }),
               en: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`Tag &quot;${ssrInterpolate(unref(getTagEnName)(filterTag.value))}&quot; &#39;s result`);
+                  _push2(`Articles tagged &quot;${ssrInterpolate(unref(getTagEnName)(filterTag.value))}&quot;`);
                 } else {
                   return [
-                    createTextVNode('Tag "' + toDisplayString(unref(getTagEnName)(filterTag.value)) + `" 's result`, 1)
+                    createTextVNode('Articles tagged "' + toDisplayString(unref(getTagEnName)(filterTag.value)) + '"', 1)
                   ];
                 }
               }),
               _: 1
             }, _parent));
           } else {
-            _push(`<span data-v-a4245d8f>${ssrInterpolate(__props.tagSlug)}</span>`);
+            _push(`<span data-v-ee831184>${ssrInterpolate(__props.tagSlug)}</span>`);
           }
           _push(`<!--]-->`);
         } else {
@@ -2763,19 +2766,19 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
           _push(ssrRenderComponent(_component_i18n, null, {
             zh: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`日期 “${ssrInterpolate(__props.date)}” 的过滤结果`);
+                _push2(`发布于 ${ssrInterpolate(__props.date)} 的文章`);
               } else {
                 return [
-                  createTextVNode("日期 “" + toDisplayString(__props.date) + "” 的过滤结果", 1)
+                  createTextVNode("发布于 " + toDisplayString(__props.date) + " 的文章", 1)
                 ];
               }
             }),
             en: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`Date &quot;${ssrInterpolate(__props.date)}&quot; &#39;s result`);
+                _push2(`Articles from ${ssrInterpolate(__props.date)}`);
               } else {
                 return [
-                  createTextVNode('Date "' + toDisplayString(__props.date) + `" 's result`, 1)
+                  createTextVNode("Articles from " + toDisplayString(__props.date), 1)
                 ];
               }
             }),
@@ -2788,19 +2791,19 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
           _push(ssrRenderComponent(_component_i18n, null, {
             zh: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`关键词 “${ssrInterpolate(__props.searchKeyword)}” 的过滤结果`);
+                _push2(`关键词 “${ssrInterpolate(__props.searchKeyword)}” 的搜索结果`);
               } else {
                 return [
-                  createTextVNode("关键词 “" + toDisplayString(__props.searchKeyword) + "” 的过滤结果", 1)
+                  createTextVNode("关键词 “" + toDisplayString(__props.searchKeyword) + "” 的搜索结果", 1)
                 ];
               }
             }),
             en: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`Search keyword &quot;${ssrInterpolate(__props.searchKeyword)}&quot; &#39;s result`);
+                _push2(`Search results for &quot;${ssrInterpolate(__props.searchKeyword)}&quot;`);
               } else {
                 return [
-                  createTextVNode('Search keyword "' + toDisplayString(__props.searchKeyword) + `" 's result`, 1)
+                  createTextVNode('Search results for "' + toDisplayString(__props.searchKeyword) + '"', 1)
                 ];
               }
             }),
@@ -2816,7 +2819,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="iconfont icon-cancel" data-v-a4245d8f${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-cancel" data-v-ee831184${_scopeId}></i>`);
             } else {
               return [
                 createVNode("i", { class: "iconfont icon-cancel" })
@@ -2835,13 +2838,13 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="skeletons" data-v-a4245d8f${_scopeId}><!--[-->`);
+            _push2(`<ul class="skeletons" data-v-ee831184${_scopeId}><!--[-->`);
             ssrRenderList(3, (item) => {
-              _push2(`<li class="item" data-v-a4245d8f${_scopeId}><div class="thumbnail" data-v-a4245d8f${_scopeId}>`);
+              _push2(`<li class="item" data-v-ee831184${_scopeId}><div class="thumbnail" data-v-ee831184${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="content" data-v-a4245d8f${_scopeId}><div class="title" data-v-a4245d8f${_scopeId}>`);
+              _push2(`</div><div class="content" data-v-ee831184${_scopeId}><div class="title" data-v-ee831184${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="description" data-v-a4245d8f${_scopeId}>`);
+              _push2(`</div><div class="description" data-v-ee831184${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
               _push2(`</div></div></li>`);
             });
@@ -2891,11 +2894,11 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div data-v-a4245d8f${_scopeId}><div${ssrRenderAttrs({
+            _push2(`<div data-v-ee831184${_scopeId}><div${ssrRenderAttrs({
               key: "list",
               name: "list",
               class: "list"
-            })} data-v-a4245d8f>`);
+            })} data-v-ee831184>`);
             ssrRenderList(unref(articleListStore).data, (article, index) => {
               _push2(ssrRenderComponent(ListItem$1, {
                 class: "list-item",
@@ -2912,7 +2915,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
             }, {
               normal: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<button class="normal" data-v-a4245d8f${_scopeId2}><i class="iconfont icon-loadmore" data-v-a4245d8f${_scopeId2}></i></button>`);
+                  _push3(`<button class="normal" data-v-ee831184${_scopeId2}><i class="iconfont icon-loadmore" data-v-ee831184${_scopeId2}></i></button>`);
                 } else {
                   return [
                     createVNode("button", {
@@ -2945,7 +2948,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
               }),
               finished: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="finished" data-v-a4245d8f${_scopeId2}>`);
+                  _push3(`<span class="finished" data-v-ee831184${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     k: unref(LocaleKey).LIST_NO_MORE_DATA
                   }, null, _parent3, _scopeId2));
@@ -3030,7 +3033,7 @@ _sfc_main$1R.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/mobile/index.vue");
   return _sfc_setup$1R ? _sfc_setup$1R(props, ctx) : void 0;
 };
-const MobileListing = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-a4245d8f"]]);
+const MobileListing = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-ee831184"]]);
 const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
   __name: "item",
   __ssrInlineRender: true,
@@ -4707,16 +4710,12 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
     const currentCategoryIcon = computed(() => {
       return getExtendValue(currentCategory.value?.extends || [], "icon") || "icon-category";
     });
-    const currentCategoryColor = computed(() => {
+    const currentCategoryBgColor = computed(() => {
       return getExtendValue(currentCategory.value?.extends || [], "bgcolor");
     });
-    const currentCategoryImage = computed(() => {
-      const value = getExtendValue(currentCategory.value?.extends || [], "background");
-      if (isOriginalStaticURL(value)) {
-        return getStaticURL(cdnDomain, getStaticPath(value));
-      } else {
-        return value;
-      }
+    const currentCategoryBgImage = computed(() => {
+      const imageUrl = getExtendValue(currentCategory.value?.extends || [], "background");
+      return isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl;
     });
     const loadmoreArticles = async () => {
       await articleListStore.fetch({
@@ -4729,9 +4728,10 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
       const enTitle = firstUpperCase(props.categorySlug);
       const zhTitle = _i18n.t(props.categorySlug);
       const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle];
+      const description = currentCategory.value?.description || titles.join(",");
       return {
         pageTitles: titles,
-        description: currentCategory.value?.description || titles.join(","),
+        description,
         ogType: "website"
       };
     });
@@ -4748,10 +4748,10 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-baba6f41>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "category-flow-page" }, _attrs))} data-v-4375b490>`);
       _push(ssrRenderComponent(ArticleListHeader, {
-        "background-color": currentCategoryColor.value,
-        "background-image": currentCategoryImage.value,
+        "background-color": currentCategoryBgColor.value,
+        "background-image": currentCategoryBgImage.value,
         icon: currentCategoryIcon.value
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -4760,12 +4760,12 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
+                    _push3(`<span data-v-4375b490${_scopeId2}>${ssrInterpolate(currentCategory.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
+                    _push3(`<span data-v-4375b490${_scopeId2}>${ssrInterpolate(currentCategory.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, toDisplayString(currentCategory.value.name), 1),
@@ -4779,12 +4779,12 @@ const _sfc_main$1K = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-baba6f41${_scopeId2}>Category</span>`);
+                    _push3(`<span data-v-4375b490${_scopeId2}>Category</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-baba6f41${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
+                    _push3(`<span data-v-4375b490${_scopeId2}>${ssrInterpolate(unref(firstUpperCase)(currentCategory.value.slug))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Category"),
@@ -4843,7 +4843,7 @@ _sfc_main$1K.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/category.vue");
   return _sfc_setup$1K ? _sfc_setup$1K(props, ctx) : void 0;
 };
-const CategoryListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1K, [["__scopeId", "data-v-baba6f41"]]);
+const CategoryListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1K, [["__scopeId", "data-v-4375b490"]]);
 const _sfc_main$1J = /* @__PURE__ */ defineComponent({
   __name: "tag",
   __ssrInlineRender: true,
@@ -4857,14 +4857,10 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
     const articleListStore = useArticleListStore();
     const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug));
     const currentTagIcon = computed(() => getExtendValue(currentTag.value?.extends || [], "icon") || "icon-tag");
-    const currentTagColor = computed(() => getExtendValue(currentTag.value?.extends || [], "bgcolor"));
-    const currentTagImage = computed(() => {
-      const value = getExtendValue(currentTag.value?.extends || [], "background");
-      if (isOriginalStaticURL(value)) {
-        return getStaticURL(cdnDomain, getStaticPath(value));
-      } else {
-        return value;
-      }
+    const currentTagBgColor = computed(() => getExtendValue(currentTag.value?.extends || [], "bgcolor"));
+    const currentTagBgImage = computed(() => {
+      const imageUrl = getExtendValue(currentTag.value?.extends || [], "background");
+      return isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl;
     });
     const loadmoreArticles = async () => {
       await articleListStore.fetch({
@@ -4874,10 +4870,11 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
       scrollToNextScreen();
     };
     usePageSeo(() => {
-      const enTitle = firstUpperCase(props.tagSlug);
-      const zhTitle = currentTag.value?.name;
+      const tag = currentTag.value;
+      const zhTitle = tag.name;
+      const enTitle = getTagEnName(tag);
       const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, "Tag"];
-      const description = currentTag.value?.description || titles.join(",");
+      const description = tag.description || titles.join(",");
       return { pageTitles: titles, description };
     });
     onBeforeMount(() => {
@@ -4893,25 +4890,25 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-3f25e4df>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "tag-flow-page" }, _attrs))} data-v-6e29f5d0>`);
       _push(ssrRenderComponent(ArticleListHeader, {
-        "background-color": currentTagColor.value,
-        "background-image": currentTagImage.value,
+        "background-color": currentTagBgColor.value,
+        "background-image": currentTagBgImage.value,
         icon: currentTagIcon.value
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (currentTag.value) {
-              _push2(`<span class="header" data-v-3f25e4df${_scopeId}>`);
+              _push2(`<span class="header" data-v-6e29f5d0${_scopeId}>`);
               _push2(ssrRenderComponent(_component_i18n, null, {
                 zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-3f25e4df${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
+                    _push3(`<span data-v-6e29f5d0${_scopeId2}>#${ssrInterpolate(currentTag.value.name)}</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-3f25e4df${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
+                    _push3(`<span data-v-6e29f5d0${_scopeId2}>${ssrInterpolate(currentTag.value.description || "...")}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "#" + toDisplayString(currentTag.value.name), 1),
@@ -4925,12 +4922,12 @@ const _sfc_main$1J = /* @__PURE__ */ defineComponent({
                 }),
                 en: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<span data-v-3f25e4df${_scopeId2}>Tag</span>`);
+                    _push3(`<span data-v-6e29f5d0${_scopeId2}>Tag</span>`);
                     _push3(ssrRenderComponent(_component_divider, {
                       class: "divider",
                       type: "vertical"
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span data-v-3f25e4df${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
+                    _push3(`<span data-v-6e29f5d0${_scopeId2}>#${ssrInterpolate(unref(getTagEnName)(currentTag.value))}</span>`);
                   } else {
                     return [
                       createVNode("span", null, "Tag"),
@@ -4995,7 +4992,7 @@ _sfc_main$1J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/tag.vue");
   return _sfc_setup$1J ? _sfc_setup$1J(props, ctx) : void 0;
 };
-const TagListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1J, [["__scopeId", "data-v-3f25e4df"]]);
+const TagListingPage = /* @__PURE__ */ _export_sfc(_sfc_main$1J, [["__scopeId", "data-v-6e29f5d0"]]);
 const _sfc_main$1I = /* @__PURE__ */ defineComponent({
   __name: "search",
   __ssrInlineRender: true,
@@ -5013,8 +5010,12 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
       });
       scrollToNextScreen();
     };
+    const pageDescription = computed(() => {
+      return isZhLang.value ? `关键词 “${props.keyword}” 的搜索结果` : `Search results for "${props.keyword}"`;
+    });
     usePageSeo(() => ({
-      pageTitles: [`"${props.keyword}"`, isZhLang.value ? "搜索" : "Search"],
+      pageTitles: isZhLang.value ? [`“${props.keyword}”`, "搜索"] : [`"${props.keyword}"`, "Search"],
+      description: pageDescription.value,
       ogType: "website"
     }));
     onBeforeMount(() => {
@@ -5028,21 +5029,14 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
       return articleListStore.fetch({ keyword: props.keyword });
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_i18n = resolveComponent("i18n");
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "search-flow-page" }, _attrs))}>`);
       _push(ssrRenderComponent(ArticleListHeader, { icon: "icon-search" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(ssrRenderComponent(_component_i18n, {
-              zh: `和 “${__props.keyword}” 有关的所有文章`,
-              en: `Keyword "${__props.keyword}"'s result`
-            }, null, _parent2, _scopeId));
+            _push2(`${ssrInterpolate(pageDescription.value)}`);
           } else {
             return [
-              createVNode(_component_i18n, {
-                zh: `和 “${__props.keyword}” 有关的所有文章`,
-                en: `Keyword "${__props.keyword}"'s result`
-              }, null, 8, ["zh", "en"])
+              createTextVNode(toDisplayString(pageDescription.value), 1)
             ];
           }
         }),
@@ -5072,6 +5066,7 @@ const _sfc_main$1H = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
+    const { isZhLang } = useEnhancer();
     const { articleList: articleListStore } = useStores();
     const loadmoreArticles = async () => {
       await articleListStore.fetch({
@@ -5080,8 +5075,12 @@ const _sfc_main$1H = /* @__PURE__ */ defineComponent({
       });
       scrollToNextScreen();
     };
+    const pageDescription = computed(() => {
+      return isZhLang.value ? `发布于 ${props.date} 的文章` : `Articles from ${props.date}`;
+    });
     usePageSeo(() => ({
-      pageTitles: [props.date, "Date"],
+      pageTitles: [props.date, isZhLang.value ? "日期" : "Date"],
+      description: pageDescription.value,
       ogType: "website"
     }));
     onBeforeMount(() => {
@@ -5095,21 +5094,14 @@ const _sfc_main$1H = /* @__PURE__ */ defineComponent({
       return articleListStore.fetch({ date: props.date });
     });
     return (_ctx, _push, _parent, _attrs) => {
-      const _component_i18n = resolveComponent("i18n");
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "date-flow-page" }, _attrs))}>`);
       _push(ssrRenderComponent(ArticleListHeader, { icon: "icon-clock" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(ssrRenderComponent(_component_i18n, {
-              zh: `发布于 ${__props.date} 的所有文章`,
-              en: `Articles published at ${__props.date}`
-            }, null, _parent2, _scopeId));
+            _push2(`${ssrInterpolate(pageDescription.value)}`);
           } else {
             return [
-              createVNode(_component_i18n, {
-                zh: `发布于 ${__props.date} 的所有文章`,
-                en: `Articles published at ${__props.date}`
-              }, null, 8, ["zh", "en"])
+              createTextVNode(toDisplayString(pageDescription.value), 1)
             ];
           }
         }),
@@ -5137,7 +5129,7 @@ const i18ns$1 = {
     [Language.English]: `Surmon's writing archive`
   },
   description: {
-    [Language.Chinese]: `书字字之方便，开众善之法门`,
+    [Language.Chinese]: "书字字之方便，开众善之法门",
     [Language.English]: "Either write something worth reading or do something worth writing"
   }
 };
@@ -5146,10 +5138,8 @@ const useArchivePageMeta = () => {
   usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ARCHIVE, Language.English));
     const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ARCHIVE), enTitle] : [enTitle];
-    return {
-      pageTitles: titles,
-      description: `${APP_PROFILE.title} ${isZhLang.value ? "数据归档" : "archives"}`
-    };
+    const description = `${APP_PROFILE.title} ${isZhLang.value ? "数据归档" : "archives"}`;
+    return { pageTitles: titles, description };
   });
 };
 const useArchivePageStatistics = () => {
@@ -11462,9 +11452,10 @@ const useAboutPageMeta = () => {
   return usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English));
     const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ABOUT), enTitle] : [enTitle];
+    const description = `${isZhLang.value ? "关于" : "About"} ${APP_PROFILE.author}`;
     return {
       pageTitles: titles,
-      description: `${isZhLang.value ? "关于" : "About"} ${APP_PROFILE.author}`,
+      description,
       ogType: "profile",
       ogImage: adminProfile.data?.avatar
     };
@@ -12969,9 +12960,10 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
     usePageSeo(() => {
       const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_APP, Language.English));
       const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_APP), enTitle] : [enTitle];
+      const description = `${APP_PROFILE.title} App ${isZhLang.value ? "下载" : "download"}`;
       return {
         pageTitles: titles,
-        description: `${APP_PROFILE.title} App ${isZhLang.value ? "下载" : "download"}`,
+        description,
         ogImage: APP_LOGO_URL
       };
     });
@@ -12982,13 +12974,13 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["app-page", { mobile: props.isMobile }]
-      }, _attrs))} data-v-d8338517><div class="app" data-v-d8338517><div class="logo" data-v-d8338517>`);
+      }, _attrs))} data-v-3e72680c><div class="app" data-v-3e72680c><div class="logo" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_uimage, {
         alt: "app-logo",
         src: APP_LOGO_URL,
         cdn: ""
       }, null, _parent));
-      _push(`</div><h2 class="title" data-v-d8338517>${ssrInterpolate(unref(APP_PROFILE).title)}</h2><p class="description" data-v-d8338517>`);
+      _push(`</div><h2 class="title" data-v-3e72680c>${ssrInterpolate(unref(APP_PROFILE).title)}</h2><p class="description" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_webfont, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -13005,14 +12997,14 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</p><div class="screen" data-v-d8338517>`);
+      _push(`</p><div class="screen" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_uimage, {
         alt: "app-hot",
         class: "screen-img",
         src: "/images/page-app/hot.webp",
         cdn: ""
       }, null, _parent));
-      _push(`<div class="download" data-v-d8338517>`);
+      _push(`<div class="download" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "qrcode",
         alt: "qrcode",
@@ -13026,7 +13018,7 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="icon iconfont icon-android" data-v-d8338517${_scopeId}></i><span class="text" data-v-d8338517${_scopeId}>Android</span><i class="new-window iconfont icon-new-window-s" data-v-d8338517${_scopeId}></i>`);
+            _push2(`<i class="icon iconfont icon-android" data-v-3e72680c${_scopeId}></i><span class="text" data-v-3e72680c${_scopeId}>Android</span><i class="new-window iconfont icon-new-window-s" data-v-3e72680c${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "icon iconfont icon-android" }),
@@ -13044,7 +13036,7 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="icon iconfont icon-apple" data-v-d8338517${_scopeId}></i><span class="text" data-v-d8338517${_scopeId}>iOS</span><i class="new-window iconfont icon-new-window-s" data-v-d8338517${_scopeId}></i>`);
+            _push2(`<i class="icon iconfont icon-apple" data-v-3e72680c${_scopeId}></i><span class="text" data-v-3e72680c${_scopeId}>iOS</span><i class="new-window iconfont icon-new-window-s" data-v-3e72680c${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "icon iconfont icon-apple" }),
@@ -13062,7 +13054,7 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-git" data-v-d8338517${_scopeId}></i> Source Code `);
+            _push2(`<i class="iconfont icon-git" data-v-3e72680c${_scopeId}></i> Source Code `);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-git" }),
@@ -13072,12 +13064,12 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><p class="rss" data-v-d8338517><span class="prefix" data-v-d8338517>`);
+      _push(`</div></div><p class="rss" data-v-3e72680c><span class="prefix" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "（",
         en: "["
       }, null, _parent));
-      _push(`</span><span class="deprecated" data-v-d8338517>`);
+      _push(`</span><span class="deprecated" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "此项目已废弃！",
         en: "DEPRECATED!"
@@ -13087,12 +13079,12 @@ const _sfc_main$$ = /* @__PURE__ */ defineComponent({
         zh: "建议使用",
         en: "Recommend"
       }, null, _parent));
-      _push(`<a class="link"${ssrRenderAttr("href", unref(VALUABLE_LINKS).RSS)} target="_blank" data-v-d8338517>`);
+      _push(`<a class="link"${ssrRenderAttr("href", unref(VALUABLE_LINKS).RSS)} target="_blank" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "RSS 订阅",
         en: "RSS subscription"
       }, null, _parent));
-      _push(`</a><span class="suffix" data-v-d8338517>`);
+      _push(`</a><span class="suffix" data-v-3e72680c>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "）",
         en: "]"
@@ -13107,7 +13099,7 @@ _sfc_main$$.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/app.vue");
   return _sfc_setup$$ ? _sfc_setup$$(props, ctx) : void 0;
 };
-const AppPage = /* @__PURE__ */ _export_sfc(_sfc_main$$, [["__scopeId", "data-v-d8338517"]]);
+const AppPage = /* @__PURE__ */ _export_sfc(_sfc_main$$, [["__scopeId", "data-v-3e72680c"]]);
 var ProviderId = /* @__PURE__ */ ((ProviderId2) => {
   ProviderId2["GitHub"] = "github";
   ProviderId2["PayPal"] = "paypal";
@@ -14188,7 +14180,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
     usePageSeo(() => {
       return {
         pageTitle: "YouTube",
-        description: isZhLang.value ? `${APP_PROFILE.author} 的视频` : `${APP_PROFILE.author}'s YouTube`
+        description: isZhLang.value ? `${APP_PROFILE.author} 的长视频` : `${APP_PROFILE.author}'s YouTube`
       };
     });
     useUniversalFetch(() => youtubePlayList.fetch());
@@ -14198,7 +14190,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_container = resolveComponent("container");
       const _component_empty = resolveComponent("empty");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube-page" }, _attrs))} data-v-335da5f2>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube-page" }, _attrs))} data-v-067846c8>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/lake-1.mp4",
@@ -14241,7 +14233,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-335da5f2${_scopeId}>`);
+            _push2(`<div class="links" data-v-067846c8${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item youtube",
               title: "YouTube Channel",
@@ -14249,7 +14241,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-335da5f2${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span>`);
+                  _push3(`<span class="username" data-v-067846c8${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1)
@@ -14282,11 +14274,11 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_component_container, { class: "page-content" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-content" data-v-335da5f2${_scopeId}>`);
+            _push2(`<div class="module-content" data-v-067846c8${_scopeId}>`);
             _push2(ssrRenderComponent(YoutubePlaylist, { playlists: youtubePlaylistData.value }, {
               title: withCtx(({ list }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<h4 class="module-title youtube" data-v-335da5f2${_scopeId2}>`);
+                  _push3(`<h4 class="module-title youtube" data-v-067846c8${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_ulink, {
                     class: "link",
                     href: unref(getYouTubePlaylistURL)(list.id)
@@ -14308,7 +14300,7 @@ const _sfc_main$N = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx((_2, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<i class="iconfont icon-youtube" data-v-335da5f2${_scopeId3}></i><span class="text" data-v-335da5f2${_scopeId3}>YouTube · Channel</span>`);
+                        _push4(`<i class="iconfont icon-youtube" data-v-067846c8${_scopeId3}></i><span class="text" data-v-067846c8${_scopeId3}>YouTube · Channel</span>`);
                       } else {
                         return [
                           createVNode("i", { class: "iconfont icon-youtube" }),
@@ -14473,7 +14465,7 @@ _sfc_main$N.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/youtube/index.vue");
   return _sfc_setup$N ? _sfc_setup$N(props, ctx) : void 0;
 };
-const YoutubePage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-335da5f2"]]);
+const YoutubePage = /* @__PURE__ */ _export_sfc(_sfc_main$N, [["__scopeId", "data-v-067846c8"]]);
 const _sfc_main$M = /* @__PURE__ */ defineComponent({
   __name: "album",
   __ssrInlineRender: true,
@@ -14812,7 +14804,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
       return [...latestMedias, ...medias];
     });
     usePageSeo(() => {
-      const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY, Language.English));
+      const enTitle = "Photography";
       const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY), enTitle] : [enTitle];
       const description = isZhLang.value ? `${APP_PROFILE.author} 的摄影作品` : `${APP_PROFILE.author}'s photographs`;
       return {
@@ -14831,7 +14823,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_skeleton_base = resolveComponent("skeleton-base");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-48ead3a2>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "photography-page" }, _attrs))} data-v-4d58741a>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         video: "/videos/clips/ocean-5.mp4",
@@ -14874,7 +14866,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-48ead3a2${_scopeId}>`);
+            _push2(`<div class="links" data-v-4d58741a${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item instagram",
               title: "Instagram",
@@ -14882,7 +14874,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-48ead3a2${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
+                  _push3(`<span class="username" data-v-4d58741a${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).INSTAGRAM_USERNAME)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, "@" + toDisplayString(unref(IDENTITIES).INSTAGRAM_USERNAME), 1)
@@ -14903,7 +14895,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-xiaohongshu" data-v-48ead3a2${_scopeId2}></i>`);
+                  _push3(`<i class="iconfont icon-xiaohongshu" data-v-4d58741a${_scopeId2}></i>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-xiaohongshu" })
@@ -14994,9 +14986,9 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
               }),
               loading: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="module-loading" data-v-48ead3a2${_scopeId2}><!--[-->`);
+                  _push3(`<div class="module-loading" data-v-4d58741a${_scopeId2}><!--[-->`);
                   ssrRenderList(4 * 2, (item) => {
-                    _push3(`<div class="item" data-v-48ead3a2${_scopeId2}>`);
+                    _push3(`<div class="item" data-v-4d58741a${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_skeleton_base, null, null, _parent3, _scopeId2));
                     _push3(`</div>`);
                   });
@@ -15021,7 +15013,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
               }),
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div data-v-48ead3a2${_scopeId2}>`);
+                  _push3(`<div data-v-4d58741a${_scopeId2}>`);
                   _push3(ssrRenderComponent(InstagramGrid, { medias: allMedias.value }, null, _parent3, _scopeId2));
                   if (!unref(instagramLatestMedias).fetching && !finished.value) {
                     _push3(ssrRenderComponent(Loadmore, {
@@ -15031,7 +15023,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
                     }, {
                       normal: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<button class="normal" data-v-48ead3a2${_scopeId3}><i class="iconfont icon-loadmore" data-v-48ead3a2${_scopeId3}></i></button>`);
+                          _push4(`<button class="normal" data-v-4d58741a${_scopeId3}><i class="iconfont icon-loadmore" data-v-4d58741a${_scopeId3}></i></button>`);
                         } else {
                           return [
                             createVNode("button", {
@@ -15182,7 +15174,7 @@ _sfc_main$J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/index.vue");
   return _sfc_setup$J ? _sfc_setup$J(props, ctx) : void 0;
 };
-const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-48ead3a2"]]);
+const PhotographyPage = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-4d58741a"]]);
 const useThreadsMediaUrl = (url) => {
   if (!url) return null;
   const { cdnDomain, isCNUser } = useEnhancer();

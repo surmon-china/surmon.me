@@ -43,7 +43,9 @@ const APP_CONFIG = Object.freeze({
   default_error_code: 500,
   default_comment_avatar: "/images/gravatar.webp",
   default_og_image: "/images/og-social-card.jpg",
-  title_separator: " | ",
+  root_title_separator: " | ",
+  page_title_separator: " • ",
+  // page_title_separator: ' · ',
   primary_color: "#0088f5"
 });
 const APP_PROFILE = Object.freeze({
