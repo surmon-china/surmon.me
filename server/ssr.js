@@ -42,7 +42,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.8.7";
+const APP_VERSION = "5.8.8";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -1618,7 +1618,7 @@ const createRenderer = (options) => {
     const transformed = CUSTOM_ELEMENT_LIST.reduce((result, ce) => ce.transform(result), trimmed);
     return options?.sanitize ? sanitizeHTML(escape(transformed)) : transformed;
   };
-  renderer.heading = ({ depth, tokens }) => {
+  renderer.heading = ({ depth, tokens, text }) => {
     const getAnchorWithLink = (anchor) => {
       const preventDefault = `event.preventDefault()`;
       const copy = `window.navigator.clipboard?.writeText(this.href)`;
@@ -1626,12 +1626,12 @@ const createRenderer = (options) => {
       const href = `href="#${anchor}"`;
       return `<a class="anchor link" ${href} ${onclick}>#</a>`;
     };
-    const text = renderer.parser.parseInline(tokens);
+    const html = renderer.parser.parseInline(tokens);
     const identifier = options?.headingIdentifierGetter?.(depth, text);
     const idAttr = identifier?.id ? `id="${identifier.id}"` : "";
     const titleAttr = `title="${escape(text)}"`;
     const anchorElement = identifier?.anchor ? getAnchorWithLink(identifier.anchor) : `<span class="anchor static">#</span>`;
-    return `<h${depth} ${idAttr} ${titleAttr}>${anchorElement}${text}</h${depth}>`;
+    return `<h${depth} ${idAttr} ${titleAttr}>${anchorElement}${html}</h${depth}>`;
   };
   renderer.paragraph = ({ tokens }) => {
     const html = renderer.parser.parseInline(tokens);
@@ -19080,7 +19080,7 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
       if (unref(store).article) {
-        _push(`<div${ssrRenderAttrs(mergeProps({ class: "anchor" }, _attrs))} data-v-20e332e5><button class="header"${ssrRenderAttr("title", unref(store).article.title)} data-v-20e332e5><div class="title" data-v-20e332e5>${ssrInterpolate(unref(store).article.title)}</div><div class="read" data-v-20e332e5>`);
+        _push(`<div${ssrRenderAttrs(mergeProps({ class: "anchor" }, _attrs))} data-v-be4da575><button class="header"${ssrRenderAttr("title", unref(store).article.title)} data-v-be4da575><div class="title" data-v-be4da575>${ssrInterpolate(unref(store).article.title)}</div><div class="read" data-v-be4da575>`);
         _push(ssrRenderComponent(_component_i18n, unref(ArticleLangI18n)[unref(store).article.lang], null, _parent));
         _push(ssrRenderComponent(_component_i18n, {
           zh: "，",
@@ -19109,13 +19109,13 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
         }, _parent));
         _push(`</div></button>`);
         if (headings.value.length) {
-          _push(`<div class="catalogue" data-v-20e332e5><ul class="${ssrRenderClass([`indent-${minHeadingLevel.value}`, "list"])}" data-v-20e332e5><!--[-->`);
+          _push(`<div class="catalogue" data-v-be4da575><ul class="${ssrRenderClass([`indent-${minHeadingLevel.value}`, "list"])}" data-v-be4da575><!--[-->`);
           ssrRenderList(headings.value, (heading, index) => {
-            _push(`<li${ssrRenderAttr("title", heading.text)} class="${ssrRenderClass([`level-${heading.level}`, "item"])}" data-v-20e332e5><i class="${ssrRenderClass([`icon-h-${heading.level}`, "level iconfont"])}" data-v-20e332e5></i><span class="text" data-v-20e332e5>${ssrInterpolate(heading.text)}</span></li>`);
+            _push(`<li${ssrRenderAttr("title", heading.text)} class="${ssrRenderClass([`level-${heading.level}`, "item"])}" data-v-be4da575><i class="${ssrRenderClass([`icon-h-${heading.level}`, "level iconfont"])}" data-v-be4da575></i><span class="text" data-v-be4da575>${ssrInterpolate(heading.text)}</span></li>`);
           });
           _push(`<!--]-->`);
           if (unref(store).isLongContent && !unref(store).renderedFullContent) {
-            _push(`<li class="${ssrRenderClass([`level-${minHeadingLevel.value}`, "item readmore"])}" data-v-20e332e5><i class="level iconfont icon-loadmore" data-v-20e332e5></i><span class="text" data-v-20e332e5>`);
+            _push(`<li class="${ssrRenderClass([`level-${minHeadingLevel.value}`, "item readmore"])}" data-v-be4da575><i class="level iconfont icon-loadmore" data-v-be4da575></i><span class="text" data-v-be4da575>`);
             _push(ssrRenderComponent(_component_i18n, {
               k: unref(LocaleKey).ARTICLE_READ_ALL
             }, null, _parent));
@@ -19127,27 +19127,27 @@ const _sfc_main$c = /* @__PURE__ */ defineComponent({
         } else {
           _push(`<!---->`);
         }
-        _push(`<button class="link" data-v-20e332e5><i class="iconfont icon-peachblossom" data-v-20e332e5></i>`);
+        _push(`<button class="link" data-v-be4da575><i class="iconfont icon-peachblossom" data-v-be4da575></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "随喜",
           en: "Sponsor"
         }, null, _parent));
         _push(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent));
-        _push(`<span class="meta" data-v-20e332e5><i class="iconfont icon-like" data-v-20e332e5></i><span class="count" data-v-20e332e5>${ssrInterpolate(unref(store).article.meta.likes)}</span></span>`);
+        _push(`<span class="meta" data-v-be4da575><i class="iconfont icon-like" data-v-be4da575></i><span class="count" data-v-be4da575>${ssrInterpolate(unref(store).article.meta.likes)}</span></span>`);
         _push(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent));
-        _push(`<span class="meta" data-v-20e332e5><i class="iconfont icon-eye" data-v-20e332e5></i><span class="count" data-v-20e332e5>${ssrInterpolate(unref(numberSplit)(unref(store).article.meta.views))}</span></span></button><button class="link" data-v-20e332e5><i class="iconfont icon-category" data-v-20e332e5></i>`);
+        _push(`<span class="meta" data-v-be4da575><i class="iconfont icon-eye" data-v-be4da575></i><span class="count" data-v-be4da575>${ssrInterpolate(unref(numberSplit)(unref(store).article.meta.views))}</span></span></button><button class="link" data-v-be4da575><i class="iconfont icon-category" data-v-be4da575></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "相关",
           en: "Related"
         }, null, _parent));
         _push(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent));
-        _push(`<span class="count" data-v-20e332e5>${ssrInterpolate(unref(store).relatedArticles.length)}</span></button><button class="link" data-v-20e332e5><i class="iconfont icon-comment" data-v-20e332e5></i>`);
+        _push(`<span class="count" data-v-be4da575>${ssrInterpolate(unref(store).relatedArticles.length)}</span></button><button class="link" data-v-be4da575><i class="iconfont icon-comment" data-v-be4da575></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "评论",
           en: "Comments"
         }, null, _parent));
         _push(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent));
-        _push(`<span class="count" data-v-20e332e5>${ssrInterpolate(unref(store).article.meta.comments)}</span></button></div>`);
+        _push(`<span class="count" data-v-be4da575>${ssrInterpolate(unref(store).article.meta.comments)}</span></button></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -19160,7 +19160,7 @@ _sfc_main$c.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/aside/anchor.vue");
   return _sfc_setup$c ? _sfc_setup$c(props, ctx) : void 0;
 };
-const AsideAnchor = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-20e332e5"]]);
+const AsideAnchor = /* @__PURE__ */ _export_sfc(_sfc_main$c, [["__scopeId", "data-v-be4da575"]]);
 const _sfc_main$b = /* @__PURE__ */ defineComponent({
   __name: "calendar",
   __ssrInlineRender: true,
