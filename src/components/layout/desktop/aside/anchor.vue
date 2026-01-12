@@ -201,9 +201,6 @@
             .iconfont {
               color: $primary;
             }
-            .text {
-              font-weight: bold;
-            }
           }
 
           .level {

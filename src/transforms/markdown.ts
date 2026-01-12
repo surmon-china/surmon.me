@@ -85,7 +85,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   }
 
   // heading
-  renderer.heading = ({ depth, tokens }) => {
+  renderer.heading = ({ depth, tokens, text }) => {
     const getAnchorWithLink = (anchor: string) => {
       const preventDefault = `event.preventDefault()`
       const copy = `window.navigator.clipboard?.writeText(this.href)`
@@ -94,14 +94,14 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       return `<a class="anchor link" ${href} ${onclick}>#</a>`
     }
 
-    const text = renderer.parser.parseInline(tokens)
+    const html = renderer.parser.parseInline(tokens)
     const identifier = options?.headingIdentifierGetter?.(depth, text)
     const idAttr = identifier?.id ? `id="${identifier.id}"` : ''
     const titleAttr = `title="${escape(text)}"`
     const anchorElement = identifier?.anchor
       ? getAnchorWithLink(identifier.anchor)
       : `<span class="anchor static">#</span>`
-    return `<h${depth} ${idAttr} ${titleAttr}>${anchorElement}${text}</h${depth}>`
+    return `<h${depth} ${idAttr} ${titleAttr}>${anchorElement}${html}</h${depth}>`
   }
 
   // paragraph

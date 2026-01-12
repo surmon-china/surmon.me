@@ -134,6 +134,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     if (!article.value || !isLongContent.value) {
       return null
     }
+
     return getMarkdownSplitIndex(
       article.value.content,
       Math.min(APP_CONFIG.render_long_article_threshold, Math.floor(contentLength.value / 2))
@@ -153,6 +154,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     if (!article.value) {
       return null
     }
+
     const markdown = isLongContent.value
       ? article.value.content.substring(0, splitIndex.value!)
       : article.value.content
@@ -164,6 +166,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     if (!article.value || !isLongContent.value) {
       return null
     }
+
     const markdown = article.value.content.substring(splitIndex.value!)
     const { html, headings } = renderArticleMarkdown(markdown, optimizeImageSource)
     return { markdown, html, headings }
