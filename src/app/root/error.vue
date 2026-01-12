@@ -12,9 +12,6 @@
   }>()
 
   const { isDarkTheme } = useEnhancer()
-  const handleResolveRoute = () => {
-    emit('resolve')
-  }
 </script>
 
 <template>
@@ -24,7 +21,7 @@
       <template v-if="props.error.message">{{ props.error.message }}</template>
       <i18n v-else :k="LocaleKey.NOT_FOUND" />
     </h3>
-    <p class="link" @click="handleResolveRoute">
+    <p class="link" @click="emit('resolve')">
       <slot name="resolve-text" />
     </p>
   </div>
@@ -121,8 +118,7 @@
     .link {
       cursor: pointer;
       color: $color-text-divider;
-      margin-bottom: 4rem;
-      @include mix.text-underline(0.5em);
+      @include mix.text-underline(0.4em);
       @include mix.color-transition();
       &:hover {
         color: $color-text-darker;

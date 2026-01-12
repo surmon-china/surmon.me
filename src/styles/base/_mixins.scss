@@ -26,7 +26,7 @@
 @mixin text-underline($offset: 0.3em) {
   text-decoration: underline;
   text-underline-offset: $offset;
-  text-decoration-thickness: from-font;
+  text-decoration-thickness: 1px;
 }
 
 /// Text trim

@@ -107,7 +107,7 @@ export const routes: RouteRecordRaw[] = [
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Article ID → <number>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Article ID (number)'
           })
         }
       }
@@ -132,7 +132,7 @@ export const routes: RouteRecordRaw[] = [
         if (!category_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Category slug → <string>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Category slug (string)'
           })
         }
       }
@@ -157,7 +157,7 @@ export const routes: RouteRecordRaw[] = [
         if (!tag_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Tag slug → <string>'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Tag slug (string)'
           })
         }
       }
@@ -182,7 +182,7 @@ export const routes: RouteRecordRaw[] = [
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + `Invalid date ${date || ''}`
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid date (YYYY-MM-DD)'
           })
         }
       }
@@ -206,7 +206,7 @@ export const routes: RouteRecordRaw[] = [
         if (!route.params.keyword) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Keywords ?'
+            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Missing search keywords'
           })
         }
       }

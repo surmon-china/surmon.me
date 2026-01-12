@@ -311,6 +311,7 @@
         border: 4px solid $module-bg-lighter;
         border-radius: $radius-sm;
         background-color: $module-bg-darker-2;
+        overflow: hidden;
 
         img {
           width: 100%;

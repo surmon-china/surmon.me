@@ -44,42 +44,36 @@
         <uimage alt="app-hot" class="screen-img" src="/images/page-app/hot.webp" cdn />
         <div class="download">
           <uimage class="qrcode" alt="qrcode" src="/images/page-app/qrcode.png" cdn />
-          <ulink
-            class="button"
-            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE + '#android'"
-            @mousedown="handleAppEvent('download_android_app')"
-          >
+          <button class="button android-download" disabled>
             <i class="icon iconfont icon-android"></i>
             <span class="text">Android</span>
-            <i class="new-window iconfont icon-new-window-s"></i>
-          </ulink>
-          <ulink
-            class="button"
-            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE + '#ios'"
-            @mousedown="handleAppEvent('download_ios_app')"
-          >
+            <i class="iconfont icon-download"></i>
+          </button>
+          <button class="button ios-download" disabled>
             <i class="icon iconfont icon-apple"></i>
             <span class="text">iOS</span>
-            <i class="new-window iconfont icon-new-window-s"></i>
-          </ulink>
+            <i class="iconfont icon-download"></i>
+          </button>
           <ulink
-            class="source-code"
+            class="button source-code"
             :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE"
             @mousedown="handleAppEvent('app_source_code')"
           >
-            <i class="iconfont icon-git"></i>
-            Source Code
+            <i class="icon iconfont icon-github"></i>
+            <span class="text">Source Code</span>
+            <i class="new-window iconfont icon-new-window-s"></i>
           </ulink>
         </div>
       </div>
       <p class="rss">
-        <span class="prefix"><i18n zh="（" en="[" /></span>
-        <span class="deprecated"><i18n zh="此项目已废弃！" en="DEPRECATED!" /></span>
-        <i18n zh="建议使用" en="Recommend" />
-        <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">
-          <i18n zh="RSS 订阅" en="RSS subscription" />
-        </a>
-        <span class="suffix"><i18n zh="）" en="]" /></span>
+        <i18n>
+          <template #zh>
+            （ 此项目已废弃！建议使用 <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">RSS 订阅</a> ）
+          </template>
+          <template #en>
+            [ DEPRECATED! Use <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">RSS subscription</a> ]
+          </template>
+        </i18n>
       </p>
     </div>
   </div>
@@ -116,32 +110,13 @@
         text-transform: uppercase;
       }
 
-      .version {
-        color: $color-text-divider;
-        text-decoration: line-through;
-      }
-
       .rss {
         margin-top: 2rem;
         margin-bottom: 0;
         color: $color-text-secondary;
 
-        .deprecated {
-          font-weight: bold;
-          margin-right: $gap-xs;
-          color: $red;
-        }
-
         .link {
-          margin-left: $gap-xs;
           @include mix.text-underline();
-        }
-
-        .prefix {
-          margin-right: $gap-xs;
-        }
-        .suffix {
-          margin-left: $gap-xs;
         }
       }
 
@@ -192,39 +167,37 @@
             display: flex;
             align-items: center;
             margin-top: 2rem;
-            padding: 0 1em;
-            border: 1px solid $primary;
-            border-radius: $radius-xs;
-            background: $module-bg;
-            color: $primary;
+            padding: 0 1rem;
+            border: 1px solid;
+            border-radius: $radius-sm;
             transition: all $motion-duration-fast;
-            &:hover {
-              color: $color-text-reversal;
-              border-color: $primary-translucent;
-              background: $primary-lighter;
-            }
 
             .icon {
               font-size: $font-size-h4;
               margin-right: $gap-sm;
             }
 
-            .new-window {
-              margin-left: $gap-xs;
-              font-size: $font-size-small;
-            }
-          }
+            &.android-download,
+            &.ios-download {
+              background: $module-bg;
+              justify-content: space-between;
 
-          .source-code {
-            margin-top: 2rem;
-            border-bottom: 1px solid;
-            color: $color-text;
-            &:hover {
-              color: $primary;
+              .text {
+                flex-grow: 1;
+                text-align: left;
+              }
             }
 
-            .iconfont {
-              margin-right: $gap-xs;
+            &.source-code {
+              color: $github-primary;
+              &:hover {
+                color: $github-primary-hover;
+              }
+
+              .new-window {
+                margin-left: $gap-xs;
+                font-size: $font-size-small - 1;
+              }
             }
           }
         }

@@ -155,7 +155,7 @@
               :article="article"
               @rendered="handleContentRendered"
             />
-            <div class="divider"></div>
+            <div class="divider"><div class="line"></div></div>
             <article-meta :id="ANCHORS.ARTICLE_META_ELEMENT_ID" :article="article" :plain="isMobile">
               <template #action>
                 <article-upvote
@@ -244,7 +244,10 @@
       }
 
       .divider {
-        border-top: 2px dotted $module-bg-darker-1;
+        padding: 0 2rem;
+        .line {
+          border-top: 1px dashed $module-bg-darker-1;
+        }
       }
 
       .bridge {

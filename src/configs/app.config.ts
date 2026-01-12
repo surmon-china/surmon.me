@@ -69,7 +69,6 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
   GOOGLE_MY_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
   MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-
   GITHUB_STATISTIC_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
   GOOGLE_MY_MAP_KML_URL: 'https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   GO_LINK_MAP_ENDPOINT: 'https://go.surmon.me'

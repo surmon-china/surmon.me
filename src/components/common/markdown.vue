@@ -61,7 +61,6 @@
 
     a {
       margin: 0;
-      font-weight: bold;
       @include mix.text-underline();
       &.image-link {
         margin: 0;
