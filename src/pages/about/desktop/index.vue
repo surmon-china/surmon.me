@@ -18,7 +18,7 @@
   import AboutPageBanner from './banner.vue'
   import { useAboutPageMeta, i18ns } from '../shared'
 
-  const { gtag, globalState } = useEnhancer()
+  const { gtag, globalState, appConfig } = useEnhancer()
   const { adminProfile, appOption, goLink } = useStores()
 
   const handleGTagEvent = (event: string) => {
@@ -109,21 +109,6 @@
       href: VALUABLE_LINKS.RSS
     }
   ])
-
-  const specialLinks = Object.freeze([
-    {
-      name: 'GitHub',
-      url: 'https://github.com'
-    },
-    {
-      name: 'Cloudflare',
-      url: 'https://www.cloudflare.com'
-    },
-    {
-      name: 'MongoDB',
-      url: 'https://www.mongodb.com'
-    }
-  ])
 </script>
 
 <template>
@@ -170,7 +155,7 @@
       </div>
       <div class="footer-links">
         <div class="friend-links">
-          <template v-for="(link, index) in appOption.data?.friend_links || []" :key="index">
+          <template v-for="(link, index) in appOption.data?.friend_links ?? []" :key="index">
             <divider type="vertical" size="lg" v-if="index !== 0" />
             <a :href="link.value" class="item" target="_blank" rel="external nofollow noopener">
               {{ link.name }}
@@ -178,7 +163,7 @@
           </template>
         </div>
         <div class="special-links">
-          <template v-for="(item, index) in specialLinks" :key="index">
+          <template v-for="(item, index) in appConfig.ABOUT_SPECIAL_LINKS ?? []" :key="index">
             <divider type="vertical" size="lg" v-if="index !== 0" />
             <a :href="item.url" class="item" target="_blank" rel="external nofollow noopener">
               {{ item.name }}

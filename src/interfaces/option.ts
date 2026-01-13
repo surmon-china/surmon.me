@@ -7,6 +7,10 @@ export interface AppRemoteConfig {
   ABOUT_GEO_TITLE_ZH?: string
   ABOUT_GEO_TITLE_EN?: string
   ABOUT_GEO_COORDINATES?: [number, number]
+  ABOUT_SPECIAL_LINKS?: Array<{
+    name: string
+    url: string
+  }>
   AD_PC_CARROUSEL?: {
     index: number
     url: string
