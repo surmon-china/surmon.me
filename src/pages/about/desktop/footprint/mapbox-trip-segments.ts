@@ -1,6 +1,7 @@
 import type { Map as MB_Map, LngLatBoundsLike } from 'mapbox-gl'
 import { shallowRef, computed } from 'vue'
 import { APP_CONFIG } from '/@/configs/app.config'
+import API_CONFIG from '/@/configs/app.api'
 import vanilla from '/@/services/vanilla'
 
 // Bangkok: [100.54126850944652, 13.731420002813918]
@@ -123,7 +124,7 @@ export const useMapTripSegments = () => {
   const fetchConfigJson = () => {
     return configJson.value.length
       ? Promise.resolve()
-      : vanilla.get<Array<Trip>>('/data/footprint-trips.json').then((result) => {
+      : vanilla.get<Array<Trip>>(`${API_CONFIG.STATIC}/data/footprint-trips.json`).then((result) => {
           configJson.value = result.data
         })
   }
