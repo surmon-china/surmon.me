@@ -157,7 +157,7 @@ export const renderApp = async (context: RequestContext, cache: CacheStore): Pro
     devDebug('- 2. store.serverInit')
     await store.prefetchOnServer()
 
-    // because the layout func set has by animation done
+    // Because the layout func set has by animation done.
     devDebug('- 3. set layout')
     globalState.setPageLayout(resolvePageLayout(router.currentRoute.value.meta.layout))
 

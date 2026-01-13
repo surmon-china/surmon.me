@@ -14,7 +14,7 @@ export const useSnippetsPageMeta = () => {
   usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_SNIPPETS, Language.English)!)
     const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_SNIPPETS)!, enTitle] : [enTitle]
-    const description = isZhLang.value ? `${APP_PROFILE.author} 的清风念` : `${APP_PROFILE.author}'s snippets`
+    const description = isZhLang.value ? `${APP_PROFILE.author} 近期发布的片段` : `${APP_PROFILE.author}'s snippets`
     return {
       pageTitles: titles,
       description: description

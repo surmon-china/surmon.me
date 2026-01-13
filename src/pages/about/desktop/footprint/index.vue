@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import type { Map } from 'mapbox-gl'
   import { shallowRef } from 'vue'
-  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { useEnhancer } from '/@/app/enhancer'
+  import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { flyToLivingMarker } from './mapbox-living-now'
   import MapboxModal from './box-modal.vue'
   import Mapbox from './box-base.vue'
