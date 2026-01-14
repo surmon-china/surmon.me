@@ -13,7 +13,7 @@
   }>()
 
   const { adminProfile, appOption, goLink } = useStores()
-  const { isZhLang, isDarkTheme, cdnDomain, appConfig, globalState } = useEnhancer()
+  const { isZhLang, cdnDomain, appConfig, globalState } = useEnhancer()
 
   const emailLink = getEmailLink({
     email: appOption.data?.site_email!,
@@ -42,7 +42,7 @@
     </div>
     <div class="content">
       <div class="fullwidth">
-        <div class="profile" :class="{ dark: isDarkTheme }">
+        <div class="profile">
           <uimage class="avatar" :src="useAdminAvatar(adminProfile.data?.avatar)" />
           <div class="right">
             <h1 class="name">{{ adminProfile.data?.name || '-' }}</h1>
@@ -211,19 +211,19 @@
 
       .profile {
         $avatar-size: 5rem;
+        min-width: 28rem;
         z-index: $z-index-normal + 2;
         margin-bottom: $gap * 2;
         padding: $gap-xs $gap-lg $gap-xs $gap-xs;
         display: flex;
         align-items: center;
-        @include mix.backdrop-blur(3px);
-        @include mix.radius-box($avatar-size);
-        border-bottom-right-radius: $radius-sm;
+        border-top-left-radius: $avatar-size;
+        border-bottom-left-radius: $avatar-size;
+        border-top-right-radius: 2rem;
         border-top: 1px solid rgb(255 255 255 / 40%);
-        background-color: rgb(255, 255, 255, 0.14);
-        &.dark {
-          background-color: rgba(0, 0, 0, 0.05);
-        }
+        border-left: 1px solid rgb(255 255 255 / 30%);
+        // border-bottom: 1px solid rgb(255 255 255 / 30%);
+        // border-right: 1px solid rgb(255 255 255 / 20%);
 
         &:hover {
           .avatar {
