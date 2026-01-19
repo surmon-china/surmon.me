@@ -4,7 +4,7 @@
   import { usePopupWithRoot } from './hook'
 
   const element = ref<HTMLElement>(null as any)
-  const { isDarkTheme, globalState } = useEnhancer()
+  const { globalState } = useEnhancer()
   const { state, image, hidden } = usePopupWithRoot(() => element.value)
   const handleWindowScroll = () => hidden()
   const handleMaskClick = () => {
@@ -20,12 +20,7 @@
 </script>
 
 <template>
-  <div
-    id="popup"
-    class="popup"
-    :class="{ dark: isDarkTheme, mobile: globalState.userAgent.isMobile }"
-    v-disabled-wallflower
-  >
+  <div id="popup" class="popup" :class="{ mobile: globalState.userAgent.isMobile }" v-disabled-wallflower>
     <transition name="module">
       <div class="mask" v-show="state.visible" @click.self="handleMaskClick">
         <div ref="element" class="wrapper" :class="{ border: state.border }">
@@ -42,11 +37,6 @@
   @use '/src/styles/base/mixins' as mix;
 
   #popup {
-    &.dark {
-      .mask {
-        background-color: rgba($black, 0.5);
-      }
-    }
     &.mobile {
       .mask {
         .wrapper {
@@ -69,9 +59,12 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      background-color: rgba($grey, 0.5);
       @include mix.visibility-transition();
       @include mix.backdrop-blur(5px);
+      background-color: rgba($grey, 0.5);
+      @include mix.dark-theme {
+        background-color: rgba($black, 0.5);
+      }
 
       .wrapper {
         display: contents;

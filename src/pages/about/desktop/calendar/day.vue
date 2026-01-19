@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
 
   const props = defineProps<{
     date: string
@@ -11,7 +10,6 @@
     githubColor?: string
   }>()
 
-  const { isDarkTheme } = useEnhancer()
   const total = computed(() => props.articles + props.threads + props.contributions + props.instagrams)
   const getPointHeightStyle = (value: number) => {
     return isNaN(value) ? 0 : `${Math.floor(value * 100)}%`
@@ -21,7 +19,6 @@
 <template>
   <div
     class="day"
-    :class="{ dark: isDarkTheme }"
     :data-date="date"
     :data-total-count="total"
     :data-article-count="articles"
@@ -82,7 +79,7 @@
     height: $size;
     border-radius: $radius;
     background-color: $module-bg-darker-2;
-    &.dark {
+    @include mix.dark-theme {
       background-color: $module-bg-darker-1;
       .point {
         filter: brightness(86%);

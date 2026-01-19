@@ -97,8 +97,9 @@ $breakpoint-small: 400px;
 $breakpoint-large: $container-width;
 
 // font
-// prettier-ignore
-$font-family-base: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI', 'Microsoft YaHei', '微软雅黑', sans-serif;
+$font-family-base:
+  -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', 'Segoe UI',
+  'Microsoft YaHei', '微软雅黑', sans-serif;
 $font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
 $font-family-normal: SpecialSymbol, DINRegular, $font-family-base;
 

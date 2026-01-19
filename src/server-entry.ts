@@ -19,7 +19,7 @@ import type { CacheStore } from '@/server/services/cache'
 import { parseAcceptLanguage } from '/@/server/utils/accept-language'
 import { formatErrorToAppError } from '/@/app/error'
 import { renderSSRStateScript, renderSSRContextScript } from '/@/app/universal'
-import { Theme, THEME_STORAGE_KEY } from '/@/composables/theme'
+import { Theme } from '/@/composables/theme'
 import * as HTTP_CODES from '/@/constants/http-code'
 import { resolvePageLayout } from '/@/constants/page-layout'
 import { CDNPrefix, getCDNPrefix } from '/@/transforms/url'
@@ -45,7 +45,6 @@ const createSSRContext = (context: RequestContext, error: AppErrorValue = null):
     requestUrl: context.url,
     userAgent: context.headers['user-agent'],
     acceptLanguage: context.headers['accept-language'],
-    cookieTheme: context.cookies[THEME_STORAGE_KEY],
     countryName,
     countryCode,
     cdnDomain,
@@ -59,7 +58,7 @@ const createSSRMainApp = (ssrContext: SSRContext): [MainApp, VueHeadClient] => {
     routerHistoryCreator: createMemoryHistory,
     languages: parseAcceptLanguage(ssrContext.acceptLanguage, { ignoreWildcard: true }),
     userAgent: ssrContext.userAgent,
-    theme: (ssrContext.cookieTheme as Theme) ?? Theme.Light,
+    theme: Theme.Light, // Any initial value set here will be overwritten in the client-side HTML <head>.
     region: getRegionByCountryCode(ssrContext.countryCode),
     error: ssrContext.error
   })
@@ -106,7 +105,7 @@ export const renderError = async (context: RequestContext, error: unknown): Prom
     message: 'Unknown Render Error'
   })
   const ssrContext = createSSRContext(context, appError)
-  const [{ app, theme }, head] = createSSRMainApp(ssrContext)
+  const [{ app }, head] = createSSRMainApp(ssrContext)
   head.push({ title: `Server Error: ${appError.message}` })
   return {
     code: appError.code,
@@ -116,7 +115,6 @@ export const renderError = async (context: RequestContext, error: unknown): Prom
     contextScripts: renderSSRContextScript(serialize(ssrContext)),
     stateScripts: renderSSRStateScript(
       serialize({
-        theme: theme.theme.value,
         region: getRegionByCountryCode(ssrContext.countryCode)
       })
     )
@@ -126,14 +124,17 @@ export const renderError = async (context: RequestContext, error: unknown): Prom
 // App page renderer
 export const renderApp = async (context: RequestContext, cache: CacheStore): Promise<RenderResult> => {
   const ssrContext = createSSRContext(context)
-  const [{ app, router, store, theme, i18n, globalState }, head] = createSSRMainApp(ssrContext)
+  const [{ app, router, store, i18n, globalState }, head] = createSSRMainApp(ssrContext)
 
   // Make cache Key
   const language = i18n.language.value
-  const themeName = theme.theme.value
   const deviceType = globalState.userAgent.isMobile ? 'mobile' : 'desktop'
   const regionCode = getRegionByCountryCode(ssrContext.countryCode)
-  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${themeName}_${ssrContext.requestUrl}`
+  // 1. `language` affects the user-facing UI content.
+  // 2. `regionCode` affects resource URLs.
+  // 3. `deviceType` affects UI structure and content.
+  // 4. `requestUrl` is the decisive factor for content differentiation.
+  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${ssrContext.requestUrl}`
 
   // Return cached result if exists
   const isCached = await cache.has(cacheKey)
@@ -182,7 +183,6 @@ export const renderApp = async (context: RequestContext, cache: CacheStore): Pro
     const stateScripts = renderSSRStateScript(
       serialize({
         store: store.state.value,
-        theme: theme.theme.value,
         layout: globalState.pageLayout.value.layout,
         region: getRegionByCountryCode(ssrContext.countryCode)
       })

@@ -26,7 +26,7 @@
     count: 9
   })
 
-  const { i18n: _i18n, appConfig, cdnDomain, isDarkTheme } = useEnhancer()
+  const { i18n: _i18n, appConfig, cdnDomain } = useEnhancer()
   const getPictureURL = (url: string, format?: ImgProxyFormat) => {
     if (!isOriginalStaticURL(url)) {
       return url
@@ -134,7 +134,7 @@
                   </template>
                   <img class="image" draggable="false" :alt="slide.title" :src="getPictureURL(slide.image)" />
                 </picture>
-                <div class="title" :class="{ dark: isDarkTheme }" :title="slide.title">
+                <div class="title" :title="slide.title">
                   <div class="background"></div>
                   <div class="prospect">
                     <span class="text">{{ slide.title }}</span>
@@ -343,6 +343,12 @@
               transform $motion-duration-fast,
               background-color $motion-duration-fast;
             @include mix.text-overflow;
+            @include mix.dark-theme {
+              mix-blend-mode: normal;
+              .text {
+                color: $color-link;
+              }
+            }
 
             .text {
               letter-spacing: 0.3px;
@@ -363,15 +369,6 @@
             & + .subscript {
               opacity: 1;
               transform: translate3d(0, -$title-offset, 0);
-            }
-          }
-
-          &.dark {
-            .prospect {
-              mix-blend-mode: normal;
-              .text {
-                color: $color-link;
-              }
             }
           }
         }

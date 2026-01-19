@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  const { isDarkTheme } = useEnhancer()
+  const { theme } = useEnhancer()
 </script>
 
 <template>
   <client-only transition>
     <Adsense
-      v-if="isDarkTheme"
+      v-if="theme.isDark.value"
       key="dark-mammon"
       ins-class="mammon-ins"
       data-ad-format="fluid"

@@ -7,7 +7,6 @@ export interface SSRContext {
   requestUrl: string
   userAgent: string | undefined
   acceptLanguage: string | undefined
-  cookieTheme: string | undefined
   countryName: string | undefined
   countryCode: string | undefined
   cdnDomain: string

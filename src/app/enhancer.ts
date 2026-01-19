@@ -31,7 +31,6 @@ export const useEnhancer = () => {
   const countryCode = useCountryCode()
 
   const appConfig = computed(() => appOptionStore.appConfig)
-  const isDarkTheme = computed(() => theme.theme.value === Theme.Dark)
   const isZhLang = computed(() => i18n.language.value === Language.Chinese)
 
   return {
@@ -46,7 +45,6 @@ export const useEnhancer = () => {
     isCNUser: isCNCode(countryCode || 'GLOBAL'),
 
     appConfig,
-    isDarkTheme,
     isZhLang,
 
     defer: (isClient ? useDefer() : undefined) as Defer,

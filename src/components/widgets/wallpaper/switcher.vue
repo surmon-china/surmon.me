@@ -6,7 +6,7 @@
   import { Language } from '/@/locales'
   import Wallpapers from './wall.vue'
 
-  const { i18n: _i18n, gtag, isDarkTheme } = useEnhancer()
+  const { i18n: _i18n, gtag } = useEnhancer()
   const wallpaperStore = useWallpaperStore()
   const isOnWallpaper = ref(false)
 
@@ -28,7 +28,7 @@
 
 <template>
   <div id="wallpaper" v-disabled-wallflower>
-    <div class="switcher" :class="{ dark: isDarkTheme }" @click="handleOpenWallpaper">
+    <div class="switcher" @click="handleOpenWallpaper">
       <div class="title">
         <i class="iconfont icon-bing" />
         <span class="text">BING</span>
@@ -68,7 +68,7 @@
       opacity: 0.5;
       transition: opacity $motion-duration-fast;
       background-color: #ffffff;
-      &.dark {
+      @include mix.dark-theme {
         background-color: #ececec;
       }
       &:hover {

@@ -15,6 +15,7 @@ import { createMainApp } from '/@/app/main'
 import gtag from '/@/composables/gtag'
 import lozad from '/@/composables/lozad'
 import adsense from '/@/composables/adsense'
+import { Theme } from '/@/composables/theme'
 import { createDefer } from '/@/composables/defer'
 import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
@@ -44,9 +45,10 @@ const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
   routerHistoryCreator: createWebHistory,
   languages: navigator.languages as string[],
   userAgent: navigator.userAgent,
+  // MARK: `window.initialTheme` from index.html <head> script.
+  theme: (window.initialTheme as Theme) ?? Theme.Light,
   region: getSSRStateValue('region')!,
   layout: getSSRStateValue('layout')!,
-  theme: getSSRStateValue('theme')!,
   error: getSSRContextValue('error')
 })
 

@@ -20,8 +20,6 @@
 </script>
 
 <script lang="ts" setup>
-  import { useEnhancer } from '/@/app/enhancer'
-
   interface Props {
     brand?: string
     icon?: string
@@ -32,11 +30,10 @@
   }
 
   defineProps<Props>()
-  const { isDarkTheme } = useEnhancer()
 </script>
 
 <template>
-  <div class="statistic" :class="[brand, { dark: isDarkTheme }]">
+  <div class="statistic" :class="brand">
     <placeholder :loading="fetching" :data="data">
       <template #loading>
         <ul class="skeletons">
@@ -90,10 +87,10 @@
     }
     &.github {
       #{--s-primary}: $github-primary;
-    }
-    &.github.dark {
-      #{--s-primary}: $color-link;
-      #{--brand-color}: $color-text-reversal;
+      @include mix.dark-theme {
+        #{--s-primary}: $color-link;
+        #{--brand-color}: $color-text-reversal;
+      }
     }
 
     .skeletons {

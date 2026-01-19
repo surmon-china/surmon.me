@@ -1,6 +1,13 @@
 @use 'variables' as *;
 @use 'functions' as funs;
 
+/// Dark theme only
+@mixin dark-theme {
+  [data-theme='dark'] & {
+    @content;
+  }
+}
+
 /// Element border radius
 @mixin radius-box($radius-size) {
   border-radius: $radius-size;

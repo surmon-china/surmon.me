@@ -1,6 +1,3 @@
-// For loadmore / lozad components
-import 'intersection-observer'
-
 // For Android browsers. e.g. WeChat webview
 // MDN: https://developer.mozilla.org/en-US/docs/Web/API/URL/canParse_static
 // Fork from: https://github.com/zloirock/core-js/blob/master/packages/core-js/modules/web.url.can-parse.js

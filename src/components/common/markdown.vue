@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { useLozad } from '/@/composables/lozad'
   import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 
@@ -14,7 +13,6 @@
 
   const props = defineProps<Props>()
   const { element } = useLozad()
-  const { isDarkTheme } = useEnhancer()
   const markdownHTML = computed<string>(() => {
     if (props.markdown) {
       return markdownToHTML(props.markdown, {
@@ -30,7 +28,7 @@
   <section
     ref="element"
     v-html="markdownHTML"
-    :class="[plain ? 'global-markdown-plain' : 'global-markdown-html', { compact, dark: isDarkTheme }]"
+    :class="[plain ? 'global-markdown-plain' : 'global-markdown-html', { compact }]"
   ></section>
 </template>
 
@@ -301,6 +299,20 @@
       font-size: $code-font-size;
       background-color: #f3f3f3;
       @include mix.background-transition($motion-duration-mid);
+      @include mix.dark-theme {
+        background-color: #1e1e1e;
+        &::before {
+          background-color: $module-bg-darker-1;
+        }
+        .code-lines {
+          background-color: $module-bg-darker-2;
+        }
+        code {
+          color: #c9d1d9;
+          border-color: transparent;
+        }
+      }
+
       &.with-line-numbers {
         padding-left: $code-number-width;
         code {
@@ -362,22 +374,6 @@
         background-color: transparent !important;
         color: #444;
         cursor: text;
-      }
-    }
-
-    &.dark {
-      pre {
-        background-color: #1e1e1e;
-        &::before {
-          background-color: $module-bg-darker-1;
-        }
-        .code-lines {
-          background-color: $module-bg-darker-3;
-        }
-        code {
-          color: #c9d1d9;
-          border-color: transparent;
-        }
       }
     }
 

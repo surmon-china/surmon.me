@@ -68,8 +68,10 @@
         <button class="button language" title="Switch language" @click="toggleLanguage">
           <i class="iconfont" :class="languageIcon"></i>
         </button>
-        <button class="button theme" :class="theme.theme.value" @click="toggleTheme">
-          <i class="iconfont" :class="themeIcon"></i>
+        <button class="button theme" @click="toggleTheme">
+          <client-only>
+            <i class="iconfont" :class="themeIcon" :data-value="theme.theme.value"></i>
+          </client-only>
         </button>
       </div>
     </div>

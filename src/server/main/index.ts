@@ -5,7 +5,6 @@
  */
 
 import http from 'http'
-import cookie from 'cookie'
 import type { AddressInfo } from 'net'
 import type { Server, IncomingMessage, ServerResponse } from 'http'
 import type { CacheStore } from '@/server/services/cache'
@@ -18,7 +17,6 @@ export interface RequestContext {
   readonly url: string
   readonly path: string
   readonly query: Record<string, string>
-  readonly cookies: Record<string, string | undefined>
   readonly headers: Record<string, string | undefined>
   request: IncomingMessage
   response: ServerResponse
@@ -77,7 +75,6 @@ export const createBFFServerApp = (options: ServerAppCreatorOptions) => {
         url: request.url,
         path: pathname,
         query: Object.fromEntries(searchParams.entries()),
-        cookies: cookie.parse(request.headers.cookie || ''),
         headers: request.headers as Record<string, string | undefined>,
         request,
         response

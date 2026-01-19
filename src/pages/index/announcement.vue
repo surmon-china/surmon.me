@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { ref, shallowRef } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
   import type { Announcement } from '/@/interfaces/announcement'
   import Markdown from '/@/components/common/markdown.vue'
@@ -11,7 +10,6 @@
     fetching: boolean
   }>()
 
-  const { isDarkTheme } = useEnhancer()
   const activeIndex = ref(0)
   const swiperRef = shallowRef<SwiperClass>()
   const setSwiper = (_swiper: SwiperClass) => {
@@ -26,7 +24,7 @@
 </script>
 
 <template>
-  <div class="announcement" :class="{ dark: isDarkTheme }">
+  <div class="announcement">
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
@@ -127,14 +125,6 @@
       }
       .right {
         flex: 1;
-      }
-    }
-
-    &.dark {
-      .background {
-        &::after {
-          background: $module-bg-darker-1;
-        }
       }
     }
 

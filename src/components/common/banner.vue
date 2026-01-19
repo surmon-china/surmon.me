@@ -22,7 +22,7 @@
     isMobile: false
   })
 
-  const { isDarkTheme, cdnDomain } = useEnhancer()
+  const { cdnDomain } = useEnhancer()
   const backgroundImage = computed(() => {
     return props.cdn && props.image ? getAssetURL(cdnDomain, props.image) : props.image
   })
@@ -45,7 +45,7 @@
 
 <template>
   <div class="banner" :class="{ mobile: isMobile }">
-    <div class="background" :class="{ dark: isDarkTheme }" :style="backgroundImageStyle">
+    <div class="background" :style="backgroundImageStyle">
       <video
         class="video"
         loop
@@ -88,7 +88,7 @@
       background-color: $module-bg-darker-1;
       background-size: cover;
       background-position-x: center;
-      &.dark {
+      @include mix.dark-theme {
         filter: brightness(0.8);
       }
 

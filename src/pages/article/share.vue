@@ -220,6 +220,7 @@
           background: linear-gradient(to bottom, transparent 10%, $module-bg 30%, $white);
         }
       }
+
       &.dark {
         .content {
           background-color: $black;

@@ -50,12 +50,6 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    optimizeDeps: {
-      exclude: [
-        // IIFE
-        'intersection-observer'
-      ]
-    },
     build: {
       sourcemap: true,
       manifest: true,
@@ -80,7 +74,6 @@ export default defineConfig(({ mode }) => {
               'lozad',
               'qrcode',
               'geojson',
-              'js-cookie',
               'lodash-es',
               'marked',
               'marked-highlight',
@@ -91,7 +84,6 @@ export default defineConfig(({ mode }) => {
               'html-to-image',
               'ua-parser-js',
               'bezier-easing',
-              'intersection-observer',
               '@braintree/sanitize-url'
             ]
           }

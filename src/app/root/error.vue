@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { useEnhancer } from '/@/app/enhancer'
   import { LocaleKey } from '/@/locales'
   import type { AppError } from '../error'
 
@@ -10,12 +9,10 @@
   const emit = defineEmits<{
     (e: 'resolve'): void
   }>()
-
-  const { isDarkTheme } = useEnhancer()
 </script>
 
 <template>
-  <div class="app-error" :class="{ dark: isDarkTheme }">
+  <div class="app-error">
     <h1 class="code">{{ props.error.code }}</h1>
     <h3 class="message">
       <template v-if="props.error.message">{{ props.error.message }}</template>
@@ -46,12 +43,6 @@
     justify-content: center;
     flex-direction: column;
     background-color: $module-bg;
-    &.dark {
-      background-color: $module-bg-opaque;
-      .message {
-        color: $color-text-darker;
-      }
-    }
 
     @keyframes error-item {
       0% {

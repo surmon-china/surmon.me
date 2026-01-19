@@ -5,15 +5,18 @@
 @use '/src/effects/highlight/theme.scss' as highlight;
 
 :root {
+  color-scheme: light dark;
   background-color: $body-bg;
 
   // theme
   &[data-theme='light'] {
+    color-scheme: light;
     @include themes.appLightTheme();
     @include highlight.highlightLightTheme();
   }
 
   &[data-theme='dark'] {
+    color-scheme: dark;
     @include themes.appDarkTheme();
     @include highlight.highlightDarkTheme();
   }

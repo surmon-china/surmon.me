@@ -25,7 +25,7 @@
     (e: Events.Loadmore): void
   }>()
 
-  const { isDarkTheme, isZhLang } = useEnhancer()
+  const { theme, isZhLang } = useEnhancer()
   const hasMoreData = computed(() => {
     if (!props.pagination) return false
     return props.pagination.current_page < props.pagination.total_page
@@ -68,7 +68,7 @@
             <client-only>
               <template v-if="mammon">
                 <Adsense
-                  v-if="isDarkTheme"
+                  v-if="theme.isDark.value"
                   ins-class="mammon-ins"
                   data-ad-format="fluid"
                   data-ad-layout-key="-hj-9+3a-97+6s"

@@ -48,7 +48,9 @@
     </div>
     <div class="aside-tool">
       <button class="item" @click="theme.toggle">
-        <i class="iconfont" :class="themeIcon"></i>
+        <client-only>
+          <i class="iconfont" :class="themeIcon"></i>
+        </client-only>
       </button>
       <div class="separator"></div>
       <button class="item" @click="_i18n.toggle">

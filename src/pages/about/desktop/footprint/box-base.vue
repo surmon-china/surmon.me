@@ -11,18 +11,18 @@
     (e: 'style-load', v: { map: Map; lib: any }): void
   }>()
 
-  const { isDarkTheme, appConfig } = useEnhancer()
+  const { theme, appConfig } = useEnhancer()
   const container = shallowRef<HTMLElement>()
   const lib = shallowRef<MapboxGL>()
   const map = shallowRef<Map>()
 
   const getMapStyle = () => {
-    return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT
+    return theme.isDark.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT
   }
 
   onBeforeMount(() => {
     watch(
-      () => isDarkTheme.value,
+      () => theme.theme.value,
       () => map.value?.setStyle(getMapStyle())
     )
   })
