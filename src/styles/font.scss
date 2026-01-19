@@ -8,24 +8,11 @@
 
 @font-face {
   font-display: swap;
-  font-family: Monda;
-  src: global.surl('/fonts/Monda-Regular.ttf');
-  unicode-range: U+21-3B, U+3D, U+3F-5F, U+61-7D;
-}
-
-@font-face {
-  font-display: swap;
   font-family: DINRegular;
   src: global.surl('/fonts/DIN-Regular.ttf');
   // CSS Unicode Range Generator https://codepen.io/elifitch/pen/Ljqway
   // abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/.=-;',?!#@$%^&*()_+\|:"[]{}
   unicode-range: U+21-3B, U+3D, U+3F-5F, U+61-7D;
-}
-
-@font-face {
-  font-display: swap;
-  font-family: 'SFMono-Regular';
-  src: global.surl('/fonts/SFMonoRegular.otf') format('opentype');
 }
 
 // 阿里巴巴普惠体 2.0 65 Medium
