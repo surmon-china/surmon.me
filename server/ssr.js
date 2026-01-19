@@ -36,13 +36,12 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import lozad from "lozad";
 import BezierEasing from "bezier-easing";
-import cookies from "js-cookie";
 import { useHead } from "@unhead/vue";
 import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.8.10";
+const APP_VERSION = "5.9.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -2177,52 +2176,38 @@ const createI18n = (config) => {
 const useI18n = () => {
   return inject(I18nSymbol);
 };
+const THEME_STORAGE_KEY = "theme";
 var Theme = /* @__PURE__ */ ((Theme2) => {
   Theme2["Light"] = "light";
   Theme2["Dark"] = "dark";
   return Theme2;
 })(Theme || {});
-const DARK_THEME_QUERY = "(prefers-color-scheme: dark)";
-const LIGHT_THEME_QUERY = "(prefers-color-scheme: light)";
-const THEME_STORAGE_KEY = "theme";
-const ThemeSymbol = /* @__PURE__ */ Symbol("theme");
 const themes = [
   "light",
   "dark"
   /* Dark */
 ];
-const createTheme = (initTheme) => {
+const ThemeSymbol = /* @__PURE__ */ Symbol("theme");
+const createTheme = (initialValue) => {
   const theme = ref(
-    initTheme === "dark" ? "dark" : "light"
+    initialValue === "dark" ? "dark" : "light"
     /* Light */
+  );
+  const isDark = computed(
+    () => theme.value === "dark"
+    /* Dark */
   );
   const set2 = (newTheme) => {
     if (themes.includes(newTheme) && newTheme !== theme.value) {
       theme.value = newTheme;
-      cookies.set(THEME_STORAGE_KEY, newTheme);
       storage.set(THEME_STORAGE_KEY, newTheme);
     }
   };
   const toggle = () => set2(
-    theme.value === "dark" ? "light" : "dark"
+    isDark.value ? "light" : "dark"
     /* Dark */
   );
-  const bindClientSystem = () => {
-    window.matchMedia(DARK_THEME_QUERY).addEventListener("change", ({ matches }) => matches && set2(
-      "dark"
-      /* Dark */
-    ));
-    window.matchMedia(LIGHT_THEME_QUERY).addEventListener("change", ({ matches }) => matches && set2(
-      "light"
-      /* Light */
-    ));
-  };
-  const themeState = {
-    theme: readonly(theme),
-    set: set2,
-    toggle,
-    bindClientSystem
-  };
+  const themeState = { theme: readonly(theme), isDark, set: set2, toggle };
   return {
     ...themeState,
     install(app) {
@@ -2246,7 +2231,6 @@ const useEnhancer = () => {
   const cdnDomain = useCdnDomain();
   const countryCode = useCountryCode();
   const appConfig = computed(() => appOptionStore.appConfig);
-  const isDarkTheme = computed(() => theme.theme.value === Theme.Dark);
   const isZhLang = computed(() => i18n.language.value === Language.Chinese);
   return {
     route,
@@ -2258,7 +2242,6 @@ const useEnhancer = () => {
     countryCode,
     isCNUser: isCNCode(countryCode || "GLOBAL"),
     appConfig,
-    isDarkTheme,
     isZhLang,
     defer: void 0,
     popup: void 0,
@@ -3286,7 +3269,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
   },
   setup(__props, { emit: __emit }) {
     const props = __props;
-    const { isDarkTheme, isZhLang } = useEnhancer();
+    const { theme, isZhLang } = useEnhancer();
     const hasMoreData = computed(() => {
       if (!props.pagination) return false;
       return props.pagination.current_page < props.pagination.total_page;
@@ -3299,22 +3282,22 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_Adsense = resolveComponent("Adsense");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-76fcdb14><div class="article-list" data-v-76fcdb14>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "articles" }, _attrs))} data-v-0e8bbd13><div class="article-list" data-v-0e8bbd13>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: __props.articles.length,
         loading: !__props.articles.length && __props.fetching
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="article-list-skeleton" data-v-76fcdb14${_scopeId}><!--[-->`);
+            _push2(`<ul class="article-list-skeleton" data-v-0e8bbd13${_scopeId}><!--[-->`);
             ssrRenderList(6, (item) => {
-              _push2(`<li class="item" data-v-76fcdb14${_scopeId}><div class="thumbnail" data-v-76fcdb14${_scopeId}>`);
+              _push2(`<li class="item" data-v-0e8bbd13${_scopeId}><div class="thumbnail" data-v-0e8bbd13${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_base, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="content" data-v-76fcdb14${_scopeId}><div class="title" data-v-76fcdb14${_scopeId}>`);
+              _push2(`</div><div class="content" data-v-0e8bbd13${_scopeId}><div class="title" data-v-0e8bbd13${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-              _push2(`</div><div class="description" data-v-76fcdb14${_scopeId}><!--[-->`);
+              _push2(`</div><div class="description" data-v-0e8bbd13${_scopeId}><!--[-->`);
               ssrRenderList(2, (line) => {
-                _push2(`<div class="line-item" data-v-76fcdb14${_scopeId}>`);
+                _push2(`<div class="line-item" data-v-0e8bbd13${_scopeId}>`);
                 _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
                 _push2(`</div>`);
               });
@@ -3380,13 +3363,13 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div data-v-76fcdb14${_scopeId}>`);
+            _push2(`<div data-v-0e8bbd13${_scopeId}>`);
             _push2(ssrRenderComponent(_component_client_only, null, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
                   if (__props.mammon) {
                     _push3(`<!--[-->`);
-                    if (unref(isDarkTheme)) {
+                    if (unref(theme).isDark.value) {
                       _push3(ssrRenderComponent(_component_Adsense, {
                         "ins-class": "mammon-ins",
                         "data-ad-format": "fluid",
@@ -3410,7 +3393,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
                 } else {
                   return [
                     __props.mammon ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                      unref(isDarkTheme) ? (openBlock(), createBlock(_component_Adsense, {
+                      unref(theme).isDark.value ? (openBlock(), createBlock(_component_Adsense, {
                         key: 0,
                         "ins-class": "mammon-ins",
                         "data-ad-format": "fluid",
@@ -3446,7 +3429,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
                 createVNode(_component_client_only, null, {
                   default: withCtx(() => [
                     __props.mammon ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                      unref(isDarkTheme) ? (openBlock(), createBlock(_component_Adsense, {
+                      unref(theme).isDark.value ? (openBlock(), createBlock(_component_Adsense, {
                         key: 0,
                         "ins-class": "mammon-ins",
                         "data-ad-format": "fluid",
@@ -3483,13 +3466,13 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div><button class="article-load"${ssrIncludeBooleanAttr(__props.fetching || !hasMoreData.value) ? " disabled" : ""} data-v-76fcdb14><div class="background" data-v-76fcdb14><span class="left" data-v-76fcdb14></span><span class="right" data-v-76fcdb14></span></div><div class="content" data-v-76fcdb14><span class="left" data-v-76fcdb14>`);
+      _push(`</div><button class="article-load"${ssrIncludeBooleanAttr(__props.fetching || !hasMoreData.value) ? " disabled" : ""} data-v-0e8bbd13><div class="background" data-v-0e8bbd13><span class="left" data-v-0e8bbd13></span><span class="right" data-v-0e8bbd13></span></div><div class="content" data-v-0e8bbd13><span class="left" data-v-0e8bbd13>`);
       if (__props.fetching) {
         _push(`<!--[-->•••<!--]-->`);
       } else {
         _push(`<!--[-->${ssrInterpolate(__props.articles.length)} / ${ssrInterpolate(__props.pagination?.total)}<!--]-->`);
       }
-      _push(`</span><span class="right" data-v-76fcdb14><span class="${ssrRenderClass([{ zh: unref(isZhLang) }, "text"])}" data-v-76fcdb14>`);
+      _push(`</span><span class="right" data-v-0e8bbd13><span class="${ssrRenderClass([{ zh: unref(isZhLang) }, "text"])}" data-v-0e8bbd13>`);
       if (__props.fetching) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocaleKey).ARTICLE_LIST_LOADING
@@ -3505,9 +3488,9 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
       }
       _push(`</span>`);
       if (__props.fetching || hasMoreData.value) {
-        _push(`<i class="iconfont icon-loadmore" data-v-76fcdb14></i>`);
+        _push(`<i class="iconfont icon-loadmore" data-v-0e8bbd13></i>`);
       } else {
-        _push(`<i class="iconfont icon-stop" data-v-76fcdb14></i>`);
+        _push(`<i class="iconfont icon-stop" data-v-0e8bbd13></i>`);
       }
       _push(`</span></div></button></div>`);
     };
@@ -3519,7 +3502,7 @@ _sfc_main$1P.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/listing/desktop/list.vue");
   return _sfc_setup$1P ? _sfc_setup$1P(props, ctx) : void 0;
 };
-const ArticleList = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-76fcdb14"]]);
+const ArticleList = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-0e8bbd13"]]);
 Swiper.use([Autoplay, Mousewheel, Mousewheel, Grid, EffectFade]);
 const INITIAL_SLIDE_INDEX = 0;
 const _sfc_main$1O = /* @__PURE__ */ defineComponent({
@@ -3532,7 +3515,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { i18n: _i18n, appConfig, cdnDomain, isDarkTheme } = useEnhancer();
+    const { i18n: _i18n, appConfig, cdnDomain } = useEnhancer();
     const getPictureURL = (url, format) => {
       if (!isOriginalStaticURL(url)) {
         return url;
@@ -3591,7 +3574,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
       const _component_skeleton_line = resolveComponent("skeleton-line");
       const _component_ulink = resolveComponent("ulink");
       const _component_client_only = resolveComponent("client-only");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-44f7b7e2>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "carrousel" }, _attrs))} data-v-e16325a5>`);
       _push(ssrRenderComponent(_component_placeholder, {
         data: slides.value.length,
         loading: __props.fetching
@@ -3637,13 +3620,13 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="article-skeleton" data-v-44f7b7e2${_scopeId}><div class="title" data-v-44f7b7e2${_scopeId}>`);
+            _push2(`<div class="article-skeleton" data-v-e16325a5${_scopeId}><div class="title" data-v-e16325a5${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
-            _push2(`</div><div class="content" data-v-44f7b7e2${_scopeId}><div class="first" data-v-44f7b7e2${_scopeId}>`);
+            _push2(`</div><div class="content" data-v-e16325a5${_scopeId}><div class="first" data-v-e16325a5${_scopeId}>`);
             _push2(ssrRenderComponent(_component_skeleton_line, null, null, _parent2, _scopeId));
             _push2(`</div><!--[-->`);
             ssrRenderList(3, (index) => {
-              _push2(`<div class="line" data-v-44f7b7e2${_scopeId}>`);
+              _push2(`<div class="line" data-v-e16325a5${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton_line, { class: "line-item" }, null, _parent2, _scopeId));
               _push2(`</div>`);
             });
@@ -3695,9 +3678,9 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                   _push3(ssrRenderComponent(_component_client_only, null, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(`<div class="swiper-pagination" data-v-44f7b7e2${_scopeId3}><!--[-->`);
+                        _push4(`<div class="swiper-pagination" data-v-e16325a5${_scopeId3}><!--[-->`);
                         ssrRenderList(slides.value.slice(0, 9), (slide, index) => {
-                          _push4(`<div${ssrRenderAttr("aria-label", `Go to article ${slide.title}`)} class="${ssrRenderClass([{ active: index === activatedSlideIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-44f7b7e2${_scopeId3}><span class="bullet-progress" data-v-44f7b7e2${_scopeId3}></span></div>`);
+                          _push4(`<div${ssrRenderAttr("aria-label", `Go to article ${slide.title}`)} class="${ssrRenderClass([{ active: index === activatedSlideIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-e16325a5${_scopeId3}><span class="bullet-progress" data-v-e16325a5${_scopeId3}></span></div>`);
                         });
                         _push4(`<!--]--></div>`);
                       } else {
@@ -3750,7 +3733,7 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                     _push3(ssrRenderComponent(unref(SwiperSlide), { key: index }, {
                       default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                         if (_push4) {
-                          _push4(`<div class="content" data-v-44f7b7e2${_scopeId3}>`);
+                          _push4(`<div class="content" data-v-e16325a5${_scopeId3}>`);
                           _push4(ssrRenderComponent(_component_ulink, {
                             class: "link",
                             href: slide.url,
@@ -3758,15 +3741,15 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                           }, {
                             default: withCtx((_4, _push5, _parent5, _scopeId4) => {
                               if (_push5) {
-                                _push5(`<picture class="picture" data-v-44f7b7e2${_scopeId4}>`);
+                                _push5(`<picture class="picture" data-v-e16325a5${_scopeId4}>`);
                                 if (unref(isOriginalStaticURL)(slide.image)) {
-                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-44f7b7e2${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-44f7b7e2${_scopeId4}><!--]-->`);
+                                  _push5(`<!--[--><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "avif"))} type="image/avif" data-v-e16325a5${_scopeId4}><source${ssrRenderAttr("srcset", getPictureURL(slide.image, "webp"))} type="image/webp" data-v-e16325a5${_scopeId4}><!--]-->`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
-                                _push5(`<img class="image" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-44f7b7e2${_scopeId4}></picture><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "title"])}"${ssrRenderAttr("title", slide.title)} data-v-44f7b7e2${_scopeId4}><div class="background" data-v-44f7b7e2${_scopeId4}></div><div class="prospect" data-v-44f7b7e2${_scopeId4}><span class="text" data-v-44f7b7e2${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
+                                _push5(`<img class="image" draggable="false"${ssrRenderAttr("alt", slide.title)}${ssrRenderAttr("src", getPictureURL(slide.image))} data-v-e16325a5${_scopeId4}></picture><div class="title"${ssrRenderAttr("title", slide.title)} data-v-e16325a5${_scopeId4}><div class="background" data-v-e16325a5${_scopeId4}></div><div class="prospect" data-v-e16325a5${_scopeId4}><span class="text" data-v-e16325a5${_scopeId4}>${ssrInterpolate(slide.title)}</span></div></div>`);
                                 if (slide.subscript) {
-                                  _push5(`<span class="subscript" data-v-44f7b7e2${_scopeId4}>${ssrInterpolate(slide.subscript)}</span>`);
+                                  _push5(`<span class="subscript" data-v-e16325a5${_scopeId4}>${ssrInterpolate(slide.subscript)}</span>`);
                                 } else {
                                   _push5(`<!---->`);
                                 }
@@ -3791,14 +3774,14 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                                     }, null, 8, ["alt", "src"])
                                   ]),
                                   createVNode("div", {
-                                    class: ["title", { dark: unref(isDarkTheme) }],
+                                    class: "title",
                                     title: slide.title
                                   }, [
                                     createVNode("div", { class: "background" }),
                                     createVNode("div", { class: "prospect" }, [
                                       createVNode("span", { class: "text" }, toDisplayString(slide.title), 1)
                                     ])
-                                  ], 10, ["title"]),
+                                  ], 8, ["title"]),
                                   slide.subscript ? (openBlock(), createBlock("span", {
                                     key: 0,
                                     class: "subscript"
@@ -3837,14 +3820,14 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                                     }, null, 8, ["alt", "src"])
                                   ]),
                                   createVNode("div", {
-                                    class: ["title", { dark: unref(isDarkTheme) }],
+                                    class: "title",
                                     title: slide.title
                                   }, [
                                     createVNode("div", { class: "background" }),
                                     createVNode("div", { class: "prospect" }, [
                                       createVNode("span", { class: "text" }, toDisplayString(slide.title), 1)
                                     ])
-                                  ], 10, ["title"]),
+                                  ], 8, ["title"]),
                                   slide.subscript ? (openBlock(), createBlock("span", {
                                     key: 0,
                                     class: "subscript"
@@ -3891,14 +3874,14 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                                   }, null, 8, ["alt", "src"])
                                 ]),
                                 createVNode("div", {
-                                  class: ["title", { dark: unref(isDarkTheme) }],
+                                  class: "title",
                                   title: slide.title
                                 }, [
                                   createVNode("div", { class: "background" }),
                                   createVNode("div", { class: "prospect" }, [
                                     createVNode("span", { class: "text" }, toDisplayString(slide.title), 1)
                                   ])
-                                ], 10, ["title"]),
+                                ], 8, ["title"]),
                                 slide.subscript ? (openBlock(), createBlock("span", {
                                   key: 0,
                                   class: "subscript"
@@ -3982,14 +3965,14 @@ const _sfc_main$1O = /* @__PURE__ */ defineComponent({
                                 }, null, 8, ["alt", "src"])
                               ]),
                               createVNode("div", {
-                                class: ["title", { dark: unref(isDarkTheme) }],
+                                class: "title",
                                 title: slide.title
                               }, [
                                 createVNode("div", { class: "background" }),
                                 createVNode("div", { class: "prospect" }, [
                                   createVNode("span", { class: "text" }, toDisplayString(slide.title), 1)
                                 ])
-                              ], 10, ["title"]),
+                              ], 8, ["title"]),
                               slide.subscript ? (openBlock(), createBlock("span", {
                                 key: 0,
                                 class: "subscript"
@@ -4020,7 +4003,7 @@ _sfc_main$1O.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/index/carrousel.vue");
   return _sfc_setup$1O ? _sfc_setup$1O(props, ctx) : void 0;
 };
-const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1O, [["__scopeId", "data-v-44f7b7e2"]]);
+const Carrousel = /* @__PURE__ */ _export_sfc(_sfc_main$1O, [["__scopeId", "data-v-e16325a5"]]);
 const _sfc_main$1N = /* @__PURE__ */ defineComponent({
   __name: "threads",
   __ssrInlineRender: true,
@@ -5201,7 +5184,7 @@ const _sfc_main$1G = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { isDarkTheme, cdnDomain } = useEnhancer();
+    const { cdnDomain } = useEnhancer();
     const backgroundImage = computed(() => {
       return props.cdn && props.image ? getAssetURL(cdnDomain, props.image) : props.image;
     });
@@ -5220,15 +5203,15 @@ const _sfc_main$1G = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["banner", { mobile: __props.isMobile }]
-      }, _attrs))} data-v-8024e433><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "background"])}" style="${ssrRenderStyle(backgroundImageStyle.value)}" data-v-8024e433>`);
+      }, _attrs))} data-v-1db3e693><div class="background" style="${ssrRenderStyle(backgroundImageStyle.value)}" data-v-1db3e693>`);
       if (videoSource.value) {
-        _push(`<video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""} style="${ssrRenderStyle({ objectPosition: `0% ${props.videoPosition}%` })}"${ssrRenderAttr("src", videoSource.value)} data-v-8024e433></video>`);
+        _push(`<video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""} style="${ssrRenderStyle({ objectPosition: `0% ${props.videoPosition}%` })}"${ssrRenderAttr("src", videoSource.value)} data-v-1db3e693></video>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="${ssrRenderClass([{ blur: Boolean(__props.blur) }, "content"])}" style="${ssrRenderStyle({ "--blur": `${__props.blur}px` })}" data-v-8024e433><h2 class="title" data-v-8024e433>`);
+      _push(`</div><div class="${ssrRenderClass([{ blur: Boolean(__props.blur) }, "content"])}" style="${ssrRenderStyle({ "--blur": `${__props.blur}px` })}" data-v-1db3e693><h2 class="title" data-v-1db3e693>`);
       ssrRenderSlot(_ctx.$slots, "title", {}, null, _push, _parent);
-      _push(`</h2><div class="description" data-v-8024e433>`);
+      _push(`</h2><div class="description" data-v-1db3e693>`);
       ssrRenderSlot(_ctx.$slots, "description", {}, null, _push, _parent);
       _push(`</div></div></div>`);
     };
@@ -5240,7 +5223,7 @@ _sfc_main$1G.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/common/banner.vue");
   return _sfc_setup$1G ? _sfc_setup$1G(props, ctx) : void 0;
 };
-const PageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$1G, [["__scopeId", "data-v-8024e433"]]);
+const PageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$1G, [["__scopeId", "data-v-1db3e693"]]);
 const _sfc_main$1F = /* @__PURE__ */ defineComponent({
   __name: "tree",
   __ssrInlineRender: true,
@@ -6978,7 +6961,6 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const { element } = useLozad();
-    const { isDarkTheme } = useEnhancer();
     const markdownHTML = computed(() => {
       if (props.markdown) {
         return markdownToHTML(props.markdown, {
@@ -6991,7 +6973,7 @@ const _sfc_main$1z = /* @__PURE__ */ defineComponent({
       _push(`<section${ssrRenderAttrs(mergeProps({
         ref_key: "element",
         ref: element,
-        class: [__props.plain ? "global-markdown-plain" : "global-markdown-html", { compact: __props.compact, dark: unref(isDarkTheme) }]
+        class: [__props.plain ? "global-markdown-plain" : "global-markdown-html", { compact: __props.compact }]
       }, _attrs))}>${markdownHTML.value ?? ""}</section>`);
     };
   }
@@ -8687,7 +8669,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
       const _component_divider = resolveComponent("divider");
       const _component_uimage = resolveComponent("uimage");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-0eb022b7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "share-box" }, _attrs))} data-v-7cf428ad>`);
       _push(ssrRenderComponent(Share, {
         class: "share",
         socials: props.socials,
@@ -8704,9 +8686,9 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-0eb022b7${_scopeId2}>`);
+                  _push3(`<div class="${ssrRenderClass([{ rendered: isRenderedShareImage.value }, "share-as-image-modal"])}" data-v-7cf428ad${_scopeId2}>`);
                   if (!isRenderedShareImage.value) {
-                    _push3(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-0eb022b7${_scopeId2}><div class="content" data-v-0eb022b7${_scopeId2}><div class="header" data-v-0eb022b7${_scopeId2}><h1 class="title" data-v-0eb022b7${_scopeId2}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-0eb022b7${_scopeId2}>`);
+                    _push3(`<div class="${ssrRenderClass([unref(theme).theme.value, "share-template"])}" data-v-7cf428ad${_scopeId2}><div class="content" data-v-7cf428ad${_scopeId2}><div class="header" data-v-7cf428ad${_scopeId2}><h1 class="title" data-v-7cf428ad${_scopeId2}>${ssrInterpolate(__props.article.title)}</h1><p class="meta-info" data-v-7cf428ad${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, {
                       zh: "发布于 ",
                       en: "Created at "
@@ -8744,11 +8726,11 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                       }
                     }, null, _parent3, _scopeId2));
                     if (isLongArticle.value) {
-                      _push3(`<div class="read-more-mask" data-v-0eb022b7${_scopeId2}></div>`);
+                      _push3(`<div class="read-more-mask" data-v-7cf428ad${_scopeId2}></div>`);
                     } else {
                       _push3(`<!---->`);
                     }
-                    _push3(`</div><div class="footer" data-v-0eb022b7${_scopeId2}><p class="tip" data-v-0eb022b7${_scopeId2}>`);
+                    _push3(`</div><div class="footer" data-v-7cf428ad${_scopeId2}><p class="tip" data-v-7cf428ad${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_i18n, {
                       zh: "长按识别二维码，阅读全文，参与评论",
                       en: "Long-press the QR code to read and discuss"
@@ -8771,7 +8753,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                     _push3(`<!---->`);
                   }
                   if (!isRenderedShareImage.value) {
-                    _push3(`<div class="share-rendering" data-v-0eb022b7${_scopeId2}>`);
+                    _push3(`<div class="share-rendering" data-v-7cf428ad${_scopeId2}>`);
                     _push3(ssrRenderComponent(_component_loading_indicator, {
                       width: "1.8rem",
                       height: "1.2rem"
@@ -8781,7 +8763,7 @@ const _sfc_main$1m = /* @__PURE__ */ defineComponent({
                     _push3(`<!---->`);
                   }
                   if (isRenderedShareImage.value) {
-                    _push3(`<div class="share-image" data-v-0eb022b7${_scopeId2}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-0eb022b7${_scopeId2}></div>`);
+                    _push3(`<div class="share-image" data-v-7cf428ad${_scopeId2}><img class="image"${ssrRenderAttr("src", shareImageUrl.value)}${ssrRenderAttr("alt", __props.article.title)} data-v-7cf428ad${_scopeId2}></div>`);
                   } else {
                     _push3(`<!---->`);
                   }
@@ -9007,7 +8989,7 @@ _sfc_main$1m.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/share.vue");
   return _sfc_setup$1m ? _sfc_setup$1m(props, ctx) : void 0;
 };
-const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$1m, [["__scopeId", "data-v-0eb022b7"]]);
+const ArticleShare = /* @__PURE__ */ _export_sfc(_sfc_main$1m, [["__scopeId", "data-v-7cf428ad"]]);
 const _sfc_main$1l = /* @__PURE__ */ defineComponent({
   __name: "meta",
   __ssrInlineRender: true,
@@ -9939,22 +9921,21 @@ const _sfc_main$1f = /* @__PURE__ */ defineComponent({
     data: {}
   },
   setup(__props) {
-    const { isDarkTheme } = useEnhancer();
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
       const _component_skeleton_base = resolveComponent("skeleton-base");
       const _component_empty = resolveComponent("empty");
       const _component_ulink = resolveComponent("ulink");
       _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["statistic", [__props.brand, { dark: unref(isDarkTheme) }]]
-      }, _attrs))} data-v-9de8a844>`);
+        class: ["statistic", __props.brand]
+      }, _attrs))} data-v-7b5b2167>`);
       _push(ssrRenderComponent(_component_placeholder, {
         loading: __props.fetching,
         data: __props.data
       }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="skeletons" data-v-9de8a844${_scopeId}><!--[-->`);
+            _push2(`<ul class="skeletons" data-v-7b5b2167${_scopeId}><!--[-->`);
             ssrRenderList(3, (i) => {
               _push2(ssrRenderComponent(_component_skeleton_base, {
                 key: i,
@@ -9992,14 +9973,14 @@ const _sfc_main$1f = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="content" data-v-9de8a844${_scopeId}>`);
+            _push2(`<div class="content" data-v-7b5b2167${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "title",
               href: __props.href
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="left" data-v-9de8a844${_scopeId2}><i class="${ssrRenderClass([__props.icon, "iconfont"])}" data-v-9de8a844${_scopeId2}></i><span class="text" data-v-9de8a844${_scopeId2}>${ssrInterpolate(__props.platform)}</span></span><span class="right" data-v-9de8a844${_scopeId2}><i class="iconfont icon-next" data-v-9de8a844${_scopeId2}></i></span>`);
+                  _push3(`<span class="left" data-v-7b5b2167${_scopeId2}><i class="${ssrRenderClass([__props.icon, "iconfont"])}" data-v-7b5b2167${_scopeId2}></i><span class="text" data-v-7b5b2167${_scopeId2}>${ssrInterpolate(__props.platform)}</span></span><span class="right" data-v-7b5b2167${_scopeId2}><i class="iconfont icon-next" data-v-7b5b2167${_scopeId2}></i></span>`);
                 } else {
                   return [
                     createVNode("span", { class: "left" }, [
@@ -10055,7 +10036,7 @@ _sfc_main$1f.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/statistic/base.vue");
   return _sfc_setup$1f ? _sfc_setup$1f(props, ctx) : void 0;
 };
-const StatisticBase = /* @__PURE__ */ _export_sfc(_sfc_main$1f, [["__scopeId", "data-v-9de8a844"]]);
+const StatisticBase = /* @__PURE__ */ _export_sfc(_sfc_main$1f, [["__scopeId", "data-v-7b5b2167"]]);
 const _sfc_main$1e = /* @__PURE__ */ defineComponent({
   __name: "npm",
   __ssrInlineRender: true,
@@ -10930,26 +10911,25 @@ const _sfc_main$18 = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { isDarkTheme } = useEnhancer();
     const total = computed(() => props.articles + props.threads + props.contributions + props.instagrams);
     const getPointHeightStyle = (value) => {
       return isNaN(value) ? 0 : `${Math.floor(value * 100)}%`;
     };
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["day", { dark: unref(isDarkTheme) }],
+        class: "day",
         "data-date": __props.date,
         "data-total-count": total.value,
         "data-article-count": __props.articles,
         "data-thread-count": __props.threads,
         "data-instagram-count": __props.instagrams,
         "data-contribution-count": __props.contributions
-      }, _attrs))} data-v-da750b92><div class="point" data-v-da750b92><div class="item article" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.articles / total.value) })}" data-v-da750b92></div><div class="item threads" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.threads / total.value) })}" data-v-da750b92></div><div class="item instagram" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.instagrams / total.value) })}" data-v-da750b92></div><div class="item contribution" style="${ssrRenderStyle({
+      }, _attrs))} data-v-dcea940b><div class="point" data-v-dcea940b><div class="item article" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.articles / total.value) })}" data-v-dcea940b></div><div class="item threads" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.threads / total.value) })}" data-v-dcea940b></div><div class="item instagram" style="${ssrRenderStyle({ height: getPointHeightStyle(__props.instagrams / total.value) })}" data-v-dcea940b></div><div class="item contribution" style="${ssrRenderStyle({
         height: getPointHeightStyle(__props.contributions / total.value),
         backgroundColor: __props.githubColor
-      })}" data-v-da750b92></div></div>`);
+      })}" data-v-dcea940b></div></div>`);
       if (total.value) {
-        _push(`<div class="tooltip" data-v-da750b92><p class="date" data-v-da750b92>${ssrInterpolate(__props.date)}</p><ul class="counts" data-v-da750b92><li class="item article" data-v-da750b92><i class="iconfont icon-quill" data-v-da750b92></i><span class="count" data-v-da750b92>${ssrInterpolate(__props.articles)}</span> articles </li><li class="item thread" data-v-da750b92><i class="iconfont icon-threads" data-v-da750b92></i><span class="count" data-v-da750b92>${ssrInterpolate(__props.threads)}</span> threads </li><li class="item instagram" data-v-da750b92><i class="iconfont icon-instagram" data-v-da750b92></i><span class="count" data-v-da750b92>${ssrInterpolate(__props.instagrams)}</span> instagrams </li><li class="item contribution" data-v-da750b92><i class="iconfont icon-github" data-v-da750b92></i><span class="count" data-v-da750b92>${ssrInterpolate(__props.contributions)}</span> contributions </li></ul></div>`);
+        _push(`<div class="tooltip" data-v-dcea940b><p class="date" data-v-dcea940b>${ssrInterpolate(__props.date)}</p><ul class="counts" data-v-dcea940b><li class="item article" data-v-dcea940b><i class="iconfont icon-quill" data-v-dcea940b></i><span class="count" data-v-dcea940b>${ssrInterpolate(__props.articles)}</span> articles </li><li class="item thread" data-v-dcea940b><i class="iconfont icon-threads" data-v-dcea940b></i><span class="count" data-v-dcea940b>${ssrInterpolate(__props.threads)}</span> threads </li><li class="item instagram" data-v-dcea940b><i class="iconfont icon-instagram" data-v-dcea940b></i><span class="count" data-v-dcea940b>${ssrInterpolate(__props.instagrams)}</span> instagrams </li><li class="item contribution" data-v-dcea940b><i class="iconfont icon-github" data-v-dcea940b></i><span class="count" data-v-dcea940b>${ssrInterpolate(__props.contributions)}</span> contributions </li></ul></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -10963,7 +10943,7 @@ _sfc_main$18.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/calendar/day.vue");
   return _sfc_setup$18 ? _sfc_setup$18(props, ctx) : void 0;
 };
-const CalendarDay = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-da750b92"]]);
+const CalendarDay = /* @__PURE__ */ _export_sfc(_sfc_main$18, [["__scopeId", "data-v-dcea940b"]]);
 const _sfc_main$17 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -11063,16 +11043,16 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
   emits: ["load", "style-load"],
   setup(__props, { emit: __emit }) {
     const emit = __emit;
-    const { isDarkTheme, appConfig } = useEnhancer();
+    const { theme, appConfig } = useEnhancer();
     const container = shallowRef();
     const lib = shallowRef();
     const map = shallowRef();
     const getMapStyle = () => {
-      return isDarkTheme.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
+      return theme.isDark.value ? MAPBOX_CONFIG.STYLE_DARK : MAPBOX_CONFIG.STYLE_LIGHT;
     };
     onBeforeMount(() => {
       watch(
-        () => isDarkTheme.value,
+        () => theme.theme.value,
         () => map.value?.setStyle(getMapStyle())
       );
     });
@@ -11105,7 +11085,7 @@ const _sfc_main$16 = /* @__PURE__ */ defineComponent({
         class: "mapbox",
         ref_key: "container",
         ref: container
-      }, _attrs))} data-v-32724e13></div>`);
+      }, _attrs))} data-v-ed254aa9></div>`);
     };
   }
 });
@@ -11115,7 +11095,7 @@ _sfc_main$16.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
   return _sfc_setup$16 ? _sfc_setup$16(props, ctx) : void 0;
 };
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-32724e13"]]);
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$16, [["__scopeId", "data-v-ed254aa9"]]);
 const PLACEMARK_LAYER_ID = "placemarks";
 const useMapPlacemarks = () => {
   const kmlJson = shallowRef(null);
@@ -17726,7 +17706,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
   __name: "switcher",
   __ssrInlineRender: true,
   setup(__props) {
-    const { isDarkTheme } = useEnhancer();
+    useEnhancer();
     useWallpaperStore();
     const isOnWallpaper = ref(false);
     const handleCloseWallpaper = () => {
@@ -17736,7 +17716,7 @@ const _sfc_main$o = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<!--[--><div${ssrRenderAttrs(mergeProps({ id: "wallpaper" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-371351d4><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "switcher"])}" data-v-371351d4><div class="title" data-v-371351d4><i class="iconfont icon-bing" data-v-371351d4></i><span class="text" data-v-371351d4>BING</span></div></div></div>`);
+      _push(`<!--[--><div${ssrRenderAttrs(mergeProps({ id: "wallpaper" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-922453d9><div class="switcher" data-v-922453d9><div class="title" data-v-922453d9><i class="iconfont icon-bing" data-v-922453d9></i><span class="text" data-v-922453d9>BING</span></div></div></div>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -17785,15 +17765,15 @@ _sfc_main$o.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/wallpaper/switcher.vue");
   return _sfc_setup$o ? _sfc_setup$o(props, ctx) : void 0;
 };
-const Wallpaper = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["__scopeId", "data-v-371351d4"]]);
+const Wallpaper = /* @__PURE__ */ _export_sfc(_sfc_main$o, [["__scopeId", "data-v-922453d9"]]);
 const _sfc_main$n = /* @__PURE__ */ defineComponent({
   __name: "background",
   __ssrInlineRender: true,
   setup(__props) {
-    const { cdnDomain, isDarkTheme } = useEnhancer();
+    const { cdnDomain } = useEnhancer();
     const backgroundImage = getAssetURL(cdnDomain, "/images/background.png");
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "background" }, _attrs))} data-v-53df6962><div class="${ssrRenderClass([{ dark: unref(isDarkTheme) }, "image"])}" style="${ssrRenderStyle({ backgroundImage: `url('${unref(backgroundImage)}')` })}" data-v-53df6962></div></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "background" }, _attrs))} data-v-e5475315><div class="image" style="${ssrRenderStyle({ backgroundImage: `url('${unref(backgroundImage)}')` })}" data-v-e5475315></div></div>`);
     };
   }
 });
@@ -17803,7 +17783,7 @@ _sfc_main$n.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/widgets/background.vue");
   return _sfc_setup$n ? _sfc_setup$n(props, ctx) : void 0;
 };
-const Background = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-53df6962"]]);
+const Background = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-e5475315"]]);
 const _sfc_main$m = /* @__PURE__ */ defineComponent({
   __name: "toolbox",
   __ssrInlineRender: true,
@@ -18087,12 +18067,13 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
       const _component_router_link = resolveComponent("router-link");
+      const _component_client_only = resolveComponent("client-only");
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
       _push(`<header${ssrRenderAttrs(mergeProps({
         id: unref(HEADER_ELEMENT_ID),
         class: ["header", { "enable-nav": isEnabledNav.value }]
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-f7ead17a><div class="header-container container" data-v-f7ead17a><div class="header-header" data-v-f7ead17a>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-ed5b3904><div class="header-container container" data-v-ed5b3904><div class="header-header" data-v-ed5b3904>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         src: "/images/logo.svg",
@@ -18121,17 +18102,33 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
         title: unref(APP_PROFILE).title,
         onMousedown: handleRootNavEvent
       }, null, _parent));
-      _push(`</div><div class="toolbox" data-v-f7ead17a>`);
+      _push(`</div><div class="toolbox" data-v-ed5b3904>`);
       if (isEnabledNav.value) {
-        _push(`<button class="button menu" data-v-f7ead17a><i class="iconfont icon-top-menu" data-v-f7ead17a></i></button>`);
+        _push(`<button class="button menu" data-v-ed5b3904><i class="iconfont icon-top-menu" data-v-ed5b3904></i></button>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="button language" title="Switch language" data-v-f7ead17a><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-f7ead17a></i></button><button class="${ssrRenderClass([unref(theme).theme.value, "button theme"])}" data-v-f7ead17a><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-f7ead17a></i></button></div></div><div class="header-nav" data-v-f7ead17a><nav class="nav-list container" data-v-f7ead17a><!--[-->`);
+      _push(`<button class="button language" title="Switch language" data-v-ed5b3904><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-ed5b3904></i></button><button class="button theme" data-v-ed5b3904>`);
+      _push(ssrRenderComponent(_component_client_only, null, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}"${ssrRenderAttr("data-value", unref(theme).theme.value)} data-v-ed5b3904${_scopeId}></i>`);
+          } else {
+            return [
+              createVNode("i", {
+                class: ["iconfont", themeIcon.value],
+                "data-value": unref(theme).theme.value
+              }, null, 10, ["data-value"])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</button></div></div><div class="header-nav" data-v-ed5b3904><nav class="nav-list container" data-v-ed5b3904><!--[-->`);
       ssrRenderList(unref(menus), (menu, index) => {
         _push(`<!--[-->`);
         if (index > 0) {
-          _push(`<span class="divider" data-v-f7ead17a></span>`);
+          _push(`<span class="divider" data-v-ed5b3904></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -18148,7 +18145,7 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
                   src: menu.imageIcon
                 }, null, _parent2, _scopeId));
               } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-f7ead17a${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-ed5b3904${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -18173,12 +18170,12 @@ const _sfc_main$j = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.hot) {
-                _push2(`<span class="superscript" data-v-f7ead17a${_scopeId}><i class="iconfont icon-hot" data-v-f7ead17a${_scopeId}></i></span>`);
+                _push2(`<span class="superscript" data-v-ed5b3904${_scopeId}><i class="iconfont icon-hot" data-v-ed5b3904${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.newWindow) {
-                _push2(`<span class="new-window" data-v-f7ead17a${_scopeId}><i class="iconfont icon-new-window-s" data-v-f7ead17a${_scopeId}></i></span>`);
+                _push2(`<span class="new-window" data-v-ed5b3904${_scopeId}><i class="iconfont icon-new-window-s" data-v-ed5b3904${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -18233,7 +18230,7 @@ _sfc_main$j.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/desktop/header.vue");
   return _sfc_setup$j ? _sfc_setup$j(props, ctx) : void 0;
 };
-const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-f7ead17a"]]);
+const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$j, [["__scopeId", "data-v-ed5b3904"]]);
 const _sfc_main$i = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
@@ -19981,15 +19978,16 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
+      const _component_client_only = resolveComponent("client-only");
       const _component_router_link = resolveComponent("router-link");
       const _component_ulink = resolveComponent("ulink");
-      _push(`<aside${ssrRenderAttrs(mergeProps({ class: "aside" }, _attrs))} data-v-b447619e><div class="aside-user" data-v-b447619e>`);
+      _push(`<aside${ssrRenderAttrs(mergeProps({ class: "aside" }, _attrs))} data-v-9095a816><div class="aside-user" data-v-9095a816>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "avatar",
         src: adminAvatar.value,
         alt: unref(APP_PROFILE).author
       }, null, _parent));
-      _push(`<div class="profile" data-v-b447619e><h3 class="name" data-v-b447619e>${ssrInterpolate(unref(APP_PROFILE).author)}</h3>`);
+      _push(`<div class="profile" data-v-9095a816><h3 class="name" data-v-9095a816>${ssrInterpolate(unref(APP_PROFILE).author)}</h3>`);
       _push(ssrRenderComponent(_component_webfont, { class: "slogan" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -20006,14 +20004,29 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="aside-tool" data-v-b447619e><button class="item" data-v-b447619e><i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-b447619e></i></button><div class="separator" data-v-b447619e></div><button class="item" data-v-b447619e><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-b447619e></i></button></div><div class="aside-nav" data-v-b447619e><nav class="nav-list" data-v-b447619e>`);
+      _push(`</div></div><div class="aside-tool" data-v-9095a816><button class="item" data-v-9095a816>`);
+      _push(ssrRenderComponent(_component_client_only, null, {
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}" data-v-9095a816${_scopeId}></i>`);
+          } else {
+            return [
+              createVNode("i", {
+                class: ["iconfont", themeIcon.value]
+              }, null, 2)
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</button><div class="separator" data-v-9095a816></div><button class="item" data-v-9095a816><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-9095a816></i></button></div><div class="aside-nav" data-v-9095a816><nav class="nav-list" data-v-9095a816>`);
       _push(ssrRenderComponent(_component_router_link, {
         to: "/",
         class: "item"
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-home" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-home" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20058,7 +20071,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-code" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-code" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20103,7 +20116,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-insight" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-insight" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20148,7 +20161,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-buddhism" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-buddhism" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20193,7 +20206,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-quill" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-quill" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20238,7 +20251,7 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-comment" data-v-b447619e${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-comment" data-v-9095a816${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_webfont, {
               bolder: "",
               uppercase: ""
@@ -20328,14 +20341,14 @@ const _sfc_main$4 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</nav></div><div class="aside-source-link" data-v-b447619e>`);
+      _push(`</nav></div><div class="aside-source-link" data-v-9095a816>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "link",
         href: unref(VALUABLE_LINKS).GITHUB_SURMON_ME
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-b447619e${_scopeId}></i><span class="label" data-v-b447619e${_scopeId}>Source Code</span><span class="new-window" data-v-b447619e${_scopeId}><i class="iconfont icon-new-window-s" data-v-b447619e${_scopeId}></i></span>`);
+            _push2(`<i class="iconfont icon-github" data-v-9095a816${_scopeId}></i><span class="label" data-v-9095a816${_scopeId}>Source Code</span><span class="new-window" data-v-9095a816${_scopeId}><i class="iconfont icon-new-window-s" data-v-9095a816${_scopeId}></i></span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" }),
@@ -20358,7 +20371,7 @@ _sfc_main$4.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/layout/mobile/aside.vue");
   return _sfc_setup$4 ? _sfc_setup$4(props, ctx) : void 0;
 };
-const AsideView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-b447619e"]]);
+const AsideView = /* @__PURE__ */ _export_sfc(_sfc_main$4, [["__scopeId", "data-v-9095a816"]]);
 const _sfc_main$3 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
@@ -20461,12 +20474,9 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
   emits: ["resolve"],
   setup(__props, { emit: __emit }) {
     const props = __props;
-    const { isDarkTheme } = useEnhancer();
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["app-error", { dark: unref(isDarkTheme) }]
-      }, _attrs))} data-v-36701477><h1 class="code" data-v-36701477>${ssrInterpolate(props.error.code)}</h1><h3 class="message" data-v-36701477>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "app-error" }, _attrs))} data-v-df103f64><h1 class="code" data-v-df103f64>${ssrInterpolate(props.error.code)}</h1><h3 class="message" data-v-df103f64>`);
       if (props.error.message) {
         _push(`<!--[-->${ssrInterpolate(props.error.message)}<!--]-->`);
       } else {
@@ -20474,7 +20484,7 @@ const _sfc_main$2 = /* @__PURE__ */ defineComponent({
           k: unref(LocaleKey).NOT_FOUND
         }, null, _parent));
       }
-      _push(`</h3><p class="link" data-v-36701477>`);
+      _push(`</h3><p class="link" data-v-df103f64>`);
       ssrRenderSlot(_ctx.$slots, "resolve-text", {}, null, _push, _parent);
       _push(`</p></div>`);
     };
@@ -20486,7 +20496,7 @@ _sfc_main$2.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/app/root/error.vue");
   return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
 };
-const AppError = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-36701477"]]);
+const AppError = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["__scopeId", "data-v-df103f64"]]);
 const _sfc_main$1 = /* @__PURE__ */ defineComponent({
   __name: "boundary",
   __ssrInlineRender: true,
@@ -20704,7 +20714,6 @@ const createSSRContext = (context, error = null) => {
     requestUrl: context.url,
     userAgent: context.headers["user-agent"],
     acceptLanguage: context.headers["accept-language"],
-    cookieTheme: context.cookies[THEME_STORAGE_KEY],
     countryName,
     countryCode,
     cdnDomain,
@@ -20717,7 +20726,8 @@ const createSSRMainApp = (ssrContext) => {
     routerHistoryCreator: createMemoryHistory,
     languages: parseAcceptLanguage(ssrContext.acceptLanguage, { ignoreWildcard: true }),
     userAgent: ssrContext.userAgent,
-    theme: ssrContext.cookieTheme ?? Theme.Light,
+    theme: Theme.Light,
+    // Any initial value set here will be overwritten in the client-side HTML <head>.
     region: getRegionByCountryCode(ssrContext.countryCode),
     error: ssrContext.error
   });
@@ -20739,7 +20749,7 @@ const renderError = async (context, error) => {
     message: "Unknown Render Error"
   });
   const ssrContext = createSSRContext(context, appError);
-  const [{ app, theme }, head] = createSSRMainApp(ssrContext);
+  const [{ app }, head] = createSSRMainApp(ssrContext);
   head.push({ title: `Server Error: ${appError.message}` });
   return {
     code: appError.code,
@@ -20749,7 +20759,6 @@ const renderError = async (context, error) => {
     contextScripts: renderSSRContextScript(serialize(ssrContext)),
     stateScripts: renderSSRStateScript(
       serialize({
-        theme: theme.theme.value,
         region: getRegionByCountryCode(ssrContext.countryCode)
       })
     )
@@ -20757,12 +20766,11 @@ const renderError = async (context, error) => {
 };
 const renderApp = async (context, cache) => {
   const ssrContext = createSSRContext(context);
-  const [{ app, router, store, theme, i18n, globalState }, head] = createSSRMainApp(ssrContext);
+  const [{ app, router, store, i18n, globalState }, head] = createSSRMainApp(ssrContext);
   const language = i18n.language.value;
-  const themeName = theme.theme.value;
   const deviceType = globalState.userAgent.isMobile ? "mobile" : "desktop";
   const regionCode = getRegionByCountryCode(ssrContext.countryCode);
-  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${themeName}_${ssrContext.requestUrl}`;
+  const cacheKey = `ssr:${language}_${regionCode}_${deviceType}_${ssrContext.requestUrl}`;
   const isCached = await cache.has(cacheKey);
   if (isCached) {
     return {
@@ -20792,7 +20800,6 @@ const renderApp = async (context, cache) => {
     const stateScripts = renderSSRStateScript(
       serialize({
         store: store.state.value,
-        theme: theme.theme.value,
         layout: globalState.pageLayout.value.layout,
         region: getRegionByCountryCode(ssrContext.countryCode)
       })

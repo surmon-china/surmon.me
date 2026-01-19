@@ -1,7 +1,6 @@
 import "@dotenvx/dotenvx/config";
 import path from "path";
 import http from "http";
-import cookie from "cookie";
 import https from "https";
 import { pipeline } from "stream/promises";
 import _isNil from "lodash-es/isNil.js";
@@ -425,7 +424,6 @@ const createBFFServerApp = (options) => {
         url: request.url,
         path: pathname,
         query: Object.fromEntries(searchParams.entries()),
-        cookies: cookie.parse(request.headers.cookie || ""),
         headers: request.headers,
         request,
         response
