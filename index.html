@@ -6,8 +6,8 @@
     <script>
       const localTheme = localStorage.getItem('theme')
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      window.initialTheme = ['light', 'dark'].includes(localTheme) ? localTheme : systemTheme
-      document.documentElement.setAttribute('data-theme', initialTheme)
+      window.initialTheme = localTheme === 'light' || localTheme === 'dark' ? localTheme : systemTheme
+      document.documentElement.setAttribute('data-theme', window.initialTheme)
     </script>
     <title>Surmon.me</title>
     <!-- Preconnect -->

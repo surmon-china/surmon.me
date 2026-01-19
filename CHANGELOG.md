@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### 5.9.0 (2026-01-20)
+
+**Feature**
+
+- Theme logic is no longer dependent on cookies.
+
 ### 5.1.0 (2025-07-11)
 
 **Feature**
