@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@braintree/sanitize-url": "^7.1.x",
-    "@dotenvx/dotenvx": "^1.51.x",
+    "@dotenvx/dotenvx": "^1.52.x",
     "@redis/client": "^5.x",
     "@sentry/vue": "^10.x",
     "@unhead/vue": "^2.x",
