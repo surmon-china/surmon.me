@@ -8,7 +8,7 @@
     listData: GitHubSponsorsResponse | null
   }>()
 
-  const { goLink } = useStores()
+  const { goLinksStore } = useStores()
   const allSponsors = computed(() => {
     if (!props.listData) {
       return []
@@ -29,7 +29,7 @@
 
 <template>
   <div class="github-sponsors">
-    <ulink class="link" :href="goLink.map['github-sponsors']">
+    <ulink class="link" :href="goLinksStore.map['github-sponsors']">
       <uimage class="icon" src="/images/third-party/github-sponsors-heart.svg" alt="GitHub Sponsors" />
       <span class="text">
         <i18n en="Sponsor me on GitHub" zh="通过 GitHub Sponsor 赞助我" />
@@ -61,7 +61,11 @@
           >
             <uimage class="avatar" :src="item.avatarUrl" :alt="'@' + item.login" />
           </ulink>
-          <ulink v-if="allSponsors.length > props.maxCount" class="more-link" :href="goLink.map['github-sponsors']">
+          <ulink
+            v-if="allSponsors.length > props.maxCount"
+            class="more-link"
+            :href="goLinksStore.map['github-sponsors']"
+          >
             + {{ allSponsors.length - props.maxCount }}
           </ulink>
         </div>

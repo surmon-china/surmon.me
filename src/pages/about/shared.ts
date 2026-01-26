@@ -1,8 +1,8 @@
 import { useStores } from '/@/stores'
 import { useEnhancer } from '/@/app/enhancer'
-import { usePageSeo } from '/@/composables/head'
 import { useCdnDomain } from '/@/app/context'
-import { Language, LocaleKey } from '/@/locales'
+import { usePageSeo } from '/@/composables/head'
+import { Language, LocalesKey } from '/@/locales'
 import { firstUpperCase } from '/@/transforms/text'
 import { getAssetURL } from '/@/transforms/url'
 import { APP_PROFILE } from '/@/configs/app.config'
@@ -13,22 +13,22 @@ export const useAdminAvatar = (avatar?: string) => {
 
 export const useAboutPageMeta = () => {
   const { i18n, isZhLang } = useEnhancer()
-  const { adminProfile } = useStores()
+  const { adminProfileStore } = useStores()
 
   return usePageSeo(() => {
-    const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_ABOUT, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_ABOUT)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(i18n.t(LocalesKey.PAGE_ABOUT, Language.English)!)
+    const titles = isZhLang.value ? [i18n.t(LocalesKey.PAGE_ABOUT)!, enTitle] : [enTitle]
     const description = `${isZhLang.value ? '关于' : 'About'} ${APP_PROFILE.author}`
     return {
       pageTitles: titles,
       description,
       ogType: 'profile',
-      ogImage: adminProfile.data?.avatar
+      ogImage: adminProfileStore.data?.avatar
     }
   })
 }
 
-export interface AboutI18nConfig {
+export interface AboutPageI18nConfig {
   [Language.Chinese]: string
   [Language.English]: string
 }

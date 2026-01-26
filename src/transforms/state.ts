@@ -5,25 +5,21 @@
  */
 
 import _isNil from 'lodash-es/isNil'
-import { UniversalKeyValue } from '/@/interfaces/common'
-import { OriginState } from '/@/constants/biz-state'
+import { ExtraKeyValue } from '/@/interfaces/common'
+import { ArticleOrigin } from '/@/interfaces/article'
 
-export const isOriginalType = (originState?: OriginState) => {
-  return _isNil(originState) || originState === OriginState.Original
+export const isOriginalArticle = (origin?: ArticleOrigin) => {
+  return _isNil(origin) || origin === ArticleOrigin.Original
 }
 
-export const isHybridType = (originState: OriginState) => {
-  return originState === OriginState.Hybrid
+export const isHybridArticle = (origin: ArticleOrigin) => {
+  return origin === ArticleOrigin.Hybrid
 }
 
-export const isReprintType = (originState: OriginState) => {
-  return originState === OriginState.Reprint
+export const isReprintArticle = (origin: ArticleOrigin) => {
+  return origin === ArticleOrigin.Reprint
 }
 
-export const getExtendsObject = (kvs: UniversalKeyValue[] | void): { [key: string]: string } => {
-  return kvs?.length ? kvs.reduce((v, c) => ({ ...v, [c.name]: c.value }), {}) : {}
-}
-
-export const getExtendValue = (kvs: UniversalKeyValue[], key: string) => {
-  return kvs.length ? getExtendsObject(kvs)[key] : undefined
+export const getExtrasMap = (kvs: ExtraKeyValue[] | void): Map<string, string> => {
+  return new Map((kvs ?? []).map((item) => [item.key, item.value]))
 }

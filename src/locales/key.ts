@@ -4,7 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-export enum LocaleKey {
+export enum LocalesKey {
   APP_SLOGAN = 'app-slogan',
   CATEGORY_INSIGHT = 'insight',
   CATEGORY_CODE = 'code',

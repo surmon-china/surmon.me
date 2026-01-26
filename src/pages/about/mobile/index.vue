@@ -1,57 +1,55 @@
 <script lang="ts" setup>
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
   import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { markdownToHTML } from '/@/transforms/markdown'
-  import { useAdminProfileStore } from '/@/stores/basic'
   import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'
 
-  const { goLink } = useStores()
   const { isZhLang, appConfig } = useEnhancer()
-  const adminProfile = useAdminProfileStore()
+  const { goLinksStore, adminProfileStore } = useStores()
 
   useAboutPageMeta()
-  useUniversalFetch(() => adminProfile.fetch())
+  useUniversalFetch(() => adminProfileStore.fetch())
 </script>
 
 <template>
   <div class="about-page">
     <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.webp" :image-position="70" cdn>
       <template #title>
-        <webfont bolder><i18n :k="LocaleKey.PAGE_ABOUT" /></webfont>
+        <webfont bolder><i18n :k="LocalesKey.PAGE_ABOUT" /></webfont>
       </template>
     </page-banner>
     <div class="profile">
       <div class="avatar">
-        <uimage class="image" :src="useAdminAvatar(adminProfile.data?.avatar)" />
+        <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
       </div>
-      <h2 class="name">{{ adminProfile.data?.name || '-' }}</h2>
-      <h5 class="slogan">{{ adminProfile.data?.slogan || '-' }}</h5>
+      <h2 class="name">{{ adminProfileStore.data?.name || '-' }}</h2>
+      <h5 class="slogan">{{ adminProfileStore.data?.slogan || '-' }}</h5>
       <h4 class="description">
         <webfont bolder>{{ isZhLang ? APP_PROFILE.description_short_zh : APP_PROFILE.description_en }}</webfont>
       </h4>
       <div class="socials">
-        <ulink class="item github" :href="goLink.map.github">
+        <ulink class="item github" :href="goLinksStore.map.github">
           <i class="iconfont icon-github" />
         </ulink>
-        <ulink class="item instagram" :href="goLink.map.instagram">
+        <ulink class="item instagram" :href="goLinksStore.map.instagram">
           <i class="iconfont icon-instagram" />
         </ulink>
-        <ulink class="item threads" :href="goLink.map.threads">
+        <ulink class="item threads" :href="goLinksStore.map.threads">
           <i class="iconfont icon-threads" />
         </ulink>
-        <ulink class="item telegram" :href="goLink.map.telegram">
+        <ulink class="item telegram" :href="goLinksStore.map.telegram">
           <i class="iconfont icon-telegram" />
         </ulink>
-        <ulink class="item zhihu" :href="goLink.map.zhihu">
+        <ulink class="item zhihu" :href="goLinksStore.map.zhihu">
           <i class="iconfont icon-zhihu" />
         </ulink>
-        <ulink class="item douban" :href="goLink.map['douban-movie']">
+        <ulink class="item douban" :href="goLinksStore.map['douban-movie']">
           <i class="iconfont icon-douban" />
         </ulink>
       </div>
@@ -82,11 +80,11 @@
         <i class="iconfont icon-comment" />
         <span class="label"><i18n v-bind="i18ns.guestbook" /></span>
       </router-link>
-      <ulink class="item discord" :href="goLink.map['discord-server']">
+      <ulink class="item discord" :href="goLinksStore.map['discord-server']">
         <i class="iconfont icon-discord" />
         <span class="label"><i18n v-bind="i18ns.discordGroup" /></span>
       </ulink>
-      <ulink class="item telegram" :href="goLink.map['telegram-group']">
+      <ulink class="item telegram" :href="goLinksStore.map['telegram-group']">
         <i class="iconfont icon-telegram" />
         <span class="label"><i18n v-bind="i18ns.telegramGroup" /></span>
       </ulink>

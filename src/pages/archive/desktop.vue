@@ -2,7 +2,7 @@
   import { ref, computed, onMounted } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
   import { useArchiveStore } from '/@/stores/archive'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { numberSplit } from '/@/transforms/text'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { i18ns, useArchivePageMeta, useArchivePageStatistics } from './shared'
@@ -59,7 +59,7 @@
       <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
         <template #placeholder>
           <empty class="archive-empty" bold key="empty">
-            <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
+            <i18n :k="LocalesKey.ARTICLE_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
@@ -88,22 +88,22 @@
                       {{ article.title }}
                     </a>
                   </h3>
-                  <p class="description" v-html="article.description" />
+                  <p class="summary" v-html="article.summary" />
                 </div>
                 <div class="metas">
                   <div class="item views">
                     <i class="iconfont icon-eye"></i>
-                    <span class="text">{{ numberSplit(article.meta.views) }}</span>
+                    <span class="text">{{ numberSplit(article.stats.views) }}</span>
                   </div>
                   <divider type="vertical" />
                   <div class="item likes">
                     <i class="like-icon iconfont icon-like"></i>
-                    <span class="text">{{ article.meta.likes }}</span>
+                    <span class="text">{{ article.stats.likes }}</span>
                   </div>
                   <divider type="vertical" />
                   <div class="item comments">
                     <i class="iconfont icon-comment"></i>
-                    <span class="text">{{ article.meta.comments }}</span>
+                    <span class="text">{{ article.stats.comments }}</span>
                   </div>
                 </div>
               </div>
@@ -242,7 +242,7 @@
               }
             }
 
-            .description {
+            .summary {
               margin-bottom: $gap;
               padding-left: 3rem;
             }

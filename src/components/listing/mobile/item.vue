@@ -1,13 +1,13 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { LocaleKey } from '/@/locales'
-  import { Article, ArticleLangI18n } from '/@/interfaces/article'
+  import { LocalesKey } from '/@/locales'
+  import { Article, ArticleLanguageI18n } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
 
   const props = defineProps<{
@@ -16,10 +16,10 @@
 
   const { cdnDomain, globalState } = useEnhancer()
   const identityStore = useIdentityStore()
-  const isLiked = computed(() => identityStore.isLikedPage(props.article.id))
-  const isHybrid = computed(() => isHybridType(props.article.origin))
-  const isReprint = computed(() => isReprintType(props.article.origin))
-  const isOriginal = computed(() => isOriginalType(props.article.origin))
+  const isLiked = computed(() => identityStore.isLikedArticle(props.article.id))
+  const isHybrid = computed(() => isHybridArticle(props.article.origin))
+  const isReprint = computed(() => isReprintArticle(props.article.origin))
+  const isOriginal = computed(() => isOriginalArticle(props.article.origin))
   const detailRoutePath = getArticleDetailRoute(props.article.id)
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
@@ -57,12 +57,12 @@
           hybrid: isHybrid
         }"
       >
-        <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-        <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-        <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+        <i18n :k="LocalesKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+        <i18n :k="LocalesKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+        <i18n :k="LocalesKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
       </span>
       <span class="featured" v-if="article.featured">
-        <i18n :k="LocaleKey.ARTICLE_FEATURED" />
+        <i18n :k="LocalesKey.ARTICLE_FEATURED" />
       </span>
       <picture class="picture">
         <template v-if="isOriginalStaticURL(article.thumbnail)">
@@ -84,10 +84,10 @@
         <h4 class="title">
           <span class="text" :title="article.title">{{ article.title }}</span>
           <span class="language">
-            <i18n v-bind="ArticleLangI18n[article.lang]" />
+            <i18n v-bind="ArticleLanguageI18n[article.lang]" />
           </span>
         </h4>
-        <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
+        <p class="summary" style="-webkit-box-orient: vertical" v-html="article.summary"></p>
       </div>
       <div class="meta">
         <span class="date" data-allow-mismatch>
@@ -96,15 +96,15 @@
         </span>
         <span class="views">
           <i class="iconfont icon-eye"></i>
-          <span class="text">{{ numberSplit(article.meta.views) }}</span>
+          <span class="text">{{ numberSplit(article.stats.views) }}</span>
         </span>
         <span class="comments">
           <i class="iconfont icon-comment"></i>
-          <span class="text">{{ article.meta.comments }}</span>
+          <span class="text">{{ article.stats.comments }}</span>
         </span>
         <span class="likes">
           <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
-          <span class="text">{{ article.meta.likes }}</span>
+          <span class="text">{{ article.stats.likes }}</span>
         </span>
       </div>
     </div>
@@ -207,7 +207,7 @@
           }
         }
 
-        .description {
+        .summary {
           margin: 0;
           line-height: 2em;
           overflow: hidden;

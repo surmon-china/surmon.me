@@ -42,7 +42,10 @@
         <button class="item" @click="flyToLivingMarker(map!, appConfig.ABOUT_GEO_COORDINATES!)">
           <i class="iconfont icon-location"></i>
           <span class="text">
-            <i18n :zh="appConfig.ABOUT_GEO_TITLE_ZH" :en="appConfig.ABOUT_GEO_TITLE_EN" />
+            <template v-if="appConfig.ABOUT_GEO_TITLE_ZH || appConfig.ABOUT_GEO_TITLE_EN">
+              <i18n :zh="appConfig.ABOUT_GEO_TITLE_ZH" :en="appConfig.ABOUT_GEO_TITLE_EN" />
+            </template>
+            <template v-else>-</template>
           </span>
         </button>
         <div class="divider"></div>

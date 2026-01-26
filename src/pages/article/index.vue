@@ -5,13 +5,13 @@
   import { useUniversalFetch } from '/@/app/universal'
   import { useStores } from '/@/stores'
   import { useHead, usePageSeo } from '/@/composables/head'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import * as ANCHORS from '/@/constants/element-anchor'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widgets/share.vue'
   import { getChatGPTShareURL } from '/@/transforms/chatgpt'
-  import { getExtendValue } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/state'
   import { scrollToAnchor } from '/@/utils/scroller'
   import logger from '/@/utils/logger'
   import Comment from '/@/components/comment/index.vue'
@@ -29,17 +29,18 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, route, gtag, globalState } = useEnhancer()
-  const { identity, comment: commentStore, articleDetail: articleDetailStore } = useStores()
+  const { route, gtag, globalState, i18n: _i18n } = useEnhancer()
+  const { identityStore, commentStore, articleDetailStore } = useStores()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
-  const isLiked = computed(() => Boolean(article.value && identity.isLikedPage(article.value.id)))
-  const articleExtends = computed(() => article.value?.extends || [])
+
+  const isLiked = computed(() => !!(article.value && identityStore.isLikedArticle(article.value.id)))
+  const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras))
 
   // fot ChatGPT
-  const articleGPTId = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-id'))
-  const articleGPTResponse = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-response'))
-  const articleGPTTimestamp = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-timestamp'))
-  const articleGPTModel = computed(() => getExtendValue(articleExtends.value, 'chatgpt-conversation-model'))
+  const articleGPTId = computed(() => articleExtrasMap.value.get('chatgpt-conversation-id'))
+  const articleGPTResponse = computed(() => articleExtrasMap.value.get('chatgpt-conversation-response'))
+  const articleGPTTimestamp = computed(() => articleExtrasMap.value.get('chatgpt-conversation-timestamp'))
+  const articleGPTModel = computed(() => articleExtrasMap.value.get('chatgpt-conversation-model'))
 
   const handleCommentTopBarChatGPTClick = () => {
     gtag?.event('chatgpt_comment_top_bar', {
@@ -70,10 +71,10 @@
     })
     try {
       await articleDetailStore.postArticleLike(article.value!.id)
-      identity.likePage(article.value!.id)
+      identityStore.likeArticle(article.value!.id)
       callback?.()
     } catch (error) {
-      const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
+      const message = _i18n.t(LocalesKey.POST_ACTION_ERROR)
       logger.failure(message, error)
       alert(message)
     }
@@ -97,7 +98,7 @@
 
   usePageSeo(() => ({
     pageTitle: article.value?.title,
-    description: article.value?.description,
+    description: article.value?.summary,
     keywords: article.value?.keywords?.join(',') || article.value?.title,
     ogType: 'article',
     ogImage: article.value?.thumbnail,
@@ -159,7 +160,7 @@
             <article-meta :id="ANCHORS.ARTICLE_META_ELEMENT_ID" :article="article" :plain="isMobile">
               <template #action>
                 <article-upvote
-                  :likes="article.meta.likes"
+                  :likes="article.stats.likes"
                   :is-liked="isLiked"
                   :hidden-sponsor="isMobile"
                   :enabled-parkinson="

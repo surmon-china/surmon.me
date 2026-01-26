@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+### 5.10.0 (2026-01-26)
+
+- Update all APIs and data structures to match NodePress v6 changes.
+
 ### 5.9.0 (2026-01-20)
 
 **Feature**

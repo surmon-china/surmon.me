@@ -2,14 +2,15 @@
   import { ref, computed } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { Language, LocaleKey } from '/@/locales'
+  import { Language, LocalesKey } from '/@/locales'
   import { APP_CONFIG } from '/@/configs/app.config'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { numberToKilo } from '/@/transforms/text'
   import { dateToYMD } from '/@/transforms/moment'
 
   const { i18n: _i18n } = useEnhancer()
-  const { hottestArticleList, latestArticleList, featuredArticleList } = useStores()
+  const { hottestArticleListStore, latestArticleListStore, featuredArticleListStore } = useStores()
+
   const tabs = computed(() => [
     {
       zh_title: '最近更新',
@@ -17,7 +18,7 @@
       zh_label: '最新',
       en_label: 'latest',
       icon: 'icon-clock',
-      store: latestArticleList
+      store: latestArticleListStore
     },
     {
       zh_title: '热门趋势',
@@ -25,15 +26,15 @@
       zh_label: '热门',
       en_label: 'trend',
       icon: 'icon-fire',
-      store: hottestArticleList
+      store: hottestArticleListStore
     },
     {
       zh_title: '群贤毕至',
       en_title: 'Featured',
-      zh_label: _i18n.t(LocaleKey.ARTICLE_FEATURED_SHORT, Language.Chinese),
-      en_label: _i18n.t(LocaleKey.ARTICLE_FEATURED_SHORT, Language.English),
+      zh_label: _i18n.t(LocalesKey.ARTICLE_FEATURED_SHORT, Language.Chinese),
+      en_label: _i18n.t(LocalesKey.ARTICLE_FEATURED_SHORT, Language.English),
       icon: 'icon-windmill',
-      store: featuredArticleList
+      store: featuredArticleListStore
     }
   ])
 
@@ -69,7 +70,7 @@
     <placeholder
       :data="activatedTab.store.data"
       :loading="activatedTab.store.fetching"
-      :i18n-key="LocaleKey.ARTICLE_PLACEHOLDER"
+      :i18n-key="LocalesKey.ARTICLE_PLACEHOLDER"
     >
       <template #loading>
         <ul class="article-list-skeleton" key="skeleton">
@@ -94,15 +95,15 @@
                 <span class="item date">{{ dateToYMD(article.created_at).slice(0, -3) }}</span>
                 <span class="item views">
                   <i class="iconfont icon-eye"></i>
-                  {{ numberToKilo(article.meta.views) }}
+                  {{ numberToKilo(article.stats.views) }}
                 </span>
                 <span class="item comments">
                   <i class="iconfont icon-comment"></i>
-                  {{ article.meta.comments }}
+                  {{ article.stats.comments }}
                 </span>
                 <span class="item likes">
                   <i class="iconfont icon-like"></i>
-                  {{ article.meta.likes }}
+                  {{ article.stats.likes }}
                 </span>
               </div>
             </div>

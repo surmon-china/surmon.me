@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, watch, onBeforeMount } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
@@ -8,7 +8,7 @@
   import { useArticleListStore } from '/@/stores/article'
   import { useTagStore, getTagEnName } from '/@/stores/tag'
   import { useCategoryStore } from '/@/stores/category'
-  import { useAppOptionStore } from '/@/stores/basic'
+  import { useAppOptionsStore } from '/@/stores/basic'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import { isClient } from '/@/configs/app.env'
@@ -22,11 +22,11 @@
     date?: string
   }>()
 
-  const { i18n: _i18n, isZhLang } = useEnhancer()
+  const { isZhLang, i18n: _i18n } = useEnhancer()
   const tagStore = useTagStore()
   const categoryStore = useCategoryStore()
   const articleListStore = useArticleListStore()
-  const appOptionStore = useAppOptionStore()
+  const appOptionsStore = useAppOptionsStore()
   const filterCategory = computed(() => {
     return props.categorySlug ? categoryStore.data.find((category) => category.slug === props.categorySlug)! : null
   })
@@ -57,9 +57,9 @@
 
     // index page
     return {
-      title: `${APP_PROFILE.title} - ${_i18n.t(LocaleKey.APP_SLOGAN)}`,
+      title: `${APP_PROFILE.title} - ${_i18n.t(LocalesKey.APP_SLOGAN)}`,
       description: isZhLang.value ? APP_PROFILE.description_zh : APP_PROFILE.description_en,
-      keywords: appOptionStore.data?.keywords.join(','),
+      keywords: appOptionsStore.data?.keywords.join(','),
       ogType: 'website'
     }
   })
@@ -148,7 +148,7 @@
         </ul>
       </template>
       <template #placeholder>
-        <empty bold :i18n-key="LocaleKey.ARTICLE_PLACEHOLDER" />
+        <empty bold :i18n-key="LocalesKey.ARTICLE_PLACEHOLDER" />
       </template>
       <template #default>
         <div>
@@ -176,7 +176,7 @@
             </template>
             <template #finished>
               <span class="finished">
-                <i18n :k="LocaleKey.LIST_NO_MORE_DATA" />
+                <i18n :k="LocalesKey.LIST_NO_MORE_DATA" />
               </span>
             </template>
           </loadmore>

@@ -4,9 +4,9 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useArticleListStore } from '/@/stores/article'
-  import { useTagStore, getTagEnName } from '/@/stores/tag'
+  import { useTagStore, getTagIconName, getTagEnName } from '/@/stores/tag'
   import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
-  import { getExtendValue } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/state'
   import { scrollToNextScreen } from '/@/utils/scroller'
   import ArticleListHeader from '/@/components/listing/desktop/header.vue'
   import ArticleList from '/@/components/listing/desktop/list.vue'
@@ -15,16 +15,17 @@
     tagSlug: string
   }>()
 
-  const { cdnDomain, isZhLang } = useEnhancer()
-
   const tagStore = useTagStore()
   const articleListStore = useArticleListStore()
-  const currentTag = computed(() => tagStore.data.find((tag) => tag.slug === props.tagSlug))
-  const currentTagIcon = computed(() => getExtendValue(currentTag.value?.extends || [], 'icon') || 'icon-tag')
-  const currentTagBgColor = computed(() => getExtendValue(currentTag.value?.extends || [], 'bgcolor'))
-  const currentTagBgImage = computed(() => {
-    const imageUrl = getExtendValue(currentTag.value?.extends || [], 'background')
-    return isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl!)) : imageUrl
+  const { cdnDomain, isZhLang } = useEnhancer()
+
+  const tag = computed(() => tagStore.data.find(({ slug }) => slug === props.tagSlug))
+  const tagIconName = computed(() => getTagIconName(tag.value?.extras))
+  const tagExtrasMap = computed(() => getExtrasMap(tag.value?.extras))
+  const tagBackgroundColor = computed(() => tagExtrasMap.value.get('background-color'))
+  const tagBackgroundImage = computed(() => {
+    const imageUrl = tagExtrasMap.value.get('background-image')
+    return imageUrl && isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl
   })
 
   const loadmoreArticles = async () => {
@@ -36,11 +37,11 @@
   }
 
   usePageSeo(() => {
-    const tag = currentTag.value!
-    const zhTitle = tag.name
-    const enTitle = getTagEnName(tag)
+    const _tag = tag.value!
+    const zhTitle = _tag.name
+    const enTitle = getTagEnName(_tag)
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle, 'Tag']
-    const description = tag.description || titles.join(',')
+    const description = _tag.description || titles.join(',')
     return { pageTitles: titles, description }
   })
 
@@ -60,22 +61,22 @@
 <template>
   <div class="tag-flow-page">
     <article-list-header
-      :background-color="currentTagBgColor"
-      :background-image="currentTagBgImage"
-      :icon="currentTagIcon"
+      :icon-name="tagIconName"
+      :background-color="tagBackgroundColor"
+      :background-image="tagBackgroundImage"
     >
-      <template v-if="currentTag">
+      <template v-if="tag">
         <span class="header">
           <i18n>
             <template #zh>
-              <span>#{{ currentTag.name }}</span>
+              <span>#{{ tag.name }}</span>
               <divider class="divider" type="vertical" />
-              <span>{{ currentTag.description || '...' }}</span>
+              <span>{{ tag.description || '...' }}</span>
             </template>
             <template #en>
               <span>Tag</span>
               <divider class="divider" type="vertical" />
-              <span>#{{ getTagEnName(currentTag) }}</span>
+              <span>#{{ getTagEnName(tag) }}</span>
             </template>
           </i18n>
         </span>

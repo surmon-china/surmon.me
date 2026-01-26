@@ -7,8 +7,7 @@
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
-import { CommentPostId } from '/@/constants/biz-state'
-import { AdminProfile, AppOption, AppRemoteConfig } from '/@/interfaces/option'
+import { AdminProfile, AppOptions, AppRemoteConfig } from '/@/interfaces/option'
 import { useIdentityStore, UserType } from './identity'
 import nodepress from '/@/services/nodepress'
 
@@ -22,12 +21,12 @@ export const useAdminProfileStore = defineStore('adminProfile', () => {
   })
 })
 
-export const useAppOptionStore = defineStore('appOption', () => {
-  const fetchStore = createFetchStore<AppOption | null>({
+export const useAppOptionsStore = defineStore('appOptions', () => {
+  const fetchStore = createFetchStore<AppOptions | null>({
     shallow: false,
     data: null,
     async fetcher() {
-      const response = await nodepress.get<AppOption>('/option')
+      const response = await nodepress.get<AppOptions>('/options')
       return response.result
     }
   })
@@ -43,21 +42,6 @@ export const useAppOptionStore = defineStore('appOption', () => {
     }
   })
 
-  const postSiteLike = () => {
-    const identityStore = useIdentityStore()
-    return nodepress
-      .post<number>('/vote/post', {
-        vote: 1,
-        post_id: CommentPostId.Guestbook,
-        author: identityStore.author
-      })
-      .then((response) => {
-        if (fetchStore.data.value) {
-          fetchStore.data.value.meta.likes = response.result
-        }
-      })
-  }
-
   const postFeedback = (feedback: { emotion: number; content: string }) => {
     const identityStore = useIdentityStore()
     const authorName = identityStore.author?.name || null
@@ -72,7 +56,6 @@ export const useAppOptionStore = defineStore('appOption', () => {
   return {
     ...fetchStore,
     appConfig,
-    postSiteLike,
     postFeedback
   }
 })

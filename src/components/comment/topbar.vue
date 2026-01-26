@@ -2,8 +2,8 @@
   import { computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { APP_PROFILE } from '/@/configs/app.config'
-  import { LocaleKey } from '/@/locales'
-  import { SortType } from '/@/constants/biz-state'
+  import { LocalesKey } from '/@/locales'
+  import { SortMode } from '/@/constants/biz-state'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { UserType, useIdentityStore } from '/@/stores/identity'
   import { openPopupWindow, openNewWindow } from '/@/utils/opener'
@@ -12,7 +12,7 @@
 
   interface Props {
     postId: number
-    sort: SortType
+    sort: SortMode
     fetching: boolean
     loading: boolean
     loaded?: number
@@ -27,7 +27,7 @@
   })
 
   const emit = defineEmits<{
-    (e: CommentEvents.Sort, sort: SortType): void
+    (e: CommentEvents.Sort, sort: SortMode): void
   }>()
 
   const { gtag } = useEnhancer()
@@ -126,14 +126,14 @@
           <label class="sort">
             <span class="icon">▼</span>
             <select class="select" name="sort" :value="sort" @change="handleSort($event.target)">
-              <option :value="SortType.Desc">
-                <i18n :k="LocaleKey.COMMENT_SORT_NEW" />
+              <option :value="SortMode.Latest">
+                <i18n :k="LocalesKey.COMMENT_SORT_NEW" />
               </option>
-              <option :value="SortType.Hottest">
-                <i18n :k="LocaleKey.COMMENT_SORT_HOT" />
+              <option :value="SortMode.Hottest">
+                <i18n :k="LocalesKey.COMMENT_SORT_HOT" />
               </option>
-              <option :value="SortType.Asc">
-                <i18n :k="LocaleKey.COMMENT_SORT_OLD" />
+              <option :value="SortMode.Oldest">
+                <i18n :k="LocalesKey.COMMENT_SORT_OLD" />
               </option>
             </select>
           </label>
@@ -144,10 +144,6 @@
         </div>
         <div class="user">
           <div class="unlogin" v-if="user.type === UserType.Null">
-            <span class="guest">
-              <i18n zh="访客身份" en="Guest" />
-            </span>
-            <divider type="vertical" size="sm" />
             <button class="disqus" @click="handleDisqusLogin">
               <i18n>
                 <template #zh>使用<i class="iconfont icon-disqus"></i>登录</template>

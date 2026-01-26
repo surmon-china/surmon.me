@@ -6,9 +6,9 @@
   import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import * as ANCHORS from '/@/constants/element-anchor'
-  import { SortType } from '/@/constants/biz-state'
+  import { SortMode } from '/@/constants/biz-state'
   import { Author } from '/@/interfaces/comment'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { MAX_COMMENT_LENGTH, luanchEmojiRain, logger } from './helper'
   import CommentTopbar from './topbar.vue'
@@ -49,7 +49,7 @@
   const isReplyPosting = computed(() => isPosting.value && postingKey.value === PostKey.Reply)
 
   const commentState = reactive({
-    sort: SortType.Desc,
+    sort: SortMode.Latest,
     replyPId: 0
   })
 
@@ -90,7 +90,7 @@
     return commentStore.fetchList(_params, loadmore)
   }
 
-  const fetchSortComments = (sort: SortType) => {
+  const fetchSortComments = (sort: SortMode) => {
     if (commentState.sort !== sort) {
       commentState.sort = sort
       fetchCommentList()
@@ -122,10 +122,10 @@
 
     // content length
     if (!payload.content || !payload.content.trim()) {
-      throw `${i18n.t(LocaleKey.COMMENT_POST_CONTENT)} ?`
+      throw `${i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`
     }
     if (payload.content.length > MAX_COMMENT_LENGTH) {
-      throw `${i18n.t(LocaleKey.COMMENT_POST_ERROR_CONTENT)} ?`
+      throw `${i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`
     }
 
     // temp user profile
@@ -133,10 +133,10 @@
     const guestProfileValue = guestProfile.value
     if (isGuest) {
       if (!guestProfileValue.name) {
-        throw i18n.t(LocaleKey.COMMENT_POST_NAME) + '?'
+        throw i18n.t(LocalesKey.COMMENT_POST_NAME) + '?'
       }
       if (!guestProfileValue.email) {
-        throw i18n.t(LocaleKey.COMMENT_POST_EMAIL) + '?'
+        throw i18n.t(LocalesKey.COMMENT_POST_EMAIL) + '?'
       }
     }
 

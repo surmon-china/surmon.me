@@ -45,7 +45,9 @@
     })
 
     // living now marker
-    addLivingMarkerToMap(_lib, _map, appConfig.value.ABOUT_GEO_COORDINATES!)
+    if (appConfig.value.ABOUT_GEO_COORDINATES) {
+      addLivingMarkerToMap(_lib, _map, appConfig.value.ABOUT_GEO_COORDINATES)
+    }
 
     // https://stackoverflow.com/questions/36168658/mapbox-gl-setstyle-removes-layers
     // https://bl.ocks.org/tristen/0c0ed34e210a04e89984

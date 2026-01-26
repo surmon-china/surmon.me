@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { LocalesKey } from '/@/locales'
   import { useArticleDetailStore } from '/@/stores/article'
-  import { LocaleKey } from '/@/locales'
-  import { ArticleLangI18n } from '/@/interfaces/article'
+  import { ArticleLanguageI18n } from '/@/interfaces/article'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { numberSplit } from '/@/transforms/text'
   import * as ANCHORS from '/@/constants/element-anchor'
@@ -26,7 +26,7 @@
     <button class="header" :title="store.article.title" @click="scrollToAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)">
       <div class="title">{{ store.article.title }}</div>
       <div class="read">
-        <i18n v-bind="ArticleLangI18n[store.article.lang]" />
+        <i18n v-bind="ArticleLanguageI18n[store.article.lang]" />
         <i18n zh="，" en=", " />
         <i18n>
           <template #zh>共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template>
@@ -57,7 +57,7 @@
           @click="scrollToAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
         >
           <i class="level iconfont icon-loadmore"></i>
-          <span class="text"><i18n :k="LocaleKey.ARTICLE_READ_ALL" /></span>
+          <span class="text"><i18n :k="LocalesKey.ARTICLE_READ_ALL" /></span>
         </li>
       </ul>
     </div>
@@ -67,12 +67,12 @@
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-like"></i>
-        <span class="count">{{ store.article.meta.likes }}</span>
+        <span class="count">{{ store.article.stats.likes }}</span>
       </span>
       <divider type="vertical" />
       <span class="meta">
         <i class="iconfont icon-eye"></i>
-        <span class="count">{{ numberSplit(store.article.meta.views) }}</span>
+        <span class="count">{{ numberSplit(store.article.stats.views) }}</span>
       </span>
     </button>
     <button class="link" @click="scrollToAnchor(ANCHORS.ARTICLE_RELATED_ELEMENT_ID)">
@@ -85,7 +85,7 @@
       <i class="iconfont icon-comment"></i>
       <i18n zh="评论" en="Comments" />
       <divider type="vertical" />
-      <span class="count">{{ store.article.meta.comments }}</span>
+      <span class="count">{{ store.article.stats.comments }}</span>
     </button>
   </div>
 </template>

@@ -14,7 +14,7 @@
   const today = dateToHuman(new Date())
   const isToday = (target) => isSameHumanDay(target, today)
 
-  const { i18n: _i18n, isZhLang } = useEnhancer()
+  const { isZhLang, i18n: _i18n } = useEnhancer()
   const tableView = reactive({
     month: 0,
     year: 1970,

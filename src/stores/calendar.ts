@@ -14,7 +14,7 @@ import tunnel from '/@/services/tunnel'
 
 type CalendarDay = { date: string; count: number }
 
-export const useArticleCalendarStore = defineStore('articleCalendar', () => {
+export const useArticlesCalendarStore = defineStore('articlesCalendar', () => {
   return createFetchStore<CalendarDay[]>({
     once: true,
     data: [],

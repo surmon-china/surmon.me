@@ -13,8 +13,9 @@
     fetching: boolean
   }>()
 
-  const { goLink } = useStores()
   const { gtag, isCNUser } = useEnhancer()
+  const { goLinksStore } = useStores()
+
   const swiperRef = shallowRef<SwiperClass>()
   const prevSlide = () => swiperRef.value?.slidePrev()
   const nextSlide = () => swiperRef.value?.slideNext()
@@ -53,7 +54,7 @@
       <template #default>
         <div class="threads-content" key="content">
           <div class="profile" v-if="profile" :title="profile.name">
-            <ulink class="link" :href="goLink.map.threads" @mousedown="handleGtagEvent('threads_homepage')">
+            <ulink class="link" :href="goLinksStore.map.threads" @mousedown="handleGtagEvent('threads_homepage')">
               <uimage class="avatar" :src="profile.avatar" :proxy="isCNUser" defer />
               <span class="logo"><i class="iconfont icon-threads" /></span>
             </ulink>

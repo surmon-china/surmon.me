@@ -2,33 +2,32 @@
   import { ref, computed, onMounted } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useInstagramLatestMediasStore } from '/@/stores/media'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getCdnProxyURL } from '/@/transforms/url'
 
-  const fetching = ref(true)
-  const { goLink } = useStores()
   const { cdnDomain, isCNUser } = useEnhancer()
-  const igLatestMediasStore = useInstagramLatestMediasStore()
-  const igMedias = computed(() => igLatestMediasStore.data?.data.slice(0, 23) ?? [])
+  const { goLinksStore, instagramLatestMediasStore } = useStores()
+
+  const isPageLoading = ref(true)
+  const igMedias = computed(() => instagramLatestMediasStore.data?.data.slice(0, 23) ?? [])
   const getMediaThumbnail = (media: InstagramMediaItem) => {
     const url = getInstagramCoverURL(media)
     return isCNUser ? getCdnProxyURL(cdnDomain, url) : url
   }
 
   onMounted(() => {
-    igLatestMediasStore
+    instagramLatestMediasStore
       .fetch()
       .catch(() => null)
       .finally(() => {
-        fetching.value = false
+        isPageLoading.value = false
       })
   })
 </script>
 
 <template>
-  <placeholder :loading="fetching" :data="igMedias">
+  <placeholder :loading="isPageLoading" :data="igMedias">
     <template #loading>
       <ul class="list">
         <li class="item" v-for="i in 24" :key="i">
@@ -56,7 +55,7 @@
           </ulink>
         </li>
         <li class="item">
-          <ulink class="link more" :href="goLink.map.instagram">•••</ulink>
+          <ulink class="link more" :href="goLinksStore.map.instagram">•••</ulink>
         </li>
       </ul>
     </template>

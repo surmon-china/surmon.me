@@ -9,7 +9,7 @@ import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { useIdentityStore } from './identity'
 import { useCdnDomain } from '/@/app/context'
-import { SortType } from '/@/constants/biz-state'
+import { SortMode } from '/@/constants/biz-state'
 import { Article } from '/@/interfaces/article'
 import { Pagination, PaginationList } from '/@/interfaces/common'
 import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/element-anchor'
@@ -39,7 +39,7 @@ export const useLatestArticleListStore = defineStore('latestArticleList', () => 
 })
 
 export const useHottestArticleListStore = defineStore('hottestArticleList', () => {
-  return createSpecialArticleListStore({ sort: SortType.Hottest })
+  return createSpecialArticleListStore({ sort: SortMode.Hottest })
 })
 
 export const useFeaturedArticleListStore = defineStore('featuredArticleList', () => {
@@ -205,10 +205,10 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   const postArticleLike = (articleId: number) => {
     const identityStore = useIdentityStore()
     return nodepress
-      .post('/vote/post', { post_id: articleId, vote: 1, author: identityStore.author })
+      .post('/vote/article', { article_id: articleId, vote: 1, author: identityStore.author })
       .then((response) => {
         if (article.value) {
-          article.value.meta.likes = response.result
+          article.value.stats.likes = response.result
         }
       })
   }

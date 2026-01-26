@@ -2,18 +2,18 @@
   import { ref, computed, onMounted } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useDoubanMoviesStore } from '/@/stores/media'
   import StatisticBase, { StatisticCount } from './base.vue'
 
-  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
-  const store = useDoubanMoviesStore()
-  const totalSpent = computed(() => Math.trunc(store.data?.total_spent ?? 0))
-  const weeklyAvg = computed(() => (store.data?.weekly_avg ?? 0).toFixed(2))
-  const fetching = ref(true)
+  const { goLinksStore, doubanMoviesStore } = useStores()
+
+  const isFetching = ref(true)
+  const totalSpent = computed(() => Math.trunc(doubanMoviesStore.data?.total_spent ?? 0))
+  const weeklyAvg = computed(() => (doubanMoviesStore.data?.weekly_avg ?? 0).toFixed(2))
+
   onMounted(() => {
-    store.fetch().finally(() => {
-      fetching.value = false
+    doubanMoviesStore.fetch().finally(() => {
+      isFetching.value = false
     })
   })
 </script>
@@ -22,15 +22,15 @@
   <statistic-base
     brand="douban"
     icon="icon-douban"
-    :data="store.data"
-    :fetching="fetching"
-    :href="goLink.map['douban-movie']"
+    :fetching="isFetching"
+    :data="doubanMoviesStore.data"
+    :href="goLinksStore.map['douban-movie']"
     :platform="isZhLang ? '我在豆瓣' : 'Douban Movie'"
   >
     <p>
       <i class="iconfont icon-video-outlined"></i>
       <span v-if="isZhLang">标记看过</span>
-      <statistic-count large primary split :count="store.data.total_collections" />
+      <statistic-count large primary split :count="doubanMoviesStore.data.total_collections" />
       <span v-if="isZhLang">部影片</span>
       <span v-else>films marked</span>
     </p>

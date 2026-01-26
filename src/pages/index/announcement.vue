@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { ref, shallowRef } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import type { Announcement } from '/@/interfaces/announcement'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -28,7 +28,7 @@
     <placeholder :data="announcements.length" :loading="fetching">
       <template #placeholder>
         <empty class="announcement-empty" key="empty">
-          <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
+          <i18n :k="LocalesKey.EMPTY_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>

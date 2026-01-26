@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
   import { useArchiveStore } from '/@/stores/archive'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import PageBanner from '/@/components/common/banner.vue'
   import ArchiveTree from './tree.vue'
@@ -25,7 +25,7 @@
   <div class="archive-page">
     <page-banner :is-mobile="true" image="/images/page-archive/banner-mobile.webp" :image-position="80" cdn>
       <template #title>
-        <webfont bolder><i18n :k="LocaleKey.PAGE_ARCHIVE" /></webfont>
+        <webfont bolder><i18n :k="LocalesKey.PAGE_ARCHIVE" /></webfont>
       </template>
       <template #description>
         <webfont><i18n v-bind="i18ns.title" /></webfont>
@@ -63,7 +63,7 @@
         <placeholder :data="archiveStore.data?.articles.length" :loading="archiveStore.fetching">
           <template #placeholder>
             <empty class="archive-empty" key="empty">
-              <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
+              <i18n :k="LocalesKey.ARTICLE_PLACEHOLDER" />
             </empty>
           </template>
           <template #loading>
@@ -91,7 +91,7 @@
                       {{ article.title }}
                     </a>
                   </h4>
-                  <p class="description" v-html="article.description" />
+                  <p class="summary" v-html="article.summary" />
                 </div>
               </template>
             </archive-tree>
@@ -213,7 +213,7 @@
             }
           }
 
-          .description {
+          .summary {
             margin-bottom: 0;
             padding-left: 3rem;
             color: $color-text-disabled;

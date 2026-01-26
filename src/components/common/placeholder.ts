@@ -6,7 +6,7 @@
 
 import _isUndefined from 'lodash-es/isUndefined'
 import { defineComponent, h, Transition, type PropType } from 'vue'
-import { LocaleKey } from '/@/locales'
+import { LocalesKey } from '/@/locales'
 import Empty from './empty.vue'
 import Spin from './spin.vue'
 
@@ -46,7 +46,7 @@ export default defineComponent({
       default: 'module'
     },
     placeholder: String,
-    i18nKey: String as PropType<LocaleKey>,
+    i18nKey: String as PropType<LocalesKey>,
     loading: Boolean
   },
   emits: [Events.AfterEnter],

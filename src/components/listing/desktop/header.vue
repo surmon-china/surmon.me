@@ -3,7 +3,7 @@
   import { getAssetURL } from '/@/transforms/url'
 
   defineProps<{
-    icon: string
+    iconName: string
     backgroundColor?: string
     backgroundImage?: string
   }>()
@@ -23,7 +23,7 @@
     />
     <div class="content">
       <div class="logo">
-        <i key="date" class="iconfont" :class="icon"></i>
+        <i key="date" class="iconfont" :class="iconName"></i>
       </div>
       <div class="title">
         <div class="text"><slot></slot></div>

@@ -21,7 +21,6 @@ export const APP_CONFIG = Object.freeze({
   default_og_image: '/images/og-social-card.jpg',
   root_title_separator: ' | ',
   page_title_separator: ' • ',
-  // page_title_separator: ' · ',
   primary_color: '#0088f5'
 })
 
@@ -69,9 +68,9 @@ export const VALUABLE_LINKS = Object.freeze({
   GITHUB_SURMON_ME_NATIVE: 'https://github.com/surmon-china/surmon.me.native',
   GOOGLE_MY_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
   MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-  GITHUB_STATISTIC_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
+  GITHUB_STATISTICS_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
   GOOGLE_MY_MAP_KML_URL: 'https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
-  GO_LINK_MAP_ENDPOINT: 'https://go.surmon.me'
+  GO_LINKS_MAP_ENDPOINT: 'https://go.surmon.me'
 })
 
 export const GO_LINK_MAP_KEYS = Object.freeze([
@@ -95,8 +94,8 @@ export const GO_LINK_MAP_KEYS = Object.freeze([
   'x'
 ] as const)
 
-export type GoLinkMap = Record<(typeof GO_LINK_MAP_KEYS)[number], string>
-export const GO_LINK_MAP = GO_LINK_MAP_KEYS.reduce<GoLinkMap>(
-  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINK_MAP_ENDPOINT}/${key}` }),
-  {} as GoLinkMap
+export type GoLinksMap = Record<(typeof GO_LINK_MAP_KEYS)[number], string>
+export const GO_LINKS_MAP = GO_LINK_MAP_KEYS.reduce<GoLinksMap>(
+  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}` }),
+  {} as GoLinksMap
 )

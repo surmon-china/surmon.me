@@ -7,9 +7,10 @@
   import CalendarDay from './day.vue'
 
   const { gtag } = useEnhancer()
-  const { articleCalendar, instagramCalendar, githubCalendar } = useStores()
+  const { articlesCalendarStore, instagramCalendarStore, githubCalendarStore } = useStores()
+
   const githubContributionsMap = computed(() => {
-    return new Map(githubCalendar.days.map((day) => [day.date, day]))
+    return new Map(githubCalendarStore.days.map((day) => [day.date, day]))
   })
   const getDayContributions = (date: string) => {
     return githubContributionsMap.value.get(date)?.count || 0
@@ -18,10 +19,10 @@
     return githubContributionsMap.value.get(date)?.color
   }
   const getDayInstagrams = (date: string) => {
-    return instagramCalendar.data.find((i) => i.date === date)?.count || 0
+    return instagramCalendarStore.data.find((i) => i.date === date)?.count || 0
   }
   const getDayArticles = (date: string) => {
-    return articleCalendar.data.find((i) => i.date === date)?.count || 0
+    return articlesCalendarStore.data.find((i) => i.date === date)?.count || 0
   }
 
   const handleHover = () => {
@@ -60,9 +61,9 @@
   ]
 
   onMounted(() => {
-    articleCalendar.fetch()
-    githubCalendar.fetch()
-    instagramCalendar.fetch()
+    githubCalendarStore.fetch()
+    instagramCalendarStore.fetch()
+    articlesCalendarStore.fetch()
   })
 </script>
 

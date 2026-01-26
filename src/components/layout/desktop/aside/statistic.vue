@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { defineComponent, ref, h, onMounted, Transition } from 'vue'
-  import { useNodepressStatisticStore } from '/@/stores/statistic'
+  import { useNodepressStatisticsStore } from '/@/stores/statistics'
   import { RouteName } from '/@/app/router'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
 
   const StatisticSkeleton = defineComponent({
     props: {
@@ -20,7 +20,7 @@
   })
 
   const fetching = ref(true)
-  const statisticStore = useNodepressStatisticStore()
+  const statisticStore = useNodepressStatisticsStore()
 
   onMounted(() => {
     statisticStore.fetch().finally(() => {
@@ -34,21 +34,21 @@
     <div class="item">
       <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.articles" />
       <span class="title">
-        <i18n :k="LocaleKey.STATISTIC_ARTICLES" />
+        <i18n :k="LocalesKey.STATISTIC_ARTICLES" />
       </span>
     </div>
     <divider type="vertical" />
     <div class="item">
       <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.todayViews" />
       <span class="title">
-        <i18n :k="LocaleKey.STATISTIC_TODAY_VIEWS" />
+        <i18n :k="LocalesKey.STATISTIC_TODAY_VIEWS" />
       </span>
     </div>
     <divider type="vertical" />
     <div class="item">
       <statistic-skeleton :fetching="fetching" :count="statisticStore.data?.comments" />
       <span class="title">
-        <i18n :k="LocaleKey.STATISTIC_COMMENTS" />
+        <i18n :k="LocalesKey.STATISTIC_COMMENTS" />
       </span>
     </div>
   </router-link>

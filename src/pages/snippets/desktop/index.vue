@@ -1,11 +1,10 @@
 <script lang="ts" setup>
   import { shallowRef } from 'vue'
   import { IDENTITIES } from '/@/configs/app.config'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
-  import { useThreadsLatestMediasStore } from '/@/stores/media'
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
@@ -15,18 +14,17 @@
   import ListItemCard from './card.vue'
   import ThreadsBody from './body-threads.vue'
 
-  const { goLink } = useStores()
   const { popup } = useEnhancer()
-  const { fetching, fetchMedias } = useThreadsMediasRequest()
-  const latestThreadsStore = useThreadsLatestMediasStore()
+  const { goLinksStore, threadsLatestMediasStore } = useStores()
 
   const masonryRef = shallowRef<MasonryRef<ThreadsMedia>>()
   const lastPaging = shallowRef<ThreadsMediaListResponse['paging'] | null>(null)
   const noMoreData = shallowRef(false)
 
+  const { fetchMedias, fetching } = useThreadsMediasRequest()
   const fetchNextPageThreadsMedias = async () => {
-    if (latestThreadsStore.fetching || fetching.value || noMoreData.value) return
-    const secondPage = latestThreadsStore.data?.paging.cursors.after
+    if (threadsLatestMediasStore.fetching || fetching.value || noMoreData.value) return
+    const secondPage = threadsLatestMediasStore.data?.paging.cursors.after
     const nextPage = lastPaging.value?.cursors?.after
     const response = await fetchMedias(nextPage ?? secondPage)
     lastPaging.value = response.paging
@@ -35,7 +33,7 @@
   }
 
   useSnippetsPageMeta()
-  useUniversalFetch(() => latestThreadsStore.fetch())
+  useUniversalFetch(() => threadsLatestMediasStore.fetch())
 </script>
 
 <template>
@@ -46,11 +44,11 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item threads" title="Threads" :href="goLink.map.threads">
+          <ulink class="item threads" title="Threads" :href="goLinksStore.map.threads">
             <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
-          <ulink class="item zhihu" title="知乎" :href="goLink.map.zhihu">
+          <ulink class="item zhihu" title="知乎" :href="goLinksStore.map.zhihu">
             <i class="iconfont icon-zhihu-full"></i>
           </ulink>
         </div>
@@ -58,10 +56,10 @@
     </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
-      <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
+      <placeholder :data="threadsLatestMediasStore.data?.data" :loading="threadsLatestMediasStore.fetching">
         <template #placeholder>
           <empty class="data-empty" key="empty">
-            <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
+            <i18n :k="LocalesKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
@@ -79,7 +77,7 @@
               :columns="3"
               row-gap="2.8rem"
               col-gap="2.4rem"
-              :initial-items="latestThreadsStore.data?.data || []"
+              :initial-items="threadsLatestMediasStore.data?.data || []"
               :ssr-initial-render="true"
               @mounted="masonryRef = $event"
             >
@@ -95,7 +93,7 @@
               </template>
             </masonry-wall>
             <loadmore
-              v-if="!latestThreadsStore.fetching && !noMoreData"
+              v-if="!threadsLatestMediasStore.fetching && !noMoreData"
               class="loadmore"
               :loading="fetching"
               @loadmore="fetchNextPageThreadsMedias"

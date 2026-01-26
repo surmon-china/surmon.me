@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-  import { ref, computed } from 'vue'
+  import { ref } from 'vue'
   import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useStores } from '/@/stores'
   import { APP_PROFILE } from '/@/configs/app.config'
-  import { Language, LocaleKey } from '/@/locales'
-  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { Language, LocalesKey } from '/@/locales'
   import { CommentPostId } from '/@/constants/biz-state'
   import { firstUpperCase } from '/@/transforms/text'
   import { isClient } from '/@/configs/app.env'
-  import logger from '/@/utils/logger'
   import PageBanner from '/@/components/common/banner.vue'
   import Comment from '/@/components/comment/index.vue'
 
@@ -18,44 +16,22 @@
     isMobile?: boolean
   }>()
 
-  const { i18n: _i18n, gtag, globalState, isZhLang } = useEnhancer()
-  const { identity, appOption, comment: commentStore } = useStores()
-  const isLiked = computed(() => identity.isLikedPage(CommentPostId.Guestbook))
-  const siteLikes = computed(() => appOption.data?.meta.likes || 0)
+  const { globalState, isZhLang, i18n: _i18n } = useEnhancer()
+  const { commentStore } = useStores()
+
   // MARK: Only for client-side routing to navigate to this page
   const isLoading = ref(isClient && globalState.isHydrated)
-  const bannerImage = `/images/page-guestbook/banner.webp`
+  const bannerImage = '/images/page-guestbook/banner.webp'
 
-  const handleLike = async () => {
-    if (isLiked.value) {
-      return false
-    }
-
-    gtag?.event('like_site', {
-      event_category: GAEventCategories.Universal
-    })
-
-    try {
-      await appOption.postSiteLike()
-      identity.likePage(CommentPostId.Guestbook)
-    } catch (error) {
-      const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
-      logger.warn(message, error)
-      alert(message)
-    }
-  }
-
-  const fetchAllData = () => {
-    const appOptionRequest = appOption.fetch()
-    const commentRequest = commentStore.fetchList({ post_id: CommentPostId.Guestbook })
-    return Promise.all([appOptionRequest, commentRequest]).then(() => {
+  const fetchComments = () => {
+    return commentStore.fetchList({ post_id: CommentPostId.Guestbook }).then(() => {
       isLoading.value = false
     })
   }
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_GUESTBOOK, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(_i18n.t(LocalesKey.PAGE_GUESTBOOK, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LocalesKey.PAGE_GUESTBOOK)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `给 ${APP_PROFILE.author} 留言` : 'Leave a comment'
     return {
       pageTitles: titles,
@@ -67,7 +43,7 @@
     }
   })
 
-  useUniversalFetch(() => fetchAllData())
+  useUniversalFetch(() => fetchComments())
 </script>
 
 <template>
@@ -76,13 +52,9 @@
       <template #desktop>
         <div class="desktop-banner">
           <uimage class="image" :src="bannerImage" cdn />
-          <button class="like" :class="{ liked: isLiked }" :disabled="isLiked" @click="handleLike">
-            <i class="icon iconfont icon-heart"></i>
-            <span class="count">{{ isLiked ? `${siteLikes - 1} + 1` : siteLikes }}</span>
-          </button>
           <span class="slogan">
             <webfont class="text">
-              <i18n :k="LocaleKey.GUESTBOOK_SLOGAN" />
+              <i18n :k="LocalesKey.GUESTBOOK_SLOGAN" />
             </webfont>
           </span>
         </div>
@@ -90,10 +62,10 @@
       <template #mobile>
         <page-banner class="mobile-banner" :is-mobile="true" :image="bannerImage" :image-position="70" cdn>
           <template #title>
-            <webfont bolder><i18n :k="LocaleKey.PAGE_GUESTBOOK" /></webfont>
+            <webfont bolder><i18n :k="LocalesKey.PAGE_GUESTBOOK" /></webfont>
           </template>
           <template #description>
-            <webfont><i18n :k="LocaleKey.GUESTBOOK_SLOGAN" /></webfont>
+            <webfont><i18n :k="LocalesKey.GUESTBOOK_SLOGAN" /></webfont>
           </template>
         </page-banner>
       </template>
@@ -131,33 +103,6 @@
         transition: all $motion-duration-slow;
         &:hover {
           transform: rotate(2deg) scale(1.1);
-        }
-      }
-
-      .like {
-        position: absolute;
-        left: $gap-lg * 2;
-        bottom: $gap * 2;
-        display: inline-flex;
-        align-items: center;
-
-        &.liked,
-        &:hover {
-          .icon {
-            color: $red;
-          }
-        }
-
-        .icon {
-          margin-right: $gap-sm;
-          color: rgba($red, 0.6);
-          font-size: $font-size-h2;
-          @include mix.color-transition();
-        }
-
-        .count {
-          color: rgba($white, 0.8);
-          font-weight: bold;
         }
       }
 

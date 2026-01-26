@@ -4,9 +4,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { fetchGitHubStatisticJSON } from './github'
+import { fetchGitHubStatisticsJson } from './github'
 
-export interface NpmStatistic {
+export interface NpmStatistics {
   totalPackages: number
   totalDownloads: number
   averageScore: number
@@ -17,8 +17,8 @@ interface NPM_JSON {
   packages: Array<any>
 }
 
-export const getNPMStatistic = async () => {
-  const data = await fetchGitHubStatisticJSON<NPM_JSON>('npm.json')
+export const getNPMStatistics = async () => {
+  const data = await fetchGitHubStatisticsJson<NPM_JSON>('npm.json')
   const totalPackages = data ? Object.keys(data.downloads).length : 0
   const totalDownloads = data ? Object.values<number>(data.downloads).reduce((p, c) => p + c, 0) : 0
   const averageScore = (() => {
@@ -35,5 +35,5 @@ export const getNPMStatistic = async () => {
     totalPackages,
     totalDownloads,
     averageScore
-  } as NpmStatistic
+  } as NpmStatistics
 }

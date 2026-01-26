@@ -1,19 +1,19 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useCommentStore } from '/@/stores/comment'
-  import { useIdentityStore, UserType } from '/@/stores/identity'
+  import { UserType } from '/@/stores/identity'
   import { getCommentItemElementId } from '/@/constants/element-anchor'
   import { getCommentUrlHashById } from '/@/constants/element-anchor'
   import { APP_CONFIG } from '/@/configs/app.config'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getPageURL, getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
-  import { getExtendValue } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { copy } from '/@/utils/clipboard'
   import { Comment } from '/@/interfaces/comment'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -40,23 +40,17 @@
     (e: CommentEvents.CancelReply, commentId: number): void
   }>()
 
-  const { route, i18n: _i18n, cdnDomain, isCNUser } = useEnhancer()
-  const commentStore = useCommentStore()
-  const identityStore = useIdentityStore()
-  const isDeleting = computed(() => commentStore.deleting)
+  const { route, cdnDomain, isCNUser, i18n: _i18n } = useEnhancer()
+  const { commentStore, identityStore } = useStores()
 
-  const disqusAuthorId = computed(() => {
-    return getExtendValue(props.comment.extends, 'disqus-author-id')
-  })
-  const disqusUsername = computed<string | void>(() => {
-    return getExtendValue(props.comment.extends, 'disqus-author-username')
-  })
-
-  const isDisqusAuthor = computed(() => Boolean(disqusAuthorId.value))
+  const commentExtrasMap = computed(() => getExtrasMap(props.comment.extras))
+  const disqusAuthorId = computed(() => commentExtrasMap.value.get('disqus-author-id'))
+  const disqusUsername = computed(() => commentExtrasMap.value.get('disqus-author-username'))
+  const isDisqusAuthor = computed(() => !!disqusAuthorId.value)
   const isAdminAuthor = computed(() => {
     return (
-      Boolean(disqusUsername.value) &&
-      Boolean(identityStore.disqusConfig) &&
+      !!disqusUsername.value &&
+      !!identityStore.disqusConfig &&
       disqusUsername.value === identityStore.disqusConfig.admin_username
     )
   })
@@ -114,7 +108,7 @@
   }
 
   const handleDelete = () => {
-    if (window.confirm(_i18n.t(LocaleKey.COMMENT_DELETE_CONFIRM))) {
+    if (window.confirm(_i18n.t(LocalesKey.COMMENT_DELETE_CONFIRM))) {
       emit(CommentEvents.Delete, props.comment.id)
     }
   }
@@ -156,7 +150,7 @@
               {{ firstUpperCase(comment.author.name) }}
             </comment-link>
             <span class="moderator" v-if="isAdminAuthor">
-              <i18n :k="LocaleKey.COMMENT_MODERATOR" />
+              <i18n :k="LocalesKey.COMMENT_MODERATOR" />
             </span>
             <span class="author-info">
               <template v-if="comment.ip_location && !hiddenLocation">
@@ -174,7 +168,7 @@
         <div class="cm-content">
           <p v-if="comment.pid" class="reply">
             <span class="text">
-              <i18n :k="LocaleKey.COMMENT_REPLY" />
+              <i18n :k="LocalesKey.COMMENT_REPLY" />
             </span>
             <button class="parent" @click="scrollToCommentItem(comment.pid)">
               {{ getReplyParentCommentText(comment.pid) }}
@@ -204,7 +198,7 @@
               @click="handleVote(true)"
             >
               <i class="iconfont icon-like" />
-              <i18n :k="LocaleKey.COMMENT_UPVOTE" v-if="!plainVote" />
+              <i18n :k="LocalesKey.COMMENT_UPVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.likes }})</span>
             </button>
             <button
@@ -217,22 +211,22 @@
               @click="handleVote(false)"
             >
               <i class="iconfont icon-dislike" />
-              <i18n :k="LocaleKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
+              <i18n :k="LocalesKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
             <button class="reply" @click="handleCancelReply" v-if="isReply">
               <i class="iconfont icon-cancel" />
-              <i18n :k="LocaleKey.COMMENT_REPLY_CANCEL" />
+              <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
             </button>
             <button class="reply" @click="handleReply" v-else>
               <i class="iconfont icon-reply" />
-              <i18n :k="LocaleKey.COMMENT_REPLY" />
+              <i18n :k="LocalesKey.COMMENT_REPLY" />
             </button>
           </div>
           <div class="right">
-            <button class="delete" :disabled="isDeleting" @click="handleDelete" v-if="isDeletable">
+            <button class="delete" :disabled="commentStore.deleting" @click="handleDelete" v-if="isDeletable">
               <i class="iconfont icon-delete" />
-              <i18n :k="LocaleKey.COMMENT_DELETE" />
+              <i18n :k="LocalesKey.COMMENT_DELETE" />
             </button>
           </div>
         </div>

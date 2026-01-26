@@ -2,7 +2,7 @@
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { Comment } from '/@/interfaces/comment'
   import { CommentTreeItem } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/google-analytics'
@@ -43,8 +43,8 @@
     },
     emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],
     setup(_, context) {
-      const { i18n: _i18n, gtag } = useEnhancer()
-      const { comment: commentStore, identity } = useStores()
+      const { gtag, i18n: _i18n } = useEnhancer()
+      const { commentStore, identityStore } = useStores()
 
       const buildCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
         return comments.map((comment) => ({
@@ -70,24 +70,24 @@
           event_category: GAEventCategories.Comment,
           event_label: isLike ? 'like' : 'dislike'
         })
-        if (isLike && identity.isLikedComment(commentId)) {
+        if (isLike && identityStore.isLikedComment(commentId)) {
           return false
         }
-        if (!isLike && identity.isDislikedComment(commentId)) {
+        if (!isLike && identityStore.isDislikedComment(commentId)) {
           return false
         }
         try {
           await commentStore.postCommentVote(commentId, isLike ? 1 : -1)
-          isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
+          isLike ? identityStore.likeComment(commentId) : identityStore.dislikeComment(commentId)
         } catch (error) {
-          const message = _i18n.t(LocaleKey.POST_ACTION_ERROR)
+          const message = _i18n.t(LocalesKey.POST_ACTION_ERROR)
           logger.failure(message, error)
           alert(message)
         }
       }
 
       return {
-        identity,
+        identityStore,
         buildCommentTree,
         handleReplyComment,
         handleCancelReply,
@@ -105,8 +105,8 @@
         v-for="item in comments"
         :key="item.comment.id"
         :comment="item.comment"
-        :liked="identity.isLikedComment(item.comment.id)"
-        :disliked="identity.isDislikedComment(item.comment.id)"
+        :liked="identityStore.isLikedComment(item.comment.id)"
+        :disliked="identityStore.isDislikedComment(item.comment.id)"
         :has-child="!!item.children.length"
         :is-child="isChildList"
         :is-reply="replyPid === item.comment.id"

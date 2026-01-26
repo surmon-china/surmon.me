@@ -5,13 +5,13 @@
   import { getDateFlowRoute } from '/@/transforms/route'
   import Calendar from '/@/components/widgets/calendar.vue'
 
-  const { articleCalendar } = useStores()
+  const { articlesCalendarStore } = useStores()
   const articlesIn = (targetDate: HumanDate) => {
     const ymd = humanDateToYMD(targetDate)
-    return articleCalendar.data.find((item) => item.date === ymd)?.count || 0
+    return articlesCalendarStore.data.find((item) => item.date === ymd)?.count || 0
   }
 
-  onMounted(() => articleCalendar.fetch())
+  onMounted(() => articlesCalendarStore.fetch())
 </script>
 
 <template>

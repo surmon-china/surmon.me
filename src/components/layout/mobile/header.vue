@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { reactive, ref, watch, onMounted, nextTick } from 'vue'
-  import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
-  import { useEnhancer } from '/@/app/enhancer'
+  import { LocalesKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
-  import { LocaleKey } from '/@/locales'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
   import { isSearchFlow } from '/@/transforms/route'
   import { getTagFlowRoute } from '/@/transforms/route'
   import { onBeforeMount } from 'vue'
@@ -97,7 +97,7 @@
           type="text"
           maxlength="24"
           required
-          :placeholder="_i18n.t(LocaleKey.SEARCH_PLACEHOLDER)"
+          :placeholder="_i18n.t(LocalesKey.SEARCH_PLACEHOLDER)"
           v-model.trim="searchState.keyword"
           @keyup.enter.stop.prevent="submitSearch"
           @focus="searchState.focused = true"
@@ -116,7 +116,7 @@
             :key="index"
             v-for="(tag, index) in tagStore.sorted"
           >
-            <i class="iconfont" :class="getTagIconName(tag)" />
+            <i class="iconfont" :class="getTagIconName(tag.extras)" />
             <span class="name"><i18n :zh="tag.name" :en="getTagEnName(tag)" /></span>
             <span class="count">{{ tag.article_count || 0 }}</span>
           </router-link>

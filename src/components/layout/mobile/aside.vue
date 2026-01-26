@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
-  import { Language, LocaleKey } from '/@/locales'
+  import { Language, LocalesKey } from '/@/locales'
   import { RouteName, CategorySlug } from '/@/app/router'
   import { Theme } from '/@/composables/theme'
   import { useEnhancer } from '/@/app/enhancer'
@@ -10,7 +10,7 @@
   import { getAssetURL } from '/@/transforms/url'
   import { getPageRoute, getCategoryFlowRoute } from '/@/transforms/route'
 
-  const { i18n: _i18n, theme, cdnDomain } = useEnhancer()
+  const { theme, cdnDomain, i18n: _i18n } = useEnhancer()
   const adminProfileStore = useAdminProfileStore()
   const adminAvatar = computed(() => {
     return adminProfileStore.data?.avatar || getAssetURL(cdnDomain, '/images/anonymous.png')
@@ -42,7 +42,7 @@
       <div class="profile">
         <h3 class="name">{{ APP_PROFILE.author }}</h3>
         <webfont class="slogan">
-          <i18n :k="LocaleKey.APP_SLOGAN" />
+          <i18n :k="LocalesKey.APP_SLOGAN" />
         </webfont>
       </div>
     </div>
@@ -62,43 +62,43 @@
         <router-link to="/" class="item">
           <i class="iconfont icon-home"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.PAGE_HOME" />
+            <i18n :k="LocalesKey.PAGE_HOME" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Code)">
           <i class="iconfont icon-code"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.CATEGORY_CODE" />
+            <i18n :k="LocalesKey.CATEGORY_CODE" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getCategoryFlowRoute(CategorySlug.Insight)">
           <i class="iconfont icon-insight"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.CATEGORY_INSIGHT" />
+            <i18n :k="LocalesKey.CATEGORY_INSIGHT" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Snippets)">
           <i class="iconfont icon-buddhism"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.PAGE_SNIPPETS" />
+            <i18n :k="LocalesKey.PAGE_SNIPPETS" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Archive)">
           <i class="iconfont icon-quill"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.PAGE_ARCHIVE" />
+            <i18n :k="LocalesKey.PAGE_ARCHIVE" />
           </webfont>
         </router-link>
         <router-link class="item" :to="getPageRoute(RouteName.Guestbook)">
           <i class="iconfont icon-comment"></i>
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.PAGE_GUESTBOOK" />
+            <i18n :k="LocalesKey.PAGE_GUESTBOOK" />
           </webfont>
         </router-link>
         <router-link class="item about" :to="getPageRoute(RouteName.About)">
           <uimage class="avatar" :src="adminAvatar" />
           <webfont bolder uppercase>
-            <i18n :k="LocaleKey.PAGE_ABOUT" />
+            <i18n :k="LocalesKey.PAGE_ABOUT" />
           </webfont>
         </router-link>
       </nav>

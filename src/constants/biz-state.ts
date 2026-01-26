@@ -4,11 +4,10 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// article.origin
-export enum OriginState {
-  Original = 0, // 原创
-  Reprint = 1, // 转载
-  Hybrid = 2 // 混合
+export enum SortMode {
+  Oldest = 1, // 升序（从旧到新）
+  Latest = -1, // 降序（从新到旧）
+  Hottest = 2 // 热序
 }
 
 // comment.post_id
@@ -19,10 +18,4 @@ export enum CommentPostId {
 // comment.pid
 export enum CommentParentId {
   Self = 0 // `0` means no parent comment
-}
-
-export enum SortType {
-  Asc = 1, // 升序
-  Desc = -1, // 降序
-  Hottest = 2 // 热序
 }

@@ -4,7 +4,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
   import type { InstagramMediaItem, InstagramMediaListResponse } from '/@/server/getters/instagram'
   import { isClient } from '/@/configs/app.env'
@@ -15,35 +15,36 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import InstagramGrid from './grid.vue'
 
-  const { i18n: _i18n, isZhLang } = useEnhancer()
-  const { instagramLatestMedias, goLink } = useStores()
+  const { isZhLang, i18n: _i18n } = useEnhancer()
+  const { instagramLatestMediasStore, goLinksStore } = useStores()
 
-  const loading = ref(false)
   const medias = shallowReactive<Array<InstagramMediaItem>>([])
+  const allMedias = computed(() => {
+    const latestMedias = instagramLatestMediasStore.data?.data ?? []
+    return [...latestMedias, ...medias]
+  })
+
   const lastPaging = shallowRef<InstagramMediaListResponse['paging'] | null>(null)
   const finished = computed(() => Boolean(lastPaging.value && !lastPaging.value.next))
+  const isLoadingMore = ref(false)
+
   const fetchMoreMedias = async () => {
     try {
-      loading.value = true
+      isLoadingMore.value = true
       const request = tunnel.fetch<InstagramMediaListResponse>(TunnelModule.InstagramMedias, {
-        after: lastPaging.value?.cursors.after ?? instagramLatestMedias.data?.paging?.cursors.after
+        after: lastPaging.value?.cursors.after ?? instagramLatestMediasStore.data?.paging?.cursors.after
       })
       const response = await (isClient ? delayPromise(360, request) : request)
       medias.push(...response.data)
       lastPaging.value = response.paging
     } finally {
-      loading.value = false
+      isLoadingMore.value = false
     }
   }
 
-  const allMedias = computed(() => {
-    const latestMedias = instagramLatestMedias.data?.data ?? []
-    return [...latestMedias, ...medias]
-  })
-
   usePageSeo(() => {
     const enTitle = 'Photography'
-    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
+    const titles = isZhLang.value ? [_i18n.t(LocalesKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${APP_PROFILE.author} 的摄影作品` : `${APP_PROFILE.author}'s photographs`
     return {
       pageTitles: titles,
@@ -51,7 +52,7 @@
     }
   })
 
-  useUniversalFetch(() => instagramLatestMedias.fetch())
+  useUniversalFetch(() => instagramLatestMediasStore.fetch())
 </script>
 
 <template>
@@ -64,11 +65,11 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item instagram" title="Instagram" :href="goLink.map.instagram">
+          <ulink class="item instagram" title="Instagram" :href="goLinksStore.map.instagram">
             <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
-          <ulink class="item xiaohongshu" title="小红书" :href="goLink.map.xiaohongshu">
+          <ulink class="item xiaohongshu" title="小红书" :href="goLinksStore.map.xiaohongshu">
             <i class="iconfont icon-xiaohongshu"></i>
           </ulink>
         </div>
@@ -76,10 +77,10 @@
     </page-banner>
     <container class="page-bridge"></container>
     <container class="page-content">
-      <placeholder :data="instagramLatestMedias.data?.data" :loading="instagramLatestMedias.fetching">
+      <placeholder :data="instagramLatestMediasStore.data?.data" :loading="instagramLatestMediasStore.fetching">
         <template #placeholder>
           <empty class="module-empty" key="empty">
-            <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
+            <i18n :k="LocalesKey.EMPTY_PLACEHOLDER" />
           </empty>
         </template>
         <template #loading>
@@ -93,9 +94,9 @@
           <div>
             <instagram-grid :medias="allMedias" />
             <loadmore
-              v-if="!instagramLatestMedias.fetching && !finished"
+              v-if="!instagramLatestMediasStore.fetching && !finished"
               class="loadmore"
-              :loading="loading"
+              :loading="isLoadingMore"
               @loadmore="fetchMoreMedias"
             >
               <template #normal>

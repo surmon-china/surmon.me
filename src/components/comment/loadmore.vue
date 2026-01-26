@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { Pagination } from '/@/interfaces/common'
   import { GAEventCategories } from '/@/constants/google-analytics'
@@ -47,7 +47,7 @@
       </i18n>
     </button>
     <span class="finished" v-else>
-      <i18n :k="LocaleKey.LIST_NO_MORE_DATA" />
+      <i18n :k="LocalesKey.LIST_NO_MORE_DATA" />
     </span>
   </div>
 </template>

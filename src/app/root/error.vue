@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import type { AppError } from '../error'
 
   const props = defineProps<{
@@ -16,7 +16,7 @@
     <h1 class="code">{{ props.error.code }}</h1>
     <h3 class="message">
       <template v-if="props.error.message">{{ props.error.message }}</template>
-      <i18n v-else :k="LocaleKey.NOT_FOUND" />
+      <i18n v-else :k="LocalesKey.NOT_FOUND" />
     </h3>
     <p class="link" @click="emit('resolve')">
       <slot name="resolve-text" />

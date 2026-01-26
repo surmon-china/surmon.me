@@ -1,5 +1,5 @@
-export interface UniversalKeyValue {
-  name: string
+export interface ExtraKeyValue {
+  key: string
   value: string
 }
 

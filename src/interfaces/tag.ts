@@ -1,4 +1,4 @@
-import { UniversalKeyValue } from './common'
+import { ExtraKeyValue } from './common'
 
 export interface Tag {
   _id: string
@@ -6,8 +6,8 @@ export interface Tag {
   name: string
   slug: string
   description: string
+  extras: ExtraKeyValue[]
   updated_at: string
   created_at: string
-  extends: UniversalKeyValue[]
   article_count: number
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { useEnhancer } from '/@/app/enhancer'
   import { useMusic } from '/@/composables/music'
@@ -58,7 +58,7 @@
       </div>
       <button class="song-link" @click="togglePlayerModel" @mousedown="handleTouchEvent('open player model')">
         <span v-if="currentSong">{{ currentSong.name }}</span>
-        <i18n v-else :k="LocaleKey.MUSIC_PLACEHOLDER" />
+        <i18n v-else :k="LocalesKey.MUSIC_PLACEHOLDER" />
       </button>
     </div>
     <div class="cd">

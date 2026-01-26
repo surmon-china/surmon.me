@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import { ref, computed, nextTick, onMounted, onUpdated } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { Article } from '/@/interfaces/article'
   import { useArticleDetailStore } from '/@/stores/article'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/state'
   import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -21,9 +21,9 @@
   }>()
 
   const ctxStore = useArticleDetailStore()
-  const isHybrid = computed(() => isHybridType(props.article.origin!))
-  const isReprint = computed(() => isReprintType(props.article.origin!))
-  const isOriginal = computed(() => isOriginalType(props.article.origin!))
+  const isHybrid = computed(() => isHybridArticle(props.article.origin))
+  const isReprint = computed(() => isReprintArticle(props.article.origin))
+  const isOriginal = computed(() => isOriginalArticle(props.article.origin))
 
   const element = ref<HTMLDivElement>()
   const isRenderMoreContent = ref(false)
@@ -57,15 +57,15 @@
         hybrid: isHybrid
       }"
     >
-      <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-      <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-      <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+      <i18n :k="LocalesKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+      <i18n :k="LocalesKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+      <i18n :k="LocalesKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
     </div>
     <div class="knowledge" key="knowledge">
       <h2 class="title">
         <span class="text">{{ article.title }}</span>
         <span class="featured" v-if="article.featured">
-          <i18n :k="LocaleKey.ARTICLE_FEATURED_SHORT" />
+          <i18n :k="LocalesKey.ARTICLE_FEATURED_SHORT" />
         </span>
       </h2>
       <div class="meta">
@@ -84,15 +84,15 @@
         <divider type="vertical" class="vertical" />
         <span>
           <i class="iconfont icon-eye"></i>
-          <span>{{ numberSplit(article.meta.views) }}&nbsp;</span>
-          <i18n :k="LocaleKey.ARTICLE_VIEWS" />
+          <span>{{ numberSplit(article.stats.views) }}&nbsp;</span>
+          <i18n :k="LocalesKey.ARTICLE_VIEWS" />
         </span>
       </div>
       <markdown :html="ctxStore.defaultContent?.html" />
       <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
           <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
-            <i18n :k="isRenderMoreContent ? LocaleKey.ARTICLE_RENDERING : LocaleKey.ARTICLE_READ_ALL" />
+            <i18n :k="isRenderMoreContent ? LocalesKey.ARTICLE_RENDERING : LocalesKey.ARTICLE_READ_ALL" />
             <i class="iconfont icon-loadmore"></i>
           </button>
         </div>

@@ -2,7 +2,7 @@
   import { reactive, computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useStores } from '/@/stores'
-  import { LocaleKey } from '/@/locales/key'
+  import { LocalesKey } from '/@/locales/key'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
 
@@ -22,7 +22,7 @@
     { emoji: '🥰', value: 5, en: 'Amazing', zh: '太棒了' }
   ]
 
-  const { appOption, identity } = useStores()
+  const { appOptionsStore, identityStore } = useStores()
   const { gtag, isZhLang } = useEnhancer()
   const state = reactive({
     emotion: null as unknown as number,
@@ -47,8 +47,8 @@
 
     try {
       state.submitting = true
-      const response = await appOption.postFeedback(toRaw(state))
-      identity.addFeedback(response.result)
+      const response = await appOptionsStore.postFeedback(toRaw(state))
+      identityStore.addFeedback(response.result)
       state.submitted = true
     } catch (error) {
       alert(error)
@@ -121,16 +121,16 @@
           <button class="item submit" :disabled="!isSubmitable || state.submitting" @click="handleSubmit">
             <i class="iconfont icon-mail-plane" />
             <span class="text">
-              <i18n :k="state.submitting ? LocaleKey.SUBMITTING : LocaleKey.SUBMIT" />
+              <i18n :k="state.submitting ? LocalesKey.SUBMITTING : LocalesKey.SUBMIT" />
             </span>
           </button>
         </div>
       </div>
     </template>
-    <div class="history" v-if="identity.feedbacks.length">
+    <div class="history" v-if="identityStore.feedbacks.length">
       <i18n>
-        <template #zh>你已进行过 {{ identity.feedbacks.length }} 次反馈。</template>
-        <template #en>You have {{ identity.feedbacks.length }} feedback history.</template>
+        <template #zh>你已进行过 {{ identityStore.feedbacks.length }} 次反馈。</template>
+        <template #en>You have {{ identityStore.feedbacks.length }} feedback history.</template>
       </i18n>
     </div>
   </div>

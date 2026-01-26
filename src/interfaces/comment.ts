@@ -1,5 +1,5 @@
 import { CommentParentId } from '/@/constants/biz-state'
-import { UniversalKeyValue } from './common'
+import { ExtraKeyValue } from './common'
 
 export interface Author {
   name: string
@@ -28,7 +28,7 @@ export interface Comment {
   dislikes: number
   ip?: string
   ip_location?: IPLocation
-  extends: UniversalKeyValue[]
+  extras: ExtraKeyValue[]
   created_at: string
   updated_at: string
 }

@@ -42,7 +42,7 @@
         _id: '',
         id: null,
         title: '-',
-        description: '',
+        summary: '',
         thumbnail: null
       })
     ]
@@ -69,7 +69,7 @@
             />
           </picture>
           <div class="title">{{ article.title }}</div>
-          <div class="description" :title="article.description">{{ article.description }}</div>
+          <div class="summary" :title="article.summary">{{ article.summary }}</div>
         </router-link>
       </li>
     </ul>
@@ -137,7 +137,7 @@
           }
 
           .title,
-          .description {
+          .summary {
             display: block;
             width: 100%;
             padding: 0 $gap-sm;
@@ -153,7 +153,7 @@
             color: $color-text;
           }
 
-          .description {
+          .summary {
             margin-bottom: $gap-sm;
             font-size: $font-size-small;
             color: $color-text-disabled;
@@ -167,7 +167,7 @@
             .title {
               color: $color-link;
             }
-            .description {
+            .summary {
               color: $color-text-secondary;
             }
           }

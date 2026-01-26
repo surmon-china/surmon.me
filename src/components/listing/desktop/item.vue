@@ -1,25 +1,25 @@
 <script lang="ts" setup>
   import { computed, shallowRef, onMounted } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore } from '/@/stores/identity'
-  import { Article, ArticleLang, ArticleLangI18n } from '/@/interfaces/article'
-  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
-  import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
+  import { Article, ArticleLanguage, ArticleLanguageI18n } from '/@/interfaces/article'
+  import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/state'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
-  import { isOriginalType, isHybridType, isReprintType } from '/@/transforms/state'
+  import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
+  import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { numberSplit } from '/@/transforms/text'
 
   const props = defineProps<{
     article: Article
   }>()
 
-  const { i18n: _i18n, cdnDomain, isZhLang } = useEnhancer()
-  const identity = useIdentityStore()
-  const isLiked = computed(() => identity.isLikedPage(props.article.id))
-  const isHybrid = computed(() => isHybridType(props.article.origin))
-  const isReprint = computed(() => isReprintType(props.article.origin))
-  const isOriginal = computed(() => isOriginalType(props.article.origin))
+  const { cdnDomain, isZhLang, i18n: _i18n } = useEnhancer()
+  const identityStore = useIdentityStore()
+  const isLiked = computed(() => identityStore.isLikedArticle(props.article.id))
+  const isHybrid = computed(() => isHybridArticle(props.article.origin))
+  const isReprint = computed(() => isReprintArticle(props.article.origin))
+  const isOriginal = computed(() => isOriginalArticle(props.article.origin))
 
   const imageRef = shallowRef<HTMLImageElement | null>(null)
   const finallyThumbnailURL = shallowRef<string | null>(null)
@@ -27,8 +27,8 @@
     finallyThumbnailURL.value = imageRef.value?.currentSrc ?? null
   }
 
-  const getLanguageText = (language: ArticleLang) => {
-    const targetI18n = ArticleLangI18n[language]
+  const getLanguageText = (language: ArticleLanguage) => {
+    const targetI18n = ArticleLanguageI18n[language]
     return isZhLang.value ? targetI18n.zh : targetI18n.en
   }
 
@@ -70,11 +70,11 @@
             reprint: isReprint
           }"
         >
-          <i18n :k="LocaleKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
-          <i18n :k="LocaleKey.ORIGIN_REPRINT" v-else-if="isReprint" />
-          <i18n :k="LocaleKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
+          <i18n :k="LocalesKey.ORIGIN_ORIGINAL" v-if="isOriginal" />
+          <i18n :k="LocalesKey.ORIGIN_REPRINT" v-else-if="isReprint" />
+          <i18n :k="LocalesKey.ORIGIN_HYBRID" v-else-if="isHybrid" />
         </span>
-        <span class="item-featured" v-if="article.featured" :title="_i18n.t(LocaleKey.ARTICLE_FEATURED)">
+        <span class="item-featured" v-if="article.featured" :title="_i18n.t(LocalesKey.ARTICLE_FEATURED)">
           <i class="iconfont icon-windmill"></i>
         </span>
         <picture class="picture">
@@ -102,7 +102,7 @@
             </router-link>
             <span class="language">{{ getLanguageText(article.lang) }}</span>
           </h5>
-          <p class="description" style="-webkit-box-orient: vertical" v-html="article.description"></p>
+          <p class="summary" style="-webkit-box-orient: vertical" v-html="article.summary"></p>
         </div>
         <div class="item-meta">
           <span class="date" data-allow-mismatch>
@@ -111,21 +111,21 @@
           </span>
           <span class="views">
             <i class="iconfont icon-eye"></i>
-            <span>{{ numberSplit(article.meta.views) }}</span>
+            <span>{{ numberSplit(article.stats.views) }}</span>
           </span>
           <span class="comments">
             <i class="iconfont icon-comment"></i>
-            <span>{{ article.meta.comments }}</span>
+            <span>{{ article.stats.comments }}</span>
           </span>
           <span class="likes">
             <i class="iconfont icon-like" :class="{ liked: isLiked }"></i>
-            <span>{{ article.meta.likes }}</span>
+            <span>{{ article.stats.likes }}</span>
           </span>
           <span class="categories">
             <i class="iconfont icon-category"></i>
             <placeholder :transition="false" :data="article.categories.length">
               <template #placeholder>
-                <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
+                <i18n :k="LocalesKey.EMPTY_PLACEHOLDER" />
               </template>
               <template #default>
                 <router-link
@@ -295,7 +295,7 @@
           }
         }
 
-        .description {
+        .summary {
           margin: 0;
           line-height: 1.8em;
           overflow: hidden;

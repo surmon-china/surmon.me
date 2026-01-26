@@ -13,7 +13,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { getPageURL } from '/@/transforms/url'
@@ -151,7 +151,7 @@
     (e: 'shareAsImage'): void
   }>()
 
-  const { i18n: _i18n, gtag, route, isZhLang } = useEnhancer()
+  const { gtag, route, isZhLang, i18n: _i18n } = useEnhancer()
   const enabledSocials = computed(() => {
     return props.socials?.length ? defaultSocials.filter((s) => props.socials?.includes(s.id)) : defaultSocials
   })
@@ -161,7 +161,7 @@
   const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
-    return pageDescription || _i18n.t(LocaleKey.APP_SLOGAN)!
+    return pageDescription || _i18n.t(LocalesKey.APP_SLOGAN)!
   }
 
   const copyPageURL = () => {

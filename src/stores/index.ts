@@ -24,13 +24,13 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
     // https://pinia.vuejs.org/ssr/#using-the-store-outside-of-setup
     const stores = useStores(pinia)
     const initFetchTasks = [
-      stores.appOption.fetch(), // app basic configuration
-      stores.category.fetch(), // basic categories data
-      stores.tag.fetch() // basic tags data
+      stores.appOptionsStore.fetch(), // app basic configuration
+      stores.categoryStore.fetch(), // basic categories data
+      stores.tagStore.fetch() // basic tags data
     ]
-    // fetch hot articles when desktop only
+    // fetch featured articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(stores.featuredArticleList.fetch())
+      initFetchTasks.push(stores.featuredArticleListStore.fetch())
     }
     return Promise.all(initFetchTasks)
   }

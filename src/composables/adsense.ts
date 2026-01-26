@@ -5,7 +5,7 @@
  */
 
 import { App, defineComponent, h } from 'vue'
-import { LocaleKey } from '/@/locales'
+import { LocalesKey } from '/@/locales'
 import { useEnhancer } from '/@/app/enhancer'
 import { loadScript } from '/@/utils/scripter'
 
@@ -63,7 +63,7 @@ const getComponent = (clientId: string) => {
           'div',
           {
             class: ['mammon-box', rootClass],
-            placeholder: i18n.t(LocaleKey.AD)
+            placeholder: i18n.t(LocalesKey.AD)
           },
           [
             h('script', {

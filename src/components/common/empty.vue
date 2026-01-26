@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
 
   defineProps<{
     placeholder?: string
-    i18nKey?: LocaleKey
+    i18nKey?: LocalesKey
     bold?: boolean
     size?: 'small' | 'default' | 'large'
   }>()
@@ -14,7 +14,7 @@
     <slot>
       <template v-if="placeholder">{{ placeholder }}</template>
       <template v-else>
-        <i18n :k="i18nKey || LocaleKey.EMPTY_PLACEHOLDER" />
+        <i18n :k="i18nKey || LocalesKey.EMPTY_PLACEHOLDER" />
       </template>
     </slot>
   </div>

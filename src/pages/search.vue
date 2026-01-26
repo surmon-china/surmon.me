@@ -12,6 +12,7 @@
 
   const { isZhLang } = useEnhancer()
   const articleListStore = useArticleListStore()
+
   const loadmoreArticles = async () => {
     await articleListStore.fetch({
       keyword: props.keyword,
@@ -45,7 +46,7 @@
 
 <template>
   <div class="search-flow-page">
-    <article-list-header icon="icon-search">
+    <article-list-header icon-name="icon-search">
       {{ pageDescription }}
     </article-list-header>
     <article-list

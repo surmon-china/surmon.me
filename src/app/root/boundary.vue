@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { onErrorCaptured } from 'vue'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
   import { useEnhancer } from '/@/app/enhancer'
   import { resolvePageLayout } from '/@/constants/page-layout'
@@ -25,7 +25,7 @@
   <div class="app-boundary">
     <app-error v-if="globalState.error.value" :error="globalState.error.value" @resolve="handleResolveRoute">
       <template #resolve-text>
-        <i18n :k="LocaleKey.BACK_TO_HOME_PAGE" />
+        <i18n :k="LocalesKey.BACK_TO_HOME_PAGE" />
       </template>
     </app-error>
     <template v-else>

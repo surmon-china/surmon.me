@@ -11,13 +11,13 @@ import { useArchiveStore } from './archive'
 import { useCommentStore } from './comment'
 import { useCategoryStore } from './category'
 import { useTagStore } from './tag'
-import { useGoLinkStore } from './go-link'
+import { useGoLinksStore } from './go-links'
 import { useIdentityStore } from './identity'
 import { useWallpaperStore } from './wallpaper'
 import { useGitHubSponsorsStore } from './sponsors'
-import { useAdminProfileStore, useAppOptionStore } from './basic'
-import { useNodepressStatisticStore, useGitHubStatisticStore, useNpmStatisticStore } from './statistic'
-import { useArticleCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
+import { useAdminProfileStore, useAppOptionsStore } from './basic'
+import { useNodepressStatisticsStore, useGitHubStatisticsStore, useNpmStatisticsStore } from './statistics'
+import { useArticlesCalendarStore, useInstagramCalendarStore, useGitHubCalendarStore } from './calendar'
 import {
   useDoubanMoviesStore,
   useThreadsProfileStore,
@@ -35,44 +35,42 @@ import {
 } from './article'
 
 export const useStores = (pinia?: Pinia) => ({
-  hottestArticleList: useHottestArticleListStore(pinia),
-  featuredArticleList: useFeaturedArticleListStore(pinia),
-  latestArticleList: useLatestArticleListStore(pinia),
+  hottestArticleListStore: useHottestArticleListStore(pinia),
+  featuredArticleListStore: useFeaturedArticleListStore(pinia),
+  latestArticleListStore: useLatestArticleListStore(pinia),
 
   // BIZ
-  articleList: useArticleListStore(pinia),
-  articleDetail: useArticleDetailStore(pinia),
-  announcement: useAnnouncementStore(pinia),
-  category: useCategoryStore(pinia),
-  tag: useTagStore(pinia),
-  comment: useCommentStore(pinia),
-  archive: useArchiveStore(pinia),
-  identity: useIdentityStore(pinia),
-  adminProfile: useAdminProfileStore(pinia),
-  appOption: useAppOptionStore(pinia),
-  wallpaper: useWallpaperStore(pinia),
+  articleListStore: useArticleListStore(pinia),
+  articleDetailStore: useArticleDetailStore(pinia),
+  announcementStore: useAnnouncementStore(pinia),
+  categoryStore: useCategoryStore(pinia),
+  tagStore: useTagStore(pinia),
+  commentStore: useCommentStore(pinia),
+  archiveStore: useArchiveStore(pinia),
+  identityStore: useIdentityStore(pinia),
+  adminProfileStore: useAdminProfileStore(pinia),
+  appOptionsStore: useAppOptionsStore(pinia),
+  wallpaperStore: useWallpaperStore(pinia),
 
-  // link map
-  goLink: useGoLinkStore(pinia),
-
-  // sponsor
-  githubSponsors: useGitHubSponsorsStore(pinia),
+  // links map
+  goLinksStore: useGoLinksStore(pinia),
 
   // statistic
-  nodepressStatistic: useNodepressStatisticStore(pinia),
-  githubStatistic: useGitHubStatisticStore(pinia),
-  npmStatistic: useNpmStatisticStore(pinia),
+  nodepressStatisticsStore: useNodepressStatisticsStore(pinia),
+  githubStatisticsStore: useGitHubStatisticsStore(pinia),
+  npmStatisticsStore: useNpmStatisticsStore(pinia),
 
   // calendar
-  articleCalendar: useArticleCalendarStore(pinia),
-  instagramCalendar: useInstagramCalendarStore(pinia),
-  githubCalendar: useGitHubCalendarStore(pinia),
+  articlesCalendarStore: useArticlesCalendarStore(pinia),
+  instagramCalendarStore: useInstagramCalendarStore(pinia),
+  githubCalendarStore: useGitHubCalendarStore(pinia),
 
   // third
-  doubanMovies: useDoubanMoviesStore(pinia),
-  threadsProfile: useThreadsProfileStore(pinia),
-  threadsLatestMedias: useThreadsLatestMediasStore(pinia),
-  instagramProfile: useInstagramProfileStore(pinia),
-  instagramLatestMedias: useInstagramLatestMediasStore(pinia),
-  youtubePlayList: useYouTubePlayListStore(pinia)
+  githubSponsorsStore: useGitHubSponsorsStore(pinia),
+  doubanMoviesStore: useDoubanMoviesStore(pinia),
+  threadsProfileStore: useThreadsProfileStore(pinia),
+  threadsLatestMediasStore: useThreadsLatestMediasStore(pinia),
+  instagramProfileStore: useInstagramProfileStore(pinia),
+  instagramLatestMediasStore: useInstagramLatestMediasStore(pinia),
+  youtubePlayListStore: useYouTubePlayListStore(pinia)
 })

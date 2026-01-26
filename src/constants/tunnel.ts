@@ -22,6 +22,6 @@ export enum TunnelModule {
   DoubanMovies = 'douban_movies',
   GitHubSponsors = 'github_sponsors',
   GitHubContributions = 'github_contributions',
-  StatisticGitHubJson = 'statistic_github_json',
-  StatisticNpmJson = 'statistic_npm_json'
+  StatisticsGitHubJson = 'statistics_github_json',
+  StatisticsNpmJson = 'statistics_npm_json'
 }

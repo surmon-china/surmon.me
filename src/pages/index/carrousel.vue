@@ -2,7 +2,7 @@
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
   import { shallowRef, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import type { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -26,7 +26,7 @@
     count: 9
   })
 
-  const { i18n: _i18n, appConfig, cdnDomain } = useEnhancer()
+  const { appConfig, cdnDomain, i18n: _i18n } = useEnhancer()
   const getPictureURL = (url: string, format?: ImgProxyFormat) => {
     if (!isOriginalStaticURL(url)) {
       return url
@@ -66,7 +66,7 @@
       title: article.title,
       route: getArticleDetailRoute(article.id),
       image: article.thumbnail || getAssetURL(cdnDomain, '/images/thumbnail/carrousel.jpg'),
-      subscript: article.featured ? _i18n.t(LocaleKey.ARTICLE_FEATURED) : undefined
+      subscript: article.featured ? _i18n.t(LocalesKey.ARTICLE_FEATURED) : undefined
     }))
     if (!result.length) {
       return []
@@ -79,7 +79,7 @@
         title: config.title,
         image: config.src,
         url: config.url,
-        subscript: _i18n.t(LocaleKey.AD)
+        subscript: _i18n.t(LocalesKey.AD)
       })
     }
     return result
@@ -91,7 +91,7 @@
     <placeholder :data="slides.length" :loading="fetching">
       <template #placeholder>
         <empty class="article-empty" bold key="empty">
-          <i18n :k="LocaleKey.ARTICLE_PLACEHOLDER" />
+          <i18n :k="LocalesKey.ARTICLE_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>

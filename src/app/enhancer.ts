@@ -14,7 +14,7 @@ import { useTheme, Theme } from '/@/composables/theme'
 import { useDefer, Defer } from '/@/composables/defer'
 import type { Popup } from '/@/composables/popup'
 import { usePopup } from '/@/composables/popup/hook'
-import { useAppOptionStore } from '/@/stores/basic'
+import { useAppOptionsStore } from '/@/stores/basic'
 import { isCNCode } from '/@/transforms/region'
 import { isClient } from '/@/configs/app.env'
 import { Language } from '/@/locales'
@@ -25,12 +25,12 @@ export const useEnhancer = () => {
   const i18n = useI18n()
   const theme = useTheme()
   const globalState = useGlobalState()
-  const appOptionStore = useAppOptionStore()
+  const appOptionsStore = useAppOptionsStore()
 
   const cdnDomain = useCdnDomain()
   const countryCode = useCountryCode()
 
-  const appConfig = computed(() => appOptionStore.appConfig)
+  const appConfig = computed(() => appOptionsStore.appConfig)
   const isZhLang = computed(() => i18n.language.value === Language.Chinese)
 
   return {

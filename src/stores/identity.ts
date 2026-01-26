@@ -25,7 +25,7 @@ interface IdentityState {
     disqusProfile: any | null
   }
   vote: {
-    likedPages: number[]
+    likedArticles: number[]
     likedComments: number[]
     dislikedComments: number[]
   }
@@ -45,7 +45,7 @@ export const useIdentityStore = defineStore('identity', () => {
   })
   // vote history
   const vote = reactive({
-    likedPages: [] as number[],
+    likedArticles: [] as number[],
     likedComments: [] as number[],
     dislikedComments: [] as number[]
   })
@@ -53,7 +53,7 @@ export const useIdentityStore = defineStore('identity', () => {
   const feedbacks = reactive<any[]>([])
 
   // getters
-  const isLikedPage = computed(() => (id: number) => vote.likedPages.includes(id))
+  const isLikedArticle = computed(() => (id: number) => vote.likedArticles.includes(id))
   const isLikedComment = computed(() => (id: number) => vote.likedComments.includes(id))
   const isDislikedComment = computed(() => (id: number) => vote.dislikedComments.includes(id))
   const author = computed<Author | null>(() => {
@@ -77,8 +77,8 @@ export const useIdentityStore = defineStore('identity', () => {
     vote.dislikedComments.push(commentId)
   }
 
-  const likePage = (id: number) => {
-    vote.likedPages.push(id)
+  const likeArticle = (id: number) => {
+    vote.likedArticles.push(id)
   }
 
   const addFeedback = (data) => {
@@ -124,9 +124,11 @@ export const useIdentityStore = defineStore('identity', () => {
     user.type = state.user.type
     user.localProfile = state.user.localProfile
     user.disqusProfile = state.user.disqusProfile
-    vote.likedPages = state.vote.likedPages
-    vote.likedComments = state.vote.likedComments
-    vote.dislikedComments = state.vote.dislikedComments
+    // @ts-ignore
+    // MARK: Read `likedPages` to maintain backward compatibility with legacy data.
+    vote.likedArticles = state.vote.likedArticles ?? state.vote.likedPages ?? []
+    vote.likedComments = state.vote.likedComments ?? []
+    vote.dislikedComments = state.vote.dislikedComments ?? []
     feedbacks.splice(0, feedbacks.length, ...state.feedbacks)
   }
 
@@ -176,12 +178,12 @@ export const useIdentityStore = defineStore('identity', () => {
     vote,
     feedbacks,
     author,
-    isLikedPage,
+    isLikedArticle,
     isLikedComment,
     isDislikedComment,
     likeComment,
     dislikeComment,
-    likePage,
+    likeArticle,
     addFeedback,
     saveLocalUser,
     removeLocalUser,

@@ -3,10 +3,9 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
-  import { useThreadsLatestMediasStore } from '/@/stores/media'
   import { useThreadsMediasRequest } from '../threads'
   import { i18nTitle, useSnippetsPageMeta } from '../shared'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { IDENTITIES } from '/@/configs/app.config'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
   import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
@@ -14,18 +13,17 @@
   import Loadmore from '/@/components/common/loadmore.vue'
   import ThreadsCard from './card-threads.vue'
 
-  const { goLink } = useStores()
   const { popup } = useEnhancer()
-  const { fetching, fetchMedias } = useThreadsMediasRequest()
-  const latestThreadsStore = useThreadsLatestMediasStore()
+  const { goLinksStore, threadsLatestMediasStore } = useStores()
 
   const masonryRef = shallowRef<MasonryRef<ThreadsMedia>>()
   const lastPaging = shallowRef<ThreadsMediaListResponse['paging'] | null>(null)
   const noMoreData = shallowRef(false)
 
+  const { fetchMedias, fetching } = useThreadsMediasRequest()
   const fetchNextPageThreadsMedias = async () => {
-    if (latestThreadsStore.fetching || fetching.value || noMoreData.value) return
-    const secondPage = latestThreadsStore.data?.paging.cursors.after
+    if (threadsLatestMediasStore.fetching || fetching.value || noMoreData.value) return
+    const secondPage = threadsLatestMediasStore.data?.paging.cursors.after
     const nextPage = lastPaging.value?.cursors?.after
     const response = await fetchMedias(nextPage ?? secondPage)
     lastPaging.value = response.paging
@@ -34,20 +32,20 @@
   }
 
   useSnippetsPageMeta()
-  useUniversalFetch(() => latestThreadsStore.fetch())
+  useUniversalFetch(() => threadsLatestMediasStore.fetch())
 </script>
 
 <template>
   <div class="snippets-page">
     <page-banner :is-mobile="true" image="/images/page-snippets/banner-mobile.webp" :image-position="80" cdn>
       <template #title>
-        <webfont bolder><i18n :k="LocaleKey.PAGE_SNIPPETS" /></webfont>
+        <webfont bolder><i18n :k="LocalesKey.PAGE_SNIPPETS" /></webfont>
       </template>
       <template #description>
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>
     </page-banner>
-    <placeholder :data="latestThreadsStore.data?.data" :loading="latestThreadsStore.fetching">
+    <placeholder :data="threadsLatestMediasStore.data?.data" :loading="threadsLatestMediasStore.fetching">
       <template #loading>
         <div class="snippets-loading" key="loading">
           <div class="socials">
@@ -63,7 +61,7 @@
       <template #default>
         <div class="snippets-content">
           <div class="socials">
-            <ulink class="item" :href="goLink.map.threads">
+            <ulink class="item" :href="goLinksStore.map.threads">
               <p class="label">
                 <i class="iconfont icon-threads"></i>
                 <span class="text">Threads</span>
@@ -71,7 +69,7 @@
               <p class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</p>
             </ulink>
             <divider type="vertical" />
-            <ulink class="item" :href="goLink.map.zhihu">
+            <ulink class="item" :href="goLinksStore.map.zhihu">
               <p class="label">
                 <i class="iconfont icon-zhihu-full"></i>
                 <span class="text">回答</span>
@@ -83,7 +81,7 @@
             row-gap="1.2rem"
             col-gap="1.4rem"
             :columns="2"
-            :initial-items="latestThreadsStore.data?.data || []"
+            :initial-items="threadsLatestMediasStore.data?.data || []"
             :ssr-initial-render="true"
             @mounted="masonryRef = $event"
           >
@@ -92,7 +90,7 @@
             </template>
           </masonry-wall>
           <loadmore
-            v-if="!latestThreadsStore.fetching && !noMoreData"
+            v-if="!threadsLatestMediasStore.fetching && !noMoreData"
             class="loadmore"
             :loading="fetching"
             @loadmore="fetchNextPageThreadsMedias"

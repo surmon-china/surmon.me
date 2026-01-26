@@ -6,7 +6,7 @@
   import { Language } from '/@/locales'
   import Wallpapers from './wall.vue'
 
-  const { i18n: _i18n, gtag } = useEnhancer()
+  const { gtag, i18n: _i18n } = useEnhancer()
   const wallpaperStore = useWallpaperStore()
   const isOnWallpaper = ref(false)
 

@@ -26,7 +26,7 @@ import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { setStaticTitler, resetTitler } from '/@/effects/titler'
 import { resolvePageLayout } from '/@/constants/page-layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
-import { Language, LocaleKey } from '/@/locales'
+import { Language, LocalesKey } from '/@/locales'
 import { APP_VERSION, isDev, isProd } from './configs/app.env'
 import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
 
@@ -117,9 +117,9 @@ router.isReady().finally(() => {
     // reset i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init user identity state
-    store.stores.identity.initOnClient()
+    store.stores.identityStore.initOnClient()
     // init go url map state
-    store.stores.goLink.fetchRemoteLinkMap()
+    store.stores.goLinksStore.fetchRemoteLinksMap()
     // title surprise (desktop only)
     if (!globalState.userAgent.isMobile) {
       document.addEventListener(
@@ -142,7 +142,7 @@ router.isReady().finally(() => {
     }
     // production only
     if (isProd) {
-      consoleSlogan(i18n.t(LocaleKey.APP_SLOGAN)!, store.stores.appOption.data?.site_email)
+      consoleSlogan(i18n.t(LocalesKey.APP_SLOGAN)!, store.stores.appOptionsStore.data?.site_email)
     }
   })
 })

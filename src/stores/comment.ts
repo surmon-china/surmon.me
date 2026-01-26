@@ -10,7 +10,7 @@ import nodepress from '/@/services/nodepress'
 import { isClient } from '/@/configs/app.env'
 import { Comment } from '/@/interfaces/comment'
 import { Pagination, PaginationList } from '/@/interfaces/common'
-import { SortType, CommentParentId } from '/@/constants/biz-state'
+import { SortMode, CommentParentId } from '/@/constants/biz-state'
 import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
 
@@ -19,7 +19,7 @@ export const COMMENT_API_PATH = '/comment'
 export interface CommentFetchParams {
   page?: number
   per_page?: number
-  sort?: SortType
+  sort?: SortMode
   [key: string]: any
 }
 
@@ -76,7 +76,7 @@ export const useCommentStore = defineStore('comment', () => {
     params = {
       page: 1,
       per_page: 50,
-      sort: SortType.Desc,
+      sort: SortMode.Latest,
       ...params
     }
 

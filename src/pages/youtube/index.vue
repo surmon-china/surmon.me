@@ -5,16 +5,16 @@
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
   import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import PageBanner from '/@/components/common/banner.vue'
   import YoutubeSkeleton from './skeleton.vue'
   import YoutubePlaylist from './playlist.vue'
 
   const { isZhLang } = useEnhancer()
-  const { youtubePlayList, goLink } = useStores()
+  const { youtubePlayListStore, goLinksStore } = useStores()
   const youtubePlaylistData = computed(() => {
-    return youtubePlayList.data.filter((list) => list.contentDetails.itemCount > 1)
+    return youtubePlayListStore.data.filter((list) => list.contentDetails.itemCount > 1)
   })
 
   usePageSeo(() => {
@@ -24,7 +24,7 @@
     }
   })
 
-  useUniversalFetch(() => youtubePlayList.fetch())
+  useUniversalFetch(() => youtubePlayListStore.fetch())
 </script>
 
 <template>
@@ -37,7 +37,7 @@
       </template>
       <template #description>
         <div class="links">
-          <ulink class="item youtube" title="YouTube Channel" :href="goLink.map.youtube">
+          <ulink class="item youtube" title="YouTube Channel" :href="goLinksStore.map.youtube">
             <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
           </ulink>
         </div>
@@ -53,7 +53,7 @@
                 {{ list.snippet.title }}
                 ({{ list.contentDetails.itemCount }})
               </ulink>
-              <ulink class="brand" :href="goLink.map.youtube">
+              <ulink class="brand" :href="goLinksStore.map.youtube">
                 <i class="iconfont icon-youtube"></i>
                 <span class="text">YouTube · Channel</span>
               </ulink>
@@ -64,7 +64,7 @@
           </template>
           <template #empty>
             <empty class="module-empty" key="empty">
-              <i18n :k="LocaleKey.EMPTY_PLACEHOLDER" />
+              <i18n :k="LocalesKey.EMPTY_PLACEHOLDER" />
             </empty>
           </template>
         </youtube-playlist>

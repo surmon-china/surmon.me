@@ -6,7 +6,7 @@
 
 import { createRouter } from 'vue-router'
 import type { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory } from 'vue-router'
-import { LocaleKey } from '/@/locales'
+import { LocalesKey } from '/@/locales'
 import { PageLayout } from '/@/constants/page-layout'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/http-code'
 import { isValidDateParam } from '/@/transforms/validate'
@@ -107,7 +107,7 @@ export const routes: RouteRecordRaw[] = [
         if (!Number.isInteger(Number(route.params.article_id))) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Article ID (number)'
+            message: i18n.t(LocalesKey.QUERY_PARAMS_ERROR) + 'Invalid Article ID (number)'
           })
         }
       }
@@ -132,7 +132,7 @@ export const routes: RouteRecordRaw[] = [
         if (!category_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Category slug (string)'
+            message: i18n.t(LocalesKey.QUERY_PARAMS_ERROR) + 'Invalid Category slug (string)'
           })
         }
       }
@@ -157,7 +157,7 @@ export const routes: RouteRecordRaw[] = [
         if (!tag_slug) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid Tag slug (string)'
+            message: i18n.t(LocalesKey.QUERY_PARAMS_ERROR) + 'Invalid Tag slug (string)'
           })
         }
       }
@@ -182,7 +182,7 @@ export const routes: RouteRecordRaw[] = [
         if (!date || !isValidDateParam(date)) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Invalid date (YYYY-MM-DD)'
+            message: i18n.t(LocalesKey.QUERY_PARAMS_ERROR) + 'Invalid date (YYYY-MM-DD)'
           })
         }
       }
@@ -206,7 +206,7 @@ export const routes: RouteRecordRaw[] = [
         if (!route.params.keyword) {
           return Promise.reject({
             code: BAD_REQUEST,
-            message: i18n.t(LocaleKey.QUERY_PARAMS_ERROR) + 'Missing search keywords'
+            message: i18n.t(LocalesKey.QUERY_PARAMS_ERROR) + 'Missing search keywords'
           })
         }
       }
@@ -325,7 +325,7 @@ export const routes: RouteRecordRaw[] = [
       async validator({ i18n }) {
         return Promise.reject({
           code: NOT_FOUND,
-          message: i18n.t(LocaleKey.NOT_FOUND)
+          message: i18n.t(LocalesKey.NOT_FOUND)
         })
       }
     }

@@ -12,11 +12,11 @@
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { adminProfile, appOption, goLink } = useStores()
   const { isZhLang, cdnDomain, appConfig, globalState } = useEnhancer()
+  const { adminProfileStore, appOptionsStore, goLinksStore } = useStores()
 
   const emailLink = getEmailLink({
-    email: appOption.data?.site_email!,
+    email: appOptionsStore.data?.site_email!,
     subject: `Hello, ${APP_PROFILE.author}!`,
     body: 'Hi, I am writing to you from your website.'
   })
@@ -43,30 +43,30 @@
     <div class="content">
       <div class="fullwidth">
         <div class="profile">
-          <uimage class="avatar" :src="useAdminAvatar(adminProfile.data?.avatar)" />
+          <uimage class="avatar" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
           <div class="right">
-            <h1 class="name">{{ adminProfile.data?.name || '-' }}</h1>
-            <p class="slogan">{{ adminProfile.data?.slogan || '-' }}</p>
+            <h1 class="name">{{ adminProfileStore.data?.name || '-' }}</h1>
+            <p class="slogan">{{ adminProfileStore.data?.slogan || '-' }}</p>
           </div>
         </div>
         <p class="description">
           <webfont bolder>{{ isZhLang ? APP_PROFILE.description_zh : APP_PROFILE.description_en }}</webfont>
         </p>
         <div class="socials">
-          <ulink class="item icon-only instagram" title="Instagram" :href="goLink.map.instagram">
+          <ulink class="item icon-only instagram" title="Instagram" :href="goLinksStore.map.instagram">
             <i class="iconfont icon-instagram" />
           </ulink>
-          <ulink class="item icon-only threads" title="Threads" :href="goLink.map.threads">
+          <ulink class="item icon-only threads" title="Threads" :href="goLinksStore.map.threads">
             <i class="iconfont icon-threads" />
           </ulink>
-          <ulink class="item with-text github" :href="goLink.map.github">
+          <ulink class="item with-text github" :href="goLinksStore.map.github">
             <i class="iconfont icon-github" />
             <span class="text">GitHub</span>
           </ulink>
-          <ulink class="item icon-only youtube" title="YouTube" :href="goLink.map.youtube">
+          <ulink class="item icon-only youtube" title="YouTube" :href="goLinksStore.map.youtube">
             <i class="iconfont icon-youtube" />
           </ulink>
-          <ulink class="item icon-only telegram" title="Telegram" :href="goLink.map.telegram">
+          <ulink class="item icon-only telegram" title="Telegram" :href="goLinksStore.map.telegram">
             <i class="iconfont icon-telegram" />
           </ulink>
           <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
@@ -86,13 +86,13 @@
               </popup>
             </client-only>
           </button>
-          <ulink class="item icon-only linkedin" title="LinkedIn" :href="goLink.map.linkedin">
+          <ulink class="item icon-only linkedin" title="LinkedIn" :href="goLinksStore.map.linkedin">
             <i class="iconfont icon-linkedin" />
           </ulink>
-          <ulink class="item icon-only zhihu" title="知乎回答" :href="goLink.map.zhihu">
+          <ulink class="item icon-only zhihu" title="知乎回答" :href="goLinksStore.map.zhihu">
             <i class="iconfont icon-zhihu" />
           </ulink>
-          <ulink class="item icon-only douban" title="豆瓣" :href="goLink.map.douban">
+          <ulink class="item icon-only douban" title="豆瓣" :href="goLinksStore.map.douban">
             <i class="iconfont icon-douban" />
           </ulink>
           <ulink class="item icon-only email" title="Email me" :href="emailLink">

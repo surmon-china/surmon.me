@@ -2,7 +2,7 @@
   import { storeToRefs } from 'pinia'
   import { ref, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { Author } from '/@/interfaces/comment'
   import { APP_CONFIG } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
@@ -36,7 +36,7 @@
     (e: PublisherEvents.UpdateProfile, profile: Author): void
   }>()
 
-  const { i18n: _i18n, gtag, cdnDomain, isCNUser } = useEnhancer()
+  const { gtag, cdnDomain, isCNUser, i18n: _i18n } = useEnhancer()
   const { user } = storeToRefs(useIdentityStore())
   const defaultAvatar = getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
   const avatar = computed(() => {
@@ -97,7 +97,7 @@
             name="name"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_NAME) + ' *'"
+            :placeholder="_i18n.t(LocalesKey.COMMENT_POST_NAME) + ' *'"
           />
         </div>
         <div class="email">
@@ -109,7 +109,7 @@
             name="email"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_EMAIL) + ' *'"
+            :placeholder="_i18n.t(LocalesKey.COMMENT_POST_EMAIL) + ' *'"
           />
         </div>
         <div class="site">
@@ -120,7 +120,7 @@
             name="url"
             autocomplete="on"
             :disabled="disabled"
-            :placeholder="_i18n.t(LocaleKey.COMMENT_POST_SITE)"
+            :placeholder="_i18n.t(LocalesKey.COMMENT_POST_SITE)"
           />
         </div>
       </div>

@@ -15,7 +15,7 @@
       </div>
       <div class="content">
         <p class="title">{{ prev.title }}</p>
-        <p class="description">{{ prev.description }}</p>
+        <p class="summary">{{ prev.summary }}</p>
       </div>
     </router-link>
     <div v-else class="null">
@@ -24,7 +24,7 @@
     <router-link v-if="next" class="link next" :title="next.title" :to="getArticleDetailRoute(next.id)">
       <div class="content">
         <p class="title">{{ next.title }}</p>
-        <p class="description">{{ next.description }}</p>
+        <p class="summary">{{ next.summary }}</p>
       </div>
       <div class="icon">
         <i class="iconfont icon-next"></i>
@@ -77,7 +77,7 @@
           .title {
             color: $color-link;
           }
-          .description {
+          .summary {
             color: $color-text-secondary;
           }
         }
@@ -113,7 +113,7 @@
         padding: $gap-sm $gap;
 
         .title,
-        .description {
+        .summary {
           display: block;
           width: 100%;
           transition: color $motion-duration-fast;
@@ -128,7 +128,7 @@
           color: $color-text;
         }
 
-        .description {
+        .summary {
           margin-bottom: 0;
           font-size: $font-size-small;
           color: $color-text-disabled;

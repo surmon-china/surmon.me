@@ -2,12 +2,12 @@
   import { ref, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { isSearchFlow } from '/@/transforms/route'
 
-  const { i18n: _i18n, gtag, route, router } = useEnhancer()
+  const { gtag, route, router, i18n: _i18n } = useEnhancer()
   const formElement = ref<HTMLFormElement>()
   const keyword = ref('')
 
@@ -54,7 +54,7 @@
         autocomplete="off"
         v-model.trim="keyword"
         :class="_i18n.language"
-        :placeholder="_i18n.t(LocaleKey.SEARCH_PLACEHOLDER)"
+        :placeholder="_i18n.t(LocalesKey.SEARCH_PLACEHOLDER)"
         @keyup.enter="handleSearch"
       />
       <button type="submit" class="search-btn" @click="handleSearch">

@@ -13,7 +13,7 @@
   }>()
 
   const { isZhLang } = useEnhancer()
-  const { articleList: articleListStore } = useStores()
+  const { articleListStore } = useStores()
 
   const loadmoreArticles = async () => {
     await articleListStore.fetch({
@@ -48,7 +48,7 @@
 
 <template>
   <div class="date-flow-page">
-    <article-list-header icon="icon-clock">
+    <article-list-header icon-name="icon-clock">
       {{ pageDescription }}
     </article-list-header>
     <article-list

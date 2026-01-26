@@ -2,13 +2,13 @@
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { Theme } from '/@/composables/theme'
-  import { Language, LocaleKey } from '/@/locales'
+  import { Language, LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { HEADER_ELEMENT_ID } from '/@/constants/element-anchor'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { menus } from './menu'
 
-  const { i18n: _i18n, gtag, theme, globalState } = useEnhancer()
+  const { gtag, theme, globalState, i18n: _i18n } = useEnhancer()
   // enable header nav bar when full page layout
   const isEnabledNav = computed(() => !globalState.pageLayout.value.isNormal)
 
@@ -57,7 +57,7 @@
       <div class="header-header">
         <uimage cdn src="/images/logo.svg" class="header-logo" :alt="APP_PROFILE.title" />
         <webfont class="header-slogan">
-          <i18n :k="LocaleKey.APP_SLOGAN" />
+          <i18n :k="LocalesKey.APP_SLOGAN" />
         </webfont>
         <router-link to="/" class="header-link" :title="APP_PROFILE.title" @mousedown="handleRootNavEvent" />
       </div>

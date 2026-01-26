@@ -2,16 +2,15 @@
   import { ref, onMounted } from 'vue'
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useGitHubStatisticStore } from '/@/stores/statistic'
   import StatisticBase, { StatisticCount } from './base.vue'
 
-  const { goLink } = useStores()
   const { isZhLang } = useEnhancer()
-  const store = useGitHubStatisticStore()
-  const fetching = ref(true)
+  const { goLinksStore, githubStatisticsStore } = useStores()
+  const isFetching = ref(true)
+
   onMounted(() => {
-    store.fetch().finally(() => {
-      fetching.value = false
+    githubStatisticsStore.fetch().finally(() => {
+      isFetching.value = false
     })
   })
 </script>
@@ -20,29 +19,29 @@
   <statistic-base
     brand="github"
     icon="icon-github"
-    :data="store.data"
-    :fetching="fetching"
-    :href="goLink.map.github"
+    :fetching="isFetching"
+    :data="githubStatisticsStore.data"
+    :href="goLinksStore.map.github"
     :platform="isZhLang ? '我在 GitHub' : 'GitHub'"
   >
     <p>
       <i class="iconfont icon-star-outlined"></i>
       <span v-if="isZhLang">共获得</span>
-      <statistic-count large primary split :count="store.data?.totalStarCount" />
+      <statistic-count large primary split :count="githubStatisticsStore.data?.totalStarCount" />
       <span v-if="isZhLang">个 star</span>
       <span v-else>stars earned</span>
     </p>
     <p>
       <i class="iconfont icon-repository"></i>
       <span v-if="isZhLang">共维护</span>
-      <statistic-count :count="store.data?.repositoryCount" />
+      <statistic-count :count="githubStatisticsStore.data?.repositoryCount" />
       <span v-if="isZhLang">个开源项目</span>
       <span v-else>open-source repos</span>
     </p>
     <p>
       <i class="iconfont icon-organization"></i>
       <span v-if="isZhLang">维护/发起</span>
-      <statistic-count :count="store.data?.organizationCount" />
+      <statistic-count :count="githubStatisticsStore.data?.organizationCount" />
       <span v-if="isZhLang">个开源组织</span>
       <span v-else>organizations</span>
     </p>

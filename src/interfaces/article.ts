@@ -1,27 +1,32 @@
 import { Language } from '/@/locales'
-import { OriginState } from '/@/constants/biz-state'
-import { UniversalKeyValue } from './common'
+import { ExtraKeyValue } from './common'
 import { Category } from './category'
 import { Tag } from './tag'
 
-export enum ArticleLang {
-  Chinese = 'zh', // 简体中文
-  English = 'en', // English
-  Mixed = 'mix' // 多语言混合
+export enum ArticleOrigin {
+  Original = 0, // 原创
+  Reprint = 1, // 转载
+  Hybrid = 2 // 混合
 }
 
-export const ArticleLangI18n: Record<ArticleLang, Record<Language, string>> = {
-  [ArticleLang.Chinese]: {
+export enum ArticleLanguage {
+  Chinese = 'zh', // 简体中文
+  English = 'en', // English
+  Multiple = 'mul' // 多语言混合
+}
+
+export const ArticleLanguageI18n: Record<ArticleLanguage, Record<Language, string>> = {
+  [ArticleLanguage.Chinese]: {
     [Language.Chinese]: '中文',
     [Language.English]: 'ZH'
   },
-  [ArticleLang.English]: {
+  [ArticleLanguage.English]: {
     [Language.Chinese]: '英文',
     [Language.English]: 'EN'
   },
-  [ArticleLang.Mixed]: {
+  [ArticleLanguage.Multiple]: {
     [Language.Chinese]: '多语',
-    [Language.English]: 'MIX'
+    [Language.English]: 'MUL'
   }
 }
 
@@ -29,22 +34,22 @@ export interface Article {
   _id: string
   id: number
   title: string
-  description: string
+  summary: string
   keywords: string[]
   content: string
   thumbnail: string
-  origin: OriginState
-  lang: ArticleLang
+  origin: ArticleOrigin
+  lang: ArticleLanguage
   featured: boolean
   disabled_comments: boolean
   tags: Tag[]
   categories: Category[]
-  meta: {
+  stats: {
     likes: number
     views: number
     comments: number
   }
+  extras: ExtraKeyValue[]
   updated_at: string
   created_at: string
-  extends: UniversalKeyValue[]
 }

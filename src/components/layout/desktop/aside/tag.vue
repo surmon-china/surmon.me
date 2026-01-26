@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { useTagStore, getTagEnName, getTagIconName } from '/@/stores/tag'
   import { getTagFlowRoute } from '/@/transforms/route'
 
@@ -8,7 +8,11 @@
 
 <template>
   <div class="tags">
-    <placeholder :data="tagStore.sorted.length" :fetching="tagStore.fetching" :i18n-key="LocaleKey.TAG_PLACEHOLDER">
+    <placeholder
+      :data="tagStore.sorted.length"
+      :fetching="tagStore.fetching"
+      :i18n-key="LocalesKey.TAG_PLACEHOLDER"
+    >
       <template #loading>
         <ul class="tag-list-skeleton" key="skeleton">
           <li v-for="item in 14" :key="item" class="item">
@@ -25,7 +29,7 @@
             :key="index"
             v-for="(tag, index) in tagStore.sorted"
           >
-            <i class="iconfont" :class="getTagIconName(tag)" />
+            <i class="iconfont" :class="getTagIconName(tag.extras)" />
             <span class="name">
               <i18n :zh="tag.name" :en="getTagEnName(tag)" />
               <span class="count">({{ tag.article_count || 0 }})</span>

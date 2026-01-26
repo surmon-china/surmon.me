@@ -8,17 +8,16 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { firstUpperCase } from '/@/transforms/text'
-import { getExtendValue } from '/@/transforms/state'
 import { Tag } from '/@/interfaces/tag'
 import nodepress from '/@/services/nodepress'
 
-export const getTagIconName = (tag: Tag) => {
-  return getExtendValue(tag.extends || [], 'icon') || 'icon-tag'
+export const getTagIconName = (tagExtras: Tag['extras'] | undefined) => {
+  return tagExtras?.find(({ key }) => key === 'icon-name')?.value ?? 'icon-tag'
 }
 
 export const getTagEnName = (tag: Tag) => {
   // tag extras custom en-name
-  const tagEnName = tag.extends.find((item) => item.name === 'en-name')
+  const tagEnName = tag.extras.find(({ key }) => key === 'en-name')
   if (tagEnName) {
     return tagEnName.value
   }
@@ -34,7 +33,6 @@ export const getTagEnName = (tag: Tag) => {
   return firstUpperCase(tag.slug)
 }
 
-export type TagMap = Map<string, Tag>
 export const useTagStore = defineStore('tag', () => {
   const fetchStore = createFetchStore<Tag[]>({
     once: true,
@@ -53,16 +51,16 @@ export const useTagStore = defineStore('tag', () => {
   })
 
   // full list of tags (origin/lowercase/uppercase/CamelCase)
-  const fullNameTags = computed(() => {
-    const tagMap: TagMap = new Map()
-    fetchStore.data.value.forEach((tag) => {
-      tagMap.set(tag.name, tag)
-      tagMap.set(tag.name.toLowerCase(), tag)
-      tagMap.set(tag.name.toUpperCase(), tag)
-      tagMap.set(firstUpperCase(tag.name), tag)
-    })
-    return tagMap
-  })
+  // const fullNamesTagsMap = computed(() => {
+  //   const map = new Map<string, Tag>()
+  //   fetchStore.data.value.forEach((tag) => {
+  //     map.set(tag.name, tag)
+  //     map.set(tag.name.toLowerCase(), tag)
+  //     map.set(tag.name.toUpperCase(), tag)
+  //     map.set(firstUpperCase(tag.name), tag)
+  //   })
+  //   return map
+  // })
 
-  return { ...fetchStore, sorted, fullNameTags }
+  return { ...fetchStore, sorted }
 })

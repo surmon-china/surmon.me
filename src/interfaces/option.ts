@@ -1,5 +1,3 @@
-import { UniversalKeyValue } from './common'
-
 export interface AppRemoteConfig {
   [key: string]: any
   ABOUT_BIOGRAPHY_ZH?: string
@@ -33,16 +31,15 @@ export interface AppRemoteConfig {
   }>
 }
 
-export interface AppOption {
+export interface AppOptions {
   title: string
   sub_title: string
   description: string
   keywords: Array<string>
   site_url: string
   site_email: string
-  meta: { likes: number }
   statement: string
-  friend_links: Array<UniversalKeyValue>
+  friend_links: Array<{ name: string; url: string }>
   app_config: string
 }
 

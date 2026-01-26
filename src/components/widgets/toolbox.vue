@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
 
-  const { i18n: _i18n, gtag, globalState } = useEnhancer()
+  const { gtag, globalState, i18n: _i18n } = useEnhancer()
 
   const animationFrameId = ref(0)
   const isTopButtonMouseOver = ref(false)
@@ -73,7 +73,7 @@
   <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
-        <button class="feedback" :title="_i18n.t(LocaleKey.FEEDBACK)" @click="handleFeedbackClick">
+        <button class="feedback" :title="_i18n.t(LocalesKey.FEEDBACK)" @click="handleFeedbackClick">
           <i class="iconfont icon-feedback" />
         </button>
         <button class="ai" @click="handleAiClick">
@@ -82,7 +82,7 @@
         </button>
         <button
           class="to-page-top"
-          :title="_i18n.t(LocaleKey.TO_TOP)"
+          :title="_i18n.t(LocalesKey.TO_TOP)"
           @click="scrollToPageTop"
           @mouseover="setTopButtonState(true, true)"
           @mouseleave="setTopButtonState(false)"
@@ -91,7 +91,7 @@
         </button>
         <button
           class="to-page-bottom"
-          :title="_i18n.t(LocaleKey.TO_BOTTOM)"
+          :title="_i18n.t(LocalesKey.TO_BOTTOM)"
           @click="scrollToNextScreen"
           @mouseover="setBottomButtonState(true, true)"
           @mouseleave="setBottomButtonState(false)"

@@ -3,19 +3,19 @@
   import { getEmailLink } from '/@/transforms/email'
   import Markdown from '/@/components/common/markdown.vue'
 
-  const { appOption } = useStores()
+  const { appOptionsStore } = useStores()
 </script>
 
 <template>
   <div class="statement">
     <div class="content">
-      <markdown :markdown="appOption.data?.statement" :compact="true" />
+      <markdown :markdown="appOptionsStore.data?.statement" :compact="true" />
       <br />
       <hr />
-      <p v-if="appOption.data" class="email">
-        <a :href="getEmailLink(appOption.data.site_email)" class="link" target="_blank">
+      <p v-if="appOptionsStore.data" class="email">
+        <a :href="getEmailLink(appOptionsStore.data.site_email)" class="link" target="_blank">
           <i class="iconfont icon-mail"></i>
-          <span class="text">{{ appOption.data.site_email }}</span>
+          <span class="text">{{ appOptionsStore.data.site_email }}</span>
         </a>
       </p>
     </div>

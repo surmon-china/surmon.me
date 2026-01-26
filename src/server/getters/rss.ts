@@ -40,7 +40,7 @@ export const getRssXml = async (cache: CacheStore) => {
   archiveData.articles.forEach((article) => {
     return feed.item({
       title: article.title,
-      description: article.description,
+      description: article.summary,
       url: getArticleURL(article.id),
       guid: String(article.id),
       categories: article.categories.map((category) => category.slug),

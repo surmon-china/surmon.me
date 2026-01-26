@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
 
   interface Props {
     hasData: boolean
@@ -29,7 +29,7 @@
     </template>
     <template #placeholder>
       <div class="list-empty">
-        <i18n :k="LocaleKey.COMMENT_LIST_EMPTY" />
+        <i18n :k="LocalesKey.COMMENT_LIST_EMPTY" />
       </div>
     </template>
     <template #default>

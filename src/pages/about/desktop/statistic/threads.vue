@@ -5,8 +5,8 @@
   import StatisticBase, { StatisticCount } from './base.vue'
 
   const { isZhLang } = useEnhancer()
-  const { goLink, threadsProfile } = useStores()
-  const fetching = ref(true)
+  const { goLinksStore, threadsProfileStore } = useStores()
+  const isFetching = ref(true)
 
   // MARK: hard code
   const joinedDate = new Date('2024-07-06')
@@ -21,8 +21,8 @@
   }
 
   onMounted(() => {
-    threadsProfile.fetch().finally(() => {
-      fetching.value = false
+    threadsProfileStore.fetch().finally(() => {
+      isFetching.value = false
     })
   })
 </script>
@@ -31,9 +31,9 @@
   <statistic-base
     brand="threads"
     icon="icon-threads"
-    :fetching="fetching"
-    :data="threadsProfile.data"
-    :href="goLink.map.threads"
+    :fetching="isFetching"
+    :data="threadsProfileStore.data"
+    :href="goLinksStore.map.threads"
     :platform="isZhLang ? '我在 Threads' : 'Threads'"
   >
     <p>
@@ -58,7 +58,7 @@
     <p>
       <i class="iconfont icon-follower"></i>
       <span v-if="isZhLang">获得了</span>
-      <statistic-count split :count="threadsProfile.data?.followersCount || '-'" />
+      <statistic-count split :count="threadsProfileStore.data?.followersCount || '-'" />
       <span v-if="isZhLang">位关注者</span>
       <span v-else>followers</span>
     </p>

@@ -2,7 +2,7 @@
   import { ref, watch, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
   import { VALUABLE_LINKS } from '/@/configs/app.config'
-  import { LocaleKey } from '/@/locales'
+  import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
   import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
@@ -147,7 +147,7 @@
           :autofocus="props.autoFocus"
           :minlength="MIN_COMMENT_LENGTH"
           :maxlength="MAX_COMMENT_LENGTH"
-          :placeholder="_i18n.t(LocaleKey.COMMENT_POST_PLACEHOLDER)"
+          :placeholder="_i18n.t(LocalesKey.COMMENT_POST_PLACEHOLDER)"
           @input="handleInputChange"
           @focus="disableCopyrighter"
           @blur="enableCopyrighter"

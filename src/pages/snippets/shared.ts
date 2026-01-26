@@ -1,4 +1,4 @@
-import { Language, LocaleKey } from '/@/locales'
+import { Language, LocalesKey } from '/@/locales'
 import { APP_PROFILE } from '/@/configs/app.config'
 import { useEnhancer } from '/@/app/enhancer'
 import { usePageSeo } from '/@/composables/head'
@@ -12,8 +12,8 @@ export const i18nTitle = {
 export const useSnippetsPageMeta = () => {
   const { i18n, isZhLang } = useEnhancer()
   usePageSeo(() => {
-    const enTitle = firstUpperCase(i18n.t(LocaleKey.PAGE_SNIPPETS, Language.English)!)
-    const titles = isZhLang.value ? [i18n.t(LocaleKey.PAGE_SNIPPETS)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(i18n.t(LocalesKey.PAGE_SNIPPETS, Language.English)!)
+    const titles = isZhLang.value ? [i18n.t(LocalesKey.PAGE_SNIPPETS)!, enTitle] : [enTitle]
     const description = isZhLang.value ? `${APP_PROFILE.author} 近期发布的片段` : `${APP_PROFILE.author}'s snippets`
     return {
       pageTitles: titles,

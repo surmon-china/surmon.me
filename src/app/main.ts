@@ -14,7 +14,7 @@ import { createAppError } from './error'
 import { createTheme, Theme } from '/@/composables/theme'
 import { createI18n } from '/@/composables/i18n'
 import { PageLayout } from '/@/constants/page-layout'
-import { Language, LocaleKey, locales } from '/@/locales'
+import { Language, LocalesKey, locales } from '/@/locales'
 import { APP_MODE, APP_VERSION, isServer } from '/@/configs/app.env'
 import API_CONFIG from '/@/configs/app.api'
 import register from './register'
@@ -69,7 +69,7 @@ export const createMainApp = (context: AppCreatorContext) => {
   const theme = createTheme(context.theme)
   const i18n = createI18n({
     default: globalState.userAgent.isZhUser ? Language.Chinese : Language.English,
-    keys: Object.values(LocaleKey),
+    keys: Object.values(LocalesKey),
     locales
   })
 

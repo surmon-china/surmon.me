@@ -7,13 +7,13 @@
 import axios from '@/server/services/axios'
 import { VALUABLE_LINKS } from '@/configs/app.config'
 
-export const fetchGitHubStatisticJSON = async <T = any>(fileName: string): Promise<T> => {
-  const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`
+export const fetchGitHubStatisticsJson = async <T = any>(fileName: string): Promise<T> => {
+  const url = `${VALUABLE_LINKS.GITHUB_STATISTICS_JSON_URL}${fileName}`
   const response = await axios.get<T>(url, { timeout: 8000 })
   return response.data
 }
 
-export interface GitHubStatistic {
+export interface GitHubStatistics {
   followerCount: number
   followingCount: number
   gistCount: number
@@ -23,8 +23,8 @@ export interface GitHubStatistic {
   totalCodeSize: number
 }
 
-export const getGitHubStatistic = () => {
-  return fetchGitHubStatisticJSON<any>('github.json').then((data) => ({
+export const getGitHubStatistics = () => {
+  return fetchGitHubStatisticsJson<any>('github.json').then((data) => ({
     followerCount: data.userinfo.followers,
     followingCount: data.userinfo.following,
     gistCount: data.userinfo.public_gists,
@@ -50,7 +50,7 @@ export interface GitHubSponsorsResponse {
 }
 
 export const getGitHubSponsors = () => {
-  return fetchGitHubStatisticJSON<GitHubSponsorsResponse>('github.sponsors.json')
+  return fetchGitHubStatisticsJson<GitHubSponsorsResponse>('github.sponsors.json')
 }
 
 export interface GitHubContributionDay {
@@ -68,5 +68,5 @@ export interface GitHubContributionsResponse {
 }
 
 export const getGitHubContributions = () => {
-  return fetchGitHubStatisticJSON<GitHubContributionsResponse>('github.contributions.json')
+  return fetchGitHubStatisticsJson<GitHubContributionsResponse>('github.contributions.json')
 }

@@ -19,7 +19,7 @@
   import { useAboutPageMeta, i18ns } from '../shared'
 
   const { gtag, globalState, appConfig } = useEnhancer()
-  const { adminProfile, appOption, goLink } = useStores()
+  const { adminProfileStore, appOptionsStore, goLinksStore } = useStores()
 
   const handleGTagEvent = (event: string) => {
     gtag?.event(event, {
@@ -45,7 +45,7 @@
   // meta
   useAboutPageMeta()
   // prefetch
-  useUniversalFetch(() => Promise.all([adminProfile.fetch(), appOption.fetch()]))
+  useUniversalFetch(() => Promise.all([adminProfileStore.fetch(), appOptionsStore.fetch()]))
 
   const moduleButtons = computed(() => [
     {
@@ -82,13 +82,13 @@
       class: 'telegram',
       icon: 'icon-telegram',
       i18n: i18ns.telegramGroup,
-      href: goLink.map['telegram-group']
+      href: goLinksStore.map['telegram-group']
     },
     {
       class: 'discord',
       icon: 'icon-discord',
       i18n: i18ns.discordGroup,
-      href: goLink.map['discord-server']
+      href: goLinksStore.map['discord-server']
     },
     {
       class: 'sponsor',
@@ -155,9 +155,9 @@
       </div>
       <div class="footer-links">
         <div class="friend-links">
-          <template v-for="(link, index) in appOption.data?.friend_links ?? []" :key="index">
+          <template v-for="(link, index) in appOptionsStore.data?.friend_links ?? []" :key="index">
             <divider type="vertical" size="lg" v-if="index !== 0" />
-            <a :href="link.value" class="item" target="_blank" rel="external nofollow noopener">
+            <a :href="link.url" class="item" target="_blank" rel="external nofollow noopener">
               {{ link.name }}
             </a>
           </template>

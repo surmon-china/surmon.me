@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { onMounted, onBeforeMount } from 'vue'
-  import { Language, LocaleKey } from '/@/locales'
+  import { Language, LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useGitHubSponsorsStore } from '/@/stores/sponsors'
@@ -10,13 +10,13 @@
   import SponsorProvider from '/@/components/widgets/sponsor/provider.vue'
   import PageBanner from '/@/components/common/banner.vue'
 
-  const { i18n: _i18n, route, isZhLang } = useEnhancer()
-  const sponsorState = useSponsorState()
+  const { route, isZhLang, i18n: _i18n } = useEnhancer()
   const githubSponsorsStore = useGitHubSponsorsStore()
+  const sponsorState = useSponsorState()
 
   usePageSeo(() => {
-    const enTitle = firstUpperCase(_i18n.t(LocaleKey.PAGE_SPONSOR, Language.English)!)
-    const titles = isZhLang.value ? [_i18n.t(LocaleKey.PAGE_SPONSOR)!, enTitle] : [enTitle]
+    const enTitle = firstUpperCase(_i18n.t(LocalesKey.PAGE_SPONSOR, Language.English)!)
+    const titles = isZhLang.value ? [_i18n.t(LocalesKey.PAGE_SPONSOR)!, enTitle] : [enTitle]
     return { pageTitles: titles }
   })
 

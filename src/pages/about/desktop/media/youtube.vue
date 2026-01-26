@@ -1,25 +1,23 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { useStores } from '/@/stores'
-  import { useYouTubePlayListStore } from '/@/stores/media'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { IDENTITIES } from '/@/configs/app.config'
 
-  const { goLink } = useStores()
-  const youtubeStore = useYouTubePlayListStore()
-  onMounted(() => youtubeStore.fetch().catch(() => []))
+  const { goLinksStore, youtubePlayListStore } = useStores()
+  onMounted(() => youtubePlayListStore.fetch().catch(() => []))
 </script>
 
 <template>
   <div class="youtube">
-    <span v-if="youtubeStore.fetching"></span>
-    <empty size="large" bold v-else-if="!youtubeStore.data.length" />
+    <span v-if="youtubePlayListStore.fetching"></span>
+    <empty size="large" bold v-else-if="!youtubePlayListStore.data.length" />
     <ul v-else class="list">
       <li
         class="item"
         :title="item.snippet.title"
         :key="index"
-        v-for="(item, index) in youtubeStore.data.slice(0, 5)"
+        v-for="(item, index) in youtubePlayListStore.data.slice(0, 5)"
       >
         <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
           <uimage class="cover" proxy :src="item.snippet.thumbnails.medium.url" />
@@ -37,7 +35,7 @@
         </ulink>
       </li>
       <li class="item">
-        <ulink class="link more" :href="goLink.map.youtube">
+        <ulink class="link more" :href="goLinksStore.map.youtube">
           <i class="iconfont icon-youtube"></i>
           <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
           <span class="text">•••</span>

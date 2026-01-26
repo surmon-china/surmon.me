@@ -4,7 +4,7 @@
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
   import { useStores } from '/@/stores'
-  import { getExtendValue } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/state'
   import { firstUpperCase } from '/@/transforms/text'
   import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { scrollToNextScreen } from '/@/utils/scroller'
@@ -15,20 +15,16 @@
     categorySlug: string
   }>()
 
-  const { i18n: _i18n, cdnDomain, isZhLang } = useEnhancer()
-  const { articleList: articleListStore, category: categoryStore } = useStores()
-  const currentCategory = computed(() => {
-    return categoryStore.data.find((category) => category.slug === props.categorySlug)
-  })
-  const currentCategoryIcon = computed(() => {
-    return getExtendValue(currentCategory.value?.extends || [], 'icon') || 'icon-category'
-  })
-  const currentCategoryBgColor = computed(() => {
-    return getExtendValue(currentCategory.value?.extends || [], 'bgcolor')
-  })
-  const currentCategoryBgImage = computed(() => {
-    const imageUrl = getExtendValue(currentCategory.value?.extends || [], 'background')
-    return isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl!)) : imageUrl
+  const { cdnDomain, isZhLang, i18n: _i18n } = useEnhancer()
+  const { articleListStore, categoryStore } = useStores()
+
+  const category = computed(() => categoryStore.data.find(({ slug }) => slug === props.categorySlug))
+  const categoryExtrasMap = computed(() => getExtrasMap(category.value?.extras))
+  const categoryIconName = computed(() => categoryExtrasMap.value.get('icon-name') ?? 'icon-category')
+  const categoryBackgroundColor = computed(() => categoryExtrasMap.value.get('background-color'))
+  const categoryBackgroundImage = computed(() => {
+    const imageUrl = categoryExtrasMap.value.get('background-image')
+    return imageUrl && isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl
   })
 
   const loadmoreArticles = async () => {
@@ -43,7 +39,7 @@
     const enTitle = firstUpperCase(props.categorySlug)
     const zhTitle = _i18n.t(props.categorySlug)!
     const titles = isZhLang.value ? [zhTitle, enTitle] : [enTitle]
-    const description = currentCategory.value?.description || titles.join(',')
+    const description = category.value?.description || titles.join(',')
     return {
       pageTitles: titles,
       description,
@@ -67,20 +63,20 @@
 <template>
   <div class="category-flow-page">
     <article-list-header
-      :background-color="currentCategoryBgColor"
-      :background-image="currentCategoryBgImage"
-      :icon="currentCategoryIcon"
+      :icon-name="categoryIconName"
+      :background-color="categoryBackgroundColor"
+      :background-image="categoryBackgroundImage"
     >
-      <i18n v-if="currentCategory">
+      <i18n v-if="category">
         <template #zh>
-          <span>{{ currentCategory.name }}</span>
+          <span>{{ category.name }}</span>
           <divider class="divider" type="vertical" />
-          <span>{{ currentCategory.description || '...' }}</span>
+          <span>{{ category.description || '...' }}</span>
         </template>
         <template #en>
           <span>Category</span>
           <divider class="divider" type="vertical" />
-          <span>{{ firstUpperCase(currentCategory.slug) }}</span>
+          <span>{{ firstUpperCase(category.slug) }}</span>
         </template>
       </i18n>
     </article-list-header>

@@ -5,20 +5,20 @@
  */
 
 import type { I18nLocale, I18nValueRender } from '/@/composables/i18n'
-export { LocaleKey } from './key'
-import { LocaleKey } from './key'
+export { LocalesKey } from './key'
+import { LocalesKey } from './key'
 import { zhLangMap } from './lang-zh'
 import { enLangMap } from './lang-en'
 
-export type LocaleValue = string | I18nValueRender
-export type LocaleMap = Record<LocaleKey, LocaleValue>
+export type LocalesValue = string | I18nValueRender
+export type LocalesMap = Record<LocalesKey, LocalesValue>
 
 export enum Language {
   English = 'en',
   Chinese = 'zh'
 }
 
-export const locales: I18nLocale<LocaleKey>[] = [
+export const locales: I18nLocale<LocalesKey>[] = [
   {
     code: Language.Chinese,
     iso: 'zh-CN',

@@ -29,11 +29,11 @@ import { getSitemapXml } from './server/getters/sitemap'
 import { getGTagScript } from './server/getters/gtag'
 import { getAllWallpapers } from './server/getters/wallpaper'
 import { getMyGoogleMap } from './server/getters/my-google-map'
-import { getNPMStatistic } from './server/getters/npm'
+import { getNPMStatistics } from './server/getters/npm'
 import { getDoubanMovies } from './server/getters/douban'
 import { getSongList } from './server/getters/netease-music'
 import { getYouTubeChannelPlayLists, getYouTubeVideoListByPlayerListId } from './server/getters/youtube'
-import { getGitHubStatistic, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
+import { getGitHubStatistics, getGitHubSponsors, getGitHubContributions } from './server/getters/github'
 import {
   getThreadsProfile,
   getThreadsMedias,
@@ -321,24 +321,24 @@ app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.GitHubContrib
   )
 })
 
-// GitHub statistic
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticGitHubJson}`, async () => {
+// GitHub statistics
+app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticsGitHubJson}`, async () => {
   return respond.json(
     await cacher.passive(cache, {
-      key: TunnelModule.StatisticGitHubJson,
+      key: TunnelModule.StatisticsGitHubJson,
       ttl: hours(8),
-      getter: getGitHubStatistic
+      getter: getGitHubStatistics
     })
   )
 })
 
-// NPM statistic
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticNpmJson}`, async () => {
+// NPM statistics
+app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticsNpmJson}`, async () => {
   return respond.json(
     await cacher.passive(cache, {
-      key: TunnelModule.StatisticNpmJson,
+      key: TunnelModule.StatisticsNpmJson,
       ttl: hours(8),
-      getter: getNPMStatistic
+      getter: getNPMStatistics
     })
   )
 })
