@@ -41,7 +41,7 @@ import { Swiper } from "swiper";
 import { Autoplay, Mousewheel, Grid, EffectFade } from "swiper/modules";
 import { Swiper as Swiper$1, SwiperSlide } from "swiper/vue";
 import QRCode from "qrcode";
-const APP_VERSION = "5.10.0";
+const APP_VERSION = "5.11.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -93,6 +93,7 @@ var LocalesKey = /* @__PURE__ */ ((LocalesKey2) => {
   LocalesKey2["ARTICLE_FEATURED"] = "article-featured";
   LocalesKey2["ARTICLE_FEATURED_SHORT"] = "article-featured-short";
   LocalesKey2["COMMENT_LIST_EMPTY"] = "comment-list-placeholder";
+  LocalesKey2["COMMENT_DISABLED"] = "comment-disabled";
   LocalesKey2["COMMENT_UPVOTE"] = "comment-likes";
   LocalesKey2["COMMENT_DOWNVOTE"] = "comment-dislikes";
   LocalesKey2["COMMENT_REPLY"] = "reply-comment";
@@ -260,6 +261,7 @@ const zhLangMap = {
   [LocalesKey.ARTICLE_FEATURED]: "精选",
   [LocalesKey.ARTICLE_FEATURED_SHORT]: "精选",
   [LocalesKey.COMMENT_LIST_EMPTY]: "期待你的捷足先登",
+  [LocalesKey.COMMENT_DISABLED]: "当前页面的评论功能已关闭",
   [LocalesKey.COMMENT_UPVOTE]: "赞",
   [LocalesKey.COMMENT_DOWNVOTE]: "踩",
   [LocalesKey.COMMENT_DELETE]: "删除",
@@ -339,6 +341,7 @@ const enLangMap = {
   [LocalesKey.ARTICLE_FEATURED]: "featured",
   [LocalesKey.ARTICLE_FEATURED_SHORT]: "feat",
   [LocalesKey.COMMENT_LIST_EMPTY]: "Be the first to comment",
+  [LocalesKey.COMMENT_DISABLED]: "Commenting on this page is currently unavailable",
   [LocalesKey.COMMENT_UPVOTE]: "upvote",
   [LocalesKey.COMMENT_DOWNVOTE]: "downvote",
   [LocalesKey.COMMENT_DELETE]: "delete",
@@ -6318,9 +6321,6 @@ _sfc_main$1C.setup = (props, ctx) => {
   return _sfc_setup$1C ? _sfc_setup$1C(props, ctx) : void 0;
 };
 const Share = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-468e376f"]]);
-const getChatGPTShareURL = (conversationId) => {
-  return `https://chatgpt.com/share/${conversationId}`;
-};
 const logger = createLogger("APP:Comment");
 const EMOJIS = [
   ...["😃", "😂", "😅", "😉", "😌", "😔", "😓", "😢", "😍", "😘", "😜", "😡"],
@@ -7087,6 +7087,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
     isReply: { type: Boolean },
     isChild: { type: Boolean },
     hasChild: { type: Boolean },
+    hiddenReply: { type: Boolean },
     hiddenAvatar: { type: Boolean },
     hiddenUa: { type: Boolean },
     hiddenLocation: { type: Boolean },
@@ -7148,20 +7149,20 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
         }],
         key: __props.comment.id,
         id: unref(getCommentItemElementId)(__props.comment.id)
-      }, _attrs))} data-v-61c32645><div data-v-61c32645>`);
+      }, _attrs))} data-v-7cc01417><div data-v-7cc01417>`);
       if (!__props.hiddenAvatar) {
-        _push(`<div class="cm-avatar" data-v-61c32645>`);
+        _push(`<div class="cm-avatar" data-v-7cc01417>`);
         _push(ssrRenderComponent(_sfc_main$1y, {
           class: "link",
           href: authorURL.value
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<img${ssrRenderAttr("src", authorAvatar.value)}${ssrRenderAttr("alt", __props.comment.author.name)} draggable="false" data-v-61c32645${_scopeId}><span class="${ssrRenderClass([isDisqusAuthor.value ? "disqus" : "anonymous", "role"])}" data-v-61c32645${_scopeId}>`);
+              _push2(`<img${ssrRenderAttr("src", authorAvatar.value)}${ssrRenderAttr("alt", __props.comment.author.name)} draggable="false" data-v-7cc01417${_scopeId}><span class="${ssrRenderClass([isDisqusAuthor.value ? "disqus" : "anonymous", "role"])}" data-v-7cc01417${_scopeId}>`);
               if (isDisqusAuthor.value) {
-                _push2(`<i class="iconfont icon-disqus-logo" data-v-61c32645${_scopeId}></i>`);
+                _push2(`<i class="iconfont icon-disqus-logo" data-v-7cc01417${_scopeId}></i>`);
               } else {
-                _push2(`<i class="iconfont icon-user" data-v-61c32645${_scopeId}></i>`);
+                _push2(`<i class="iconfont icon-user" data-v-7cc01417${_scopeId}></i>`);
               }
               _push2(`</span>`);
             } else {
@@ -7191,7 +7192,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="cm-body" data-v-61c32645><div class="cm-header" data-v-61c32645><div class="left" data-v-61c32645>`);
+      _push(`<div class="cm-body" data-v-7cc01417><div class="cm-header" data-v-7cc01417><div class="left" data-v-7cc01417>`);
       _push(ssrRenderComponent(_sfc_main$1y, {
         class: ["username", { url: Boolean(authorURL.value) }],
         href: authorURL.value
@@ -7208,7 +7209,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
         _: 1
       }, _parent));
       if (isAdminAuthor.value) {
-        _push(`<span class="moderator" data-v-61c32645>`);
+        _push(`<span class="moderator" data-v-7cc01417>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7216,7 +7217,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="author-info" data-v-61c32645>`);
+      _push(`<span class="author-info" data-v-7cc01417>`);
       if (__props.comment.ip_location && !__props.hiddenLocation) {
         _push(ssrRenderComponent(CommentLocation, {
           location: __props.comment.ip_location
@@ -7231,13 +7232,13 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</span></div><div class="right" data-v-61c32645><button class="floor" data-v-61c32645>#${ssrInterpolate(__props.comment.id)}</button></div></div><div class="cm-content" data-v-61c32645>`);
+      _push(`</span></div><div class="right" data-v-7cc01417><button class="floor" data-v-7cc01417>#${ssrInterpolate(__props.comment.id)}</button></div></div><div class="cm-content" data-v-7cc01417>`);
       if (__props.comment.pid) {
-        _push(`<p class="reply" data-v-61c32645><span class="text" data-v-61c32645>`);
+        _push(`<p class="reply" data-v-7cc01417><span class="text" data-v-7cc01417>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_REPLY
         }, null, _parent));
-        _push(`</span><button class="parent" data-v-61c32645>${ssrInterpolate(getReplyParentCommentText(__props.comment.pid))}</button>`);
+        _push(`</span><button class="parent" data-v-7cc01417>${ssrInterpolate(getReplyParentCommentText(__props.comment.pid))}</button>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "：",
           en: ":"
@@ -7246,13 +7247,13 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="markdown" data-v-61c32645>`);
+      _push(`<div class="markdown" data-v-7cc01417>`);
       _push(ssrRenderComponent(_sfc_main$1z, {
         markdown: __props.comment.content,
         compact: true,
         "render-options": { sanitize: true, codeLineNumbers: false }
       }, null, _parent));
-      _push(`</div></div><div class="cm-footer" data-v-61c32645><div class="left" data-v-61c32645><span class="create-at" data-allow-mismatch data-v-61c32645>`);
+      _push(`</div></div><div class="cm-footer" data-v-7cc01417><div class="left" data-v-7cc01417><span class="create-at" data-allow-mismatch data-v-7cc01417>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "ago",
         date: __props.comment.created_at
@@ -7260,7 +7261,7 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       _push(`</span><button class="${ssrRenderClass([{
         voted: __props.liked,
         "has-count": Boolean(__props.comment.likes)
-      }, "vote"])}"${ssrIncludeBooleanAttr(__props.liked) ? " disabled" : ""} data-v-61c32645><i class="iconfont icon-like" data-v-61c32645></i>`);
+      }, "vote"])}"${ssrIncludeBooleanAttr(__props.liked) ? " disabled" : ""} data-v-7cc01417><i class="iconfont icon-like" data-v-7cc01417></i>`);
       if (!__props.plainVote) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_UPVOTE
@@ -7268,10 +7269,10 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="count" data-v-61c32645>(${ssrInterpolate(__props.comment.likes)})</span></button><button class="${ssrRenderClass([{
+      _push(`<span class="count" data-v-7cc01417>(${ssrInterpolate(__props.comment.likes)})</span></button><button class="${ssrRenderClass([{
         voted: __props.disliked,
         "has-count": Boolean(__props.comment.dislikes)
-      }, "vote"])}"${ssrIncludeBooleanAttr(__props.disliked) ? " disabled" : ""} data-v-61c32645><i class="iconfont icon-dislike" data-v-61c32645></i>`);
+      }, "vote"])}"${ssrIncludeBooleanAttr(__props.disliked) ? " disabled" : ""} data-v-7cc01417><i class="iconfont icon-dislike" data-v-7cc01417></i>`);
       if (!__props.plainVote) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_DOWNVOTE
@@ -7279,23 +7280,29 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<span class="count" data-v-61c32645>(${ssrInterpolate(__props.comment.dislikes)})</span></button>`);
-      if (__props.isReply) {
-        _push(`<button class="reply" data-v-61c32645><i class="iconfont icon-cancel" data-v-61c32645></i>`);
-        _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).COMMENT_REPLY_CANCEL
-        }, null, _parent));
-        _push(`</button>`);
+      _push(`<span class="count" data-v-7cc01417>(${ssrInterpolate(__props.comment.dislikes)})</span></button>`);
+      if (!__props.hiddenReply) {
+        _push(`<!--[-->`);
+        if (__props.isReply) {
+          _push(`<button class="reply" data-v-7cc01417><i class="iconfont icon-cancel" data-v-7cc01417></i>`);
+          _push(ssrRenderComponent(_component_i18n, {
+            k: unref(LocalesKey).COMMENT_REPLY_CANCEL
+          }, null, _parent));
+          _push(`</button>`);
+        } else {
+          _push(`<button class="reply" data-v-7cc01417><i class="iconfont icon-reply" data-v-7cc01417></i>`);
+          _push(ssrRenderComponent(_component_i18n, {
+            k: unref(LocalesKey).COMMENT_REPLY
+          }, null, _parent));
+          _push(`</button>`);
+        }
+        _push(`<!--]-->`);
       } else {
-        _push(`<button class="reply" data-v-61c32645><i class="iconfont icon-reply" data-v-61c32645></i>`);
-        _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).COMMENT_REPLY
-        }, null, _parent));
-        _push(`</button>`);
+        _push(`<!---->`);
       }
-      _push(`</div><div class="right" data-v-61c32645>`);
+      _push(`</div><div class="right" data-v-7cc01417>`);
       if (isDeletable.value) {
-        _push(`<button class="delete"${ssrIncludeBooleanAttr(unref(commentStore).deleting) ? " disabled" : ""} data-v-61c32645><i class="iconfont icon-delete" data-v-61c32645></i>`);
+        _push(`<button class="delete"${ssrIncludeBooleanAttr(unref(commentStore).deleting) ? " disabled" : ""} data-v-7cc01417><i class="iconfont icon-delete" data-v-7cc01417></i>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_DELETE
         }, null, _parent));
@@ -7305,13 +7312,13 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       }
       _push(`</div></div>`);
       if (__props.isReply) {
-        _push(`<div class="cm-reply" data-v-61c32645>`);
+        _push(`<div class="cm-reply" data-v-7cc01417>`);
         ssrRenderSlot(_ctx.$slots, "reply", {}, null, _push, _parent);
         _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="cm-children" data-v-61c32645>`);
+      _push(`<div class="cm-children" data-v-7cc01417>`);
       ssrRenderSlot(_ctx.$slots, "children", {}, null, _push, _parent);
       _push(`</div></div></div></li>`);
     };
@@ -7323,7 +7330,7 @@ _sfc_main$1v.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item.vue");
   return _sfc_setup$1v ? _sfc_setup$1v(props, ctx) : void 0;
 };
-const CommentItem = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-61c32645"]]);
+const CommentItem = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-7cc01417"]]);
 const _sfc_main$1u = defineComponent({
   name: "CommentList",
   components: {
@@ -7339,6 +7346,10 @@ const _sfc_main$1u = defineComponent({
       required: true
     },
     isChildList: {
+      type: Boolean,
+      default: false
+    },
+    hiddenReply: {
       type: Boolean,
       default: false
     },
@@ -7405,7 +7416,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
   const _component_comment_list = resolveComponent("comment-list");
   _push(`<ul${ssrRenderAttrs(mergeProps({
     class: ["comment-list", _ctx.isChildList ? "child" : "root"]
-  }, _attrs))} data-v-a39fdbfd><!--[-->`);
+  }, _attrs))} data-v-ac6c6c92><!--[-->`);
   ssrRenderList(_ctx.comments, (item) => {
     _push(ssrRenderComponent(_component_comment_item, {
       key: item.comment.id,
@@ -7415,6 +7426,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
       "has-child": !!item.children.length,
       "is-child": _ctx.isChildList,
       "is-reply": _ctx.replyPid === item.comment.id,
+      "hidden-reply": _ctx.hiddenReply,
       "hidden-avatar": _ctx.hiddenAvatar,
       "hidden-ua": _ctx.hiddenUa,
       "plain-vote": _ctx.plainVote,
@@ -7447,6 +7459,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
             _push2(ssrRenderComponent(_component_comment_list, {
               comments: _ctx.buildCommentTree(item.children),
               "is-child-list": true,
+              "hidden-reply": _ctx.hiddenReply,
               "hidden-avatar": _ctx.hiddenAvatar,
               "hidden-ua": _ctx.hiddenUa,
               "plain-vote": _ctx.plainVote,
@@ -7477,6 +7490,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
               createVNode(_component_comment_list, {
                 comments: _ctx.buildCommentTree(item.children),
                 "is-child-list": true,
+                "hidden-reply": _ctx.hiddenReply,
                 "hidden-avatar": _ctx.hiddenAvatar,
                 "hidden-ua": _ctx.hiddenUa,
                 "plain-vote": _ctx.plainVote,
@@ -7492,7 +7506,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
                   }, void 0, true)
                 ]),
                 _: 2
-              }, 1032, ["comments", "hidden-avatar", "hidden-ua", "plain-vote", "reply-pid", "onDelete", "onReply", "onCancelReply"])
+              }, 1032, ["comments", "hidden-reply", "hidden-avatar", "hidden-ua", "plain-vote", "reply-pid", "onDelete", "onReply", "onCancelReply"])
             ];
           }
         }),
@@ -7508,7 +7522,7 @@ _sfc_main$1u.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/list.vue");
   return _sfc_setup$1u ? _sfc_setup$1u(props, ctx) : void 0;
 };
-const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1u, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-a39fdbfd"]]);
+const CommentList = /* @__PURE__ */ _export_sfc(_sfc_main$1u, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-ac6c6c92"]]);
 const _sfc_main$1t = /* @__PURE__ */ defineComponent({
   __name: "loadmore",
   __ssrInlineRender: true,
@@ -7879,12 +7893,13 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   props: {
     postId: {},
+    readonly: { type: Boolean, default: false },
     fetching: { type: Boolean, default: false },
     plain: { type: Boolean, default: false }
   },
   setup(__props) {
     const props = __props;
-    const { i18n, route, globalState } = useEnhancer();
+    const { route, globalState, i18n: _i18n } = useEnhancer();
     const identityStore = useIdentityStore();
     const commentStore = useCommentStore();
     const isPosting = computed(() => commentStore.posting);
@@ -7958,19 +7973,19 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
     };
     const createComment = async (payload) => {
       if (!payload.content || !payload.content.trim()) {
-        throw `${i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`;
+        throw `${_i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`;
       }
       if (payload.content.length > MAX_COMMENT_LENGTH) {
-        throw `${i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`;
+        throw `${_i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`;
       }
       const isGuest = identityStore.user.type === UserType.Null;
       const guestProfileValue = guestProfile.value;
       if (isGuest) {
         if (!guestProfileValue.name) {
-          throw i18n.t(LocalesKey.COMMENT_POST_NAME) + "?";
+          throw _i18n.t(LocalesKey.COMMENT_POST_NAME) + "?";
         }
         if (!guestProfileValue.email) {
-          throw i18n.t(LocalesKey.COMMENT_POST_EMAIL) + "?";
+          throw _i18n.t(LocalesKey.COMMENT_POST_EMAIL) + "?";
         }
       }
       const author = isGuest ? toRaw(guestProfileValue) : identityStore.user.type === UserType.Local ? identityStore.user.localProfile : {
@@ -8059,10 +8074,11 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_divider = resolveComponent("divider");
+      const _component_i18n = resolveComponent("i18n");
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: COMMENT_ELEMENT_ID,
         class: ["comment-box", { plain: __props.plain }]
-      }, _attrs))} data-v-b0bd715f>`);
+      }, _attrs))} data-v-f1440db1>`);
       _push(ssrRenderComponent(CommentTopbar, {
         total: unref(commentStore).pagination?.total,
         loaded: unref(commentStore).comments.length,
@@ -8088,33 +8104,68 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
         class: "divider",
         size: "lg"
       }, null, _parent));
-      _push(ssrRenderComponent(CommentPublisherMain, { fetching: __props.fetching }, {
-        default: withCtx((_, _push2, _parent2, _scopeId) => {
-          if (_push2) {
-            _push2(ssrRenderComponent(CommentPublisher, {
-              profile: guestProfile.value,
-              "onUpdate:profile": ($event) => guestProfile.value = $event,
-              id: COMMENT_PUBLISHER_ELEMENT_ID,
-              disabled: isLoading.value || isRootPosting.value,
-              total: unref(commentStore).pagination?.total,
-              "default-blossomed": __props.plain ? true : false,
-              "hidden-avatar": __props.plain
-            }, {
-              pen: withCtx((_2, _push3, _parent3, _scopeId2) => {
-                if (_push3) {
-                  _push3(ssrRenderComponent(CommentPen, {
-                    modelValue: rootPenState.content,
-                    "onUpdate:modelValue": ($event) => rootPenState.content = $event,
-                    previewed: rootPenState.previewed,
-                    "onUpdate:previewed": ($event) => rootPenState.previewed = $event,
-                    "auto-focus": __props.plain ? false : true,
-                    "hidden-stationery": __props.plain,
-                    disabled: isRootPosting.value || isLoading.value,
-                    posting: isRootPosting.value,
-                    onSubmit: handleRootSubmit
-                  }, null, _parent3, _scopeId2));
-                } else {
-                  return [
+      if (__props.readonly) {
+        _push(`<div class="readonly" data-v-f1440db1>`);
+        _push(ssrRenderComponent(_component_i18n, {
+          k: unref(LocalesKey).COMMENT_DISABLED
+        }, null, _parent));
+        _push(`</div>`);
+      } else {
+        _push(ssrRenderComponent(CommentPublisherMain, { fetching: __props.fetching }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(ssrRenderComponent(CommentPublisher, {
+                profile: guestProfile.value,
+                "onUpdate:profile": ($event) => guestProfile.value = $event,
+                id: COMMENT_PUBLISHER_ELEMENT_ID,
+                disabled: isLoading.value || isRootPosting.value,
+                total: unref(commentStore).pagination?.total,
+                "default-blossomed": __props.plain ? true : false,
+                "hidden-avatar": __props.plain
+              }, {
+                pen: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(ssrRenderComponent(CommentPen, {
+                      modelValue: rootPenState.content,
+                      "onUpdate:modelValue": ($event) => rootPenState.content = $event,
+                      previewed: rootPenState.previewed,
+                      "onUpdate:previewed": ($event) => rootPenState.previewed = $event,
+                      "auto-focus": __props.plain ? false : true,
+                      "hidden-stationery": __props.plain,
+                      disabled: isRootPosting.value || isLoading.value,
+                      posting: isRootPosting.value,
+                      onSubmit: handleRootSubmit
+                    }, null, _parent3, _scopeId2));
+                  } else {
+                    return [
+                      createVNode(CommentPen, {
+                        modelValue: rootPenState.content,
+                        "onUpdate:modelValue": ($event) => rootPenState.content = $event,
+                        previewed: rootPenState.previewed,
+                        "onUpdate:previewed": ($event) => rootPenState.previewed = $event,
+                        "auto-focus": __props.plain ? false : true,
+                        "hidden-stationery": __props.plain,
+                        disabled: isRootPosting.value || isLoading.value,
+                        posting: isRootPosting.value,
+                        onSubmit: handleRootSubmit
+                      }, null, 8, ["modelValue", "onUpdate:modelValue", "previewed", "onUpdate:previewed", "auto-focus", "hidden-stationery", "disabled", "posting"])
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+            } else {
+              return [
+                createVNode(CommentPublisher, {
+                  profile: guestProfile.value,
+                  "onUpdate:profile": ($event) => guestProfile.value = $event,
+                  id: COMMENT_PUBLISHER_ELEMENT_ID,
+                  disabled: isLoading.value || isRootPosting.value,
+                  total: unref(commentStore).pagination?.total,
+                  "default-blossomed": __props.plain ? true : false,
+                  "hidden-avatar": __props.plain
+                }, {
+                  pen: withCtx(() => [
                     createVNode(CommentPen, {
                       modelValue: rootPenState.content,
                       "onUpdate:modelValue": ($event) => rootPenState.content = $event,
@@ -8126,42 +8177,15 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
                       posting: isRootPosting.value,
                       onSubmit: handleRootSubmit
                     }, null, 8, ["modelValue", "onUpdate:modelValue", "previewed", "onUpdate:previewed", "auto-focus", "hidden-stationery", "disabled", "posting"])
-                  ];
-                }
-              }),
-              _: 1
-            }, _parent2, _scopeId));
-          } else {
-            return [
-              createVNode(CommentPublisher, {
-                profile: guestProfile.value,
-                "onUpdate:profile": ($event) => guestProfile.value = $event,
-                id: COMMENT_PUBLISHER_ELEMENT_ID,
-                disabled: isLoading.value || isRootPosting.value,
-                total: unref(commentStore).pagination?.total,
-                "default-blossomed": __props.plain ? true : false,
-                "hidden-avatar": __props.plain
-              }, {
-                pen: withCtx(() => [
-                  createVNode(CommentPen, {
-                    modelValue: rootPenState.content,
-                    "onUpdate:modelValue": ($event) => rootPenState.content = $event,
-                    previewed: rootPenState.previewed,
-                    "onUpdate:previewed": ($event) => rootPenState.previewed = $event,
-                    "auto-focus": __props.plain ? false : true,
-                    "hidden-stationery": __props.plain,
-                    disabled: isRootPosting.value || isLoading.value,
-                    posting: isRootPosting.value,
-                    onSubmit: handleRootSubmit
-                  }, null, 8, ["modelValue", "onUpdate:modelValue", "previewed", "onUpdate:previewed", "auto-focus", "hidden-stationery", "disabled", "posting"])
-                ]),
-                _: 1
-              }, 8, ["profile", "onUpdate:profile", "id", "disabled", "total", "default-blossomed", "hidden-avatar"])
-            ];
-          }
-        }),
-        _: 1
-      }, _parent));
+                  ]),
+                  _: 1
+                }, 8, ["profile", "onUpdate:profile", "id", "disabled", "total", "default-blossomed", "hidden-avatar"])
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      }
       _push(ssrRenderComponent(_component_divider, {
         class: "divider",
         size: "lg"
@@ -8176,6 +8200,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(CommentList, {
               comments: unref(commentStore).commentTreeList,
               "reply-pid": commentState.replyPId,
+              "hidden-reply": __props.readonly,
               "hidden-avatar": __props.plain,
               "hidden-ua": __props.plain,
               "plain-vote": __props.plain,
@@ -8251,6 +8276,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
               createVNode(CommentList, {
                 comments: unref(commentStore).commentTreeList,
                 "reply-pid": commentState.replyPId,
+                "hidden-reply": __props.readonly,
                 "hidden-avatar": __props.plain,
                 "hidden-ua": __props.plain,
                 "plain-vote": __props.plain,
@@ -8282,7 +8308,7 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
                   }, 8, ["profile", "onUpdate:profile", "id", "hidden-avatar", "fixed-avatar"])
                 ]),
                 _: 1
-              }, 8, ["comments", "reply-pid", "hidden-avatar", "hidden-ua", "plain-vote"])
+              }, 8, ["comments", "reply-pid", "hidden-reply", "hidden-avatar", "hidden-ua", "plain-vote"])
             ];
           }
         }),
@@ -8339,7 +8365,7 @@ _sfc_main$1p.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/index.vue");
   return _sfc_setup$1p ? _sfc_setup$1p(props, ctx) : void 0;
 };
-const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-b0bd715f"]]);
+const Comment = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-f1440db1"]]);
 const _sfc_main$1o = /* @__PURE__ */ defineComponent({
   __name: "skeleton",
   __ssrInlineRender: true,
@@ -9413,56 +9439,70 @@ _sfc_main$1i.setup = (props, ctx) => {
 };
 const ArticleNeighbour = /* @__PURE__ */ _export_sfc(_sfc_main$1i, [["__scopeId", "data-v-2f5447ff"]]);
 const _sfc_main$1h = /* @__PURE__ */ defineComponent({
-  __name: "chatgpt",
+  __name: "ai-review",
   __ssrInlineRender: true,
   props: {
-    gptId: {},
-    gptResponse: {},
-    gptModel: {},
-    gptTimestamp: {},
+    content: {},
+    provider: {},
+    model: {},
+    timestamp: {},
+    link: {},
     hiddenAvatar: { type: Boolean }
   },
   emits: ["click-link"],
   setup(__props, { emit: __emit }) {
+    const avatarMap = {
+      chatgpt3: "/images/ai-providers/chatgpt-3.webp",
+      chatgpt4: "/images/ai-providers/chatgpt-4.webp",
+      openai: "/images/ai-providers/openai.svg",
+      gemini: "/images/ai-providers/gemini.svg",
+      google: "/images/ai-providers/google.svg",
+      microsoft: "/images/ai-providers/microsoft.svg",
+      meta: "/images/ai-providers/meta.svg",
+      qwen: "/images/ai-providers/qwen.svg",
+      default: "/icon.normal.png"
+    };
     const props = __props;
     const emit = __emit;
     const handleLinkClick = () => {
       emit("click-link");
     };
-    const avatarURL = computed(() => {
-      const fileName = props.gptModel?.includes("3") ? "3.5" : "4.0";
-      return `/images/chatgpt/${fileName}.png`;
+    const aiAvatarUrl = computed(() => {
+      const provider = props.provider.toLowerCase();
+      return provider === "chatgpt" ? props.model?.includes("3") ? avatarMap.chatgpt3 : avatarMap.chatgpt4 : avatarMap[provider] || avatarMap.default;
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
       const _component_udate = resolveComponent("udate");
       _push(`<div${ssrRenderAttrs(mergeProps({
-        class: ["gpt-comment", { "hide-avatar": __props.hiddenAvatar }]
-      }, _attrs))} data-v-1016ded2>`);
+        class: ["ai-review", { "hide-avatar": __props.hiddenAvatar }]
+      }, _attrs))} data-v-4ced2101>`);
       if (!__props.hiddenAvatar) {
-        _push(`<div class="gpt-avatar" data-v-1016ded2>`);
+        _push(`<div class="ai-avatar" data-v-4ced2101>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "link",
-          href: unref(getChatGPTShareURL)(__props.gptId),
+          href: __props.link,
           onClick: handleLinkClick
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
               _push2(ssrRenderComponent(_component_uimage, {
-                cdn: "",
-                src: avatarURL.value,
-                alt: __props.gptModel,
-                draggable: "false"
+                class: ["image", { svg: aiAvatarUrl.value.endsWith(".svg") }],
+                alt: __props.model,
+                src: aiAvatarUrl.value,
+                draggable: "false",
+                cdn: ""
               }, null, _parent2, _scopeId));
             } else {
               return [
                 createVNode(_component_uimage, {
-                  cdn: "",
-                  src: avatarURL.value,
-                  alt: __props.gptModel,
-                  draggable: "false"
-                }, null, 8, ["src", "alt"])
+                  class: ["image", { svg: aiAvatarUrl.value.endsWith(".svg") }],
+                  alt: __props.model,
+                  src: aiAvatarUrl.value,
+                  draggable: "false",
+                  cdn: ""
+                }, null, 8, ["alt", "src", "class"])
               ];
             }
           }),
@@ -9472,42 +9512,42 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<div class="gpt-body" data-v-1016ded2><div class="gpt-header" data-v-1016ded2><div class="left" data-v-1016ded2>`);
+      _push(`<div class="ai-body" data-v-4ced2101><div class="ai-header" data-v-4ced2101><div class="left" data-v-4ced2101>`);
       _push(ssrRenderComponent(_component_ulink, {
-        class: "username",
-        href: unref(getChatGPTShareURL)(__props.gptId),
+        class: "provider",
+        href: __props.link,
         onClick: handleLinkClick
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`ChatGPT`);
+            _push2(`${ssrInterpolate(__props.provider)}`);
           } else {
             return [
-              createTextVNode("ChatGPT")
+              createTextVNode(toDisplayString(__props.provider), 1)
             ];
           }
         }),
         _: 1
       }, _parent));
-      if (__props.gptModel) {
-        _push(`<span class="model" data-v-1016ded2><i class="iconfont icon-cpu" data-v-1016ded2></i><span data-v-1016ded2>${ssrInterpolate(__props.gptModel)}</span></span>`);
+      if (__props.model) {
+        _push(`<span class="model" data-v-4ced2101><i class="iconfont icon-cpu" data-v-4ced2101></i><span data-v-4ced2101>${ssrInterpolate(__props.model)}</span></span>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="right" data-v-1016ded2>`);
-      if (__props.gptTimestamp) {
-        _push(`<span class="created" data-allow-mismatch data-v-1016ded2>`);
+      _push(`</div><div class="right" data-v-4ced2101>`);
+      if (__props.timestamp) {
+        _push(`<span class="created" data-allow-mismatch data-v-4ced2101>`);
         _push(ssrRenderComponent(_component_udate, {
-          date: Number(__props.gptTimestamp) * 1e3,
+          date: Number(__props.timestamp) * 1e3,
           to: "ago"
         }, null, _parent));
         _push(`</span>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div></div><div class="gpt-content" data-v-1016ded2><div class="markdown" data-v-1016ded2>`);
+      _push(`</div></div><div class="ai-content" data-v-4ced2101><div class="markdown" data-v-4ced2101>`);
       _push(ssrRenderComponent(_sfc_main$1z, {
-        markdown: props.gptResponse,
+        markdown: __props.content,
         compact: true,
         "render-options": { sanitize: true }
       }, null, _parent));
@@ -9518,10 +9558,10 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
 const _sfc_setup$1h = _sfc_main$1h.setup;
 _sfc_main$1h.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/chatgpt.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/ai-review.vue");
   return _sfc_setup$1h ? _sfc_setup$1h(props, ctx) : void 0;
 };
-const ArticleChatgpt = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-1016ded2"]]);
+const ArticleAiReview = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-4ced2101"]]);
 const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -9536,13 +9576,12 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
     const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore);
     const isLiked = computed(() => !!(article.value && identityStore.isLikedArticle(article.value.id)));
     const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras));
-    const articleGPTId = computed(() => articleExtrasMap.value.get("chatgpt-conversation-id"));
-    const articleGPTResponse = computed(() => articleExtrasMap.value.get("chatgpt-conversation-response"));
-    const articleGPTTimestamp = computed(() => articleExtrasMap.value.get("chatgpt-conversation-timestamp"));
-    const articleGPTModel = computed(() => articleExtrasMap.value.get("chatgpt-conversation-model"));
-    const handleCommentTopBarChatGPTClick = () => {
-    };
-    const handleCommentUsernameChatGPTClick = () => {
+    const aiReviewProvider = computed(() => articleExtrasMap.value.get("ai-review-provider"));
+    const aiReviewModel = computed(() => articleExtrasMap.value.get("ai-review-model"));
+    const aiReviewContent = computed(() => articleExtrasMap.value.get("ai-review-content"));
+    const aiReviewTimestamp = computed(() => articleExtrasMap.value.get("ai-review-timestamp"));
+    const aiReviewLink = computed(() => articleExtrasMap.value.get("ai-review-link"));
+    const handleAiReviewClick = () => {
     };
     const handleSponsor = () => {
       globalState.toggleSwitcher("sponsor", true);
@@ -9610,8 +9649,7 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_placeholder = resolveComponent("placeholder");
-      const _component_ulink = resolveComponent("ulink");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-186bdf71>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "article-page" }, _attrs))} data-v-fcd1d740>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: unref(fetching) }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -9631,14 +9669,14 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(article)) {
-              _push2(`<div data-v-186bdf71${_scopeId}><div class="module margin background overflow" data-v-186bdf71${_scopeId}>`);
+              _push2(`<div data-v-fcd1d740${_scopeId}><div class="module margin background overflow" data-v-fcd1d740${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleContent, {
                 id: ARTICLE_CONTENT_ELEMENT_ID,
                 "readmore-id": ARTICLE_READMORE_ELEMENT_ID,
                 article: unref(article),
                 onRendered: handleContentRendered
               }, null, _parent2, _scopeId));
-              _push2(`<div class="divider" data-v-186bdf71${_scopeId}><div class="line" data-v-186bdf71${_scopeId}></div></div>`);
+              _push2(`<div class="divider" data-v-fcd1d740${_scopeId}><div class="line" data-v-fcd1d740${_scopeId}></div></div>`);
               _push2(ssrRenderComponent(ArticleMeta, {
                 id: ARTICLE_META_ELEMENT_ID,
                 article: unref(article),
@@ -9669,19 +9707,19 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
                 }),
                 _: 1
               }, _parent2, _scopeId));
-              _push2(`</div><div class="module margin background" data-v-186bdf71${_scopeId}><div class="bridge left" data-v-186bdf71${_scopeId}></div><div class="bridge right" data-v-186bdf71${_scopeId}></div>`);
+              _push2(`</div><div class="module margin background" data-v-fcd1d740${_scopeId}><div class="bridge left" data-v-fcd1d740${_scopeId}></div><div class="bridge right" data-v-fcd1d740${_scopeId}></div>`);
               _push2(ssrRenderComponent(ArticleShare, {
                 id: ARTICLE_SHARE_ELEMENT_ID,
                 article: unref(article),
                 "disabled-image-share": __props.isMobile,
                 socials: __props.isMobile ? [unref(SocialMedia).Wechat, unref(SocialMedia).Weibo, unref(SocialMedia).Twitter] : []
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-186bdf71${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-fcd1d740${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleNeighbour, {
                 prev: unref(prevArticle),
                 next: unref(nextArticle)
               }, null, _parent2, _scopeId));
-              _push2(`</div><div class="module margin overflow" data-v-186bdf71${_scopeId}>`);
+              _push2(`</div><div class="module margin overflow" data-v-fcd1d740${_scopeId}>`);
               _push2(ssrRenderComponent(ArticleRelated, {
                 id: ARTICLE_RELATED_ELEMENT_ID,
                 columns: __props.isMobile ? 2 : 3,
@@ -9753,75 +9791,41 @@ const _sfc_main$1g = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-186bdf71>`);
+      _push(`<div class="comment" data-v-fcd1d740>`);
       _push(ssrRenderComponent(Comment, {
         plain: __props.isMobile,
+        readonly: unref(article)?.disabled_comments,
         fetching: unref(fetching),
         "post-id": __props.articleId
       }, createSlots({ _: 2 }, [
-        articleGPTId.value ? {
-          name: "topbar-extra",
+        aiReviewContent.value && aiReviewProvider.value ? {
+          name: "list-top-extra",
           fn: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(ssrRenderComponent(_component_ulink, {
-                class: "chat-gpt-link",
-                href: unref(getChatGPTShareURL)(articleGPTId.value),
-                onClick: handleCommentTopBarChatGPTClick
-              }, {
-                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
-                  if (_push3) {
-                    _push3(`<i class="iconfont icon-chat-gpt" data-v-186bdf71${_scopeId2}></i>`);
-                  } else {
-                    return [
-                      createVNode("i", { class: "iconfont icon-chat-gpt" })
-                    ];
-                  }
-                }),
-                _: 1
-              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(ArticleAiReview, {
+                provider: aiReviewProvider.value,
+                content: aiReviewContent.value,
+                timestamp: aiReviewTimestamp.value,
+                model: aiReviewModel.value,
+                link: aiReviewLink.value,
+                "hidden-avatar": __props.isMobile,
+                onClickLink: handleAiReviewClick
+              }, null, _parent2, _scopeId));
             } else {
               return [
-                createVNode(_component_ulink, {
-                  class: "chat-gpt-link",
-                  href: unref(getChatGPTShareURL)(articleGPTId.value),
-                  onClick: handleCommentTopBarChatGPTClick
-                }, {
-                  default: withCtx(() => [
-                    createVNode("i", { class: "iconfont icon-chat-gpt" })
-                  ]),
-                  _: 1
-                }, 8, ["href"])
+                createVNode(ArticleAiReview, {
+                  provider: aiReviewProvider.value,
+                  content: aiReviewContent.value,
+                  timestamp: aiReviewTimestamp.value,
+                  model: aiReviewModel.value,
+                  link: aiReviewLink.value,
+                  "hidden-avatar": __props.isMobile,
+                  onClickLink: handleAiReviewClick
+                }, null, 8, ["provider", "content", "timestamp", "model", "link", "hidden-avatar"])
               ];
             }
           }),
           key: "0"
-        } : void 0,
-        articleGPTId.value && articleGPTResponse.value ? {
-          name: "list-top-extra",
-          fn: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(ssrRenderComponent(ArticleChatgpt, {
-                "gpt-id": articleGPTId.value,
-                "gpt-response": articleGPTResponse.value,
-                "gpt-timestamp": articleGPTTimestamp.value,
-                "gpt-model": articleGPTModel.value,
-                "hidden-avatar": __props.isMobile,
-                onClickLink: handleCommentUsernameChatGPTClick
-              }, null, _parent2, _scopeId));
-            } else {
-              return [
-                createVNode(ArticleChatgpt, {
-                  "gpt-id": articleGPTId.value,
-                  "gpt-response": articleGPTResponse.value,
-                  "gpt-timestamp": articleGPTTimestamp.value,
-                  "gpt-model": articleGPTModel.value,
-                  "hidden-avatar": __props.isMobile,
-                  onClickLink: handleCommentUsernameChatGPTClick
-                }, null, 8, ["gpt-id", "gpt-response", "gpt-timestamp", "gpt-model", "hidden-avatar"])
-              ];
-            }
-          }),
-          key: "1"
         } : void 0
       ]), _parent));
       _push(`</div></div>`);
@@ -9834,7 +9838,7 @@ _sfc_main$1g.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/index.vue");
   return _sfc_setup$1g ? _sfc_setup$1g(props, ctx) : void 0;
 };
-const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$1g, [["__scopeId", "data-v-186bdf71"]]);
+const ArticleDetailPage = /* @__PURE__ */ _export_sfc(_sfc_main$1g, [["__scopeId", "data-v-fcd1d740"]]);
 const StatisticCount = defineComponent({
   name: "StatisticCount",
   props: {
@@ -12654,17 +12658,17 @@ const _sfc_main$10 = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_webfont = resolveComponent("webfont");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-e9bb332a>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "guestbook-page" }, _attrs))} data-v-94ac68c0>`);
       _push(ssrRenderComponent(_component_responsive, null, {
         desktop: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="desktop-banner" data-v-e9bb332a${_scopeId}>`);
+            _push2(`<div class="desktop-banner" data-v-94ac68c0${_scopeId}>`);
             _push2(ssrRenderComponent(_component_uimage, {
               class: "image",
               src: bannerImage,
               cdn: ""
             }, null, _parent2, _scopeId));
-            _push2(`<span class="slogan" data-v-e9bb332a${_scopeId}>`);
+            _push2(`<span class="slogan" data-v-94ac68c0${_scopeId}>`);
             _push2(ssrRenderComponent(_component_webfont, { class: "text" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
@@ -12813,7 +12817,7 @@ const _sfc_main$10 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="comment" data-v-e9bb332a>`);
+      _push(`<div class="comment" data-v-94ac68c0>`);
       _push(ssrRenderComponent(Comment, {
         "post-id": 0,
         plain: props.isMobile,
@@ -12829,7 +12833,7 @@ _sfc_main$10.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/guestbook.vue");
   return _sfc_setup$10 ? _sfc_setup$10(props, ctx) : void 0;
 };
-const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["__scopeId", "data-v-e9bb332a"]]);
+const GuestbookPage = /* @__PURE__ */ _export_sfc(_sfc_main$10, [["__scopeId", "data-v-94ac68c0"]]);
 const APP_LOGO_URL = "/images/page-app/logo.png";
 const _sfc_main$$ = /* @__PURE__ */ defineComponent({
   __name: "app",
