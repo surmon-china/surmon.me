@@ -1,13 +1,25 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import Markdown from '/@/components/common/markdown.vue'
 
+  const avatarMap = {
+    chatgpt3: '/images/ai-providers/chatgpt-3.webp',
+    chatgpt4: '/images/ai-providers/chatgpt-4.webp',
+    openai: '/images/ai-providers/openai.svg',
+    gemini: '/images/ai-providers/gemini.svg',
+    google: '/images/ai-providers/google.svg',
+    microsoft: '/images/ai-providers/microsoft.svg',
+    meta: '/images/ai-providers/meta.svg',
+    qwen: '/images/ai-providers/qwen.svg',
+    default: '/icon.normal.png'
+  } as const
+
   const props = defineProps<{
-    gptId: string
-    gptResponse: string
-    gptModel?: string
-    gptTimestamp?: string
+    content: string
+    provider: string
+    model?: string
+    timestamp?: string
+    link?: string
     hiddenAvatar?: boolean
   }>()
 
@@ -19,37 +31,48 @@
     emit('click-link')
   }
 
-  const avatarURL = computed(() => {
-    const fileName = props.gptModel?.includes('3') ? '3.5' : '4.0'
-    return `/images/chatgpt/${fileName}.png`
+  const aiAvatarUrl = computed<string>(() => {
+    const provider = props.provider.toLowerCase()
+    return provider === 'chatgpt'
+      ? props.model?.includes('3')
+        ? avatarMap.chatgpt3
+        : avatarMap.chatgpt4
+      : avatarMap[provider] || avatarMap.default
   })
 </script>
 
 <template>
-  <div class="gpt-comment" :class="{ 'hide-avatar': hiddenAvatar }">
-    <div class="gpt-avatar" v-if="!hiddenAvatar">
-      <ulink class="link" :href="getChatGPTShareURL(gptId)" @click="handleLinkClick">
-        <uimage cdn :src="avatarURL" :alt="gptModel" draggable="false" />
+  <div class="ai-review" :class="{ 'hide-avatar': hiddenAvatar }">
+    <div class="ai-avatar" v-if="!hiddenAvatar">
+      <ulink class="link" :href="link" @click="handleLinkClick">
+        <uimage
+          class="image"
+          :alt="model"
+          :src="aiAvatarUrl"
+          :class="{ svg: aiAvatarUrl.endsWith('.svg') }"
+          draggable="false"
+          cdn
+        />
       </ulink>
     </div>
-    <div class="gpt-body">
-      <div class="gpt-header">
+    <div class="ai-body">
+      <div class="ai-header">
         <div class="left">
-          <ulink class="username" :href="getChatGPTShareURL(gptId)" @click="handleLinkClick">ChatGPT</ulink>
-          <span class="model" v-if="gptModel">
+          <ulink class="provider" :href="link" @click="handleLinkClick">{{ provider }}</ulink>
+          <span class="model" v-if="model">
             <i class="iconfont icon-cpu"></i>
-            <span>{{ gptModel }}</span>
+            <span>{{ model }}</span>
           </span>
         </div>
         <div class="right">
-          <span class="created" data-allow-mismatch v-if="gptTimestamp">
-            <udate :date="Number(gptTimestamp) * 1000" to="ago" />
+          <span class="created" data-allow-mismatch v-if="timestamp">
+            <udate :date="Number(timestamp) * 1000" to="ago" />
           </span>
         </div>
       </div>
-      <div class="gpt-content">
+      <div class="ai-content">
         <div class="markdown">
-          <markdown :markdown="props.gptResponse" :compact="true" :render-options="{ sanitize: true }" />
+          <markdown :markdown="content" :compact="true" :render-options="{ sanitize: true }" />
         </div>
       </div>
     </div>
@@ -61,17 +84,17 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .gpt-comment {
+  .ai-review {
     position: relative;
     padding-left: 2rem;
     margin-top: $gap-lg;
     &:hover {
-      .gpt-body {
+      .ai-body {
         background-color: $module-bg-hover;
       }
     }
 
-    .gpt-avatar {
+    .ai-avatar {
       display: block;
       position: absolute;
       left: 0;
@@ -80,22 +103,29 @@
       .link {
         $size: 4.8rem;
         position: relative;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: $size;
         height: $size;
         border: 4px solid $module-bg-lighter;
         border-radius: $radius-sm;
         background-color: $module-bg-darker-2;
 
-        img {
+        .image {
           width: 100%;
           height: 100%;
           border-radius: $radius-xs;
+
+          &.svg {
+            width: 65%;
+            height: auto;
+          }
         }
       }
     }
 
-    .gpt-body {
+    .ai-body {
       display: block;
       width: 100%;
       height: 100%;
@@ -104,7 +134,7 @@
       border-radius: $radius-xs;
       @include mix.background-transition();
 
-      > .gpt-header {
+      > .ai-header {
         position: relative;
         display: flex;
         justify-content: space-between;
@@ -114,10 +144,10 @@
           align-items: center;
         }
 
-        .username {
+        .provider {
           font-weight: bold;
           margin-right: $gap;
-          &:hover {
+          &[href]:not([href='']):hover {
             @include mix.text-underline();
           }
         }
@@ -140,7 +170,7 @@
         }
       }
 
-      > .gpt-content {
+      > .ai-content {
         padding-right: $gap-xs;
         user-select: text;
 
@@ -154,7 +184,7 @@
       padding: 0;
       margin-top: $gap;
 
-      .gpt-body {
+      .ai-body {
         padding: $gap-sm $gap;
       }
     }

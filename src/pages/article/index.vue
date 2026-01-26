@@ -10,7 +10,6 @@
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
   import { SocialMedia } from '/@/components/widgets/share.vue'
-  import { getChatGPTShareURL } from '/@/transforms/chatgpt'
   import { getExtrasMap } from '/@/transforms/state'
   import { scrollToAnchor } from '/@/utils/scroller'
   import logger from '/@/utils/logger'
@@ -22,7 +21,7 @@
   import ArticleUpvote from './upvote.vue'
   import ArticleRelated from './related.vue'
   import ArticleNeighbour from './neighbour.vue'
-  import ArticleChatgpt from './chatgpt.vue'
+  import ArticleAiReview from './ai-review.vue'
 
   const props = defineProps<{
     articleId: number
@@ -36,20 +35,15 @@
   const isLiked = computed(() => !!(article.value && identityStore.isLikedArticle(article.value.id)))
   const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras))
 
-  // fot ChatGPT
-  const articleGPTId = computed(() => articleExtrasMap.value.get('chatgpt-conversation-id'))
-  const articleGPTResponse = computed(() => articleExtrasMap.value.get('chatgpt-conversation-response'))
-  const articleGPTTimestamp = computed(() => articleExtrasMap.value.get('chatgpt-conversation-timestamp'))
-  const articleGPTModel = computed(() => articleExtrasMap.value.get('chatgpt-conversation-model'))
+  // fot AI review
+  const aiReviewProvider = computed(() => articleExtrasMap.value.get('ai-review-provider'))
+  const aiReviewModel = computed(() => articleExtrasMap.value.get('ai-review-model'))
+  const aiReviewContent = computed(() => articleExtrasMap.value.get('ai-review-content'))
+  const aiReviewTimestamp = computed(() => articleExtrasMap.value.get('ai-review-timestamp'))
+  const aiReviewLink = computed(() => articleExtrasMap.value.get('ai-review-link'))
 
-  const handleCommentTopBarChatGPTClick = () => {
-    gtag?.event('chatgpt_comment_top_bar', {
-      event_category: GAEventCategories.Comment
-    })
-  }
-
-  const handleCommentUsernameChatGPTClick = () => {
-    gtag?.event('chatgpt_comment_name_link', {
+  const handleAiReviewClick = () => {
+    gtag?.event('ai_review_link', {
       event_category: GAEventCategories.Comment
     })
   }
@@ -198,23 +192,15 @@
     </placeholder>
     <div class="comment">
       <comment :plain="isMobile" :readonly="article?.disabled_comments" :fetching="fetching" :post-id="articleId">
-        <template #topbar-extra v-if="articleGPTId">
-          <ulink
-            class="chat-gpt-link"
-            :href="getChatGPTShareURL(articleGPTId)"
-            @click="handleCommentTopBarChatGPTClick"
-          >
-            <i class="iconfont icon-chat-gpt"></i>
-          </ulink>
-        </template>
-        <template #list-top-extra v-if="articleGPTId && articleGPTResponse">
-          <article-chatgpt
-            :gpt-id="articleGPTId"
-            :gpt-response="articleGPTResponse"
-            :gpt-timestamp="articleGPTTimestamp"
-            :gpt-model="articleGPTModel"
+        <template #list-top-extra v-if="aiReviewContent && aiReviewProvider">
+          <article-ai-review
+            :provider="aiReviewProvider"
+            :content="aiReviewContent"
+            :timestamp="aiReviewTimestamp"
+            :model="aiReviewModel"
+            :link="aiReviewLink"
             :hidden-avatar="isMobile"
-            @click-link="handleCommentUsernameChatGPTClick"
+            @click-link="handleAiReviewClick"
           />
         </template>
       </comment>
@@ -263,20 +249,6 @@
         }
         &.right {
           right: $distance;
-        }
-      }
-    }
-
-    .comment {
-      .chat-gpt-link {
-        margin-left: 1rem;
-        width: 2em;
-        border-radius: 2px;
-        text-align: center;
-        background-color: $module-bg-darker-1;
-        &:hover {
-          background-color: $chatgpt-primary;
-          color: $white;
         }
       }
     }
