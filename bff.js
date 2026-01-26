@@ -44,7 +44,6 @@ const APP_CONFIG = Object.freeze({
   default_og_image: "/images/og-social-card.jpg",
   root_title_separator: " | ",
   page_title_separator: " • ",
-  // page_title_separator: ' · ',
   primary_color: "#0088f5"
 });
 const APP_PROFILE = Object.freeze({
@@ -80,9 +79,9 @@ const VALUABLE_LINKS = Object.freeze({
   GITHUB_SURMON_ME_NATIVE: "https://github.com/surmon-china/surmon.me.native",
   GOOGLE_MY_MAP: "https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3",
   MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
-  GITHUB_STATISTIC_JSON_URL: "https://raw.githubusercontent.com/surmon-china/surmon-china/release/",
+  GITHUB_STATISTICS_JSON_URL: "https://raw.githubusercontent.com/surmon-china/surmon-china/release/",
   GOOGLE_MY_MAP_KML_URL: "https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w",
-  GO_LINK_MAP_ENDPOINT: "https://go.surmon.me"
+  GO_LINKS_MAP_ENDPOINT: "https://go.surmon.me"
 });
 const GO_LINK_MAP_KEYS = Object.freeze([
   "status",
@@ -105,7 +104,7 @@ const GO_LINK_MAP_KEYS = Object.freeze([
   "x"
 ]);
 GO_LINK_MAP_KEYS.reduce(
-  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINK_MAP_ENDPOINT}/${key}` }),
+  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}` }),
   {}
 );
 const SUCCESS = 200;
@@ -133,8 +132,8 @@ var TunnelModule = /* @__PURE__ */ ((TunnelModule2) => {
   TunnelModule2["DoubanMovies"] = "douban_movies";
   TunnelModule2["GitHubSponsors"] = "github_sponsors";
   TunnelModule2["GitHubContributions"] = "github_contributions";
-  TunnelModule2["StatisticGitHubJson"] = "statistic_github_json";
-  TunnelModule2["StatisticNpmJson"] = "statistic_npm_json";
+  TunnelModule2["StatisticsGitHubJson"] = "statistics_github_json";
+  TunnelModule2["StatisticsNpmJson"] = "statistics_npm_json";
   return TunnelModule2;
 })(TunnelModule || {});
 const MIME_TYPES = {
@@ -759,7 +758,7 @@ const getRssXml = async (cache2) => {
   archiveData.articles.forEach((article) => {
     return feed.item({
       title: article.title,
-      description: article.description,
+      description: article.summary,
       url: getArticleURL(article.id),
       guid: String(article.id),
       categories: article.categories.map((category) => category.slug),
@@ -869,13 +868,13 @@ const getMyGoogleMap = () => {
   });
   return axios.get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 8e3 }).then((response) => xmlParser.parse(response.data).kml.Document);
 };
-const fetchGitHubStatisticJSON = async (fileName) => {
-  const url = `${VALUABLE_LINKS.GITHUB_STATISTIC_JSON_URL}${fileName}`;
+const fetchGitHubStatisticsJson = async (fileName) => {
+  const url = `${VALUABLE_LINKS.GITHUB_STATISTICS_JSON_URL}${fileName}`;
   const response = await axios.get(url, { timeout: 8e3 });
   return response.data;
 };
-const getGitHubStatistic = () => {
-  return fetchGitHubStatisticJSON("github.json").then((data) => ({
+const getGitHubStatistics = () => {
+  return fetchGitHubStatisticsJson("github.json").then((data) => ({
     followerCount: data.userinfo.followers,
     followingCount: data.userinfo.following,
     gistCount: data.userinfo.public_gists,
@@ -886,13 +885,13 @@ const getGitHubStatistic = () => {
   }));
 };
 const getGitHubSponsors = () => {
-  return fetchGitHubStatisticJSON("github.sponsors.json");
+  return fetchGitHubStatisticsJson("github.sponsors.json");
 };
 const getGitHubContributions = () => {
-  return fetchGitHubStatisticJSON("github.contributions.json");
+  return fetchGitHubStatisticsJson("github.contributions.json");
 };
-const getNPMStatistic = async () => {
-  const data = await fetchGitHubStatisticJSON("npm.json");
+const getNPMStatistics = async () => {
+  const data = await fetchGitHubStatisticsJson("npm.json");
   const totalPackages = data ? Object.keys(data.downloads).length : 0;
   const totalDownloads = data ? Object.values(data.downloads).reduce((p, c) => p + c, 0) : 0;
   const averageScore = (() => {
@@ -1365,21 +1364,21 @@ app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.GitHubContrib
     })
   );
 });
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticGitHubJson}`, async () => {
+app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticsGitHubJson}`, async () => {
   return respond.json(
     await cacher.passive(cache, {
-      key: TunnelModule.StatisticGitHubJson,
+      key: TunnelModule.StatisticsGitHubJson,
       ttl: hours(8),
-      getter: getGitHubStatistic
+      getter: getGitHubStatistics
     })
   );
 });
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticNpmJson}`, async () => {
+app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.StatisticsNpmJson}`, async () => {
   return respond.json(
     await cacher.passive(cache, {
-      key: TunnelModule.StatisticNpmJson,
+      key: TunnelModule.StatisticsNpmJson,
       ttl: hours(8),
-      getter: getNPMStatistic
+      getter: getNPMStatistics
     })
   );
 });
