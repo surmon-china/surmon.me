@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+### 5.11.0 (2026-01-27)
+
+- Implement `comments_disabled` support, aligning with NodePress capabilities.
+- Refactor the original ChatGPT Comment logic into a more generic extra structure.
+
 ### 5.10.0 (2026-01-26)
 
 - Update all APIs and data structures to match NodePress v6 changes.
