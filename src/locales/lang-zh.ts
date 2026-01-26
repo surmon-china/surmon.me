@@ -50,6 +50,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.ARTICLE_FEATURED]: '精选',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: '精选',
   [LocalesKey.COMMENT_LIST_EMPTY]: '期待你的捷足先登',
+  [LocalesKey.COMMENT_DISABLED]: '当前页面的评论功能已关闭',
   [LocalesKey.COMMENT_UPVOTE]: '赞',
   [LocalesKey.COMMENT_DOWNVOTE]: '踩',
   [LocalesKey.COMMENT_DELETE]: '删除',

@@ -27,6 +27,7 @@
     isReply?: boolean
     isChild?: boolean
     hasChild?: boolean
+    hiddenReply?: boolean
     hiddenAvatar?: boolean
     hiddenUa?: boolean
     hiddenLocation?: boolean
@@ -214,14 +215,16 @@
               <i18n :k="LocalesKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
-            <button class="reply" @click="handleCancelReply" v-if="isReply">
-              <i class="iconfont icon-cancel" />
-              <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
-            </button>
-            <button class="reply" @click="handleReply" v-else>
-              <i class="iconfont icon-reply" />
-              <i18n :k="LocalesKey.COMMENT_REPLY" />
-            </button>
+            <template v-if="!hiddenReply">
+              <button class="reply" @click="handleCancelReply" v-if="isReply">
+                <i class="iconfont icon-cancel" />
+                <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
+              </button>
+              <button class="reply" @click="handleReply" v-else>
+                <i class="iconfont icon-reply" />
+                <i18n :k="LocalesKey.COMMENT_REPLY" />
+              </button>
+            </template>
           </div>
           <div class="right">
             <button class="delete" :disabled="commentStore.deleting" @click="handleDelete" v-if="isDeletable">

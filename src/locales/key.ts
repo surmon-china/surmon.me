@@ -52,6 +52,7 @@ export enum LocalesKey {
   ARTICLE_FEATURED = 'article-featured',
   ARTICLE_FEATURED_SHORT = 'article-featured-short',
   COMMENT_LIST_EMPTY = 'comment-list-placeholder',
+  COMMENT_DISABLED = 'comment-disabled',
   COMMENT_UPVOTE = 'comment-likes',
   COMMENT_DOWNVOTE = 'comment-dislikes',
   COMMENT_REPLY = 'reply-comment',

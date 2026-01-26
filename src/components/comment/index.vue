@@ -21,16 +21,18 @@
 
   export interface Props {
     postId: number
+    readonly?: boolean
     fetching?: boolean
     plain?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
+    readonly: false,
     fetching: false,
     plain: false
   })
 
-  const { i18n, gtag, route, globalState } = useEnhancer()
+  const { gtag, route, globalState, i18n: _i18n } = useEnhancer()
   const identityStore = useIdentityStore()
   const commentStore = useCommentStore()
 
@@ -122,10 +124,10 @@
 
     // content length
     if (!payload.content || !payload.content.trim()) {
-      throw `${i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`
+      throw `${_i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`
     }
     if (payload.content.length > MAX_COMMENT_LENGTH) {
-      throw `${i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`
+      throw `${_i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`
     }
 
     // temp user profile
@@ -133,10 +135,10 @@
     const guestProfileValue = guestProfile.value
     if (isGuest) {
       if (!guestProfileValue.name) {
-        throw i18n.t(LocalesKey.COMMENT_POST_NAME) + '?'
+        throw _i18n.t(LocalesKey.COMMENT_POST_NAME) + '?'
       }
       if (!guestProfileValue.email) {
-        throw i18n.t(LocalesKey.COMMENT_POST_EMAIL) + '?'
+        throw _i18n.t(LocalesKey.COMMENT_POST_EMAIL) + '?'
       }
     }
 
@@ -257,7 +259,10 @@
       </template>
     </comment-topbar>
     <divider class="divider" size="lg" />
-    <comment-publisher-main :fetching="fetching">
+    <div class="readonly" v-if="readonly">
+      <i18n :k="LocalesKey.COMMENT_DISABLED" />
+    </div>
+    <comment-publisher-main :fetching="fetching" v-else>
       <comment-publisher
         v-model:profile="guestProfile"
         :id="ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID"
@@ -293,6 +298,7 @@
         <comment-list
           :comments="commentStore.commentTreeList"
           :reply-pid="commentState.replyPId"
+          :hidden-reply="readonly"
           :hidden-avatar="plain"
           :hidden-ua="plain"
           :plain-vote="plain"
@@ -350,6 +356,13 @@
 
     .divider {
       border-color: $module-bg-darker-1 !important;
+    }
+
+    .readonly {
+      text-align: center;
+      font-weight: bold;
+      line-height: $line-height-base * 2;
+      color: $color-text-secondary;
     }
   }
 </style>

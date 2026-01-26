@@ -28,6 +28,10 @@
         type: Boolean,
         default: false
       },
+      hiddenReply: {
+        type: Boolean,
+        default: false
+      },
       hiddenAvatar: {
         type: Boolean,
         default: false
@@ -110,6 +114,7 @@
         :has-child="!!item.children.length"
         :is-child="isChildList"
         :is-reply="replyPid === item.comment.id"
+        :hidden-reply="hiddenReply"
         :hidden-avatar="hiddenAvatar"
         :hidden-ua="hiddenUa"
         :plain-vote="plainVote"
@@ -125,6 +130,7 @@
           <comment-list
             :comments="buildCommentTree(item.children)"
             :is-child-list="true"
+            :hidden-reply="hiddenReply"
             :hidden-avatar="hiddenAvatar"
             :hidden-ua="hiddenUa"
             :plain-vote="plainVote"

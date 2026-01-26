@@ -50,6 +50,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.ARTICLE_FEATURED]: 'featured',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: 'feat',
   [LocalesKey.COMMENT_LIST_EMPTY]: 'Be the first to comment',
+  [LocalesKey.COMMENT_DISABLED]: 'Commenting on this page is currently unavailable',
   [LocalesKey.COMMENT_UPVOTE]: 'upvote',
   [LocalesKey.COMMENT_DOWNVOTE]: 'downvote',
   [LocalesKey.COMMENT_DELETE]: 'delete',

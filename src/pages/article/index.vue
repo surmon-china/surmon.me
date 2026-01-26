@@ -197,7 +197,7 @@
       </template>
     </placeholder>
     <div class="comment">
-      <comment :plain="isMobile" :fetching="fetching" :post-id="articleId">
+      <comment :plain="isMobile" :readonly="article?.disabled_comments" :fetching="fetching" :post-id="articleId">
         <template #topbar-extra v-if="articleGPTId">
           <ulink
             class="chat-gpt-link"
