@@ -111,7 +111,7 @@
         display: block;
         position: absolute;
         right: $gap-lg * 2;
-        bottom: $gap * 2;
+        bottom: $gap-lg * 2;
         height: $size;
         line-height: $size;
         padding: 0 $gap-sm;
