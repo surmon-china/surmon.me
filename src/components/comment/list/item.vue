@@ -3,17 +3,16 @@
   import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { UserType } from '/@/stores/identity'
+  import { LocalesKey } from '/@/locales'
   import { getCommentItemElementId } from '/@/constants/element-anchor'
   import { getCommentUrlHashById } from '/@/constants/element-anchor'
   import { APP_CONFIG } from '/@/configs/app.config'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getPageURL, getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
   import { getExtrasMap } from '/@/transforms/state'
-  import { firstUpperCase } from '/@/transforms/text'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { copy } from '/@/utils/clipboard'
   import { Comment } from '/@/interfaces/comment'
-  import { LocalesKey } from '/@/locales'
   import Markdown from '/@/components/common/markdown.vue'
   import CommentLink from './link.vue'
   import CommentLocation from './location.vue'
@@ -148,7 +147,7 @@
         <div class="cm-header">
           <div class="left">
             <comment-link class="username" :class="{ url: Boolean(authorURL) }" :href="authorURL">
-              {{ firstUpperCase(comment.author.name) }}
+              {{ comment.author.name }}
             </comment-link>
             <span class="moderator" v-if="isAdminAuthor">
               <i18n :k="LocalesKey.COMMENT_MODERATOR" />
