@@ -38,7 +38,7 @@
       #{--divider-gap}: $gap;
     }
     &.xs {
-      #{--divider-gap}: $gap-xs;
+      #{--divider-gap}: $gap-tiny;
     }
     &.sm {
       #{--divider-gap}: $gap-sm;

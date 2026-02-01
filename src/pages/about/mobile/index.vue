@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useAdminProfileStore } from '/@/stores/foundation'
   import { LocalesKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
-  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { markdownToHTML } from '/@/transforms/markdown'
   import { useUniversalFetch } from '/@/app/universal'
   import { getPageRoute } from '/@/transforms/route'
-  import PageBanner from '/@/components/common/banner.vue'
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'
+  import { APP_PROFILE, BFF_CONFIG } from '/@/configs/app.config'
+  import MobileBanner from '/@/components/mobile/widgets/page-banner.vue'
 
-  const { isZhLang, appConfig } = useEnhancer()
-  const { goLinksStore, adminProfileStore } = useStores()
+  const { appConfig, goLinks, isZhLang } = useEnhancer()
+  const adminProfileStore = useAdminProfileStore()
 
   useAboutPageMeta()
   useUniversalFetch(() => adminProfileStore.fetch())
@@ -19,11 +19,11 @@
 
 <template>
   <div class="about-page">
-    <page-banner :is-mobile="true" image="/images/page-about/banner-mobile.webp" :image-position="70" cdn>
+    <mobile-banner background-image="/images/page-about/mobile-banner-2.webp" :background-image-y="58" cdn>
       <template #title>
         <webfont bolder><i18n :k="LocalesKey.PAGE_ABOUT" /></webfont>
       </template>
-    </page-banner>
+    </mobile-banner>
     <div class="profile">
       <div class="avatar">
         <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
@@ -34,22 +34,22 @@
         <webfont bolder>{{ isZhLang ? APP_PROFILE.description_short_zh : APP_PROFILE.description_en }}</webfont>
       </h4>
       <div class="socials">
-        <ulink class="item github" :href="goLinksStore.map.github">
+        <ulink class="item github" :href="goLinks.github">
           <i class="iconfont icon-github" />
         </ulink>
-        <ulink class="item instagram" :href="goLinksStore.map.instagram">
+        <ulink class="item instagram" :href="goLinks.instagram">
           <i class="iconfont icon-instagram" />
         </ulink>
-        <ulink class="item threads" :href="goLinksStore.map.threads">
+        <ulink class="item threads" :href="goLinks.threads">
           <i class="iconfont icon-threads" />
         </ulink>
-        <ulink class="item telegram" :href="goLinksStore.map.telegram">
+        <ulink class="item telegram" :href="goLinks.telegram">
           <i class="iconfont icon-telegram" />
         </ulink>
-        <ulink class="item zhihu" :href="goLinksStore.map.zhihu">
+        <ulink class="item zhihu" :href="goLinks.zhihu">
           <i class="iconfont icon-zhihu" />
         </ulink>
-        <ulink class="item douban" :href="goLinksStore.map['douban-movie']">
+        <ulink class="item douban" :href="goLinks['douban-movie']">
           <i class="iconfont icon-douban" />
         </ulink>
       </div>
@@ -80,15 +80,15 @@
         <i class="iconfont icon-comment" />
         <span class="label"><i18n v-bind="i18ns.guestbook" /></span>
       </router-link>
-      <ulink class="item discord" :href="goLinksStore.map['discord-server']">
+      <ulink class="item discord" :href="goLinks['discord-server']">
         <i class="iconfont icon-discord" />
         <span class="label"><i18n v-bind="i18ns.discordGroup" /></span>
       </ulink>
-      <ulink class="item telegram" :href="goLinksStore.map['telegram-group']">
+      <ulink class="item telegram" :href="goLinks['telegram-group']">
         <i class="iconfont icon-telegram" />
         <span class="label"><i18n v-bind="i18ns.telegramGroup" /></span>
       </ulink>
-      <ulink class="item rss" :href="VALUABLE_LINKS.RSS">
+      <ulink class="item rss" :href="BFF_CONFIG.route_path_rss">
         <i class="iconfont icon-rss" />
         <span class="label"><i18n v-bind="i18ns.rss" /></span>
       </ulink>
@@ -112,8 +112,9 @@
   .about-page {
     .profile {
       position: relative;
-      padding: $gap-lg;
-      padding-top: $gap * 5;
+      padding-inline: $gap;
+      padding-top: 3.4rem;
+      padding-bottom: 1.2rem;
       border-bottom-left-radius: $radius-sm;
       border-bottom-right-radius: $radius-sm;
       background-color: $module-bg-opaque;
@@ -121,12 +122,12 @@
       .avatar {
         width: 100%;
         position: absolute;
-        top: -$gap * 4;
+        top: -$gap-sm * 4;
         left: 0;
         text-align: center;
 
         .image {
-          $size: 7rem;
+          $size: 5.2rem;
           width: $size;
           height: $size;
           z-index: $z-index-normal + 2;
@@ -140,24 +141,26 @@
       .slogan {
         text-align: center;
         margin-top: 0;
-        margin-bottom: $gap-xs;
+      }
+
+      .name {
+        margin-bottom: $gap-tiny;
       }
 
       .slogan {
-        line-height: $line-height-base * 1.2;
+        margin-bottom: $gap-xs;
       }
 
       .description {
         margin-top: 0;
-        margin-bottom: $gap;
-        line-height: $line-height-base * 1.3;
+        margin-bottom: $gap-sm;
+        line-height: $line-height-loose;
         text-align: center;
       }
 
       .socials {
         $button-size: 3em;
         height: $button-size;
-        margin-bottom: $gap-xs;
         display: flex;
         justify-content: space-around;
 
@@ -204,20 +207,20 @@
     }
 
     .biography {
-      margin-top: $gap-lg;
+      margin-top: $gap;
       position: relative;
-      padding-top: $gap-sm;
-      padding-bottom: $gap-lg;
-      padding-inline: $gap-sm * 3;
+      padding-inline: $gap;
+      padding-top: $gap-xs;
+      padding-bottom: $gap;
       border-radius: $radius-sm;
       background-color: $module-bg-opaque;
 
       .bridge {
         $distance: 3rem;
         position: absolute;
-        top: -$gap-lg;
-        width: $gap-lg;
-        height: $gap-lg;
+        top: -$gap;
+        width: $gap;
+        height: $gap;
         background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
         &.left {
           left: $distance;
@@ -263,17 +266,17 @@
     }
 
     .buttons {
-      margin-top: $gap-lg;
+      margin-top: $gap;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      grid-gap: $gap-lg;
+      grid-gap: $gap;
 
       .item {
         height: 3em;
         display: flex;
         align-items: center;
-        padding-left: $gap;
-        padding-right: $gap-xs;
+        padding-left: $gap-sm;
+        padding-right: $gap-tiny;
         border-radius: $radius-sm;
         background-color: $module-bg;
         overflow: hidden;
@@ -292,7 +295,7 @@
         }
 
         .iconfont {
-          margin-right: $gap-sm;
+          margin-right: 0.5em;
         }
 
         .label {
@@ -304,14 +307,14 @@
     }
 
     .qrcodes {
-      margin-top: $gap-lg;
+      margin-top: $gap;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-gap: $gap-lg;
+      grid-gap: $gap;
 
       .item {
         width: 100%;
-        padding: $gap;
+        padding: $gap-xs;
         border-radius: $radius-sm;
         overflow: hidden;
         background-color: $module-bg-opaque;

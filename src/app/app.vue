@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import NavProgress from '/@/components/widgets/navigation-progress/index.vue'
-  import EmojiRain from '/@/components/widgets/emoji-rain.vue'
-  import DesktopMain from '/@/components/layout/desktop/main.vue'
-  import MobileMain from '/@/components/layout/mobile/main.vue'
+  import NavProgress from '/@/components/common/navigation-progress/index.vue'
+  import DesktopMain from '/@/components/desktop/layout/main.vue'
+  import MobileMain from '/@/components/mobile/layout/main.vue'
   import AppBoundary from './root/boundary.vue'
 
   const { globalState } = useEnhancer()
@@ -13,7 +12,6 @@
   <div class="app-root" v-cloak>
     <client-only>
       <nav-progress :spin="!globalState.userAgent.isMobile" />
-      <emoji-rain />
       <popup-root />
     </client-only>
     <app-boundary>

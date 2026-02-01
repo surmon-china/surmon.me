@@ -4,6 +4,35 @@
   display: flex;
   align-items: center;
 
+  &.gap-default {
+    #{--indicator-gap}: $gap;
+  }
+  &.gap-lg {
+    #{--indicator-gap}: $gap-lg;
+  }
+  &.gap-sm {
+    #{--indicator-gap}: $gap-sm;
+  }
+  &.gap-xs {
+    #{--indicator-gap}: $gap-xs;
+  }
+  &.gap-tiny {
+    #{--indicator-gap}: $gap-tiny;
+  }
+
+  &.radius-tiny {
+    #{--indicator-radius}: $radius-tiny;
+  }
+  &.radius-xs {
+    #{--indicator-radius}: $radius-xs;
+  }
+  &.radius-sm {
+    #{--indicator-radius}: $radius-sm;
+  }
+  &.radius-md {
+    #{--indicator-radius}: $radius-md;
+  }
+
   @keyframes loading-indicator {
     0% {
       opacity: 1;
@@ -19,9 +48,10 @@
   > div {
     width: var(--indicator-width);
     height: var(--indicator-height);
-    margin: 0 var(--indicator-gap);
+    margin-right: var(--indicator-gap);
     border-radius: var(--indicator-radius);
     animation: loading-indicator 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+
     &:nth-child(1) {
       background: $module-bg-darker-3;
       animation-delay: -0.6s;
@@ -35,6 +65,7 @@
       animation-delay: -0.2s;
     }
     &:nth-child(4) {
+      margin-right: 0;
       background: $module-bg-darker-3;
       animation-delay: -1s;
     }

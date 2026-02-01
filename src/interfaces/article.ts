@@ -1,5 +1,5 @@
 import { Language } from '/@/locales'
-import { ExtraKeyValue } from './common'
+import { ExtraKeyValue } from './extra'
 import { Category } from './category'
 import { Tag } from './tag'
 

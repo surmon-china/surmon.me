@@ -67,12 +67,12 @@
 
       .image {
         background-color: $module-bg-darker-1;
-        min-height: 4rem;
+        min-height: 3rem;
       }
 
       .video {
         background-color: $module-bg-darker-1;
-        min-height: 8rem;
+        min-height: 6rem;
       }
 
       .audio::-webkit-media-controls-enclosure {
@@ -81,10 +81,10 @@
     }
 
     .content {
-      padding: $gap-sm $gap;
+      padding: $gap-tiny 0.7em;
 
       ::v-deep(p) {
-        margin-bottom: $gap-sm;
+        margin-bottom: $gap-xs;
         &:last-child {
           margin-bottom: 0;
         }
@@ -92,14 +92,15 @@
     }
 
     .footer {
-      margin-bottom: $gap-sm;
-      padding: 0 $gap;
+      margin-top: 0.1rem;
+      margin-bottom: $gap-xs;
+      padding: 0 0.7em;
       display: flex;
       justify-content: space-between;
       align-items: center;
 
       .link {
-        font-size: $font-size-small;
+        font-size: $font-size-h6;
         color: $color-text;
         line-height: 1;
 
@@ -114,7 +115,7 @@
       }
 
       .timestamp {
-        font-size: $font-size-small;
+        font-size: $font-size-h6;
         color: $color-text-secondary;
       }
     }

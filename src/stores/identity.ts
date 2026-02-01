@@ -1,5 +1,5 @@
 /**
- * @file Identity state
+ * @file Identity store
  * @module store/identity
  * @author Surmon <https://github.com/surmon-china>
  */

@@ -130,8 +130,8 @@
       transform: translateY(-50%);
       white-space: nowrap;
       z-index: $z-index-normal + 1;
-      padding: $gap-sm $gap;
-      padding-right: $gap-lg;
+      padding: $gap-xs $gap-sm;
+      padding-right: $gap;
       background-color: var(--background);
       border-radius: $radius-sm;
       color: $color-text-reversal;
@@ -152,7 +152,7 @@
 
       .date {
         font-weight: bold;
-        margin-bottom: $gap-xs;
+        margin-bottom: $gap-tiny;
       }
 
       .counts {
@@ -161,8 +161,8 @@
         list-style: none;
 
         .item {
-          line-height: 1.8em;
-          font-size: $font-size-small;
+          line-height: $line-height-loose;
+          font-size: $font-size-tertiary;
           &.article {
             color: $surmon;
           }
@@ -176,7 +176,7 @@
           }
 
           .count {
-            margin-left: $gap-sm;
+            margin-left: $gap-xs;
             font-weight: bold;
           }
         }

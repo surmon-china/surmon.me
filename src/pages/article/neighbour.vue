@@ -4,11 +4,12 @@
   defineProps<{
     prev: Article | null
     next: Article | null
+    plain?: boolean
   }>()
 </script>
 
 <template>
-  <div class="neighbour">
+  <div class="neighbour" :class="{ plain }">
     <router-link v-if="prev" class="link prev" :title="prev.title" :to="getArticleDetailRoute(prev.id)">
       <div class="icon">
         <i class="iconfont icon-prev"></i>
@@ -51,11 +52,22 @@
     list-style: none;
     overflow: hidden;
 
+    &.plain {
+      .link {
+        .icon {
+          width: 2rem;
+        }
+
+        .content {
+          padding: $gap-xs $gap-sm;
+        }
+      }
+    }
+
     .link,
     .null {
       display: flex;
       position: relative;
-      overflow: hidden;
       @include mix.radius-box($radius-sm);
     }
 
@@ -89,6 +101,7 @@
           border-right-width: 1px;
         }
       }
+
       &.next {
         justify-content: space-between;
         .icon {
@@ -97,10 +110,11 @@
       }
 
       .icon {
+        flex-shrink: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 3rem;
+        width: 2.4rem;
         height: 100%;
         color: $color-text-secondary;
         border-style: solid;
@@ -109,8 +123,9 @@
       }
 
       .content {
-        width: calc(100% - 3rem);
-        padding: $gap-sm $gap;
+        flex: 1;
+        overflow: hidden;
+        padding: $gap-xs $gap;
 
         .title,
         .summary {
@@ -121,16 +136,15 @@
         }
 
         .title {
-          font-size: $font-size-h6;
           margin-top: 0;
-          margin-bottom: $gap-xs;
+          margin-bottom: $gap-tiny;
           font-weight: bold;
           color: $color-text;
         }
 
         .summary {
           margin-bottom: 0;
-          font-size: $font-size-small;
+          font-size: $font-size-tertiary;
           color: $color-text-disabled;
         }
       }

@@ -1,31 +1,30 @@
 <script lang="ts" setup>
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
+  import { useArticleListStore } from '/@/stores/article-list'
+  import { useThreadsProfileStore, useThreadsLatestMediasStore } from '/@/stores/socials'
   import { LocalesKey } from '/@/locales'
   import { APP_PROFILE } from '/@/configs/app.config'
-  import { isClient } from '/@/configs/app.env'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import ArticleList from '/@/components/listing/desktop/list.vue'
+  import ArticleListMain from '/@/components/desktop/listing/index.vue'
   import Carrousel from './carrousel.vue'
   import Threads from './threads.vue'
 
-  const { isZhLang, i18n: _i18n } = useEnhancer()
-  const { appOptionsStore, threadsProfileStore, threadsLatestMediasStore, articleListStore } = useStores()
+  const { appOptions, isZhLang, i18n: _i18n } = useEnhancer()
+  const articleListStore = useArticleListStore()
+  const threadsProfileStore = useThreadsProfileStore()
+  const threadsLatestMediasStore = useThreadsLatestMediasStore()
 
   const loadmoreArticles = async () => {
-    const targetPage = articleListStore.pagination!.current_page + 1
-    await articleListStore.fetch({ page: targetPage })
-    if (targetPage > 1 && isClient) {
-      scrollToNextScreen()
-    }
+    await articleListStore.fetchNextPage()
+    scrollToNextScreen()
   }
 
   usePageSeo(() => ({
     title: `${APP_PROFILE.title} - ${_i18n.t(LocalesKey.APP_SLOGAN)}`,
     description: isZhLang.value ? APP_PROFILE.description_zh : APP_PROFILE.description_en,
-    keywords: appOptionsStore.data?.keywords.join(',')
+    keywords: appOptions.value?.keywords.join(',')
   }))
 
   useUniversalFetch(() => {
@@ -46,11 +45,12 @@
       :medias="threadsLatestMediasStore.data?.data ?? []"
       :fetching="threadsLatestMediasStore.fetching || threadsProfileStore.fetching || articleListStore.fetching"
     />
-    <article-list
+    <article-list-main
       :mammon="false"
-      :fetching="articleListStore.fetching"
       :articles="articleListStore.data"
       :pagination="articleListStore.pagination"
+      :fetching="articleListStore.fetching"
+      :has-more="articleListStore.hasMore"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -64,7 +64,7 @@
   .index-page {
     .carrousel,
     .threads {
-      margin-bottom: $gap-lg;
+      margin-bottom: $gap;
     }
   }
 </style>

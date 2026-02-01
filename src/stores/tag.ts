@@ -1,5 +1,5 @@
 /**
- * @file Tags state
+ * @file Tags store
  * @module store/tag
  * @author Surmon <https://github.com/surmon-china>
  */

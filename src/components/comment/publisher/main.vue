@@ -6,12 +6,8 @@
   <placeholder :loading="fetching">
     <template #loading>
       <div class="publisher-skeleton" key="skeleton">
-        <div class="avatar">
-          <skeleton-base />
-        </div>
-        <div class="content">
-          <skeleton-base />
-        </div>
+        <skeleton class="avatar" />
+        <skeleton class="content" />
       </div>
     </template>
     <template #default>
@@ -25,19 +21,20 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  $avatar-size: 4rem;
+  $avatar-size: 3rem;
 
   .publisher-skeleton {
     display: flex;
-    height: $avatar-size;
 
     .avatar {
       width: $avatar-size;
+      height: $avatar-size;
       margin-right: $gap;
     }
 
     .content {
       flex-grow: 1;
+      height: $avatar-size;
     }
   }
 </style>

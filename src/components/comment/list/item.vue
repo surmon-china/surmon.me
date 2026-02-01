@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useCommentStore } from '/@/stores/comment'
   import { UserType } from '/@/stores/identity'
   import { LocalesKey } from '/@/locales'
   import { getCommentItemElementId } from '/@/constants/element-anchor'
@@ -9,7 +9,7 @@
   import { APP_CONFIG } from '/@/configs/app.config'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getPageURL, getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
-  import { getExtrasMap } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/extra'
   import { scrollToAnchor } from '/@/utils/scroller'
   import { copy } from '/@/utils/clipboard'
   import { Comment } from '/@/interfaces/comment'
@@ -40,8 +40,8 @@
     (e: CommentEvents.CancelReply, commentId: number): void
   }>()
 
-  const { route, cdnDomain, isCNUser, i18n: _i18n } = useEnhancer()
-  const { commentStore, identityStore } = useStores()
+  const { route, identity, cdnDomain, isCNUser, i18n: _i18n } = useEnhancer()
+  const commentStore = useCommentStore()
 
   const commentExtrasMap = computed(() => getExtrasMap(props.comment.extras))
   const disqusAuthorId = computed(() => commentExtrasMap.value.get('disqus-author-id'))
@@ -50,8 +50,8 @@
   const isAdminAuthor = computed(() => {
     return (
       !!disqusUsername.value &&
-      !!identityStore.disqusConfig &&
-      disqusUsername.value === identityStore.disqusConfig.admin_username
+      !!identity.disqusConfig &&
+      disqusUsername.value === identity.disqusConfig.admin_username
     )
   })
 
@@ -79,10 +79,10 @@
 
   const isDeletable = computed(() => {
     // 1. Disqus logged-in
-    if (identityStore.user.type === UserType.Disqus) {
+    if (identity.user.type === UserType.Disqus) {
       // 2. Logged-in user ID === comment.author.disqus-author-id
       if (disqusAuthorId.value) {
-        return identityStore.user.disqusProfile?.id === disqusAuthorId.value
+        return identity.user.disqusProfile?.id === disqusAuthorId.value
       }
     }
     return false
@@ -118,7 +118,7 @@
   }
 
   const scrollToCommentItem = (commentId: number) => {
-    scrollToAnchor(getCommentItemElementId(commentId), -300)
+    scrollToAnchor(getCommentItemElementId(commentId))
   }
 </script>
 
@@ -198,7 +198,6 @@
               @click="handleVote(true)"
             >
               <i class="iconfont icon-like" />
-              <i18n :k="LocalesKey.COMMENT_UPVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.likes }})</span>
             </button>
             <button
@@ -211,7 +210,6 @@
               @click="handleVote(false)"
             >
               <i class="iconfont icon-dislike" />
-              <i18n :k="LocalesKey.COMMENT_DOWNVOTE" v-if="!plainVote" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
             <template v-if="!hiddenReply">
@@ -251,16 +249,16 @@
   .comment-item {
     position: relative;
     padding-left: 2rem;
-    margin-top: $gap-lg;
+    margin-top: $gap;
     &:first-child {
       margin-top: 0;
     }
 
     /* reply */
     .cm-reply {
-      padding-top: $gap-lg;
-      padding-bottom: $gap-sm;
-      padding-right: $gap-sm;
+      padding-top: $gap;
+      padding-bottom: $gap-tiny;
+      padding-right: $gap-tiny;
     }
 
     &.has-child {
@@ -270,9 +268,14 @@
     }
 
     &.is-child {
-      margin-top: $gap-xs;
-      padding-top: $gap-xs;
+      margin-top: $gap-tiny;
+      padding-top: $gap-tiny;
       border-top: 1px dashed $module-bg-darker-3;
+
+      .cm-avatar {
+        top: 1.8rem;
+      }
+
       .cm-reply {
         padding-right: 0;
         padding-bottom: 0;
@@ -283,12 +286,8 @@
           padding-bottom: 0;
         }
         .cm-reply {
-          padding-bottom: $gap-sm;
+          padding-bottom: $gap-tiny;
         }
-      }
-
-      .cm-avatar {
-        top: $gap-lg * 2;
       }
     }
 
@@ -296,10 +295,10 @@
       display: block;
       position: absolute;
       left: 0;
-      top: $gap * 2;
+      top: 1.2rem;
 
       .link {
-        $size: 4.8rem;
+        $size: 3.6rem;
         position: relative;
         display: block;
         width: $size;
@@ -325,7 +324,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          border-top-left-radius: $radius-sm;
+          border-top-left-radius: $radius-xs;
           color: $white;
           &.disqus {
             background-color: rgba($disqus-primary, 0.5);
@@ -341,7 +340,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: $gap-sm $gap-sm $gap-sm ($gap-lg * 3);
+      padding: $gap-xs $gap-xs $gap-xs 2.3rem;
       background-color: $module-bg-darker-1;
       border-radius: $radius-xs;
       @include mix.background-transition();
@@ -362,8 +361,9 @@
         }
 
         .username {
+          text-transform: capitalize;
           font-weight: bold;
-          margin-right: $gap;
+          margin-right: $gap-sm;
           &.url:hover {
             @include mix.text-underline();
           }
@@ -371,11 +371,11 @@
 
         .moderator {
           display: inline-block;
-          margin-left: -$gap-sm;
+          margin-left: -$gap-xs;
           margin-right: $gap-sm;
-          padding: 0 $gap-xs 0.1em;
+          padding: 0 0.26em 0.1em;
           white-space: nowrap;
-          font-size: 11px;
+          font-size: $font-size-quaternary;
           color: $color-text-reversal;
           background-color: $primary-lighter;
           border-radius: $radius-xs;
@@ -384,11 +384,11 @@
         .author-info {
           display: inline-flex;
           align-items: center;
-          font-size: $font-size-small;
+          font-size: $font-size-tertiary;
           color: $color-text-divider;
 
           > * {
-            margin-right: $gap;
+            margin-right: $gap-sm;
             &:last-child {
               margin-right: 0;
             }
@@ -397,7 +397,7 @@
 
         .floor {
           color: $color-text-divider;
-          font-size: $font-size-small;
+          font-size: $font-size-tertiary;
           font-weight: bold;
           &:hover {
             color: $color-link;
@@ -408,20 +408,19 @@
       }
 
       > .cm-content {
-        padding-right: $gap-xs;
         user-select: text;
 
         .reply {
           display: flex;
           align-items: center;
-          margin-top: $gap-sm;
-          margin-bottom: -$gap-xs;
-          font-size: $font-size-h6;
+          margin-top: 0.4rem;
+          margin-bottom: -$gap-tiny;
+          font-size: $font-size-secondary;
           font-weight: bold;
           color: $color-text-disabled;
 
           .text {
-            margin-right: $gap-xs;
+            margin-right: $gap-tiny;
           }
 
           .parent {
@@ -434,7 +433,7 @@
         }
 
         .markdown {
-          margin: $gap-sm 0;
+          margin: 0.3rem 0;
         }
       }
 
@@ -447,18 +446,8 @@
         .vote,
         .delete {
           color: $color-text-disabled;
-          font-size: $font-size-small;
+          font-size: $font-size-tertiary;
           margin-right: $gap;
-
-          .iconfont {
-            margin-right: $gap-xs;
-          }
-        }
-
-        .reply {
-          &:hover {
-            color: $color-link;
-          }
         }
 
         .vote {
@@ -478,11 +467,25 @@
           }
         }
 
+        .reply {
+          &:hover {
+            color: $color-link;
+          }
+
+          .iconfont {
+            margin-right: $gap-tiny;
+          }
+        }
+
         .delete {
-          color: $color-text-divider;
           margin: 0;
+          color: $color-text-divider;
           &:hover {
             color: $red;
+          }
+
+          .iconfont {
+            margin-right: $gap-tiny;
           }
         }
       }
@@ -496,16 +499,16 @@
 
     &.hide-avatar {
       padding: 0;
-      margin-top: $gap;
+
       &.is-child {
         .cm-content {
           border-left: 6px solid $module-bg-darker-2;
-          padding-left: 1rem;
+          padding-left: $gap-sm;
         }
       }
 
       .cm-body {
-        padding: $gap-sm $gap;
+        padding: $gap-xs $gap-sm;
       }
     }
   }

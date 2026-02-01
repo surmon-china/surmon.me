@@ -14,26 +14,27 @@
 </script>
 
 <template>
-  <placeholder :loading="fetching" :data="hasData || !!$slots.extra">
-    <template #loading>
-      <ul class="main-skeleton">
-        <li v-for="item in skeletonCount" :key="item" class="item">
-          <div class="avatar">
-            <skeleton-base />
-          </div>
-          <div class="content">
-            <skeleton-paragraph :lines="4" />
-          </div>
-        </li>
-      </ul>
-    </template>
+  <placeholder :loading="fetching" :has-data="hasData || !!$slots.extra">
     <template #placeholder>
       <div class="list-empty">
         <i18n :k="LocalesKey.COMMENT_LIST_EMPTY" />
       </div>
     </template>
+    <template #loading>
+      <ul class="list-skeleton">
+        <li class="item" v-for="item in skeletonCount" :key="item">
+          <skeleton class="avatar" />
+          <div class="right">
+            <skeleton class="username" />
+            <skeleton class="content" />
+            <skeleton class="content" />
+            <skeleton class="content" />
+          </div>
+        </li>
+      </ul>
+    </template>
     <template #default>
-      <div class="main">
+      <div class="list-content">
         <slot name="extra"></slot>
         <slot name="list"></slot>
         <slot name="pagination"></slot>
@@ -47,30 +48,50 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .main-skeleton {
-    padding: 0;
+  .list-skeleton {
+    margin: 0;
+    padding-inline: 1em;
 
     .item {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-      margin-bottom: $gap-lg;
-
-      .avatar {
-        width: 5rem;
-        height: 5rem;
+      margin-bottom: 1.2rem;
+      &:last-child {
+        margin-bottom: $gap-sm;
       }
 
-      .content {
-        width: calc((100% - 5rem) * 0.9);
+      .avatar {
+        width: 3.4rem;
+        height: 3.4rem;
+        margin-right: $gap;
+      }
+
+      .right {
+        flex: 1;
+
+        .username {
+          width: 8rem;
+          height: 1.3rem;
+          margin-bottom: $gap-sm;
+        }
+
+        .content {
+          width: 100%;
+          height: 0.8rem;
+          margin-top: $gap-xs;
+          &:nth-child(4) {
+            width: 70%;
+          }
+        }
       }
     }
   }
 
   .list-empty {
-    color: $color-text-secondary;
-    font-weight: bold;
+    line-height: 3rem;
     text-align: center;
-    line-height: 4rem;
+    font-weight: bold;
+    color: $color-text-secondary;
   }
 </style>

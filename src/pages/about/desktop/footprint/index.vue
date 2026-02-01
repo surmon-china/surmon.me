@@ -2,7 +2,7 @@
   import type { Map } from 'mapbox-gl'
   import { shallowRef } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { RESOURCE_LINKS } from '/@/configs/app.config'
   import { flyToLivingMarker } from './mapbox-living-now'
   import MapboxModal from './box-modal.vue'
   import Mapbox from './box-base.vue'
@@ -29,7 +29,7 @@
     <div class="mapbox-wrapper">
       <mapbox class="mapbox" @load="handleMapboxLoad" />
       <div class="toolbar">
-        <ulink class="button" :href="VALUABLE_LINKS.GOOGLE_MY_MAP">
+        <ulink class="button" :href="RESOURCE_LINKS.GOOGLE_MY_MAP">
           <i class="iconfont icon-google-maps"></i>
         </ulink>
         <button class="button" @click="openModal">
@@ -110,19 +110,19 @@
     .legends .buttons,
     .legends .links {
       @include mix.common-bg-module();
-      @include mix.radius-box($radius-lg);
+      @include mix.radius-box($radius-sm);
     }
 
     .legends {
       flex: 1;
       display: flex;
       flex-direction: column;
-      margin-left: $gap * 2;
+      margin-left: $gap-lg;
 
       .buttons {
         flex-shrink: 0;
-        margin-bottom: $gap-lg;
-        padding: $gap-xs 0;
+        margin-bottom: $gap;
+        padding: $gap-tiny 0;
         width: 100%;
 
         .divider {
@@ -167,7 +167,7 @@
           }
 
           .iconfont {
-            margin-right: $gap;
+            margin-right: $gap-sm;
           }
 
           .text {
@@ -191,9 +191,9 @@
 
     .mapbox-wrapper {
       position: relative;
-      padding: $gap;
+      padding: $gap-sm;
       @include mix.common-bg-module();
-      @include mix.radius-box($radius-lg);
+      @include mix.radius-box($radius-sm);
 
       .mapbox {
         width: $map-width;
@@ -203,8 +203,8 @@
 
       .toolbar {
         position: absolute;
-        top: $gap-lg * 2;
-        right: $gap-lg * 2;
+        top: 2rem;
+        right: 2rem;
         z-index: $z-index-normal + 1;
         display: flex;
 

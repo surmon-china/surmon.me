@@ -101,7 +101,7 @@
       .mapboxgl-popup-content {
         background-color: $white;
         box-shadow: 0px 0px 14px 4px rgb(0 0 0 / 10%);
-        border-radius: $radius-lg;
+        border-radius: $radius-md;
         padding: 0.8em 1em;
         font-size: $font-size-base;
         line-height: 1.7;

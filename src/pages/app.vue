@@ -3,10 +3,11 @@
   import { usePageSeo } from '/@/composables/head'
   import { Language, LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
-  import { APP_PROFILE, VALUABLE_LINKS } from '/@/configs/app.config'
   import { firstUpperCase } from '/@/transforms/text'
+  import { APP_PROFILE, RESOURCE_LINKS, BFF_CONFIG } from '/@/configs/app.config'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
+
   const props = defineProps<{
     isMobile?: boolean
   }>()
@@ -56,7 +57,7 @@
           </button>
           <ulink
             class="button source-code"
-            :href="VALUABLE_LINKS.GITHUB_SURMON_ME_NATIVE"
+            :href="RESOURCE_LINKS.GITHUB_SURMON_ME_NATIVE"
             @mousedown="handleAppEvent('app_source_code')"
           >
             <i class="icon iconfont icon-github"></i>
@@ -68,10 +69,12 @@
       <p class="rss">
         <i18n>
           <template #zh>
-            （ 此项目已废弃！建议使用 <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">RSS 订阅</a> ）
+            （ 此项目已废弃！建议使用
+            <a class="link" :href="BFF_CONFIG.route_path_rss" target="_blank">RSS 订阅</a> ）
           </template>
           <template #en>
-            [ DEPRECATED! Use <a class="link" :href="VALUABLE_LINKS.RSS" target="_blank">RSS subscription</a> ]
+            [ DEPRECATED! Use
+            <a class="link" :href="BFF_CONFIG.route_path_rss" target="_blank">RSS subscription</a> ]
           </template>
         </i18n>
       </p>
@@ -89,29 +92,28 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    min-height: 68rem;
-    height: $full-page-active-content-height;
+    min-height: 50rem;
+    height: $full-page-content-height;
 
     .app {
       text-align: center;
 
       .logo {
-        margin-bottom: $gap-lg * 2;
+        margin-bottom: $gap-lg;
         img {
-          width: 6rem;
+          width: 4.6rem;
           border-radius: 1em;
         }
       }
 
       .title {
-        margin-bottom: 1rem;
-        color: $primary;
+        margin-bottom: $gap-sm;
         font-weight: bold;
-        text-transform: uppercase;
+        color: $primary;
       }
 
       .rss {
-        margin-top: 2rem;
+        margin-top: $gap-lg;
         margin-bottom: 0;
         color: $color-text-secondary;
 
@@ -121,8 +123,8 @@
       }
 
       .screen {
-        margin-top: 3rem;
-        width: 36rem;
+        margin-top: 2rem;
+        width: 27rem;
         position: relative;
 
         &:hover {
@@ -141,7 +143,7 @@
         }
 
         .download {
-          $size: 12rem;
+          $size: 9.6rem;
           position: absolute;
           width: 100%;
           height: 100%;
@@ -163,18 +165,18 @@
 
           .button {
             width: $size;
-            height: 3rem;
+            height: 2.4rem;
             display: flex;
             align-items: center;
-            margin-top: 2rem;
-            padding: 0 1rem;
+            margin-top: $gap-lg;
+            padding: 0 1em;
             border: 1px solid;
             border-radius: $radius-sm;
             transition: all $motion-duration-fast;
 
             .icon {
               font-size: $font-size-h4;
-              margin-right: $gap-sm;
+              margin-right: $gap-xs;
             }
 
             &.android-download,
@@ -196,7 +198,7 @@
 
               .new-window {
                 margin-left: $gap-xs;
-                font-size: $font-size-small - 1;
+                font-size: $font-size-quinary;
               }
             }
           }
@@ -205,8 +207,8 @@
     }
 
     &.mobile {
-      min-height: 53rem;
-      height: calc(100vh - #{$mobile-header-height + $gap-lg + $gap-lg + $mobile-footer-height});
+      min-height: 40rem;
+      height: $mobile-page-content-height;
 
       .app {
         .screen {

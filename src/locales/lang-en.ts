@@ -43,7 +43,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.LIST_NO_MORE_DATA]: 'No more',
   [LocalesKey.ARTICLE_PLACEHOLDER]: 'No articles',
   [LocalesKey.ARTICLE_VIEWS]: 'views',
-  [LocalesKey.ARTICLE_READ_ALL]: 'Show Full Article',
+  [LocalesKey.ARTICLE_READ_ALL]: 'Read full article',
   [LocalesKey.ARTICLE_RENDERING]: 'Rendering...',
   [LocalesKey.ARTICLE_LIST_LOADMORE]: 'Loadmore',
   [LocalesKey.ARTICLE_LIST_LOADING]: 'Loading...',

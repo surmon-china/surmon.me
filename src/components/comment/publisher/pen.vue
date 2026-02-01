@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, watch, onBeforeMount, onMounted } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { VALUABLE_LINKS } from '/@/configs/app.config'
+  import { RESOURCE_LINKS } from '/@/configs/app.config'
   import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
@@ -165,7 +165,7 @@
     </div>
     <div class="pencilbox">
       <div class="stationery">
-        <ulink class="markdown" title="markdown" :href="VALUABLE_LINKS.MARKDOWN_DOC">
+        <ulink class="markdown" title="markdown" :href="RESOURCE_LINKS.MARKDOWN_DOC">
           <i class="iconfont icon-markdown" />
         </ulink>
         <template v-if="!hiddenStationery">
@@ -210,7 +210,6 @@
           <template #en>Post as {{ user.disqusProfile?.name }}</template>
         </i18n>
         <i18n zh="发布" en="Publish" v-else />
-        <i class="iconfont icon-mail-plane"></i>
       </button>
     </div>
   </div>
@@ -253,7 +252,6 @@
           width: 100%;
           min-height: 6em;
           max-height: 32em;
-          font-size: $font-size-h6;
           overflow-wrap: anywhere;
           grid-area: 1 / 1 / 2 / 2;
         }
@@ -321,7 +319,7 @@
         }
 
         .markdown {
-          width: 4rem;
+          width: 3rem;
           text-align: center;
           background-color: $module-bg-darker-3;
         }
@@ -339,7 +337,7 @@
             left: 0;
             top: 100%;
             width: 100%;
-            padding: $gap-xs;
+            padding: $gap-tiny;
             z-index: $z-index-normal + 1;
             background-color: $module-bg-darker-4;
             border-bottom-left-radius: $radius-xs;
@@ -355,10 +353,11 @@
 
               .item {
                 cursor: pointer;
-                padding: $gap-xs 0;
+                padding: $gap-tiny 0;
                 > span {
                   display: block;
                   font-size: $font-size-h2;
+                  transition: all 0.05s;
                   opacity: 0.8;
                 }
                 &:hover {
@@ -374,21 +373,17 @@
       }
 
       .submit {
-        min-width: 8rem;
+        min-width: 6rem;
         height: $size;
-        padding: 0 $gap;
+        padding: 0 $gap-sm;
         font-weight: bold;
-        font-size: $font-size-small;
+        font-size: $font-size-tertiary;
         color: $color-text-disabled;
         background-color: $module-bg-darker-3;
         @include mix.background-transition();
         &:hover {
           color: $color-text-secondary;
           background-color: $module-bg-darker-4;
-        }
-
-        .iconfont {
-          margin-left: $gap-sm;
         }
       }
     }

@@ -72,9 +72,9 @@
   .upvote {
     display: flex;
     justify-content: center;
-    $button-size: 3rem;
+    $button-size: 2.5rem;
     $button-radius: $radius-sm;
-    $like-icon-size: $font-size-h2;
+    $like-icon-size: $font-size-h3;
     /* https://github.com/ant-design/ant-design/blob/master/components/style/themes/variable.less#L121 */
     $lighter-red: color.mix($white, $red, 10%);
 
@@ -122,13 +122,14 @@
         &.sponsor {
           font-size: $font-size-h4;
         }
+
         &.like {
-          min-width: 8rem;
+          min-width: 7rem;
           .icon {
             font-size: $like-icon-size;
           }
           .text {
-            margin-left: $gap-sm;
+            margin-left: $gap-xs;
             font-weight: bold;
           }
         }
@@ -192,7 +193,9 @@
                 transform: rotate(6deg) translateY(-2px) translateX(-42%);
               }
             }
+
             .iconfont {
+              font-size: $font-size-base * 2;
               transition:
                 transform $motion-duration-mid,
                 margin $motion-duration-mid;
@@ -234,6 +237,7 @@
                   margin-left: 0;
                 }
               }
+
               .iconfont {
                 text-stroke: 1px $red;
                 -webkit-text-stroke: 1px $red;
@@ -242,6 +246,7 @@
                 animation: liked-icon 1s forwards;
               }
             }
+
             /* likes animate */
             @keyframes likes-count {
               0% {
@@ -259,6 +264,7 @@
                 transform: scale(0.8);
               }
             }
+
             .parkinson-likes {
               animation: likes-count 0.5s forwards;
               animation-delay: 0.5s;

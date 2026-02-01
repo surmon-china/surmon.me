@@ -1,5 +1,5 @@
 /**
- * @file Sponsors state
+ * @file Sponsors store
  * @module store/sponsors
  * @author Surmon <https://github.com/surmon-china>
  */

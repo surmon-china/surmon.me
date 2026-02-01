@@ -8,7 +8,7 @@ export const HEADER_ELEMENT_ID = 'A_header'
 export const NAV_ELEMENT_ID = 'A_nav'
 export const MAIN_ELEMENT_ID = 'A_main'
 export const MAIN_CONTENT_ELEMENT_ID = 'A_main'
-export const ASIDE_ELEMENT_ID = 'A_aside'
+export const SIDEBAR_ELEMENT_ID = 'A_sidebar'
 export const FOOTER_ELEMENT_ID = 'A_footer'
 
 export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'

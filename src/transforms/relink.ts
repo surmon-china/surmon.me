@@ -8,7 +8,7 @@ import { Tag } from '/@/interfaces/tag'
 import { getTagFlowRoute } from './route'
 
 // Since it's impossible to tell if markdown content is a link or not, don't use this feature until the problem is solved
-export default (text: string, namesTagsMap: Map<string, Tag>) => {
+export const relinkTags = (text: string, namesTagsMap: Map<string, Tag>) => {
   const tagNames = Object.keys(namesTagsMap).sort((prev, next) => next.length - prev.length)
   const tagRegexp = eval(`/${tagNames.join('|')}/ig`)
 

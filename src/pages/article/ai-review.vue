@@ -87,7 +87,7 @@
   .ai-review {
     position: relative;
     padding-left: 2rem;
-    margin-top: $gap-lg;
+    margin-top: $gap;
     &:hover {
       .ai-body {
         background-color: $module-bg-hover;
@@ -98,10 +98,10 @@
       display: block;
       position: absolute;
       left: 0;
-      top: $gap * 2;
+      top: $gap-lg;
 
       .link {
-        $size: 4.8rem;
+        $size: 3.6rem;
         position: relative;
         display: flex;
         justify-content: center;
@@ -129,7 +129,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: $gap-sm $gap-sm $gap-sm ($gap-lg * 3);
+      padding: $gap-xs $gap-xs $gap-xs 2.3rem;
       background-color: $module-bg-darker-1;
       border-radius: $radius-xs;
       @include mix.background-transition();
@@ -155,27 +155,27 @@
         .model {
           display: inline-flex;
           align-items: center;
-          font-size: $font-size-small;
+          font-size: $font-size-h6;
           color: $color-text-divider;
 
           .iconfont {
-            margin-right: $gap-xs;
+            margin-right: $gap-tiny;
           }
         }
 
         .created {
           color: $color-text-divider;
-          font-size: $font-size-small;
+          font-size: $font-size-h6;
           font-weight: bold;
         }
       }
 
       > .ai-content {
-        padding-right: $gap-xs;
+        padding-right: $gap-tiny;
         user-select: text;
 
         .markdown {
-          margin: $gap-sm 0;
+          margin: $gap-tiny 0;
         }
       }
     }
@@ -185,7 +185,7 @@
       margin-top: $gap;
 
       .ai-body {
-        padding: $gap-sm $gap;
+        padding: $gap-xs $gap-sm;
       }
     }
   }

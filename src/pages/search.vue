@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { watch, onBeforeMount, computed } from 'vue'
-  import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useUniversalFetch } from '/@/app/universal'
   import { usePageSeo } from '/@/composables/head'
-  import { useArticleListStore } from '/@/stores/article'
+  import { useArticleListStore } from '/@/stores/article-list'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import ArticleListHeader from '/@/components/listing/desktop/header.vue'
-  import ArticleList from '/@/components/listing/desktop/list.vue'
+  import ArticleListHeader from '/@/components/desktop/listing/header.vue'
+  import ArticleListMain from '/@/components/desktop/listing/index.vue'
 
   const props = defineProps<{ keyword: string }>()
 
@@ -14,10 +14,7 @@
   const articleListStore = useArticleListStore()
 
   const loadmoreArticles = async () => {
-    await articleListStore.fetch({
-      keyword: props.keyword,
-      page: articleListStore.pagination!.current_page + 1
-    })
+    await articleListStore.fetchNextPage({ keyword: props.keyword })
     scrollToNextScreen()
   }
 
@@ -46,14 +43,27 @@
 
 <template>
   <div class="search-flow-page">
-    <article-list-header icon-name="icon-search">
+    <article-list-header class="page-header" icon-name="icon-search">
       {{ pageDescription }}
     </article-list-header>
-    <article-list
-      :fetching="articleListStore.fetching"
+    <article-list-main
       :articles="articleListStore.data"
       :pagination="articleListStore.pagination"
+      :fetching="articleListStore.fetching"
+      :has-more="articleListStore.hasMore"
       @loadmore="loadmoreArticles"
     />
   </div>
 </template>
+
+<style lang="scss" scoped>
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
+
+  .search-flow-page {
+    .page-header {
+      margin-bottom: $gap;
+    }
+  }
+</style>

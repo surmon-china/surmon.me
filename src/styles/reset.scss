@@ -358,7 +358,7 @@ h6 {
 small {
   color: $color-text-secondary;
   vertical-align: bottom;
-  font-size: $font-size-small;
+  font-size: $font-size-h6;
 }
 
 pre {
@@ -422,12 +422,12 @@ s {
 }
 
 sup {
-  font-size: $font-size-small;
+  font-size: $font-size-h6;
   vertical-align: super;
 }
 
 sub {
-  font-size: $font-size-small;
+  font-size: $font-size-h6;
   vertical-align: sub;
 }
 
@@ -457,7 +457,7 @@ select {
   background: $module-bg;
   color: $color-text;
   display: inline-block;
-  padding: $gap-xs;
+  padding: $gap-tiny;
   vertical-align: middle;
 }
 
@@ -566,15 +566,15 @@ label {
 fieldset {
   border: 0;
   margin: 0;
-  padding: $gap-sm 0;
+  padding: $gap-tiny 0;
 }
 
 legend {
   border-bottom: 1px solid $module-bg-darker-1;
   color: $color-text;
   display: block;
-  margin-bottom: $gap-sm;
-  padding: $gap-sm 0;
+  margin-bottom: $gap-tiny;
+  padding: $gap-tiny 0;
   width: 100%;
 }
 
@@ -628,7 +628,7 @@ table {
 }
 
 caption {
-  padding: $gap-sm 0;
+  padding: $gap-tiny 0;
 }
 
 thead th {
@@ -638,7 +638,7 @@ thead th {
 }
 
 tr {
-  margin-bottom: $gap-sm;
+  margin-bottom: $gap-tiny;
 }
 
 th,
@@ -655,7 +655,7 @@ tfoot tr {
 
 tfoot td {
   color: $color-text-secondary;
-  font-size: $gap-sm;
+  font-size: $gap-tiny;
   font-style: italic;
-  padding: 1em $gap-xs;
+  padding: 1em $gap-tiny;
 }

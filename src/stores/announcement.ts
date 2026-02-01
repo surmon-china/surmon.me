@@ -1,5 +1,5 @@
 /**
- * @file Announcement state
+ * @file Announcement store
  * @module store/announcement
  * @author Surmon <https://github.com/surmon-china>
  */
@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { Announcement } from '/@/interfaces/announcement'
-import { PaginationList } from '/@/interfaces/common'
+import { PaginationList } from '/@/interfaces/pagination'
 import nodepress from '/@/services/nodepress'
 
 export const useAnnouncementStore = defineStore('announcement', () => {

@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
+  import { useArticlesCalendarStore, useGitHubCalendarStore, useInstagramCalendarStore } from '/@/stores/calendar'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { dateToHuman, HumanDate, humanDateToYMD } from '/@/transforms/moment'
   import CalendarDay from './day.vue'
 
   const { gtag } = useEnhancer()
-  const { articlesCalendarStore, instagramCalendarStore, githubCalendarStore } = useStores()
+  const githubCalendarStore = useGitHubCalendarStore()
+  const articlesCalendarStore = useArticlesCalendarStore()
+  const instagramCalendarStore = useInstagramCalendarStore()
 
   const githubContributionsMap = computed(() => {
     return new Map(githubCalendarStore.days.map((day) => [day.date, day]))

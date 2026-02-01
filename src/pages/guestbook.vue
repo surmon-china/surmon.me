@@ -3,13 +3,13 @@
   import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useStores } from '/@/stores'
+  import { useCommentStore } from '/@/stores/comment'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { Language, LocalesKey } from '/@/locales'
-  import { CommentPostId } from '/@/constants/biz-state'
+  import { CommentPostId } from '/@/constants/comment-id'
   import { firstUpperCase } from '/@/transforms/text'
   import { isClient } from '/@/configs/app.env'
-  import PageBanner from '/@/components/common/banner.vue'
+  import MobileBanner from '/@/components/mobile/widgets/page-banner.vue'
   import Comment from '/@/components/comment/index.vue'
 
   const props = defineProps<{
@@ -17,7 +17,7 @@
   }>()
 
   const { globalState, isZhLang, i18n: _i18n } = useEnhancer()
-  const { commentStore } = useStores()
+  const commentStore = useCommentStore()
 
   // MARK: Only for client-side routing to navigate to this page
   const isLoading = ref(isClient && globalState.isHydrated)
@@ -60,14 +60,14 @@
         </div>
       </template>
       <template #mobile>
-        <page-banner class="mobile-banner" :is-mobile="true" :image="bannerImage" :image-position="70" cdn>
+        <mobile-banner class="mobile-banner" :background-image="bannerImage" :background-image-y="70" cdn>
           <template #title>
             <webfont bolder><i18n :k="LocalesKey.PAGE_GUESTBOOK" /></webfont>
           </template>
           <template #description>
             <webfont><i18n :k="LocalesKey.GUESTBOOK_SLOGAN" /></webfont>
           </template>
-        </page-banner>
+        </mobile-banner>
       </template>
     </responsive>
     <div class="comment">
@@ -83,17 +83,17 @@
 
   .guestbook-page {
     .mobile-banner {
-      margin-bottom: $gap-lg;
+      margin-bottom: $gap;
     }
 
     .desktop-banner {
       position: relative;
-      margin-bottom: $gap-lg;
+      margin-bottom: $gap;
       width: 100%;
-      height: 19rem;
+      height: 14rem;
       border: 0;
       background-color: $module-bg;
-      @include mix.radius-box($radius-lg);
+      @include mix.radius-box($radius-sm);
 
       .image {
         width: 100%;
@@ -110,14 +110,14 @@
         $size: 2em;
         display: block;
         position: absolute;
-        right: $gap-lg * 2;
-        bottom: $gap-lg * 2;
+        right: 2rem;
+        bottom: 2rem;
         height: $size;
         line-height: $size;
-        padding: 0 $gap-sm;
         padding-left: 3rem;
-        border-top-right-radius: $radius-mini;
-        border-bottom-right-radius: $radius-mini;
+        padding-right: $gap-xs;
+        border-top-right-radius: $radius-xs;
+        border-bottom-right-radius: $radius-xs;
         background: linear-gradient(to left, $module-bg-lighter, $module-bg, transparent);
         mix-blend-mode: screen;
         opacity: 0.8;

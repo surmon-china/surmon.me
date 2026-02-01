@@ -1,87 +1,82 @@
 <script lang="ts" setup="">
   import { ref } from 'vue'
-  import { useEnhancer } from '/@/app/enhancer'
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { IDENTITIES } from '/@/configs/app.config'
-  import { getCdnProxyURL } from '/@/transforms/url'
+  import InstagramMedia from './media.vue'
   import InstagramAlbum from './album.vue'
 
   defineProps<{
     media: InstagramMediaItem
-    index: number
-    count: number
   }>()
 
-  const { cdnDomain, isCNUser } = useEnhancer()
   const isLoaded = ref(false)
-  const mediaLoaded = () => {
-    isLoaded.value = true
-  }
+  const mediaAspectRatio = ref('auto')
 
-  const getMediaUrl = (url: string) => {
-    return isCNUser ? getCdnProxyURL(cdnDomain, url) : url
+  const handleMediaLoad = async (payload: { width: number; height: number }) => {
+    if (!isLoaded.value) {
+      isLoaded.value = true
+      mediaAspectRatio.value = `${payload.width} / ${payload.height}`
+    }
   }
 </script>
 
 <template>
   <div class="instagram-gallery">
     <div class="topbar">
-      <div class="left">
-        <ulink class="type-link" :href="media.permalink">
-          <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
-          <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
-          <i class="iconfont icon-camera" v-else></i>
-        </ulink>
-      </div>
-      <div class="center">
-        <span class="pagination">{{ index + 1 }} / {{ count }}</span>
-      </div>
-      <div class="right">
-        <span class="timestamp">
-          <udate to="YMDm" :date="media.timestamp" separator="/" />
-        </span>
-      </div>
+      <ulink class="type-link" :href="media.permalink">
+        <i class="iconfont icon-video" v-if="isVideoMediaIns(media)"></i>
+        <i class="iconfont icon-album" v-else-if="isAlbumMediaIns(media)"></i>
+        <i class="iconfont icon-camera" v-else></i>
+      </ulink>
+      <span class="timestamp">
+        <udate to="YMDm" :date="media.timestamp" separator="/" />
+      </span>
     </div>
-    <div class="content" :class="{ loaded: isLoaded }">
+    <div class="content">
       <transition name="module">
         <div class="loading" v-if="!isLoaded">
-          <spin />
+          <loading-indicator gap="lg" width="1.8rem" height="1.2rem" />
         </div>
       </transition>
-      <video
-        v-if="isVideoMediaIns(media)"
-        class="video"
-        :src="getMediaUrl(media.media_url)"
-        autoplay
-        @loadeddata="mediaLoaded"
+      <instagram-media
+        v-if="isImageMediaIns(media) || isVideoMediaIns(media)"
+        class="root-media"
+        :class="{ loaded: isLoaded }"
+        :style="{ aspectRatio: mediaAspectRatio }"
+        :media="media"
+        :lazy-image="true"
+        :video-muted="false"
+        :video-loop="true"
+        :video-auto-play="true"
+        @load="handleMediaLoad"
       />
-      <instagram-album v-else-if="isAlbumMediaIns(media)" class="album" :media="media" @load="mediaLoaded">
-        <template #child="{ activeMedia }">
-          <img
-            v-if="isImageMediaIns(activeMedia)"
-            class="image"
-            :src="getMediaUrl(activeMedia?.media_url)"
-            :alt="activeMedia?.caption"
-            draggable="false"
-          />
-          <video
-            v-if="isVideoMediaIns(activeMedia)"
-            class="video"
-            autoplay
-            :src="getMediaUrl(activeMedia?.media_url)"
-          />
+      <instagram-album v-else-if="isAlbumMediaIns(media)" :media="media">
+        <template #content="{ activeMedia, ghostMedia }">
+          <div class="album-media" :class="{ loaded: isLoaded }" :style="{ aspectRatio: mediaAspectRatio }">
+            <instagram-media
+              v-if="activeMedia"
+              :media="activeMedia"
+              :lazy-image="false"
+              :video-muted="false"
+              :video-loop="false"
+              :video-auto-play="true"
+              :style="{ display: 'contents' }"
+              @load="handleMediaLoad"
+            />
+            <!-- Keep rendering a ghost media element to prevent container collapse during data switching. -->
+            <instagram-media
+              v-if="ghostMedia && isLoaded"
+              :media="ghostMedia"
+              :lazy-image="false"
+              :video-muted="true"
+              :video-loop="false"
+              :video-auto-play="false"
+              :style="{ display: 'contents', opacity: 0, visibility: 'hidden', pointerEvents: 'none' }"
+            />
+          </div>
         </template>
       </instagram-album>
-      <img
-        v-else
-        class="image"
-        :src="getMediaUrl(media?.media_url)"
-        :alt="media.caption"
-        draggable="false"
-        loading="lazy"
-        @load="mediaLoaded"
-      />
       <p v-if="media.caption" class="caption" v-html="media.caption.replaceAll('\n', '<br>')"></p>
       <ulink class="username-link" :href="media.permalink">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</ulink>
     </div>
@@ -100,32 +95,27 @@
     .content {
       position: relative;
 
-      .loading {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-      }
-
-      .image,
-      .album,
-      .video {
-        min-width: 32rem;
-        max-width: 32rem;
-        min-height: 48vh;
-        max-height: 48vh;
-        width: auto;
-        height: auto;
-        overflow: hidden;
-        will-change: width, height;
+      .root-media,
+      .album-media {
+        // MARK: important for size animation!
+        interpolate-size: allow-keywords;
+        width: 32rem;
+        height: 46rem;
+        max-width: 60vw;
+        max-height: 68vh;
+        aspect-ratio: auto;
+        will-change: width, height, aspect-ratio;
         transition:
-          max-width 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-          max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      }
+          width 0.48s cubic-bezier(0.65, 0.05, 0.36, 1),
+          height 0.48s cubic-bezier(0.65, 0.05, 0.36, 1),
+          aspect-ratio 0.48s cubic-bezier(0.65, 0.05, 0.36, 1);
 
-      &.loaded {
-        .image,
-        .album,
-        .video {
+        &.loaded {
+          // MARK: important for Safari and Firefox!
+          // ✅ fit-content
+          // ❌ max-content
+          width: fit-content;
+          height: fit-content;
           max-width: 94vw;
           max-height: 86vh;
         }
@@ -134,23 +124,29 @@
       .caption {
         position: absolute;
         left: 0;
-        bottom: 2em;
+        bottom: 2.8rem;
         margin: 0;
         width: 100%;
-        padding: 2em;
-        font-size: $font-size-base + 1;
+        padding: 2rem;
         @include mix.title-shadow();
       }
 
       .username-link {
         position: absolute;
-        left: 2em;
-        bottom: 2em;
+        left: 2rem;
+        bottom: 2rem;
         margin: 0;
         font-weight: bold;
         font-family: $font-family-monospace;
-        font-size: $font-size-base + 1;
         @include mix.title-shadow();
+      }
+
+      .loading {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
       }
     }
 
@@ -159,45 +155,22 @@
       top: 0;
       left: 0;
       margin: 0;
-      padding: 0 1em;
+      padding: 0 $gap;
       width: 100%;
-      height: 4rem;
+      height: 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: $font-size-h4;
-      color: $white;
       z-index: $z-index-normal + 2;
 
-      .left,
-      .right,
-      .center {
-        display: inline-flex;
-        align-items: center;
-      }
-      .left {
-        width: 40%;
-        justify-content: start;
-      }
-      .center {
-        width: 20%;
-        justify-content: center;
-      }
-      .right {
-        width: 40%;
-        justify-content: end;
-      }
-
-      .pagination {
-        font-weight: bold;
+      .type-link {
+        font-size: $font-size-h4;
+        color: $white;
       }
 
       .timestamp {
-        font-size: $font-size-base - 1;
+        font-size: $font-size-secondary;
         font-weight: bold;
-      }
-
-      .type-link {
         color: $white;
       }
     }

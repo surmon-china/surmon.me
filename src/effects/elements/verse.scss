@@ -8,7 +8,7 @@ p.verse {
     text-decoration: underline;
     text-decoration-style: dotted;
     text-decoration-thickness: from-font;
-    text-underline-offset: $gap-sm;
+    text-underline-offset: $gap-tiny;
     text-decoration-color: $color-text-disabled;
   }
 
@@ -21,7 +21,7 @@ p.verse {
     margin-bottom: 0;
     font-weight: lighter;
     font-family: $font-family-monospace;
-    font-size: $font-size-small;
+    font-size: $font-size-h6;
     color: $color-text-secondary;
   }
 }

@@ -12,12 +12,15 @@ import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
 import { createMainApp } from '/@/app/main'
+import { useAppOptionsStore } from '/@/stores/foundation'
+import { useIdentityStore } from '/@/stores/identity'
+import { useGoLinksStore } from '/@/stores/go-links'
+
 import gtag from '/@/composables/gtag'
 import lozad from '/@/composables/lozad'
 import adsense from '/@/composables/adsense'
 import { Theme } from '/@/composables/theme'
 import { createDefer } from '/@/composables/defer'
-import { createMusic } from '/@/composables/music'
 import { createPopup } from '/@/composables/popup'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
@@ -28,7 +31,7 @@ import { resolvePageLayout } from '/@/constants/page-layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
 import { Language, LocalesKey } from '/@/locales'
 import { APP_VERSION, isDev, isProd } from './configs/app.env'
-import { APP_PROFILE, IDENTITIES } from '/@/configs/app.config'
+import { APP_PROFILE, IDENTITIES, BFF_CONFIG } from '/@/configs/app.config'
 
 import './effects/swiper/style'
 import './effects/elements/index.scss'
@@ -55,7 +58,6 @@ const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
 // init: composables
 const defer = createDefer()
 const popup = createPopup()
-const music = createMusic({ delay: 668, continueNext: true })
 const head = createHead({ disableCapoSorting: true })
 
 // init: global head attributes
@@ -68,7 +70,6 @@ store.hydrateOnClient()
 
 // init: plugins & services
 app.use(head)
-app.use(music)
 app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
@@ -76,7 +77,7 @@ app.use(gtag, {
   router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: '/gtag-script'
+  customResourceURL: BFF_CONFIG.route_path_gtag_script
 })
 
 // enable adsense on desktop only
@@ -117,9 +118,9 @@ router.isReady().finally(() => {
     // reset i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
     // init user identity state
-    store.stores.identityStore.initOnClient()
+    useIdentityStore(store.pinia).initOnClient()
     // init go url map state
-    store.stores.goLinksStore.fetchRemoteLinksMap()
+    useGoLinksStore(store.pinia).fetchRemoteLinksMap()
     // title surprise (desktop only)
     if (!globalState.userAgent.isMobile) {
       document.addEventListener(
@@ -142,7 +143,7 @@ router.isReady().finally(() => {
     }
     // production only
     if (isProd) {
-      consoleSlogan(i18n.t(LocalesKey.APP_SLOGAN)!, store.stores.appOptionsStore.data?.site_email)
+      consoleSlogan(i18n.t(LocalesKey.APP_SLOGAN)!, useAppOptionsStore(store.pinia).data?.site_email)
     }
   })
 })

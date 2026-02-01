@@ -34,7 +34,7 @@
   }
 
   onMounted(() => {
-    fetchMediaChildren(props.media.id).finally(() => emit('load'))
+    fetchMediaChildren(props.media.id).then(() => emit('load'))
   })
 </script>
 
@@ -54,14 +54,13 @@
       <span
         class="index"
         :class="{ active: index === activeIndex + 1 }"
-        v-for="index in mediaChildren.length"
         :key="index"
+        v-for="index in mediaChildren.length"
       ></span>
     </div>
     <slot
-      name="child"
-      v-if="mediaChildren[activeIndex]"
-      v-bind="{ activeIndex, activeMedia: mediaChildren[activeIndex] }"
+      name="content"
+      v-bind="{ activeIndex, activeMedia: mediaChildren[activeIndex], ghostMedia: mediaChildren[0] }"
     ></slot>
   </div>
 </template>
@@ -76,18 +75,20 @@
 
     .pagination {
       position: absolute;
-      bottom: 2rem;
+      bottom: 1rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: $z-index-normal + 1;
+      max-width: 100%;
+      white-space: nowrap;
 
       .index {
         $size: 8px;
         display: inline-block;
         width: $size;
         height: $size;
-        margin: 0 3px;
-        border-radius: 100%;
+        margin: 0 $gap-tiny;
+        border-radius: $radius-tiny;
         background-color: $white;
         opacity: 0.4;
         &.active {
@@ -109,15 +110,15 @@
       }
 
       .button {
-        $size: 3rem;
-        width: $size;
-        height: $size;
-        border-radius: 100%;
+        width: 2.6rem;
+        height: 3rem;
+        border-radius: $radius-sm;
+        font-size: $font-size-h2;
         background-color: $module-bg;
         transition: all $motion-duration-fast;
 
         &[disabled] {
-          opacity: 0.7;
+          opacity: 0.6;
           color: $color-text-divider;
         }
         &:not([disabled]):hover {

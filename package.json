@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "5.11.0",
+  "version": "6.0.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -51,13 +51,13 @@
     "swiper": "^12.x",
     "ua-parser-js": "^2.x",
     "vue": "^3.5.x",
-    "vue-router": "^4.6.x",
+    "vue-router": "^5.0.x",
     "wonderful-bing-wallpaper": "^0.3.4",
     "yargs-parser": "^22.x"
   },
   "devDependencies": {
     "@eslint/js": "^9.x",
-    "@sentry/vite-plugin": "^4.7.x",
+    "@sentry/vite-plugin": "^4.8.x",
     "@types/fs-extra": "^11.x",
     "@types/lodash-es": "^4.17.x",
     "@types/lozad": "^1.16.4",

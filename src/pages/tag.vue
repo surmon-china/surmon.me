@@ -3,13 +3,13 @@
   import { useUniversalFetch } from '/@/app/universal'
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
-  import { useArticleListStore } from '/@/stores/article'
+  import { useArticleListStore } from '/@/stores/article-list'
   import { useTagStore, getTagIconName, getTagEnName } from '/@/stores/tag'
   import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
-  import { getExtrasMap } from '/@/transforms/state'
+  import { getExtrasMap } from '/@/transforms/extra'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import ArticleListHeader from '/@/components/listing/desktop/header.vue'
-  import ArticleList from '/@/components/listing/desktop/list.vue'
+  import ArticleListHeader from '/@/components/desktop/listing/header.vue'
+  import ArticleListMain from '/@/components/desktop/listing/index.vue'
 
   const props = defineProps<{
     tagSlug: string
@@ -29,10 +29,7 @@
   })
 
   const loadmoreArticles = async () => {
-    await articleListStore.fetch({
-      tag_slug: props.tagSlug,
-      page: articleListStore.pagination!.current_page + 1
-    })
+    await articleListStore.fetchNextPage({ tag_slug: props.tagSlug })
     scrollToNextScreen()
   }
 
@@ -61,31 +58,31 @@
 <template>
   <div class="tag-flow-page">
     <article-list-header
+      class="page-header"
       :icon-name="tagIconName"
       :background-color="tagBackgroundColor"
       :background-image="tagBackgroundImage"
     >
-      <template v-if="tag">
-        <span class="header">
-          <i18n>
-            <template #zh>
-              <span>#{{ tag.name }}</span>
-              <divider class="divider" type="vertical" />
-              <span>{{ tag.description || '...' }}</span>
-            </template>
-            <template #en>
-              <span>Tag</span>
-              <divider class="divider" type="vertical" />
-              <span>#{{ getTagEnName(tag) }}</span>
-            </template>
-          </i18n>
-        </span>
-      </template>
+      <span class="header" v-if="tag">
+        <i18n>
+          <template #zh>
+            <span>#{{ tag.name }}</span>
+            <divider class="divider" type="vertical" />
+            <span>{{ tag.description || '...' }}</span>
+          </template>
+          <template #en>
+            <span>Tag</span>
+            <divider class="divider" type="vertical" />
+            <span>#{{ getTagEnName(tag) }}</span>
+          </template>
+        </i18n>
+      </span>
     </article-list-header>
-    <article-list
-      :fetching="articleListStore.fetching"
+    <article-list-main
       :articles="articleListStore.data"
       :pagination="articleListStore.pagination"
+      :fetching="articleListStore.fetching"
+      :has-more="articleListStore.hasMore"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -97,6 +94,10 @@
   @use '/src/styles/base/mixins' as mix;
 
   .tag-flow-page {
+    .page-header {
+      margin-bottom: $gap;
+    }
+
     .divider {
       border-color: $white !important;
     }

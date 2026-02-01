@@ -31,12 +31,12 @@
 
   .list-item-card {
     display: block;
-    padding: $gap-lg;
+    padding: $gap;
     @include mix.radius-box($radius-sm);
     @include mix.common-bg-module($motion-duration-fast);
 
     .header {
-      margin-bottom: 10px;
+      margin-bottom: $gap-sm;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -52,7 +52,7 @@
         }
 
         .iconfont {
-          font-size: $font-size-small;
+          font-size: $font-size-h6;
           margin-right: 2px;
         }
 
@@ -63,7 +63,7 @@
       }
 
       .timestamp {
-        font-size: $font-size-small;
+        font-size: $font-size-h6;
         color: $color-text-secondary;
       }
     }

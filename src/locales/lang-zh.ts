@@ -32,7 +32,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.TO_BOTTOM]: '下一屏',
   [LocalesKey.ORIGIN_ORIGINAL]: '原创',
   [LocalesKey.ORIGIN_REPRINT]: '转载',
-  [LocalesKey.ORIGIN_HYBRID]: '衍生',
+  [LocalesKey.ORIGIN_HYBRID]: '混合',
   [LocalesKey.ACTION_ON]: '开',
   [LocalesKey.ACTION_OFF]: '关',
   [LocalesKey.MUSIC_PLACEHOLDER]: '五音六律，七弦八度',

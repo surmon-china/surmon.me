@@ -72,12 +72,7 @@
     </transition-group>
     <client-only>
       <popup :visible="!!galleryActiveMedia" :scroll-close="false" @close="closeMediaGallery">
-        <ins-gallery
-          v-if="galleryActiveMedia"
-          :media="galleryActiveMedia"
-          :index="galleryActiveIndex!"
-          :count="medias.length"
-        />
+        <ins-gallery :media="galleryActiveMedia" v-if="!!galleryActiveMedia" />
       </popup>
     </client-only>
   </div>
@@ -94,14 +89,14 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: $gap * 5;
+    grid-gap: $gap * 4;
     list-style: none;
 
     .item {
       display: block;
-      padding: 1rem;
+      padding: $gap-sm;
       background-color: $module-bg;
-      @include mix.radius-box($radius-xs);
+      @include mix.radius-box($radius-sm);
 
       .content {
         position: relative;
@@ -120,13 +115,14 @@
           background-size: cover;
           background-position: center;
           background-color: $module-bg-darker-1;
+          @include mix.radius-box($radius-tiny);
         }
 
         .type-icon {
           opacity: 0.8;
           position: absolute;
           top: $gap-xs;
-          right: $gap-sm;
+          right: $gap-xs;
           font-size: $font-size-h4;
           color: $white;
         }
@@ -134,10 +130,10 @@
         .date {
           opacity: 0.8;
           position: absolute;
-          bottom: $gap-sm;
-          left: $gap;
+          bottom: $gap-xs;
+          left: $gap-sm;
           color: $white;
-          font-size: $font-size-root;
+          font-size: $font-size-h6;
           font-weight: bold;
           letter-spacing: 1px;
         }

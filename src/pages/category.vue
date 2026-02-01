@@ -3,20 +3,22 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useUniversalFetch } from '/@/app/universal'
-  import { useStores } from '/@/stores'
-  import { getExtrasMap } from '/@/transforms/state'
+  import { useArticleListStore } from '/@/stores/article-list'
+  import { useCategoryStore } from '/@/stores/category'
+  import { getExtrasMap } from '/@/transforms/extra'
   import { firstUpperCase } from '/@/transforms/text'
   import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { scrollToNextScreen } from '/@/utils/scroller'
-  import ArticleListHeader from '/@/components/listing/desktop/header.vue'
-  import ArticleList from '/@/components/listing/desktop/list.vue'
+  import ArticleListHeader from '/@/components/desktop/listing/header.vue'
+  import ArticleListMain from '/@/components/desktop/listing/index.vue'
 
   const props = defineProps<{
     categorySlug: string
   }>()
 
   const { cdnDomain, isZhLang, i18n: _i18n } = useEnhancer()
-  const { articleListStore, categoryStore } = useStores()
+  const articleListStore = useArticleListStore()
+  const categoryStore = useCategoryStore()
 
   const category = computed(() => categoryStore.data.find(({ slug }) => slug === props.categorySlug))
   const categoryExtrasMap = computed(() => getExtrasMap(category.value?.extras))
@@ -28,10 +30,7 @@
   })
 
   const loadmoreArticles = async () => {
-    await articleListStore.fetch({
-      category_slug: props.categorySlug,
-      page: articleListStore.pagination!.current_page + 1
-    })
+    await articleListStore.fetchNextPage({ category_slug: props.categorySlug })
     scrollToNextScreen()
   }
 
@@ -63,6 +62,7 @@
 <template>
   <div class="category-flow-page">
     <article-list-header
+      class="page-header"
       :icon-name="categoryIconName"
       :background-color="categoryBackgroundColor"
       :background-image="categoryBackgroundImage"
@@ -80,10 +80,11 @@
         </template>
       </i18n>
     </article-list-header>
-    <article-list
-      :fetching="articleListStore.fetching"
+    <article-list-main
       :articles="articleListStore.data"
       :pagination="articleListStore.pagination"
+      :fetching="articleListStore.fetching"
+      :has-more="articleListStore.hasMore"
       @loadmore="loadmoreArticles"
     />
   </div>
@@ -95,6 +96,10 @@
   @use '/src/styles/base/mixins' as mix;
 
   .category-flow-page {
+    .page-header {
+      margin-bottom: $gap;
+    }
+
     .divider {
       border-color: $white !important;
     }

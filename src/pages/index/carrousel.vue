@@ -88,23 +88,19 @@
 
 <template>
   <div class="carrousel">
-    <placeholder :data="slides.length" :loading="fetching">
+    <placeholder :loading="fetching" :has-data="!!slides.length">
       <template #placeholder>
-        <empty class="article-empty" bold key="empty">
+        <empty class="article-empty" bold size="large">
           <i18n :k="LocalesKey.ARTICLE_PLACEHOLDER" />
         </empty>
       </template>
       <template #loading>
-        <div class="article-skeleton" key="skeleton">
-          <div class="title">
-            <skeleton-line />
-          </div>
+        <div class="article-skeleton">
+          <skeleton class="title" />
           <div class="content">
-            <div class="first">
-              <skeleton-line />
-            </div>
-            <div class="line" v-for="index in 3" :key="index">
-              <skeleton-line class="line-item" />
+            <skeleton class="first" />
+            <div class="lines" v-for="index in 3" :key="index">
+              <skeleton class="item" />
             </div>
           </div>
         </div>
@@ -178,44 +174,44 @@
     position: relative;
     height: $carrousel-height;
     @include mix.common-bg-module();
-    @include mix.radius-box($radius-lg);
+    @include mix.radius-box($radius-sm);
 
     .article-empty {
-      font-size: $font-size-h1;
+      height: $carrousel-height;
     }
 
     .article-skeleton {
       position: relative;
+      display: flex;
       width: 100%;
-      height: 100%;
-      padding: 2rem;
-
-      .content {
-        width: 50%;
-        margin-top: 4rem;
-        margin-left: 1rem;
-
-        .first {
-          width: 8rem;
-          height: $gap * 2;
-          margin-bottom: $gap;
-        }
-
-        .line {
-          .line-item {
-            width: 14rem;
-            height: $gap-lg;
-            margin-bottom: $gap;
-          }
-        }
-      }
+      height: $carrousel-height;
 
       .title {
         position: absolute;
-        top: 2rem;
-        right: 2rem;
-        height: 2.6rem;
-        width: 18rem;
+        top: 1.8rem;
+        right: 1.8rem;
+        height: 2rem;
+        width: 14rem;
+      }
+
+      .content {
+        position: absolute;
+        bottom: 1rem;
+        left: 1.8rem;
+
+        .first {
+          width: 6rem;
+          height: 1.8rem;
+          margin-bottom: $gap-lg;
+        }
+
+        .lines {
+          .item {
+            width: 12rem;
+            height: 1rem;
+            margin-bottom: $gap-sm;
+          }
+        }
       }
     }
 
@@ -237,16 +233,16 @@
         position: absolute;
         width: 100%;
         left: 0;
-        bottom: $gap-lg;
+        bottom: $gap;
         text-align: center;
 
         .swiper-pagination-bullet {
-          $size: 8px;
+          $size: 0.5rem;
           position: relative;
           display: inline-block;
           width: $size;
           height: $size;
-          border-radius: $radius-xs;
+          border-radius: $radius-tiny;
           overflow: hidden;
           margin: 0 0.4rem;
           background-color: rgba(white, 0.4);
@@ -327,15 +323,17 @@
             z-index: 0;
             top: 0;
             left: 0;
+            border-radius: $radius-xs;
             background-color: rgba(0, 0, 0, 0.2);
             transform: translate3d($title-offset, -$title-offset, 0);
             transition: transform $motion-duration-fast;
           }
 
           .prospect {
-            padding: 0 1em;
+            padding: 0 0.8em;
             height: 2em;
             line-height: 2em;
+            border-radius: $radius-xs;
             background-color: $module-bg-lighter;
             mix-blend-mode: screen;
             transform: translate3d(-$title-offset, $title-offset, 0);
@@ -376,12 +374,12 @@
         .subscript {
           display: block;
           position: absolute;
-          top: 5.6rem;
+          top: 4.6rem;
           right: $title-right;
           padding: 0.1em 0.3em;
           border: 1px solid;
-          border-radius: $radius-mini;
-          font-size: $font-size-root;
+          border-radius: $radius-tiny;
+          font-size: $font-size-h6;
           text-transform: capitalize;
           color: $white;
           opacity: 0.8;

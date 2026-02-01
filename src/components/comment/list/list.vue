@@ -1,7 +1,7 @@
 <script lang="ts">
   import { defineComponent, PropType } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useStores } from '/@/stores'
+  import { useCommentStore } from '/@/stores/comment'
   import { LocalesKey } from '/@/locales'
   import { Comment } from '/@/interfaces/comment'
   import { CommentTreeItem } from '/@/stores/comment'
@@ -47,8 +47,8 @@
     },
     emits: [CommentEvents.Reply, CommentEvents.Delete, CommentEvents.CancelReply],
     setup(_, context) {
-      const { gtag, i18n: _i18n } = useEnhancer()
-      const { commentStore, identityStore } = useStores()
+      const { gtag, identity, i18n: _i18n } = useEnhancer()
+      const commentStore = useCommentStore()
 
       const buildCommentTree = (comments: Comment[]): Array<CommentTreeItem> => {
         return comments.map((comment) => ({
@@ -74,15 +74,15 @@
           event_category: GAEventCategories.Comment,
           event_label: isLike ? 'like' : 'dislike'
         })
-        if (isLike && identityStore.isLikedComment(commentId)) {
+        if (isLike && identity.isLikedComment(commentId)) {
           return false
         }
-        if (!isLike && identityStore.isDislikedComment(commentId)) {
+        if (!isLike && identity.isDislikedComment(commentId)) {
           return false
         }
         try {
           await commentStore.postCommentVote(commentId, isLike ? 1 : -1)
-          isLike ? identityStore.likeComment(commentId) : identityStore.dislikeComment(commentId)
+          isLike ? identity.likeComment(commentId) : identity.dislikeComment(commentId)
         } catch (error) {
           const message = _i18n.t(LocalesKey.POST_ACTION_ERROR)
           logger.failure(message, error)
@@ -91,7 +91,7 @@
       }
 
       return {
-        identityStore,
+        identity,
         buildCommentTree,
         handleReplyComment,
         handleCancelReply,
@@ -109,8 +109,8 @@
         v-for="item in comments"
         :key="item.comment.id"
         :comment="item.comment"
-        :liked="identityStore.isLikedComment(item.comment.id)"
-        :disliked="identityStore.isDislikedComment(item.comment.id)"
+        :liked="identity.isLikedComment(item.comment.id)"
+        :disliked="identity.isDislikedComment(item.comment.id)"
         :has-child="!!item.children.length"
         :is-child="isChildList"
         :is-reply="replyPid === item.comment.id"
@@ -163,7 +163,7 @@
     }
 
     &.child {
-      margin-top: $gap;
+      margin-top: $gap-sm;
     }
   }
 </style>

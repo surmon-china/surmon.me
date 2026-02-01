@@ -42,7 +42,7 @@
         .wrapper {
           & > ::v-deep(*) {
             min-width: 50vw;
-            min-height: 4rem;
+            min-height: 3rem;
           }
         }
       }
@@ -71,16 +71,16 @@
         position: relative;
 
         & > ::v-deep(*) {
-          min-width: 24rem;
-          min-height: 8rem;
+          min-width: 6rem;
+          min-height: 6rem;
           max-width: 90%;
           max-height: 90%;
           background-color: $module-bg;
         }
 
         &.border > ::v-deep(*) {
-          border: $gap-sm solid $module-bg-darker-1;
-          @include mix.radius-box($radius-sm);
+          border: $gap-xs solid $module-bg-darker-1;
+          @include mix.radius-box($radius-md);
         }
       }
     }

@@ -1,5 +1,5 @@
 /**
- * @file Comment state
+ * @file Comment store
  * @module store/comment
  * @author Surmon <https://github.com/surmon-china>
  */
@@ -9,8 +9,9 @@ import { defineStore } from 'pinia'
 import nodepress from '/@/services/nodepress'
 import { isClient } from '/@/configs/app.env'
 import { Comment } from '/@/interfaces/comment'
-import { Pagination, PaginationList } from '/@/interfaces/common'
-import { SortMode, CommentParentId } from '/@/constants/biz-state'
+import { Pagination, PaginationList } from '/@/interfaces/pagination'
+import { CommentParentId } from '/@/constants/comment-id'
+import { SortMode } from '/@/constants/sort-param'
 import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
 
@@ -34,6 +35,10 @@ export const useCommentStore = defineStore('comment', () => {
   const deleting = ref(false)
   const comments = ref<Comment[]>([])
   const pagination = ref<Pagination | null>(null)
+
+  const hasMore = computed(() => {
+    return pagination.value ? pagination.value.current_page < pagination.value.total_page : false
+  })
 
   const commentTreeList = computed<CommentTreeItem[]>(() => {
     // only keep 2 level tree
@@ -72,32 +77,38 @@ export const useCommentStore = defineStore('comment', () => {
     pagination.value = null
   }
 
-  const fetchList = async (params: CommentFetchParams = {}, loadmore = false) => {
-    params = {
-      page: 1,
-      per_page: 50,
-      sort: SortMode.Latest,
-      ...params
-    }
-
-    // clear list when refetch
-    if (params.page === 1) {
-      clearList()
-    }
-
+  const _fetchList = async (params: CommentFetchParams = {}) => {
+    const fetchParams = { per_page: 50, sort: SortMode.Latest, ...params }
+    fetching.value = true
     try {
-      fetching.value = true
-      const request = nodepress.get<PaginationList<Comment>>(COMMENT_API_PATH, { params })
+      const request = nodepress.get<PaginationList<Comment>>(COMMENT_API_PATH, { params: fetchParams })
       const response = await (isClient ? delayPromise(480, request) : request)
       pagination.value = response.result.pagination
-      if (loadmore) {
-        comments.value.push(...response.result.data)
-      } else {
-        comments.value = response.result.data
-      }
+      comments.value.push(...response.result.data)
     } finally {
       fetching.value = false
     }
+  }
+
+  const fetchList = async (params?: CommentFetchParams) => {
+    // clear list when refetch
+    clearList()
+    return _fetchList({ ...params, page: 1 })
+  }
+
+  const fetchListNextPage = (params?: CommentFetchParams) => {
+    if (!pagination.value) {
+      const message = 'No pagination data available.'
+      console.warn(`[CommentStore] fetchMore: ${message} Please call fetch() first.`)
+      return Promise.reject(message)
+    }
+    if (!hasMore.value) {
+      const message = 'No more data to load.'
+      console.warn(`[CommentStore] fetchMore: ${message}`)
+      return Promise.reject(message)
+    }
+
+    return _fetchList({ ...params, page: pagination.value.current_page + 1 })
   }
 
   const postComment = async (comment: Partial<Comment>) => {
@@ -143,9 +154,11 @@ export const useCommentStore = defineStore('comment', () => {
     fetching,
     posting,
     deleting,
+    hasMore,
     commentTreeList,
     clearList,
     fetchList,
+    fetchListNextPage,
     postComment,
     deleteComment,
     postCommentVote

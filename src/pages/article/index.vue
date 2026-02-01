@@ -3,18 +3,19 @@
   import { storeToRefs } from 'pinia'
   import { useEnhancer } from '/@/app/enhancer'
   import { useUniversalFetch } from '/@/app/universal'
-  import { useStores } from '/@/stores'
+  import { useCommentStore } from '/@/stores/comment'
+  import { useArticleDetailStore } from '/@/stores/article-detail'
   import { useHead, usePageSeo } from '/@/composables/head'
   import { LocalesKey } from '/@/locales'
   import * as ANCHORS from '/@/constants/element-anchor'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
-  import { SocialMedia } from '/@/components/widgets/share.vue'
-  import { getExtrasMap } from '/@/transforms/state'
+  import { SocialMedia } from '/@/components/common/shares.vue'
+  import { getExtrasMap } from '/@/transforms/extra'
   import { scrollToAnchor } from '/@/utils/scroller'
   import logger from '/@/utils/logger'
   import Comment from '/@/components/comment/index.vue'
-  import ArticleSkeleton from './skeleton.vue'
+  import ArticleSkeletons from './skeletons.vue'
   import ArticleContent from './content.vue'
   import ArticleShare from './share.vue'
   import ArticleMeta from './meta.vue'
@@ -28,11 +29,12 @@
     isMobile?: boolean
   }>()
 
-  const { route, gtag, globalState, i18n: _i18n } = useEnhancer()
-  const { identityStore, commentStore, articleDetailStore } = useStores()
+  const { route, gtag, globalState, identity, i18n: _i18n } = useEnhancer()
+  const commentStore = useCommentStore()
+  const articleDetailStore = useArticleDetailStore()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
 
-  const isLiked = computed(() => !!(article.value && identityStore.isLikedArticle(article.value.id)))
+  const isLiked = computed(() => !!(article.value && identity.isLikedArticle(article.value.id)))
   const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras))
 
   // fot AI review
@@ -65,7 +67,7 @@
     })
     try {
       await articleDetailStore.postArticleLike(article.value!.id)
-      identityStore.likeArticle(article.value!.id)
+      identity.likeArticle(article.value!.id)
       callback?.()
     } catch (error) {
       const message = _i18n.t(LocalesKey.POST_ACTION_ERROR)
@@ -139,11 +141,11 @@
   <div class="article-page">
     <placeholder :loading="fetching">
       <template #loading>
-        <article-skeleton :social-count="isMobile ? 3 : 8" :related-count="isMobile ? 2 : 3" />
+        <article-skeletons :social-count="isMobile ? 3 : 8" :related-count="isMobile ? 2 : 3" />
       </template>
       <template #default>
         <div v-if="article">
-          <div class="module margin background overflow">
+          <div class="module margin background overflow radius-md">
             <article-content
               :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID"
               :readmore-id="ANCHORS.ARTICLE_READMORE_ELEMENT_ID"
@@ -166,7 +168,7 @@
               </template>
             </article-meta>
           </div>
-          <div class="module margin background">
+          <div class="module margin background radius-sm">
             <div class="bridge left"></div>
             <div class="bridge right"></div>
             <article-share
@@ -177,7 +179,7 @@
             />
           </div>
           <div class="module margin overflow">
-            <article-neighbour :prev="prevArticle" :next="nextArticle" />
+            <article-neighbour :plain="isMobile" :prev="prevArticle" :next="nextArticle" />
           </div>
           <div class="module margin overflow">
             <article-related
@@ -218,12 +220,19 @@
       position: relative;
 
       &.margin {
-        margin-bottom: $gap-lg;
+        margin-bottom: $gap;
       }
 
       &.background {
-        border-radius: $radius-sm;
         @include mix.common-bg-module();
+      }
+
+      &.radius-md {
+        border-radius: $radius-md;
+      }
+
+      &.radius-sm {
+        border-radius: $radius-sm;
       }
 
       &.overflow {
@@ -231,7 +240,7 @@
       }
 
       .divider {
-        padding: 0 2rem;
+        padding: 0 $gap-lg;
         .line {
           border-top: 1px dashed $module-bg-darker-1;
         }
@@ -240,9 +249,9 @@
       .bridge {
         $distance: 3rem;
         position: absolute;
-        top: -$gap-lg;
-        width: $gap-lg;
-        height: $gap-lg;
+        top: -$gap;
+        width: $gap;
+        height: $gap;
         background: linear-gradient(to bottom, $module-bg, $module-bg-darker-1);
         &.left {
           left: $distance;

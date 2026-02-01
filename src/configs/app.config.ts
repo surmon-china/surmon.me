@@ -9,13 +9,16 @@ export const BFF_CONFIG = Object.freeze({
   server_local_url: 'http://localhost:3000',
   tunnel_url_prefix: '/_tunnel',
   proxy_url_prefix: '/_proxy',
-  proxy_allow_list_regexp: /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/
+  proxy_allow_list_regexp: /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/,
+  route_path_rss: '/rss.xml',
+  route_path_sitemap: '/sitemap.xml',
+  route_path_gtag_script: '/gtag-script'
 })
 
 export const APP_CONFIG = Object.freeze({
   article_image_share_long_threshold: 6688,
   render_long_article_threshold: 16688,
-  desktop_aside_article_list_count: 8,
+  desktop_sidebar_article_list_count: 8,
   default_error_code: 500,
   default_comment_avatar: '/images/gravatar.webp',
   default_og_image: '/images/og-social-card.jpg',
@@ -55,13 +58,13 @@ export const IDENTITIES = Object.freeze({
   ZHIHU_USERNAME: 'surmon',
   DOUBAN_USER_ID: '56647958',
   INSTAGRAM_USERNAME: 'surmon_sattva',
+  THREADS_USERNAME: 'surmon_sattva',
+  THREADS_JOINED_DATE: '2024-07-06',
   BTC_ADDRESS: 'bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze',
   ETH_ADDRESS: '0xaD556974D449126efdeF23f4FF581861C301cB77'
 })
 
-export const VALUABLE_LINKS = Object.freeze({
-  RSS: '/rss.xml',
-  SITE_MAP: '/sitemap.xml',
+export const RESOURCE_LINKS = Object.freeze({
   MARKDOWN_DOC: 'https://daringfireball.net/projects/markdown/',
   GITHUB_NODEPRESS: 'https://github.com/surmon-china/nodepress',
   GITHUB_SURMON_ME: 'https://github.com/surmon-china/surmon.me',
@@ -73,7 +76,7 @@ export const VALUABLE_LINKS = Object.freeze({
   GO_LINKS_MAP_ENDPOINT: 'https://go.surmon.me'
 })
 
-export const GO_LINK_MAP_KEYS = Object.freeze([
+const GO_LINKS_MAP_KEYS = [
   'status',
   'npm',
   'paypal',
@@ -92,10 +95,9 @@ export const GO_LINK_MAP_KEYS = Object.freeze([
   'instagram',
   'threads',
   'x'
-] as const)
+] as const
 
-export type GoLinksMap = Record<(typeof GO_LINK_MAP_KEYS)[number], string>
-export const GO_LINKS_MAP = GO_LINK_MAP_KEYS.reduce<GoLinksMap>(
-  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}` }),
-  {} as GoLinksMap
-)
+export type GoLinksMap = Record<(typeof GO_LINKS_MAP_KEYS)[number], string>
+export const GO_LINKS_MAP = Object.freeze(
+  Object.fromEntries(GO_LINKS_MAP_KEYS.map((key) => [key, `${RESOURCE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}`]))
+) as Record<(typeof GO_LINKS_MAP_KEYS)[number], string>

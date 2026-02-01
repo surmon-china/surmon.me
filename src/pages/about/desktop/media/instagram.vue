@@ -1,13 +1,13 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useInstagramLatestMediasStore } from '/@/stores/socials'
   import { isVideoMediaIns, isAlbumMediaIns, getInstagramCoverURL } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getCdnProxyURL } from '/@/transforms/url'
 
-  const { cdnDomain, isCNUser } = useEnhancer()
-  const { goLinksStore, instagramLatestMediasStore } = useStores()
+  const { goLinks, cdnDomain, isCNUser } = useEnhancer()
+  const instagramLatestMediasStore = useInstagramLatestMediasStore()
 
   const isPageLoading = ref(true)
   const igMedias = computed(() => instagramLatestMediasStore.data?.data.slice(0, 23) ?? [])
@@ -27,19 +27,19 @@
 </script>
 
 <template>
-  <placeholder :loading="isPageLoading" :data="igMedias">
-    <template #loading>
-      <ul class="list">
-        <li class="item" v-for="i in 24" :key="i">
-          <skeleton-base />
-        </li>
-      </ul>
-    </template>
+  <placeholder :loading="isPageLoading" :has-data="!!igMedias.length">
     <template #placeholder>
       <empty size="large" bold />
     </template>
+    <template #loading>
+      <ul class="media-skeleton">
+        <li class="item" v-for="i in 24" :key="i">
+          <skeleton class="skeleton" />
+        </li>
+      </ul>
+    </template>
     <template #default>
-      <ul class="list">
+      <ul class="media-list">
         <li class="item" :key="index" v-for="(media, index) in igMedias">
           <ulink class="link" :href="media.permalink" :title="media.caption">
             <uimage class="cover" :alt="media.caption" :src="getMediaThumbnail(media)" />
@@ -55,7 +55,7 @@
           </ulink>
         </li>
         <li class="item">
-          <ulink class="link more" :href="goLinksStore.map.instagram">•••</ulink>
+          <ulink class="link more" :href="goLinks.instagram">•••</ulink>
         </li>
       </ul>
     </template>
@@ -68,7 +68,10 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .list {
+  $item-size: 74px;
+
+  .media-skeleton,
+  .media-list {
     padding: 0;
     margin: 0;
     width: 100%;
@@ -76,13 +79,26 @@
     list-style: none;
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-gap: 1rem;
-    $item-size: 74px;
+    grid-gap: $gap-sm;
 
     .item {
-      position: relative;
       width: $item-size;
       height: $item-size;
+    }
+  }
+
+  .media-skeleton {
+    .item {
+      .skeleton {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .media-list {
+    .item {
+      position: relative;
       overflow: hidden;
 
       .link {
@@ -116,8 +132,8 @@
         .type-icon {
           opacity: 0.7;
           position: absolute;
-          top: math.div($gap-xs, 2);
-          right: $gap-xs;
+          top: math.div($gap-tiny, 2);
+          right: $gap-tiny;
           color: $white;
         }
 

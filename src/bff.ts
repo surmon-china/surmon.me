@@ -76,12 +76,12 @@ const app = createBFFServerApp({
 })
 
 // sitemap.xml
-app.usePathRequest('/sitemap.xml', async () => {
+app.usePathRequest(BFF_CONFIG.route_path_sitemap, async () => {
   return respond.xml(await getSitemapXml(cache))
 })
 
 // rss.xml
-app.usePathRequest('/rss.xml', async () => {
+app.usePathRequest(BFF_CONFIG.route_path_rss, async () => {
   return respond.xml(await getRssXml(cache))
 })
 
@@ -94,7 +94,7 @@ const getGtagCache = cacher.interval(cache, {
   getter: getGTagScript
 })
 
-app.usePathRequest('/gtag-script', async () => {
+app.usePathRequest(BFF_CONFIG.route_path_gtag_script, async () => {
   return respond.javascript(await getGtagCache())
 })
 

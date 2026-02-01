@@ -6,31 +6,25 @@
 
 import { App } from 'vue'
 
-import Webfont from '/@/components/common/webfont.vue'
-import Spin from '/@/components/common/spin.vue'
 import Empty from '/@/components/common/empty.vue'
+import Webfont from '/@/components/common/webfont.vue'
 import Divider from '/@/components/common/divider.vue'
 import Udate from '/@/components/common/udate'
 import Ulink from '/@/components/common/ulink'
 import Uimage from '/@/components/common/uimage'
-import Placeholder from '/@/components/common/placeholder'
 import ClientOnly from '/@/components/common/client-only'
-import Container from '/@/components/common/container'
+import Placeholder from '/@/components/common/placeholder'
+import Skeleton from '/@/components/common/skeleton.vue'
 import { LoadingIndicator } from '/@/components/common/loading-indicator'
 import { Responsive, DesktopOnly } from '/@/components/common/responsive'
-
-import SkeletonBase from '/@/components/common/skeleton/base.vue'
-import SkeletonLine from '/@/components/common/skeleton/line.vue'
-import SkeletonParagraph from '/@/components/common/skeleton/paragraph.vue'
 
 import {
   vDisabledWallflower,
   DIRECTIVE_NAME as disabledWallflowerDirectiveName
-} from '/@/components/widgets/wallflower/directive'
+} from '/@/components/desktop/widgets/wallflower/directive'
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Spin: typeof Spin
     Empty: typeof Empty
     Webfont: typeof Webfont
     Divider: typeof Divider
@@ -42,33 +36,24 @@ declare module 'vue' {
     Responsive: typeof Responsive
     DesktopOnly: typeof DesktopOnly
     LoadingIndicator: typeof LoadingIndicator
-    Container: typeof Container
-    SkeletonBase: typeof SkeletonBase
-    SkeletonLine: typeof SkeletonLine
-    SkeletonParagraph: typeof SkeletonParagraph
+    Skeleton: typeof Skeleton
   }
 }
 
 export default function (app: App) {
   // components
   app.component('Webfont', Webfont)
-  app.component('Spin', Spin)
   app.component('Empty', Empty)
-  app.component('Divider', Divider)
   app.component('Udate', Udate)
   app.component('Ulink', Ulink)
   app.component('Uimage', Uimage)
+  app.component('Divider', Divider)
   app.component('Placeholder', Placeholder)
-  app.component('LoadingIndicator', LoadingIndicator)
-
   app.component('ClientOnly', ClientOnly)
   app.component('Responsive', Responsive)
   app.component('DesktopOnly', DesktopOnly)
-  app.component('Container', Container)
-
-  app.component('SkeletonBase', SkeletonBase)
-  app.component('SkeletonLine', SkeletonLine)
-  app.component('SkeletonParagraph', SkeletonParagraph)
+  app.component('LoadingIndicator', LoadingIndicator)
+  app.component('Skeleton', Skeleton)
 
   // directives
   app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)

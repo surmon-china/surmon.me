@@ -1,47 +1,59 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
-  import { useStores } from '/@/stores'
+  import { useEnhancer } from '/@/app/enhancer'
+  import { useYouTubePlayListStore } from '/@/stores/socials'
   import { getYouTubePlaylistURL } from '/@/transforms/media'
   import { IDENTITIES } from '/@/configs/app.config'
 
-  const { goLinksStore, youtubePlayListStore } = useStores()
+  const { goLinks } = useEnhancer()
+  const youtubePlayListStore = useYouTubePlayListStore()
   onMounted(() => youtubePlayListStore.fetch().catch(() => []))
 </script>
 
 <template>
   <div class="youtube">
-    <span v-if="youtubePlayListStore.fetching"></span>
-    <empty size="large" bold v-else-if="!youtubePlayListStore.data.length" />
-    <ul v-else class="list">
-      <li
-        class="item"
-        :title="item.snippet.title"
-        :key="index"
-        v-for="(item, index) in youtubePlayListStore.data.slice(0, 5)"
-      >
-        <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
-          <uimage class="cover" proxy :src="item.snippet.thumbnails.medium.url" />
-          <span class="count">
-            <i class="iconfont icon-video"></i>
-            <span class="number">{{ item.contentDetails.itemCount }}</span>
-          </span>
-          <p class="title">
-            <i class="iconfont icon-playlist"></i>
-            <span class="text">{{ item.snippet.title }}</span>
-          </p>
-          <div class="mask">
-            <i class="iconfont icon-eye"></i>
-          </div>
-        </ulink>
-      </li>
-      <li class="item">
-        <ulink class="link more" :href="goLinksStore.map.youtube">
-          <i class="iconfont icon-youtube"></i>
-          <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
-          <span class="text">•••</span>
-        </ulink>
-      </li>
-    </ul>
+    <placeholder :loading="youtubePlayListStore.fetching" :has-data="!!youtubePlayListStore.data.length">
+      <template #placeholder>
+        <empty class="playlist-empty" size="large" bold />
+      </template>
+      <template #loading>
+        <div class="playlist-skeleton">
+          <skeleton class="item" :key="i" v-for="i in 6" />
+        </div>
+      </template>
+      <template #default>
+        <ul class="playlist-list">
+          <li
+            class="item"
+            :title="item.snippet.title"
+            :key="index"
+            v-for="(item, index) in youtubePlayListStore.data.slice(0, 5)"
+          >
+            <ulink class="link" :href="getYouTubePlaylistURL(item.id)">
+              <uimage class="cover" proxy :src="item.snippet.thumbnails.medium.url" />
+              <span class="count">
+                <i class="iconfont icon-video"></i>
+                <span class="number">{{ item.contentDetails.itemCount }}</span>
+              </span>
+              <p class="title">
+                <i class="iconfont icon-playlist"></i>
+                <span class="text">{{ item.snippet.title }}</span>
+              </p>
+              <div class="mask">
+                <i class="iconfont icon-eye"></i>
+              </div>
+            </ulink>
+          </li>
+          <li class="item">
+            <ulink class="link more" :href="goLinks.youtube">
+              <i class="iconfont icon-youtube"></i>
+              <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
+              <span class="text">•••</span>
+            </ulink>
+          </li>
+        </ul>
+      </template>
+    </placeholder>
   </div>
 </template>
 
@@ -50,21 +62,31 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .list {
+  .playlist-skeleton,
+  .playlist-list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 1rem;
+  }
 
+  .playlist-skeleton {
+    .item {
+      height: 6rem;
+      width: 100%;
+    }
+  }
+
+  .playlist-list {
     .item {
       position: relative;
       overflow: hidden;
 
       .link {
-        $cover-size: 6.8rem;
-        $title-size: 2.6rem;
+        $cover-size: 5rem;
+        $title-size: 2rem;
         display: block;
         height: $cover-size + $title-size;
         background-color: $module-bg-darker-1;
@@ -81,21 +103,20 @@
 
         .count {
           position: absolute;
-          top: $gap-sm;
-          right: $gap-sm;
-          height: 1.8rem;
+          top: $gap-xs;
+          right: $gap-xs;
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          padding: 0 $gap-xs;
+          padding: $gap-tiny;
           border-radius: $radius-sm;
           background-color: rgba(#000, 0.3);
-          font-size: $font-size-root;
+          font-size: $font-size-h6;
           z-index: $z-index-normal + 1;
           color: $white;
 
           .number {
-            margin-left: $gap-xs;
+            margin-left: $gap-tiny;
             font-weight: bold;
           }
         }
@@ -114,10 +135,10 @@
           padding: 0 1em;
           height: $title-size;
           line-height: $title-size;
-          font-size: $font-size-small;
+          font-size: $font-size-h6;
 
           .iconfont {
-            margin-right: $gap-xs;
+            margin-right: $gap-tiny;
           }
 
           .text {

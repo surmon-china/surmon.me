@@ -2,8 +2,8 @@
   import { ref, computed, nextTick, onMounted, onUpdated } from 'vue'
   import { LocalesKey } from '/@/locales'
   import { Article } from '/@/interfaces/article'
-  import { useArticleDetailStore } from '/@/stores/article'
-  import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/state'
+  import { useArticleDetailStore } from '/@/stores/article-detail'
+  import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/article'
   import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
 
@@ -75,13 +75,13 @@
           :en="`${numberSplit(ctxStore.contentLength)} characters, ${ctxStore.readMinutes} min read`"
         />
         <responsive desktop>
-          <divider type="vertical" class="vertical" />
+          <divider type="vertical" size="sm" class="vertical" />
           <span>
             <i class="iconfont icon-clock-outlined"></i>
             <udate to="YMDm" :date="article.created_at" separator="/" />
           </span>
         </responsive>
-        <divider type="vertical" class="vertical" />
+        <divider type="vertical" size="sm" class="vertical" />
         <span>
           <i class="iconfont icon-eye"></i>
           <span>{{ numberSplit(article.stats.views) }}&nbsp;</span>
@@ -108,7 +108,7 @@
   @use '/src/styles/base/mixins' as mix;
 
   .detail {
-    padding: 1rem 2rem;
+    padding: $gap-sm $gap-lg;
     position: relative;
     overflow: hidden;
     height: auto;
@@ -116,17 +116,16 @@
 
     .origin {
       position: absolute;
-      top: 0.6rem;
-      left: -2.4rem;
+      top: 0.5rem;
+      left: -1.4rem;
       transform: rotate(-45deg);
-      width: 8rem;
-      height: 2rem;
-      line-height: 2rem;
+      width: 5rem;
+      line-height: 2;
       text-align: center;
       transform-origin: center;
       color: $white;
       font-weight: bold;
-      font-size: $font-size-small;
+      font-size: $font-size-h6;
       background-color: var(--color);
       &.original {
         --color: #{rgba($surmon, 0.7)};
@@ -144,19 +143,19 @@
       position: relative;
 
       .title {
-        margin-top: $gap;
-        margin-bottom: $gap;
+        margin-top: $gap-sm;
+        margin-bottom: $gap-xs;
         text-align: center;
 
         .featured {
           display: inline-block;
           border: 1px solid;
           border-radius: $radius-xs;
-          margin-left: $gap-sm;
+          margin-left: $gap-xs;
           padding: 0 2px;
           font-weight: normal;
           text-transform: capitalize;
-          font-size: $font-size-small;
+          font-size: $font-size-secondary;
           color: $color-text-secondary;
           transform: translateY(-2px);
           user-select: none;
@@ -164,14 +163,14 @@
       }
 
       .meta {
-        margin-bottom: $gap-lg;
+        margin-bottom: $gap;
         text-align: center;
         color: $color-text-disabled;
-        font-size: $font-size-small;
+        font-size: $font-size-tertiary;
         user-select: none;
         line-height: 2;
         .iconfont {
-          margin-right: $gap-xs;
+          margin-right: $gap-tiny;
         }
         .vertical {
           top: -1px;
@@ -182,7 +181,7 @@
         position: absolute;
         bottom: 0;
         width: 100%;
-        height: 18rem;
+        height: 16rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -190,14 +189,14 @@
 
         .readmore-btn {
           width: 80%;
-          height: 3rem;
           margin-top: 2rem;
-          line-height: 3rem;
+          line-height: 2.5rem;
           text-align: center;
+          font-weight: bold;
           color: $color-text-reversal;
           background-color: $primary-lighter;
           @include mix.background-transition();
-          @include mix.radius-box($radius-xs);
+          @include mix.radius-box($radius-sm);
 
           &[disabled] {
             cursor: no-drop;

@@ -146,7 +146,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  $avatar-size: 4rem;
+  $avatar-size: 3rem;
 
   .publisher-skeleton {
     display: flex;
@@ -164,7 +164,7 @@
 
   .publisher {
     display: block;
-    padding-left: 5.2rem;
+    padding-left: 4rem;
     &.bordered {
       input {
         border: 1px solid $module-bg-darker-3;
@@ -189,7 +189,7 @@
           line-height: 2em;
           text-indent: 3px;
           background-color: $module-bg-darker-1;
-          @include mix.radius-box($radius-mini);
+          @include mix.radius-box($radius-tiny);
           @include mix.background-transition();
 
           &:focus,
@@ -254,7 +254,7 @@
     &.blossomed {
       .postbox {
         height: auto;
-        min-height: 8rem;
+        min-height: 6rem;
       }
     }
 
@@ -273,7 +273,7 @@
           width: 80%;
           margin-left: 0;
           margin-right: 0;
-          margin-bottom: $gap;
+          margin-bottom: $gap-sm;
         }
       }
     }

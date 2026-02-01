@@ -4,11 +4,11 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { usePageSeo } from '/@/composables/head'
   import { useGitHubSponsorsStore } from '/@/stores/sponsors'
-  import { useSponsorState, ProviderId } from '/@/components/widgets/sponsor/state'
+  import { useSponsorState, ProviderId } from '/@/components/desktop/widgets/sponsor/state'
+  import SponsorProvider from '/@/components/desktop/widgets/sponsor/provider.vue'
+  import SponsorTabs from '/@/components/desktop/widgets/sponsor/tabs.vue'
+  import PageBanner from '/@/components/desktop/widgets/page-banner.vue'
   import { firstUpperCase } from '/@/transforms/text'
-  import SponsorTabs from '/@/components/widgets/sponsor/tabs.vue'
-  import SponsorProvider from '/@/components/widgets/sponsor/provider.vue'
-  import PageBanner from '/@/components/common/banner.vue'
 
   const { route, isZhLang, i18n: _i18n } = useEnhancer()
   const githubSponsorsStore = useGitHubSponsorsStore()
@@ -34,7 +34,7 @@
 
 <template>
   <div class="sponsor-page">
-    <page-banner image="/images/page-sponsor/banner.webp" cdn>
+    <page-banner background-image="/images/page-sponsor/banner.webp" cdn>
       <template #title>
         <webfont>
           <i18n zh="隨喜一念，各得其安" en="Become a sponsor to me" />
@@ -48,9 +48,11 @@
       </template>
     </page-banner>
     <div class="page-content">
-      <container class="tabs-wrapper">
-        <sponsor-tabs class="sponsor-tabs" :state="sponsorState" />
-      </container>
+      <div class="tabs-wrapper">
+        <div class="container">
+          <sponsor-tabs class="sponsor-tabs" :state="sponsorState" />
+        </div>
+      </div>
       <sponsor-provider
         class="sponsor-provider"
         :state="sponsorState"
@@ -67,7 +69,7 @@
 
   .sponsor-page {
     width: 100%;
-    min-height: $full-page-active-content-height;
+    min-height: $full-page-content-height;
     display: flex;
     flex-direction: column;
 
@@ -78,8 +80,9 @@
 
       .tabs-wrapper {
         background-color: $module-bg-translucent;
+
         .sponsor-tabs {
-          height: 8rem;
+          height: 6rem;
         }
       }
 
@@ -87,7 +90,7 @@
         flex: 1;
         margin: 0 auto;
         width: $container-width;
-        min-height: 27rem;
+        min-height: 24rem;
         overflow: hidden;
       }
     }

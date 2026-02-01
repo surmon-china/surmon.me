@@ -1,6 +1,5 @@
 <script lang="ts" setup>
   import { ref, shallowRef } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import SwiperClass, { Swiper, SwiperSlide } from '/@/effects/swiper'
@@ -13,8 +12,7 @@
     fetching: boolean
   }>()
 
-  const { gtag, isCNUser } = useEnhancer()
-  const { goLinksStore } = useStores()
+  const { gtag, goLinks, isCNUser } = useEnhancer()
 
   const swiperRef = shallowRef<SwiperClass>()
   const prevSlide = () => swiperRef.value?.slidePrev()
@@ -41,20 +39,25 @@
 
 <template>
   <div class="threads">
-    <placeholder :data="profile ?? undefined" :loading="fetching">
+    <placeholder :loading="fetching" :has-data="!!profile">
       <template #placeholder>
-        <empty class="threads-empty" bold key="empty" />
+        <empty class="threads-empty" bold />
       </template>
       <template #loading>
-        <div class="threads-skeleton" key="skeleton">
-          <div class="left"><skeleton-line /></div>
-          <div class="right"><skeleton-line /></div>
+        <div class="threads-skeleton">
+          <skeleton class="profile" />
+          <skeleton class="content" />
         </div>
       </template>
       <template #default>
-        <div class="threads-content" key="content">
-          <div class="profile" v-if="profile" :title="profile.name">
-            <ulink class="link" :href="goLinksStore.map.threads" @mousedown="handleGtagEvent('threads_homepage')">
+        <div class="threads-content">
+          <div class="profile" v-if="profile">
+            <ulink
+              class="link"
+              :href="goLinks.threads"
+              :title="profile.name"
+              @mousedown="handleGtagEvent('threads_homepage')"
+            >
               <uimage class="avatar" :src="profile.avatar" :proxy="isCNUser" defer />
               <span class="logo"><i class="iconfont icon-threads" /></span>
             </ulink>
@@ -68,7 +71,7 @@
             </div>
           </div>
           <div class="posts">
-            <empty v-if="!medias.length" class="posts-empty" bold key="empty" />
+            <empty class="posts-empty" bold key="empty" v-if="!medias.length" />
             <swiper
               v-else
               class="posts-swiper"
@@ -113,7 +116,7 @@
                 </div>
                 <div class="meta">
                   <ulink
-                    class="item link"
+                    class="link"
                     title="To Post"
                     :href="media.permalink"
                     @mousedown="handleGtagEvent('threads_detail_link')"
@@ -121,10 +124,12 @@
                     <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
                     <i class="iconfont icon-threads" v-else></i>
                     <span>thread</span>
-                    <i class="iconfont window icon-new-window-s"></i>
+                    <span class="new-window-icon">
+                      <i class="iconfont icon-new-window-s"></i>
+                    </span>
                   </ulink>
-                  <span class="item date" data-allow-mismatch v-if="media.timestamp">
-                    <i class="iconfont icon-clock"></i>
+                  <div class="divider" />
+                  <span class="date" data-allow-mismatch v-if="media.timestamp">
                     <udate to="ago" :date="media.timestamp" />
                   </span>
                 </div>
@@ -172,15 +177,15 @@
   }
 
   .threads-skeleton {
-    padding: $gap;
+    padding: $gap-sm;
     background-color: $module-bg;
     @include mix.radius-box($radius-sm);
 
-    .left {
-      width: 140px;
-      margin-right: $gap-lg;
+    .profile {
+      width: 10rem;
+      margin-right: $gap;
     }
-    .right {
+    .content {
       flex: 1;
     }
   }
@@ -194,18 +199,18 @@
     .profile {
       width: auto;
       height: 100%;
-      padding: 0 $gap;
-      margin-right: $gap-sm;
+      padding: 0 0.8rem;
+      margin-right: $gap-xs;
       display: flex;
       justify-content: center;
       align-items: center;
       @include mix.radius-box($radius-sm);
-      border-top-right-radius: $radius-mini;
-      border-bottom-right-radius: $radius-mini;
+      border-top-right-radius: $radius-tiny;
+      border-bottom-right-radius: $radius-tiny;
 
       .link {
         position: relative;
-        border-radius: 100%;
+        border-radius: $radius-xs;
         overflow: hidden;
         &:hover {
           .logo {
@@ -236,14 +241,14 @@
       }
 
       .count {
-        min-width: 3rem;
-        margin-left: 1.5rem;
+        min-width: 2rem;
+        margin-left: 1.2rem;
         position: relative;
         display: inline-flex;
         flex-direction: column;
         justify-content: space-around;
         height: $content-height;
-        padding: 0.2em 0.5em 0.26em;
+        padding: 0.2rem 0.4rem;
         border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &::before {
@@ -261,7 +266,6 @@
 
         .title {
           margin: 0;
-          font-size: $font-size-small + 1;
           font-weight: bold;
           color: $color-text-secondary;
         }
@@ -269,7 +273,7 @@
         .secondary {
           margin: 0;
           color: $color-text-disabled;
-          font-size: $font-size-root;
+          font-size: $font-size-tertiary;
         }
       }
     }
@@ -277,7 +281,7 @@
     .posts {
       flex: 1;
       height: $threads-height;
-      @include mix.radius-box($radius-mini);
+      @include mix.radius-box($radius-tiny);
 
       .posts-empty {
         min-height: auto;
@@ -301,7 +305,7 @@
         box-sizing: border-box;
         width: 100%;
         height: $threads-height;
-        padding: 0 $gap-lg;
+        padding: 0 $gap;
 
         .content {
           display: flex;
@@ -353,63 +357,72 @@
             }
 
             .count {
-              margin-left: $gap-xs;
+              margin-left: $gap-tiny;
               vertical-align: top;
-              font-size: $font-size-small;
+              font-size: $font-size-h6;
               @include mix.color-transition();
             }
           }
         }
 
         .meta {
+          width: 100%;
           display: flex;
           align-items: center;
-          width: 100%;
           overflow: hidden;
+          $meta-color: $color-text-divider;
 
-          .item {
+          .link {
             display: inline-block;
-            margin-right: $gap-lg;
-            font-size: $font-size-small;
-            color: $color-text-divider;
+            font-size: $font-size-tertiary;
+            color: $meta-color;
             @include mix.color-transition();
-            .iconfont {
-              margin-right: $gap-xs;
-              font-size: $font-size-small - 1;
+            &:hover {
+              color: $color-text;
             }
 
-            &.link {
-              .window {
-                margin-right: 0;
-                margin-left: 2px;
-                font-size: 10px;
-              }
-
-              &:hover {
-                color: $color-text;
-              }
+            > .iconfont {
+              margin-right: math.div($gap-tiny, 2);
+              font-size: $font-size-tertiary;
             }
+
+            .new-window-icon {
+              margin-left: math.div($gap-tiny, 2);
+              font-size: $font-size-quinary;
+            }
+          }
+
+          .divider {
+            height: 0.6em;
+            width: 1px;
+            background-color: $meta-color;
+            margin-inline: $gap;
+          }
+
+          .date {
+            font-size: $font-size-tertiary;
+            color: $meta-color;
           }
         }
       }
     }
 
     .navigation {
-      width: 3rem;
+      width: 2.6rem;
       height: 100%;
-      margin-left: $gap-sm;
+      margin-left: $gap-xs;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
 
       .button {
         flex: 1;
-        font-size: $font-size-small;
         text-align: center;
+        font-size: $font-size-h5;
         color: $color-text-disabled;
         @include mix.color-transition();
         @include mix.common-bg-module();
-        @include mix.radius-box($radius-mini);
+        @include mix.radius-box($radius-tiny);
 
         &:not([disabled]):hover {
           color: $color-link;
@@ -421,7 +434,7 @@
         }
 
         &.prev {
-          margin-bottom: $gap-sm;
+          margin-bottom: $gap-xs;
           border-top-right-radius: $radius-sm;
         }
 

@@ -1,50 +1,25 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
   import { LocalesKey } from '/@/locales'
-  import { useEnhancer } from '/@/app/enhancer'
-  import { Pagination } from '/@/interfaces/common'
-  import { GAEventCategories } from '/@/constants/google-analytics'
+  import { Pagination } from '/@/interfaces/pagination'
   import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/element-anchor'
-  import { CommentEvents } from './helper'
 
   const props = defineProps<{
     fetching: boolean
-    remain?: number
     pagination: Pagination | null
+    hasMore: boolean
   }>()
 
   const emit = defineEmits<{
-    (e: CommentEvents.Page, page: number): void
+    (e: 'loadmore'): void
   }>()
-
-  const { gtag } = useEnhancer()
-  const hasMore = computed(() => {
-    return (
-      props.pagination &&
-      props.pagination?.total_page > 1 &&
-      props.pagination?.current_page !== props.pagination?.total_page
-    )
-  })
-
-  const handleLoadmore = () => {
-    if (props.pagination) {
-      emit(CommentEvents.Page, props.pagination.current_page + 1)
-      gtag?.event('loadmore', {
-        event_category: GAEventCategories.Comment
-      })
-    }
-  }
 </script>
 
 <template>
   <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
-    <loading-indicator class="loading" v-if="fetching" width="2rem" height="1.2rem" gap="0.8rem" />
-    <button class="button" v-else-if="hasMore" @click="handleLoadmore">
+    <loading-indicator class="loading" v-if="fetching" />
+    <button class="button" v-else-if="hasMore" @click="emit('loadmore')">
+      <i18n zh="加载更多评论" en="loadmore comments" />
       <i class="iconfont icon-loadmore"></i>
-      <i18n>
-        <template #zh>加载更多（{{ remain }} 条）评论</template>
-        <template #en>Loadmore (remain of {{ remain }} comments)</template>
-      </i18n>
     </button>
     <span class="finished" v-else>
       <i18n :k="LocalesKey.LIST_NO_MORE_DATA" />
@@ -57,23 +32,25 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
+  $button-size: 2.2rem;
+
   .loadmore {
-    margin-top: $gap-lg;
+    margin-top: $gap;
     margin-bottom: $gap-sm;
     display: flex;
     justify-content: center;
     align-items: center;
 
     .loading {
-      margin: $gap-sm 0;
+      height: $button-size;
     }
 
     .button {
       position: relative;
       min-width: 10rem;
-      height: 2.8rem;
-      padding: 0 $gap-lg;
-      border-radius: $radius-xs;
+      height: $button-size;
+      padding: 0 $gap;
+      border-radius: $radius-sm;
       background-color: $module-bg-darker-1;
       color: $color-text-disabled;
       &:hover {
@@ -82,7 +59,7 @@
       }
 
       .iconfont {
-        margin-right: $gap-sm;
+        margin-left: $gap-xs;
       }
     }
 

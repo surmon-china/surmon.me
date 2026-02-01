@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { LocalesKey } from '/@/locales'
-  import { SortMode } from '/@/constants/biz-state'
+  import { SortMode } from '/@/constants/sort-param'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { UserType, useIdentityStore } from '/@/stores/identity'
   import { openPopupWindow, openNewWindow } from '/@/utils/opener'
@@ -101,11 +101,11 @@
     <template #loading>
       <div class="topbar-skeleton" key="skeleton">
         <div class="left">
-          <skeleton-line class="skeleton-item count" />
-          <skeleton-line class="skeleton-item sort" v-if="!plain" />
+          <skeleton class="item count" />
+          <skeleton class="item sort" v-if="!plain" />
         </div>
         <div class="right">
-          <skeleton-line class="skeleton-item user" />
+          <skeleton class="item user" />
         </div>
       </div>
     </template>
@@ -209,7 +209,6 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  // local variables
   $topbar-size: 2em;
 
   .topbar,
@@ -220,25 +219,23 @@
   }
 
   .topbar-skeleton {
-    .left,
-    .right {
-      height: $topbar-size;
+    .left {
+      display: flex;
     }
-    .skeleton-item {
+
+    .item {
+      height: $topbar-size;
+
       &.count {
-        width: 12rem;
+        width: 10rem;
         margin-right: $gap;
       }
       &.sort {
-        width: 8rem;
+        width: 6rem;
       }
       &.user {
-        width: 8rem;
+        width: 6rem;
       }
-    }
-
-    .left {
-      display: flex;
     }
   }
 
@@ -246,7 +243,7 @@
     &.plain {
       flex-direction: column;
       align-items: baseline;
-      height: 6rem;
+      height: 4.2rem;
     }
 
     .statistics {
@@ -255,15 +252,16 @@
       line-height: $topbar-size;
 
       .total {
+        interpolate-size: allow-keywords;
         padding: 0;
         padding-right: 0.6em;
         background-color: $module-bg-darker-1;
         @include mix.radius-box($radius-xs);
         will-change: width;
-        transition: all $motion-duration-fast;
-        max-width: 180px;
+        transition: width $motion-duration-mid;
+        width: fit-content;
         &.loading {
-          max-width: 130px;
+          width: 130px;
         }
 
         .iconfont {
@@ -271,20 +269,20 @@
           width: $topbar-size;
           height: $topbar-size;
           text-align: center;
-          margin-right: $gap-xs;
+          margin-right: $gap-tiny;
           background-color: $module-bg-darker-2;
           @include mix.background-transition();
         }
 
         .count {
           font-weight: bold;
-          margin: 0 $gap-xs;
+          margin: 0 $gap-tiny;
         }
       }
 
       .sort,
       .disqus {
-        margin-left: $gap;
+        margin-left: $gap-sm;
         background-color: $module-bg-darker-1;
         @include mix.radius-box($radius-xs);
         &:hover {
@@ -300,14 +298,14 @@
           align-items: center;
           position: absolute;
           top: 0;
-          left: $gap-sm;
+          left: $gap-xs;
           height: 100%;
-          font-size: $font-size-small;
+          font-size: $font-size-tertiary;
           pointer-events: none;
         }
 
         .select {
-          padding: 0 $gap-sm 0 $gap * 2;
+          padding: 0 $gap-xs 0 $gap-lg;
           font-weight: bold;
           appearance: none;
           background: none;
@@ -346,9 +344,9 @@
           }
 
           .iconfont {
-            margin: 0 $gap-sm;
+            margin: 0 $gap-xs;
             color: $disqus-primary;
-            font-size: $font-size-small;
+            font-size: $font-size-tertiary;
             &.right {
               margin-right: 0;
             }
@@ -377,22 +375,20 @@
           background-color: $module-bg-darker-1;
           @include mix.radius-box($radius-xs);
 
-          .icon {
-            &.disqus {
-              font-size: $font-size-h4;
-              color: $disqus-primary;
-            }
+          .icon.disqus {
+            font-size: $font-size-h4;
+            color: $disqus-primary;
           }
 
           .text {
-            margin-right: $gap-xs;
-            margin-left: $gap-sm;
+            margin-right: $gap-tiny;
+            margin-left: $gap-tiny;
             font-weight: bold;
           }
 
           .arrow {
             color: $color-text-divider;
-            font-size: $font-size-small;
+            font-size: $font-size-tertiary;
           }
         }
 
@@ -416,7 +412,7 @@
                 padding: 0 $gap;
                 line-height: 2.3em;
                 text-align: right;
-                font-size: $font-size-small;
+                font-size: $font-size-secondary;
                 background-color: $module-bg-darker-2;
                 &:hover {
                   background-color: $module-bg-darker-3;
@@ -426,7 +422,7 @@
                   &.disqus {
                     color: $disqus-primary;
                     font-size: 10px;
-                    margin: 0 $gap-xs;
+                    margin: 0 $gap-tiny;
                   }
                 }
               }

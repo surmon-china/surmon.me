@@ -13,7 +13,7 @@ import { isValidDateParam } from '/@/transforms/validate'
 import { scrollToPageTop } from '/@/utils/scroller'
 
 // Mobile listing
-import MobileListing from '/@/components/listing/mobile/index.vue'
+import MobileListing from '/@/components/mobile/listing/index.vue'
 
 // Desktop listing
 import IndexPage from '/@/pages/index/index.vue'

@@ -1,12 +1,33 @@
 import { computed } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { usePageSeo } from '/@/composables/head'
+import { I18nLocaleMap } from '/@/composables/i18n'
 import { useNodepressStatisticsStore } from '/@/stores/statistics'
 import { numberSplit, numberToKilo, firstUpperCase } from '/@/transforms/text'
 import { Language, LocalesKey } from '/@/locales'
 import { APP_PROFILE } from '/@/configs/app.config'
 
-export const i18ns = {
+const monthNamesI18ns = [
+  ['Jan', '一月'],
+  ['Feb', '二月'],
+  ['Mar', '三月'],
+  ['Apr', '四月'],
+  ['May', '五月'],
+  ['Jun', '六月'],
+  ['Jul', '七月'],
+  ['Aug', '八月'],
+  ['Sep', '九月'],
+  ['Oct', '十月'],
+  ['Nov', '十一'],
+  ['Dec', '十二']
+]
+
+export const getMonthNameI18n = (number: number): I18nLocaleMap<Language> => {
+  const [en, zh] = monthNamesI18ns[number - 1]
+  return { [Language.English]: en, [Language.Chinese]: zh }
+}
+
+export const bannerI18ns = {
   title: {
     [Language.Chinese]: '出入平等，了了分明',
     [Language.English]: `Surmon's writing archive`

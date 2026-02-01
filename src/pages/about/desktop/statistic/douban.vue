@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import StatisticBase, { StatisticCount } from './base.vue'
+  import { useDoubanMoviesStore } from '/@/stores/socials'
+  import StatisticCard, { StatisticCount } from './_card.vue'
 
-  const { isZhLang } = useEnhancer()
-  const { goLinksStore, doubanMoviesStore } = useStores()
+  const { goLinks, isZhLang } = useEnhancer()
+  const doubanMoviesStore = useDoubanMoviesStore()
 
   const isFetching = ref(true)
   const totalSpent = computed(() => Math.trunc(doubanMoviesStore.data?.total_spent ?? 0))
@@ -19,12 +19,12 @@
 </script>
 
 <template>
-  <statistic-base
-    brand="douban"
+  <statistic-card
+    class="douban-statistic"
     icon="icon-douban"
-    :fetching="isFetching"
-    :data="doubanMoviesStore.data"
-    :href="goLinksStore.map['douban-movie']"
+    :loading="isFetching"
+    :has-data="!!doubanMoviesStore.data"
+    :href="goLinks['douban-movie']"
     :platform="isZhLang ? '我在豆瓣' : 'Douban Movie'"
   >
     <p>
@@ -32,7 +32,7 @@
       <span v-if="isZhLang">标记看过</span>
       <statistic-count large primary split :count="doubanMoviesStore.data.total_collections" />
       <span v-if="isZhLang">部影片</span>
-      <span v-else>films marked</span>
+      <span v-else> films marked</span>
     </p>
     <p>
       <i class="iconfont icon-clock-outlined"></i>
@@ -48,5 +48,15 @@
         <template #en><statistic-count :count="weeklyAvg" /> films per week</template>
       </i18n>
     </p>
-  </statistic-base>
+  </statistic-card>
 </template>
+
+<style lang="scss" scoped>
+  @use '/src/styles/base/variables' as *;
+  @use '/src/styles/base/functions' as funs;
+  @use '/src/styles/base/mixins' as mix;
+
+  .douban-statistic {
+    #{--brand-primary-color}: $douban-primary;
+  }
+</style>

@@ -54,56 +54,59 @@
         <h3 class="title"><i18n v-bind="i18ns.footprintTitle" /></h3>
         <p class="description"><i18n v-bind="i18ns.footprintDescription" /></p>
       </div>
-      <div class="content-skeleton" key="skeleton" v-if="!loaded">
-        <skeleton-line class="skeleton-item" :key="i" v-for="i in 5" />
-      </div>
-      <div class="content" key="content" v-else>
-        <ul class="group-list">
-          <li class="group" :key="trip.id" v-for="trip in mapTss.configJson.value">
-            <h5 class="title">
-              <i class="iconfont icon-route"></i>
-              <span class="text">{{ trip.name }}</span>
-            </h5>
-            <ul class="child-list">
-              <li
-                class="item"
-                :class="{ actived: getFlatSegmentId(trip.id, index) === lastActiveSegmentId }"
-                :key="index"
-                :title="segment.name"
-                v-for="(segment, index) in trip.segments"
-                @click="
-                  activateTripSegment(map!, mapTss.flatSegmentsMap.value.get(getFlatSegmentId(trip.id, index))!)
-                "
-              >
-                <i class="iconfont" :class="getTransportIconName(segment.transport)"></i>
-                <span class="text">{{ segment.name }}</span>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="group-list">
-          <li class="group" :key="index" v-for="(folder, index) in mapPms.folders.value">
-            <h5 class="title">
-              <i class="iconfont icon-map"></i>
-              <span class="text">{{ folder.name }}</span>
-              <span class="count">({{ folder.placemarks.length }})</span>
-            </h5>
-            <div class="empty" v-if="!folder.placemarks.length">null</div>
-            <ul class="child-list placemarks" v-else>
-              <li
-                class="item"
-                :key="i"
-                :title="placemark.name"
-                v-for="(placemark, i) in folder.placemarks"
-                @click="activatePlacemark(lib!, map!, placemark)"
-              >
-                <uimage class="icon" :cdn="true" src="/images/third-party/mapbox-veterinary.svg" />
-                <span class="text">{{ placemark.name }}</span>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+      <!-- MARK: Do not use <placeholder> component for scroll container -->
+      <transition name="module" mode="out-in">
+        <div class="content-skeleton" key="skeleton" v-if="!loaded">
+          <skeleton class="line" :key="i" v-for="i in 5" />
+        </div>
+        <div class="content" key="content" v-else>
+          <ul class="group-list">
+            <li class="group" :key="trip.id" v-for="trip in mapTss.configJson.value">
+              <h5 class="title">
+                <i class="iconfont icon-route"></i>
+                <span class="text">{{ trip.name }}</span>
+              </h5>
+              <ul class="child-list">
+                <li
+                  class="item"
+                  :class="{ actived: getFlatSegmentId(trip.id, index) === lastActiveSegmentId }"
+                  :key="index"
+                  :title="segment.name"
+                  v-for="(segment, index) in trip.segments"
+                  @click="
+                    activateTripSegment(map!, mapTss.flatSegmentsMap.value.get(getFlatSegmentId(trip.id, index))!)
+                  "
+                >
+                  <i class="iconfont" :class="getTransportIconName(segment.transport)"></i>
+                  <span class="text">{{ segment.name }}</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="group-list">
+            <li class="group" :key="index" v-for="(folder, index) in mapPms.folders.value">
+              <h5 class="title">
+                <i class="iconfont icon-map"></i>
+                <span class="text">{{ folder.name }}</span>
+                <span class="count">({{ folder.placemarks.length }})</span>
+              </h5>
+              <div class="empty" v-if="!folder.placemarks.length">null</div>
+              <ul class="child-list placemarks" v-else>
+                <li
+                  class="item"
+                  :key="i"
+                  :title="placemark.name"
+                  v-for="(placemark, i) in folder.placemarks"
+                  @click="activatePlacemark(lib!, map!, placemark)"
+                >
+                  <uimage class="img-icon" :cdn="true" src="/images/third-party/mapbox-veterinary.svg" />
+                  <span class="text">{{ placemark.name }}</span>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -123,25 +126,25 @@
 
     .panel {
       position: absolute;
-      right: 3rem;
-      top: 3rem;
-      bottom: 3rem;
+      right: 2rem;
+      top: 2rem;
+      bottom: 2rem;
       display: flex;
       flex-direction: column;
-      width: 22rem;
-      padding: $gap-lg $gap $gap $gap-lg;
+      width: 17rem;
+      padding: $gap-sm $gap-sm $gap-sm $gap;
       background: $module-bg-opaque;
-      border-radius: $radius-lg;
+      border-radius: $radius-md;
       box-shadow: 0px 0px 8px 4px rgb(0 0 0 / 10%);
 
       .head {
-        margin-bottom: $gap-lg;
-        padding-bottom: $gap-lg;
+        margin-bottom: $gap;
+        padding-bottom: $gap;
         border-bottom: 1px solid $module-bg-darker-1;
 
         .title {
           margin-top: 0;
-          margin-bottom: $gap;
+          margin-bottom: $gap-sm;
         }
 
         .description {
@@ -151,7 +154,8 @@
       }
 
       .content-skeleton {
-        .skeleton-item {
+        .line {
+          height: 1rem;
           margin-bottom: $gap;
         }
       }
@@ -175,7 +179,7 @@
 
             .title {
               margin-top: 0;
-              margin-bottom: $gap-sm;
+              margin-bottom: $gap-xs;
               font-weight: bold;
 
               .iconfont {
@@ -183,15 +187,18 @@
               }
 
               .text {
-                margin-left: $gap-sm;
-                margin-right: $gap-xs;
+                margin-left: $gap-xs;
+              }
+
+              .count {
+                margin-left: $gap-tiny;
               }
             }
 
             .empty,
             .child-list {
               padding-left: 1rem;
-              margin-bottom: $gap;
+              margin-bottom: $gap-sm;
               color: $color-text-secondary;
             }
 
@@ -202,7 +209,7 @@
               .item {
                 display: flex;
                 scroll-snap-align: start;
-                line-height: 2.2;
+                line-height: 2.4;
                 cursor: pointer;
                 &:hover {
                   color: $color-text;
@@ -211,7 +218,7 @@
                   color: $surmon;
                 }
 
-                .icon {
+                .img-icon {
                   width: 1.4em;
                   margin-top: -2px;
                 }
@@ -222,7 +229,7 @@
                 }
 
                 .text {
-                  margin-left: $gap-sm;
+                  margin-left: $gap-xs;
                   max-width: 80%;
                   @include mix.text-overflow();
                 }

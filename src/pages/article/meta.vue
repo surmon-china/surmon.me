@@ -83,7 +83,7 @@
         </template>
       </i18n>
       <template v-if="plain"><br /></template>
-      <template v-else><divider type="vertical" /></template>
+      <template v-else><divider type="vertical" size="sm" /></template>
       <span class="link permalink" @click="copy(articleURL)">
         {{ articleURL }}
       </span>
@@ -99,7 +99,7 @@
 
   .meta {
     position: relative;
-    padding: 2rem;
+    padding: $gap-lg;
     text-align: center;
     &.plain {
       .line {
@@ -109,15 +109,13 @@
     }
 
     .actions {
-      margin-top: $gap-sm;
-      margin-bottom: 2rem;
+      margin-top: $gap-tiny;
+      margin-bottom: $gap-lg;
     }
 
     .line {
-      $size: 2rem;
-      height: $size;
-      line-height: $size;
-      margin-bottom: $gap-lg;
+      line-height: $line-height-loose;
+      margin-bottom: $gap-sm;
       font-weight: bold;
       color: $color-text-secondary;
       &:last-child {
@@ -137,7 +135,7 @@
         &.date,
         &.category,
         &.tag {
-          margin: 0 $gap-xs;
+          margin: 0 $gap-tiny;
           color: $color-text;
           &:hover {
             color: $color-link-hover;

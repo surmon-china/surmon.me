@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { ref, onMounted } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
-  import StatisticBase, { StatisticCount } from './base.vue'
+  import { useNpmStatisticsStore } from '/@/stores/statistics'
+  import StatisticCard, { StatisticCount } from './_card.vue'
 
-  const { isZhLang } = useEnhancer()
-  const { goLinksStore, npmStatisticsStore } = useStores()
+  const { goLinks, isZhLang } = useEnhancer()
+  const npmStatisticsStore = useNpmStatisticsStore()
   const isFetching = ref(true)
 
   onMounted(() => {
@@ -16,12 +16,12 @@
 </script>
 
 <template>
-  <statistic-base
-    brand="npm"
+  <statistic-card
+    class="npm-statistic"
     icon="icon-npm"
-    :fetching="isFetching"
-    :data="npmStatisticsStore.data"
-    :href="goLinksStore.map.npm"
+    :loading="isFetching"
+    :has-data="!!npmStatisticsStore.data"
+    :href="goLinks.npm"
     :platform="isZhLang ? '我在 NPM' : 'NPM'"
   >
     <p class="line-1">
@@ -36,7 +36,7 @@
       <span v-if="isZhLang">被下载</span>
       <statistic-count large primary split :count="npmStatisticsStore.data?.totalDownloads" />
       <span v-if="isZhLang">次</span>
-      <span v-else>downs</span>
+      <span v-else> downs</span>
     </p>
     <p>
       <i class="iconfont icon-score"></i>
@@ -45,7 +45,7 @@
       <span v-if="isZhLang">分</span>
       <span v-else>average score</span>
     </p>
-  </statistic-base>
+  </statistic-card>
 </template>
 
 <style lang="scss" scoped>
@@ -53,8 +53,12 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .line-1 {
-    margin-top: $gap-lg;
-    margin-bottom: 0.7em;
+  .npm-statistic {
+    #{--brand-primary-color}: $npm-primary;
+
+    .line-1 {
+      margin-top: $gap;
+      margin-bottom: 0.7em;
+    }
   }
 </style>

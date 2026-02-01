@@ -52,7 +52,7 @@
 </script>
 
 <template>
-  <placeholder :data="videos" :loading="fetching">
+  <placeholder :loading="fetching" :has-data="!!videos.length">
     <template #placeholder>
       <slot name="empty"></slot>
     </template>
@@ -126,20 +126,20 @@
       .published-at {
         position: absolute;
         bottom: $gap-sm;
-        right: 1rem;
+        right: $gap;
         z-index: $z-index-normal + 1;
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        height: 2rem;
-        padding: 0 $gap-sm;
+        height: 2em;
+        padding: 0 $gap-tiny;
         border-radius: $radius-sm;
         background-color: rgba(#000, 0.3);
-        font-size: $font-size-small;
+        font-size: $font-size-h6;
         color: $white;
 
         .iconfont {
-          margin-right: $gap-xs;
+          margin-right: $gap-tiny;
         }
 
         .text {
@@ -176,7 +176,7 @@
     }
 
     .title {
-      margin-top: $gap-sm;
+      margin-top: $gap-xs;
       margin-bottom: 0.4em;
       font-weight: bold;
       color: $color-text;
@@ -186,7 +186,7 @@
 
     .description {
       max-width: 95%;
-      font-size: $font-size-h5 - 1;
+      font-size: $font-size-secondary;
       color: $color-text-secondary;
       @include mix.text-overflow();
     }

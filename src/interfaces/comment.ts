@@ -1,5 +1,5 @@
-import { CommentParentId } from '/@/constants/biz-state'
-import { ExtraKeyValue } from './common'
+import { CommentParentId } from '/@/constants/comment-id'
+import { ExtraKeyValue } from './extra'
 
 export interface Author {
   name: string

@@ -46,11 +46,11 @@
     }
 
     .iconfont {
-      margin-right: $gap-xs;
+      margin-right: $gap-tiny;
     }
 
     .emoji {
-      margin-right: $gap-xs;
+      margin-right: $gap-tiny;
       font-size: 130%;
     }
 

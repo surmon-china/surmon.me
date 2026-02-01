@@ -3,10 +3,10 @@
   import { onBeforeMount, onMounted, onBeforeUnmount, onUnmounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useIdentityStore, UserType } from '/@/stores/identity'
-  import { useCommentStore, CommentFetchParams } from '/@/stores/comment'
+  import { useCommentStore } from '/@/stores/comment'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import * as ANCHORS from '/@/constants/element-anchor'
-  import { SortMode } from '/@/constants/biz-state'
+  import { SortMode } from '/@/constants/sort-param'
   import { Author } from '/@/interfaces/comment'
   import { LocalesKey } from '/@/locales'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -83,27 +83,17 @@
     })
   }
 
-  const fetchCommentList = (params: CommentFetchParams = {}, loadmore?: boolean) => {
-    const _params = {
-      ...params,
-      sort: commentState.sort,
-      post_id: props.postId
-    }
-    return commentStore.fetchList(_params, loadmore)
-  }
-
   const fetchSortComments = (sort: SortMode) => {
     if (commentState.sort !== sort) {
       commentState.sort = sort
-      fetchCommentList()
+      commentStore.fetchList({ post_id: props.postId, sort: commentState.sort })
       scrollToAnchor(ANCHORS.COMMENT_ELEMENT_ID)
     }
   }
 
-  const fetchPageComments = (page: number) => {
-    const comments = commentStore.comments
-    const lastCommentId = ANCHORS.getCommentItemElementId(comments[comments.length - 2].id)
-    fetchCommentList({ page }, true).then(() => {
+  const fetchNextPageComments = () => {
+    const lastCommentId = ANCHORS.getCommentItemElementId(commentStore.comments.at(-1)!.id)
+    commentStore.fetchListNextPage({ post_id: props.postId, sort: commentState.sort }).then(() => {
       nextTick().then(() => {
         scrollToAnchor(lastCommentId)
       })
@@ -258,7 +248,7 @@
         <slot name="topbar-extra"></slot>
       </template>
     </comment-topbar>
-    <divider class="divider" size="lg" />
+    <divider class="divider" />
     <div class="readonly" v-if="readonly">
       <i18n :k="LocalesKey.COMMENT_DISABLED" />
     </div>
@@ -284,15 +274,15 @@
         </template>
       </comment-publisher>
     </comment-publisher-main>
-    <divider class="divider" size="lg" />
+    <divider class="divider" />
     <comment-main
       :fetching="isLoading"
       :skeleton-count="plain ? 3 : 5"
-      :has-data="Boolean(commentStore.commentTreeList.length)"
+      :has-data="!!commentStore.commentTreeList.length"
     >
       <template #extra v-if="!!$slots['list-top-extra']">
         <slot name="list-top-extra"></slot>
-        <divider class="divider" size="lg" />
+        <divider class="divider" />
       </template>
       <template #list>
         <comment-list
@@ -302,9 +292,9 @@
           :hidden-avatar="plain"
           :hidden-ua="plain"
           :plain-vote="plain"
-          @delete="handleDeleteComment"
           @reply="replyComment"
           @cancel-reply="cancelCommentReply"
+          @delete="handleDeleteComment"
         >
           <template #reply="payload">
             <comment-publisher
@@ -333,8 +323,8 @@
         <comment-loadmore
           :fetching="isFetching"
           :pagination="commentStore.pagination"
-          :remain="commentStore.pagination ? commentStore.pagination?.total - commentStore.comments.length : 0"
-          @page="fetchPageComments"
+          :has-more="commentStore.hasMore"
+          @loadmore="fetchNextPageComments"
         />
       </template>
     </comment-main>
@@ -347,9 +337,9 @@
   @use '/src/styles/base/mixins' as mix;
 
   .comment-box {
-    padding: $gap;
+    padding: $gap-sm;
     @include mix.common-bg-module();
-    @include mix.radius-box($radius-lg);
+    @include mix.radius-box($radius-sm);
     &.plain {
       border-radius: $radius-sm;
     }

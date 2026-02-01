@@ -46,10 +46,10 @@
 
 <template>
   <span class="user-agent">
-    <span class="os" v-if="osName">
+    <!-- <span class="os" v-if="osName">
       <i v-if="osIconName" class="iconfont" :class="osIconName" />
       <span>{{ osName }}</span>
-    </span>
+    </span> -->
     <span class="browser" v-if="browserName">
       <i v-if="browserIconName" class="iconfont" :class="browserIconName" />
       <i v-else class="iconfont icon-internet" />
@@ -67,11 +67,11 @@
     white-space: nowrap;
 
     .iconfont {
-      margin-right: $gap-xs;
+      margin-right: $gap-tiny;
     }
 
     .os {
-      margin-right: $gap-sm;
+      margin-right: $gap-tiny;
     }
   }
 </style>

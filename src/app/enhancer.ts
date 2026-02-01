@@ -9,12 +9,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { useCdnDomain, useCountryCode } from '/@/app/context'
 import { useGlobalState } from '/@/app/state'
 import { useI18n } from '/@/composables/i18n'
+import { useTheme } from '/@/composables/theme'
 import { useGtag, Gtag } from '/@/composables/gtag'
-import { useTheme, Theme } from '/@/composables/theme'
 import { useDefer, Defer } from '/@/composables/defer'
 import type { Popup } from '/@/composables/popup'
 import { usePopup } from '/@/composables/popup/hook'
-import { useAppOptionsStore } from '/@/stores/basic'
+import { useAppOptionsStore } from '/@/stores/foundation'
+import { useGoLinksStore } from '/@/stores/go-links'
+import { useIdentityStore } from '/@/stores/identity'
 import { isCNCode } from '/@/transforms/region'
 import { isClient } from '/@/configs/app.env'
 import { Language } from '/@/locales'
@@ -26,12 +28,10 @@ export const useEnhancer = () => {
   const theme = useTheme()
   const globalState = useGlobalState()
   const appOptionsStore = useAppOptionsStore()
-
+  const goLinksStore = useGoLinksStore()
+  const identityStore = useIdentityStore()
   const cdnDomain = useCdnDomain()
   const countryCode = useCountryCode()
-
-  const appConfig = computed(() => appOptionsStore.appConfig)
-  const isZhLang = computed(() => i18n.language.value === Language.Chinese)
 
   return {
     route,
@@ -40,12 +40,15 @@ export const useEnhancer = () => {
     theme,
     globalState,
 
+    isZhLang: computed(() => i18n.language.value === Language.Chinese),
+    appOptions: computed(() => appOptionsStore.data),
+    appConfig: computed(() => appOptionsStore.appConfig),
+    goLinks: computed(() => goLinksStore.mixedLinksMap),
+    identity: identityStore,
+
     cdnDomain,
     countryCode,
     isCNUser: isCNCode(countryCode || 'GLOBAL'),
-
-    appConfig,
-    isZhLang,
 
     defer: (isClient ? useDefer() : undefined) as Defer,
     popup: (isClient ? usePopup() : undefined) as Popup,

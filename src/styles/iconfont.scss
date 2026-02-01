@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_eixsl04ja1.woff2?t=1768238414936') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_eixsl04ja1.woff?t=1768238414936') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_eixsl04ja1.ttf?t=1768238414936') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_nl73vk2j6i9.woff2?t=1769901244608') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_nl73vk2j6i9.woff?t=1769901244608') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_nl73vk2j6i9.ttf?t=1769901244608') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-heart-outlined:before {
+  content: '\e657';
 }
 
 .icon-meditation-2:before {
@@ -588,10 +592,6 @@
 
 .icon-dollar:before {
   content: '\e764';
-}
-
-.icon-upwork:before {
-  content: '\e634';
 }
 
 .icon-mic:before {

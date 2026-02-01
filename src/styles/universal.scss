@@ -60,7 +60,7 @@ body {
 }
 
 @include mix.scrollbar-style(
-  $size: $gap-sm,
+  $size: $gap-xs,
   $bg: $module-bg,
   $thumb-bg: $module-bg-darker-3,
   $thumb-bg-hover: $module-bg-darker-4

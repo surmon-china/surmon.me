@@ -1,91 +1,61 @@
-/**
- * @file placeholder
- * @description render placeholder or data
- * @author Surmon <https://github.com/surmon-china>
- */
-
 import _isUndefined from 'lodash-es/isUndefined'
-import { defineComponent, h, Transition, type PropType } from 'vue'
-import { LocalesKey } from '/@/locales'
-import Empty from './empty.vue'
-import Spin from './spin.vue'
+import { defineComponent, h, Transition } from 'vue'
+import type { PropType, BaseTransitionProps } from 'vue'
 
 export enum Events {
   AfterEnter = 'after-enter'
 }
 
-/**
- * @example
- *  <placeholder :loading="false" :data="data.length" :i18n-key="LocaleKey.XXX">
- *    <component />
- *  </placeholder>
- * @example
- *  <placeholder :loading="false" :data="data.length" placeholder="empty">
- *    <component />
- *  </placeholder>
- * @example
- *  <placeholder :loading="true" :data="data.length">
- *    <template #loading> skeleton </template>
- *    <template #placeholder> placeholder </template>
- *    <template #default> <component /> </template>
- *  </placeholder>
- */
 export default defineComponent({
   name: 'Placeholder',
   props: {
-    data: {
-      type: [Array, Object, Boolean, Number],
-      default: undefined
-    },
-    transition: {
+    loading: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    hasData: {
+      type: Boolean as PropType<boolean | undefined>,
+      default: undefined
     },
     transitionName: {
       type: String,
       default: 'module'
     },
-    placeholder: String,
-    i18nKey: String as PropType<LocalesKey>,
-    loading: Boolean
+    transitionMode: {
+      type: String as PropType<BaseTransitionProps['mode']>,
+      default: 'out-in'
+    }
   },
   emits: [Events.AfterEnter],
-  setup(props, context) {
+  setup(props, { slots, emit }) {
     return () => {
-      const { data, placeholder, i18nKey, loading, transition, transitionName } = props
-      const isEmptyData = !_isUndefined(data) && ((Array.isArray(data) && !(data as any).length) || !data)
+      const { loading, hasData, transitionName, transitionMode } = props
 
-      const getPlaceholderView = () => {
-        return placeholder || i18nKey ? h(Empty, { placeholder, i18nKey }) : context.slots.placeholder?.()
+      let currentKey: string
+      let currentSlot: any
+
+      if (loading) {
+        currentKey = 'loading'
+        currentSlot = slots.loading?.()
+      } else if (hasData === true || _isUndefined(hasData)) {
+        currentKey = 'default'
+        currentSlot = slots.default?.()
+      } else {
+        currentKey = 'placeholder'
+        currentSlot = slots.placeholder?.()
       }
 
-      const getDataView = () => {
-        return isEmptyData ? getPlaceholderView() : context.slots.default?.()
-      }
-
-      const getLoadingView = () => {
-        return context.slots.loading?.() || h(Spin, { loading: true })
-      }
-
-      const getView = () => {
-        return loading ? getLoadingView() : getDataView()
-      }
-
-      if (transition) {
-        return h(
-          Transition,
-          {
-            name: transitionName,
-            mode: 'out-in',
-            onAfterEnter(...args) {
-              context.emit(Events.AfterEnter, ...args)
-            }
-          },
-          () => getView()
-        )
-      }
-
-      return getView()
+      return h(
+        Transition,
+        {
+          name: transitionName,
+          mode: transitionMode,
+          onAfterEnter(...args) {
+            emit(Events.AfterEnter, ...args)
+          }
+        },
+        () => h('div', { key: currentKey, class: 'placeholder-wrapper' }, currentSlot)
+      )
     }
   }
 })

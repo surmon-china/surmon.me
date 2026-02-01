@@ -17,13 +17,20 @@ import { APP_PROFILE } from '/@/configs/app.config'
 import { getOriginalProxyURL } from './url'
 import { escape } from './text'
 
+const markdownCodeLanguageNamesMap = new Map([
+  ['js', 'JavaScript'],
+  ['javascript', 'JavaScript'],
+  ['ts', 'TypeScript'],
+  ['typescript', 'TypeScript'],
+  ['html', 'HTML'],
+  ['css', 'CSS']
+])
+
 // https://marked.js.org
-const highlightLangPrefix = 'language-'
 const marked = new Marked(
   mangle(),
   markedXhtml(),
   markedHighlight({
-    langPrefix: highlightLangPrefix,
     highlight(code, language) {
       return highlight.getLanguage(language)
         ? highlight.highlight(code, { language }).value
@@ -122,8 +129,9 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
   }
 
   // link: sanitize
-  renderer.link = ({ href, title, tokens }) => {
+  renderer.link = ({ href, title, tokens, text: _text }) => {
     const text = renderer.parser.parseInline(tokens)
+    const isCodeLink = text.includes('<code>')
     const isImageLink = text.includes('<img')
     const isSelf = href.startsWith(APP_PROFILE.url)
     const textValue = options?.sanitize ? escape(text) : text
@@ -134,8 +142,8 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
         <a
           href="${hrefValue}"
           target="_blank"
-          class="${isImageLink ? 'image-link' : 'link'}"
-          title="${titleValue || (isImageLink ? hrefValue : textValue)}"
+          class="${isImageLink ? 'image-link' : isCodeLink ? 'code-link' : 'link'}"
+          title="${titleValue || (isImageLink ? hrefValue : escape(_text))}"
           ${isSelf ? '' : 'rel="external nofollow noopener"'}
         >${textValue}</a>
       `)
@@ -164,10 +172,8 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
           </div>
           ${getLoadingIndicatorHTML({
             class: 'placeholder loading',
-            width: '2rem',
-            height: '1.2rem',
-            gap: '0.62rem',
-            radius: '1px'
+            width: '1.8rem',
+            height: '1rem'
           })}
           <picture>
             ${sourcesValue.map((s) => `<source srcset="${s.srcset}" type="${s.type}" />`).join('\n')}
@@ -193,37 +199,30 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
     const code = text.replace(/\n$/, '')
     const langString = (lang || '').match(/^\S*/)?.[0]
 
-    const readOnlyAttrs = [
-      `contenteditable="true"`,
-      `spellcheck="false"`,
-      `oncut="return false"`,
-      `onpaste="return false"`,
-      `onbeforeinput="return false"`,
-      `onkeydown="if(event.metaKey) return true; return false;"`
-    ].join(' ')
+    const getLineNumbersElement = () => {
+      return `<ul class="code-lines">${code
+        .split('\n')
+        .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
+        .join('')}</ul>`
+    }
 
-    const escapedCode = escaped ? code : escape(code)
-    const preClassName = options?.codeLineNumbers ? 'with-line-numbers' : 'default'
-    const lineNumbersList = options?.codeLineNumbers
-      ? `<ul class="code-lines">${code
-          .split('\n')
-          .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
-          .join('')}</ul>`
-      : ''
-
-    return langString
-      ? `
-        <pre class="${preClassName}" data-lang="${langString}">
-          ${lineNumbersList}
-          <code ${readOnlyAttrs} class="${highlightLangPrefix}${escape(langString)}">${escapedCode}</code>
-        </pre>
-      `
-      : `
-        <pre class="${preClassName}">
-          ${lineNumbersList}
-          <code ${readOnlyAttrs}>${escapedCode}</code>
-        </pre>
-      `
+    return `
+      <pre ${langString ? `data-lang="${langString}"` : ''}>
+        <div class="language-header">
+          <span class="name">
+            <i class="iconfont icon-code"></i>
+            <span class="text">${langString ? (markdownCodeLanguageNamesMap.get(langString.toLowerCase()) ?? langString) : 'code'}</span>
+          </span>
+          <button class="copy" title="Copy code" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('code').innerText)">
+            <i class="iconfont icon-copy"></i>
+          </button>
+        </div>
+        <div class="code-wrapper">
+          ${options?.codeLineNumbers ? getLineNumbersElement() : ''}
+          <code>${escaped ? code : escape(code)}</code>
+        </div>
+      </pre>
+    `
   }
 
   return renderer

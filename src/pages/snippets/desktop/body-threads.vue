@@ -50,7 +50,7 @@
     }
 
     .media {
-      margin-top: $gap-sm;
+      margin-top: $gap-tiny;
       // for Chrome video plugins
       position: relative;
 

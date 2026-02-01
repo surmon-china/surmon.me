@@ -1,4 +1,4 @@
-import { ExtraKeyValue } from './common'
+import { ExtraKeyValue } from './extra'
 
 export interface Tag {
   _id: string

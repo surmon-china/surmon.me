@@ -113,7 +113,7 @@
             position: relative;
             display: block;
             width: 100%;
-            height: 7rem;
+            height: 5.2rem;
             opacity: 0.88;
             background-color: $module-bg-darker-2;
             transition: all $motion-duration-fast;
@@ -140,22 +140,22 @@
           .summary {
             display: block;
             width: 100%;
-            padding: 0 $gap-sm;
+            padding: 0 $gap-xs;
             transition: color $motion-duration-fast;
             @include mix.text-overflow();
           }
 
           .title {
-            font-size: $font-size-h6;
-            margin-top: $gap-sm;
-            margin-bottom: $gap-xs;
+            margin-top: 0.4rem;
+            margin-bottom: $gap-tiny;
             font-weight: bold;
+            font-size: $font-size-secondary;
             color: $color-text;
           }
 
           .summary {
-            margin-bottom: $gap-sm;
-            font-size: $font-size-small;
+            margin-bottom: 0.4rem;
+            font-size: $font-size-tertiary;
             color: $color-text-disabled;
           }
 
@@ -163,7 +163,6 @@
             .thumbnail {
               opacity: 1;
             }
-
             .title {
               color: $color-link;
             }

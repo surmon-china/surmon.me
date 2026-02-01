@@ -1,6 +1,6 @@
-import { useStores } from '/@/stores'
 import { useEnhancer } from '/@/app/enhancer'
 import { useCdnDomain } from '/@/app/context'
+import { useAdminProfileStore } from '/@/stores/foundation'
 import { usePageSeo } from '/@/composables/head'
 import { Language, LocalesKey } from '/@/locales'
 import { firstUpperCase } from '/@/transforms/text'
@@ -13,7 +13,7 @@ export const useAdminAvatar = (avatar?: string) => {
 
 export const useAboutPageMeta = () => {
   const { i18n, isZhLang } = useEnhancer()
-  const { adminProfileStore } = useStores()
+  const adminProfileStore = useAdminProfileStore()
 
   return usePageSeo(() => {
     const enTitle = firstUpperCase(i18n.t(LocalesKey.PAGE_ABOUT, Language.English)!)

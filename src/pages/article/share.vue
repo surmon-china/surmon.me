@@ -8,7 +8,7 @@
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getOriginalProxyURL, getPageURL } from '/@/transforms/url'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
-  import BaseShare, { SocialMedia } from '/@/components/widgets/share.vue'
+  import BaseShare, { SocialMedia } from '/@/components/common/shares.vue'
   import Markdown from '/@/components/common/markdown.vue'
 
   const props = defineProps({
@@ -152,7 +152,7 @@
           </div>
           <transition name="module">
             <div v-if="!isRenderedShareImage" class="share-rendering">
-              <loading-indicator width="1.8rem" height="1.2rem" />
+              <loading-indicator width="1.8rem" height="1.2rem" gap="lg" />
             </div>
           </transition>
           <div v-if="isRenderedShareImage" class="share-image">
@@ -171,8 +171,8 @@
   @use '/src/styles/base/mixins' as mix;
 
   .share-box {
-    padding: $gap;
-    $share-size: 3rem;
+    padding: $gap-sm;
+    $share-size: 2.3rem;
 
     .share {
       width: 100%;
@@ -188,7 +188,7 @@
         width: auto;
         height: $share-size;
         line-height: $share-size;
-        margin-right: $gap;
+        margin-right: $gap-sm;
         font-size: $font-size-h4;
         border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
@@ -234,12 +234,12 @@
       }
 
       .content {
-        padding: $gap * 2;
+        padding: $gap-lg;
         position: relative;
 
         .header {
           position: relative;
-          margin-bottom: $gap * 2;
+          margin-bottom: $gap-lg;
 
           .qrcode {
             position: absolute;
@@ -252,7 +252,7 @@
 
           .title {
             margin-top: 0;
-            margin-bottom: $gap-sm;
+            margin-bottom: $gap-tiny;
             max-width: 80%;
             @include mix.text-overflow();
           }
@@ -278,7 +278,7 @@
       }
 
       .footer {
-        padding: $gap * 2 0;
+        padding: $gap-lg 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -286,20 +286,20 @@
         .tip {
           font-weight: bold;
           font-size: $font-size-h4;
-          margin-bottom: $gap * 2;
+          margin-bottom: $gap-lg;
         }
 
         .qrcode {
           width: 13rem;
           border: 1px solid;
-          border-radius: $radius-lg;
+          border-radius: $radius-sm;
         }
 
         .logo {
           filter: $theme-logo-rotate;
           width: 9rem;
-          margin-right: $gap-xs;
-          margin-top: $gap * 2;
+          margin-right: $gap-tiny;
+          margin-top: $gap-lg;
         }
       }
     }

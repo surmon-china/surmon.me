@@ -34,8 +34,9 @@
     return Array.from({ length: count }).map<number[]>(() => [])
   }
 
+  let innerItems: T[] = [...props.initialItems]
+
   const element = shallowRef<HTMLElement | null>(null)
-  const innerItems = shallowRef<T[]>([...props.initialItems])
   const columnsTree = ref<number[][]>(createColumns(props.columns))
   const filledIndex = ref(0)
   let currentRedrawId = 0
@@ -43,7 +44,7 @@
   const fillColumns = async (startIndex: number, assignedRedrawId: number) => {
     if (!element.value) return
     const columnDivs = [...element.value.children] as HTMLDivElement[]
-    for (let i = startIndex; i < innerItems.value.length; i++) {
+    for (let i = startIndex; i < innerItems.length; i++) {
       await nextTick()
       // Skip if a new redraw has been requested in parallel,
       // e.g., in an onMounted hook during initial render
@@ -54,25 +55,25 @@
       const colIndex = +target.dataset.index!
       columnsTree.value[colIndex].push(i)
     }
-    filledIndex.value = innerItems.value.length
+    filledIndex.value = innerItems.length
   }
 
   const resetItems = async (items: T[] = []) => {
     columnsTree.value = createColumns(props.columns)
-    innerItems.value = [...items]
+    innerItems = [...items]
     filledIndex.value = 0
     await fillColumns(filledIndex.value, ++currentRedrawId)
   }
 
   const appendItems = async (newItems: T[]) => {
-    const start = innerItems.value.length
-    innerItems.value.push(...newItems)
+    const start = innerItems.length
+    innerItems.push(...newItems)
     await fillColumns(start, ++currentRedrawId)
   }
 
   const removeItems = (predicate: (item: T) => boolean) => {
     const map = new Map<number, boolean>()
-    innerItems.value.forEach((item, i) => {
+    innerItems.forEach((item, i) => {
       if (predicate(item)) map.set(i, true)
     })
     for (const col of columnsTree.value) {
@@ -91,7 +92,7 @@
       columns[i % props.columns].push(i)
     }
     columnsTree.value = columns
-    innerItems.value = [...props.initialItems]
+    innerItems = [...props.initialItems]
     filledIndex.value = props.initialItems.length
   }
 

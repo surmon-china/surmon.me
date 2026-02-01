@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
-  import { useStores } from '/@/stores'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useAdminProfileStore } from '/@/stores/foundation'
   import { getAssetURL } from '/@/transforms/url'
   import { getEmailLink } from '/@/transforms/email'
   import { markdownToHTML } from '/@/transforms/markdown'
@@ -12,11 +12,11 @@
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { isZhLang, cdnDomain, appConfig, globalState } = useEnhancer()
-  const { adminProfileStore, appOptionsStore, goLinksStore } = useStores()
+  const { globalState, appOptions, appConfig, goLinks, cdnDomain, isZhLang } = useEnhancer()
+  const adminProfileStore = useAdminProfileStore()
 
   const emailLink = getEmailLink({
-    email: appOptionsStore.data?.site_email!,
+    email: appOptions.value?.site_email!,
     subject: `Hello, ${APP_PROFILE.author}!`,
     body: 'Hi, I am writing to you from your website.'
   })
@@ -37,7 +37,7 @@
         muted
         autoplay
         :controls="false"
-        :src="getAssetURL(cdnDomain, '/videos/clips/ocean-1.mp4')"
+        :src="getAssetURL(cdnDomain, '/videos/clips/ocean-6.mp4')"
       ></video>
     </div>
     <div class="content">
@@ -53,20 +53,20 @@
           <webfont bolder>{{ isZhLang ? APP_PROFILE.description_zh : APP_PROFILE.description_en }}</webfont>
         </p>
         <div class="socials">
-          <ulink class="item icon-only instagram" title="Instagram" :href="goLinksStore.map.instagram">
+          <ulink class="item icon-only instagram" title="Instagram" :href="goLinks.instagram">
             <i class="iconfont icon-instagram" />
           </ulink>
-          <ulink class="item icon-only threads" title="Threads" :href="goLinksStore.map.threads">
+          <ulink class="item icon-only threads" title="Threads" :href="goLinks.threads">
             <i class="iconfont icon-threads" />
           </ulink>
-          <ulink class="item with-text github" :href="goLinksStore.map.github">
+          <ulink class="item with-text github" :href="goLinks.github">
             <i class="iconfont icon-github" />
             <span class="text">GitHub</span>
           </ulink>
-          <ulink class="item icon-only youtube" title="YouTube" :href="goLinksStore.map.youtube">
+          <ulink class="item icon-only youtube" title="YouTube" :href="goLinks.youtube">
             <i class="iconfont icon-youtube" />
           </ulink>
-          <ulink class="item icon-only telegram" title="Telegram" :href="goLinksStore.map.telegram">
+          <ulink class="item icon-only telegram" title="Telegram" :href="goLinks.telegram">
             <i class="iconfont icon-telegram" />
           </ulink>
           <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
@@ -86,13 +86,13 @@
               </popup>
             </client-only>
           </button>
-          <ulink class="item icon-only linkedin" title="LinkedIn" :href="goLinksStore.map.linkedin">
+          <ulink class="item icon-only linkedin" title="LinkedIn" :href="goLinks.linkedin">
             <i class="iconfont icon-linkedin" />
           </ulink>
-          <ulink class="item icon-only zhihu" title="知乎回答" :href="goLinksStore.map.zhihu">
+          <ulink class="item icon-only zhihu" title="知乎回答" :href="goLinks.zhihu">
             <i class="iconfont icon-zhihu" />
           </ulink>
-          <ulink class="item icon-only douban" title="豆瓣" :href="goLinksStore.map.douban">
+          <ulink class="item icon-only douban" title="豆瓣" :href="goLinks.douban">
             <i class="iconfont icon-douban" />
           </ulink>
           <ulink class="item icon-only email" title="Email me" :href="emailLink">
@@ -124,9 +124,9 @@
   @use '/src/styles/base/mixins' as mix;
 
   .qrcode-modal {
-    $image-size: 16rem;
-    width: 23rem;
-    height: 28rem;
+    $image-size: 12rem;
+    width: 18.6rem;
+    height: 21rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -149,7 +149,7 @@
       z-index: $z-index-normal + 1;
       width: $image-size;
       height: $image-size;
-      margin-bottom: 2rem;
+      margin-bottom: $gap-lg;
       background-color: $module-bg-opaque;
       @include mix.radius-box($radius-sm);
     }
@@ -161,7 +161,7 @@
   }
 
   .page-banner {
-    $banner-height: 25rem;
+    $banner-height: 19.8rem;
 
     .background {
       display: block;
@@ -210,11 +210,11 @@
       }
 
       .profile {
-        $avatar-size: 5rem;
-        min-width: 28rem;
+        $avatar-size: 4rem;
+        min-width: 24rem;
         z-index: $z-index-normal + 2;
-        margin-bottom: $gap * 2;
-        padding: $gap-xs $gap-lg $gap-xs $gap-xs;
+        margin-bottom: $gap-lg;
+        padding: $gap-tiny $gap-sm $gap-tiny $gap-tiny;
         display: flex;
         align-items: center;
         border-top-left-radius: $avatar-size;
@@ -227,6 +227,7 @@
 
         &:hover {
           .avatar {
+            transition-delay: 500ms;
             transform: rotate(360deg);
           }
         }
@@ -238,7 +239,7 @@
           border: 6px solid $module-bg;
           border-radius: 100%;
           overflow: hidden;
-          margin-right: $gap-lg;
+          margin-right: $gap;
           background-color: $module-bg;
           transition: transform $motion-duration-slow;
         }
@@ -250,26 +251,27 @@
         .name {
           line-height: 1;
           margin-top: 0;
-          margin-bottom: $gap;
+          margin-bottom: $gap-sm;
           color: $white;
         }
 
         .slogan {
           line-height: 1;
           font-weight: 600;
-          margin-bottom: $gap-xs;
+          margin-bottom: $gap-tiny;
           color: #ffffffbf;
         }
       }
 
       .description {
         z-index: $z-index-normal + 2;
+        margin-bottom: $gap-lg;
         font-size: $font-size-h3;
         color: $white;
       }
 
       .socials {
-        $button-size: 3.2rem;
+        $button-size: 2.5rem;
         display: flex;
         justify-content: center;
         z-index: $z-index-normal + 2;
@@ -278,7 +280,7 @@
           position: relative;
           height: $button-size;
           line-height: $button-size;
-          margin-right: $gap;
+          margin-right: $gap-sm;
           &:last-child {
             margin: 0;
           }
@@ -322,10 +324,10 @@
         }
 
         .item.with-text {
-          padding: 0 $gap;
+          padding: 0 $gap-sm;
           display: inline-flex;
           align-items: center;
-          border-radius: $radius-lg * 3;
+          border-radius: 2em;
           color: $white;
           transition: all $motion-duration-fast;
 
@@ -334,7 +336,7 @@
           }
 
           .text {
-            margin-left: 0.5rem;
+            margin-left: $gap-xs;
             font-weight: bold;
           }
         }
@@ -408,7 +410,7 @@
 
       .biography {
         margin: 0;
-        padding: $gap * 1.8 $gap;
+        padding: $gap-sm * 1.8 $gap;
         text-indent: 2em;
         font-weight: 600;
         color: $color-text-secondary;

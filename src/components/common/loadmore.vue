@@ -1,24 +1,17 @@
 <script lang="ts" setup>
   import { ref, onMounted, onBeforeUnmount } from 'vue'
 
-  enum Event {
-    Loadmore = 'loadmore'
-  }
-
+  const emits = defineEmits(['loadmore'])
   const props = defineProps<{
     loading?: boolean
     finished?: boolean
-  }>()
-
-  const emit = defineEmits<{
-    (event: Event.Loadmore): void
   }>()
 
   const element = ref<HTMLDivElement | null>(null)
   const observer = ref<IntersectionObserver | null>(null)
   const emitLoadEvent = () => {
     if (!props.loading && !props.finished) {
-      emit(Event.Loadmore)
+      emits('loadmore')
     }
   }
 
@@ -46,13 +39,13 @@
 
 <template>
   <div class="loadmore" ref="element">
-    <div class="loading-wrapper" v-if="loading">
+    <div class="loading-wrapper" key="loading" v-if="loading">
       <slot name="loading"></slot>
     </div>
-    <div class="normal-wrapper" v-else-if="!finished">
+    <div class="normal-wrapper" key="normal" v-else-if="!finished">
       <slot name="normal"></slot>
     </div>
-    <div class="finished-wrapper" v-else>
+    <div class="finished-wrapper" key="finished" v-else>
       <slot name="finished"></slot>
     </div>
   </div>

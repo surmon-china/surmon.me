@@ -56,7 +56,7 @@
           />
           <transition name="module">
             <div class="loading" v-if="!modelIframeLoaded">
-              <spin />
+              <loading-indicator gap="lg" width="2.4rem" height="1.2rem" />
             </div>
           </transition>
         </div>
@@ -89,6 +89,8 @@
       top: 0;
       left: 0;
       z-index: $z-index-normal + 2;
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -96,7 +98,7 @@
     .playlist {
       padding: 0;
       list-style: none;
-      margin: 0 0 4rem 0;
+      margin-block: 3rem;
     }
   }
 </style>

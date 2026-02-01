@@ -43,8 +43,11 @@ const getThreadsUserInsights = async () => {
     // https://developers.facebook.com/docs/threads/insights
     const uri = 'https://graph.threads.net/v1.0/me/threads_insights'
     const metric = 'likes,reposts,quotes,followers_count'
+    const since = '1712991600'
+    const until = Date.now().toString().slice(0, 10)
+
     const response = await axios.get<any>(uri, {
-      params: { access_token: THREADS_TOKEN, metric },
+      params: { access_token: THREADS_TOKEN, metric, since, until },
       timeout: 8000
     })
 
