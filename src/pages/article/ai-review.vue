@@ -146,7 +146,7 @@
 
         .provider {
           font-weight: bold;
-          margin-right: $gap;
+          margin-right: $gap-xs;
           &[href]:not([href='']):hover {
             @include mix.text-underline();
           }
@@ -175,7 +175,7 @@
         user-select: text;
 
         .markdown {
-          margin: $gap-tiny 0;
+          margin-top: $gap-tiny;
         }
       }
     }
