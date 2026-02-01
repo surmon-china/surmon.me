@@ -33,12 +33,15 @@ const BFF_CONFIG = Object.freeze({
   server_local_url: "http://localhost:3000",
   tunnel_url_prefix: "/_tunnel",
   proxy_url_prefix: "/_proxy",
-  proxy_allow_list_regexp: /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/
+  proxy_allow_list_regexp: /^https:\/\/([a-z0-9-]+\.)*surmon\.(me|cn)/,
+  route_path_rss: "/rss.xml",
+  route_path_sitemap: "/sitemap.xml",
+  route_path_gtag_script: "/gtag-script"
 });
 const APP_CONFIG = Object.freeze({
   article_image_share_long_threshold: 6688,
   render_long_article_threshold: 16688,
-  desktop_aside_article_list_count: 8,
+  desktop_sidebar_article_list_count: 8,
   default_error_code: 500,
   default_comment_avatar: "/images/gravatar.webp",
   default_og_image: "/images/og-social-card.jpg",
@@ -67,12 +70,12 @@ const IDENTITIES = Object.freeze({
   ZHIHU_USERNAME: "surmon",
   DOUBAN_USER_ID: "56647958",
   INSTAGRAM_USERNAME: "surmon_sattva",
+  THREADS_USERNAME: "surmon_sattva",
+  THREADS_JOINED_DATE: "2024-07-06",
   BTC_ADDRESS: "bc1qhpdu03tnexkj4xsm3lqzyjdddz6z0rj2n7fsze",
   ETH_ADDRESS: "0xaD556974D449126efdeF23f4FF581861C301cB77"
 });
-const VALUABLE_LINKS = Object.freeze({
-  RSS: "/rss.xml",
-  SITE_MAP: "/sitemap.xml",
+const RESOURCE_LINKS = Object.freeze({
   MARKDOWN_DOC: "https://daringfireball.net/projects/markdown/",
   GITHUB_NODEPRESS: "https://github.com/surmon-china/nodepress",
   GITHUB_SURMON_ME: "https://github.com/surmon-china/surmon.me",
@@ -83,7 +86,7 @@ const VALUABLE_LINKS = Object.freeze({
   GOOGLE_MY_MAP_KML_URL: "https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w",
   GO_LINKS_MAP_ENDPOINT: "https://go.surmon.me"
 });
-const GO_LINK_MAP_KEYS = Object.freeze([
+const GO_LINKS_MAP_KEYS = [
   "status",
   "npm",
   "paypal",
@@ -102,10 +105,9 @@ const GO_LINK_MAP_KEYS = Object.freeze([
   "instagram",
   "threads",
   "x"
-]);
-GO_LINK_MAP_KEYS.reduce(
-  (map, key) => ({ ...map, [key]: `${VALUABLE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}` }),
-  {}
+];
+Object.freeze(
+  Object.fromEntries(GO_LINKS_MAP_KEYS.map((key) => [key, `${RESOURCE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}`]))
 );
 const SUCCESS = 200;
 const BAD_REQUEST = 400;
@@ -866,10 +868,10 @@ const getMyGoogleMap = () => {
     allowBooleanAttributes: true,
     attributeNamePrefix: "@"
   });
-  return axios.get(VALUABLE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 8e3 }).then((response) => xmlParser.parse(response.data).kml.Document);
+  return axios.get(RESOURCE_LINKS.GOOGLE_MY_MAP_KML_URL, { timeout: 8e3 }).then((response) => xmlParser.parse(response.data).kml.Document);
 };
 const fetchGitHubStatisticsJson = async (fileName) => {
-  const url = `${VALUABLE_LINKS.GITHUB_STATISTICS_JSON_URL}${fileName}`;
+  const url = `${RESOURCE_LINKS.GITHUB_STATISTICS_JSON_URL}${fileName}`;
   const response = await axios.get(url, { timeout: 8e3 });
   return response.data;
 };
@@ -1039,8 +1041,10 @@ const getThreadsUserInsights = async () => {
   try {
     const uri = "https://graph.threads.net/v1.0/me/threads_insights";
     const metric = "likes,reposts,quotes,followers_count";
+    const since = "1712991600";
+    const until = Date.now().toString().slice(0, 10);
     const response = await axios.get(uri, {
-      params: { access_token: THREADS_TOKEN, metric },
+      params: { access_token: THREADS_TOKEN, metric, since, until },
       timeout: 8e3
     });
     return {
@@ -1170,10 +1174,10 @@ const app = createBFFServerApp({
     return respond.error(error, INTERNAL_SERVER_ERROR);
   }
 });
-app.usePathRequest("/sitemap.xml", async () => {
+app.usePathRequest(BFF_CONFIG.route_path_sitemap, async () => {
   return respond.xml(await getSitemapXml(cache));
 });
-app.usePathRequest("/rss.xml", async () => {
+app.usePathRequest(BFF_CONFIG.route_path_rss, async () => {
   return respond.xml(await getRssXml(cache));
 });
 const getGtagCache = cacher.interval(cache, {
@@ -1183,7 +1187,7 @@ const getGtagCache = cacher.interval(cache, {
   retry: hours(1),
   getter: getGTagScript
 });
-app.usePathRequest("/gtag-script", async () => {
+app.usePathRequest(BFF_CONFIG.route_path_gtag_script, async () => {
   return respond.javascript(await getGtagCache());
 });
 const getWallpaperCache = cacher.interval(cache, {
