@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { isImageMediaIns, isVideoMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'

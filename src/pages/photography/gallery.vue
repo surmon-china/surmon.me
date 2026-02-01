@@ -1,4 +1,4 @@
-<script lang="ts" setup="">
+<script lang="ts" setup>
   import { ref } from 'vue'
   import { isImageMediaIns, isVideoMediaIns, isAlbumMediaIns } from '/@/transforms/media'
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
