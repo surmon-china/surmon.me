@@ -17,7 +17,7 @@ import PopupComponent from './popup.vue'
 
 export type Popup = ReturnType<typeof createPopupState>
 
-const PopupSymbol = Symbol('popup-plugin')
+const PopupSymbol = Symbol('popup-state')
 
 export interface PopupPluginConfig {
   exportToGlobal?: boolean
@@ -43,12 +43,12 @@ export const usePopup = (): Popup => {
 }
 
 declare module 'vue' {
-  interface ComponentCustomProperties {
-    $popup: Popup
-  }
   interface GlobalComponents {
     Popup: typeof PopupComponent
     PopupRoot: typeof PopupRootComponent
+  }
+  interface ComponentCustomProperties {
+    $popup: Popup
   }
 }
 

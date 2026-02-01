@@ -7,7 +7,9 @@
 import { App, inject, ref, computed, readonly } from 'vue'
 import storage from '/@/utils/storage'
 
-export const THEME_STORAGE_KEY = 'theme'
+const THEME_STORAGE_KEY = 'theme'
+
+const ThemeSymbol = Symbol('theme-state')
 
 export enum Theme {
   Light = 'light',
@@ -15,7 +17,6 @@ export enum Theme {
 }
 
 const themes = [Theme.Light, Theme.Dark]
-const ThemeSymbol = Symbol('theme')
 
 export const createTheme = (initialValue: Theme) => {
   const theme = ref<Theme>(initialValue === Theme.Dark ? Theme.Dark : Theme.Light)
@@ -30,7 +31,12 @@ export const createTheme = (initialValue: Theme) => {
 
   const toggle = () => set(isDark.value ? Theme.Light : Theme.Dark)
 
-  const themeState = { theme: readonly(theme), isDark, set, toggle }
+  const themeState = {
+    theme: readonly(theme),
+    isDark,
+    set,
+    toggle
+  }
 
   return {
     ...themeState,

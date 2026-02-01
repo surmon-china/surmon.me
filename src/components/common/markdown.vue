@@ -218,7 +218,7 @@
         border-top: 1px dashed $module-bg-darker-1;
         text-align: center;
         line-height: 2.6;
-        font-size: $font-size-h6;
+        font-size: $font-size-tertiary;
         font-weight: bold;
         user-select: none;
         pointer-events: none;

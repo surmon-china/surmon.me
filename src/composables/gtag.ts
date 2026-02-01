@@ -4,8 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, reactive, readonly, inject, Plugin, nextTick } from 'vue'
 import { Router } from 'vue-router'
+import { App, Plugin, reactive, readonly, inject, nextTick } from 'vue'
 import { getGaScriptURL } from '/@/transforms/gtag'
 import { loadScript } from '/@/utils/scripter'
 // MARK: https://zh.nuxtjs.org/faq/ga
@@ -19,25 +19,23 @@ declare global {
   }
 }
 
-export interface GtagConfig {
+interface GtagConfig {
   [key: string]: any
 }
 
 export interface GtagPluginConfig {
   id: string
   router?: Router
-  customResourceURL?: string
+  customResourceUrl?: string
   config?: GtagConfig
 }
 
-const GtagSymbol = Symbol('gtag')
-export type Gtag = ReturnType<typeof createGtag>
-export const createGtag = (options: GtagPluginConfig) => {
+const createGtagState = (options: GtagPluginConfig) => {
   if (!options.id) {
     return
   }
 
-  const resourceURL = options.customResourceURL || getGaScriptURL(options.id)
+  const resourceURL = options.customResourceUrl || getGaScriptURL(options.id)
   const state = reactive({
     loaded: false,
     disabled: false
@@ -49,7 +47,7 @@ export const createGtag = (options: GtagPluginConfig) => {
 
   if (window.gtag == null) {
     window.dataLayer = window.dataLayer || []
-    // MARK: important! only function
+    // MARK: important! only anonymous function
     window.gtag = function () {
       // eslint-disable-next-line prefer-rest-params
       window.dataLayer.push(arguments)
@@ -80,7 +78,7 @@ export const createGtag = (options: GtagPluginConfig) => {
     })
   }
 
-  const gtag = {
+  return {
     state: readonly(state),
     enable: () => {
       state.disabled = false
@@ -106,25 +104,26 @@ export const createGtag = (options: GtagPluginConfig) => {
       push('event', eventName, config)
     }
   }
+}
 
-  return gtag
+export type Gtag = ReturnType<typeof createGtagState>
+
+const GtagSymbol = Symbol('gtag-state')
+
+export const gtag: Plugin<GtagPluginConfig> = {
+  install(app: App, config: GtagPluginConfig) {
+    const gtag = createGtagState(config)
+    app.provide(GtagSymbol, gtag)
+    app.config.globalProperties.$gtag = gtag
+  }
 }
 
 export const useGtag = (): Gtag => {
   return inject(GtagSymbol) as Gtag
 }
 
-type PluginInstallFunction = Plugin & {
-  installed?: boolean
-}
-
-const install: PluginInstallFunction = (app: App, config: GtagPluginConfig) => {
-  if (install.installed) {
-    return
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $gtag: Gtag
   }
-  const gtag = createGtag(config)
-  app.provide(GtagSymbol, gtag)
-  app.config.globalProperties.$gtag = gtag
-  install.installed = true
 }
-export default { install }

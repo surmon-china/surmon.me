@@ -16,9 +16,9 @@ import { useAppOptionsStore } from '/@/stores/foundation'
 import { useIdentityStore } from '/@/stores/identity'
 import { useGoLinksStore } from '/@/stores/go-links'
 
-import gtag from '/@/composables/gtag'
-import lozad from '/@/composables/lozad'
-import adsense from '/@/composables/adsense'
+import { gtag } from '/@/composables/gtag'
+import { lozad } from '/@/composables/lozad'
+import { adsense } from '/@/composables/adsense'
 import { Theme } from '/@/composables/theme'
 import { createDefer } from '/@/composables/defer'
 import { createPopup } from '/@/composables/popup'
@@ -73,17 +73,13 @@ app.use(head)
 app.use(lozad, { exportToGlobal: true })
 app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
+app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID })
 app.use(gtag, {
   router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
   config: { send_page_view: false },
-  customResourceURL: BFF_CONFIG.route_path_gtag_script
+  customResourceUrl: BFF_CONFIG.route_path_gtag_script
 })
-
-// enable adsense on desktop only
-if (!globalState.userAgent.isMobile) {
-  app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID, enabledAutoAd: false })
-}
 
 // init: services with client
 exportEmojiRainToGlobal()

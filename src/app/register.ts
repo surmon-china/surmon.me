@@ -23,6 +23,25 @@ import {
   DIRECTIVE_NAME as disabledWallflowerDirectiveName
 } from '/@/components/desktop/widgets/wallflower/directive'
 
+export default function (app: App) {
+  // directives
+  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
+
+  // components
+  app.component('Webfont', Webfont)
+  app.component('Empty', Empty)
+  app.component('Udate', Udate)
+  app.component('Ulink', Ulink)
+  app.component('Uimage', Uimage)
+  app.component('Divider', Divider)
+  app.component('Placeholder', Placeholder)
+  app.component('ClientOnly', ClientOnly)
+  app.component('Responsive', Responsive)
+  app.component('DesktopOnly', DesktopOnly)
+  app.component('LoadingIndicator', LoadingIndicator)
+  app.component('Skeleton', Skeleton)
+}
+
 declare module 'vue' {
   interface GlobalDirectives {
     vDisabledWallflower: typeof vDisabledWallflower
@@ -42,23 +61,4 @@ declare module 'vue' {
     LoadingIndicator: typeof LoadingIndicator
     Skeleton: typeof Skeleton
   }
-}
-
-export default function (app: App) {
-  // directives
-  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
-
-  // components
-  app.component('Webfont', Webfont)
-  app.component('Empty', Empty)
-  app.component('Udate', Udate)
-  app.component('Ulink', Ulink)
-  app.component('Uimage', Uimage)
-  app.component('Divider', Divider)
-  app.component('Placeholder', Placeholder)
-  app.component('ClientOnly', ClientOnly)
-  app.component('Responsive', Responsive)
-  app.component('DesktopOnly', DesktopOnly)
-  app.component('LoadingIndicator', LoadingIndicator)
-  app.component('Skeleton', Skeleton)
 }

@@ -4,19 +4,11 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, ref, Plugin } from 'vue'
+import { App, Plugin, inject, ref } from 'vue'
 
-declare global {
-  interface Window {
-    // @ts-ignore
-    $defer: Defer
-  }
-}
-
-// @ts-ignore
-export type Defer = ReturnType<typeof createDeferStore>
 export type DeferTask = () => any
-const createDeferStore = () => {
+
+const createDeferState = () => {
   const loaded = ref<boolean>(document.readyState === 'complete')
   const tasks: DeferTask[] = []
 
@@ -47,25 +39,39 @@ const createDeferStore = () => {
   return { loaded, tasks, addTask }
 }
 
-const DeferSymbol = Symbol('defer')
+export type Defer = ReturnType<typeof createDeferState>
+
+const DeferSymbol = Symbol('defer-state')
 
 export interface DeferPluginConfig {
   exportToGlobal?: boolean
 }
-export const createDefer = (): Defer & Plugin => {
-  const defer = createDeferStore()
-  return {
-    ...defer,
+
+export const createDefer = (): Defer & Plugin<DeferPluginConfig> => {
+  const defer = createDeferState()
+  return Object.assign(defer, {
     install(app: App, config?: DeferPluginConfig) {
       app.provide(DeferSymbol, defer)
-
+      app.config.globalProperties.$defer = defer
       if (config?.exportToGlobal) {
         window.$defer = defer
       }
     }
-  }
+  })
 }
 
 export const useDefer = (): Defer => {
   return inject(DeferSymbol) as Defer
+}
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $defer: Defer
+  }
+}
+
+declare global {
+  interface Window {
+    $defer?: Defer
+  }
 }

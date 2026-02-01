@@ -4,7 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, inject, computed, ref, readonly, defineComponent } from 'vue'
+import type { App, DefineComponent } from 'vue'
+import { inject, computed, ref, readonly, defineComponent } from 'vue'
 
 export type I18nValueRender = (...args: any[]) => string
 export type I18nLocaleMap<Lang extends string, V = string> = {
@@ -26,8 +27,7 @@ interface I18nConfig<K extends string> {
   locales: I18nLocale<K>[]
 }
 
-const I18nSymbol = Symbol('i18n')
-const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
+const createI18nState = <K extends string>(config: I18nConfig<K>) => {
   const language = ref(config.default)
   const languageCodes = config.locales.map((lang) => lang.code)
   const l = computed(() => config.locales.find((l) => l.code === language.value))
@@ -79,6 +79,10 @@ const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
   }
 }
 
+export type I18n = ReturnType<typeof createI18nState>
+
+const I18nSymbol = Symbol('i18n-state')
+
 /**
  * @example <span>{{ i18n.t(LocaleKey.SOME_KEY) }}</span>
  * @example <i18n :k="LocaleKey.SOME_KEY" />
@@ -90,9 +94,8 @@ const createI18nStore = <K extends string>(config: I18nConfig<K>) => {
  *  </i18n>
  * )
  */
-export type I18n = ReturnType<typeof createI18nStore>
 export const createI18n = <K extends string>(config: I18nConfig<K>) => {
-  const i18nStore = createI18nStore(config)
+  const i18nState = createI18nState(config)
   const i18nComponent = defineComponent({
     name: 'I18n',
     props: {
@@ -100,24 +103,32 @@ export const createI18n = <K extends string>(config: I18nConfig<K>) => {
     },
     render() {
       if (this.$props.k) {
-        return i18nStore.t(this.$props.k as K, null, this.$attrs)
+        return i18nState.t(this.$props.k as K, null, this.$attrs)
       } else {
-        const lang = i18nStore.language.value
+        const lang = i18nState.language.value
         return this.$attrs[lang] || this.$slots[lang]?.()
       }
     }
   })
 
-  return {
-    ...i18nStore,
+  return Object.assign(i18nState, {
     install(app: App) {
-      app.config.globalProperties.$i18n = i18nStore
-      app.provide(I18nSymbol, i18nStore)
+      app.provide(I18nSymbol, i18nState)
       app.component(i18nComponent.name!, i18nComponent)
+      app.config.globalProperties.$i18n = i18nState
     }
-  }
+  })
 }
 
 export const useI18n = (): I18n => {
   return inject(I18nSymbol) as I18n
+}
+
+declare module 'vue' {
+  interface GlobalComponents {
+    I18n: DefineComponent<{ k?: string | number | symbol; zh?: string; en?: string }>
+  }
+  interface ComponentCustomProperties {
+    $i18n: I18n
+  }
 }

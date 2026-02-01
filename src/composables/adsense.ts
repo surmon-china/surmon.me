@@ -4,25 +4,14 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { App, defineComponent, h } from 'vue'
+import type { App, Plugin } from 'vue'
+import { defineComponent, h } from 'vue'
 import { LocalesKey } from '/@/locales'
 import { useEnhancer } from '/@/app/enhancer'
-import { loadScript } from '/@/utils/scripter'
-
-declare global {
-  interface Window {
-    adsbygoogle: any[]
-  }
-}
-
-export interface AdSenseConfig {
-  id: string
-  enabledAutoAd?: boolean
-}
 
 const ADS_SCRIPT = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
 
-const getComponent = (clientId: string) => {
+const createComponent = (clientId: string) => {
   return defineComponent({
     name: 'Adsense',
     props: {
@@ -90,19 +79,19 @@ const getComponent = (clientId: string) => {
   })
 }
 
-export default {
-  install(app: App, adsenseConfig: AdSenseConfig) {
-    const component = getComponent(adsenseConfig.id)
+export interface GoogleAdsenseConfig {
+  id: string
+}
+
+export const adsense: Plugin<GoogleAdsenseConfig> = {
+  install(app: App, adsenseConfig: GoogleAdsenseConfig) {
+    const component = createComponent(adsenseConfig.id)
     app.component(component.name!, component)
-    // auto ad
-    if (adsenseConfig.enabledAutoAd) {
-      loadScript(ADS_SCRIPT, { async: true }).then(() => {
-        const adsbygoogle = window.adsbygoogle || []
-        adsbygoogle.push({
-          google_ad_client: adsenseConfig.id,
-          enable_page_level_ads: true
-        })
-      })
-    }
+  }
+}
+
+declare module 'vue' {
+  interface GlobalComponents {
+    Adsense: ReturnType<typeof createComponent>
   }
 }
