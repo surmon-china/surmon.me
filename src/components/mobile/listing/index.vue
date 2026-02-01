@@ -252,7 +252,7 @@
 
     .articles-list-content {
       .list-item {
-        margin-bottom: $gap;
+        margin-bottom: 1.2rem;
         &:last-child {
           margin-bottom: 0;
         }

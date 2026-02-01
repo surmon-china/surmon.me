@@ -125,8 +125,8 @@
 
   .qrcode-modal {
     $image-size: 12rem;
-    width: 18.6rem;
-    height: 21rem;
+    width: 18.3rem;
+    height: 20.2rem;
     position: relative;
     display: flex;
     flex-direction: column;

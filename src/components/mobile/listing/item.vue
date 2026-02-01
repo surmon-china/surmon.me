@@ -168,6 +168,7 @@
       .image {
         width: 100%;
         height: 7.6rem;
+        aspect-ratio: 1190 / 420;
         min-height: calc((100vw - 2rem) * 0.34);
         max-height: 12rem;
         object-fit: cover;

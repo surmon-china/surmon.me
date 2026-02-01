@@ -203,7 +203,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 1em 0 2em;
+        padding: 0 1.2em 0 2em;
         @include mix.common-bg-module($motion-duration-fast);
         @include mix.radius-box($radius-sm);
         &.discord {
@@ -237,7 +237,7 @@
 
           .right {
             opacity: 1;
-            transform: translateX(-$gap-tiny);
+            transform: translateX(-$gap-xs);
             color: var(--item-hover, $color-text-reversal);
           }
         }

@@ -208,7 +208,7 @@
           width: 100%;
           height: 3em;
           line-height: 3em;
-          letter-spacing: 0.08em;
+          letter-spacing: 0.06em;
           color: $white;
           &:last-child {
             margin-bottom: 0;

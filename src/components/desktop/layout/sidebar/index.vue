@@ -79,7 +79,6 @@
         .content {
           height: 250px;
           width: 250px;
-          border-radius: $radius-xs;
           overflow: hidden;
         }
       }
