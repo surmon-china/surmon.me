@@ -46,16 +46,8 @@
       :qrcode="activeProvider.qrcode"
       :text="activeProvider.text"
     />
-    <crypto-provider
-      v-if="activeProvider.id == ProviderId.BitCoin"
-      :qrcode="activeProvider.qrcode"
-      :address="activeProvider.address"
-    />
-    <crypto-provider
-      v-if="activeProvider.id == ProviderId.Ethereum"
-      :qrcode="activeProvider.qrcode"
-      :address="activeProvider.address"
-    />
+    <crypto-provider v-if="activeProvider.id == ProviderId.BitCoin" :address="activeProvider.address" />
+    <crypto-provider v-if="activeProvider.id == ProviderId.Ethereum" :address="activeProvider.address" />
   </div>
 </template>
 

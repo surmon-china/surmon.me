@@ -1,16 +1,18 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
+  import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { copy } from '/@/utils/clipboard'
 
   const props = defineProps<{
     address: string
-    qrcode: string
   }>()
 
   const { isZhLang, popup } = useEnhancer()
 
-  const handleClickQRCode = () => {
-    popup.vImage(props.qrcode)
+  const handleQRCode = () => {
+    renderTextToQRCodeDataURL(props.address).then((dataURL) => {
+      popup.vImage(dataURL)
+    })
   }
 
   const handleCopyAddress = () => {
@@ -23,7 +25,7 @@
 <template>
   <div class="crypto-provider">
     <code class="address" @click="handleCopyAddress">{{ props.address }}</code>
-    <i class="iconfont icon-qrcode" @click="handleClickQRCode"></i>
+    <i class="iconfont icon-qrcode" @click="handleQRCode"></i>
   </div>
 </template>
 

@@ -23,40 +23,39 @@ export const PROVIDERS = [
     id: ProviderId.PayPal,
     title: 'PayPal me',
     logo: '/images/third-party/paypal-logo.svg',
-    qrcode: '/images/third-party/paypal-qrcode.webp',
+    qrcode: '/images/page-sponsor/qrcode-paypal.webp',
     link: GO_LINKS_MAP.paypal
   },
   {
     id: ProviderId.Alipay,
     title: '支付宝',
     logo: '/images/third-party/alipay-logo.svg',
-    qrcode: '/images/third-party/alipay-qrcode.webp',
+    qrcode: '/images/page-sponsor/qrcode-alipay.webp',
     text: '通过支付宝扫码'
   },
   {
     id: ProviderId.WeChatPay,
     title: '微信赞赏',
     logo: '/images/third-party/wechat-pay-logo.svg',
-    qrcode: '/images/third-party/wechat-pay-qrcode.webp',
+    qrcode: '/images/page-sponsor/qrcode-wechat-pay.webp',
     text: '通过微信扫码'
   },
   {
     id: ProviderId.BitCoin,
     title: 'BTC',
     logo: '/images/third-party/btc-logo.svg',
-    address: IDENTITIES.BTC_ADDRESS,
-    qrcode: '/images/third-party/btc-qrcode.webp'
+    address: IDENTITIES.BTC_ADDRESS
   },
   {
     id: ProviderId.Ethereum,
     title: 'ETH',
     logo: '/images/third-party/eth-logo.svg',
-    address: IDENTITIES.ETH_ADDRESS,
-    qrcode: '/images/third-party/eth-qrcode.webp'
+    address: IDENTITIES.ETH_ADDRESS
   }
 ] as const
 
 export type SponsorState = ReturnType<typeof useSponsorState>
+
 export const useSponsorState = (initId?: ProviderId) => {
   const { gtag } = useEnhancer()
   const activeId = ref(initId && PROVIDER_IDS.includes(initId) ? initId : PROVIDERS[0].id)
