@@ -10,7 +10,7 @@
   import * as ANCHORS from '/@/constants/element-anchor'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
-  import { SocialMedia } from '/@/components/common/shares.vue'
+  import { SocialMedia } from '/@/components/common/share.vue'
   import { getExtrasMap } from '/@/transforms/extra'
   import { scrollToAnchor } from '/@/utils/scroller'
   import logger from '/@/utils/logger'

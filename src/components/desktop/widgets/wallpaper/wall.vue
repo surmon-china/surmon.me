@@ -4,12 +4,8 @@
   import { useWallpaperStore } from '/@/stores/wallpaper'
   import { Language } from '/@/locales'
 
-  enum WallEvents {
-    Close = 'close'
-  }
-
   const emit = defineEmits<{
-    (e: WallEvents.Close): void
+    (e: 'close'): void
   }>()
 
   const { i18n: _i18n } = useEnhancer()
@@ -18,7 +14,7 @@
 
   const index = ref(0)
   const activePaper = computed(() => wallpapers.value?.[index.value])
-  const handleClose = () => emit(WallEvents.Close)
+  const handleClose = () => emit('close')
 </script>
 
 <template>
@@ -66,20 +62,21 @@
 
   .wall {
     position: relative;
-    overflow: auto;
+    width: 88vw;
+    height: 88vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    width: 88vw;
-    height: 88vh;
+    background-color: $module-bg;
 
     .picture-box {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-repeat: no-repeat;
       background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
     .story-box {

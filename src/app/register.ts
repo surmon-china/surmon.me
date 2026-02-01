@@ -24,7 +24,11 @@ import {
 } from '/@/components/desktop/widgets/wallflower/directive'
 
 declare module 'vue' {
-  export interface GlobalComponents {
+  interface GlobalDirectives {
+    vDisabledWallflower: typeof vDisabledWallflower
+  }
+
+  interface GlobalComponents {
     Empty: typeof Empty
     Webfont: typeof Webfont
     Divider: typeof Divider
@@ -41,6 +45,9 @@ declare module 'vue' {
 }
 
 export default function (app: App) {
+  // directives
+  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
+
   // components
   app.component('Webfont', Webfont)
   app.component('Empty', Empty)
@@ -54,7 +61,4 @@ export default function (app: App) {
   app.component('DesktopOnly', DesktopOnly)
   app.component('LoadingIndicator', LoadingIndicator)
   app.component('Skeleton', Skeleton)
-
-  // directives
-  app.directive(disabledWallflowerDirectiveName, vDisabledWallflower)
 }

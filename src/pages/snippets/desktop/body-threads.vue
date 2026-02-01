@@ -9,9 +9,11 @@
 
   const emit = defineEmits<{
     (e: 'click-image', url: string): void
+    (e: 'click-video', url: string): void
   }>()
 
   const mediaUrl = useThreadsMediaUrl(props.media.media_url)
+  const thumbnailUrl = useThreadsMediaUrl(props.media.thumbnail_url)
 </script>
 
 <template>
@@ -19,7 +21,12 @@
     <markdown class="text" compact :markdown="media.text" :render-options="{ codeLineNumbers: false }" />
     <div class="media" :class="{ audio: media.media_type === 'AUDIO' }" v-if="mediaUrl">
       <audio class="audio" :src="mediaUrl" controls v-if="media.media_type === 'AUDIO'" />
-      <video class="video" :src="mediaUrl" controls v-else-if="media.media_type === 'VIDEO'" />
+      <div class="video" v-else-if="media.media_type === 'VIDEO'">
+        <button class="play-button" @click="emit('click-video', mediaUrl)">
+          <i class="iconfont icon-video-play"></i>
+        </button>
+        <img class="poster" :alt="thumbnailUrl ?? ''" :src="thumbnailUrl ?? ''" loading="lazy" draggable="false" />
+      </div>
       <img
         v-else
         class="image"
@@ -43,6 +50,12 @@
       .text {
         color: $color-link;
       }
+
+      .audio,
+      .image,
+      .video .poster {
+        filter: saturate(1) brightness(1);
+      }
     }
 
     .text {
@@ -50,31 +63,50 @@
     }
 
     .media {
-      margin-top: $gap-tiny;
       // for Chrome video plugins
       position: relative;
+      margin-top: $gap-xs;
+    }
 
-      .image,
-      .video,
-      .audio {
+    .audio,
+    .image,
+    .video .poster {
+      width: 100%;
+      border-radius: $radius-tiny;
+      filter: saturate(0.7) brightness(0.85);
+      transition: filter $motion-duration-mid;
+    }
+
+    .image {
+      min-height: 6rem;
+      background-color: $module-bg-darker-1;
+      cursor: pointer;
+    }
+
+    .video {
+      position: relative;
+      min-height: 10rem;
+      background-color: #000;
+      cursor: pointer;
+
+      .play-button {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-        border-radius: $radius-xs;
+        height: 100%;
+        font-size: 3.5rem;
+        z-index: $z-index-normal + 1;
+        @include mix.color-transition();
+        color: rgba(255, 255, 255, 0.6);
+        &:hover {
+          color: rgba(255, 255, 255, 0.8);
+        }
       }
+    }
 
-      .image {
-        background-color: $module-bg-darker-1;
-        min-height: 6rem;
-        cursor: pointer;
-      }
-
-      .video {
-        background-color: $module-bg-darker-1;
-        min-height: 14rem;
-      }
-
-      .audio::-webkit-media-controls-enclosure {
-        border-radius: $radius-xs;
-      }
+    .audio::-webkit-media-controls-enclosure {
+      border-radius: $radius-xs;
     }
   }
 </style>

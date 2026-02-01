@@ -22,7 +22,7 @@
 <template>
   <div class="footprint-map">
     <client-only>
-      <popup v-model:visible="modalVisible" :scroll-close="false">
+      <popup v-model:visible="modalVisible" :scroll-closable="false">
         <mapbox-modal class="footprint-modal" />
       </popup>
     </client-only>
@@ -97,7 +97,8 @@
 
   .footprint-modal {
     width: 88vw;
-    height: 88vh;
+    height: 86vh;
+    background-color: $module-bg;
   }
 
   .footprint-map {

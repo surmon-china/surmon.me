@@ -72,7 +72,7 @@
           <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
             <i class="iconfont icon-wechat" />
             <client-only>
-              <popup v-model:visible="wechatModalOpened" :scroll-close="false">
+              <popup v-model:visible="wechatModalOpened" :scroll-closable="false">
                 <div class="qrcode-modal wechat">
                   <div class="background"></div>
                   <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
@@ -125,13 +125,14 @@
 
   .qrcode-modal {
     $image-size: 12rem;
-    width: 18.3rem;
+    width: 18.2rem;
     height: 20.2rem;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: $module-bg;
     &.wechat {
       --item-primary: #{$wechat-primary};
     }

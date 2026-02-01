@@ -91,7 +91,11 @@
                     :permalink="item.permalink"
                     :timestamp="item.timestamp"
                   >
-                    <threads-body :media="item" @click-image="(url) => popup.vImage(url)" />
+                    <threads-body
+                      :media="item"
+                      @click-image="(url) => popup.image(url)"
+                      @click-video="(url) => popup.video(url)"
+                    />
                   </list-item-card>
                 </template>
               </masonry-wall>

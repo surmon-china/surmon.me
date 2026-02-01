@@ -15,10 +15,10 @@
   import EmojiRain from '/@/components/desktop/widgets/emoji-rain.vue'
   import SponsorTabs from '/@/components/desktop/widgets/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/desktop/widgets/sponsor/provider.vue'
-  import Share from '/@/components/common/shares.vue'
   import Toolbox from '/@/components/desktop/widgets/toolbox.vue'
   import Feedback from '/@/components/desktop/widgets/feedback.vue'
   import Statement from '/@/components/desktop/widgets/statement.vue'
+  import Share from '/@/components/common/share.vue'
   import SidebarView from './sidebar/index.vue'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
@@ -62,7 +62,7 @@
     <wallflower />
     <emoji-rain />
     <client-only>
-      <popup :visible="switcher.sponsor" @close="handleSponsorModalClose">
+      <popup :visible="switcher.sponsor" :scroll-closable="false" @close="handleSponsorModalClose">
         <div class="sponsor-modal">
           <div class="sponsor">
             <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
@@ -77,13 +77,13 @@
       </popup>
       <popup
         :visible="switcher.feedback"
-        :mask-close="false"
-        :scroll-close="false"
+        :mask-closable="false"
+        :scroll-closable="false"
         @close="handleFeedbackModalClose"
       >
         <feedback @close="handleFeedbackModalClose" />
       </popup>
-      <popup :visible="switcher.statement" :scroll-close="false" @close="handleStatementModalClose">
+      <popup :visible="switcher.statement" :scroll-closable="false" @close="handleStatementModalClose">
         <statement />
       </popup>
     </client-only>
@@ -138,7 +138,7 @@
     height: 23rem;
     display: flex;
     flex-direction: column;
-    background-color: $module-bg-lighter !important;
+    background-color: $module-bg-lighter;
 
     .sponsor {
       flex-grow: 1;
@@ -146,7 +146,7 @@
       flex-direction: column;
 
       .tabs {
-        background-color: $module-bg-lighter;
+        background-color: $module-bg-opaque;
         border-bottom: 1px solid $module-bg-darker-1;
       }
 

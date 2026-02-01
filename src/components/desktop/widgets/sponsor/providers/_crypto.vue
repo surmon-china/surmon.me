@@ -11,7 +11,7 @@
 
   const handleQRCode = () => {
     renderTextToQRCodeDataURL(props.address).then((dataURL) => {
-      popup.vImage(dataURL)
+      popup.image(dataURL)
     })
   }
 

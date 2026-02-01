@@ -185,7 +185,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
               ${titleValue ? `title="${titleValue}"` : ''}
               onload="this.parentElement.parentElement.dataset.status = 'loaded'"
               onerror="this.parentElement.parentElement.dataset.status = 'error'"
-              onclick="window.$popup.vImage(this.currentSrc || this.src)"
+              onclick="window.$popup?.image(this.currentSrc || this.src)"
             />
           </picture>
           ${altValue ? `<figcaption>${altValue}</figcaption>` : ''}

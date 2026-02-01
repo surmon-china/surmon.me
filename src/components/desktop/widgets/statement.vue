@@ -28,13 +28,14 @@
   @use '/src/styles/base/mixins' as mix;
 
   .statement {
-    background-color: $module-bg-opaque !important;
-    overflow-y: scroll !important;
+    width: 46rem;
+    min-height: 18rem;
+    max-height: 80vh;
+    background-color: $module-bg-opaque;
+    overflow-y: scroll;
 
     .content {
       padding: 0 2em;
-      width: 46rem;
-      min-height: 58rem;
 
       .email {
         .link {

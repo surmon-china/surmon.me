@@ -8,6 +8,13 @@
   }
 }
 
+/// Mobile device only
+@mixin in-mobile {
+  [data-device='mobile'] & {
+    @content;
+  }
+}
+
 /// Element border radius
 @mixin radius-box($radius-size) {
   border-radius: $radius-size;

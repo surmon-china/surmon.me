@@ -13,6 +13,8 @@ import { formatErrorToAppError } from './error'
 import type { AppError } from './error'
 import logger from '/@/utils/logger'
 
+const GlobalStateSymbol = Symbol('globalState')
+
 export type AppErrorValue = AppError | null
 
 export interface GlobalStateOptions {
@@ -22,8 +24,6 @@ export interface GlobalStateOptions {
   error: AppErrorValue
 }
 
-const GlobalStateSymbol = Symbol('globalState')
-export type GlobalState = ReturnType<typeof createGlobalState>
 export const createGlobalState = (options: GlobalStateOptions) => {
   // User agent state
   // This state is used to store the user agent string and parsed device information.
@@ -126,6 +126,8 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     }
   }
 }
+
+export type GlobalState = ReturnType<typeof createGlobalState>
 
 export const useGlobalState = (): GlobalState => {
   return inject(GlobalStateSymbol) as GlobalState

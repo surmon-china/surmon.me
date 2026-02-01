@@ -46,7 +46,7 @@
       </li>
     </ul>
     <client-only>
-      <popup :visible="isOnYouTubeModal" :scroll-close="false" @close="closeYouTubeModal">
+      <popup :visible="isOnYouTubeModal" :scroll-closable="false" @close="closeYouTubeModal">
         <div class="youtube-modal">
           <iframe
             class="youtube-iframe"
@@ -71,10 +71,10 @@
   @use '/src/styles/base/mixins' as mix;
 
   .youtube-modal {
-    width: 88vw;
-    height: 76vh;
     position: relative;
-    background: $black !important;
+    width: 88vw;
+    height: 82vh;
+    background: $black;
 
     .youtube-iframe {
       width: 100%;

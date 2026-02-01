@@ -92,7 +92,7 @@
             @mounted="masonryRef = $event"
           >
             <template #default="{ item }">
-              <threads-card :media="item" @click-image="(url) => popup.vImage(url)" />
+              <threads-card :media="item" @click-image="(url) => popup.image(url)" />
             </template>
           </masonry-wall>
           <loadmore

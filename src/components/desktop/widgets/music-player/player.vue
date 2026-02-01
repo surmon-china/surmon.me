@@ -121,14 +121,15 @@
   @use '/src/styles/base/mixins' as mix;
 
   .music-player-main {
-    position: relative;
-    overflow: auto;
-    min-width: 48rem !important;
-    max-width: 56rem !important;
-    width: 60vw !important;
+    width: 60vw;
     height: 70vh;
+    min-width: 48rem;
+    max-width: 56rem;
+    position: relative;
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    background-color: $module-bg;
 
     .panel {
       width: 100%;

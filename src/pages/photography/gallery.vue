@@ -90,7 +90,7 @@
 
   .instagram-gallery {
     position: relative;
-    background: $black !important;
+    background: $black;
 
     .content {
       position: relative;

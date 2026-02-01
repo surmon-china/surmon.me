@@ -6,6 +6,7 @@ export interface ThreadsMedia {
   media_product_type: 'THREADS'
   media_type: 'TEXT_POST' | 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM' | 'AUDIO' | 'REPOST_FACADE'
   media_url?: string
+  thumbnail_url?: string
   permalink: string
   owner: Record<string, string>
   username: string

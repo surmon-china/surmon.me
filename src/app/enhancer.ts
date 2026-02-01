@@ -12,8 +12,7 @@ import { useI18n } from '/@/composables/i18n'
 import { useTheme } from '/@/composables/theme'
 import { useGtag, Gtag } from '/@/composables/gtag'
 import { useDefer, Defer } from '/@/composables/defer'
-import type { Popup } from '/@/composables/popup'
-import { usePopup } from '/@/composables/popup/hook'
+import { usePopup, Popup } from '/@/composables/popup'
 import { useAppOptionsStore } from '/@/stores/foundation'
 import { useGoLinksStore } from '/@/stores/go-links'
 import { useIdentityStore } from '/@/stores/identity'
@@ -40,6 +39,7 @@ export const useEnhancer = () => {
     theme,
     globalState,
 
+    isMobileDevice: globalState.userAgent.isMobile,
     isZhLang: computed(() => i18n.language.value === Language.Chinese),
     appOptions: computed(() => appOptionsStore.data),
     appConfig: computed(() => appOptionsStore.appConfig),

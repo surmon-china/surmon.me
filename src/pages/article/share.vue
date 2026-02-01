@@ -8,7 +8,7 @@
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getOriginalProxyURL, getPageURL } from '/@/transforms/url'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
-  import BaseShare, { SocialMedia } from '/@/components/common/shares.vue'
+  import BaseShare, { SocialMedia } from '/@/components/common/share.vue'
   import Markdown from '/@/components/common/markdown.vue'
 
   const props = defineProps({
@@ -109,7 +109,7 @@
       @share-as-image="openImageSharePopup"
     />
     <client-only>
-      <popup :visible="shareImageVisibility" :scroll-close="false" @close="closeImageSharePopup">
+      <popup :visible="shareImageVisibility" :scroll-closable="false" @close="closeImageSharePopup">
         <div class="share-as-image-modal" :class="{ rendered: isRenderedShareImage }">
           <div
             v-if="!isRenderedShareImage"
@@ -202,6 +202,7 @@
   .share-as-image-modal {
     position: relative;
     width: 460px;
+    height: 86vh;
     &.rendered {
       overflow-y: auto !important;
     }
