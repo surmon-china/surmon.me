@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.0.2";
+const APP_VERSION = "6.0.3";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -18473,17 +18473,17 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: unref(SIDEBAR_ELEMENT_ID),
         class: "desktop-sidebar"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-fffb2978><div class="module" data-v-fffb2978>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-46ba3eb8><div class="module" data-v-46ba3eb8>`);
       _push(ssrRenderComponent(SidebarSearch, null, null, _parent));
-      _push(`</div><div class="module" data-v-fffb2978>`);
+      _push(`</div><div class="module" data-v-46ba3eb8>`);
       _push(ssrRenderComponent(SidebarStatistic, null, null, _parent));
-      _push(`</div><div class="module" data-v-fffb2978>`);
+      _push(`</div><div class="module" data-v-46ba3eb8>`);
       _push(ssrRenderComponent(SidebarArticles, null, null, _parent));
       _push(`</div>`);
       _push(ssrRenderComponent(_component_client_only, { transition: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module mammon" data-v-fffb2978${_scopeId}>`);
+            _push2(`<div class="module mammon" data-v-46ba3eb8${_scopeId}>`);
             _push2(ssrRenderComponent(SidebarMammon, null, null, _parent2, _scopeId));
             _push2(`</div>`);
           } else {
@@ -18496,30 +18496,30 @@ const _sfc_main$b = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="module" data-v-fffb2978>`);
+      _push(`<div class="module" data-v-46ba3eb8>`);
       _push(ssrRenderComponent(SidebarCalendar, null, null, _parent));
-      _push(`</div><div class="sidebar-sticky-box" data-v-fffb2978><div class="module mammon-square" data-v-fffb2978>`);
-      _push(ssrRenderComponent(_component_client_only, null, {
+      _push(`</div><div class="sidebar-sticky-box" data-v-46ba3eb8><div class="module mammon-square" data-v-46ba3eb8>`);
+      _push(ssrRenderComponent(_component_client_only, { transition: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             _push2(ssrRenderComponent(_component_Adsense, {
+              "ins-class": "content",
               "ins-style": "display:inline-block;width:250px;height:250px",
-              "data-ad-slot": "6138120718",
-              class: "content"
+              "data-ad-slot": "6138120718"
             }, null, _parent2, _scopeId));
           } else {
             return [
               createVNode(_component_Adsense, {
+                "ins-class": "content",
                 "ins-style": "display:inline-block;width:250px;height:250px",
-                "data-ad-slot": "6138120718",
-                class: "content"
+                "data-ad-slot": "6138120718"
               })
             ];
           }
         }),
         _: 1
       }, _parent));
-      _push(`</div><div class="module" data-v-fffb2978>`);
+      _push(`</div><div class="module" data-v-46ba3eb8>`);
       if (isArticlePage.value) {
         _push(ssrRenderComponent(_component_client_only, null, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -18546,7 +18546,7 @@ _sfc_main$b.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/sidebar/index.vue");
   return _sfc_setup$b ? _sfc_setup$b(props, ctx) : void 0;
 };
-const SidebarView = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-fffb2978"]]);
+const SidebarView = /* @__PURE__ */ _export_sfc(_sfc_main$b, [["__scopeId", "data-v-46ba3eb8"]]);
 const menus = [
   {
     id: RouteName.Home,
