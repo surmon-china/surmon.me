@@ -69,7 +69,7 @@ const getComponent = (clientId: string) => {
             h('script', {
               type: 'text/javascript',
               async: 'true',
-              src: ADS_SCRIPT
+              src: `${ADS_SCRIPT}?client=${dataAdClient || clientId}`
             }),
             h('ins', {
               class: ['adsbygoogle', insClass],

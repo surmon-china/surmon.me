@@ -36,11 +36,11 @@
     </div>
     <div class="sidebar-sticky-box">
       <div class="module mammon-square">
-        <client-only>
+        <client-only transition>
           <Adsense
+            ins-class="content"
             ins-style="display:inline-block;width:250px;height:250px"
             data-ad-slot="6138120718"
-            class="content"
           />
         </client-only>
       </div>
