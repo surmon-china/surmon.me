@@ -139,7 +139,7 @@
 
       &::v-deep(.mammon-ins) {
         margin: $gap-tiny 0;
-        height: 105px;
+        height: 103px;
       }
     }
 

@@ -38,7 +38,7 @@
       <div class="module mammon-square">
         <client-only transition>
           <Adsense
-            ins-class="content"
+            class="content"
             ins-style="display:inline-block;width:250px;height:250px"
             data-ad-slot="6138120718"
           />
