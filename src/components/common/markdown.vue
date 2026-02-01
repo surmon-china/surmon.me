@@ -1,34 +1,22 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
   import { useLozad } from '/@/composables/lozad'
   import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
 
-  interface Props {
-    markdown?: string
+  const props = defineProps<{
     html?: string
-    plain?: boolean
+    markdown?: string
     compact?: boolean
     renderOptions?: MarkdownRenderOption
-  }
+  }>()
 
-  const props = defineProps<Props>()
   const { element } = useLozad()
-  const markdownHTML = computed<string>(() => {
-    if (props.markdown) {
-      return markdownToHTML(props.markdown, {
-        ...props.renderOptions
-      })
-    }
-
-    return props.html || ''
-  })
 </script>
 
 <template>
   <section
     ref="element"
-    v-html="markdownHTML"
-    :class="[plain ? 'global-markdown-plain' : 'global-markdown-html', { compact }]"
+    :class="['global-markdown-html', { compact }]"
+    v-html="props.markdown ? markdownToHTML(props.markdown, props.renderOptions) : props.html || ''"
   ></section>
 </template>
 
@@ -36,18 +24,6 @@
   @use '/src/styles/base/variables' as *;
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
-
-  .global-markdown-plain {
-    p {
-      margin: 0;
-      max-width: 100%;
-      @include mix.text-overflow();
-    }
-
-    a {
-      @include mix.text-underline();
-    }
-  }
 
   .global-markdown-html {
     font-size: $font-size-base * 1.05;
