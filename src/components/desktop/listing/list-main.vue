@@ -37,25 +37,23 @@
       </template>
       <template #default>
         <div class="article-list-content">
-          <client-only>
-            <template v-if="mammon">
-              <Adsense
-                v-if="theme.isDark.value"
-                class="article-list-mammon"
-                ins-class="mammon-ins"
-                data-ad-format="fluid"
-                data-ad-layout-key="-hj-9+3a-97+6s"
-                data-ad-slot="1765379407"
-              />
-              <Adsense
-                v-else
-                class="article-list-mammon"
-                ins-class="mammon-ins"
-                data-ad-format="fluid"
-                data-ad-layout-key="-hj-9+3a-97+6s"
-                data-ad-slot="1148538406"
-              />
-            </template>
+          <client-only transition v-if="mammon">
+            <Adsense
+              v-if="theme.isDark.value"
+              class="article-list-mammon"
+              ins-class="mammon-ins"
+              data-ad-format="fluid"
+              data-ad-layout-key="-hf-e+4i-9k+38"
+              data-ad-slot="1765379407"
+            />
+            <Adsense
+              v-else
+              class="article-list-mammon"
+              ins-class="mammon-ins"
+              data-ad-format="fluid"
+              data-ad-layout-key="-hf-e+4i-9k+38"
+              data-ad-slot="1148538406"
+            />
           </client-only>
           <transition-group name="list">
             <list-item class="article-list-item" v-for="article in articles" :key="article.id" :article="article" />
@@ -141,7 +139,7 @@
 
       &::v-deep(.mammon-ins) {
         margin: $gap-tiny 0;
-        height: 100px;
+        height: 105px;
       }
     }
 
