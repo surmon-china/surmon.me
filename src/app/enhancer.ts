@@ -39,7 +39,6 @@ export const useEnhancer = () => {
     theme,
     globalState,
 
-    isMobileDevice: globalState.userAgent.isMobile,
     isZhLang: computed(() => i18n.language.value === Language.Chinese),
     appOptions: computed(() => appOptionsStore.data),
     appConfig: computed(() => appOptionsStore.appConfig),
