@@ -56,6 +56,7 @@
           <div class="album-media" :class="{ loaded: isLoaded }" :style="{ aspectRatio: mediaAspectRatio }">
             <instagram-media
               v-if="activeMedia"
+              :key="activeMedia.id"
               :media="activeMedia"
               :lazy-image="false"
               :video-muted="false"
