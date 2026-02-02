@@ -37,23 +37,30 @@
       </template>
       <template #default>
         <div class="article-list-content">
-          <client-only transition v-if="mammon">
-            <Adsense
-              v-if="theme.isDark.value"
-              class="article-list-mammon"
-              ins-class="mammon-ins"
-              data-ad-format="fluid"
-              data-ad-layout-key="-hf-e+4i-9k+38"
-              data-ad-slot="1765379407"
-            />
-            <Adsense
-              v-else
-              class="article-list-mammon"
-              ins-class="mammon-ins"
-              data-ad-format="fluid"
-              data-ad-layout-key="-hf-e+4i-9k+38"
-              data-ad-slot="1148538406"
-            />
+          <client-only transition>
+            <!-- MARK: template is important to keep rerender when change theme -->
+            <template v-if="mammon">
+              <Adsense
+                v-if="theme.isDark.value"
+                key="dark-adsense"
+                class="article-list-mammon"
+                ins-class="mammon-ins"
+                ins-style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-hf-e+4i-9k+38"
+                data-ad-slot="1765379407"
+              />
+              <Adsense
+                v-else
+                key="light-adsense"
+                class="article-list-mammon"
+                ins-class="mammon-ins"
+                ins-style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-hf-e+4i-9k+38"
+                data-ad-slot="1148538406"
+              />
+            </template>
           </client-only>
           <transition-group name="list">
             <list-item class="article-list-item" v-for="article in articles" :key="article.id" :article="article" />

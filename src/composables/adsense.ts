@@ -9,7 +9,7 @@ import { defineComponent, h } from 'vue'
 import { LocalesKey } from '/@/locales'
 import { useEnhancer } from '/@/app/enhancer'
 
-const ADS_SCRIPT = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
+const ADS_SCRIPT = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
 
 const createComponent = (clientId: string) => {
   return defineComponent({
@@ -56,8 +56,8 @@ const createComponent = (clientId: string) => {
           },
           [
             h('script', {
-              type: 'text/javascript',
               async: 'true',
+              crossorigin: 'anonymous',
               src: `${ADS_SCRIPT}?client=${dataAdClient || clientId}`
             }),
             h('ins', {
