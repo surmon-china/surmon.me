@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.x",
-    "@sentry/vite-plugin": "^4.8.x",
+    "@sentry/vite-plugin": "^4.9.x",
     "@types/fs-extra": "^11.x",
     "@types/lodash-es": "^4.17.x",
     "@types/lozad": "^1.16.4",
