@@ -72,9 +72,9 @@
     .image,
     .video .poster {
       width: 100%;
-      border-radius: $radius-tiny;
       filter: saturate(0.7) brightness(0.85);
       transition: filter $motion-duration-mid;
+      @include mix.radius-box($radius-tiny);
     }
 
     .image {
@@ -86,7 +86,7 @@
     .video {
       position: relative;
       min-height: 10rem;
-      background-color: #000;
+      // background-color: #000;
       cursor: pointer;
 
       .play-button {
