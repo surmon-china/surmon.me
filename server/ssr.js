@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.6";
+const APP_VERSION = "6.1.7";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -14354,7 +14354,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_udate = resolveComponent("udate");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-e48211b2><div class="topbar" data-v-e48211b2>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-2fe8c28c><div class="topbar" data-v-2fe8c28c>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "type-link",
         href: __props.media.permalink
@@ -14362,11 +14362,11 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(isVideoMediaIns)(__props.media)) {
-              _push2(`<i class="iconfont icon-video" data-v-e48211b2${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-video" data-v-2fe8c28c${_scopeId}></i>`);
             } else if (unref(isAlbumMediaIns)(__props.media)) {
-              _push2(`<i class="iconfont icon-album" data-v-e48211b2${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-album" data-v-2fe8c28c${_scopeId}></i>`);
             } else {
-              _push2(`<i class="iconfont icon-camera" data-v-e48211b2${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-camera" data-v-2fe8c28c${_scopeId}></i>`);
             }
           } else {
             return [
@@ -14385,15 +14385,15 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="timestamp" data-v-e48211b2>`);
+      _push(`<span class="timestamp" data-v-2fe8c28c>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "YMDm",
         date: __props.media.timestamp,
         separator: "/"
       }, null, _parent));
-      _push(`</span></div><div class="content" data-v-e48211b2>`);
+      _push(`</span></div><div class="content" data-v-2fe8c28c>`);
       if (!isLoaded.value) {
-        _push(`<div class="loading" data-v-e48211b2>`);
+        _push(`<div class="loading" data-v-2fe8c28c>`);
         _push(ssrRenderComponent(_component_loading_indicator, {
           gap: "lg",
           width: "1.8rem",
@@ -14418,9 +14418,10 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         _push(ssrRenderComponent(InstagramAlbum, { media: __props.media }, {
           content: withCtx(({ activeMedia, ghostMedia }, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<div class="${ssrRenderClass([{ loaded: isLoaded.value }, "album-media"])}" style="${ssrRenderStyle({ aspectRatio: mediaAspectRatio.value })}" data-v-e48211b2${_scopeId}>`);
+              _push2(`<div class="${ssrRenderClass([{ loaded: isLoaded.value }, "album-media"])}" style="${ssrRenderStyle({ aspectRatio: mediaAspectRatio.value })}" data-v-2fe8c28c${_scopeId}>`);
               if (activeMedia) {
                 _push2(ssrRenderComponent(InstagramMedia, {
+                  key: activeMedia.id,
                   media: activeMedia,
                   "lazy-image": false,
                   "video-muted": false,
@@ -14452,7 +14453,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
                   style: { aspectRatio: mediaAspectRatio.value }
                 }, [
                   activeMedia ? (openBlock(), createBlock(InstagramMedia, {
-                    key: 0,
+                    key: activeMedia.id,
                     media: activeMedia,
                     "lazy-image": false,
                     "video-muted": false,
@@ -14480,7 +14481,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       if (__props.media.caption) {
-        _push(`<p class="caption" data-v-e48211b2>${__props.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
+        _push(`<p class="caption" data-v-2fe8c28c>${__props.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
       } else {
         _push(`<!---->`);
       }
@@ -14509,7 +14510,7 @@ _sfc_main$J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/gallery.vue");
   return _sfc_setup$J ? _sfc_setup$J(props, ctx) : void 0;
 };
-const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-e48211b2"]]);
+const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-2fe8c28c"]]);
 const _sfc_main$I = /* @__PURE__ */ defineComponent({
   __name: "grid",
   __ssrInlineRender: true,
