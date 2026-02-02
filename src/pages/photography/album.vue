@@ -40,23 +40,14 @@
 
 <template>
   <div class="album-box">
-    <div class="navigation prev">
+    <div class="navigation">
       <button class="button" :disabled="!canGoPrev" @click="prevSlide">
         <i class="iconfont icon-prev" />
       </button>
-    </div>
-    <div class="navigation next">
+      <span class="page">{{ activeIndex + 1 }} / {{ mediaChildren.length }}</span>
       <button class="button" :disabled="!canGoNext" @click="nextSlide">
         <i class="iconfont icon-next" />
       </button>
-    </div>
-    <div class="pagination">
-      <span
-        class="index"
-        :class="{ active: index === activeIndex + 1 }"
-        :key="index"
-        v-for="index in mediaChildren.length"
-      ></span>
     </div>
     <slot
       name="content"
@@ -73,58 +64,33 @@
   .album-box {
     position: relative;
 
-    .pagination {
-      position: absolute;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: $z-index-normal + 1;
-      max-width: 100%;
-      white-space: nowrap;
-
-      .index {
-        $size: 8px;
-        display: inline-block;
-        width: $size;
-        height: $size;
-        margin: 0 $gap-tiny;
-        border-radius: $radius-tiny;
-        background-color: $white;
-        opacity: 0.4;
-        &.active {
-          opacity: 1;
-        }
-      }
-    }
-
     .navigation {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: 2rem;
+      right: 2rem;
       z-index: $z-index-normal + 1;
-      &.prev {
-        left: $gap-lg;
-      }
-      &.next {
-        right: $gap-lg;
-      }
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.7);
 
       .button {
-        width: 2.6rem;
-        height: 3rem;
-        border-radius: $radius-sm;
-        font-size: $font-size-h2;
-        background-color: $module-bg;
-        transition: all $motion-duration-fast;
-
+        $size: 1.4rem;
+        width: $size;
+        height: $size;
+        font-size: $font-size-h5;
+        transition: color $motion-duration-fast;
         &[disabled] {
-          opacity: 0.6;
-          color: $color-text-divider;
+          color: rgba(255, 255, 255, 0.3);
         }
         &:not([disabled]):hover {
-          color: $color-text;
-          background-color: $module-bg-darker-1;
+          color: rgba(255, 255, 255, 1);
         }
+      }
+
+      .page {
+        font-weight: bold;
+        margin-inline: $gap-xs;
       }
     }
   }

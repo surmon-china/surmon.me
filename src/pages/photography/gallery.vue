@@ -97,18 +97,17 @@
 
       .root-media,
       .album-media {
-        // MARK: important for size animation!
-        interpolate-size: allow-keywords;
         width: 32rem;
         height: 46rem;
         max-width: 60vw;
         max-height: 68vh;
-        aspect-ratio: auto;
         will-change: width, height, aspect-ratio;
-        transition:
-          width 0.48s cubic-bezier(0.65, 0.05, 0.36, 1),
-          height 0.48s cubic-bezier(0.65, 0.05, 0.36, 1),
-          aspect-ratio 0.48s cubic-bezier(0.65, 0.05, 0.36, 1);
+        // MARK: important for size animation
+        // interpolate-size: allow-keywords;
+        // transition:
+        //   width 0.15s cubic-bezier(0.65, 0.05, 0.36, 1),
+        //   height 0.15s cubic-bezier(0.65, 0.05, 0.36, 1),
+        //   aspect-ratio 0.15s cubic-bezier(0.65, 0.05, 0.36, 1);
 
         &.loaded {
           // MARK: important for Safari and Firefox!
@@ -116,8 +115,8 @@
           // ❌ max-content
           width: fit-content;
           height: fit-content;
-          max-width: 94vw;
-          max-height: 86vh;
+          max-width: 88vw;
+          max-height: 84vh;
         }
       }
 
