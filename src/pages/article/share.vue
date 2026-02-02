@@ -203,6 +203,8 @@
     position: relative;
     width: 460px;
     height: 86vh;
+    background-color: $module-bg-opaque;
+
     &.rendered {
       overflow-y: auto !important;
     }
