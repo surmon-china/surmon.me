@@ -53,7 +53,7 @@
 
         .iconfont {
           font-size: $font-size-h6;
-          margin-right: 2px;
+          margin-right: 1px;
         }
 
         .username {
