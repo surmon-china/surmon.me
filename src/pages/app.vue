@@ -4,6 +4,7 @@
   import { Language, LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getPageURL } from '/@/transforms/url'
   import { APP_PROFILE, RESOURCE_LINKS, BFF_CONFIG } from '/@/configs/app.config'
 
   const APP_LOGO_URL = '/images/page-app/logo.png'
@@ -26,7 +27,9 @@
     return {
       pageTitles: titles,
       description,
-      ogImage: APP_LOGO_URL
+      ogImage: getPageURL(APP_LOGO_URL),
+      ogImageWidth: 180,
+      ogImageHeight: 180
     }
   })
 </script>

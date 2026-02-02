@@ -3,6 +3,9 @@ import { APP_PROFILE } from '/@/configs/app.config'
 import { useEnhancer } from '/@/app/enhancer'
 import { usePageSeo } from '/@/composables/head'
 import { firstUpperCase } from '/@/transforms/text'
+import { getPageURL } from '/@/transforms/url'
+
+export const mobileBannerImageUrl = '/images/page-snippets/banner-mobile.webp'
 
 export const i18nTitle = {
   [Language.Chinese]: '廣行饒益，利樂有情',
@@ -17,7 +20,10 @@ export const useSnippetsPageMeta = () => {
     const description = isZhLang.value ? `${APP_PROFILE.author} 近期发布的片段` : `${APP_PROFILE.author}'s snippets`
     return {
       pageTitles: titles,
-      description: description
+      description: description,
+      ogImage: getPageURL(mobileBannerImageUrl),
+      ogImageWidth: 1070,
+      ogImageHeight: 600
     }
   })
 }

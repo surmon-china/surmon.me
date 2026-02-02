@@ -8,6 +8,7 @@
   import { Language, LocalesKey } from '/@/locales'
   import { CommentPostId } from '/@/constants/comment-id'
   import { firstUpperCase } from '/@/transforms/text'
+  import { getPageURL } from '/@/transforms/url'
   import { isClient } from '/@/configs/app.env'
   import MobileBanner from '/@/components/mobile/widgets/page-banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -37,9 +38,9 @@
       pageTitles: titles,
       description,
       ogType: 'website',
-      ogImage: bannerImage,
-      ogImageWidth: 620,
-      ogImageHeight: 350
+      ogImage: getPageURL(bannerImage),
+      ogImageWidth: 1200,
+      ogImageHeight: 675
     }
   })
 

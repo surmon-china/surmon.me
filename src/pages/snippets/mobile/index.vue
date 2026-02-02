@@ -4,7 +4,7 @@
   import { useThreadsLatestMediasStore } from '/@/stores/socials'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsMediasRequest } from '../threads'
-  import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import { i18nTitle, useSnippetsPageMeta, mobileBannerImageUrl } from '../shared'
   import { LocalesKey } from '/@/locales'
   import { IDENTITIES } from '/@/configs/app.config'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
@@ -37,7 +37,7 @@
 
 <template>
   <div class="snippets-page">
-    <mobile-banner background-image="/images/page-snippets/banner-mobile.webp" :background-image-y="80" cdn>
+    <mobile-banner :background-image="mobileBannerImageUrl" :background-image-y="80" cdn>
       <template #title>
         <webfont bolder><i18n :k="LocalesKey.PAGE_SNIPPETS" /></webfont>
       </template>
