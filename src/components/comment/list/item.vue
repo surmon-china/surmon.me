@@ -434,6 +434,10 @@
 
         .markdown {
           margin: 0.3rem 0;
+
+          ::v-deep(hr) {
+            border-color: $module-bg-darker-2;
+          }
         }
       }
 

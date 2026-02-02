@@ -154,7 +154,9 @@
 
     .catalogue {
       max-height: 36rem;
-      padding: $gap-tiny $gap;
+      padding-block: $gap-tiny;
+      padding-inline: $gap-sm $gap;
+
       overflow-y: auto;
       @include mix.scroll-snap-y();
       &:hover {
