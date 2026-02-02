@@ -11,7 +11,7 @@
 
   const handleQRCode = () => {
     renderTextToQRCodeDataURL(props.address).then((dataURL) => {
-      popup.image(dataURL)
+      popup.image(dataURL, { 'data-radius': 'md' })
     })
   }
 

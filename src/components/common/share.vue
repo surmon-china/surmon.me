@@ -46,7 +46,7 @@
       class: 'wechat',
       handler: (params) => {
         renderTextToQRCodeDataURL(params.url).then((dataURL) => {
-          window.$popup?.image(dataURL)
+          window.$popup?.image(dataURL, { 'data-radius': 'md' })
         })
       }
     },

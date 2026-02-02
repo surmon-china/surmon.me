@@ -78,8 +78,8 @@
                   <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />
                   <span class="text">
                     <i18n>
-                      <template #en>Friend me on WeChat | Channel</template>
-                      <template #zh>扫码加微 ｜ 关注视频号</template>
+                      <template #en>Friend me on WeChat</template>
+                      <template #zh>扫码加微 ｜ 解锁可能</template>
                     </i18n>
                   </span>
                 </div>
@@ -125,7 +125,7 @@
 
   .qrcode-modal {
     $image-size: 12rem;
-    width: 18.2rem;
+    width: 18rem;
     height: 20.2rem;
     position: relative;
     display: flex;

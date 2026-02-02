@@ -94,7 +94,22 @@
       height: 100%;
       object-fit: contain;
       object-position: center;
-      @include mix.radius-box($radius-sm);
+
+      &[data-radius='tiny'] {
+        @include mix.radius-box($radius-tiny);
+      }
+      &[data-radius='xs'] {
+        @include mix.radius-box($radius-xs);
+      }
+      &[data-radius='sm'] {
+        @include mix.radius-box($radius-sm);
+      }
+      &[data-radius='md'] {
+        @include mix.radius-box($radius-md);
+      }
+      &[data-radius='lg'] {
+        @include mix.radius-box($radius-lg);
+      }
     }
 
     .loading {
