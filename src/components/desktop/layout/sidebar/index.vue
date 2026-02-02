@@ -77,7 +77,7 @@
         padding: $gap-sm;
 
         .content {
-          min-height: 1rem;
+          min-height: 8rem;
           height: 250px;
           width: 250px;
         }
