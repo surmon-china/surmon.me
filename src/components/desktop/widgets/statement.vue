@@ -33,6 +33,8 @@
     max-height: 80vh;
     background-color: $module-bg-opaque;
     overflow-y: scroll;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
 
     .content {
       padding: 0 2em;

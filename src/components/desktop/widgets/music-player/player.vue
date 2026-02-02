@@ -128,7 +128,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow: auto;
     background-color: $module-bg;
 
     .panel {
@@ -309,6 +308,8 @@
     .songs {
       flex: 1;
       overflow-y: scroll;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
       @include mix.scroll-snap-y();
 
       .list {

@@ -7,6 +7,8 @@
 :root {
   color-scheme: light dark;
   background-color: $body-bg;
+  // scrollbar-color: $module-bg-darker-3 $module-bg;
+  // scrollbar-width: thin;
 
   // theme
   &[data-theme='light'] {
@@ -50,29 +52,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   // WORKAROUND: for Google AdSense layout
   position: relative !important;
-  // Firefox: https://developer.mozilla.org/zh-CN/docs/Web/CSS/scrollbar-width
-  scrollbar-width: thin;
   // https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering
   // text-rendering: optimizeLegibility;
   // iOS reflow: https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-}
-
-@include mix.scrollbar-style(
-  $size: $gap-xs,
-  $bg: $module-bg,
-  $thumb-bg: $module-bg-darker-3,
-  $thumb-bg-hover: $module-bg-darker-4
-);
-
-body {
-  @include mix.scrollbar-style(
-    $size: $gap-xs,
-    $bg: $module-bg,
-    $thumb-bg: $module-bg-darker-1,
-    $thumb-bg-hover: $module-bg-darker-3
-  );
 }
 
 [hidden],
@@ -116,12 +100,25 @@ select:-webkit-autofill {
   color: $color-text-secondary;
 }
 
-.center-placeholder {
-  @include mix.center-placeholder;
-}
-
 .mammon-box {
-  @extend .center-placeholder;
+  width: 100%;
+  height: auto;
+  position: relative;
+
+  &::before {
+    content: attr(placeholder);
+    position: absolute;
+    text-align: center;
+    font-size: $font-size-h1;
+    font-weight: bold;
+    color: $color-text-divider;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: $z-index-underground;
+    letter-spacing: 0.2em;
+    transform: translate(-50%, -50%);
+  }
 }
 
 // for module transition

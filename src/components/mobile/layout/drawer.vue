@@ -123,11 +123,12 @@
   .drawer {
     $border-color: funs.darken($mobile-drawer-bg, 3%);
     display: block;
-    overflow: auto;
     position: relative;
+    margin: 0;
     width: 100%;
     height: 100%;
-    margin: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
     color: $white;
 
     .drawer-user {

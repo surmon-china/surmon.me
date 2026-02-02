@@ -260,6 +260,8 @@
           resize: none;
           outline: none;
           overflow: auto;
+          overscroll-behavior: contain;
+          scrollbar-width: thin;
           background-color: $module-bg-darker-1;
           @include mix.background-transition();
           &:focus {
@@ -277,9 +279,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        overflow: auto;
         margin: 0;
         padding: 0.5em;
+        overflow: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
         background-color: $module-bg-darker-1;
       }
     }

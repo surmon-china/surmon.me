@@ -161,7 +161,9 @@
       }
 
       .content {
-        overflow: auto;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        scrollbar-width: thin;
 
         .group-list {
           list-style: none;

@@ -156,8 +156,9 @@
       max-height: 36rem;
       padding-block: $gap-tiny;
       padding-inline: $gap-sm $gap;
-
       overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
       @include mix.scroll-snap-y();
       &:hover {
         border-color: $primary;

@@ -106,9 +106,11 @@
         font-size: $font-size-base;
         line-height: 1.7;
         max-height: 260px;
-        overflow-y: auto;
         font-family: $font-family-normal;
         color: #555555;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        scrollbar-width: thin;
 
         p:last-child {
           margin: 0;

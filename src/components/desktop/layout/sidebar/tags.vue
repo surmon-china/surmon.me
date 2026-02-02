@@ -43,10 +43,12 @@
 
   .tags {
     margin-bottom: 0;
-    overflow-y: auto;
     width: 100%;
     border-top: $gap-sm solid transparent;
     border-bottom: $gap-sm solid transparent;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
 
     .tag-list {
       list-style: none;

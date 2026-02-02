@@ -357,6 +357,7 @@
           }
 
           & + code {
+            padding-block: 0;
             padding-inline: 0.2em;
           }
         }
@@ -372,6 +373,8 @@
           font-size: $code-font-size;
           background-color: transparent !important;
           cursor: text;
+          // desktop only x scroll
+          overscroll-behavior-x: contain;
         }
       }
     }

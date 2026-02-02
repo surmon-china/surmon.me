@@ -204,9 +204,10 @@
     width: 460px;
     height: 86vh;
     background-color: $module-bg-opaque;
-
     &.rendered {
-      overflow-y: auto !important;
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scrollbar-width: thin;
     }
 
     .share-template {

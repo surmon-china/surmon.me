@@ -21,6 +21,19 @@
   overflow: hidden;
 }
 
+/// Text underline
+@mixin text-underline($offset: 0.3em) {
+  text-decoration: underline;
+  text-underline-offset: $offset;
+  text-decoration-thickness: 1px;
+}
+
+/// Text trim
+@mixin text-trim() {
+  text-box-edge: text;
+  text-box-trim: trim-both;
+}
+
 /// Text overflow
 @mixin text-overflow($placeholder: ellipsis) {
   overflow: hidden;
@@ -36,17 +49,13 @@
   -webkit-box-orient: vertical;
 }
 
-/// Text underline
-@mixin text-underline($offset: 0.3em) {
-  text-decoration: underline;
-  text-underline-offset: $offset;
-  text-decoration-thickness: 1px;
-}
-
-/// Text trim
-@mixin text-trim() {
-  text-box-edge: text;
-  text-box-trim: trim-both;
+/// Text Shadow
+/// @param {Size} $x [2px] - X
+/// @param {Size} $y [2px] - Y
+/// @param {Size} $blur [2px] - Blur
+/// @param {Color} $color [rgba(0,0,0,.4)] - Color
+@mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0, 0, 0, 0.4)) {
+  text-shadow: $x $y $blur $color;
 }
 
 /// Visible element
@@ -133,64 +142,4 @@
 /// Filter transition
 @mixin filter-transition($time: $motion-duration-fast) {
   transition: filter $time;
-}
-
-/// Text Shadow
-/// @param {Size} $x [2px] - X
-/// @param {Size} $y [2px] - Y
-/// @param {Size} $blur [2px] - Blur
-/// @param {Color} $color [rgba(0,0,0,.4)] - Color
-@mixin text-shadow($x: 2px, $y: 2px, $blur: 5px, $color: rgba(0, 0, 0, 0.4)) {
-  text-shadow: $x $y $blur $color;
-}
-
-// Scrollbar
-/// @param {Size} $size
-/// @param {BackgroundColor} $bg
-/// @param {ThumbBackgroundColor} $thumb-bg
-/// @param {ThumbBackgroundColorHover} $thumb-bg-hover
-@mixin scrollbar-style(
-  $size: $gap-xs,
-  $bg: $white,
-  $thumb-bg: funs.darken($white, 18%),
-  $thumb-bg-hover: funs.darken($white, 26%)
-) {
-  ::-webkit-scrollbar {
-    width: $size;
-    height: $size;
-    background: $bg;
-  }
-  ::-webkit-scrollbar-track {
-    border-radius: 0;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: 0;
-    background-color: $thumb-bg;
-    @include background-transition();
-    &:hover {
-      background-color: $thumb-bg-hover;
-    }
-  }
-}
-
-/// Center placeholder attr in element
-@mixin center-placeholder() {
-  width: 100%;
-  height: auto;
-  position: relative;
-
-  &::before {
-    content: attr(placeholder);
-    position: absolute;
-    text-align: center;
-    font-size: $font-size-h1;
-    font-weight: bold;
-    color: $color-text-divider;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    z-index: $z-index-underground;
-    letter-spacing: 0.2em;
-    transform: translate(-50%, -50%);
-  }
 }
