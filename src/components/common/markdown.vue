@@ -416,7 +416,8 @@
 
       ul,
       ol {
-        padding-left: 2em;
+        margin-bottom: 0.8em;
+        padding-left: 1.4em;
 
         > li {
           padding: 0.2em 0.5em;
