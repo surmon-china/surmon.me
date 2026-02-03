@@ -26,7 +26,8 @@ import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
 import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
-import { setStaticTitler, resetTitler } from '/@/effects/titler'
+import { setFavicon, recoverFavicon } from '/@/effects/faviconer'
+import { setTitle, recoverTitle } from '/@/effects/titler'
 import { resolvePageLayout } from '/@/constants/page-layout'
 import { getSSRStateValue, getSSRContextData, getSSRContextValue } from '/@/app/universal'
 import { Language, LocalesKey } from '/@/locales'
@@ -48,7 +49,6 @@ const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
   routerHistoryCreator: createWebHistory,
   languages: navigator.languages as string[],
   userAgent: navigator.userAgent,
-  // MARK: `window.initialTheme` from index.html <head> script.
   theme: (window.initialTheme as Theme) ?? Theme.Light,
   region: getSSRStateValue('region')!,
   layout: getSSRStateValue('layout')!,
@@ -122,17 +122,22 @@ router.isReady().finally(() => {
       document.addEventListener(
         'visibilitychange',
         (event) => {
-          // @ts-ignore
-          const isHidden = event.target?.hidden || event.target?.webkitHidden
           const surprises = [
-            // tltle: zero width character
-            // { favicon: '🌝', title: '​' },
             // { favicon: '⛔️', title: 'FORBIDDEN' },
             // { favicon: '⭕️', title: 'FBI WARNING' },
-            { favicon: '🌱', title: APP_PROFILE.sub_title_en }
+            { favicon: '🙏🏽', title: 'Namo Buddhaya' },
+            { favicon: '☸️', title: 'Dhammaṁ saraṇaṁ gacchāmi' },
+            { favicon: '🧘🏽‍♂️', title: APP_PROFILE.sub_title_en }
           ]
-          const index = Math.floor(Math.random() * surprises.length)
-          isHidden ? setStaticTitler(surprises[index]) : resetTitler()
+          const surprise = surprises[Math.floor(Math.random() * surprises.length)]
+          // @ts-ignore
+          if (event.target?.hidden || event.target?.webkitHidden) {
+            setTitle(surprise.title)
+            setFavicon(surprise.favicon)
+          } else {
+            recoverTitle()
+            recoverFavicon()
+          }
         },
         false
       )

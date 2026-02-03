@@ -10,3 +10,19 @@ const OFFSET = 127397
 export const countryCodeToEmoji = (countryCode: string): string => {
   return countryCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET))
 }
+
+export const emojiToDataURL = (emoji: string, size = 100): string => {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
+      <text 
+        x="50%" 
+        y="50%" 
+        text-anchor="middle" 
+        dominant-baseline="central" 
+        font-size="${size * 0.8}" 
+      >${emoji}</text>
+    </svg>
+  `.trim()
+
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`
+}
