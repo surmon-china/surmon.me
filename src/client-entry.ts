@@ -132,11 +132,11 @@ router.isReady().finally(() => {
           const surprise = surprises[Math.floor(Math.random() * surprises.length)]
           // @ts-ignore
           if (event.target?.hidden || event.target?.webkitHidden) {
-            setTitle(surprise.title)
             setFavicon(surprise.favicon)
+            setTitle(surprise.title)
           } else {
-            recoverTitle()
             recoverFavicon()
+            recoverTitle()
           }
         },
         false
