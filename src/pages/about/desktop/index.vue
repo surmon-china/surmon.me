@@ -29,17 +29,17 @@
   }
 
   const handleSponsor = () => {
-    globalState.toggleSwitcher('sponsor', true)
+    globalState.toggleSwitcher('sponsorModal', true)
     handleGTagEvent('sponsor_modal')
   }
 
   const handleStatement = () => {
-    globalState.toggleSwitcher('statement', true)
+    globalState.toggleSwitcher('statementModal', true)
     handleGTagEvent('statement_modal')
   }
 
   const handleFeedback = () => {
-    globalState.toggleSwitcher('feedback', true)
+    globalState.toggleSwitcher('feedbackModal', true)
     handleGTagEvent('feedback_modal')
   }
 

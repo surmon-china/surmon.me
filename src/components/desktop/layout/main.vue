@@ -35,13 +35,13 @@
     globalState.setPageLayout(resolvePageLayout(route.meta.layout))
   }
   const handleSponsorModalClose = () => {
-    globalState.toggleSwitcher('sponsor', false)
+    globalState.toggleSwitcher('sponsorModal', false)
   }
   const handleFeedbackModalClose = () => {
-    globalState.toggleSwitcher('feedback', false)
+    globalState.toggleSwitcher('feedbackModal', false)
   }
   const handleStatementModalClose = () => {
-    globalState.toggleSwitcher('statement', false)
+    globalState.toggleSwitcher('statementModal', false)
   }
 
   onMounted(() => {
@@ -62,7 +62,7 @@
     <wallflower />
     <emoji-rain />
     <client-only>
-      <popup :visible="switcher.sponsor" :scroll-closable="false" @close="handleSponsorModalClose">
+      <popup :visible="switcher.sponsorModal" :body-scrollable="false" @close="handleSponsorModalClose">
         <div class="sponsor-modal">
           <div class="sponsor">
             <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
@@ -76,14 +76,14 @@
         </div>
       </popup>
       <popup
-        :visible="switcher.feedback"
+        :visible="switcher.feedbackModal"
         :mask-closable="false"
-        :scroll-closable="false"
+        :body-scrollable="false"
         @close="handleFeedbackModalClose"
       >
         <feedback @close="handleFeedbackModalClose" />
       </popup>
-      <popup :visible="switcher.statement" :scroll-closable="false" @close="handleStatementModalClose">
+      <popup :visible="switcher.statementModal" :body-scrollable="false" @close="handleStatementModalClose">
         <statement />
       </popup>
     </client-only>

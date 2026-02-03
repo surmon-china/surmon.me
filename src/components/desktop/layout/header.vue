@@ -54,7 +54,7 @@
 </script>
 
 <template>
-  <header :id="HEADER_ELEMENT_ID" v-disabled-wallflower class="header" :class="{ 'enable-nav': enabledNav }">
+  <header :id="HEADER_ELEMENT_ID" class="header" v-disabled-wallflower>
     <div class="header-container container">
       <div class="header-brand">
         <uimage cdn src="/images/logo.svg" class="header-logo" :alt="APP_PROFILE.title" />
@@ -63,7 +63,7 @@
         </webfont>
         <router-link to="/" class="header-link" :title="APP_PROFILE.title" @mousedown="handleRootNavEvent" />
       </div>
-      <div class="toolbox">
+      <div class="tools">
         <button class="button menu" v-if="enabledNav">
           <i class="iconfont icon-top-menu"></i>
         </button>
@@ -77,7 +77,7 @@
         </button>
       </div>
     </div>
-    <div class="header-nav">
+    <div class="header-nav" v-if="enabledNav">
       <nav class="nav-list container">
         <template v-for="(menu, index) in menus" :key="menu.id">
           <span v-if="index > 0" class="divider"></span>
@@ -115,8 +115,7 @@
     background-color: $module-bg;
     border-bottom: 1px solid $module-bg-darker-2;
     @include mix.backdrop-blur(5px);
-
-    &.enable-nav:hover {
+    &:hover {
       .header-nav {
         @include mix.visible();
       }
@@ -166,7 +165,7 @@
         }
       }
 
-      .toolbox {
+      .tools {
         display: flex;
         flex-direction: row;
         align-items: center;

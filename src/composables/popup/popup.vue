@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-  import { watch, Teleport } from 'vue'
+  import { watch, watchEffect, Teleport } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { DEFAULT_POPUP_STATE } from './state'
   import { usePopup } from './'
 
@@ -9,6 +10,10 @@
       default: false
     },
     border: {
+      type: Boolean,
+      default: true
+    },
+    bodyScrollable: {
       type: Boolean,
       default: true
     },
@@ -28,16 +33,7 @@
   }>()
 
   const popup = usePopup()
-
-  watch(
-    // hidden modal via props
-    () => props.visible,
-    (visible) => {
-      visible
-        ? popup.vModal({ maskClosable: props.maskClosable, scrollClosable: props.scrollClosable })
-        : popup.hidden()
-    }
-  )
+  const { globalState } = useEnhancer()
 
   watch(
     // hidden modal via store
@@ -49,6 +45,23 @@
       }
     }
   )
+
+  watch(
+    // hidden modal via props
+    () => props.visible,
+    (visible) => {
+      visible
+        ? popup.vModal({ maskClosable: props.maskClosable, scrollClosable: props.scrollClosable })
+        : popup.hidden()
+    }
+  )
+
+  // sync bodyScrollable state to global state
+  watchEffect(() => {
+    if (!props.bodyScrollable) {
+      globalState.toggleSwitcher('bodyScrollable', !props.visible)
+    }
+  })
 </script>
 
 <template>

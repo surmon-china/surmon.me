@@ -11,6 +11,7 @@ import * as Sentry from '@sentry/vue'
 import { computed, watch } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
+import type { SerializableHead } from '@unhead/vue'
 import { createMainApp } from '/@/app/main'
 import { useAppOptionsStore } from '/@/stores/foundation'
 import { useIdentityStore } from '/@/stores/identity'
@@ -61,7 +62,10 @@ const popup = createPopup()
 const head = createHead({ disableCapoSorting: true })
 
 // init: global head attributes
-const globalHeadRef = computed(() => getGlobalHead())
+const globalHeadRef = computed<SerializableHead>(() => {
+  const bodyAttrs = globalState.switcher.bodyScrollable ? {} : { class: 'unscrollable' }
+  return { ...getGlobalHead(), bodyAttrs }
+})
 const globalHeadEntry = head.push(globalHeadRef)
 watch(globalHeadRef, (newValue) => globalHeadEntry.patch(newValue))
 

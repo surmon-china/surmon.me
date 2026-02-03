@@ -109,7 +109,7 @@
       @share-as-image="openImageSharePopup"
     />
     <client-only>
-      <popup :visible="shareImageVisibility" :scroll-closable="false" @close="closeImageSharePopup">
+      <popup :visible="shareImageVisibility" :body-scrollable="false" @close="closeImageSharePopup">
         <div class="share-as-image-modal" :class="{ rendered: isRenderedShareImage }">
           <div
             v-if="!isRenderedShareImage"

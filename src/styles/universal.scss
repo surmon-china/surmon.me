@@ -6,6 +6,8 @@
 
 :root {
   color-scheme: light dark;
+  // MARK: Ensure the scrollbar gutter always exists to prevent layout shifts
+  scrollbar-gutter: stable;
   background-color: $body-bg;
 
   // theme
@@ -55,6 +57,10 @@ body {
   // iOS reflow: https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+
+  &.unscrollable {
+    overflow: hidden !important;
+  }
 }
 
 [hidden],

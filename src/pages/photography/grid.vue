@@ -71,7 +71,7 @@
       </li>
     </transition-group>
     <client-only>
-      <popup :visible="!!galleryActiveMedia" :scroll-closable="false" @close="closeMediaGallery">
+      <popup :visible="!!galleryActiveMedia" :body-scrollable="false" @close="closeMediaGallery">
         <ins-gallery :media="galleryActiveMedia" v-if="!!galleryActiveMedia" />
       </popup>
     </client-only>

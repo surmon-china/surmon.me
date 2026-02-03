@@ -45,7 +45,7 @@
 <template>
   <music-player-handle :player="player" @operate="handleHandleOperate" @open-modal="openPlayerModel" />
   <client-only>
-    <popup class="music-player-model" v-model:visible="isOnPlayerModel" :scroll-closable="false">
+    <popup class="music-player-model" v-model:visible="isOnPlayerModel" :body-scrollable="false">
       <music-player-main :player="player" @close="closePlayerModel" />
     </popup>
   </client-only>

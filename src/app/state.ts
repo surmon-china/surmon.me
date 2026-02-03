@@ -25,6 +25,19 @@ export interface GlobalStateOptions {
 }
 
 export const createGlobalState = (options: GlobalStateOptions) => {
+  // Hydrated state
+  // This state is used to determine whether the app has been hydrated on the client side.
+  // It is initialized to false, and set to true after the first hydration.
+  // This is useful for avoiding unnecessary data fetching on the client side after hydration.
+  // It is also used to determine whether the app is in the hydration phase.
+  // The `isHydrated` state is not reactive, so it can be used in computed properties without causing unnecessary re-renders.
+  // It is set to true in the `setHydrate` method, which is called after the first hydration.
+  // This state is not used in the SSR context, so it is only used in the client-side app.
+  let isHydrated = false
+  const setHydrate = () => {
+    isHydrated = true
+  }
+
   // User agent state
   // This state is used to store the user agent string and parsed device information.
   // It is initialized with the user agent string passed in the options.
@@ -37,19 +50,6 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     languages: options.languages,
     isZhUser: isZhUser(options.languages),
     ...uaParser(options.userAgent)
-  }
-
-  // Hydrated state
-  // This state is used to determine whether the app has been hydrated on the client side.
-  // It is initialized to false, and set to true after the first hydration.
-  // This is useful for avoiding unnecessary data fetching on the client side after hydration.
-  // It is also used to determine whether the app is in the hydration phase.
-  // The `isHydrated` state is not reactive, so it can be used in computed properties without causing unnecessary re-renders.
-  // It is set to true in the `setHydrate` method, which is called after the first hydration.
-  // This state is not used in the SSR context, so it is only used in the client-side app.
-  let isHydrated = false
-  const setHydrate = () => {
-    isHydrated = true
   }
 
   // App error state
@@ -87,9 +87,10 @@ export const createGlobalState = (options: GlobalStateOptions) => {
 
   // Global switchers
   const switcher = reactive({
-    sponsor: false,
-    feedback: false,
-    statement: false
+    sponsorModal: false,
+    feedbackModal: false,
+    statementModal: false,
+    bodyScrollable: true
   })
 
   const toggleSwitcher = (key: keyof typeof switcher, value: boolean) => {

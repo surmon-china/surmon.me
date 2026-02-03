@@ -8,14 +8,14 @@
   const { globalState, goLinks, gtag } = useEnhancer()
 
   const handleStatementClick = () => {
-    globalState.toggleSwitcher('statement', true)
+    globalState.toggleSwitcher('statementModal', true)
     gtag?.event('statement_modal', {
       event_category: GAEventCategories.Universal
     })
   }
 
   const handleFeedbackClick = () => {
-    globalState.toggleSwitcher('feedback', true)
+    globalState.toggleSwitcher('feedbackModal', true)
     gtag?.event('feedback_modal', {
       event_category: GAEventCategories.Widget
     })

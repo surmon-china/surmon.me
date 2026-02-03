@@ -72,7 +72,7 @@
           <button class="item icon-only wechat" title="WeChat" @click="handleOpenWeChatModal">
             <i class="iconfont icon-wechat" />
             <client-only>
-              <popup v-model:visible="wechatModalOpened" :scroll-closable="false">
+              <popup v-model:visible="wechatModalOpened" :body-scrollable="false">
                 <div class="qrcode-modal wechat">
                   <div class="background"></div>
                   <uimage class="image" cdn src="/images/qrcodes/wechat.webp" />

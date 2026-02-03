@@ -51,7 +51,7 @@
   }
 
   const handleSponsor = () => {
-    globalState.toggleSwitcher('sponsor', true)
+    globalState.toggleSwitcher('sponsorModal', true)
     gtag?.event('article_sponsor', {
       event_category: GAEventCategories.Article
     })

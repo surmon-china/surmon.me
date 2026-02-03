@@ -46,7 +46,7 @@
       </li>
     </ul>
     <client-only>
-      <popup :visible="isOnYouTubeModal" :scroll-closable="false" @close="closeYouTubeModal">
+      <popup :visible="isOnYouTubeModal" :body-scrollable="false" @close="closeYouTubeModal">
         <div class="youtube-modal">
           <iframe
             class="youtube-iframe"

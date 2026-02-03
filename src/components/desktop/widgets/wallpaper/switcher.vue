@@ -36,7 +36,7 @@
     </div>
   </div>
   <client-only>
-    <popup v-model:visible="isOnWallpaper" :mask-closable="false" :scroll-closable="false">
+    <popup v-model:visible="isOnWallpaper" :body-scrollable="false" :mask-closable="false">
       <wallpapers @close="handleCloseWallpaper" />
     </popup>
   </client-only>
