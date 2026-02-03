@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.7";
+const APP_VERSION = "6.1.8";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -14354,7 +14354,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
       const _component_ulink = resolveComponent("ulink");
       const _component_udate = resolveComponent("udate");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-2fe8c28c><div class="topbar" data-v-2fe8c28c>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "instagram-gallery" }, _attrs))} data-v-1965e07f><div class="topbar" data-v-1965e07f>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "type-link",
         href: __props.media.permalink
@@ -14362,11 +14362,11 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
             if (unref(isVideoMediaIns)(__props.media)) {
-              _push2(`<i class="iconfont icon-video" data-v-2fe8c28c${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-video" data-v-1965e07f${_scopeId}></i>`);
             } else if (unref(isAlbumMediaIns)(__props.media)) {
-              _push2(`<i class="iconfont icon-album" data-v-2fe8c28c${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-album" data-v-1965e07f${_scopeId}></i>`);
             } else {
-              _push2(`<i class="iconfont icon-camera" data-v-2fe8c28c${_scopeId}></i>`);
+              _push2(`<i class="iconfont icon-camera" data-v-1965e07f${_scopeId}></i>`);
             }
           } else {
             return [
@@ -14385,15 +14385,15 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<span class="timestamp" data-v-2fe8c28c>`);
+      _push(`<span class="timestamp" data-v-1965e07f>`);
       _push(ssrRenderComponent(_component_udate, {
         to: "YMDm",
         date: __props.media.timestamp,
         separator: "/"
       }, null, _parent));
-      _push(`</span></div><div class="content" data-v-2fe8c28c>`);
+      _push(`</span></div><div class="content" data-v-1965e07f>`);
       if (!isLoaded.value) {
-        _push(`<div class="loading" data-v-2fe8c28c>`);
+        _push(`<div class="loading" data-v-1965e07f>`);
         _push(ssrRenderComponent(_component_loading_indicator, {
           gap: "lg",
           width: "1.8rem",
@@ -14418,7 +14418,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         _push(ssrRenderComponent(InstagramAlbum, { media: __props.media }, {
           content: withCtx(({ activeMedia, ghostMedia }, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<div class="${ssrRenderClass([{ loaded: isLoaded.value }, "album-media"])}" style="${ssrRenderStyle({ aspectRatio: mediaAspectRatio.value })}" data-v-2fe8c28c${_scopeId}>`);
+              _push2(`<div class="${ssrRenderClass([{ loaded: isLoaded.value }, "album-media"])}" style="${ssrRenderStyle({ aspectRatio: mediaAspectRatio.value })}" data-v-1965e07f${_scopeId}>`);
               if (activeMedia) {
                 _push2(ssrRenderComponent(InstagramMedia, {
                   key: activeMedia.id,
@@ -14427,7 +14427,6 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
                   "video-muted": false,
                   "video-loop": false,
                   "video-auto-play": true,
-                  style: { display: "contents" },
                   onLoad: handleMediaLoad
                 }, null, _parent2, _scopeId));
               } else {
@@ -14452,18 +14451,25 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
                   class: ["album-media", { loaded: isLoaded.value }],
                   style: { aspectRatio: mediaAspectRatio.value }
                 }, [
-                  activeMedia ? (openBlock(), createBlock(InstagramMedia, {
-                    key: activeMedia.id,
-                    media: activeMedia,
-                    "lazy-image": false,
-                    "video-muted": false,
-                    "video-loop": false,
-                    "video-auto-play": true,
-                    style: { display: "contents" },
-                    onLoad: handleMediaLoad
-                  }, null, 8, ["media"])) : createCommentVNode("", true),
+                  createVNode(Transition, {
+                    name: "album-media-item",
+                    mode: "out-in"
+                  }, {
+                    default: withCtx(() => [
+                      activeMedia ? (openBlock(), createBlock(InstagramMedia, {
+                        key: activeMedia.id,
+                        media: activeMedia,
+                        "lazy-image": false,
+                        "video-muted": false,
+                        "video-loop": false,
+                        "video-auto-play": true,
+                        onLoad: handleMediaLoad
+                      }, null, 8, ["media"])) : createCommentVNode("", true)
+                    ]),
+                    _: 2
+                  }, 1024),
                   ghostMedia && isLoaded.value ? (openBlock(), createBlock(InstagramMedia, {
-                    key: 1,
+                    key: 0,
                     media: ghostMedia,
                     "lazy-image": false,
                     "video-muted": true,
@@ -14481,7 +14487,7 @@ const _sfc_main$J = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       if (__props.media.caption) {
-        _push(`<p class="caption" data-v-2fe8c28c>${__props.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
+        _push(`<p class="caption" data-v-1965e07f>${__props.media.caption.replaceAll("\n", "<br>") ?? ""}</p>`);
       } else {
         _push(`<!---->`);
       }
@@ -14510,7 +14516,7 @@ _sfc_main$J.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/photography/gallery.vue");
   return _sfc_setup$J ? _sfc_setup$J(props, ctx) : void 0;
 };
-const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-2fe8c28c"]]);
+const InsGallery = /* @__PURE__ */ _export_sfc(_sfc_main$J, [["__scopeId", "data-v-1965e07f"]]);
 const _sfc_main$I = /* @__PURE__ */ defineComponent({
   __name: "grid",
   __ssrInlineRender: true,
@@ -16753,14 +16759,14 @@ function register(app) {
   app.component("LoadingIndicator", LoadingIndicator);
   app.component("Skeleton", Skeleton);
 }
-const defaultOptions = {
+const DEFAULT_OPTIONS = Object.freeze({
   duration: 3e3,
   throttle: 200
-};
+});
 const CSS_HIDDEN_TRANSITION_DURATION = 200;
-const createNavigationProgress = (options) => {
-  const duration = defaultOptions.duration;
-  const throttle = defaultOptions.throttle;
+const createNavigationProgressState = (options) => {
+  const duration = DEFAULT_OPTIONS.duration;
+  const throttle = DEFAULT_OPTIONS.throttle;
   const progress = ref(0);
   const isLoading = ref(false);
   const step = computed(() => 1e4 / duration);
@@ -16795,8 +16801,10 @@ const createNavigationProgress = (options) => {
     clear();
     progress.value = 0;
     isLoading.value = true;
-    {
+    if (throttle) {
       _throttle = setTimeout(() => _startTimer(), throttle);
+    } else {
+      _startTimer();
     }
   };
   const finish = () => {
@@ -16825,7 +16833,7 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
   setup(__props) {
     const props = __props;
     const router = useRouter();
-    const state = createNavigationProgress();
+    const state = createNavigationProgressState();
     router.beforeEach((_, __, next) => {
       state.start();
       next();
@@ -16840,12 +16848,12 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
         id: "navigation-progress",
         class: { visible: unref(state).isLoading.value },
         style: { "--height": props.height + "px" }
-      }, _attrs))} data-v-29ac8b05><div class="progress" style="${ssrRenderStyle({
+      }, _attrs))} data-v-650a6b22><div class="progress" style="${ssrRenderStyle({
         background: props.color || void 0,
         transform: `scaleX(${unref(state).progress.value}%)`
-      })}" data-v-29ac8b05></div>`);
+      })}" data-v-650a6b22></div>`);
       if (props.spin) {
-        _push(`<div class="spin" data-v-29ac8b05><div class="spin-ring" data-v-29ac8b05><div data-v-29ac8b05></div><div data-v-29ac8b05></div><div data-v-29ac8b05></div><div data-v-29ac8b05></div></div></div>`);
+        _push(`<div class="spin" data-v-650a6b22><div class="spin-ring" data-v-650a6b22><div data-v-650a6b22></div><div data-v-650a6b22></div><div data-v-650a6b22></div><div data-v-650a6b22></div></div></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -16859,7 +16867,7 @@ _sfc_main$w.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/common/navigation-progress/index.vue");
   return _sfc_setup$w ? _sfc_setup$w(props, ctx) : void 0;
 };
-const NavProgress = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["__scopeId", "data-v-29ac8b05"]]);
+const NavProgress = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["__scopeId", "data-v-650a6b22"]]);
 const useWallpaperStore = defineStore("wallpaper", () => {
   const fetchStore = createFetchStore({
     fetcher: () => tunnel$1.fetch(TunnelModule.BingWallpaper),
