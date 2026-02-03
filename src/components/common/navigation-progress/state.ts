@@ -1,24 +1,22 @@
 import { ref, computed, nextTick } from 'vue'
 
-export type NavigationProgress = ReturnType<typeof createNavigationProgress>
-
 export interface NavigationProgressOptions {
   duration?: number
   throttle?: number
 }
 
-const defaultOptions: Required<NavigationProgressOptions> = {
+const DEFAULT_OPTIONS: Required<NavigationProgressOptions> = Object.freeze({
   duration: 3000,
   throttle: 200
-}
+})
 
 // MARK: coupling with CSS transition duration
 const CSS_HIDDEN_TRANSITION_DURATION = 200
 
 // https://router.vuejs.org/guide/advanced/navigation-guards.html#The-Full-Navigation-Resolution-Flow
-export const createNavigationProgress = (options?: NavigationProgressOptions) => {
-  const duration = options?.duration ?? defaultOptions.duration
-  const throttle = options?.throttle ?? defaultOptions.throttle
+export const createNavigationProgressState = (options?: NavigationProgressOptions) => {
+  const duration = options?.duration ?? DEFAULT_OPTIONS.duration
+  const throttle = options?.throttle ?? DEFAULT_OPTIONS.throttle
 
   const progress = ref(0)
   const isLoading = ref(false)
@@ -80,3 +78,5 @@ export const createNavigationProgress = (options?: NavigationProgressOptions) =>
     clear
   }
 }
+
+export type NavigationProgress = ReturnType<typeof createNavigationProgressState>

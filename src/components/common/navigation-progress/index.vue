@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { onBeforeUnmount } from 'vue'
   import { useRouter } from 'vue-router'
-  import { createNavigationProgress } from './state'
+  import { createNavigationProgressState } from './state'
 
   const props = defineProps({
     spin: Boolean,
@@ -13,7 +13,7 @@
   })
 
   const router = useRouter()
-  const state = createNavigationProgress()
+  const state = createNavigationProgressState()
 
   router.beforeEach((_, __, next) => {
     state.start()
