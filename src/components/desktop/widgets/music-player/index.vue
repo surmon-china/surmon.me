@@ -3,7 +3,7 @@
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { useEnhancer } from '/@/app/enhancer'
   import { createLogger } from '/@/utils/logger'
-  import { createMusicPlayer, MusicPlayer } from './_state'
+  import { createMusicPlayer, MusicPlayer, MusicPlayerConfig } from './_state'
   import MusicPlayerHandle from './handle.vue'
   import MusicPlayerMain from './player.vue'
 
@@ -11,10 +11,16 @@
 
   const logger = createLogger('APP:MusicPlayer')
 
+  const musicPlayerConfig: MusicPlayerConfig = {
+    logger,
+    delay: 668,
+    continueNext: true
+  }
+
   // HACK: keep global single instance
-  const player: MusicPlayer = (window.$app.config.globalProperties.$musicPlayer =
-    window.$app.config.globalProperties.$musicPlayer ??
-    createMusicPlayer({ logger, delay: 668, continueNext: true }))
+  const globalProps = window.$app?.config.globalProperties
+  const player: MusicPlayer = globalProps?.$musicPlayer ?? createMusicPlayer(musicPlayerConfig)
+  if (globalProps) globalProps.$musicPlayer ??= player
 
   const isOnPlayerModel = ref(false)
   const openPlayerModel = () => (isOnPlayerModel.value = true)
