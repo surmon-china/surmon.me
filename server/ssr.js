@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.8";
+const APP_VERSION = "6.1.9";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17134,7 +17134,13 @@ const _sfc_main$t = /* @__PURE__ */ defineComponent({
   setup(__props) {
     useEnhancer();
     const logger2 = createLogger("APP:MusicPlayer");
-    const player = window.$app.config.globalProperties.$musicPlayer = window.$app.config.globalProperties.$musicPlayer ?? createMusicPlayer({ logger: logger2, delay: 668 });
+    const musicPlayerConfig = {
+      logger: logger2,
+      delay: 668
+    };
+    const globalProps = window.$app?.config.globalProperties;
+    const player = globalProps?.$musicPlayer ?? createMusicPlayer(musicPlayerConfig);
+    if (globalProps) globalProps.$musicPlayer ??= player;
     const isOnPlayerModel = ref(false);
     const openPlayerModel = () => isOnPlayerModel.value = true;
     const closePlayerModel = () => isOnPlayerModel.value = false;
@@ -17213,7 +17219,7 @@ _sfc_main$t.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/music-player/index.vue");
   return _sfc_setup$t ? _sfc_setup$t(props, ctx) : void 0;
 };
-const MusicPlayerEntry = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-218d9bf2"]]);
+const MusicPlayerEntry = /* @__PURE__ */ _export_sfc(_sfc_main$t, [["__scopeId", "data-v-74f26bb0"]]);
 const _sfc_main$s = /* @__PURE__ */ defineComponent({
   __name: "flower",
   __ssrInlineRender: true,

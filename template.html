@@ -6,23 +6,25 @@
     <script>
       const localTheme = localStorage.getItem('theme')
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-      window.initialTheme = localTheme === 'light' || localTheme === 'dark' ? localTheme : systemTheme
-      document.documentElement.setAttribute('data-theme', window.initialTheme)
+      const initialTheme = localTheme === 'light' || localTheme === 'dark' ? localTheme : systemTheme
+      document.documentElement.dataset.theme = initialTheme
+      window.initialTheme = initialTheme
     </script>
     <title>Surmon.me</title>
     <!-- Preconnect -->
-    <link rel="preconnect" href="https://go.surmon.me" crossorigin />
     <link rel="preconnect" href="https://api.surmon.me" crossorigin />
     <link rel="preconnect" href="https://static.surmon.me" crossorigin />
     <link rel="preconnect" href="https://cdn.surmon.me" crossorigin />
     <link rel="preconnect" href="https://cdn.surmon.cn" crossorigin />
+    <link rel="preconnect" href="https://go.surmon.me" crossorigin />
     <link rel="preconnect" href="https://at.alicdn.com" crossorigin />
-    <!-- Prefetch -->
+    <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="dns-prefetch" href="//www.google-analytics.com" />
     <!-- Icons -->
-    <link rel="apple-touch-icon" href="/icon.png" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon.png" />
+    <!-- Other -->
     <link rel="author" type="text/plain" href="/humans.txt" />
     <!-- Meta infos -->
     <meta name="author" content="Surmon" />
@@ -32,9 +34,9 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="format-detection" content="telephone=no,email=no,address=no" />
     <!-- Client entry -->
-    <script type="module" crossorigin src="/index-C_7W9oat.js"></script>
-    <link rel="modulepreload" crossorigin href="/vendor-Bat4smbW.js">
-    <link rel="modulepreload" crossorigin href="/sentry-C6Y55odF.js">
+    <script type="module" crossorigin src="/index-D6yefzdF.js"></script>
+    <link rel="modulepreload" crossorigin href="/vendor-D3K_0FqV.js">
+    <link rel="modulepreload" crossorigin href="/sentry-DlizMnjd.js">
     <link rel="stylesheet" crossorigin href="/index-CNl8PowC.css">
   </head>
   <body>
