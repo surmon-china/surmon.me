@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.9";
+const APP_VERSION = "6.1.10";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
