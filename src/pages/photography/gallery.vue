@@ -54,17 +54,18 @@
       <instagram-album v-else-if="isAlbumMediaIns(media)" :media="media">
         <template #content="{ activeMedia, ghostMedia }">
           <div class="album-media" :class="{ loaded: isLoaded }" :style="{ aspectRatio: mediaAspectRatio }">
-            <instagram-media
-              v-if="activeMedia"
-              :key="activeMedia.id"
-              :media="activeMedia"
-              :lazy-image="false"
-              :video-muted="false"
-              :video-loop="false"
-              :video-auto-play="true"
-              :style="{ display: 'contents' }"
-              @load="handleMediaLoad"
-            />
+            <transition name="album-media-item" mode="out-in">
+              <instagram-media
+                v-if="activeMedia"
+                :key="activeMedia.id"
+                :media="activeMedia"
+                :lazy-image="false"
+                :video-muted="false"
+                :video-loop="false"
+                :video-auto-play="true"
+                @load="handleMediaLoad"
+              />
+            </transition>
             <!-- Keep rendering a ghost media element to prevent container collapse during data switching. -->
             <instagram-media
               v-if="ghostMedia && isLoaded"
@@ -83,6 +84,19 @@
     </div>
   </div>
 </template>
+
+<style lang="scss">
+  @use '/src/styles/base/variables' as *;
+
+  .album-media-item-enter-active,
+  .album-media-item-leave-active {
+    transition: opacity $motion-duration-fast ease;
+  }
+  .album-media-item-enter-from,
+  .album-media-item-leave-to {
+    opacity: 0;
+  }
+</style>
 
 <style lang="scss" scoped>
   @use '/src/styles/base/variables' as *;
