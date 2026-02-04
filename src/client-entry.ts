@@ -8,7 +8,7 @@
 import './polyfills'
 
 import * as Sentry from '@sentry/vue'
-import { computed, watch } from 'vue'
+import { computed, watch, nextTick } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
 import type { SerializableHead } from '@unhead/vue'
@@ -79,10 +79,28 @@ app.use(defer, { exportToGlobal: true })
 app.use(popup, { exportToGlobal: true })
 app.use(adsense, { id: IDENTITIES.GOOGLE_ADSENSE_CLIENT_ID })
 app.use(gtag, {
-  router,
   id: IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID,
-  config: { send_page_view: false },
-  customResourceUrl: BFF_CONFIG.route_path_gtag_script
+  customResourceUrl: BFF_CONFIG.route_path_gtag_script,
+  // https://developers.google.com/analytics/devguides/collection/ga4/views?hl=zh-cn&client_type=gtag#disable_pageview_measurement
+  config: { send_page_view: false }
+})
+
+// init: bind router effects
+router.beforeEach((to, from) => {
+  if (to.path !== from.path) {
+    popup.hidden()
+  }
+})
+router.afterEach((to, from) => {
+  if (to.path !== from.path) {
+    nextTick().then(() => {
+      app.config.globalProperties.$gtag?.pageView({
+        title: document.title,
+        location: window.location.href,
+        path: to.fullPath
+      })
+    })
+  }
 })
 
 // init: services with client

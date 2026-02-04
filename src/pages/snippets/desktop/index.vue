@@ -77,9 +77,9 @@
           <template #default>
             <div>
               <masonry-wall
-                :columns="3"
                 row-gap="2.2rem"
                 col-gap="2rem"
+                :columns="3"
                 :initial-items="threadsLatestMediasStore.data?.data || []"
                 :ssr-initial-render="true"
                 @mounted="masonryRef = $event"

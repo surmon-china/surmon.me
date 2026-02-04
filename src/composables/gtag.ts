@@ -4,9 +4,8 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { Router } from 'vue-router'
-import { App, Plugin, reactive, readonly, inject, nextTick } from 'vue'
-import { getGaScriptURL } from '/@/transforms/gtag'
+import { App, Plugin, reactive, readonly, inject } from 'vue'
+import { getGtagScriptURL } from '/@/transforms/gtag'
 import { loadScript } from '/@/utils/scripter'
 // MARK: https://zh.nuxtjs.org/faq/ga
 // MARK: https://github.com/nuxt-community/google-gtag/blob/master/lib/plugin.js
@@ -25,17 +24,16 @@ interface GtagConfig {
 
 export interface GtagPluginConfig {
   id: string
-  router?: Router
   customResourceUrl?: string
   config?: GtagConfig
 }
 
-const createGtagState = (options: GtagPluginConfig) => {
-  if (!options.id) {
+const createGtagState = (pluginConfig: GtagPluginConfig) => {
+  if (!pluginConfig.id) {
     return
   }
 
-  const resourceURL = options.customResourceUrl || getGaScriptURL(options.id)
+  const resourceURL = pluginConfig.customResourceUrl || getGtagScriptURL(pluginConfig.id)
   const state = reactive({
     loaded: false,
     disabled: false
@@ -53,7 +51,15 @@ const createGtagState = (options: GtagPluginConfig) => {
       window.dataLayer.push(arguments)
     }
     window.gtag('js', new Date())
-    window.gtag('config', options.id, options.config)
+    window.gtag('config', pluginConfig.id, pluginConfig.config)
+  }
+
+  const enable = () => {
+    state.disabled = false
+  }
+
+  const disable = () => {
+    state.disabled = true
   }
 
   const push = (...args) => {
@@ -62,47 +68,47 @@ const createGtagState = (options: GtagPluginConfig) => {
     }
   }
 
-  if (options.router) {
-    options.router.afterEach((to, from) => {
-      if (to.path !== from.path) {
-        nextTick().then(() => {
-          const location = window.location.origin + to.fullPath
-          push('event', 'page_view', {
-            page_title: document.title,
-            page_location: location,
-            page_path: to.fullPath,
-            send_to: options.id
-          })
-        })
-      }
+  const set = (config: GtagConfig) => {
+    push('set', config)
+  }
+
+  const config = (config: GtagConfig) => {
+    push('config', pluginConfig.id, config)
+  }
+
+  // https://support.google.com/analytics/answer/9267735?hl=zh-Hans
+  const event = (
+    eventName: string,
+    config?: GtagConfig & {
+      event_category?: string
+      event_label?: string
+      value?: number
+    }
+  ) => {
+    push('event', eventName, config)
+  }
+
+  // https://developers.google.com/analytics/devguides/collection/ga4/reference/events?hl=zh-cn&client_type=gtag#search
+  const search = () => {}
+
+  // https://developers.google.com/analytics/devguides/collection/ga4/views?hl=zh-cn&client_type=gtag
+  const pageView = (payload: { title: string; location: string; path: string }) => {
+    push('event', 'page_view', {
+      page_title: payload.title,
+      page_location: payload.location,
+      page_path: payload.path,
+      send_to: pluginConfig.id
     })
   }
 
   return {
     state: readonly(state),
-    enable: () => {
-      state.disabled = false
-    },
-    disable: () => {
-      state.disabled = true
-    },
-    set(config: GtagConfig) {
-      push('set', config)
-    },
-    config(config: GtagConfig) {
-      push('config', options.id, config)
-    },
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/events?hl=zh-cn
-    event(
-      eventName: string,
-      config?: GtagConfig & {
-        event_category?: string
-        event_label?: string
-        value?: number
-      }
-    ) {
-      push('event', eventName, config)
-    }
+    enable,
+    disable,
+    set,
+    config,
+    event,
+    pageView
   }
 }
 

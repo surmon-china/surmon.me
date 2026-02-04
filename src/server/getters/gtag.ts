@@ -6,10 +6,10 @@
 
 import axios from '@/server/services/axios'
 import { IDENTITIES } from '@/configs/app.config'
-import { getGaScriptURL } from '@/transforms/gtag'
+import { getGtagScriptURL } from '@/transforms/gtag'
 
 export const getGTagScript = async () => {
-  const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID)
+  const url = getGtagScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID)
   const response = await axios.get<string>(url, { timeout: 8000 })
   return response.data
 }
