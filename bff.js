@@ -827,11 +827,11 @@ const getSitemapXml = async (cache2) => {
     return data.toString();
   });
 };
-const getGaScriptURL = (measurementId) => {
+const getGtagScriptURL = (measurementId) => {
   return `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
 };
 const getGTagScript = async () => {
-  const url = getGaScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
+  const url = getGtagScriptURL(IDENTITIES.GOOGLE_ANALYTICS_MEASUREMENT_ID);
   const response = await axios.get(url, { timeout: 8e3 });
   return response.data;
 };

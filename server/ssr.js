@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.11";
+const APP_VERSION = "6.1.12";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -159,7 +159,7 @@ const APP_PROFILE = Object.freeze({
   description_short_zh: "本為蝶蜂，自築石池；但求抒臆，揮墨雲中"
 });
 const MAPBOX_CONFIG = Object.freeze({
-  // readonly token
+  // readonly token: https://docs.mapbox.com/help/dive-deeper/how-to-use-mapbox-securely/#access-tokens
   TOKEN: "pk.eyJ1Ijoic3VybW9uIiwiYSI6ImNsNDE4YmkzNjB2Z2wzY3F5dWg2M2tqeWIifQ.JhgYGFI4zsuNiX9dH-pBDg",
   STYLE_LIGHT: "mapbox://styles/surmon/cl41fktzn000f14pet94oo1u4",
   STYLE_DARK: "mapbox://styles/surmon/cl41gy1qo000l15ry20j5ae0k",
@@ -1016,7 +1016,7 @@ const useTagStore = defineStore("tag", () => {
 const createUniversalStore = (config) => {
   const pinia = createPinia();
   const fetchBasicStore = () => {
-    const initFetchTasks = [
+    const initialFetchTasks = [
       useAppOptionsStore(pinia).fetch(),
       // app nodepress config
       useCategoryStore(pinia).fetch(),
@@ -1025,9 +1025,9 @@ const createUniversalStore = (config) => {
       // basic tags data
     ];
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(useFeaturedArticleListStore(pinia).fetch());
+      initialFetchTasks.push(useFeaturedArticleListStore(pinia).fetch());
     }
-    return Promise.all(initFetchTasks);
+    return Promise.all(initialFetchTasks);
   };
   return {
     pinia,
@@ -1363,8 +1363,8 @@ const _sfc_main$1W = /* @__PURE__ */ defineComponent({
   __name: "popup-root",
   __ssrInlineRender: true,
   setup(__props) {
+    const modalContainerElement = ref();
     const { state, media, hidden, $setRootContainer: setRootContainer } = usePopup();
-    const element = ref(null);
     const handleWindowScroll = () => hidden();
     watchEffect(() => {
       state.visible && state.scrollClosable ? (
@@ -1372,10 +1372,10 @@ const _sfc_main$1W = /* @__PURE__ */ defineComponent({
         window.addEventListener("scroll", handleWindowScroll, { passive: true })
       ) : window.removeEventListener("scroll", handleWindowScroll);
     });
-    onMounted(() => setRootContainer(element.value));
+    onMounted(() => setRootContainer(modalContainerElement.value));
     return (_ctx, _push, _parent, _attrs) => {
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "popup" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-93259aca><div class="popup-mask" style="${ssrRenderStyle(unref(state).visible ? null : { display: "none" })}" data-v-93259aca><div class="popup-modal-container" data-v-93259aca></div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "popup" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-489ad426><div class="popup-mask" style="${ssrRenderStyle(unref(state).visible ? null : { display: "none" })}" data-v-489ad426><div class="popup-modal-container" data-v-489ad426></div>`);
       if (unref(state).isMedia && !!unref(media).src) {
         _push(ssrRenderComponent(PopupMedia, unref(media), null, _parent));
       } else {
@@ -6417,30 +6417,29 @@ const HAHA_KEYWORDS = ["2333", "haha", "哈哈"];
 const SIX_KEYWORDS = ["666", "赞", "棒", "优秀"];
 const HEHE_KEYWORDS = ["呵呵"];
 const luanchEmojiRain = (content) => {
-  const luanchRain = window.$luanchEmojiRain;
   if (HAHA_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
       emoji: getAssetURL(useCdnDomain(), "/images/emojis/haha.png")
     });
   } else if (SIX_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
       emoji: getAssetURL(useCdnDomain(), "/images/emojis/666.png")
     });
   } else if (HEHE_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       staggered: false,
       speed: 8,
       increaseSpeed: 0.04,
       emoji: getAssetURL(useCdnDomain(), "/images/emojis/hehe.png")
     });
   } else if (Math.random() <= 0.5) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       scale: 0.6,
       staggered: true,
       speed: 8,
@@ -11133,6 +11132,7 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
     onMounted(async () => {
       const _lib = await importMapbox();
       _lib.accessToken = MAPBOX_CONFIG.TOKEN;
+      if (!container.value) return;
       const _map = new _lib.Map({
         container: container.value,
         center: MAPBOX_CONFIG.CENTER,
@@ -11158,7 +11158,7 @@ const _sfc_main$14 = /* @__PURE__ */ defineComponent({
         class: "mapbox",
         ref_key: "container",
         ref: container
-      }, _attrs))} data-v-41d45823></div>`);
+      }, _attrs))} data-v-e52e76eb></div>`);
     };
   }
 });
@@ -11168,7 +11168,7 @@ _sfc_main$14.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-base.vue");
   return _sfc_setup$14 ? _sfc_setup$14(props, ctx) : void 0;
 };
-const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-41d45823"]]);
+const Mapbox = /* @__PURE__ */ _export_sfc(_sfc_main$14, [["__scopeId", "data-v-e52e76eb"]]);
 const PLACEMARK_LAYER_ID = "placemarks";
 const useMapPlacemarks = () => {
   const kmlJson = shallowRef(null);
@@ -13053,7 +13053,7 @@ const PROVIDERS = [
     address: IDENTITIES.ETH_ADDRESS
   }
 ];
-const useSponsorState = (initId) => {
+const useSponsorState = (initialId) => {
   useEnhancer();
   const activeId = ref(PROVIDERS[0].id);
   const activeProvider = computed(() => PROVIDERS.find((t) => t.id === activeId.value));
@@ -15257,7 +15257,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
       const _component_empty = resolveComponent("empty");
       const _component_skeleton = resolveComponent("skeleton");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-2c08c585>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "snippets-page" }, _attrs))} data-v-2a15cb93>`);
       _push(ssrRenderComponent(PageBanner, {
         class: "page-banner",
         "background-video": "/videos/clips/forest-1.mp4",
@@ -15291,7 +15291,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         description: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="links" data-v-2c08c585${_scopeId}>`);
+            _push2(`<div class="links" data-v-2a15cb93${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "item threads",
               title: "Threads",
@@ -15299,7 +15299,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span class="username" data-v-2c08c585${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).THREADS_USERNAME)}</span>`);
+                  _push3(`<span class="username" data-v-2a15cb93${_scopeId2}>@${ssrInterpolate(unref(IDENTITIES).THREADS_USERNAME)}</span>`);
                 } else {
                   return [
                     createVNode("span", { class: "username" }, "@" + toDisplayString(unref(IDENTITIES).THREADS_USERNAME), 1)
@@ -15320,7 +15320,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-zhihu-full" data-v-2c08c585${_scopeId2}></i>`);
+                  _push3(`<i class="iconfont icon-zhihu-full" data-v-2a15cb93${_scopeId2}></i>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-zhihu-full" })
@@ -15364,7 +15364,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-bridge" data-v-2c08c585></div><div class="page-content" data-v-2c08c585><div class="container" data-v-2c08c585>`);
+      _push(`<div class="page-bridge" data-v-2a15cb93></div><div class="page-content" data-v-2a15cb93><div class="container" data-v-2a15cb93>`);
       _push(ssrRenderComponent(_component_placeholder, {
         loading: unref(threadsLatestMediasStore).fetching,
         "has-data": !!unref(threadsLatestMediasStore).data?.data.length
@@ -15410,9 +15410,9 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="module-skeleton" data-v-2c08c585${_scopeId}><!--[-->`);
+            _push2(`<div class="module-skeleton" data-v-2a15cb93${_scopeId}><!--[-->`);
             ssrRenderList(6, (item) => {
-              _push2(`<div class="item" data-v-2c08c585${_scopeId}>`);
+              _push2(`<div class="item" data-v-2a15cb93${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton, { class: "title" }, null, _parent2, _scopeId));
               _push2(`<!--[-->`);
               ssrRenderList(4, (i) => {
@@ -15447,11 +15447,11 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div data-v-2c08c585${_scopeId}>`);
+            _push2(`<div data-v-2a15cb93${_scopeId}>`);
             _push2(ssrRenderComponent(MasonryWall, {
-              columns: 3,
               "row-gap": "2.2rem",
               "col-gap": "2rem",
+              columns: 3,
               "initial-items": unref(threadsLatestMediasStore).data?.data || [],
               "ssr-initial-render": true,
               onMounted: ($event) => masonryRef.value = $event
@@ -15513,7 +15513,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
               }, {
                 normal: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<button class="normal" data-v-2c08c585${_scopeId2}><i class="iconfont icon-loadmore" data-v-2c08c585${_scopeId2}></i></button>`);
+                    _push3(`<button class="normal" data-v-2a15cb93${_scopeId2}><i class="iconfont icon-loadmore" data-v-2a15cb93${_scopeId2}></i></button>`);
                   } else {
                     return [
                       createVNode("button", {
@@ -15554,9 +15554,9 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
             return [
               createVNode("div", null, [
                 createVNode(MasonryWall, {
-                  columns: 3,
                   "row-gap": "2.2rem",
                   "col-gap": "2rem",
+                  columns: 3,
                   "initial-items": unref(threadsLatestMediasStore).data?.data || [],
                   "ssr-initial-render": true,
                   onMounted: ($event) => masonryRef.value = $event
@@ -15620,7 +15620,7 @@ _sfc_main$D.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/snippets/desktop/index.vue");
   return _sfc_setup$D ? _sfc_setup$D(props, ctx) : void 0;
 };
-const DesktopSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-2c08c585"]]);
+const DesktopSnippetsPage = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-2a15cb93"]]);
 const _sfc_main$C = /* @__PURE__ */ defineComponent({
   __name: "card-threads",
   __ssrInlineRender: true,
@@ -17507,46 +17507,48 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   setup(__props) {
     const emojiImage = getAssetURL(useCdnDomain(), "/images/emojis/funny.png");
-    const rainBase = ref(null);
+    const rainBase = ref();
     const state = reactive({
       chambering: false,
       kichikuing: false
     });
     onMounted(() => {
-      window.$luanchEmojiRain = (options) => {
-        if (!state.chambering && !state.kichikuing) {
-          state.chambering = true;
-          nextTick(() => {
-            rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth;
-            rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight;
-            new window.$Emoji233333({
-              base: rainBase.value,
-              scale: 0.7,
-              speed: 12,
-              increaseSpeed: 0.4,
-              density: 5,
-              staggered: true,
-              emoji: emojiImage,
-              ...options,
-              onStart() {
-                state.kichikuing = true;
-              },
-              onEnded() {
-                state.kichikuing = false;
-                state.chambering = false;
-              }
-            }).launch();
-          });
-        }
-      };
+      import("emoji-233333").then(({ default: Emoji233333 }) => {
+        window.$launchEmojiRain = (options) => {
+          if (!state.chambering && !state.kichikuing) {
+            state.chambering = true;
+            nextTick(() => {
+              rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth;
+              rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight;
+              new Emoji233333({
+                base: rainBase.value,
+                scale: 0.7,
+                speed: 12,
+                increaseSpeed: 0.4,
+                density: 5,
+                staggered: true,
+                emoji: emojiImage,
+                ...options,
+                onStart() {
+                  state.kichikuing = true;
+                },
+                onEnded() {
+                  state.kichikuing = false;
+                  state.chambering = false;
+                }
+              }).launch();
+            });
+          }
+        };
+      });
     });
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: "emoji-rain",
         class: { active: state.kichikuing }
-      }, _attrs))} data-v-d2950cd5>`);
+      }, _attrs))} data-v-887b4545>`);
       if (state.chambering) {
-        _push(`<canvas class="rain-base" data-v-d2950cd5></canvas>`);
+        _push(`<canvas class="rain-base" data-v-887b4545></canvas>`);
       } else {
         _push(`<!---->`);
       }
@@ -17560,7 +17562,7 @@ _sfc_main$n.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/emoji-rain.vue");
   return _sfc_setup$n ? _sfc_setup$n(props, ctx) : void 0;
 };
-const EmojiRain = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-d2950cd5"]]);
+const EmojiRain = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-887b4545"]]);
 const _sfc_main$m = /* @__PURE__ */ defineComponent({
   __name: "toolbox",
   __ssrInlineRender: true,
@@ -19568,7 +19570,7 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
     const emit = __emit;
     const { route, router, i18n: _i18n } = useEnhancer();
     const tagStore = useTagStore();
-    ref(null);
+    ref();
     const searchState = reactive({
       open: false,
       focused: false,
@@ -19602,7 +19604,7 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       _push(`<header${ssrRenderAttrs(mergeProps({
         class: ["header", { search: searchState.open }]
-      }, _attrs))} data-v-c0506d38><nav class="navbar" data-v-c0506d38><button class="navbar-menu" data-v-c0506d38><i class="iconfont icon-menu" data-v-c0506d38></i></button>`);
+      }, _attrs))} data-v-6a0c5b33><nav class="navbar" data-v-6a0c5b33><button class="navbar-menu" data-v-6a0c5b33><i class="iconfont icon-menu" data-v-6a0c5b33></i></button>`);
       _push(ssrRenderComponent(_component_router_link, {
         to: "/",
         class: "navbar-logo"
@@ -19626,11 +19628,11 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="navbar-search" data-v-c0506d38><i class="iconfont icon-search" data-v-c0506d38></i></button></nav>`);
+      _push(`<button class="navbar-search" data-v-6a0c5b33><i class="iconfont icon-search" data-v-6a0c5b33></i></button></nav>`);
       if (searchState.open) {
-        _push(`<div class="search" data-v-c0506d38><div class="search-bar" data-v-c0506d38><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-c0506d38><span class="close" data-v-c0506d38><i class="iconfont icon-cancel" data-v-c0506d38></i></span></div><div class="search-tags" data-v-c0506d38>`);
+        _push(`<div class="search" data-v-6a0c5b33><div class="search-bar" data-v-6a0c5b33><input class="input" autocomplete="off" type="text" maxlength="24" required${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).SEARCH_PLACEHOLDER))}${ssrRenderAttr("value", searchState.keyword)} data-v-6a0c5b33><span class="close" data-v-6a0c5b33><i class="iconfont icon-cancel" data-v-6a0c5b33></i></span></div><div class="search-tags" data-v-6a0c5b33>`);
         if (unref(tagStore).sorted) {
-          _push(`<div class="${ssrRenderClass([{ "input-focused": searchState.focused }, "tag-list"])}" data-v-c0506d38><!--[-->`);
+          _push(`<div class="${ssrRenderClass([{ "input-focused": searchState.focused }, "tag-list"])}" data-v-6a0c5b33><!--[-->`);
           ssrRenderList(unref(tagStore).sorted, (tag, index) => {
             _push(ssrRenderComponent(_component_router_link, {
               class: "item",
@@ -19640,12 +19642,12 @@ const _sfc_main$6 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
-                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag.extras), "iconfont"])}" data-v-c0506d38${_scopeId}></i><span class="name" data-v-c0506d38${_scopeId}>`);
+                  _push2(`<i class="${ssrRenderClass([unref(getTagIconName)(tag.extras), "iconfont"])}" data-v-6a0c5b33${_scopeId}></i><span class="name" data-v-6a0c5b33${_scopeId}>`);
                   _push2(ssrRenderComponent(_component_i18n, {
                     zh: tag.name,
                     en: unref(getTagEnName)(tag)
                   }, null, _parent2, _scopeId));
-                  _push2(`</span><span class="count" data-v-c0506d38${_scopeId}>${ssrInterpolate(tag.article_count || 0)}</span>`);
+                  _push2(`</span><span class="count" data-v-6a0c5b33${_scopeId}>${ssrInterpolate(tag.article_count || 0)}</span>`);
                 } else {
                   return [
                     createVNode("i", {
@@ -19682,7 +19684,7 @@ _sfc_main$6.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/mobile/layout/header.vue");
   return _sfc_setup$6 ? _sfc_setup$6(props, ctx) : void 0;
 };
-const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-c0506d38"]]);
+const HeaderView = /* @__PURE__ */ _export_sfc(_sfc_main$6, [["__scopeId", "data-v-6a0c5b33"]]);
 const _sfc_main$5 = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
