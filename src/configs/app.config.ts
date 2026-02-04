@@ -100,4 +100,4 @@ const GO_LINKS_MAP_KEYS = [
 export type GoLinksMap = Record<(typeof GO_LINKS_MAP_KEYS)[number], string>
 export const GO_LINKS_MAP = Object.freeze(
   Object.fromEntries(GO_LINKS_MAP_KEYS.map((key) => [key, `${RESOURCE_LINKS.GO_LINKS_MAP_ENDPOINT}/${key}`]))
-) as Record<(typeof GO_LINKS_MAP_KEYS)[number], string>
+) as GoLinksMap
