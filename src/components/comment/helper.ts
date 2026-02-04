@@ -39,30 +39,29 @@ const SIX_KEYWORDS = ['666', '赞', '棒', '优秀']
 const HEHE_KEYWORDS = ['呵呵']
 
 export const luanchEmojiRain = (content: string) => {
-  const luanchRain = (window as any).$luanchEmojiRain
   if (HAHA_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
       emoji: getAssetURL(useCdnDomain(), '/images/emojis/haha.png')
     })
   } else if (SIX_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       speed: 12,
       staggered: true,
       increaseSpeed: 0.4,
       emoji: getAssetURL(useCdnDomain(), '/images/emojis/666.png')
     })
   } else if (HEHE_KEYWORDS.find((keyword) => content.includes(keyword))) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       staggered: false,
       speed: 8,
       increaseSpeed: 0.04,
       emoji: getAssetURL(useCdnDomain(), '/images/emojis/hehe.png')
     })
   } else if (Math.random() <= 0.5) {
-    luanchRain({
+    window.$launchEmojiRain?.({
       scale: 0.6,
       staggered: true,
       speed: 8,

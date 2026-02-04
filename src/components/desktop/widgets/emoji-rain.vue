@@ -5,46 +5,49 @@
 
   declare global {
     interface Window {
-      $luanchEmojiRain(options: any): void
+      /** See https://github.com/surmon-china/emoji-233333 */
+      $launchEmojiRain?(options: any): void
     }
   }
 
   const emojiImage = getAssetURL(useCdnDomain(), '/images/emojis/funny.png')
-  const rainBase = ref<HTMLElement>(null as any)
+  const rainBase = ref<HTMLElement>()
   const state = reactive({
     chambering: false,
     kichikuing: false
   })
 
   onMounted(() => {
-    window.$luanchEmojiRain = (options) => {
-      if (!state.chambering && !state.kichikuing) {
-        state.chambering = true
-        nextTick(() => {
-          // @ts-ignore
-          rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
-          // @ts-ignore
-          rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
-          new window.$Emoji233333({
-            base: rainBase.value,
-            scale: 0.7,
-            speed: 12,
-            increaseSpeed: 0.4,
-            density: 5,
-            staggered: true,
-            emoji: emojiImage,
-            ...options,
-            onStart() {
-              state.kichikuing = true
-            },
-            onEnded() {
-              state.kichikuing = false
-              state.chambering = false
-            }
-          }).launch()
-        })
+    import('emoji-233333').then(({ default: Emoji233333 }) => {
+      window.$launchEmojiRain = (options) => {
+        if (!state.chambering && !state.kichikuing) {
+          state.chambering = true
+          nextTick(() => {
+            // @ts-ignore
+            rainBase.value.width = document.documentElement.clientWidth || document.body.clientWidth
+            // @ts-ignore
+            rainBase.value.height = document.documentElement.clientHeight || document.body.clientHeight
+            new Emoji233333({
+              base: rainBase.value,
+              scale: 0.7,
+              speed: 12,
+              increaseSpeed: 0.4,
+              density: 5,
+              staggered: true,
+              emoji: emojiImage,
+              ...options,
+              onStart() {
+                state.kichikuing = true
+              },
+              onEnded() {
+                state.kichikuing = false
+                state.chambering = false
+              }
+            }).launch()
+          })
+        }
       }
-    }
+    })
   })
 </script>
 

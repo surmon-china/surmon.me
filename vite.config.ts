@@ -79,7 +79,6 @@ export default defineConfig(({ mode }) => {
               'marked-highlight',
               'marked-mangle',
               'marked-xhtml',
-              'emoji-233333',
               'highlight.js',
               'html-to-image',
               'ua-parser-js',

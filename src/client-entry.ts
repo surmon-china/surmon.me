@@ -26,7 +26,6 @@ import { createPopup } from '/@/composables/popup'
 import { consoleSlogan } from '/@/effects/slogan'
 import { initCopyrighter } from '/@/effects/copyright'
 import { exportAppToGlobal } from '/@/effects/exporter'
-import { exportEmojiRainToGlobal } from '/@/effects/emoji-23333'
 import { setFavicon, recoverFavicon } from '/@/effects/faviconer'
 import { setTitle, recoverTitle } from '/@/effects/titler'
 import { resolvePageLayout } from '/@/constants/page-layout'
@@ -104,7 +103,6 @@ router.afterEach((to, from) => {
 })
 
 // init: services with client
-exportEmojiRainToGlobal()
 exportAppToGlobal(app)
 initCopyrighter()
 
