@@ -23,16 +23,16 @@ export const createUniversalStore = (config: UniversalStoreConfig) => {
   // This is used to prefetch data before rendering the page and to hydrate the store on the client side.
   const fetchBasicStore = () => {
     // https://pinia.vuejs.org/ssr/#using-the-store-outside-of-setup
-    const initFetchTasks = [
+    const initialFetchTasks = [
       useAppOptionsStore(pinia).fetch(), // app nodepress config
       useCategoryStore(pinia).fetch(), // basic categories data
       useTagStore(pinia).fetch() // basic tags data
     ]
     // fetch featured articles when desktop only
     if (!config.globalState.userAgent.isMobile) {
-      initFetchTasks.push(useFeaturedArticleListStore(pinia).fetch())
+      initialFetchTasks.push(useFeaturedArticleListStore(pinia).fetch())
     }
-    return Promise.all(initFetchTasks)
+    return Promise.all(initialFetchTasks)
   }
 
   return {
