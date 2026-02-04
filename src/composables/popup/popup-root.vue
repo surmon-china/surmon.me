@@ -3,10 +3,8 @@
   import { usePopup } from './'
   import PopupMedia from './popup-media.vue'
 
+  const modalContainerElement = ref<HTMLElement>()
   const { state, media, hidden, $setRootContainer: setRootContainer } = usePopup()
-
-  const element = ref<HTMLElement>(null as any)
-
   const handleWindowScroll = () => hidden()
   const handleMaskClick = () => {
     if (state.maskClosable) {
@@ -21,14 +19,14 @@
       : window.removeEventListener('scroll', handleWindowScroll)
   })
 
-  onMounted(() => setRootContainer(element.value))
+  onMounted(() => setRootContainer(modalContainerElement.value!))
 </script>
 
 <template>
   <div id="popup" v-disabled-wallflower>
     <transition name="module">
       <div class="popup-mask" v-show="state.visible" @click.self="handleMaskClick">
-        <div ref="element" class="popup-modal-container"></div>
+        <div ref="modalContainerElement" class="popup-modal-container"></div>
         <popup-media v-bind="media as any" v-if="state.isMedia && !!media.src" />
       </div>
     </transition>

@@ -24,7 +24,7 @@
 
   const { route, router, i18n: _i18n } = useEnhancer()
   const tagStore = useTagStore()
-  const inputElement = ref<HTMLInputElement>(null as any)
+  const inputElement = ref<HTMLInputElement>()
   const searchState = reactive({
     open: false,
     focused: false,
@@ -38,7 +38,7 @@
   const openSearch = () => {
     searchState.open = true
     nextTick(() => {
-      inputElement.value.focus()
+      inputElement.value?.focus()
     })
   }
 
