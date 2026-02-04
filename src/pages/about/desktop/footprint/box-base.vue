@@ -35,8 +35,11 @@
     const _lib = await importMapbox()
     _lib.accessToken = MAPBOX_CONFIG.TOKEN
 
+    // prevent initialization errors caused by network latency
+    if (!container.value) return
+
     const _map = new _lib.Map({
-      container: container.value!,
+      container: container.value,
       center: MAPBOX_CONFIG.CENTER as LngLatLike,
       zoom: MAPBOX_CONFIG.ZOOM,
       minZoom: 2.2,
