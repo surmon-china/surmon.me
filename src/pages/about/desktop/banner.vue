@@ -216,7 +216,7 @@
         }
 
         .avatar {
-          --avatar-size: 4rem;
+          --avatar-size: 3.8rem;
           margin-right: 1.6rem;
           padding: $gap-xs;
           transition: transform $motion-duration-slow;

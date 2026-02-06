@@ -63,7 +63,7 @@
         </webfont>
         <router-link to="/" class="header-link" :title="APP_PROFILE.title" @mousedown="handleRootNavEvent" />
       </div>
-      <div class="tools">
+      <div class="headers-tools">
         <button class="button menu" v-if="enabledNav">
           <i class="iconfont icon-top-menu"></i>
         </button>
@@ -119,6 +119,13 @@
       .header-nav {
         @include mix.visible();
       }
+      .headers-tools {
+        .button.menu {
+          .iconfont {
+            transform: rotate(-90deg) scale(0.9, 1.1);
+          }
+        }
+      }
     }
 
     .header-container {
@@ -165,7 +172,7 @@
         }
       }
 
-      .tools {
+      .headers-tools {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -184,11 +191,17 @@
           width: 2rem;
           height: 2rem;
           line-height: 2rem;
-          &.menu {
-            cursor: none;
-          }
+
           &.language {
             font-size: $font-size-h4;
+          }
+
+          &.menu {
+            cursor: none;
+            .iconfont {
+              display: inline-block;
+              transition: transform $motion-duration-fast;
+            }
           }
         }
       }
@@ -217,7 +230,7 @@
           position: relative;
           display: inline-flex;
           align-items: center;
-          padding: $gap-tiny $gap-xs;
+          padding: 0.2rem $gap-xs;
           color: $color-text-reversal;
           border-radius: $radius-md;
           opacity: 0.7;
