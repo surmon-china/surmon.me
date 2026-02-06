@@ -43,15 +43,17 @@
     <div class="content">
       <div class="fullwidth">
         <div class="profile">
-          <uimage class="avatar" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
-          <div class="right">
+          <div class="avatar">
+            <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
+          </div>
+          <div class="infos">
             <h1 class="name">{{ adminProfileStore.data?.name || '-' }}</h1>
-            <p class="slogan">{{ adminProfileStore.data?.slogan || '-' }}</p>
+            <h4 class="slogan">{{ adminProfileStore.data?.slogan || '-' }}</h4>
           </div>
         </div>
-        <p class="description">
+        <h3 class="description">
           <webfont bolder>{{ isZhLang ? APP_PROFILE.description_zh : APP_PROFILE.description_en }}</webfont>
-        </p>
+        </h3>
         <div class="socials">
           <ulink class="item icon-only instagram" title="Instagram" :href="goLinks.instagram">
             <i class="iconfont icon-instagram" />
@@ -126,7 +128,7 @@
   .qrcode-modal {
     $image-size: 12rem;
     width: 18rem;
-    height: 20.2rem;
+    height: 20rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -162,7 +164,7 @@
   }
 
   .page-banner {
-    $banner-height: 19.8rem;
+    $banner-height: 19rem;
 
     .background {
       display: block;
@@ -174,18 +176,9 @@
       overflow: hidden;
       z-index: $z-index-normal + 1;
       background-color: $module-bg-darker-1;
-      // &::before {
-      //   content: '';
-      //   position: absolute;
-      //   display: block;
-      //   height: 1rem;
-      //   bottom: -0.5rem;
-      //   left: 0;
-      //   right: 0;
-      //   background-image: radial-gradient(circle, transparent 70%, $color-text-reversal 70%);
-      //   background-size: 0.7em 1em;
-      //   background-position: 0 -0.5em;
-      // }
+      @include mix.dark-theme {
+        filter: brightness(0.8);
+      }
 
       .video {
         width: 100%;
@@ -211,21 +204,10 @@
       }
 
       .profile {
-        $avatar-size: 4rem;
-        min-width: 24rem;
         z-index: $z-index-normal + 2;
-        margin-bottom: $gap-lg;
-        padding: $gap-tiny $gap-sm $gap-tiny $gap-tiny;
+        margin-bottom: 1.6rem;
         display: flex;
         align-items: center;
-        border-top-left-radius: $avatar-size;
-        border-bottom-left-radius: $avatar-size;
-        border-top-right-radius: 2rem;
-        border-top: 1px solid rgb(255 255 255 / 40%);
-        border-left: 1px solid rgb(255 255 255 / 30%);
-        // border-bottom: 1px solid rgb(255 255 255 / 30%);
-        // border-right: 1px solid rgb(255 255 255 / 20%);
-
         &:hover {
           .avatar {
             transition-delay: 500ms;
@@ -234,48 +216,60 @@
         }
 
         .avatar {
-          width: $avatar-size;
-          height: $avatar-size;
-          box-sizing: content-box;
-          border: 6px solid $module-bg;
-          border-radius: 100%;
-          overflow: hidden;
-          margin-right: $gap;
-          background-color: $module-bg;
+          --avatar-size: 4rem;
+          margin-right: 1.6rem;
+          padding: $gap-xs;
           transition: transform $motion-duration-slow;
+          border: 1px solid rgb(255 255 255 / 70%);
+          @include mix.radius-box(100%);
+          @include mix.dark-theme {
+            border-color: rgb(255 255 255 / 50%);
+          }
+
+          .image {
+            width: var(--avatar-size);
+            height: var(--avatar-size);
+            background-color: $module-bg;
+            @include mix.radius-box(100%);
+          }
         }
 
-        .right {
-          min-width: 16rem;
-        }
+        .infos {
+          min-width: 14rem;
+          max-width: 24rem;
+          padding-bottom: $gap-tiny;
 
-        .name {
-          line-height: 1;
-          margin-top: 0;
-          margin-bottom: $gap-sm;
-          color: $white;
-        }
+          .name {
+            line-height: 1;
+            margin-top: 0;
+            margin-bottom: $gap-sm;
+            font-size: 1.7rem;
+            color: $white;
+            @include mix.text-overflow();
+          }
 
-        .slogan {
-          line-height: 1;
-          font-weight: 600;
-          margin-bottom: $gap-tiny;
-          color: #ffffffbf;
+          .slogan {
+            margin: 0;
+            font-weight: bold;
+            color: rgb(255 255 255 / 80%);
+            @include mix.text-overflow();
+          }
         }
       }
 
       .description {
         z-index: $z-index-normal + 2;
+        margin-top: 0;
         margin-bottom: $gap-lg;
-        font-size: $font-size-h3;
         color: $white;
       }
 
       .socials {
         $button-size: 2.5rem;
+        z-index: $z-index-normal + 2;
+        margin-bottom: $gap-xs;
         display: flex;
         justify-content: center;
-        z-index: $z-index-normal + 2;
 
         .item {
           position: relative;

@@ -48,8 +48,8 @@
   @use '/src/styles/base/mixins' as mix;
 
   #wallpaper {
-    $width: 1.7rem;
-    $height: 5.1rem;
+    $width: 1.6rem;
+    $height: 5rem;
     position: fixed;
     top: 18%;
     right: 0;
