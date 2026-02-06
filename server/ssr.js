@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.13";
+const APP_VERSION = "6.1.14";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -11902,12 +11902,12 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       const _component_client_only = resolveComponent("client-only");
       const _component_popup = resolveComponent("popup");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "page-banner" }, _attrs))} data-v-2ce85189><div class="background" data-v-2ce85189><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""}${ssrRenderAttr("src", unref(getAssetURL)(unref(cdnDomain), "/videos/clips/ocean-6.mp4"))} data-v-2ce85189></video></div><div class="content" data-v-2ce85189><div class="fullwidth" data-v-2ce85189><div class="profile" data-v-2ce85189><div class="avatar" data-v-2ce85189>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "page-banner" }, _attrs))} data-v-9131f31d><div class="background" data-v-9131f31d><video class="video" loop muted autoplay${ssrIncludeBooleanAttr(false) ? " controls" : ""}${ssrRenderAttr("src", unref(getAssetURL)(unref(cdnDomain), "/videos/clips/ocean-6.mp4"))} data-v-9131f31d></video></div><div class="content" data-v-9131f31d><div class="fullwidth" data-v-9131f31d><div class="profile" data-v-9131f31d><div class="avatar" data-v-9131f31d>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: "image",
         src: unref(useAdminAvatar)(unref(adminProfileStore).data?.avatar)
       }, null, _parent));
-      _push(`</div><div class="infos" data-v-2ce85189><h1 class="name" data-v-2ce85189>${ssrInterpolate(unref(adminProfileStore).data?.name || "-")}</h1><h4 class="slogan" data-v-2ce85189>${ssrInterpolate(unref(adminProfileStore).data?.slogan || "-")}</h4></div></div><h3 class="description" data-v-2ce85189>`);
+      _push(`</div><div class="infos" data-v-9131f31d><h1 class="name" data-v-9131f31d>${ssrInterpolate(unref(adminProfileStore).data?.name || "-")}</h1><h4 class="slogan" data-v-9131f31d>${ssrInterpolate(unref(adminProfileStore).data?.slogan || "-")}</h4></div></div><h3 class="description" data-v-9131f31d>`);
       _push(ssrRenderComponent(_component_webfont, { bolder: "" }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -11920,7 +11920,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</h3><div class="socials" data-v-2ce85189>`);
+      _push(`</h3><div class="socials" data-v-9131f31d>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "item icon-only instagram",
         title: "Instagram",
@@ -11928,7 +11928,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-instagram" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-instagram" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-instagram" })
@@ -11944,7 +11944,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-threads" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-threads" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-threads" })
@@ -11959,7 +11959,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-github" data-v-2ce85189${_scopeId}></i><span class="text" data-v-2ce85189${_scopeId}>GitHub</span>`);
+            _push2(`<i class="iconfont icon-github" data-v-9131f31d${_scopeId}></i><span class="text" data-v-9131f31d${_scopeId}>GitHub</span>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-github" }),
@@ -11976,7 +11976,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-youtube" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-youtube" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-youtube" })
@@ -11992,7 +11992,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-telegram" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-telegram" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-telegram" })
@@ -12001,7 +12001,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="item icon-only wechat" title="WeChat" data-v-2ce85189><i class="iconfont icon-wechat" data-v-2ce85189></i>`);
+      _push(`<button class="item icon-only wechat" title="WeChat" data-v-9131f31d><i class="iconfont icon-wechat" data-v-9131f31d></i>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -12012,13 +12012,13 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="qrcode-modal wechat" data-v-2ce85189${_scopeId2}><div class="background" data-v-2ce85189${_scopeId2}></div>`);
+                  _push3(`<div class="qrcode-modal wechat" data-v-9131f31d${_scopeId2}><div class="background" data-v-9131f31d${_scopeId2}></div>`);
                   _push3(ssrRenderComponent(_component_uimage, {
                     class: "image",
                     cdn: "",
                     src: "/images/qrcodes/wechat.webp"
                   }, null, _parent3, _scopeId2));
-                  _push3(`<span class="text" data-v-2ce85189${_scopeId2}>`);
+                  _push3(`<span class="text" data-v-9131f31d${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, null, {
                     en: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
@@ -12110,7 +12110,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-linkedin" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-linkedin" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-linkedin" })
@@ -12126,7 +12126,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-zhihu" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-zhihu" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-zhihu" })
@@ -12142,7 +12142,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-douban" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-douban" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-douban" })
@@ -12158,7 +12158,7 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-mail" data-v-2ce85189${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-mail" data-v-9131f31d${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-mail" })
@@ -12167,10 +12167,10 @@ const _sfc_main$11 = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="container" data-v-2ce85189><div class="${ssrRenderClass([
+      _push(`</div></div><div class="container" data-v-9131f31d><div class="${ssrRenderClass([
         unref(isZhLang) ? "zh" : unref(globalState).userAgent.isFirefox || unref(globalState).userAgent.isSafari ? "en-hack" : "en",
         "biography"
-      ])}" data-v-2ce85189>${unref(markdownToHTML)((unref(isZhLang) ? unref(appConfig).ABOUT_BIOGRAPHY_ZH : unref(appConfig).ABOUT_BIOGRAPHY_EN) ?? "", {
+      ])}" data-v-9131f31d>${unref(markdownToHTML)((unref(isZhLang) ? unref(appConfig).ABOUT_BIOGRAPHY_ZH : unref(appConfig).ABOUT_BIOGRAPHY_EN) ?? "", {
         sanitize: false
       }) ?? ""}</div></div></div></div>`);
     };
@@ -12182,7 +12182,7 @@ _sfc_main$11.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/banner.vue");
   return _sfc_setup$11 ? _sfc_setup$11(props, ctx) : void 0;
 };
-const AboutPageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-2ce85189"]]);
+const AboutPageBanner = /* @__PURE__ */ _export_sfc(_sfc_main$11, [["__scopeId", "data-v-9131f31d"]]);
 const _sfc_main$10 = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -18855,7 +18855,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
       _push(`<header${ssrRenderAttrs(mergeProps({
         id: unref(HEADER_ELEMENT_ID),
         class: "header"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a0d29a18><div class="header-container container" data-v-a0d29a18><div class="header-brand" data-v-a0d29a18>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-35b8fb22><div class="header-container container" data-v-35b8fb22><div class="header-brand" data-v-35b8fb22>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         src: "/images/logo.svg",
@@ -18884,17 +18884,17 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
         title: unref(APP_PROFILE).title,
         onMousedown: handleRootNavEvent
       }, null, _parent));
-      _push(`</div><div class="tools" data-v-a0d29a18>`);
+      _push(`</div><div class="headers-tools" data-v-35b8fb22>`);
       if (__props.enabledNav) {
-        _push(`<button class="button menu" data-v-a0d29a18><i class="iconfont icon-top-menu" data-v-a0d29a18></i></button>`);
+        _push(`<button class="button menu" data-v-35b8fb22><i class="iconfont icon-top-menu" data-v-35b8fb22></i></button>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="button language" title="Switch language" data-v-a0d29a18><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-a0d29a18></i></button><button class="button theme" data-v-a0d29a18>`);
+      _push(`<button class="button language" title="Switch language" data-v-35b8fb22><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-35b8fb22></i></button><button class="button theme" data-v-35b8fb22>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}"${ssrRenderAttr("data-value", unref(theme).theme.value)} data-v-a0d29a18${_scopeId}></i>`);
+            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}"${ssrRenderAttr("data-value", unref(theme).theme.value)} data-v-35b8fb22${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", {
@@ -18908,11 +18908,11 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
       }, _parent));
       _push(`</button></div></div>`);
       if (__props.enabledNav) {
-        _push(`<div class="header-nav" data-v-a0d29a18><nav class="nav-list container" data-v-a0d29a18><!--[-->`);
+        _push(`<div class="header-nav" data-v-35b8fb22><nav class="nav-list container" data-v-35b8fb22><!--[-->`);
         ssrRenderList(unref(menus), (menu, index) => {
           _push(`<!--[-->`);
           if (index > 0) {
-            _push(`<span class="divider" data-v-a0d29a18></span>`);
+            _push(`<span class="divider" data-v-35b8fb22></span>`);
           } else {
             _push(`<!---->`);
           }
@@ -18929,7 +18929,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
                     src: menu.imageIcon
                   }, null, _parent2, _scopeId));
                 } else if (menu.icon) {
-                  _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-a0d29a18${_scopeId}></i>`);
+                  _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-35b8fb22${_scopeId}></i>`);
                 } else {
                   _push2(`<!---->`);
                 }
@@ -18954,7 +18954,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
                   _: 2
                 }, _parent2, _scopeId));
                 if (menu.newWindow) {
-                  _push2(`<span class="new-window" data-v-a0d29a18${_scopeId}><i class="iconfont icon-new-window-s" data-v-a0d29a18${_scopeId}></i></span>`);
+                  _push2(`<span class="new-window" data-v-35b8fb22${_scopeId}><i class="iconfont icon-new-window-s" data-v-35b8fb22${_scopeId}></i></span>`);
                 } else {
                   _push2(`<!---->`);
                 }
@@ -19007,7 +19007,7 @@ _sfc_main$a.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/header.vue");
   return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
 };
-const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-a0d29a18"]]);
+const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-35b8fb22"]]);
 const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
