@@ -36,7 +36,7 @@
   const { globalState } = useEnhancer()
 
   watch(
-    // hidden modal via store
+    // hidden modal via state
     () => popup.state.visible,
     (visible) => {
       if (!visible && props.visible) {
