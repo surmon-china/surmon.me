@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import { useEnhancer } from '/@/app/enhancer'
   import { countryCodeToEmoji } from '/@/transforms/emoji'
   import { IPLocation } from '/@/interfaces/comment'
 
@@ -7,9 +8,11 @@
     location: IPLocation
   }>()
 
+  const { globalState } = useEnhancer()
+
   const municipalities: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
   const countryText = computed(() => props.location.country_code || props.location.country)
-  const emojiText = computed(() => countryCodeToEmoji(props.location.country_code))
+  const countryEmoji = computed(() => countryCodeToEmoji(props.location.country_code))
   const cityText = computed(() => {
     if (props.location.country_code === 'CN') {
       if (municipalities.includes(props.location.region)) {
@@ -22,8 +25,14 @@
 
 <template>
   <span class="location">
-    <span v-if="emojiText" class="emoji" :title="props.location.country">{{ emojiText }}</span>
-    <i v-else class="iconfont icon-earth"></i>
+    <span
+      class="emoji"
+      :class="{ safari: globalState.userAgent.isSafari }"
+      :title="props.location.country"
+      v-if="countryEmoji"
+      >{{ countryEmoji }}</span
+    >
+    <i class="iconfont icon-earth" v-else></i>
     <span :title="props.location.country">{{ countryText }}</span>
     <span class="separator">•</span>
     <span :title="cityText">{{ cityText }}</span>
@@ -41,17 +50,24 @@
     white-space: nowrap;
     &:hover {
       .emoji {
-        color: $color-text;
+        filter: saturate(1) opacity(1);
+      }
+    }
+
+    .emoji {
+      margin-right: $gap-tiny;
+      line-height: 1;
+      color: initial;
+      filter: saturate(0.7) opacity(0.7);
+      transition: filter $motion-duration-fast;
+      font-size: 17px;
+      &.safari {
+        font-size: 14px;
       }
     }
 
     .iconfont {
       margin-right: $gap-tiny;
-    }
-
-    .emoji {
-      margin-right: $gap-tiny;
-      font-size: 130%;
     }
 
     .separator {
