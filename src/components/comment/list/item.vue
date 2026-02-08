@@ -175,13 +175,12 @@
             </button>
             <i18n zh="：" en=":" />
           </p>
-          <div class="markdown">
-            <markdown
-              :markdown="comment.content"
-              :compact="true"
-              :render-options="{ sanitize: true, codeLineNumbers: false }"
-            />
-          </div>
+          <markdown
+            class="markdown"
+            :markdown="comment.content"
+            :compact="true"
+            :render-options="{ sanitize: true, codeLineNumbers: false }"
+          />
         </div>
         <div class="cm-footer">
           <div class="left">
@@ -413,8 +412,8 @@
         .reply {
           display: flex;
           align-items: center;
-          margin-top: 0.4rem;
-          margin-bottom: -$gap-tiny;
+          margin-top: 0.3rem;
+          margin-bottom: 0;
           font-size: $font-size-secondary;
           font-weight: bold;
           color: $color-text-disabled;
@@ -430,10 +429,21 @@
               color: $color-link-hover;
             }
           }
+
+          & + .markdown {
+            ::v-deep(> pre:first-child) {
+              margin-top: 0.3em;
+            }
+          }
         }
 
         .markdown {
-          margin: 0.3rem 0;
+          overflow: hidden;
+          padding-bottom: 0.2em;
+
+          > :first-child {
+            margin-top: 0.2em;
+          }
 
           ::v-deep(hr) {
             border-color: $module-bg-darker-2;

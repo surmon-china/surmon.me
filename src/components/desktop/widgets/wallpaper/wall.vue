@@ -62,8 +62,8 @@
 
   .wall {
     position: relative;
-    width: 88vw;
-    height: 88vh;
+    width: 86vw;
+    height: 82vh;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -107,14 +107,14 @@
 
       .tools {
         display: flex;
-        $size: 2.4rem;
+        $size: 2.2rem;
 
         .button {
           display: block;
           width: $size;
           height: $size;
           line-height: $size;
-          margin-right: $gap;
+          margin-right: $gap-lg;
           text-align: center;
           font-size: $font-size-h4;
           background-color: $module-bg;
