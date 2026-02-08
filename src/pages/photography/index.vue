@@ -125,6 +125,7 @@
 
   .photography-page {
     min-height: $full-page-content-height;
+    overflow: hidden;
 
     .page-banner {
       .links {
@@ -132,6 +133,7 @@
         align-items: center;
 
         .item {
+          line-height: 1;
           color: $white;
           opacity: 0.8;
           &:hover {

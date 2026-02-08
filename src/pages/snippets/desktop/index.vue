@@ -68,9 +68,9 @@
           </template>
           <template #loading>
             <div class="module-skeleton">
-              <div class="item" v-for="item in 6" :key="item">
+              <div class="item" v-for="item in 9" :key="item">
                 <skeleton class="title" />
-                <skeleton class="line" v-for="i in 4" :key="i" />
+                <skeleton class="line" v-for="i in 3" :key="i" />
               </div>
             </div>
           </template>
@@ -130,6 +130,7 @@
 
   .snippets-page {
     min-height: $full-page-content-height;
+    overflow: hidden;
 
     .page-banner {
       .links {
@@ -137,6 +138,7 @@
         align-items: center;
 
         .item {
+          line-height: 1;
           color: $white;
           opacity: 0.8;
           &:hover {
@@ -204,7 +206,7 @@
           &:last-child {
             margin-bottom: 0;
           }
-          &:nth-child(5) {
+          &:nth-child(4) {
             height: 1rem;
             width: 66%;
           }

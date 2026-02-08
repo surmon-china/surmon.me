@@ -81,7 +81,7 @@
                   <span class="text">
                     <i18n>
                       <template #en>Friend me on WeChat</template>
-                      <template #zh>扫码加微 ｜ 解锁可能</template>
+                      <template #zh>扫码加微 ｜ 解锁灵魂</template>
                     </i18n>
                   </span>
                 </div>
@@ -126,9 +126,9 @@
   @use '/src/styles/base/mixins' as mix;
 
   .qrcode-modal {
-    $image-size: 12rem;
-    width: 18rem;
-    height: 20rem;
+    $image-size: 11.6rem;
+    width: 17rem;
+    height: 19rem;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -209,7 +209,7 @@
         display: flex;
         align-items: center;
         &:hover {
-          .avatar {
+          .avatar .image {
             transition-delay: 500ms;
             transform: rotate(360deg);
           }
@@ -219,7 +219,6 @@
           --avatar-size: 3.8rem;
           margin-right: 1.6rem;
           padding: $gap-xs;
-          transition: transform $motion-duration-slow;
           border: 1px solid rgb(255 255 255 / 70%);
           @include mix.radius-box(100%);
           @include mix.dark-theme {
@@ -231,6 +230,7 @@
             height: var(--avatar-size);
             background-color: $module-bg;
             @include mix.radius-box(100%);
+            transition: transform $motion-duration-slow;
           }
         }
 

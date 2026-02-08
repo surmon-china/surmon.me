@@ -92,6 +92,7 @@
         align-items: center;
 
         .item {
+          line-height: 1;
           color: $white;
           opacity: 0.8;
           &:hover {

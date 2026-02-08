@@ -211,19 +211,20 @@
 
         .button {
           margin-left: $gap-lg;
-          display: block;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
           $size: 2em;
           width: $size;
           height: $size;
-          line-height: $size;
           border-radius: $radius-xs;
-          text-align: center;
           background-color: $module-bg;
           font-size: $font-size-h4;
           color: $color-text-secondary;
-          @include mix.backdrop-blur(1px);
+          border: 1px solid $color-text-disabled;
           &:hover {
             color: $color-link;
+            border-color: $color-text-secondary;
             background-color: $module-bg-opaque;
           }
         }
