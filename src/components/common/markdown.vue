@@ -238,7 +238,7 @@
 
         /* image size */
         img {
-          min-height: 6rem;
+          height: 6rem;
         }
 
         /* placeholder size */
