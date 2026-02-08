@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.19";
+const APP_VERSION = "6.1.20";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -1481,8 +1481,16 @@ const useGoLinksStore = defineStore("goLinksMap", () => {
   };
   return { fetchRemoteLinksMap, mixedLinksMap };
 });
-const isCNCode = (code) => {
-  return code === "CN";
+const isCNCode = (regionCode) => {
+  return regionCode === "CN";
+};
+const regionCodeToChineseName = (regionCode) => {
+  if (regionCode === "CN") return "中国";
+  if (regionCode === "HK") return "香港";
+  if (regionCode === "MO") return "澳门";
+  if (regionCode === "TW") return "台湾";
+  const regionNames = new Intl.DisplayNames(["zh-CN"], { type: "region" });
+  return regionNames.of(regionCode.toUpperCase());
 };
 const useEnhancer = () => {
   const route = useRoute();
@@ -7024,8 +7032,8 @@ _sfc_main$1w.setup = (props, ctx) => {
   return _sfc_setup$1w ? _sfc_setup$1w(props, ctx) : void 0;
 };
 const OFFSET = 127397;
-const countryCodeToEmoji = (countryCode) => {
-  return countryCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
+const regionCodeToEmoji = (regionCode) => {
+  return regionCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
 };
 const _sfc_main$1v = /* @__PURE__ */ defineComponent({
   __name: "location",
@@ -7035,10 +7043,16 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
-    const { globalState } = useEnhancer();
+    const { globalState, isZhLang } = useEnhancer();
+    const countryEmoji = computed(() => regionCodeToEmoji(props.location.country_code));
+    const countryText = computed(() => {
+      if (props.location.country_code) {
+        return isZhLang.value ? regionCodeToChineseName(props.location.country_code) ?? props.location.country_code : props.location.country_code;
+      } else {
+        return props.location.country;
+      }
+    });
     const municipalities = ["Shanghai", "Beijing", "Tianjin", "Chongqing", "Chungking"];
-    const countryText = computed(() => props.location.country_code || props.location.country);
-    const countryEmoji = computed(() => countryCodeToEmoji(props.location.country_code));
     const cityText = computed(() => {
       if (props.location.country_code === "CN") {
         if (municipalities.includes(props.location.region)) {
@@ -7048,13 +7062,13 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       return props.location.city;
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<span${ssrRenderAttrs(mergeProps({ class: "location" }, _attrs))} data-v-3f540a57>`);
+      _push(`<span${ssrRenderAttrs(mergeProps({ class: "location" }, _attrs))} data-v-3721ec04>`);
       if (countryEmoji.value) {
-        _push(`<span class="${ssrRenderClass([{ safari: unref(globalState).userAgent.isSafari }, "emoji"])}"${ssrRenderAttr("title", props.location.country)} data-v-3f540a57>${ssrInterpolate(countryEmoji.value)}</span>`);
+        _push(`<span class="${ssrRenderClass([{ safari: unref(globalState).userAgent.isSafari }, "emoji"])}"${ssrRenderAttr("title", props.location.country)} data-v-3721ec04>${ssrInterpolate(countryEmoji.value)}</span>`);
       } else {
-        _push(`<i class="iconfont icon-earth" data-v-3f540a57></i>`);
+        _push(`<i class="iconfont icon-earth" data-v-3721ec04></i>`);
       }
-      _push(`<span${ssrRenderAttr("title", props.location.country)} data-v-3f540a57>${ssrInterpolate(countryText.value)}</span><span class="separator" data-v-3f540a57>•</span><span${ssrRenderAttr("title", cityText.value)} data-v-3f540a57>${ssrInterpolate(cityText.value)}</span></span>`);
+      _push(`<span${ssrRenderAttr("title", props.location.country)} data-allow-mismatch data-v-3721ec04>${ssrInterpolate(countryText.value)}</span><span class="separator" data-v-3721ec04>•</span><span${ssrRenderAttr("title", cityText.value)} data-v-3721ec04>${ssrInterpolate(cityText.value)}</span></span>`);
     };
   }
 });
@@ -7064,7 +7078,7 @@ _sfc_main$1v.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/location.vue");
   return _sfc_setup$1v ? _sfc_setup$1v(props, ctx) : void 0;
 };
-const CommentLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-3f540a57"]]);
+const CommentLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-3721ec04"]]);
 const _sfc_main$1u = /* @__PURE__ */ defineComponent({
   __name: "user-agent",
   __ssrInlineRender: true,
