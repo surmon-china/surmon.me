@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "6.1.18";
+const APP_VERSION = "6.1.19";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -7035,9 +7035,10 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
+    const { globalState } = useEnhancer();
     const municipalities = ["Shanghai", "Beijing", "Tianjin", "Chongqing", "Chungking"];
     const countryText = computed(() => props.location.country_code || props.location.country);
-    const emojiText = computed(() => countryCodeToEmoji(props.location.country_code));
+    const countryEmoji = computed(() => countryCodeToEmoji(props.location.country_code));
     const cityText = computed(() => {
       if (props.location.country_code === "CN") {
         if (municipalities.includes(props.location.region)) {
@@ -7047,13 +7048,13 @@ const _sfc_main$1v = /* @__PURE__ */ defineComponent({
       return props.location.city;
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<span${ssrRenderAttrs(mergeProps({ class: "location" }, _attrs))} data-v-2ea98c4b>`);
-      if (emojiText.value) {
-        _push(`<span class="emoji"${ssrRenderAttr("title", props.location.country)} data-v-2ea98c4b>${ssrInterpolate(emojiText.value)}</span>`);
+      _push(`<span${ssrRenderAttrs(mergeProps({ class: "location" }, _attrs))} data-v-3f540a57>`);
+      if (countryEmoji.value) {
+        _push(`<span class="${ssrRenderClass([{ safari: unref(globalState).userAgent.isSafari }, "emoji"])}"${ssrRenderAttr("title", props.location.country)} data-v-3f540a57>${ssrInterpolate(countryEmoji.value)}</span>`);
       } else {
-        _push(`<i class="iconfont icon-earth" data-v-2ea98c4b></i>`);
+        _push(`<i class="iconfont icon-earth" data-v-3f540a57></i>`);
       }
-      _push(`<span${ssrRenderAttr("title", props.location.country)} data-v-2ea98c4b>${ssrInterpolate(countryText.value)}</span><span class="separator" data-v-2ea98c4b>•</span><span${ssrRenderAttr("title", cityText.value)} data-v-2ea98c4b>${ssrInterpolate(cityText.value)}</span></span>`);
+      _push(`<span${ssrRenderAttr("title", props.location.country)} data-v-3f540a57>${ssrInterpolate(countryText.value)}</span><span class="separator" data-v-3f540a57>•</span><span${ssrRenderAttr("title", cityText.value)} data-v-3f540a57>${ssrInterpolate(cityText.value)}</span></span>`);
     };
   }
 });
@@ -7063,7 +7064,7 @@ _sfc_main$1v.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/location.vue");
   return _sfc_setup$1v ? _sfc_setup$1v(props, ctx) : void 0;
 };
-const CommentLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-2ea98c4b"]]);
+const CommentLocation = /* @__PURE__ */ _export_sfc(_sfc_main$1v, [["__scopeId", "data-v-3f540a57"]]);
 const _sfc_main$1u = /* @__PURE__ */ defineComponent({
   __name: "user-agent",
   __ssrInlineRender: true,
