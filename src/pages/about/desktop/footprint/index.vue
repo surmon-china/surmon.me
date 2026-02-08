@@ -218,14 +218,12 @@
           width: $size;
           height: $size;
           border-radius: $radius-xs;
-          background-color: $module-bg;
           font-size: $font-size-h4;
           color: $color-text-secondary;
-          border: 1px solid $color-text-disabled;
+          border: 1px solid $color-text-divider;
           &:hover {
             color: $color-link;
             border-color: $color-text-secondary;
-            background-color: $module-bg-opaque;
           }
         }
       }
