@@ -1,18 +1,28 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { countryCodeToEmoji } from '/@/transforms/emoji'
+  import { regionCodeToEmoji } from '/@/transforms/emoji'
+  import { regionCodeToChineseName } from '/@/transforms/region'
   import { IPLocation } from '/@/interfaces/comment'
 
   const props = defineProps<{
     location: IPLocation
   }>()
 
-  const { globalState } = useEnhancer()
+  const { globalState, isZhLang } = useEnhancer()
+
+  const countryEmoji = computed(() => regionCodeToEmoji(props.location.country_code))
+  const countryText = computed(() => {
+    if (props.location.country_code) {
+      return isZhLang.value
+        ? (regionCodeToChineseName(props.location.country_code) ?? props.location.country_code)
+        : props.location.country_code
+    } else {
+      return props.location.country
+    }
+  })
 
   const municipalities: string[] = ['Shanghai', 'Beijing', 'Tianjin', 'Chongqing', 'Chungking']
-  const countryText = computed(() => props.location.country_code || props.location.country)
-  const countryEmoji = computed(() => countryCodeToEmoji(props.location.country_code))
   const cityText = computed(() => {
     if (props.location.country_code === 'CN') {
       if (municipalities.includes(props.location.region)) {
@@ -33,7 +43,7 @@
       >{{ countryEmoji }}</span
     >
     <i class="iconfont icon-earth" v-else></i>
-    <span :title="props.location.country">{{ countryText }}</span>
+    <span :title="props.location.country" data-allow-mismatch>{{ countryText }}</span>
     <span class="separator">•</span>
     <span :title="cityText">{{ cityText }}</span>
   </span>
