@@ -4,13 +4,18 @@
   import type { InstagramMediaItem } from '/@/server/getters/instagram'
   import { getCdnProxyURL } from '/@/transforms/url'
 
-  const props = defineProps<{
+  interface Props {
     media: InstagramMediaItem
+    objectFit?: 'contain' | 'cover'
     lazyImage?: boolean
     videoLoop?: boolean
     videoMuted?: boolean
     videoAutoPlay?: boolean
-  }>()
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    objectFit: 'contain'
+  })
 
   const emit = defineEmits<{
     (e: 'load', payload: { width: number; height: number }): void
@@ -43,6 +48,7 @@
       v-if="isImageMediaIns(media)"
       class="image"
       draggable="false"
+      :class="objectFit"
       :src="getMediaUrl(media?.media_url)"
       :alt="media.caption"
       :loading="lazyImage ? 'lazy' : 'eager'"
@@ -51,6 +57,8 @@
     <video
       v-else-if="isVideoMediaIns(media)"
       class="video"
+      :class="objectFit"
+      :controls="false"
       :loop="videoLoop"
       :muted="videoMuted"
       :autoplay="videoAutoPlay"
@@ -70,8 +78,14 @@
     .video {
       width: 100%;
       height: 100%;
-      object-fit: contain;
       object-position: center;
+
+      &.contain {
+        object-fit: contain;
+      }
+      &.cover {
+        object-fit: cover;
+      }
     }
   }
 </style>

@@ -54,28 +54,31 @@
       <instagram-album v-else-if="isAlbumMediaIns(media)" :media="media">
         <template #content="{ activeMedia, ghostMedia }">
           <div class="album-media" :class="{ loaded: isLoaded }" :style="{ aspectRatio: mediaAspectRatio }">
-            <transition name="album-media-item" mode="out-in">
-              <instagram-media
-                v-if="activeMedia"
-                :key="activeMedia.id"
-                :media="activeMedia"
-                :lazy-image="false"
-                :video-muted="false"
-                :video-loop="false"
-                :video-auto-play="true"
-                @load="handleMediaLoad"
-              />
-            </transition>
             <!-- Keep rendering a ghost media element to prevent container collapse during data switching. -->
             <instagram-media
-              v-if="ghostMedia && isLoaded"
+              v-if="ghostMedia"
+              class="album-ghost-media"
               :media="ghostMedia"
               :lazy-image="false"
               :video-muted="true"
               :video-loop="false"
               :video-auto-play="false"
-              :style="{ display: 'contents', opacity: 0, visibility: 'hidden', pointerEvents: 'none' }"
+              @load="handleMediaLoad"
             />
+            <!-- The actual data is displayed filling this container with relative positioning at 100%. -->
+            <transition name="album-active-media" mode="out-in">
+              <instagram-media
+                v-if="activeMedia"
+                :key="activeMedia.id"
+                class="album-active-media"
+                object-fit="cover"
+                :media="activeMedia"
+                :lazy-image="false"
+                :video-muted="false"
+                :video-loop="false"
+                :video-auto-play="true"
+              />
+            </transition>
           </div>
         </template>
       </instagram-album>
@@ -88,12 +91,12 @@
 <style lang="scss">
   @use '/src/styles/base/variables' as *;
 
-  .album-media-item-enter-active,
-  .album-media-item-leave-active {
-    transition: opacity $motion-duration-fast ease;
+  .album-active-media-enter-active,
+  .album-active-media-leave-active {
+    transition: opacity $motion-duration-mid ease;
   }
-  .album-media-item-enter-from,
-  .album-media-item-leave-to {
+  .album-active-media-enter-from,
+  .album-active-media-leave-to {
     opacity: 0;
   }
 </style>
@@ -132,6 +135,25 @@
           height: fit-content;
           max-width: 88vw;
           max-height: 84vh;
+        }
+      }
+
+      .album-media {
+        position: relative;
+
+        .album-ghost-media {
+          display: contents;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+        }
+
+        .album-active-media {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
         }
       }
 
