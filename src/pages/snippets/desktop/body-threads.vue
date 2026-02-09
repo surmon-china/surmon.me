@@ -86,7 +86,8 @@
     .video {
       position: relative;
       min-height: 10rem;
-      // background-color: #000;
+      border-radius: $radius-tiny;
+      background-color: #000;
       cursor: pointer;
 
       .play-button {
