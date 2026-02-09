@@ -426,6 +426,8 @@
 
       blockquote {
         margin-block: 0.8em;
+        padding-left: 1em;
+        padding-right: 0.75em;
         border-color: $module-bg-darker-3;
         background-color: $module-bg-darker-2;
       }

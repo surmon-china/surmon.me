@@ -403,11 +403,12 @@ ol {
 
 blockquote {
   margin: 1em 0;
+  padding-block: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1em;
   text-indent: 0em;
   background-color: $module-bg-darker-1;
   border-left: 0.5em solid $module-bg-darker-2;
-  padding: 0.5em 1em;
-  padding-left: 1.5em;
 }
 
 figcaption {
