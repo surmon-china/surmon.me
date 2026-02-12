@@ -57,6 +57,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.COMMENT_DELETE_CONFIRM]: 'Are you sure you want to delete this comment? You cannot undo this action.',
   [LocalesKey.COMMENT_REPLY]: 'reply',
   [LocalesKey.COMMENT_REPLY_CANCEL]: 'cancel reply',
+  [LocalesKey.COMMENT_AI_ASSISTANT]: 'AI Assistant',
   [LocalesKey.COMMENT_MODERATOR]: 'Moderator',
   [LocalesKey.COMMENT_SORT_OLD]: 'Oldest',
   [LocalesKey.COMMENT_SORT_NEW]: 'Newest',

@@ -44,6 +44,7 @@
   const commentStore = useCommentStore()
 
   const commentExtrasMap = computed(() => getExtrasMap(props.comment.extras))
+  const isAiGenerated = computed(() => commentExtrasMap.value.has('ai-generated'))
   const disqusAuthorId = computed(() => commentExtrasMap.value.get('disqus-author-id'))
   const disqusUsername = computed(() => commentExtrasMap.value.get('disqus-author-username'))
   const isDisqusAuthor = computed(() => !!disqusAuthorId.value)
@@ -135,7 +136,12 @@
   >
     <div>
       <div class="cm-avatar" v-if="!hiddenAvatar">
-        <comment-link class="link" :href="authorURL">
+        <div class="link" v-if="isAiGenerated">
+          <div class="ai-brand">
+            <i class="iconfont icon-robot"></i>
+          </div>
+        </div>
+        <comment-link class="link" :href="authorURL" v-else>
           <img :src="authorAvatar" :alt="comment.author.name" draggable="false" />
           <span class="role" :class="isDisqusAuthor ? 'disqus' : 'anonymous'">
             <i class="iconfont icon-disqus-logo" v-if="isDisqusAuthor"></i>
@@ -146,13 +152,23 @@
       <div class="cm-body">
         <div class="cm-header">
           <div class="left">
-            <comment-link class="username" :class="{ url: Boolean(authorURL) }" :href="authorURL">
+            <span class="username" v-if="isAiGenerated">
+              <i18n :k="LocalesKey.COMMENT_AI_ASSISTANT" />
+            </span>
+            <comment-link class="username" :class="{ url: Boolean(authorURL) }" :href="authorURL" v-else>
               {{ comment.author.name }}
             </comment-link>
             <span class="moderator" v-if="isAdminAuthor">
               <i18n :k="LocalesKey.COMMENT_MODERATOR" />
             </span>
+            <span class="ai" v-else-if="isAiGenerated">AI</span>
             <span class="author-info">
+              <template v-if="isAiGenerated">
+                <span class="ai-model">
+                  <i class="iconfont icon-cpu"></i>
+                  <span>{{ commentExtrasMap.get('ai-provider') }}</span>
+                </span>
+              </template>
               <template v-if="comment.ip_location && !hiddenLocation">
                 <comment-location :location="comment.ip_location" />
               </template>
@@ -211,7 +227,7 @@
               <i class="iconfont icon-dislike" />
               <span class="count">({{ comment.dislikes }})</span>
             </button>
-            <template v-if="!hiddenReply">
+            <template v-if="!hiddenReply && !isAiGenerated">
               <button class="reply" @click="handleCancelReply" v-if="isReply">
                 <i class="iconfont icon-cancel" />
                 <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
@@ -332,6 +348,23 @@
             background-color: $module-bg-translucent;
           }
         }
+
+        .ai-brand {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          border-radius: $radius-xs;
+          background-color: $primary-lighter;
+          background: linear-gradient(45deg, #fa4340, $surmon, #19ba64);
+          opacity: 0.8;
+
+          .iconfont {
+            color: $white;
+            font-size: $font-size-h1;
+          }
+        }
       }
     }
 
@@ -368,7 +401,8 @@
           }
         }
 
-        .moderator {
+        .moderator,
+        .ai {
           display: inline-block;
           margin-left: -$gap-xs;
           margin-right: $gap-sm;
@@ -378,6 +412,10 @@
           color: $color-text-reversal;
           background-color: $primary-lighter;
           border-radius: $radius-xs;
+        }
+
+        .ai {
+          padding: 0 0.4em 0.1em;
         }
 
         .author-info {
@@ -390,6 +428,12 @@
             margin-right: $gap-sm;
             &:last-child {
               margin-right: 0;
+            }
+          }
+
+          .ai-model {
+            .iconfont {
+              margin-right: $gap-tiny;
             }
           }
         }

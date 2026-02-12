@@ -59,6 +59,7 @@ export enum LocalesKey {
   COMMENT_DELETE = 'delete-comment',
   COMMENT_DELETE_CONFIRM = 'delete-comment-confirm',
   COMMENT_REPLY_CANCEL = 'cancel-reply-comment',
+  COMMENT_AI_ASSISTANT = 'comment-ai-assistant',
   COMMENT_MODERATOR = 'comment-moderator',
   COMMENT_SORT_OLD = 'oldest-comments',
   COMMENT_SORT_NEW = 'newest-comments',

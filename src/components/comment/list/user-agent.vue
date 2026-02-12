@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import { computed } from 'vue'
   import { uaParser } from '/@/transforms/ua'
 
   // https://docs.uaparser.dev/info/os/name.html
