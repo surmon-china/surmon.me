@@ -74,6 +74,8 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.COMMENT_POST_ERROR_CONTENT]: '内容需要在 3000 字以内',
   [LocalesKey.QUERY_PARAMS_ERROR]: '请求参数错误：',
   [LocalesKey.POST_ACTION_ERROR]: '操作失败，详细原因 > 控制台',
+  [LocalesKey.USER_SIGN_IN]: '登录',
+  [LocalesKey.USER_SIGN_OUT]: '退出登录',
   [LocalesKey.USER_IDENTITY_LINK]: '立即绑定',
   [LocalesKey.USER_IDENTITY_UNLINK]: '解除绑定',
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: '你确定要解绑此账户吗？',

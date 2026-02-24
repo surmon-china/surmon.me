@@ -75,6 +75,8 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.COMMENT_POST_ERROR_CONTENT]: 'Content requirements are within 3000 characters!',
   [LocalesKey.QUERY_PARAMS_ERROR]: 'Invalid query params: ',
   [LocalesKey.POST_ACTION_ERROR]: 'Failed! Get error detail in console',
+  [LocalesKey.USER_SIGN_IN]: 'Sign in',
+  [LocalesKey.USER_SIGN_OUT]: 'Sign out',
   [LocalesKey.USER_IDENTITY_LINK]: 'Link Account',
   [LocalesKey.USER_IDENTITY_UNLINK]: 'Unlink',
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: 'Are you sure you want to unlink this account?',

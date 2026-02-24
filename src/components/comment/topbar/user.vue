@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { UserIdentityProvider } from '/@/interfaces/user'
+  import { LocalesKey } from '/@/locales'
   const { identity, theme, globalState } = useEnhancer()
 
   const openUserProfileModal = () => {
@@ -17,7 +18,7 @@
         @click="identity.userLoginWith(UserIdentityProvider.Google)"
       >
         <uimage class="logo google" alt="Google" src="/images/third-party/google-g-icon.svg" />
-        <i18n zh="登录" en="Sign in" />
+        <i18n :k="LocalesKey.USER_SIGN_IN" />
       </button>
       <divider type="vertical" />
       <button
@@ -30,7 +31,7 @@
           alt="GitHub"
           :src="`/images/third-party/github-icon-${theme.isDark.value ? 'white' : 'black'}.svg`"
         />
-        <i18n zh="登录" en="Sign in" />
+        <i18n :k="LocalesKey.USER_SIGN_IN" />
       </button>
     </div>
     <div class="logined" v-else>
@@ -81,7 +82,7 @@
           </li>
           <li class="item">
             <button class="button" title="Sign Out" @click="identity.userLogout">
-              <i18n zh="登出账户" en="Sign Out" />
+              <i18n :k="LocalesKey.USER_SIGN_OUT" />
             </button>
           </li>
         </ul>

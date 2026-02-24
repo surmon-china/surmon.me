@@ -79,6 +79,8 @@ export enum LocalesKey {
   QUERY_PARAMS_ERROR = 'query-params-error',
   POST_ACTION_ERROR = 'post-requiest-failed-of-other-error',
 
+  USER_SIGN_IN = 'user-sign-in',
+  USER_SIGN_OUT = 'user-sign-out',
   USER_IDENTITY_LINK = 'user-identity-link',
   USER_IDENTITY_UNLINK = 'user-identity-unlink',
   USER_IDENTITY_UNLINK_CONFIRM = 'user-identity-unlink-confirm',
