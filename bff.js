@@ -39,6 +39,8 @@ const BFF_CONFIG = Object.freeze({
   route_path_gtag_script: "/gtag-script"
 });
 const APP_CONFIG = Object.freeze({
+  comment_content_min_length: 3,
+  comment_content_max_length: 3e3,
   article_image_share_long_threshold: 6688,
   render_long_article_threshold: 16688,
   desktop_sidebar_article_list_count: 8,
@@ -1030,7 +1032,7 @@ const getThreadsUserProfile = async () => {
       id: response.data.id,
       name: response.data.name,
       username: response.data.username,
-      avatar: response.data.threads_profile_picture_url,
+      avatar_url: response.data.threads_profile_picture_url,
       biography: response.data.threads_biography
     };
   } catch (error) {
