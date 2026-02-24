@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { reactive, computed, toRaw } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useHistoryStore } from '/@/stores/history'
   import { useAppOptionsStore } from '/@/stores/foundation'
   import { LocalesKey } from '/@/locales/key'
   import { GAEventCategories } from '/@/constants/google-analytics'
@@ -22,8 +23,9 @@
     { emoji: '🥰', value: 5, en: 'Amazing', zh: '太棒了' }
   ]
 
-  const { gtag, identity, isZhLang } = useEnhancer()
+  const { gtag, isZhLang } = useEnhancer()
   const appOptionsStore = useAppOptionsStore()
+  const historyStore = useHistoryStore()
 
   const state = reactive({
     emotion: 5 as number,
@@ -49,7 +51,7 @@
     try {
       state.submitting = true
       const response = await appOptionsStore.postFeedback(toRaw(state))
-      identity.addFeedback(response.result)
+      historyStore.addFeedback(response.result)
       state.submitted = true
     } catch (error) {
       alert(error)
@@ -128,10 +130,10 @@
         </div>
       </div>
     </template>
-    <div class="history" v-if="identity.feedbacks.length">
+    <div class="history" v-if="historyStore.feedbacks.length">
       <i18n>
-        <template #zh>你已进行过 {{ identity.feedbacks.length }} 次反馈。</template>
-        <template #en>You have {{ identity.feedbacks.length }} feedback history.</template>
+        <template #zh>你已进行过 {{ historyStore.feedbacks.length }} 次反馈。</template>
+        <template #en>You have {{ historyStore.feedbacks.length }} feedback history.</template>
       </i18n>
     </div>
   </div>

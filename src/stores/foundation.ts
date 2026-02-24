@@ -51,9 +51,7 @@ export const useAppOptionsStore = defineStore('appOptions', () => {
         author_name: identityStore.profile?.name,
         author_email: identityStore.profile?.email
       },
-      {
-        token: identityStore.token
-      }
+      { token: identityStore.token }
     )
   }
 

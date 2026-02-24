@@ -28,6 +28,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.GUESTBOOK_SLOGAN]: 'If a word arises, let it be here.',
   [LocalesKey.AD]: 'AD',
   [LocalesKey.FEEDBACK]: 'Feedback',
+  [LocalesKey.PRIVACY]: 'Privacy',
   [LocalesKey.TO_TOP]: 'To top',
   [LocalesKey.TO_BOTTOM]: 'Next screen',
   [LocalesKey.ORIGIN_ORIGINAL]: 'OG',

@@ -28,8 +28,6 @@
       <ulink class="link" :href="BFF_CONFIG.route_path_sitemap">sitemap.xml</ulink>
       <divider type="vertical" />
       <i18n zh="构建于 " en="Built with " />
-      <ulink class="link" :href="RESOURCE_LINKS.GITHUB_NODEPRESS">NodePress</ulink>
-      <i18n zh="、" en=", " />
       <ulink class="link" :href="RESOURCE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
       <i18n zh=" 和 日月星辰" en="" />
       <divider type="vertical" />
@@ -40,6 +38,10 @@
       <button class="button" @click="handleFeedbackClick">
         <i18n :k="LocalesKey.FEEDBACK" />
       </button>
+      <divider type="vertical" />
+      <ulink class="link" href="/privacy/index.html">
+        <i18n :k="LocalesKey.PRIVACY" />
+      </ulink>
       <divider type="vertical" />
       <ulink class="link" :href="goLinks.status">
         <i18n zh="实态" en="STATUS" />

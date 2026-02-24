@@ -28,6 +28,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.STATISTIC_AVERAGE_EMOTION]: '平均评分',
   [LocalesKey.AD]: '广而告之',
   [LocalesKey.FEEDBACK]: '反馈',
+  [LocalesKey.PRIVACY]: '隐私',
   [LocalesKey.TO_TOP]: '回到顶部',
   [LocalesKey.TO_BOTTOM]: '下一屏',
   [LocalesKey.ORIGIN_ORIGINAL]: '原创',

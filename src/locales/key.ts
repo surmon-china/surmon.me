@@ -30,6 +30,7 @@ export enum LocalesKey {
   GUESTBOOK_SLOGAN = 'guestbook-banner-slogan',
   AD = 'ad',
   FEEDBACK = 'feedback',
+  PRIVACY = 'privacy',
   TO_TOP = 'to-page-top',
   TO_BOTTOM = 'to-page-bottom',
   ORIGIN_ORIGINAL = 'original',
