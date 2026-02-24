@@ -5,11 +5,12 @@
  */
 
 export const HEADER_ELEMENT_ID = 'A_header'
-export const NAV_ELEMENT_ID = 'A_nav'
-export const MAIN_ELEMENT_ID = 'A_main'
-export const MAIN_CONTENT_ELEMENT_ID = 'A_main'
-export const SIDEBAR_ELEMENT_ID = 'A_sidebar'
 export const FOOTER_ELEMENT_ID = 'A_footer'
+export const CONTAINER_ELEMENT_ID = 'A_container'
+
+export const NAV_ELEMENT_ID = 'A_nav'
+export const SIDEBAR_ELEMENT_ID = 'A_sidebar'
+export const MAIN_CONTENT_ELEMENT_ID = 'A_main'
 
 export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
 export const ARTICLE_READMORE_ELEMENT_ID = 'A_article_readmore'
@@ -30,12 +31,9 @@ export const getArticleHeadingUrlHash = (heading: string) => {
 }
 
 export const COMMENT_ELEMENT_ID = 'A_comment_wrapper'
-export const COMMENT_PUBLISHER_ELEMENT_ID = 'A_comment_publisher'
-export const COMMENT_REPLY_PUBLISHER_ELEMENT_ID = 'A_comment_reply_publisher'
-export const COMMENT_FOOTER_ELEMENT_ID = 'A_comment_footer'
-export const COMMENT_ITEM_ELEMENT_ID_PREFIX = 'A_comment_content_item'
+
 export const getCommentItemElementId = (commentId: string | number) => {
-  return `${COMMENT_ITEM_ELEMENT_ID_PREFIX}_${commentId}`
+  return `A_comment_content_item_${commentId}`
 }
 
 export const COMMENTS_URL_HASH = 'comments'

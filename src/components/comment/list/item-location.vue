@@ -3,7 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { regionCodeToEmoji } from '/@/transforms/emoji'
   import { regionCodeToChineseName } from '/@/transforms/region'
-  import { IPLocation } from '/@/interfaces/comment'
+  import type { IPLocation } from '/@/interfaces/comment'
 
   const props = defineProps<{
     location: IPLocation
@@ -34,14 +34,15 @@
 </script>
 
 <template>
-  <span class="location">
+  <span class="comment-ip-location">
     <span
       class="emoji"
       :class="{ safari: globalState.userAgent.isSafari }"
       :title="props.location.country"
       v-if="countryEmoji"
-      >{{ countryEmoji }}</span
     >
+      {{ countryEmoji }}
+    </span>
     <i class="iconfont icon-earth" v-else></i>
     <span :title="props.location.country" data-allow-mismatch>{{ countryText }}</span>
     <span class="separator">•</span>
@@ -54,7 +55,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .location {
+  .comment-ip-location {
     display: inline-flex;
     align-items: center;
     white-space: nowrap;

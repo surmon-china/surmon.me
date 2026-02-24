@@ -5,191 +5,148 @@
  */
 
 import { defineStore } from 'pinia'
-import { shallowRef, reactive, computed, unref, watch } from 'vue'
-import { Author } from '/@/interfaces/comment'
+import { ref, shallowRef, computed, watch, nextTick } from 'vue'
 import { getJSON, setJSON, remove } from '/@/utils/storage'
+import { User, UserIdentityProvider } from '/@/interfaces/user'
+import { openOAuthPopup } from '/@/utils/oauth'
 import nodepress from '/@/services/nodepress'
+import logger from '/@/utils/logger'
 
-export type UserLocalProfile = Author
-export enum UserType {
-  Null = 0,
-  Local = 1,
-  Disqus = 2
+export interface IdentityProfile {
+  name: string
+  email: string
+  website?: string
 }
 
-interface IdentityState {
-  disqusConfig: any
-  user: {
-    type: UserType
-    localProfile: UserLocalProfile | null
-    disqusProfile: any | null
-  }
-  vote: {
-    likedArticles: number[]
-    likedComments: number[]
-    dislikedComments: number[]
-  }
-  feedbacks: any[]
+export interface IdentityState {
+  token: string | null
+  guestProfile: IdentityProfile | null
 }
 
 const LOCAL_STORGAE_KEY = 'identity-state'
 
 export const useIdentityStore = defineStore('identity', () => {
-  // disqus config
-  const disqusConfig = shallowRef<any>(null)
-  // user
-  const user = reactive({
-    type: UserType.Null,
-    localProfile: null as UserLocalProfile | null,
-    disqusProfile: null as any | null
-  })
-  // vote history
-  const vote = reactive({
-    likedArticles: [] as number[],
-    likedComments: [] as number[],
-    dislikedComments: [] as number[]
-  })
-  // feedback history
-  const feedbacks = reactive<any[]>([])
+  const token = shallowRef<string | null>(null)
+  const userProfile = ref<User | null>(null)
+  const guestProfile = ref<IdentityProfile | null>(null)
 
-  // getters
-  const isLikedArticle = computed(() => (id: number) => vote.likedArticles.includes(id))
-  const isLikedComment = computed(() => (id: number) => vote.likedComments.includes(id))
-  const isDislikedComment = computed(() => (id: number) => vote.dislikedComments.includes(id))
-  const author = computed<Author | null>(() => {
-    if (user.type === UserType.Local) {
-      return user.localProfile
-    }
-    if (user.type === UserType.Disqus) {
+  const isUser = computed(() => !!userProfile.value)
+  const isGuest = computed(() => !isUser.value && !!guestProfile.value)
+  const isAnonymous = computed(() => !isUser.value && !isGuest.value)
+
+  const profile = computed<IdentityProfile | null>(() => {
+    if (userProfile.value) {
       return {
-        name: user.disqusProfile?.name,
-        site: user.disqusProfile?.url || user.disqusProfile?.profileUrl
-      }
+        name: userProfile.value.name,
+        email: userProfile.value.email as string,
+        website: userProfile.value.website ?? undefined
+      } satisfies IdentityProfile
+    } else if (guestProfile.value) {
+      return guestProfile.value
+    } else {
+      return null
     }
-    return null
   })
 
-  const likeComment = (commentId: number) => {
-    vote.likedComments.push(commentId)
+  const setToken = (_token: string) => {
+    token.value = _token
   }
 
-  const dislikeComment = (commentId: number) => {
-    vote.dislikedComments.push(commentId)
+  const saveGuestProfile = (profile: IdentityProfile) => {
+    guestProfile.value = { ...profile }
   }
 
-  const likeArticle = (id: number) => {
-    vote.likedArticles.push(id)
+  const removeGuestProfile = () => {
+    guestProfile.value = null
   }
 
-  const addFeedback = (data) => {
-    feedbacks.push(data)
+  const fetchUserProfile = async () => {
+    try {
+      const response = await nodepress.get<any>('/account/profile', { token: token.value! })
+      userProfile.value = response.result
+    } catch (error) {
+      userProfile.value = null
+      token.value = null
+      throw error
+    }
   }
 
-  const saveLocalUser = (profile: UserLocalProfile) => {
-    user.localProfile = { ...profile }
-    user.type = UserType.Local
+  const userLogout = async () => {
+    await nodepress.post('/account/auth/logout', {}, { token: token.value! })
+    userProfile.value = null
+    token.value = null
+    removeGuestProfile()
   }
 
-  const removeLocalUser = () => {
-    user.type = UserType.Null
-    user.localProfile = null
+  const userLoginWith = async (provider: UserIdentityProvider) => {
+    openOAuthPopup({
+      provider,
+      nodepressApi: `/account/auth/${provider}/login`,
+      async onSuccess(message) {
+        if (message.token) {
+          try {
+            setToken(message.token)
+            await fetchUserProfile()
+            await nextTick()
+            removeGuestProfile()
+          } catch (error) {
+            logger.warn('Fetch user profile failed after OAuth', error)
+          }
+        }
+      }
+    })
   }
 
-  const fetchDisqusLogout = async () => {
-    await nodepress.post('/disqus/oauth-logout')
-    user.type = UserType.Null
-    user.disqusProfile = null
-  }
-
-  const fetchDisqusUserInfo = async () => {
-    const response = await nodepress.get<any>('/disqus/user-info')
-    user.disqusProfile = response.result
-    user.type = UserType.Disqus
-  }
-
-  const fetchDisqusConfig = async () => {
-    const response = await nodepress.get<string>('/disqus/config')
-    disqusConfig.value = response.result
-  }
-
-  const getStoreState = () => ({
-    disqusConfig: unref(disqusConfig),
-    user: user,
-    vote: vote,
-    feedbacks: feedbacks
+  const getState = () => ({
+    token: token.value,
+    guestProfile: guestProfile.value
   })
-
-  const setStoreState = (state: IdentityState) => {
-    disqusConfig.value = state.disqusConfig
-    user.type = state.user.type
-    user.localProfile = state.user.localProfile
-    user.disqusProfile = state.user.disqusProfile
-    // @ts-ignore
-    // MARK: Read `likedPages` to maintain backward compatibility with legacy data.
-    vote.likedArticles = state.vote.likedArticles ?? state.vote.likedPages ?? []
-    vote.likedComments = state.vote.likedComments ?? []
-    vote.dislikedComments = state.vote.dislikedComments ?? []
-    feedbacks.splice(0, feedbacks.length, ...state.feedbacks)
-  }
 
   const resetStateFromStorage = () => {
     try {
       const localState = getJSON<IdentityState>(LOCAL_STORGAE_KEY)
       if (localState) {
-        setStoreState(localState)
+        token.value = localState.token
+        guestProfile.value = localState.guestProfile
       }
-    } catch (error) {
+    } catch {
       remove(LOCAL_STORGAE_KEY)
     }
   }
 
   const initOnClient = () => {
-    // 1. init disqus config
-    fetchDisqusConfig()
-    // 2. bind client storage
-    // 2.1 init state from storage
     resetStateFromStorage()
-    // 2.2 bind state to storage
     watch(
-      () => getStoreState(),
+      () => getState(),
       (state) => setJSON(LOCAL_STORGAE_KEY, state),
       { deep: true }
     )
-    // 2.3 reset state when storage changed
     window.addEventListener('storage', (event) => {
       if (event.key === LOCAL_STORGAE_KEY) {
         resetStateFromStorage()
       }
     })
-    // 3. init and reset disqus cache
-    if (user.type === UserType.Disqus) {
-      fetchDisqusUserInfo().catch(() => {
-        user.disqusProfile = null
-        user.type = UserType.Null
+    if (token.value) {
+      fetchUserProfile().catch((error) => {
+        logger.warn('Init fetch user profile failed.', error)
       })
-    } else {
-      user.disqusProfile = null
     }
   }
 
   return {
-    disqusConfig,
-    user,
-    vote,
-    feedbacks,
-    author,
-    isLikedArticle,
-    isLikedComment,
-    isDislikedComment,
-    likeComment,
-    dislikeComment,
-    likeArticle,
-    addFeedback,
-    saveLocalUser,
-    removeLocalUser,
-    fetchDisqusLogout,
-    fetchDisqusUserInfo,
-    fetchDisqusConfig,
+    profile,
+    userProfile,
+    guestProfile,
+    isUser,
+    isGuest,
+    isAnonymous,
+    token,
+    setToken,
+    saveGuestProfile,
+    removeGuestProfile,
+    fetchUserProfile,
+    userLoginWith,
+    userLogout,
     initOnClient
   }
 })

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useIdentityStore } from '/@/stores/identity'
+  import { useHistoryStore } from '/@/stores/history'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -15,8 +15,8 @@
   }>()
 
   const { cdnDomain, globalState } = useEnhancer()
-  const identityStore = useIdentityStore()
-  const isLiked = computed(() => identityStore.isLikedArticle(props.article.id))
+  const historyStore = useHistoryStore()
+  const isLiked = computed(() => historyStore.isLikedArticle(props.article.id))
   const detailRoutePath = getArticleDetailRoute(props.article.id)
 
   const getThumbnailURL = (url: string, format?: ImgProxyFormat) => {
@@ -84,7 +84,7 @@
         <p class="summary" style="-webkit-box-orient: vertical" v-html="article.summary"></p>
       </div>
       <div class="meta">
-        <span class="date" data-allow-mismatch>
+        <span class="date">
           <i class="iconfont icon-clock"></i>
           <span class="text"><udate to="ago" :date="article.created_at" /></span>
         </span>

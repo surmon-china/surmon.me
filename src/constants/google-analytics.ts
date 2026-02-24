@@ -5,6 +5,7 @@
  */
 
 export enum GAEventCategories {
+  User = 'user',
   Comment = 'comment',
   Share = 'share',
   Widget = 'widget',

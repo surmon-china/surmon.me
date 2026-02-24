@@ -26,12 +26,14 @@
     </mobile-banner>
     <div class="profile">
       <div class="avatar">
-        <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
+        <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar_url)" />
       </div>
       <h2 class="name">{{ adminProfileStore.data?.name || '-' }}</h2>
       <h5 class="slogan">{{ adminProfileStore.data?.slogan || '-' }}</h5>
       <h4 class="description">
-        <webfont bolder>{{ isZhLang ? APP_PROFILE.description_short_zh : APP_PROFILE.description_en }}</webfont>
+        <webfont bolder>{{
+          isZhLang ? APP_PROFILE.description_short_zh : APP_PROFILE.description_en
+        }}</webfont>
       </h4>
       <div class="socials">
         <ulink class="item github" :href="goLinks.github">

@@ -12,6 +12,10 @@ $red: #ff4d4f;
 $orange: #faad14;
 $green: #2e9a1a;
 
+$ai-primary-gradient: linear-gradient(45deg, #fa4340, $surmon, #19ba64);
+$user-primary-patron: $green;
+$user-primary-moderator: $surmon;
+
 // theme colors
 $primary: var(--color-primary);
 $primary-lighter: var(--color-primary-lighter);

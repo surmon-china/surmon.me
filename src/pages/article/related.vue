@@ -39,7 +39,6 @@
     return [
       ...articles,
       ...new Array(props.count - articles.length).fill({
-        _id: '',
         id: null,
         title: '-',
         summary: '',

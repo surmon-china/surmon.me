@@ -14,7 +14,7 @@ export const useCategoryStore = defineStore('category', () => {
     data: [],
     once: true,
     fetcher() {
-      return nodepress.get<Category[]>('/category/all').then((response) => {
+      return nodepress.get<Category[]>('/categories/all').then((response) => {
         return response.result
       })
     }

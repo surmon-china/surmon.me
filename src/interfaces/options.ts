@@ -46,5 +46,5 @@ export interface AppOptions {
 export interface AdminProfile {
   name: string
   slogan: string
-  avatar: string
+  avatar_url: string
 }

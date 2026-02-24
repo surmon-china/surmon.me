@@ -1,256 +1,167 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useHistoryStore } from '/@/stores/history'
   import { useCommentStore } from '/@/stores/comment'
-  import { UserType } from '/@/stores/identity'
-  import { LocalesKey } from '/@/locales'
   import { getCommentItemElementId } from '/@/constants/element-anchor'
-  import { getCommentUrlHashById } from '/@/constants/element-anchor'
-  import { APP_CONFIG } from '/@/configs/app.config'
-  import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
-  import { getPageURL, getAssetURL, getCdnProxyURL, getOriginalProxyURL } from '/@/transforms/url'
+  import { LocalesKey } from '/@/locales'
+  import { UserType } from '/@/interfaces/user'
+  import { Comment, CommentAuthorStatus } from '/@/interfaces/comment'
   import { getExtrasMap } from '/@/transforms/extra'
-  import { scrollToAnchor } from '/@/utils/scroller'
-  import { copy } from '/@/utils/clipboard'
-  import { Comment } from '/@/interfaces/comment'
-  import Markdown from '/@/components/common/markdown.vue'
-  import CommentLink from './link.vue'
-  import CommentLocation from './location.vue'
-  import CommentUserAgent from './user-agent.vue'
-  import { CommentEvents, getDisqusUserURL } from '../helper'
+
+  import CommentMarkdown from '../markdown.vue'
+  import CommentAvatar from './item-avatar.vue'
+  import CommentUsername from './item-username.vue'
+  import CommentLocation from './item-location.vue'
+  import CommentUserAgent from './item-user-agent.vue'
+  import CommentReplyParent from './item-reply-parent.vue'
+  import CommentAiInfo from './item-ai-info.vue'
+  import CommentFloor from './item-floor.vue'
+
+  export interface CommentMeta {
+    isAiGenerated: boolean
+    aiProvider?: string
+    aiModel?: string
+    isDisqusAuthor: boolean
+    disqusUsername?: string
+    isModeratorUser: boolean
+    isPatronUser: boolean
+    isGhostUser: boolean
+  }
 
   const props = defineProps<{
     comment: Comment
-    liked?: boolean
-    disliked?: boolean
-    isReply?: boolean
-    isChild?: boolean
-    hasChild?: boolean
+    isReplying?: boolean
+    isInChildList?: boolean
+    hasChildren?: boolean
     hiddenReply?: boolean
     hiddenAvatar?: boolean
-    hiddenUa?: boolean
     hiddenLocation?: boolean
-    plainVote?: boolean
+    hiddenUserAgent?: boolean
   }>()
 
   const emit = defineEmits<{
-    (e: CommentEvents.Vote, commentId: number, isLike: boolean): void
-    (e: CommentEvents.Delete, commentId: number): void
-    (e: CommentEvents.Reply, commentId: number): void
-    (e: CommentEvents.CancelReply, commentId: number): void
+    (e: 'like', commentId: number): void
+    (e: 'dislike', commentId: number): void
+    (e: 'delete', commentId: number): void
+    (e: 'reply', commentId: number): void
+    (e: 'cancel-reply', commentId: number): void
   }>()
 
-  const { route, identity, cdnDomain, isCNUser, i18n: _i18n } = useEnhancer()
+  const { identity, i18n: _i18n } = useEnhancer()
+
   const commentStore = useCommentStore()
+  const historyStore = useHistoryStore()
 
-  const commentExtrasMap = computed(() => getExtrasMap(props.comment.extras))
-  const isAiGenerated = computed(() => commentExtrasMap.value.has('ai-generated'))
-  const disqusAuthorId = computed(() => commentExtrasMap.value.get('disqus-author-id'))
-  const disqusUsername = computed(() => commentExtrasMap.value.get('disqus-author-username'))
-  const isDisqusAuthor = computed(() => !!disqusAuthorId.value)
-  const isAdminAuthor = computed(() => {
-    return (
-      !!disqusUsername.value &&
-      !!identity.disqusConfig &&
-      disqusUsername.value === identity.disqusConfig.admin_username
-    )
-  })
-
-  const authorAvatar = computed(() => {
-    if (disqusUsername.value) {
-      const avatar = getDisqusAvatarByUsername(disqusUsername.value)
-      return isCNUser ? getOriginalProxyURL(avatar) : avatar
-    } else {
-      const emailHash = props.comment.author.email_hash
-      if (!emailHash) return getAssetURL(cdnDomain, APP_CONFIG.default_comment_avatar)
-      const gravatar = getGravatarByHash(emailHash)
-      return isCNUser ? getCdnProxyURL(cdnDomain, gravatar) : gravatar
+  const commentMeta = computed<CommentMeta>(() => {
+    const extrasMap = getExtrasMap(props.comment.extras)
+    return {
+      isAiGenerated: extrasMap.has('ai-generated'),
+      aiProvider: extrasMap.get('ai-provider'),
+      aiModel: extrasMap.get('ai-model'),
+      isDisqusAuthor: !!extrasMap.get('disqus-author-id'),
+      disqusUsername: extrasMap.get('disqus-author-username'),
+      isModeratorUser: props.comment.user?.type === UserType.Moderator,
+      isPatronUser: props.comment.user?.type === UserType.Patron,
+      isGhostUser: props.comment.author_status === CommentAuthorStatus.Ghost
     }
-  })
-
-  const authorURL = computed(() => {
-    if (props.comment.author.site) {
-      return props.comment.author.site
-    }
-    if (disqusUsername.value) {
-      return getDisqusUserURL(disqusUsername.value)
-    }
-    return undefined
   })
 
   const isDeletable = computed(() => {
-    // 1. Disqus logged-in
-    if (identity.user.type === UserType.Disqus) {
-      // 2. Logged-in user ID === comment.author.disqus-author-id
-      if (disqusAuthorId.value) {
-        return identity.user.disqusProfile?.id === disqusAuthorId.value
-      }
-    }
-    return false
+    return Boolean(
+      identity.isUser &&
+      identity.userProfile &&
+      props.comment.user &&
+      props.comment.user.id === identity.userProfile.id
+    )
   })
-
-  const getReplyParentCommentText = (parentId: number) => {
-    const authorName = commentStore.comments.find((comment) => comment.id === parentId)?.author.name
-    const nameText = authorName ? `@${authorName}` : ''
-    const idText = `#${parentId}`
-    return `${idText} ${nameText}`
-  }
-
-  const handleReply = () => {
-    emit(CommentEvents.Reply, props.comment.id)
-  }
-
-  const handleCancelReply = () => {
-    emit(CommentEvents.CancelReply, props.comment.id)
-  }
-
-  const handleVote = (isLike: boolean) => {
-    emit(CommentEvents.Vote, props.comment.id, isLike)
-  }
-
-  const handleDelete = () => {
-    if (window.confirm(_i18n.t(LocalesKey.COMMENT_DELETE_CONFIRM))) {
-      emit(CommentEvents.Delete, props.comment.id)
-    }
-  }
-
-  const handleCopyFloor = () => {
-    copy(getPageURL(route.path, getCommentUrlHashById(props.comment.id)))
-  }
-
-  const scrollToCommentItem = (commentId: number) => {
-    scrollToAnchor(getCommentItemElementId(commentId))
-  }
 </script>
 
 <template>
   <li
     class="comment-item"
-    :key="comment.id"
     :id="getCommentItemElementId(comment.id)"
     :class="{
       'hide-avatar': hiddenAvatar,
-      'is-child': isChild,
-      'has-child': hasChild
+      'in-child-list': isInChildList,
+      'has-children': hasChildren
     }"
   >
-    <div>
-      <div class="cm-avatar" v-if="!hiddenAvatar">
-        <div class="link" v-if="isAiGenerated">
-          <div class="ai-brand">
-            <i class="iconfont icon-robot"></i>
-          </div>
-        </div>
-        <comment-link class="link" :href="authorURL" v-else>
-          <img :src="authorAvatar" :alt="comment.author.name" draggable="false" />
-          <span class="role" :class="isDisqusAuthor ? 'disqus' : 'anonymous'">
-            <i class="iconfont icon-disqus-logo" v-if="isDisqusAuthor"></i>
-            <i class="iconfont icon-user" v-else></i>
+    <comment-avatar class="cm-avatar" :comment="comment" :meta="commentMeta" v-if="!hiddenAvatar" />
+    <div class="cm-body">
+      <div class="cm-header">
+        <div class="left">
+          <comment-username class="cm-username" :comment="comment" :meta="commentMeta" />
+          <span class="author-info">
+            <comment-ai-info :comment="comment" :meta="commentMeta" v-if="commentMeta.isAiGenerated" />
+            <comment-location :location="comment.ip_location" v-if="comment.ip_location && !hiddenLocation" />
+            <comment-user-agent
+              :user-agent="comment.user_agent"
+              v-if="comment.user_agent && !hiddenUserAgent"
+            />
           </span>
-        </comment-link>
+        </div>
+        <div class="right">
+          <comment-floor :comment="comment" />
+        </div>
       </div>
-      <div class="cm-body">
-        <div class="cm-header">
-          <div class="left">
-            <span class="username" v-if="isAiGenerated">
-              <i18n :k="LocalesKey.COMMENT_AI_ASSISTANT" />
-            </span>
-            <comment-link class="username" :class="{ url: Boolean(authorURL) }" :href="authorURL" v-else>
-              {{ comment.author.name }}
-            </comment-link>
-            <span class="moderator" v-if="isAdminAuthor">
-              <i18n :k="LocalesKey.COMMENT_MODERATOR" />
-            </span>
-            <span class="ai" v-else-if="isAiGenerated">AI</span>
-            <span class="author-info">
-              <template v-if="isAiGenerated">
-                <span class="ai-model">
-                  <i class="iconfont icon-cpu"></i>
-                  <span>{{ commentExtrasMap.get('ai-provider') }}</span>
-                </span>
-              </template>
-              <template v-if="comment.ip_location && !hiddenLocation">
-                <comment-location :location="comment.ip_location" />
-              </template>
-              <template v-if="comment.agent && !hiddenUa">
-                <comment-user-agent :user-agent="comment.agent" />
-              </template>
-            </span>
-          </div>
-          <div class="right">
-            <button class="floor" @click="handleCopyFloor">#{{ comment.id }}</button>
-          </div>
-        </div>
-        <div class="cm-content">
-          <p v-if="comment.pid" class="reply">
-            <span class="text">
+      <div class="cm-content">
+        <comment-reply-parent :comment="comment" v-if="comment.parent_id" />
+        <comment-markdown :content="comment.content" />
+      </div>
+      <div class="cm-footer">
+        <div class="left">
+          <span class="create-at">
+            <udate to="ago" :date="comment.created_at" />
+          </span>
+          <button
+            class="vote"
+            :data-count="comment.likes"
+            :class="{ voted: historyStore.isLikedComment(comment.id) }"
+            :disabled="historyStore.isLikedComment(comment.id)"
+            @click="emit('like', comment.id)"
+          >
+            <i class="iconfont icon-like" />
+            <span class="count">({{ comment.likes }})</span>
+          </button>
+          <button
+            class="vote"
+            :data-count="comment.dislikes"
+            :class="{ voted: historyStore.isDislikedComment(comment.id) }"
+            :disabled="historyStore.isDislikedComment(comment.id)"
+            @click="emit('dislike', comment.id)"
+          >
+            <i class="iconfont icon-dislike" />
+            <span class="count">({{ comment.dislikes }})</span>
+          </button>
+          <template v-if="!hiddenReply && !commentMeta.isAiGenerated">
+            <button class="reply" @click="emit('cancel-reply', comment.id)" v-if="isReplying">
+              <i class="iconfont icon-cancel" />
+              <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
+            </button>
+            <button class="reply" @click="emit('reply', comment.id)" v-else>
+              <i class="iconfont icon-reply" />
               <i18n :k="LocalesKey.COMMENT_REPLY" />
-            </span>
-            <button class="parent" @click="scrollToCommentItem(comment.pid)">
-              {{ getReplyParentCommentText(comment.pid) }}
             </button>
-            <i18n zh="：" en=":" />
-          </p>
-          <markdown
-            class="markdown"
-            :markdown="comment.content"
-            :compact="true"
-            :render-options="{ sanitize: true, codeLineNumbers: false }"
-          />
+          </template>
         </div>
-        <div class="cm-footer">
-          <div class="left">
-            <span class="create-at" data-allow-mismatch>
-              <udate to="ago" :date="comment.created_at" />
-            </span>
-            <button
-              class="vote"
-              :class="{
-                voted: liked,
-                'has-count': Boolean(comment.likes)
-              }"
-              :disabled="liked"
-              @click="handleVote(true)"
-            >
-              <i class="iconfont icon-like" />
-              <span class="count">({{ comment.likes }})</span>
-            </button>
-            <button
-              class="vote"
-              :class="{
-                voted: disliked,
-                'has-count': Boolean(comment.dislikes)
-              }"
-              :disabled="disliked"
-              @click="handleVote(false)"
-            >
-              <i class="iconfont icon-dislike" />
-              <span class="count">({{ comment.dislikes }})</span>
-            </button>
-            <template v-if="!hiddenReply && !isAiGenerated">
-              <button class="reply" @click="handleCancelReply" v-if="isReply">
-                <i class="iconfont icon-cancel" />
-                <i18n :k="LocalesKey.COMMENT_REPLY_CANCEL" />
-              </button>
-              <button class="reply" @click="handleReply" v-else>
-                <i class="iconfont icon-reply" />
-                <i18n :k="LocalesKey.COMMENT_REPLY" />
-              </button>
-            </template>
-          </div>
-          <div class="right">
-            <button class="delete" :disabled="commentStore.deleting" @click="handleDelete" v-if="isDeletable">
-              <i class="iconfont icon-delete" />
-              <i18n :k="LocalesKey.COMMENT_DELETE" />
-            </button>
-          </div>
+        <div class="right">
+          <button
+            class="delete"
+            :disabled="commentStore.deleting"
+            @click="emit('delete', comment.id)"
+            v-if="isDeletable"
+          >
+            <i class="iconfont icon-delete" />
+            <i18n :k="LocalesKey.COMMENT_DELETE" />
+          </button>
         </div>
-        <div class="cm-reply" v-if="isReply">
-          <slot name="reply"></slot>
-        </div>
-        <div class="cm-children">
-          <slot name="children"></slot>
-        </div>
+      </div>
+      <div class="cm-reply" v-if="isReplying">
+        <slot name="reply"></slot>
+      </div>
+      <div class="cm-children">
+        <slot name="children"></slot>
       </div>
     </div>
   </li>
@@ -276,13 +187,13 @@
       padding-right: $gap-tiny;
     }
 
-    &.has-child {
+    &.has-children {
       .cm-reply {
         padding-bottom: 0;
       }
     }
 
-    &.is-child {
+    &.in-child-list {
       margin-top: $gap-tiny;
       padding-top: $gap-tiny;
       border-top: 1px dashed $module-bg-darker-3;
@@ -307,72 +218,16 @@
     }
 
     .cm-avatar {
-      display: block;
       position: absolute;
       left: 0;
       top: 1.2rem;
-
-      .link {
-        $size: 3.6rem;
-        position: relative;
-        display: block;
-        width: $size;
-        height: $size;
-        border: 4px solid $module-bg-lighter;
-        border-radius: $radius-sm;
-        background-color: $module-bg-darker-2;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          border-radius: $radius-xs;
-        }
-
-        .role {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-          width: 40%;
-          height: 40%;
-          padding-top: 1px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-top-left-radius: $radius-xs;
-          color: $white;
-          &.disqus {
-            background-color: rgba($disqus-primary, 0.5);
-          }
-          &.anonymous {
-            background-color: $module-bg-translucent;
-          }
-        }
-
-        .ai-brand {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 100%;
-          border-radius: $radius-xs;
-          background-color: $primary-lighter;
-          background: linear-gradient(45deg, #fa4340, $surmon, #19ba64);
-          opacity: 0.8;
-
-          .iconfont {
-            color: $white;
-            font-size: $font-size-h1;
-          }
-        }
-      }
     }
 
     .cm-body {
       display: block;
       width: 100%;
       height: 100%;
-      padding: $gap-xs $gap-xs $gap-xs 2.3rem;
+      padding: $gap-xs $gap-xs $gap-xs 2.1rem;
       background-color: $module-bg-darker-1;
       border-radius: $radius-xs;
       @include mix.background-transition();
@@ -392,107 +247,17 @@
           padding-left: 1em;
         }
 
-        .username {
-          text-transform: capitalize;
-          font-weight: bold;
-          margin-right: $gap-sm;
-          &.url:hover {
-            @include mix.text-underline();
-          }
-        }
-
-        .moderator,
-        .ai {
-          display: inline-block;
-          margin-left: -$gap-xs;
-          margin-right: $gap-sm;
-          padding: 0 0.26em 0.1em;
-          white-space: nowrap;
-          font-size: $font-size-quaternary;
-          color: $color-text-reversal;
-          background-color: $primary-lighter;
-          border-radius: $radius-xs;
-        }
-
-        .ai {
-          padding: 0 0.4em 0.1em;
-        }
-
         .author-info {
           display: inline-flex;
           align-items: center;
+          column-gap: $gap-sm;
           font-size: $font-size-tertiary;
           color: $color-text-divider;
-
-          > * {
-            margin-right: $gap-sm;
-            &:last-child {
-              margin-right: 0;
-            }
-          }
-
-          .ai-model {
-            .iconfont {
-              margin-right: $gap-tiny;
-            }
-          }
-        }
-
-        .floor {
-          color: $color-text-divider;
-          font-size: $font-size-tertiary;
-          font-weight: bold;
-          &:hover {
-            color: $color-link;
-            text-decoration: underline;
-            text-underline-offset: 2px;
-          }
         }
       }
 
       > .cm-content {
         user-select: text;
-
-        .reply {
-          display: flex;
-          align-items: center;
-          margin-top: 0.3rem;
-          margin-bottom: 0;
-          font-size: $font-size-secondary;
-          font-weight: bold;
-          color: $color-text-disabled;
-
-          .text {
-            margin-right: $gap-tiny;
-          }
-
-          .parent {
-            font-weight: bold;
-            color: $color-link;
-            &:hover {
-              color: $color-link-hover;
-            }
-          }
-
-          & + .markdown {
-            ::v-deep(> pre:first-child) {
-              margin-top: 0.3em;
-            }
-          }
-        }
-
-        .markdown {
-          overflow: hidden;
-          padding-bottom: 0.2em;
-
-          > :first-child {
-            margin-top: 0.2em;
-          }
-
-          ::v-deep(hr) {
-            border-color: $module-bg-darker-2;
-          }
-        }
       }
 
       .cm-footer {
@@ -513,8 +278,9 @@
           &.voted {
             color: $red;
           }
+
           &.voted,
-          &.has-count {
+          &:not([data-count='0']) {
             .count {
               font-weight: bold;
             }
@@ -558,7 +324,7 @@
     &.hide-avatar {
       padding: 0;
 
-      &.is-child {
+      &.in-child-list {
         .cm-content {
           border-left: 6px solid $module-bg-darker-2;
           padding-left: $gap-sm;

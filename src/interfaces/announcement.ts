@@ -1,5 +1,4 @@
 export interface Announcement {
-  _id: string
   id: number
   status: number
   content: string

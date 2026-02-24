@@ -13,7 +13,7 @@
   const { theme, cdnDomain, i18n: _i18n } = useEnhancer()
   const adminProfileStore = useAdminProfileStore()
   const adminAvatar = computed(() => {
-    return adminProfileStore.data?.avatar || getAssetURL(cdnDomain, '/images/anonymous.png')
+    return adminProfileStore.data?.avatar_url || getAssetURL(cdnDomain, '/images/anonymous.png')
   })
 
   const themeIcon = computed(() => {

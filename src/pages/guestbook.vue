@@ -6,7 +6,8 @@
   import { useCommentStore } from '/@/stores/comment'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { Language, LocalesKey } from '/@/locales'
-  import { CommentPostId } from '/@/constants/comment-id'
+  import { CommentTargetType } from '/@/interfaces/comment'
+  import { PageIds } from '/@/constants/page-id'
   import { firstUpperCase } from '/@/transforms/text'
   import { getPageURL } from '/@/transforms/url'
   import { isClient } from '/@/configs/app.env'
@@ -25,9 +26,11 @@
   const bannerImage = '/images/page-guestbook/banner.webp'
 
   const fetchComments = () => {
-    return commentStore.fetchList({ post_id: CommentPostId.Guestbook }).then(() => {
-      isLoading.value = false
-    })
+    return commentStore
+      .fetchList({ target_type: CommentTargetType.Page, target_id: PageIds.Guestbook })
+      .then(() => {
+        isLoading.value = false
+      })
   }
 
   usePageSeo(() => {
@@ -72,7 +75,7 @@
       </template>
     </responsive>
     <div class="comment">
-      <comment :post-id="0" :plain="props.isMobile" :fetching="isLoading" />
+      <comment :target-type="CommentTargetType.Page" :target-id="0" :plain="props.isMobile" :fetching="isLoading" />
     </div>
   </div>
 </template>

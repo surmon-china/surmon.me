@@ -8,7 +8,7 @@ import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { AdminProfile, AppOptions, AppRemoteConfig } from '/@/interfaces/options'
-import { useIdentityStore, UserType } from './identity'
+import { useIdentityStore } from './identity'
 import nodepress from '/@/services/nodepress'
 
 export const useAdminProfileStore = defineStore('adminProfile', () => {
@@ -22,6 +22,7 @@ export const useAdminProfileStore = defineStore('adminProfile', () => {
 })
 
 export const useAppOptionsStore = defineStore('appOptions', () => {
+  const identityStore = useIdentityStore()
   const fetchStore = createFetchStore<AppOptions | null>({
     shallow: false,
     data: null,
@@ -43,14 +44,17 @@ export const useAppOptionsStore = defineStore('appOptions', () => {
   })
 
   const postFeedback = (feedback: { emotion: number; content: string }) => {
-    const identityStore = useIdentityStore()
-    const authorName = identityStore.author?.name || null
-    return nodepress.post('/feedback', {
-      ...feedback,
-      tid: 0,
-      user_name: authorName ? `${authorName} (${UserType[identityStore.user.type]})` : null,
-      user_email: identityStore.author?.email || null
-    })
+    return nodepress.post(
+      '/feedback',
+      {
+        ...feedback,
+        author_name: identityStore.profile?.name,
+        author_email: identityStore.profile?.email
+      },
+      {
+        token: identityStore.token
+      }
+    )
   }
 
   return {

@@ -9,7 +9,9 @@
   import { LocalesKey } from '/@/locales'
   import * as ANCHORS from '/@/constants/element-anchor'
   import { GAEventCategories } from '/@/constants/google-analytics'
+  import { CommentTargetType } from '/@/interfaces/comment'
   import { CUSTOM_ELEMENTS } from '/@/effects/elements'
+  import { useHistoryStore } from '/@/stores/history'
   import { SocialMedia } from '/@/components/common/share.vue'
   import { getExtrasMap } from '/@/transforms/extra'
   import { scrollToAnchor } from '/@/utils/scroller'
@@ -29,15 +31,16 @@
     isMobile?: boolean
   }>()
 
-  const { route, gtag, globalState, identity, i18n: _i18n } = useEnhancer()
+  const { route, gtag, globalState, i18n: _i18n } = useEnhancer()
+  const historyStore = useHistoryStore()
   const commentStore = useCommentStore()
   const articleDetailStore = useArticleDetailStore()
   const { article, fetching, prevArticle, nextArticle, relatedArticles } = storeToRefs(articleDetailStore)
 
-  const isLiked = computed(() => !!(article.value && identity.isLikedArticle(article.value.id)))
-  const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras))
+  const isLiked = computed(() => !!(article.value && historyStore.isLikedArticle(article.value.id)))
 
   // fot AI review
+  const articleExtrasMap = computed(() => getExtrasMap(article.value?.extras))
   const aiReviewProvider = computed(() => articleExtrasMap.value.get('ai-review-provider'))
   const aiReviewModel = computed(() => articleExtrasMap.value.get('ai-review-model'))
   const aiReviewContent = computed(() => articleExtrasMap.value.get('ai-review-content'))
@@ -65,9 +68,10 @@
     gtag?.event('article_like', {
       event_category: GAEventCategories.Article
     })
+
     try {
       await articleDetailStore.postArticleLike(article.value!.id)
-      identity.likeArticle(article.value!.id)
+      historyStore.likeArticle(article.value!.id)
       callback?.()
     } catch (error) {
       const message = _i18n.t(LocalesKey.POST_ACTION_ERROR)
@@ -77,7 +81,7 @@
   }
 
   const fetchArticleDetail = (articleId: number) => {
-    const commentRequest = commentStore.fetchList({ post_id: articleId })
+    const commentRequest = commentStore.fetchList({ target_type: CommentTargetType.Article, target_id: articleId })
     const articleRequest = articleDetailStore.fetchCompleteArticle(articleId)
     return Promise.all([articleRequest, commentRequest])
   }
@@ -160,7 +164,7 @@
                   :is-liked="isLiked"
                   :hidden-sponsor="isMobile"
                   :enabled-parkinson="
-                    !isMobile && (globalState.userAgent.isChrome || globalState.userAgent.isFirefox)
+                    (globalState.userAgent.isChrome || globalState.userAgent.isFirefox) && !isMobile
                   "
                   @like="handleLike"
                   @sponsor="handleSponsor"
@@ -193,7 +197,13 @@
       </template>
     </placeholder>
     <div class="comment">
-      <comment :plain="isMobile" :readonly="article?.disabled_comments" :fetching="fetching" :post-id="articleId">
+      <comment
+        :target-type="CommentTargetType.Article"
+        :target-id="articleId"
+        :readonly="article?.disabled_comments"
+        :plain="isMobile"
+        :fetching="fetching"
+      >
         <template #list-top-extra v-if="aiReviewContent && aiReviewProvider">
           <article-ai-review
             :provider="aiReviewProvider"

@@ -1,9 +1,8 @@
 import { ExtraKeyValue } from './extra'
 
 export interface Category {
-  _id: string
   id: number
-  pid: string
+  parent_id: number
   name: string
   slug: string
   description: string

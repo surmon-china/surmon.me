@@ -151,7 +151,7 @@
           color: $white;
           opacity: 0.8;
           background-color: $primary-lighter;
-          background: linear-gradient(45deg, #fa4340, $surmon, #19ba64);
+          background: $ai-primary-gradient;
           animation: ai-button 4s ease infinite;
           transition: opacity $motion-duration-fast;
 

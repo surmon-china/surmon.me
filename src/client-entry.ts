@@ -4,9 +4,6 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-// polyfills
-import './polyfills'
-
 import * as Sentry from '@sentry/vue'
 import { computed, watch, nextTick } from 'vue'
 import { createWebHistory } from 'vue-router'
@@ -15,6 +12,7 @@ import type { SerializableHead } from '@unhead/vue'
 import { createMainApp } from '/@/app/main'
 import { useAppOptionsStore } from '/@/stores/foundation'
 import { useIdentityStore } from '/@/stores/identity'
+import { useHistoryStore } from '/@/stores/history'
 import { useGoLinksStore } from '/@/stores/go-links'
 
 import { gtag } from '/@/composables/gtag'
@@ -90,6 +88,7 @@ router.beforeEach((to, from) => {
     popup.hidden()
   }
 })
+
 router.afterEach((to, from) => {
   if (to.path !== from.path) {
     nextTick().then(() => {
@@ -133,7 +132,8 @@ router.isReady().finally(() => {
     globalState.setHydrate()
     // reset i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
-    // init user identity state
+    // init user identity / history state
+    useHistoryStore(store.pinia).initOnClient()
     useIdentityStore(store.pinia).initOnClient()
     // init go url map state
     useGoLinksStore(store.pinia).fetchRemoteLinksMap()

@@ -1,5 +1,6 @@
 /**
  * @file emoji
+ * @module transform/emoji
  * @author Surmon <https://github.com/surmon-china>
  */
 

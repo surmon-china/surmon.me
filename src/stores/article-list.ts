@@ -12,7 +12,7 @@ import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/configs/app.env'
 import nodepress from '/@/services/nodepress'
 
-export const ARTICLE_LIST_API_PATH = '/article'
+export const ARTICLE_LIST_API_PATH = '/articles'
 
 export interface ArticleListParams {
   tag_slug?: string

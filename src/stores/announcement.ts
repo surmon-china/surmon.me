@@ -15,7 +15,7 @@ export const useAnnouncementStore = defineStore('announcement', () => {
     data: [],
     preclean: true,
     async fetcher(params?: any) {
-      const response = await nodepress.get<PaginationList<Announcement>>('/announcement', { params })
+      const response = await nodepress.get<PaginationList<Announcement>>('/announcements', { params })
       return response.result.data
     }
   })

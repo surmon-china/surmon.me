@@ -38,7 +38,7 @@ export const useTagStore = defineStore('tag', () => {
     once: true,
     data: [],
     fetcher: async () => {
-      const response = await nodepress.get<Tag[]>('/tag/all')
+      const response = await nodepress.get<Tag[]>('/tags/all')
       return response.result
     }
   })

@@ -23,7 +23,7 @@ export const useAboutPageMeta = () => {
       pageTitles: titles,
       description,
       ogType: 'profile',
-      ogImage: adminProfileStore.data?.avatar
+      ogImage: adminProfileStore.data?.avatar_url
     }
   })
 }

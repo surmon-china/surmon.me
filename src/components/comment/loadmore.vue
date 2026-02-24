@@ -1,11 +1,8 @@
 <script lang="ts" setup>
   import { LocalesKey } from '/@/locales'
-  import { Pagination } from '/@/interfaces/pagination'
-  import { COMMENT_FOOTER_ELEMENT_ID } from '/@/constants/element-anchor'
 
   const props = defineProps<{
     fetching: boolean
-    pagination: Pagination | null
     hasMore: boolean
   }>()
 
@@ -15,7 +12,7 @@
 </script>
 
 <template>
-  <div class="loadmore" :id="COMMENT_FOOTER_ELEMENT_ID">
+  <div class="comment-loadmore">
     <loading-indicator class="loading" v-if="fetching" />
     <button class="button" v-else-if="hasMore" @click="emit('loadmore')">
       <i18n zh="加载更多评论" en="loadmore comments" />
@@ -34,7 +31,7 @@
 
   $button-size: 2.2rem;
 
-  .loadmore {
+  .comment-loadmore {
     margin-top: $gap;
     margin-bottom: $gap-sm;
     display: flex;

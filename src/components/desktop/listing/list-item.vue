@@ -2,7 +2,7 @@
   import { computed, shallowRef, onMounted } from 'vue'
   import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useIdentityStore } from '/@/stores/identity'
+  import { useHistoryStore } from '/@/stores/history'
   import { Article, ArticleLanguage, ArticleLanguageI18n } from '/@/interfaces/article'
   import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/article'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
@@ -15,8 +15,8 @@
   }>()
 
   const { cdnDomain, isZhLang, i18n: _i18n } = useEnhancer()
-  const identityStore = useIdentityStore()
-  const isLiked = computed(() => identityStore.isLikedArticle(props.article.id))
+  const historyStore = useHistoryStore()
+  const isLiked = computed(() => historyStore.isLikedArticle(props.article.id))
 
   const imageRef = shallowRef<HTMLImageElement | null>(null)
   const finallyThumbnailURL = shallowRef<string | null>(null)
@@ -99,7 +99,7 @@
           <p class="summary" style="-webkit-box-orient: vertical" v-html="article.summary"></p>
         </div>
         <div class="item-meta">
-          <span class="date" data-allow-mismatch>
+          <span class="date">
             <i class="iconfont icon-clock"></i>
             <udate to="ago" :date="article.created_at" />
           </span>

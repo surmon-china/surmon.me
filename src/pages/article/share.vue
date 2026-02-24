@@ -29,7 +29,9 @@
   const { theme } = useEnhancer()
 
   // article content
-  const isLongArticle = computed(() => props.article.content.length > APP_CONFIG.article_image_share_long_threshold)
+  const isLongArticle = computed(
+    () => props.article.content.length > APP_CONFIG.article_image_share_long_threshold
+  )
   const templateMarkdown = computed(() => {
     const content = props.article.content
     if (!isLongArticle.value) {
@@ -144,7 +146,10 @@
             </div>
             <div class="footer">
               <p class="tip">
-                <i18n zh="长按识别二维码，阅读全文，参与评论" en="Long-press the QR code to read and discuss" />
+                <i18n
+                  zh="长按识别二维码，阅读全文，参与评论"
+                  en="Long-press the QR code to read and discuss"
+                />
               </p>
               <uimage v-if="shareTemplateQRCode" class="qrcode" :src="shareTemplateQRCode" />
               <uimage class="logo" src="/images/logo.svg" />
@@ -179,6 +184,7 @@
       opacity: 0.8;
       display: flex;
       justify-content: space-between;
+      column-gap: $gap-sm;
       &:hover {
         opacity: 1;
       }
@@ -188,13 +194,9 @@
         width: auto;
         height: $share-size;
         line-height: $share-size;
-        margin-right: $gap-sm;
         font-size: $font-size-h4;
         border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
-        &:last-child {
-          margin-right: 0;
-        }
       }
     }
   }

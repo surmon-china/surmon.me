@@ -5,7 +5,7 @@
  */
 
 import axios from 'axios'
-import type { AxiosError, AxiosInstance, Method as AxiosMethod } from 'axios'
+import type { AxiosError, AxiosRequestConfig } from 'axios'
 import type { AppError } from '/@/app/error'
 import { BAD_REQUEST, NETWORK_ERROR } from '/@/constants/http-code'
 import { isClient } from '/@/configs/app.env'
@@ -50,7 +50,8 @@ nodepress.interceptors.response.use(
       logger.debug('axios error:', error)
     }
 
-    const fallbackCode = error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK' ? NETWORK_ERROR : BAD_REQUEST
+    const fallbackCode =
+      error.code === 'ECONNABORTED' || error.code === 'ERR_NETWORK' ? NETWORK_ERROR : BAD_REQUEST
     return Promise.reject({
       code: error?.status ?? error.response?.status ?? fallbackCode,
       message: error.response?.data?.message || error.response?.statusText || error?.message
@@ -58,21 +59,35 @@ nodepress.interceptors.response.use(
   }
 )
 
-type Method = Exclude<Lowercase<AxiosMethod>, 'unlink' | 'purge' | 'link'> | 'request'
-const overwrite = (method: Method) => {
-  return <T = any>(...args: Parameters<AxiosInstance[typeof method]>): Promise<NodePressSuccessResponse<T>> => {
-    return (nodepress[method] as any)(...args)
+interface NodePressRequestConfig extends AxiosRequestConfig {
+  token?: string | null
+}
+
+const request = <T = any>(config: NodePressRequestConfig): Promise<NodePressSuccessResponse<T>> => {
+  const { token, headers, ...restConfig } = config
+  const finalHeaders = {
+    ...headers,
+    ...(token ? { Authorization: `Bearer ${token}` } : {})
   }
+  return nodepress.request({ ...restConfig, headers: finalHeaders })
 }
 
 export default {
   $: nodepress,
-  request: overwrite('request'),
-  head: overwrite('head'),
-  get: overwrite('get'),
-  post: overwrite('post'),
-  put: overwrite('put'),
-  patch: overwrite('patch'),
-  delete: overwrite('delete'),
-  options: overwrite('options')
+  request,
+  get<T = any>(url: string, config?: NodePressRequestConfig) {
+    return this.request<T>({ ...config, method: 'get', url })
+  },
+  post<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
+    return this.request<T>({ ...config, method: 'post', url, data })
+  },
+  put<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
+    return this.request<T>({ ...config, method: 'put', url, data })
+  },
+  patch<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
+    return this.request<T>({ ...config, method: 'patch', url, data })
+  },
+  delete<T = any>(url: string, config?: NodePressRequestConfig) {
+    return this.request<T>({ ...config, method: 'delete', url })
+  }
 }

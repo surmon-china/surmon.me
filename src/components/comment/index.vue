@@ -1,26 +1,29 @@
 <script lang="ts" setup>
-  import { ref, reactive, computed, watch, toRaw } from 'vue'
+  import { ref, watch } from 'vue'
   import { onBeforeMount, onMounted, onBeforeUnmount, onUnmounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useIdentityStore, UserType } from '/@/stores/identity'
   import { useCommentStore } from '/@/stores/comment'
-  import { GAEventCategories } from '/@/constants/google-analytics'
   import * as ANCHORS from '/@/constants/element-anchor'
   import { SortMode } from '/@/constants/sort-param'
-  import { Author } from '/@/interfaces/comment'
+  import { CommentTargetType } from '/@/interfaces/comment'
   import { LocalesKey } from '/@/locales'
   import { scrollToAnchor } from '/@/utils/scroller'
-  import { MAX_COMMENT_LENGTH, luanchEmojiRain, logger } from './helper'
-  import CommentTopbar from './topbar.vue'
-  import CommentMain from './list/main.vue'
+
+  import CommentTopbarWrapper from './topbar/wrapper.vue'
+  import CommentTopbarCount from './topbar/count.vue'
+  import CommentTopbarSort from './topbar/sort.vue'
+  import CommentTopbarUser from './topbar/user.vue'
+  import CommentComposerWrapper from './composer/wrapper.vue'
+  import CommentComposerForm from './composer/main.vue'
+  import CommentListWrapper from './list/wrapper.vue'
   import CommentList from './list/list.vue'
   import CommentLoadmore from './loadmore.vue'
-  import CommentPublisherMain from './publisher/main.vue'
-  import CommentPublisher from './publisher/publisher.vue'
-  import CommentPen from './publisher/pen.vue'
+
+  import { useCommentInteraction } from './interaction'
 
   export interface Props {
-    postId: number
+    targetType: CommentTargetType
+    targetId: number
     readonly?: boolean
     fetching?: boolean
     plain?: boolean
@@ -32,188 +35,45 @@
     plain: false
   })
 
-  const { gtag, route, globalState, i18n: _i18n } = useEnhancer()
-  const identityStore = useIdentityStore()
+  const { route } = useEnhancer()
   const commentStore = useCommentStore()
-
-  const isPosting = computed(() => commentStore.posting)
-  const isFetching = computed(() => commentStore.fetching)
-  const isLoading = computed(() => {
-    return props.fetching || (!commentStore.comments.length && commentStore.fetching)
+  const commentInteraction = useCommentInteraction({
+    targetType: props.targetType,
+    targetId: props.targetId
   })
 
-  enum PostKey {
-    Root = 'root',
-    Reply = 'reply'
-  }
-  const postingKey = ref<PostKey>()
-  const isRootPosting = computed(() => isPosting.value && postingKey.value === PostKey.Root)
-  const isReplyPosting = computed(() => isPosting.value && postingKey.value === PostKey.Reply)
+  const commentSort = ref(SortMode.Latest)
 
-  const commentState = reactive({
-    sort: SortMode.Latest,
-    replyPId: 0
-  })
-
-  const guestProfile = ref<Author>({
-    name: '',
-    email: '',
-    site: ''
-  })
-
-  const rootPenState = reactive({
-    content: '',
-    previewed: false
-  })
-
-  const clearRootPenContent = () => {
-    rootPenState.content = ''
-  }
-  const closeRootPenPreview = () => {
-    rootPenState.previewed = false
-  }
-
-  const cancelCommentReply = () => {
-    commentState.replyPId = 0
-  }
-  const replyComment = (commentId: number) => {
-    commentState.replyPId = commentId
-    gtag?.event('reply_comment', {
-      event_category: GAEventCategories.Comment
+  const fetchCommentsWithSort = async (sort: SortMode) => {
+    scrollToAnchor(ANCHORS.COMMENT_ELEMENT_ID)
+    await commentStore.fetchList({
+      target_type: props.targetType,
+      target_id: props.targetId,
+      sort
     })
   }
 
-  const fetchSortComments = (sort: SortMode) => {
-    if (commentState.sort !== sort) {
-      commentState.sort = sort
-      commentStore.fetchList({ post_id: props.postId, sort: commentState.sort })
-      scrollToAnchor(ANCHORS.COMMENT_ELEMENT_ID)
-    }
-  }
-
-  const fetchNextPageComments = () => {
-    const lastCommentId = ANCHORS.getCommentItemElementId(commentStore.comments.at(-1)!.id)
-    commentStore.fetchListNextPage({ post_id: props.postId, sort: commentState.sort }).then(() => {
-      nextTick().then(() => {
-        scrollToAnchor(lastCommentId)
-      })
+  const fetchNextPageComments = async () => {
+    const lastComment = commentStore.comments.at(-1)
+    const lastCommentId = ANCHORS.getCommentItemElementId(lastComment!.id)
+    await commentStore.fetchListNextPage({
+      target_type: props.targetType,
+      target_id: props.targetId,
+      sort: commentSort.value
     })
-  }
-
-  const handleDeleteComment = (commentId: number) => {
-    commentStore.deleteComment(commentId).catch((error) => {
-      logger.failure('delete comment failed', error)
-      alert(error.message)
-    })
-  }
-
-  const createComment = async (payload: { content: string; pid: number }) => {
-    gtag?.event('submit_comment', {
-      event_category: GAEventCategories.Comment
-    })
-
-    // content length
-    if (!payload.content || !payload.content.trim()) {
-      throw `${_i18n.t(LocalesKey.COMMENT_POST_CONTENT)} ?`
-    }
-    if (payload.content.length > MAX_COMMENT_LENGTH) {
-      throw `${_i18n.t(LocalesKey.COMMENT_POST_ERROR_CONTENT)} ?`
-    }
-
-    // temp user profile
-    const isGuest = identityStore.user.type === UserType.Null
-    const guestProfileValue = guestProfile.value
-    if (isGuest) {
-      if (!guestProfileValue.name) {
-        throw _i18n.t(LocalesKey.COMMENT_POST_NAME) + '?'
-      }
-      if (!guestProfileValue.email) {
-        throw _i18n.t(LocalesKey.COMMENT_POST_EMAIL) + '?'
-      }
-    }
-
-    const author: Author = isGuest
-      ? toRaw(guestProfileValue)
-      : identityStore.user.type === UserType.Local
-        ? identityStore.user.localProfile!
-        : {
-            name: identityStore.user.disqusProfile.name,
-            site: identityStore.user.disqusProfile.url
-          }
-    if (!author.email) {
-      Reflect.deleteProperty(author, 'email')
-    }
-    if (!author.site) {
-      Reflect.deleteProperty(author, 'site')
-    }
-
-    try {
-      const newComment = await commentStore.postComment({
-        pid: payload.pid,
-        post_id: props.postId,
-        content: payload.content,
-        agent: globalState.userAgent.original,
-        author
-      })
-      // set user profile
-      if (isGuest) {
-        identityStore.saveLocalUser({
-          ...author,
-          email_hash: newComment.author.email_hash
-        })
-      }
-      // random emoji rain
-      luanchEmojiRain(payload.content)
-    } catch (error: any) {
-      logger.failure('submit comment failed:', error)
-      throw error.message
-    }
-  }
-
-  const validateFormById = (formId: string) => {
-    const formElement = document.getElementById(formId)! as HTMLFormElement
-    const check_status = formElement.checkValidity()
-    formElement.reportValidity()
-    return check_status ? Promise.resolve() : Promise.reject()
-  }
-
-  const handleRootSubmit = async (content: string) => {
-    await validateFormById(ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID)
-    postingKey.value = PostKey.Root
-    try {
-      await createComment({ content, pid: 0 })
-      closeRootPenPreview()
-      clearRootPenContent()
-    } catch (error: any) {
-      alert(error)
-    } finally {
-      postingKey.value = undefined
-    }
-  }
-
-  const handleReplySubmit = async (content: string) => {
-    await validateFormById(ANCHORS.COMMENT_REPLY_PUBLISHER_ELEMENT_ID)
-    postingKey.value = PostKey.Reply
-    try {
-      await createComment({ content, pid: commentState.replyPId })
-      cancelCommentReply()
-    } catch (error: any) {
-      alert(error)
-    } finally {
-      postingKey.value = undefined
-    }
+    await nextTick()
+    scrollToAnchor(lastCommentId)
   }
 
   onBeforeMount(() => {
-    watch(isLoading, (loading) => {
-      if (loading) {
-        cancelCommentReply()
-      }
+    watch(commentSort, (sort) => {
+      commentInteraction.cancelReply()
+      fetchCommentsWithSort(sort)
     })
   })
 
   onBeforeUnmount(() => {
-    cancelCommentReply()
+    commentInteraction.cancelReply()
   })
 
   onUnmounted(() => {
@@ -225,7 +85,7 @@
     if (urlHash.startsWith(ANCHORS.COMMENT_ITEM_URL_HASH_PREFIX)) {
       const commentId = ANCHORS.getCommentIdByUrlHash(urlHash)
       const elementId = ANCHORS.getCommentItemElementId(commentId)
-      if (elementId && document.getElementById(elementId)) {
+      if (document.getElementById(elementId)) {
         setTimeout(() => scrollToAnchor(elementId), 400)
       }
     }
@@ -234,49 +94,41 @@
 
 <template>
   <div :id="ANCHORS.COMMENT_ELEMENT_ID" class="comment-box" :class="{ plain }">
-    <comment-topbar
-      :total="commentStore.pagination?.total"
-      :loaded="commentStore.comments.length"
-      :post-id="postId"
-      :fetching="fetching"
-      :loading="isLoading"
-      :plain="plain"
-      :sort="commentState.sort"
-      @sort="fetchSortComments"
-    >
-      <template #extra>
-        <slot name="topbar-extra"></slot>
+    <comment-topbar-wrapper :loading="fetching" :plain="plain">
+      <template #count>
+        <comment-topbar-count :total="commentStore.pagination?.total" />
       </template>
-    </comment-topbar>
+      <template #sort>
+        <comment-topbar-sort v-model="commentSort" />
+      </template>
+      <template #user>
+        <client-only>
+          <comment-topbar-user />
+        </client-only>
+      </template>
+    </comment-topbar-wrapper>
     <divider class="divider" />
     <div class="readonly" v-if="readonly">
       <i18n :k="LocalesKey.COMMENT_DISABLED" />
     </div>
-    <comment-publisher-main :fetching="fetching" v-else>
-      <comment-publisher
-        v-model:profile="guestProfile"
-        :id="ANCHORS.COMMENT_PUBLISHER_ELEMENT_ID"
-        :disabled="isLoading || isRootPosting"
-        :total="commentStore.pagination?.total"
-        :default-blossomed="plain ? true : false"
+    <comment-composer-wrapper :loading="fetching" v-else>
+      <comment-composer-form
+        v-model:profile="commentInteraction.inputProfile"
+        v-model:content="commentInteraction.rootEditorState.content"
+        v-model:preview="commentInteraction.rootEditorState.preview"
+        :posting="commentInteraction.isRootPosting.value"
+        :disabled="commentStore.fetching || commentInteraction.isRootPosting.value"
+        :has-comments="!!commentStore.pagination?.total"
+        :expanded="plain ? true : false"
         :hidden-avatar="plain"
-      >
-        <template #pen>
-          <comment-pen
-            v-model="rootPenState.content"
-            v-model:previewed="rootPenState.previewed"
-            :auto-focus="plain ? false : true"
-            :hidden-stationery="plain"
-            :disabled="isRootPosting || isLoading"
-            :posting="isRootPosting"
-            @submit="handleRootSubmit"
-          />
-        </template>
-      </comment-publisher>
-    </comment-publisher-main>
+        :hidden-editor-tools="plain"
+        :editor-auto-focus="plain ? false : true"
+        @submit="commentInteraction.submitRootComment"
+      />
+    </comment-composer-wrapper>
     <divider class="divider" />
-    <comment-main
-      :fetching="isLoading"
+    <comment-list-wrapper
+      :loading="fetching || (!commentStore.comments.length && commentStore.fetching)"
       :skeleton-count="plain ? 3 : 5"
       :has-data="!!commentStore.commentTreeList.length"
     >
@@ -286,48 +138,43 @@
       </template>
       <template #list>
         <comment-list
+          level="root"
           :comments="commentStore.commentTreeList"
-          :reply-pid="commentState.replyPId"
+          :replying-parent-id="commentInteraction.replyingParentId.value"
           :hidden-reply="readonly"
           :hidden-avatar="plain"
-          :hidden-ua="plain"
-          :plain-vote="plain"
-          @reply="replyComment"
-          @cancel-reply="cancelCommentReply"
-          @delete="handleDeleteComment"
+          :hidden-user-agent="plain"
+          @like="commentInteraction.likeComment"
+          @dislike="commentInteraction.dislikeComment"
+          @delete="commentInteraction.deleteComment"
+          @reply="commentInteraction.replyTo"
+          @cancel-reply="commentInteraction.cancelReply"
         >
           <template #reply="payload">
-            <comment-publisher
-              v-model:profile="guestProfile"
-              :id="ANCHORS.COMMENT_REPLY_PUBLISHER_ELEMENT_ID"
-              :disabled="false"
+            <comment-composer-form
+              v-model:profile="commentInteraction.inputProfile"
+              :posting="commentInteraction.isReplyPosting.value"
+              :disabled="commentInteraction.isReplyPosting.value"
               :bordered="true"
-              :default-blossomed="true"
-              :hidden-avatar="plain"
+              :expanded="true"
               :fixed-avatar="payload.isChild"
-            >
-              <template #pen>
-                <comment-pen
-                  :posting="isReplyPosting"
-                  :bordered="true"
-                  :auto-focus="true"
-                  :hidden-stationery="plain"
-                  @submit="handleReplySubmit"
-                />
-              </template>
-            </comment-publisher>
+              :hidden-avatar="plain"
+              :hidden-editor-tools="plain"
+              :editor-auto-focus="true"
+              @submit="commentInteraction.submitReplyComment"
+            />
           </template>
         </comment-list>
       </template>
       <template #pagination>
         <comment-loadmore
-          :fetching="isFetching"
+          :fetching="commentStore.fetching"
           :pagination="commentStore.pagination"
           :has-more="commentStore.hasMore"
           @loadmore="fetchNextPageComments"
         />
       </template>
-    </comment-main>
+    </comment-list-wrapper>
   </div>
 </template>
 

@@ -44,7 +44,7 @@
       <div class="fullwidth">
         <div class="profile">
           <div class="avatar">
-            <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar)" />
+            <uimage class="image" :src="useAdminAvatar(adminProfileStore.data?.avatar_url)" />
           </div>
           <div class="infos">
             <h1 class="name">{{ adminProfileStore.data?.name || '-' }}</h1>
@@ -106,7 +106,11 @@
         <div
           class="biography"
           :class="
-            isZhLang ? 'zh' : globalState.userAgent.isFirefox || globalState.userAgent.isSafari ? 'en-hack' : 'en'
+            isZhLang
+              ? 'zh'
+              : globalState.userAgent.isFirefox || globalState.userAgent.isSafari
+                ? 'en-hack'
+                : 'en'
           "
           v-html="
             markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {

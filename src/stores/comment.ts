@@ -6,27 +6,28 @@
 
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import nodepress from '/@/services/nodepress'
 import { isClient } from '/@/configs/app.env'
 import { Comment } from '/@/interfaces/comment'
 import { Pagination, PaginationList } from '/@/interfaces/pagination'
-import { CommentParentId } from '/@/constants/comment-id'
+import { CommentTargetType } from '/@/interfaces/comment'
 import { SortMode } from '/@/constants/sort-param'
 import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
+import nodepress from '/@/services/nodepress'
 
-export const COMMENT_API_PATH = '/comment'
+export const COMMENT_API_PATH = '/comments'
 
 export interface CommentFetchParams {
+  target_type: CommentTargetType
+  target_id: number
   page?: number
   per_page?: number
   sort?: SortMode
-  [key: string]: any
 }
 
 export interface CommentTreeItem {
   comment: Comment
-  children: Array<Comment>
+  children: Array<CommentTreeItem>
 }
 
 export const useCommentStore = defineStore('comment', () => {
@@ -40,36 +41,52 @@ export const useCommentStore = defineStore('comment', () => {
     return pagination.value ? pagination.value.current_page < pagination.value.total_page : false
   })
 
-  const commentTreeList = computed<CommentTreeItem[]>(() => {
-    // only keep 2 level tree
-    const ids = comments.value.map((comment) => comment.id)
-    const roots = comments.value.filter((comment) => {
-      return comment.pid === CommentParentId.Self || !ids.includes(comment.pid)
-    })
-    const children = comments.value.filter((comment) => {
-      return comment.pid !== CommentParentId.Self && ids.includes(comment.pid)
-    })
-    const fullMap = new Map<number, Comment>(comments.value.map((comment) => [comment.id, comment]))
-    const treeMap = new Map<number, { comment: Comment; children: Array<Comment> }>(
-      roots.map((comment) => [comment.id, { comment, children: [] }])
-    )
+  const commentMap = computed<Map<number, Comment>>(() => {
+    return new Map(comments.value.map((c) => [c.id, c]))
+  })
 
-    const findRootParentId = (pid: number): number | void => {
-      const target = fullMap.get(pid)
-      return !target ? undefined : target.pid === CommentParentId.Self ? target.id : findRootParentId(target.pid)
+  const commentTreeList = computed<CommentTreeItem[]>(() => {
+    const map = commentMap.value
+    const nodeMap = new Map<number, CommentTreeItem>()
+    const rootIdMap = new Map<number, number>()
+    const roots: CommentTreeItem[] = []
+
+    for (const comment of map.values()) {
+      nodeMap.set(comment.id, { comment, children: [] })
     }
 
-    children.forEach((comment) => {
-      const rootPid = findRootParentId(comment.pid)
-      if (rootPid) {
-        if (treeMap.has(rootPid)) {
-          const target = treeMap.get(rootPid)!
-          treeMap.set(rootPid, { ...target, children: [comment, ...target.children] })
-        }
-      }
-    })
+    const findRootId = (id: number): number => {
+      if (rootIdMap.has(id)) return rootIdMap.get(id)!
 
-    return Array.from(treeMap.values())
+      const comment = map.get(id)
+      if (!comment?.parent_id || !map.has(comment.parent_id)) {
+        rootIdMap.set(id, id)
+        return id
+      }
+
+      const rootId = findRootId(comment.parent_id)
+      rootIdMap.set(id, rootId)
+      return rootId
+    }
+
+    for (const node of nodeMap.values()) {
+      const id = node.comment.id
+      const rootId = findRootId(id)
+
+      if (rootId === id) {
+        roots.push(node)
+      } else {
+        nodeMap.get(rootId)!.children.push(node)
+      }
+    }
+
+    for (const root of roots) {
+      root.children.sort(
+        (a, b) => new Date(a.comment.created_at).getTime() - new Date(b.comment.created_at).getTime()
+      )
+    }
+
+    return roots
   })
 
   const clearList = () => {
@@ -77,11 +94,13 @@ export const useCommentStore = defineStore('comment', () => {
     pagination.value = null
   }
 
-  const _fetchList = async (params: CommentFetchParams = {}) => {
+  const _fetchList = async (params: CommentFetchParams) => {
     const fetchParams = { per_page: 50, sort: SortMode.Latest, ...params }
     fetching.value = true
     try {
-      const request = nodepress.get<PaginationList<Comment>>(COMMENT_API_PATH, { params: fetchParams })
+      const request = nodepress.get<PaginationList<Comment>>(COMMENT_API_PATH, {
+        params: fetchParams
+      })
       const response = await (isClient ? delayPromise(480, request) : request)
       pagination.value = response.result.pagination
       comments.value.push(...response.result.data)
@@ -90,13 +109,13 @@ export const useCommentStore = defineStore('comment', () => {
     }
   }
 
-  const fetchList = async (params?: CommentFetchParams) => {
+  const fetchList = async (params: CommentFetchParams) => {
     // clear list when refetch
     clearList()
     return _fetchList({ ...params, page: 1 })
   }
 
-  const fetchListNextPage = (params?: CommentFetchParams) => {
+  const fetchListNextPage = (params: CommentFetchParams) => {
     if (!pagination.value) {
       const message = 'No pagination data available.'
       console.warn(`[CommentStore] fetchMore: ${message} Please call fetch() first.`)
@@ -112,9 +131,12 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   const postComment = async (comment: Partial<Comment>) => {
+    const identityStore = useIdentityStore()
     try {
       posting.value = true
-      const response = await nodepress.post<Comment>('/disqus/comment', comment)
+      const response = await nodepress.post<Comment>('/comments', comment, {
+        token: identityStore.token
+      })
       comments.value.unshift(response.result)
       if (pagination.value) {
         pagination.value.total++
@@ -126,9 +148,10 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   const deleteComment = async (commentId: number) => {
+    const identityStore = useIdentityStore()
     try {
       deleting.value = true
-      await nodepress.delete('/disqus/comment', { data: { comment_id: commentId } })
+      await nodepress.delete(`/account/comments/${commentId}`, { token: identityStore.token })
       const index = comments.value.findIndex((comment) => comment.id === commentId)
       if (index > -1) {
         comments.value.splice(index, 1)
@@ -141,8 +164,17 @@ export const useCommentStore = defineStore('comment', () => {
 
   const postCommentVote = async (commentId: number, vote: 1 | -1) => {
     const identityStore = useIdentityStore()
-    await nodepress.post(`/vote/comment`, { comment_id: commentId, vote, author: identityStore.author })
-    const comment = comments.value.find((comment) => comment.id === commentId)
+    await nodepress.post(
+      `/votes/comment`,
+      {
+        comment_id: commentId,
+        vote,
+        author_name: identityStore.profile?.name,
+        author_email: identityStore.profile?.email
+      },
+      { token: identityStore.token }
+    )
+    const comment = commentMap.value.get(commentId)
     if (comment) {
       vote > 0 ? comment.likes++ : comment.dislikes++
     }
@@ -155,6 +187,7 @@ export const useCommentStore = defineStore('comment', () => {
     posting,
     deleting,
     hasMore,
+    commentMap,
     commentTreeList,
     clearList,
     fetchList,

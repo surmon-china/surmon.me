@@ -6,7 +6,7 @@ export interface ThreadsProfile {
   id: string
   name: string
   username: string
-  avatar: string
+  avatar_url: string
   biography: string
 
   // insights
@@ -30,9 +30,9 @@ const getThreadsUserProfile = async () => {
       id: response.data.id,
       name: response.data.name,
       username: response.data.username,
-      avatar: response.data.threads_profile_picture_url,
+      avatar_url: response.data.threads_profile_picture_url,
       biography: response.data.threads_biography
-    }
+    } satisfies Partial<ThreadsProfile>
   } catch (error: any) {
     throw error.response?.data?.error?.message ?? error
   }
@@ -57,7 +57,7 @@ const getThreadsUserInsights = async () => {
       totalReposts: response.data.data[1].total_value.value,
       totalQuotes: response.data.data[2].total_value.value,
       followersCount: response.data.data[3].total_value.value
-    }
+    } satisfies Partial<ThreadsProfile>
   } catch (error: any) {
     throw error.response?.data?.error?.message ?? error
   }

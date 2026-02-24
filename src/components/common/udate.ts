@@ -3,7 +3,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType, h } from 'vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { dateToYMD } from '/@/transforms/moment'
 import { LocalesKey } from '/@/locales'
@@ -30,24 +30,25 @@ export default defineComponent({
     return () => {
       // date
       const date = props.date instanceof Date ? props.date : new Date(props.date)
+      let resultText = ''
 
       // YYYY-MM-DD
       if (props.to === 'YMD') {
-        return dateToYMD(date, props.separator)
+        resultText = dateToYMD(date, props.separator)
       }
 
       // YYYY-MM-DD mm
       if (props.to === 'YMDm') {
         const ymd = dateToYMD(date, props.separator)
         const meridiem = date.getHours() > 11 ? i18n.t(LocalesKey.MOMENT_PM) : i18n.t(LocalesKey.MOMENT_AM)
-        return `${ymd} ${meridiem}`
+        resultText = `${ymd} ${meridiem}`
       }
 
       // timeAgo
       if (props.to === 'ago') {
         const pluralize = (time: number, label: string) => {
           const ago = `${time} ${label}`
-          return i18n.t(LocalesKey.MOMENT_AGO, null, { date: ago })
+          return i18n.t(LocalesKey.MOMENT_AGO, null, { date: ago })!
         }
 
         const between = Date.now() / 1000 - Number(date) / 1000
@@ -58,26 +59,31 @@ export default defineComponent({
         const yearS = monthS * 12
 
         if (between < hourS) {
-          return ~~(between / 60) === 0
-            ? i18n.t(LocalesKey.MOMENT_JUST_NOW)
-            : pluralize(~~(between / 60), i18n.t(LocalesKey.MOMENT_MINUTES)!)
+          resultText =
+            ~~(between / 60) === 0
+              ? i18n.t(LocalesKey.MOMENT_JUST_NOW)!
+              : pluralize(~~(between / 60), i18n.t(LocalesKey.MOMENT_MINUTES)!)
+        } else if (between < dayS) {
+          resultText = pluralize(~~(between / hourS), i18n.t(LocalesKey.MOMENT_HOURS)!)
+        } else if (between < weekS) {
+          resultText = pluralize(~~(between / dayS), i18n.t(LocalesKey.MOMENT_DAYS)!)
+        } else if (between < monthS) {
+          resultText = pluralize(~~(between / weekS), i18n.t(LocalesKey.MOMENT_WEEKS)!)
+        } else if (between < yearS) {
+          resultText = pluralize(~~(between / monthS), i18n.t(LocalesKey.MOMENT_MONTHS)!)
+        } else {
+          resultText = pluralize(~~(between / yearS), i18n.t(LocalesKey.MOMENT_YEAR)!)
         }
-        if (between < dayS) {
-          return pluralize(~~(between / hourS), i18n.t(LocalesKey.MOMENT_HOURS)!)
-        }
-        if (between < weekS) {
-          return pluralize(~~(between / dayS), i18n.t(LocalesKey.MOMENT_DAYS)!)
-        }
-        if (between < monthS) {
-          return pluralize(~~(between / weekS), i18n.t(LocalesKey.MOMENT_WEEKS)!)
-        }
-        if (between < yearS) {
-          return pluralize(~~(between / monthS), i18n.t(LocalesKey.MOMENT_MONTHS)!)
-        }
-        return pluralize(~~(between / yearS), i18n.t(LocalesKey.MOMENT_YEAR)!)
       }
 
-      return null
+      return h(
+        'time',
+        {
+          datetime: date.toISOString(),
+          ...(props.to === 'ago' ? { 'data-allow-mismatch': 'text' } : {})
+        },
+        resultText
+      )
     }
   }
 })

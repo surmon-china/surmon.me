@@ -152,13 +152,17 @@
   }>()
 
   const { gtag, route, isZhLang, i18n: _i18n } = useEnhancer()
+
   const enabledSocials = computed(() => {
-    return props.socials?.length ? defaultSocials.filter((s) => props.socials?.includes(s.id)) : defaultSocials
+    return props.socials?.length
+      ? defaultSocials.filter((s) => props.socials?.includes(s.id))
+      : defaultSocials
   })
 
   const getURL = () => getPageURL(route.fullPath)
   const getTitle = () => document.title || APP_PROFILE.title
-  const getOgTitle = () => document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
+  const getOgTitle = () =>
+    document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
   const getDescription = () => {
     const pageDescription = document.getElementsByName('description')?.[0]?.getAttribute('content')
     return pageDescription || _i18n.t(LocalesKey.APP_SLOGAN)!
@@ -199,7 +203,7 @@
     if (social.handler) {
       social.handler(shareParams)
     } else if (social.url) {
-      openPopupWindow(social.url(shareParams), { name: `Share: ${APP_PROFILE.title}` })
+      openPopupWindow(social.url(shareParams), { target: `Share: ${APP_PROFILE.title}` })
     }
   }
 </script>
@@ -224,7 +228,12 @@
     >
       <i class="iconfont icon-image-share"></i>
     </button>
-    <button v-if="!props.disabledCopyLink" class="share-ejector copy-link" title="Copy link" @click="copyPageURL">
+    <button
+      v-if="!props.disabledCopyLink"
+      class="share-ejector copy-link"
+      title="Copy link"
+      @click="copyPageURL"
+    >
       <i class="iconfont icon-link"></i>
     </button>
   </div>

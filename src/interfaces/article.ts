@@ -31,7 +31,6 @@ export const ArticleLanguageI18n: Record<ArticleLanguage, Record<Language, strin
 }
 
 export interface Article {
-  _id: string
   id: number
   title: string
   summary: string

@@ -71,11 +71,15 @@
               </div>
               <span class="published-at">
                 <i class="iconfont icon-clock"></i>
-                <span class="text" data-allow-mismatch>
+                <span class="text">
                   <udate to="ago" :date="item.snippet.publishedAt" />
                 </span>
               </span>
-              <div v-lozad class="background" :data-background-image="getThumbnailURL(item.snippet.thumbnails)" />
+              <div
+                v-lozad
+                class="background"
+                :data-background-image="getThumbnailURL(item.snippet.thumbnails)"
+              />
             </div>
             <h5 class="title">{{ item.snippet.title }}</h5>
             <div class="description">{{ item.snippet.description || '-' }}</div>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, shallowRef, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { RouteName } from '/@/app/router'
   import { LocalesKey } from '/@/locales'
@@ -8,11 +8,10 @@
   import { BFF_CONFIG } from '/@/configs/app.config'
 
   const { gtag, route, router, i18n: _i18n } = useEnhancer()
-  const formElement = ref<HTMLFormElement>()
+  const formElement = shallowRef<HTMLFormElement>()
   const keyword = ref('')
 
-  const handleSearch = (event) => {
-    event.preventDefault()
+  const handleSearch = () => {
     const check_status = formElement.value?.checkValidity()
     if (!check_status) {
       formElement.value?.reportValidity()
@@ -55,9 +54,9 @@
         v-model.trim="keyword"
         :class="_i18n.language"
         :placeholder="_i18n.t(LocalesKey.SEARCH_PLACEHOLDER)"
-        @keyup.enter="handleSearch"
+        @keyup.enter.prevent="handleSearch"
       />
-      <button type="submit" class="search-btn" @click="handleSearch">
+      <button type="submit" class="search-btn" @click.prevent="handleSearch">
         <i class="iconfont icon-search" />
       </button>
     </form>

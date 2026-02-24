@@ -32,9 +32,6 @@ importers:
       bezier-easing:
         specifier: ^2.1.0
         version: 2.1.0
-      emoji-233333:
-        specifier: ^0.3.2
-        version: 0.3.2
       fast-xml-parser:
         specifier: ^5.x
         version: 5.3.4
@@ -1302,9 +1299,6 @@ packages:
 
   electron-to-chromium@1.5.283:
     resolution: {integrity: sha512-3vifjt1HgrGW/h76UEeny+adYApveS9dH2h3p57JYzBSXJIKUJAvtmIytDKjcSCt9xHfrNCFJ7gts6vkhuq++w==}
-
-  emoji-233333@0.3.2:
-    resolution: {integrity: sha512-td2B0tMO7SS9G3tVXZl3SvXRI1Larf2rbkALdNnhRGmvZPwcLVqdthIIx5neqnMZwdqOfMspZZnYyVV/sZ8rpA==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3467,8 +3461,6 @@ snapshots:
       '@noble/hashes': 1.8.0
 
   electron-to-chromium@1.5.283: {}
-
-  emoji-233333@0.3.2: {}
 
   emoji-regex@8.0.0: {}
 

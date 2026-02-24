@@ -25,7 +25,13 @@
         <button class="play-button" @click="emit('click-video', mediaUrl)">
           <i class="iconfont icon-video-play"></i>
         </button>
-        <img class="poster" :alt="thumbnailUrl ?? ''" :src="thumbnailUrl ?? ''" loading="lazy" draggable="false" />
+        <img
+          class="poster"
+          :alt="thumbnailUrl ?? ''"
+          :src="thumbnailUrl ?? ''"
+          loading="lazy"
+          draggable="false"
+        />
       </div>
       <img
         v-else

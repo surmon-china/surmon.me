@@ -61,7 +61,11 @@
           >
             <uimage class="avatar" :src="item.avatarUrl" :alt="'@' + item.login" />
           </ulink>
-          <ulink v-if="allSponsors.length > props.maxCount" class="more-link" :href="goLinks['github-sponsors']">
+          <ulink
+            v-if="allSponsors.length > props.maxCount"
+            class="more-link"
+            :href="goLinks['github-sponsors']"
+          >
             + {{ allSponsors.length - props.maxCount }}
           </ulink>
         </div>

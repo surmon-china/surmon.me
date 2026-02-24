@@ -7,12 +7,12 @@
   import { resolvePageLayout } from '/@/constants/page-layout'
   import { isDev } from '/@/configs/app.env'
   import logger from '/@/utils/logger'
-  import { MAIN_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
+  import { CONTAINER_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
+  import UserProfile from '/@/components/desktop/widgets/user-profile/index.vue'
   import MusicPlayerEntry from '/@/components/desktop/widgets/music-player/index.vue'
   import Wallflower from '/@/components/desktop/widgets/wallflower/garden.vue'
   import Wallpaper from '/@/components/desktop/widgets/wallpaper/switcher.vue'
   import Background from '/@/components/desktop/widgets/background.vue'
-  import EmojiRain from '/@/components/desktop/widgets/emoji-rain.vue'
   import SponsorTabs from '/@/components/desktop/widgets/sponsor/tabs.vue'
   import SponsorProvider from '/@/components/desktop/widgets/sponsor/provider.vue'
   import Toolbox from '/@/components/desktop/widgets/toolbox.vue'
@@ -60,7 +60,6 @@
   <div class="desktop-layout">
     <background />
     <wallflower />
-    <emoji-rain />
     <client-only>
       <popup :visible="switcher.sponsorModal" :body-scrollable="false" @close="handleSponsorModalClose">
         <div class="sponsor-modal">
@@ -86,6 +85,9 @@
       <popup :visible="switcher.statementModal" :body-scrollable="false" @close="handleStatementModalClose">
         <statement />
       </popup>
+      <popup v-model:visible="switcher.userProfileModal" :body-scrollable="false" :mask-closable="false">
+        <user-profile />
+      </popup>
     </client-only>
     <template v-if="!pageLayout.isFull">
       <share class="main-share" disabled-image-share />
@@ -98,7 +100,7 @@
     </template>
     <!-- Enable header nav bar when full page layout -->
     <header-view :enabled-nav="!pageLayout.isNormal" />
-    <main :id="MAIN_ELEMENT_ID" class="main-container" :class="{ 'full-page': pageLayout.isFull }">
+    <main :id="CONTAINER_ELEMENT_ID" class="main-container" :class="{ 'full-page': pageLayout.isFull }">
       <!-- MARK: keep order > long content > flicker -->
       <nav-view class="nav-view" v-if="pageLayout.isNormal" />
       <sidebar-view class="sidebar-view" v-if="pageLayout.isNormal" />

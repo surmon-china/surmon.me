@@ -17,7 +17,7 @@ import { isClient } from '/@/configs/app.env'
 import { APP_CONFIG } from '/@/configs/app.config'
 import nodepress from '/@/services/nodepress'
 
-export const ARTICLE_API_PATH = '/article'
+export const ARTICLE_API_PATH = '/articles'
 
 interface ArticleHeading {
   level: number
@@ -27,7 +27,10 @@ interface ArticleHeading {
 }
 
 // Use the parsing capabilities of the marked renderer to store the results in the store..
-const renderArticleMarkdown = (markdown: string, imageSourceGetter: MarkdownRenderOption['imageSourceGetter']) => {
+const renderArticleMarkdown = (
+  markdown: string,
+  imageSourceGetter: MarkdownRenderOption['imageSourceGetter']
+) => {
   const headings: Array<ArticleHeading> = []
   const html = markdownToHTML(markdown, {
     sanitize: false,
@@ -112,8 +115,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
 
   const fetchArticleDetail = async (articleId: number) => {
     article.value = null
-    const request = nodepress.get<Article>(`${ARTICLE_API_PATH}/${articleId}`)
-    const response = await (isClient ? delayPromise(580, request) : request)
+    const response = await nodepress.get<Article>(`${ARTICLE_API_PATH}/${articleId}`)
     article.value = response.result
     renderedFullContent.value = !isLongContent.value
   }
@@ -122,24 +124,34 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
     prevArticle.value = null
     nextArticle.value = null
     relatedArticles.value = []
-    const request = nodepress.get(`${ARTICLE_API_PATH}/${articleId}/context`)
-    const response = await (isClient ? delayPromise(520, request) : request)
+    const response = await nodepress.get(`${ARTICLE_API_PATH}/${articleId}/context`, {
+      params: { related_count: 6 }
+    })
     prevArticle.value = response.result.prev_article
     nextArticle.value = response.result.next_article
     relatedArticles.value = response.result.related_articles
   }
 
-  const fetchCompleteArticle = (articleId: number) => {
+  const fetchCompleteArticle = async (articleId: number) => {
     fetching.value = true
-    return Promise.all([fetchArticleDetail(articleId), fetchArticleContext(articleId)]).then(() => {
-      fetching.value = false
-    })
+    const request = Promise.all([fetchArticleDetail(articleId), fetchArticleContext(articleId)])
+    await (isClient ? delayPromise(520, request) : request)
+    fetching.value = false
   }
 
   const postArticleLike = (articleId: number) => {
     const identityStore = useIdentityStore()
     return nodepress
-      .post('/vote/article', { article_id: articleId, vote: 1, author: identityStore.author })
+      .post<number>(
+        '/votes/article',
+        {
+          article_id: articleId,
+          vote: 1,
+          author_name: identityStore.profile?.name,
+          author_email: identityStore.profile?.email
+        },
+        { token: identityStore.token }
+      )
       .then((response) => {
         if (article.value) {
           article.value.stats.likes = response.result

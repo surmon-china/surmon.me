@@ -44,7 +44,7 @@
 </script>
 
 <template>
-  <span class="user-agent">
+  <span class="comment-user-agent">
     <!-- <span class="os" v-if="osName">
       <i v-if="osIconName" class="iconfont" :class="osIconName" />
       <span>{{ osName }}</span>
@@ -62,7 +62,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .user-agent {
+  .comment-user-agent {
     white-space: nowrap;
 
     .iconfont {

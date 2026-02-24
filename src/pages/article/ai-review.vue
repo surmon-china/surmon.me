@@ -65,7 +65,7 @@
           </span>
         </div>
         <div class="right">
-          <span class="created" data-allow-mismatch v-if="timestamp">
+          <span class="created" v-if="timestamp">
             <udate :date="Number(timestamp) * 1000" to="ago" />
           </span>
         </div>

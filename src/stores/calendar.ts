@@ -19,7 +19,7 @@ export const useArticlesCalendarStore = defineStore('articlesCalendar', () => {
     once: true,
     data: [],
     async fetcher() {
-      const response = await nodepress.get<Array<CalendarDay>>('/article/calendar', {
+      const response = await nodepress.get<Array<CalendarDay>>('/articles/calendar', {
         params: { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
       })
       return response.result

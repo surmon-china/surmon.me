@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-  defineProps<{ fetching?: boolean }>()
+  defineProps<{ loading?: boolean }>()
 </script>
 
 <template>
-  <placeholder :loading="fetching">
+  <placeholder :loading="loading">
     <template #loading>
-      <div class="publisher-skeleton" key="skeleton">
+      <div class="composer-skeleton" key="skeleton">
         <skeleton class="avatar" />
         <skeleton class="content" />
       </div>
     </template>
     <template #default>
-      <slot></slot>
+      <div class="composer-container" key="container">
+        <slot></slot>
+      </div>
     </template>
   </placeholder>
 </template>
@@ -23,7 +25,7 @@
 
   $avatar-size: 3rem;
 
-  .publisher-skeleton {
+  .composer-skeleton {
     display: flex;
 
     .avatar {

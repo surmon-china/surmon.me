@@ -58,7 +58,7 @@
               :title="profile.name"
               @mousedown="handleGtagEvent('threads_homepage')"
             >
-              <uimage class="avatar" :src="profile.avatar" :proxy="isCNUser" defer />
+              <uimage class="avatar" :src="profile.avatar_url" :proxy="isCNUser" defer />
               <span class="logo"><i class="iconfont icon-threads" /></span>
             </ulink>
             <div class="count">
@@ -105,7 +105,9 @@
                     <template v-else-if="media.media_type === 'AUDIO'">
                       <i class="iconfont media icon-audio"></i>
                     </template>
-                    <template v-else-if="media.media_type === 'IMAGE' || media.media_type === 'CAROUSEL_ALBUM'">
+                    <template
+                      v-else-if="media.media_type === 'IMAGE' || media.media_type === 'CAROUSEL_ALBUM'"
+                    >
                       <i class="iconfont media icon-image"></i>
                     </template>
                     <span class="count" v-if="media.children?.data?.length"
@@ -129,7 +131,7 @@
                     </span>
                   </ulink>
                   <div class="divider" />
-                  <span class="date" data-allow-mismatch v-if="media.timestamp">
+                  <span class="date" v-if="media.timestamp">
                     <udate to="ago" :date="media.timestamp" />
                   </span>
                 </div>

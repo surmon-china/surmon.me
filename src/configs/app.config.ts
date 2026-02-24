@@ -16,6 +16,8 @@ export const BFF_CONFIG = Object.freeze({
 })
 
 export const APP_CONFIG = Object.freeze({
+  comment_content_min_length: 3,
+  comment_content_max_length: 3000,
   article_image_share_long_threshold: 6688,
   render_long_article_threshold: 16688,
   desktop_sidebar_article_list_count: 8,

@@ -3,23 +3,18 @@
 
   interface Props {
     hasData: boolean
-    fetching?: boolean
+    loading?: boolean
     skeletonCount?: number
   }
 
   withDefaults(defineProps<Props>(), {
-    fetching: false,
+    loading: false,
     skeletonCount: 6
   })
 </script>
 
 <template>
-  <placeholder :loading="fetching" :has-data="hasData || !!$slots.extra">
-    <template #placeholder>
-      <div class="list-empty">
-        <i18n :k="LocalesKey.COMMENT_LIST_EMPTY" />
-      </div>
-    </template>
+  <placeholder :loading="loading" :has-data="hasData || !!$slots.extra">
     <template #loading>
       <ul class="list-skeleton">
         <li class="item" v-for="item in skeletonCount" :key="item">
@@ -34,10 +29,15 @@
       </ul>
     </template>
     <template #default>
-      <div class="list-content">
+      <div class="list-container">
         <slot name="extra"></slot>
         <slot name="list"></slot>
         <slot name="pagination"></slot>
+      </div>
+    </template>
+    <template #placeholder>
+      <div class="list-empty">
+        <i18n :k="LocalesKey.COMMENT_LIST_EMPTY" />
       </div>
     </template>
   </placeholder>
@@ -51,15 +51,15 @@
   .list-skeleton {
     margin: 0;
     padding-inline: 1em;
+    padding-bottom: $gap-sm;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.2rem;
 
     .item {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-bottom: 1.2rem;
-      &:last-child {
-        margin-bottom: $gap-sm;
-      }
 
       .avatar {
         width: 3.4rem;

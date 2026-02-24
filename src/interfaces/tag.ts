@@ -1,7 +1,6 @@
 import { ExtraKeyValue } from './extra'
 
 export interface Tag {
-  _id: string
   id: number
   name: string
   slug: string

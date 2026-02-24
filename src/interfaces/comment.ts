@@ -1,11 +1,20 @@
-import { CommentParentId } from '/@/constants/comment-id'
 import { ExtraKeyValue } from './extra'
+import { UserPublic } from './user'
 
-export interface Author {
-  name: string
-  site?: string
-  email?: string
-  email_hash?: string
+export enum CommentTargetType {
+  Article = 'article',
+  Page = 'page'
+}
+
+export enum CommentAuthorType {
+  Guest = 'guest',
+  User = 'user'
+}
+
+export enum CommentAuthorStatus {
+  Guest = 'guest',
+  Active = 'active',
+  Ghost = 'ghost'
 }
 
 export interface IPLocation {
@@ -14,21 +23,28 @@ export interface IPLocation {
   region: string
   region_code: string
   city: string
-  zip: string
 }
 
 export interface Comment {
   id: number
-  post_id: number
-  pid: number | typeof CommentParentId.Self
+  target_type: CommentTargetType
+  target_id: number
+  parent_id: number | null
   content: string
-  agent?: string
-  author: Author
+  user: UserPublic | null
+  author_name: string
+  author_email: string | null
+  author_website: string | null
+  author_email_hash: string | null
+  author_type: CommentAuthorType
+  author_status: CommentAuthorStatus
   likes: number
   dislikes: number
-  ip?: string
-  ip_location?: IPLocation
+  ip: string | null
+  ip_location: IPLocation | null
+  user_agent: string | null
   extras: ExtraKeyValue[]
-  created_at: string
   updated_at: string
+  created_at: string
+  orphaned: boolean
 }
