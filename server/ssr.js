@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.0.0";
+const APP_VERSION = "7.0.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -574,7 +574,7 @@ const createGlobalState = (options) => {
     sponsorModal: false,
     feedbackModal: false,
     statementModal: false,
-    userProfileModal: false,
+    userPanelModal: false,
     bodyScrollable: true
   });
   const toggleSwitcher = (key, value) => {
@@ -6826,9 +6826,9 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       const _component_i18n = resolveComponent("i18n");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-user" }, _attrs))} data-v-5b70ed38>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-user" }, _attrs))} data-v-55c5e381>`);
       if (unref(identity).isAnonymous) {
-        _push(`<div class="unlogin" data-v-5b70ed38><button class="link" title="Sign in with Google" data-v-5b70ed38>`);
+        _push(`<div class="unlogin" data-v-55c5e381><button class="link" title="Sign in with Google" data-v-55c5e381>`);
         _push(ssrRenderComponent(_component_uimage, {
           class: "logo google",
           alt: "Google",
@@ -6839,7 +6839,7 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
         }, null, _parent));
         _push(`</button>`);
         _push(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent));
-        _push(`<button class="link" title="Sign in with GitHub" data-v-5b70ed38>`);
+        _push(`<button class="link" title="Sign in with GitHub" data-v-55c5e381>`);
         _push(ssrRenderComponent(_component_uimage, {
           class: "logo github",
           alt: "GitHub",
@@ -6850,13 +6850,13 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
         }, null, _parent));
         _push(`</button></div>`);
       } else {
-        _push(`<div class="logined" data-v-5b70ed38><div class="username" data-v-5b70ed38><i class="icon iconfont icon-user" data-v-5b70ed38></i><span class="text" data-v-5b70ed38>${ssrInterpolate(unref(identity).profile?.name)}</span><i class="arrow iconfont icon-down-arrow" data-v-5b70ed38></i></div><div class="user-menu" data-v-5b70ed38>`);
+        _push(`<div class="logined" data-v-55c5e381><div class="username" data-v-55c5e381><i class="icon iconfont icon-user" data-v-55c5e381></i><span class="text" data-v-55c5e381>${ssrInterpolate(unref(identity).profile?.name)}</span><i class="arrow iconfont icon-down-arrow" data-v-55c5e381></i></div><div class="user-menu" data-v-55c5e381>`);
         if (unref(identity).isGuest) {
-          _push(`<ul class="menus" data-v-5b70ed38><li class="item" data-v-5b70ed38><button class="button" title="Sign in with GitHub" data-v-5b70ed38>`);
+          _push(`<ul class="menus" data-v-55c5e381><li class="item" data-v-55c5e381><button class="button" title="Sign in with GitHub" data-v-55c5e381>`);
           _push(ssrRenderComponent(_component_i18n, null, {
             zh: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`切换为 <i class="iconfont icon-github" data-v-5b70ed38${_scopeId}></i> <strong data-v-5b70ed38${_scopeId}>GitHub</strong> 登录`);
+                _push2(`切换为 <i class="iconfont icon-github" data-v-55c5e381${_scopeId}></i> <strong data-v-55c5e381${_scopeId}>GitHub</strong> 登录`);
               } else {
                 return [
                   createTextVNode("切换为 "),
@@ -6869,7 +6869,7 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
             }),
             en: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`Sign in with <i class="iconfont icon-github" data-v-5b70ed38${_scopeId}></i> <strong data-v-5b70ed38${_scopeId}>GitHub</strong>`);
+                _push2(`Sign in with <i class="iconfont icon-github" data-v-55c5e381${_scopeId}></i> <strong data-v-55c5e381${_scopeId}>GitHub</strong>`);
               } else {
                 return [
                   createTextVNode("Sign in with "),
@@ -6881,11 +6881,11 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
             }),
             _: 1
           }, _parent));
-          _push(`</button><button class="button" title="Sign in with Google" data-v-5b70ed38>`);
+          _push(`</button><button class="button" title="Sign in with Google" data-v-55c5e381>`);
           _push(ssrRenderComponent(_component_i18n, null, {
             zh: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`切换为 <i class="iconfont icon-google" data-v-5b70ed38${_scopeId}></i> <strong data-v-5b70ed38${_scopeId}>Google</strong> 登录`);
+                _push2(`切换为 <i class="iconfont icon-google" data-v-55c5e381${_scopeId}></i> <strong data-v-55c5e381${_scopeId}>Google</strong> 登录`);
               } else {
                 return [
                   createTextVNode("切换为 "),
@@ -6898,7 +6898,7 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
             }),
             en: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                _push2(`Sign in with <i class="iconfont icon-google" data-v-5b70ed38${_scopeId}></i> <strong data-v-5b70ed38${_scopeId}>Google</strong>`);
+                _push2(`Sign in with <i class="iconfont icon-google" data-v-55c5e381${_scopeId}></i> <strong data-v-55c5e381${_scopeId}>Google</strong>`);
               } else {
                 return [
                   createTextVNode("Sign in with "),
@@ -6910,19 +6910,19 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
             }),
             _: 1
           }, _parent));
-          _push(`</button></li><li class="item" data-v-5b70ed38><button class="button" title="Clean local profile" data-v-5b70ed38>`);
+          _push(`</button></li><li class="item" data-v-55c5e381><button class="button" title="Clean local profile" data-v-55c5e381>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: "退出本地访客身份",
             en: "Clean local profile"
           }, null, _parent));
           _push(`</button></li></ul>`);
         } else if (unref(identity).isUser) {
-          _push(`<ul class="menus" data-v-5b70ed38><li class="item" data-v-5b70ed38><button class="button" title="Edit profile" data-v-5b70ed38>`);
+          _push(`<ul class="menus" data-v-55c5e381><li class="item" data-v-55c5e381><button class="button" title="Edit profile" data-v-55c5e381>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: "管理资料",
             en: "Edit profile"
           }, null, _parent));
-          _push(`</button></li><li class="item" data-v-5b70ed38><button class="button" title="Sign Out" data-v-5b70ed38>`);
+          _push(`</button></li><li class="item" data-v-55c5e381><button class="button" title="Sign Out" data-v-55c5e381>`);
           _push(ssrRenderComponent(_component_i18n, {
             k: unref(LocalesKey).USER_SIGN_OUT
           }, null, _parent));
@@ -6942,7 +6942,7 @@ _sfc_main$1I.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/topbar/user.vue");
   return _sfc_setup$1I ? _sfc_setup$1I(props, ctx) : void 0;
 };
-const CommentTopbarUser = /* @__PURE__ */ _export_sfc(_sfc_main$1I, [["__scopeId", "data-v-5b70ed38"]]);
+const CommentTopbarUser = /* @__PURE__ */ _export_sfc(_sfc_main$1I, [["__scopeId", "data-v-55c5e381"]]);
 const _sfc_main$1H = /* @__PURE__ */ defineComponent({
   __name: "wrapper",
   __ssrInlineRender: true,
@@ -17232,33 +17232,33 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
     const localProfile = reactive(createProfileState(identity.userProfile));
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<form${ssrRenderAttrs(mergeProps({ class: "user-profile" }, _attrs))} data-v-6039b975><label class="item" data-v-6039b975><h5 class="title" data-v-6039b975>`);
+      _push(`<form${ssrRenderAttrs(mergeProps({ class: "user-profile" }, _attrs))} data-v-d5dca0d7><label class="item" data-v-d5dca0d7><h5 class="title" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).COMMENT_AUTHOR_NAME
       }, null, _parent));
-      _push(` *</h5><input${ssrRenderAttr("value", localProfile.name)} required type="text" name="name" class="input" autocomplete="on"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_NAME) + " *")} data-v-6039b975><p class="extra" data-v-6039b975>`);
+      _push(` *</h5><input${ssrRenderAttr("value", localProfile.name)} required type="text" name="name" class="input" autocomplete="on"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_NAME) + " *")} data-v-d5dca0d7><p class="extra" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "名字将公开显示在评论区",
         en: "Displayed publicly in comments"
       }, null, _parent));
-      _push(`</p></label><label class="item" data-v-6039b975><h5 class="title" data-v-6039b975>`);
+      _push(`</p></label><label class="item" data-v-d5dca0d7><h5 class="title" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).COMMENT_AUTHOR_EMAIL
       }, null, _parent));
-      _push(` *</h5><input${ssrRenderAttr("value", localProfile.email)} required type="email" name="email" class="input" autocomplete="on"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_EMAIL) + " *")} data-v-6039b975><p class="extra" data-v-6039b975>`);
+      _push(` *</h5><input${ssrRenderAttr("value", localProfile.email)} required type="email" name="email" class="input" autocomplete="on"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_EMAIL) + " *")} data-v-d5dca0d7><p class="extra" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "此邮箱不作验证使用，仅用于接收回复通知",
         en: "No verification required. Used only for notifications"
       }, null, _parent));
-      _push(`</p></label><label class="item" data-v-6039b975><h5 class="title" data-v-6039b975>`);
+      _push(`</p></label><label class="item" data-v-d5dca0d7><h5 class="title" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).COMMENT_AUTHOR_WEBSITE
       }, null, _parent));
-      _push(`</h5><input${ssrRenderAttr("value", localProfile.website)} type="url" name="website" class="input" autocomplete="off"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_WEBSITE))} data-v-6039b975></label><label class="item" data-v-6039b975><h5 class="title" data-v-6039b975>`);
+      _push(`</h5><input${ssrRenderAttr("value", localProfile.website)} type="url" name="website" class="input" autocomplete="off"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_WEBSITE))} data-v-d5dca0d7></label><label class="item" data-v-d5dca0d7><h5 class="title" data-v-d5dca0d7>`);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).COMMENT_AUTHOR_AVATAR
       }, null, _parent));
-      _push(`</h5><input${ssrRenderAttr("value", localProfile.avatar_url)} type="url" name="avatar" class="input" autocomplete="off"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_AVATAR))} data-v-6039b975></label><button type="submit" class="submit"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""} data-v-6039b975>`);
+      _push(`</h5><input${ssrRenderAttr("value", localProfile.avatar_url)} type="url" name="avatar" class="input" autocomplete="off"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).COMMENT_AUTHOR_AVATAR))} data-v-d5dca0d7></label><button type="submit" class="submit"${ssrIncludeBooleanAttr(isUpdating.value) ? " disabled" : ""} data-v-d5dca0d7>`);
       if (isUpdating.value) {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).SUBMITTING
@@ -17275,10 +17275,10 @@ const _sfc_main$y = /* @__PURE__ */ defineComponent({
 const _sfc_setup$y = _sfc_main$y.setup;
 _sfc_main$y.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-profile/profile.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-panel/profile.vue");
   return _sfc_setup$y ? _sfc_setup$y(props, ctx) : void 0;
 };
-const UserProfile$1 = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["__scopeId", "data-v-6039b975"]]);
+const UserProfile = /* @__PURE__ */ _export_sfc(_sfc_main$y, [["__scopeId", "data-v-d5dca0d7"]]);
 const _sfc_main$x = /* @__PURE__ */ defineComponent({
   __name: "connections",
   __ssrInlineRender: true,
@@ -17308,22 +17308,22 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "user-connections" }, _attrs))} data-v-9085c8b6><!--[-->`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "user-connections" }, _attrs))} data-v-6d2d7b2d><!--[-->`);
       ssrRenderList(identityList.value, (item) => {
-        _push(`<div class="item" data-v-9085c8b6><h5 class="title" data-v-9085c8b6><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-9085c8b6></i><span class="provider" data-v-9085c8b6>${ssrInterpolate(item.title)}</span></h5><div class="info" data-v-9085c8b6>`);
+        _push(`<div class="item" data-v-6d2d7b2d><h5 class="title" data-v-6d2d7b2d><i class="${ssrRenderClass([item.icon, "iconfont"])}" data-v-6d2d7b2d></i><span class="provider" data-v-6d2d7b2d>${ssrInterpolate(item.title)}</span></h5><div class="info" data-v-6d2d7b2d>`);
         if (item.linked) {
-          _push(`<div data-v-9085c8b6><p data-v-9085c8b6>`);
+          _push(`<div data-v-6d2d7b2d><p data-v-6d2d7b2d>`);
           _push(ssrRenderComponent(_component_i18n, {
             zh: "已绑定：",
             en: "Linked: "
           }, null, _parent));
-          _push(`${ssrInterpolate(item.displayId)}</p><button class="unlink-btn"${ssrIncludeBooleanAttr(isProcessing.value) ? " disabled" : ""} data-v-9085c8b6>`);
+          _push(`${ssrInterpolate(item.displayId)}</p><button class="unlink-btn"${ssrIncludeBooleanAttr(isProcessing.value) ? " disabled" : ""} data-v-6d2d7b2d>`);
           _push(ssrRenderComponent(_component_i18n, {
             k: unref(LocalesKey).USER_IDENTITY_UNLINK
           }, null, _parent));
           _push(`</button></div>`);
         } else {
-          _push(`<button class="link-btn"${ssrIncludeBooleanAttr(isProcessing.value) ? " disabled" : ""} data-v-9085c8b6>`);
+          _push(`<button class="link-btn"${ssrIncludeBooleanAttr(isProcessing.value) ? " disabled" : ""} data-v-6d2d7b2d>`);
           _push(ssrRenderComponent(_component_i18n, {
             k: unref(LocalesKey).USER_IDENTITY_LINK
           }, null, _parent));
@@ -17338,10 +17338,10 @@ const _sfc_main$x = /* @__PURE__ */ defineComponent({
 const _sfc_setup$x = _sfc_main$x.setup;
 _sfc_main$x.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-profile/connections.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-panel/connections.vue");
   return _sfc_setup$x ? _sfc_setup$x(props, ctx) : void 0;
 };
-const UserConnections = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["__scopeId", "data-v-9085c8b6"]]);
+const UserConnections = /* @__PURE__ */ _export_sfc(_sfc_main$x, [["__scopeId", "data-v-6d2d7b2d"]]);
 const _sfc_main$w = /* @__PURE__ */ defineComponent({
   __name: "comments",
   __ssrInlineRender: true,
@@ -17368,13 +17368,13 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
       const _component_udate = resolveComponent("udate");
       _push(`<!--[-->`);
       if (isFetching.value) {
-        _push(`<p class="loading" data-v-94e5016f>`);
+        _push(`<p class="loading" data-v-994a690e>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).ARTICLE_LIST_LOADING
         }, null, _parent));
         _push(`</p>`);
       } else if (!comments.value.length) {
-        _push(`<p class="empty" data-v-94e5016f>`);
+        _push(`<p class="empty" data-v-994a690e>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).EMPTY_PLACEHOLDER
         }, null, _parent));
@@ -17382,14 +17382,14 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`<ul class="user-comments" data-v-94e5016f><!--[-->`);
+      _push(`<ul class="user-comments" data-v-994a690e><!--[-->`);
       ssrRenderList(comments.value, (comment, index) => {
-        _push(`<li class="item" data-v-94e5016f><p class="context" data-v-94e5016f><span class="floor" data-v-94e5016f>#${ssrInterpolate(comment.id)}</span></p><p class="content" data-v-94e5016f>${ssrInterpolate(comment.content)}</p><p class="meta" data-v-94e5016f>`);
+        _push(`<li class="item" data-v-994a690e><p class="context" data-v-994a690e><span class="floor" data-v-994a690e>#${ssrInterpolate(comment.id)}</span></p><p class="content" data-v-994a690e>${ssrInterpolate(comment.content)}</p><p class="meta" data-v-994a690e>`);
         _push(ssrRenderComponent(_component_udate, {
           to: "ago",
           date: comment.created_at
         }, null, _parent));
-        _push(`<button class="delete"${ssrIncludeBooleanAttr(isFetching.value || isDeleting.value) ? " disabled" : ""} data-v-94e5016f>`);
+        _push(`<button class="delete"${ssrIncludeBooleanAttr(isFetching.value || isDeleting.value) ? " disabled" : ""} data-v-994a690e>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_DELETE
         }, null, _parent));
@@ -17402,10 +17402,10 @@ const _sfc_main$w = /* @__PURE__ */ defineComponent({
 const _sfc_setup$w = _sfc_main$w.setup;
 _sfc_main$w.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-profile/comments.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-panel/comments.vue");
   return _sfc_setup$w ? _sfc_setup$w(props, ctx) : void 0;
 };
-const UserComments = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["__scopeId", "data-v-94e5016f"]]);
+const UserComments = /* @__PURE__ */ _export_sfc(_sfc_main$w, [["__scopeId", "data-v-994a690e"]]);
 const _sfc_main$v = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -17418,7 +17418,7 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_uimage = resolveComponent("uimage");
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "user-profile-modal" }, _attrs))} data-v-ec4d03e6><div class="sidebar" data-v-ec4d03e6><div class="avatar" data-v-ec4d03e6>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "user-panel-modal" }, _attrs))} data-v-e4cfc549><div class="sidebar" data-v-e4cfc549><div class="avatar" data-v-e4cfc549>`);
       _push(ssrRenderComponent(_component_uimage, {
         class: ["image", {
           moderator: unref(identity).userProfile?.type === unref(UserType).Moderator,
@@ -17426,15 +17426,15 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
         }],
         src: unref(identity).userProfile?.avatar_url || ""
       }, null, _parent));
-      _push(`</div><div class="menus" data-v-ec4d03e6><!--[-->`);
+      _push(`</div><div class="menus" data-v-e4cfc549><!--[-->`);
       ssrRenderList(unref(TABS), (item) => {
-        _push(`<button class="${ssrRenderClass([{ active: item.id === unref(activeId) }, "item"])}" data-v-ec4d03e6>`);
+        _push(`<button class="${ssrRenderClass([{ active: item.id === unref(activeId) }, "item"])}" data-v-e4cfc549>`);
         _push(ssrRenderComponent(_component_i18n, mergeProps({ ref_for: true }, item.i18n), null, _parent));
         _push(`</button>`);
       });
-      _push(`<!--]--></div></div><div class="content" data-v-ec4d03e6>`);
+      _push(`<!--]--></div></div><div class="content" data-v-e4cfc549>`);
       if (unref(activeId) === unref(TabKeys).Profile) {
-        _push(ssrRenderComponent(UserProfile$1, null, null, _parent));
+        _push(ssrRenderComponent(UserProfile, null, null, _parent));
       } else if (unref(activeId) === unref(TabKeys).Connections) {
         _push(ssrRenderComponent(UserConnections, null, null, _parent));
       } else if (unref(activeId) === unref(TabKeys).Comments) {
@@ -17442,17 +17442,17 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><button class="close" title="Close" data-v-ec4d03e6><i class="iconfont icon-cancel" data-v-ec4d03e6></i></button></div>`);
+      _push(`</div><button class="close" title="Close" data-v-e4cfc549><i class="iconfont icon-cancel" data-v-e4cfc549></i></button></div>`);
     };
   }
 });
 const _sfc_setup$v = _sfc_main$v.setup;
 _sfc_main$v.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-profile/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/user-panel/index.vue");
   return _sfc_setup$v ? _sfc_setup$v(props, ctx) : void 0;
 };
-const UserProfile = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-ec4d03e6"]]);
+const UserPanel = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-e4cfc549"]]);
 const createMusicPlayer = (config) => {
   const initIndex = config.index ?? 0;
   const initVolume = config.volume ?? 0.6;
@@ -19803,7 +19803,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-layout" }, _attrs))} data-v-a24d67e4>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-layout" }, _attrs))} data-v-531aee76>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -19816,7 +19816,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-a24d67e4${_scopeId2}><div class="sponsor" data-v-a24d67e4${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-531aee76${_scopeId2}><div class="sponsor" data-v-531aee76${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -19885,17 +19885,17 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
               _: 1
             }, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_popup, {
-              visible: unref(switcher).userProfileModal,
-              "onUpdate:visible": ($event) => unref(switcher).userProfileModal = $event,
+              visible: unref(switcher).userPanelModal,
+              "onUpdate:visible": ($event) => unref(switcher).userPanelModal = $event,
               "body-scrollable": false,
               "mask-closable": false
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(ssrRenderComponent(UserProfile, null, null, _parent3, _scopeId2));
+                  _push3(ssrRenderComponent(UserPanel, null, null, _parent3, _scopeId2));
                 } else {
                   return [
-                    createVNode(UserProfile)
+                    createVNode(UserPanel)
                   ];
                 }
               }),
@@ -19949,13 +19949,13 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
                 _: 1
               }, 8, ["visible"]),
               createVNode(_component_popup, {
-                visible: unref(switcher).userProfileModal,
-                "onUpdate:visible": ($event) => unref(switcher).userProfileModal = $event,
+                visible: unref(switcher).userPanelModal,
+                "onUpdate:visible": ($event) => unref(switcher).userPanelModal = $event,
                 "body-scrollable": false,
                 "mask-closable": false
               }, {
                 default: withCtx(() => [
-                  createVNode(UserProfile)
+                  createVNode(UserPanel)
                 ]),
                 _: 1
               }, 8, ["visible", "onUpdate:visible"])
@@ -19995,7 +19995,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(HeaderView$1, {
         "enabled-nav": !unref(pageLayout).isNormal
       }, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(CONTAINER_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(pageLayout).isFull }, "main-container"])}" data-v-a24d67e4>`);
+      _push(`<main${ssrRenderAttr("id", unref(CONTAINER_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(pageLayout).isFull }, "main-container"])}" data-v-531aee76>`);
       if (unref(pageLayout).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -20010,11 +20010,11 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(pageLayout).isNormal,
         "layout-wide": unref(pageLayout).isWide,
         "layout-full": unref(pageLayout).isFull
-      }, "main-view"])}" data-v-a24d67e4>`);
+      }, "main-view"])}" data-v-531aee76>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a24d67e4${_scopeId}>`);
+            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-531aee76${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -20064,7 +20064,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/main.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-a24d67e4"]]);
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-531aee76"]]);
 const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
