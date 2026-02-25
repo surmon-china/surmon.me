@@ -82,12 +82,12 @@
     padding: 0;
 
     .item {
+      scroll-snap-align: start;
+      padding-top: 1rem;
       padding-bottom: 1rem;
-      margin-bottom: 2rem;
       border-bottom: 1px dashed $module-bg-darker-1;
       &:last-child {
         padding-bottom: 0;
-        margin-bottom: 0;
         border: none;
       }
 
@@ -95,9 +95,14 @@
         display: flex;
         justify-content: space-between;
         color: $color-text-disabled;
+
+        .floor {
+          font-weight: bold;
+        }
       }
 
       .meta {
+        margin-bottom: 0;
         display: flex;
         justify-content: space-between;
         color: $color-text-disabled;

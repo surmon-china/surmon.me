@@ -11,7 +11,7 @@
   const { activeId, setTabKey } = useTabState(TabKeys.Profile)
 
   const closeModal = () => {
-    globalState.toggleSwitcher('userProfileModal', false)
+    globalState.toggleSwitcher('userPanelModal', false)
   }
 
   onMounted(() => {
@@ -20,7 +20,7 @@
 </script>
 
 <template>
-  <div class="user-profile-modal">
+  <div class="user-panel-modal">
     <div class="sidebar">
       <div class="avatar">
         <uimage
@@ -60,9 +60,9 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .user-profile-modal {
-    min-width: 40rem;
-    max-width: 60vw;
+  .user-panel-modal {
+    width: 40rem;
+    max-width: 80vw;
     height: 41em;
     position: relative;
     display: flex;
@@ -136,7 +136,10 @@
       flex: 1;
       width: 100%;
       padding: 2rem;
+      overflow-x: hidden;
       overflow-y: auto;
+      overscroll-behavior-y: contain;
+      scroll-snap-type: y proximity;
       scrollbar-width: thin;
     }
   }

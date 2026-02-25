@@ -2,10 +2,16 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { UserIdentityProvider } from '/@/interfaces/user'
   import { LocalesKey } from '/@/locales'
-  const { identity, theme, globalState } = useEnhancer()
+  const { identity, theme, globalState, isZhLang } = useEnhancer()
 
-  const openUserProfileModal = () => {
-    globalState.toggleSwitcher('userProfileModal', true)
+  const openUserPanelModal = () => {
+    if (globalState.userAgent.isMobile) {
+      const zhMessage = '用户面板仅支持桌面端环境，请在 PC 浏览器中访问。'
+      const enMessage = 'The User Panel is only available on Desktop. Please access it from a PC browser.'
+      alert(isZhLang.value ? zhMessage : enMessage)
+    } else {
+      globalState.toggleSwitcher('userPanelModal', true)
+    }
   }
 </script>
 
@@ -76,7 +82,7 @@
         </ul>
         <ul class="menus" v-else-if="identity.isUser">
           <li class="item">
-            <button class="button" title="Edit profile" @click="openUserProfileModal">
+            <button class="button" title="Edit profile" @click="openUserPanelModal">
               <i18n zh="管理资料" en="Edit profile" />
             </button>
           </li>
