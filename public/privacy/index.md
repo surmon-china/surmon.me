@@ -66,7 +66,7 @@ You have the right to access or delete your personal data at any time. If you wi
 
 ### 4. Google API 数据使用披露（有限使用）
 
-Surmon.me 对从 Google API 接收到的信息的使用和转移至其他应用的行为，将遵守《[Google API 服务用户数据政策](https://developers.google.com/terms/api-services-user-data-policy)》，包括其中的**“有限使用”**要求。
+Surmon.me 对从 Google API 接收到的信息的使用和转移至其他应用的行为，将遵守《[Google API 服务用户数据政策](https://developers.google.com/terms/api-services-user-data-policy)》，包括其中的 **“有限使用”** 要求。
 
 ### 5. 数据存储与安全
 
