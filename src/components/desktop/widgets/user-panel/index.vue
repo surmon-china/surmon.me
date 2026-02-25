@@ -63,7 +63,8 @@
   .user-panel-modal {
     width: 40rem;
     max-width: 80vw;
-    height: 41em;
+    height: 38rem;
+    max-height: 100vh;
     position: relative;
     display: flex;
     flex-direction: row;
