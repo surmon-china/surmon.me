@@ -90,6 +90,7 @@ export const createGlobalState = (options: GlobalStateOptions) => {
     sponsorModal: false,
     feedbackModal: false,
     statementModal: false,
+    privacyModal: false,
     userPanelModal: false,
     bodyScrollable: true
   })

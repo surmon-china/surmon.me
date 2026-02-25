@@ -18,6 +18,7 @@
   import Toolbox from '/@/components/desktop/widgets/toolbox.vue'
   import Feedback from '/@/components/desktop/widgets/feedback.vue'
   import Statement from '/@/components/desktop/widgets/statement.vue'
+  import Privacy from '/@/components/desktop/widgets/privacy.vue'
   import Share from '/@/components/common/share.vue'
   import SidebarView from './sidebar/index.vue'
   import HeaderView from './header.vue'
@@ -25,7 +26,7 @@
   import NavView from './nav.vue'
 
   const { route, globalState, isCNUser } = useEnhancer()
-  const { switcher, pageLayout } = globalState
+  const { pageLayout, switcher, toggleSwitcher } = globalState
 
   const sponsorState = useSponsorState()
   const gitHubSponsorsStore = useGitHubSponsorsStore()
@@ -33,15 +34,6 @@
 
   const handlePageTransitionDone = () => {
     globalState.setPageLayout(resolvePageLayout(route.meta.layout))
-  }
-  const handleSponsorModalClose = () => {
-    globalState.toggleSwitcher('sponsorModal', false)
-  }
-  const handleFeedbackModalClose = () => {
-    globalState.toggleSwitcher('feedbackModal', false)
-  }
-  const handleStatementModalClose = () => {
-    globalState.toggleSwitcher('statementModal', false)
   }
 
   onMounted(() => {
@@ -61,7 +53,11 @@
     <background />
     <wallflower />
     <client-only>
-      <popup :visible="switcher.sponsorModal" :body-scrollable="false" @close="handleSponsorModalClose">
+      <popup
+        :body-scrollable="false"
+        :visible="switcher.sponsorModal"
+        @close="toggleSwitcher('sponsorModal', false)"
+      >
         <div class="sponsor-modal">
           <div class="sponsor">
             <sponsor-tabs class="tabs" :state="sponsorState" :hide-title="true" />
@@ -75,15 +71,26 @@
         </div>
       </popup>
       <popup
-        :visible="switcher.feedbackModal"
         :mask-closable="false"
         :body-scrollable="false"
-        @close="handleFeedbackModalClose"
+        :visible="switcher.feedbackModal"
+        @close="toggleSwitcher('feedbackModal', false)"
       >
-        <feedback @close="handleFeedbackModalClose" />
+        <feedback @close="toggleSwitcher('feedbackModal', false)" />
       </popup>
-      <popup :visible="switcher.statementModal" :body-scrollable="false" @close="handleStatementModalClose">
+      <popup
+        :body-scrollable="false"
+        :visible="switcher.statementModal"
+        @close="toggleSwitcher('statementModal', false)"
+      >
         <statement />
+      </popup>
+      <popup
+        :body-scrollable="false"
+        :visible="switcher.privacyModal"
+        @close="toggleSwitcher('privacyModal', false)"
+      >
+        <privacy />
       </popup>
       <popup v-model:visible="switcher.userPanelModal" :body-scrollable="false" :mask-closable="false">
         <user-panel />

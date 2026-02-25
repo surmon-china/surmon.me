@@ -1,25 +1,10 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { LocalesKey } from '/@/locales'
-  import { GAEventCategories } from '/@/constants/google-analytics'
   import { FOOTER_ELEMENT_ID } from '/@/constants/element-anchor'
   import { RESOURCE_LINKS, BFF_CONFIG } from '/@/configs/app.config'
 
-  const { globalState, goLinks, gtag } = useEnhancer()
-
-  const handleStatementClick = () => {
-    globalState.toggleSwitcher('statementModal', true)
-    gtag?.event('statement_modal', {
-      event_category: GAEventCategories.Universal
-    })
-  }
-
-  const handleFeedbackClick = () => {
-    globalState.toggleSwitcher('feedbackModal', true)
-    gtag?.event('feedback_modal', {
-      event_category: GAEventCategories.Widget
-    })
-  }
+  const { globalState, goLinks } = useEnhancer()
 </script>
 
 <template>
@@ -31,15 +16,19 @@
       <ulink class="link" :href="RESOURCE_LINKS.GITHUB_SURMON_ME">Vue</ulink>
       <i18n zh=" 和 日月星辰" en="" />
       <divider type="vertical" />
-      <button class="button" @click="handleStatementClick">
+      <button class="button" @click="globalState.toggleSwitcher('statementModal', true)">
         <i18n zh="周知" en="FAQ" />
       </button>
       <divider type="vertical" />
-      <button class="button" @click="handleFeedbackClick">
+      <button class="button" @click="globalState.toggleSwitcher('feedbackModal', true)">
         <i18n :k="LocalesKey.FEEDBACK" />
       </button>
       <divider type="vertical" />
-      <ulink class="link" href="/privacy/index.html">
+      <ulink
+        class="link"
+        href="/privacy/index.html"
+        @click.prevent="globalState.toggleSwitcher('privacyModal', true)"
+      >
         <i18n :k="LocalesKey.PRIVACY" />
       </ulink>
       <divider type="vertical" />
