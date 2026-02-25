@@ -1,5 +1,7 @@
 # Privacy Policy / 隐私政策
 
+---
+
 **Last Updated: February 25, 2026**
 
 ## English Version
