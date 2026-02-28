@@ -5,6 +5,7 @@
   const avatarMap = {
     chatgpt3: '/images/ai-providers/chatgpt-3.webp',
     chatgpt4: '/images/ai-providers/chatgpt-4.webp',
+    deepseek: '/images/ai-providers/deepseek.svg',
     openai: '/images/ai-providers/openai.svg',
     gemini: '/images/ai-providers/gemini.svg',
     google: '/images/ai-providers/google.svg',
@@ -31,8 +32,9 @@
     emit('click-link')
   }
 
+  const aiProvider = computed(() => props.provider.toLowerCase())
   const aiAvatarUrl = computed<string>(() => {
-    const provider = props.provider.toLowerCase()
+    const provider = aiProvider.value
     return provider === 'chatgpt'
       ? props.model?.includes('3')
         ? avatarMap.chatgpt3
@@ -46,10 +48,9 @@
     <div class="ai-avatar" v-if="!hiddenAvatar">
       <ulink class="link" :href="link" @click="handleLinkClick">
         <uimage
-          class="image"
-          :alt="model"
+          :class="[aiProvider, aiAvatarUrl.endsWith('.svg') ? 'svg' : 'image']"
           :src="aiAvatarUrl"
-          :class="{ svg: aiAvatarUrl.endsWith('.svg') }"
+          :alt="model"
           draggable="false"
           cdn
         />
@@ -101,25 +102,32 @@
       top: $gap-lg;
 
       .link {
-        $size: 3.6rem;
+        $size: 3.4rem;
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
         width: $size;
         height: $size;
-        border: 4px solid $module-bg-lighter;
         border-radius: $radius-sm;
-        background-color: $module-bg-darker-2;
+        border: 4px solid $module-bg-lighter;
+        background-color: $module-bg-darker-1;
+        @include mix.dark-theme {
+          background-color: $black;
+        }
 
         .image {
           width: 100%;
           height: 100%;
           border-radius: $radius-xs;
+        }
 
-          &.svg {
-            width: 65%;
-            height: auto;
+        .svg {
+          width: 64%;
+          height: auto;
+
+          &.deepseek {
+            margin-right: -2px;
           }
         }
       }
@@ -129,7 +137,7 @@
       display: block;
       width: 100%;
       height: 100%;
-      padding: $gap-xs $gap-xs $gap-xs 2.3rem;
+      padding: $gap-xs $gap-xs $gap-xs 2.1rem;
       background-color: $module-bg-darker-1;
       border-radius: $radius-xs;
       @include mix.background-transition();
