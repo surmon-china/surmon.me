@@ -5,7 +5,6 @@
 
   const props = defineProps({
     spin: Boolean,
-    color: String,
     height: {
       type: Number,
       default: 3
@@ -15,16 +14,15 @@
   const router = useRouter()
   const state = createNavigationProgressState()
 
-  router.beforeEach((_, __, next) => {
-    state.start()
-    next()
-  })
-
-  router.afterEach(() => state.finish())
-  router.onError(() => state.finish())
+  const teardownBefore = router.beforeEach(() => state.start())
+  const teardownAfter = router.afterEach(() => state.finish())
+  const teardownError = router.onError(() => state.finish())
 
   onBeforeUnmount(() => {
     state.clear()
+    teardownBefore()
+    teardownAfter()
+    teardownError()
   })
 </script>
 
@@ -34,13 +32,7 @@
     :class="{ visible: state.isLoading.value }"
     :style="{ '--height': props.height + 'px' }"
   >
-    <div
-      class="progress"
-      :style="{
-        background: props.color || undefined,
-        transform: `scaleX(${state.progress.value}%)`
-      }"
-    />
+    <div class="progress" :style="{ transform: `scaleX(${state.progress.value / 100})` }" />
     <div v-if="props.spin" class="spin">
       <div class="spin-ring">
         <div></div>
@@ -83,6 +75,7 @@
       transition-property: transform;
       transition-duration: $motion-duration-fast;
       transition-timing-function: ease;
+      will-change: transform;
     }
 
     .spin {
