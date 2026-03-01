@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.0.6";
+const APP_VERSION = "7.1.0";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -4892,43 +4892,34 @@ const dateToYMD = (date, separator) => {
   return humanDateToYMD(dateToHuman(_date), separator);
 };
 const useArchiveStore = defineStore("archive", () => {
-  const fetchStore = createFetchStore({
-    data: null,
+  const store = createFetchStore({
+    data: [],
     once: true,
     async fetcher() {
-      const response = await nodepress$1.get("/archive");
-      return response.result;
+      const response = await nodepress$1.get("/articles/all");
+      return response.result.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
     }
   });
   const tree = computed(() => {
     const rootTree = [];
-    fetchStore.data.value?.articles.sort(({ created_at: a }, { created_at: b }) => {
-      return Date.parse(b) - Date.parse(a);
-    }).map((article) => ({
-      ...article,
-      createAt: dateToHuman(new Date(article.created_at))
-    })).forEach((article) => {
-      const { createAt } = article;
-      const yearTree = rootTree.find((ye) => ye.year === createAt.year);
-      let targetYear = yearTree;
+    store.data.value.forEach((article) => {
+      const createAt = dateToHuman(new Date(article.created_at));
+      const transformedArticle = { ...article, createAt };
+      let targetYear = rootTree.find((ye) => ye.year === createAt.year);
       if (!targetYear) {
         targetYear = { year: createAt.year, months: [] };
         rootTree.push(targetYear);
       }
-      const monthTree = targetYear.months.find((mo) => mo.month === createAt.month);
-      let targetMonth = monthTree;
+      let targetMonth = targetYear.months.find((mo) => mo.month === createAt.month);
       if (!targetMonth) {
         targetMonth = { month: createAt.month, articles: [] };
         targetYear.months.push(targetMonth);
       }
-      targetMonth.articles.push(article);
+      targetMonth.articles.push(transformedArticle);
     });
     return rootTree;
   });
-  return {
-    ...fetchStore,
-    tree
-  };
+  return { ...store, tree };
 });
 const useNodepressStatisticsStore = defineStore("nodepressStatistics", () => {
   return createFetchStore({
@@ -5155,7 +5146,7 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
       const _component_skeleton = resolveComponent("skeleton");
       const _component_empty = resolveComponent("empty");
       const _component_divider = resolveComponent("divider");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-27efac45>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-91643a94>`);
       _push(ssrRenderComponent(PageBanner, {
         "background-image": "/images/page-archive/banner.webp",
         "background-image-y": 34,
@@ -5197,11 +5188,11 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="statistics-wrapper" data-v-27efac45><div class="container" data-v-27efac45>`);
+      _push(`<div class="statistics-wrapper" data-v-91643a94><div class="container" data-v-91643a94>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: statisticFetching.value }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="statistics-skeleton" data-v-27efac45${_scopeId}><!--[-->`);
+            _push2(`<div class="statistics-skeleton" data-v-91643a94${_scopeId}><!--[-->`);
             ssrRenderList(statistics.value.length, (s) => {
               _push2(ssrRenderComponent(_component_skeleton, {
                 class: "item",
@@ -5224,9 +5215,9 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="statistics-content" data-v-27efac45${_scopeId}><!--[-->`);
+            _push2(`<div class="statistics-content" data-v-91643a94${_scopeId}><!--[-->`);
             ssrRenderList(statistics.value, (s, index) => {
-              _push2(`<div class="item" data-v-27efac45${_scopeId}><i class="${ssrRenderClass([s.icon, "iconfont"])}" data-v-27efac45${_scopeId}></i><div class="content" data-v-27efac45${_scopeId}><p class="label" data-v-27efac45${_scopeId}>${ssrInterpolate(s.label)}</p><div class="value" data-v-27efac45${_scopeId}>${ssrInterpolate(s.value)}</div></div></div>`);
+              _push2(`<div class="item" data-v-91643a94${_scopeId}><i class="${ssrRenderClass([s.icon, "iconfont"])}" data-v-91643a94${_scopeId}></i><div class="content" data-v-91643a94${_scopeId}><p class="label" data-v-91643a94${_scopeId}>${ssrInterpolate(s.label)}</p><div class="value" data-v-91643a94${_scopeId}>${ssrInterpolate(s.value)}</div></div></div>`);
             });
             _push2(`<!--]--></div>`);
           } else {
@@ -5252,10 +5243,10 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="archive-wrapper" data-v-27efac45><div class="container" data-v-27efac45>`);
+      _push(`</div></div><div class="archive-wrapper" data-v-91643a94><div class="container" data-v-91643a94>`);
       _push(ssrRenderComponent(_component_placeholder, {
         loading: unref(archiveStore).fetching,
-        "has-data": !!unref(archiveStore).data?.articles.length
+        "has-data": !!unref(archiveStore).data.length
       }, {
         placeholder: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -5298,9 +5289,9 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="archive-skeleton" data-v-27efac45${_scopeId}><!--[-->`);
+            _push2(`<ul class="archive-skeleton" data-v-91643a94${_scopeId}><!--[-->`);
             ssrRenderList(6, (i) => {
-              _push2(`<li class="item" data-v-27efac45${_scopeId}>`);
+              _push2(`<li class="item" data-v-91643a94${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton, { class: "title" }, null, _parent2, _scopeId));
               _push2(`<!--[-->`);
               ssrRenderList(3, (l) => {
@@ -5341,14 +5332,14 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
             }, {
               title: withCtx(({ year, month, count }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<h1 class="archive-title" data-v-27efac45${_scopeId2}><span class="year" data-v-27efac45${_scopeId2}>`);
+                  _push3(`<h1 class="archive-title" data-v-91643a94${_scopeId2}><span class="year" data-v-91643a94${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     en: String(year),
                     zh: unref(numberToChinese)(year)
                   }, null, _parent3, _scopeId2));
-                  _push3(`</span><span class="month" data-v-27efac45${_scopeId2}>`);
+                  _push3(`</span><span class="month" data-v-91643a94${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, unref(getMonthNameI18n)(month), null, _parent3, _scopeId2));
-                  _push3(`</span><span class="count" data-v-27efac45${_scopeId2}>`);
+                  _push3(`</span><span class="count" data-v-91643a94${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     zh: `（${count}）`,
                     en: ` (${count})`
@@ -5378,17 +5369,17 @@ const _sfc_main$1R = /* @__PURE__ */ defineComponent({
               }),
               article: withCtx(({ article, day }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="archive-article" data-v-27efac45${_scopeId2}><div class="left" data-v-27efac45${_scopeId2}><h3 class="title" data-v-27efac45${_scopeId2}><span class="date" data-v-27efac45${_scopeId2}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-27efac45${_scopeId2}>${ssrInterpolate(article.title)}</a></h3><p class="summary" data-v-27efac45${_scopeId2}>${article.summary ?? ""}</p></div><div class="metas" data-v-27efac45${_scopeId2}><div class="item views" data-v-27efac45${_scopeId2}><i class="iconfont icon-eye" data-v-27efac45${_scopeId2}></i><span class="text" data-v-27efac45${_scopeId2}>${ssrInterpolate(unref(numberSplit)(article.stats.views))}</span></div>`);
+                  _push3(`<div class="archive-article" data-v-91643a94${_scopeId2}><div class="left" data-v-91643a94${_scopeId2}><h3 class="title" data-v-91643a94${_scopeId2}><span class="date" data-v-91643a94${_scopeId2}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-91643a94${_scopeId2}>${ssrInterpolate(article.title)}</a></h3><p class="summary" data-v-91643a94${_scopeId2}>${article.summary ?? ""}</p></div><div class="metas" data-v-91643a94${_scopeId2}><div class="item views" data-v-91643a94${_scopeId2}><i class="iconfont icon-eye" data-v-91643a94${_scopeId2}></i><span class="text" data-v-91643a94${_scopeId2}>${ssrInterpolate(unref(numberSplit)(article.stats.views))}</span></div>`);
                   _push3(ssrRenderComponent(_component_divider, {
                     type: "vertical",
                     size: "sm"
                   }, null, _parent3, _scopeId2));
-                  _push3(`<div class="item likes" data-v-27efac45${_scopeId2}><i class="like-icon iconfont icon-like" data-v-27efac45${_scopeId2}></i><span class="text" data-v-27efac45${_scopeId2}>${ssrInterpolate(article.stats.likes)}</span></div>`);
+                  _push3(`<div class="item likes" data-v-91643a94${_scopeId2}><i class="like-icon iconfont icon-like" data-v-91643a94${_scopeId2}></i><span class="text" data-v-91643a94${_scopeId2}>${ssrInterpolate(article.stats.likes)}</span></div>`);
                   _push3(ssrRenderComponent(_component_divider, {
                     type: "vertical",
                     size: "sm"
                   }, null, _parent3, _scopeId2));
-                  _push3(`<div class="item comments" data-v-27efac45${_scopeId2}><i class="iconfont icon-comment" data-v-27efac45${_scopeId2}></i><span class="text" data-v-27efac45${_scopeId2}>${ssrInterpolate(article.stats.comments)}</span></div></div></div>`);
+                  _push3(`<div class="item comments" data-v-91643a94${_scopeId2}><i class="iconfont icon-comment" data-v-91643a94${_scopeId2}></i><span class="text" data-v-91643a94${_scopeId2}>${ssrInterpolate(article.stats.comments)}</span></div></div></div>`);
                 } else {
                   return [
                     createVNode("div", { class: "archive-article" }, [
@@ -5518,7 +5509,7 @@ _sfc_main$1R.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/archive/desktop.vue");
   return _sfc_setup$1R ? _sfc_setup$1R(props, ctx) : void 0;
 };
-const DesktopArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-27efac45"]]);
+const DesktopArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-91643a94"]]);
 const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
   __name: "page-banner",
   __ssrInlineRender: true,
@@ -5577,7 +5568,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
       const _component_skeleton = resolveComponent("skeleton");
       const _component_divider = resolveComponent("divider");
       const _component_empty = resolveComponent("empty");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-efac2822>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "archive-page" }, _attrs))} data-v-ccf4856a>`);
       _push(ssrRenderComponent(MobileBanner, {
         "background-image": "/images/page-archive/banner-mobile.webp",
         "background-image-y": 80,
@@ -5641,11 +5632,11 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<div class="page-content" data-v-efac2822><div class="statistics-wrapper" data-v-efac2822><div class="container" data-v-efac2822>`);
+      _push(`<div class="page-content" data-v-ccf4856a><div class="statistics-wrapper" data-v-ccf4856a><div class="container" data-v-ccf4856a>`);
       _push(ssrRenderComponent(_component_placeholder, { loading: statisticFetching.value }, {
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="statistics-skeleton" data-v-efac2822${_scopeId}><!--[-->`);
+            _push2(`<div class="statistics-skeleton" data-v-ccf4856a${_scopeId}><!--[-->`);
             ssrRenderList(3, (s) => {
               _push2(ssrRenderComponent(_component_skeleton, {
                 class: "item",
@@ -5668,11 +5659,11 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="statistics-content" data-v-efac2822${_scopeId}><div class="item" data-v-efac2822${_scopeId}><p class="label" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.articles.label)}</p><div class="value" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.articles.value)}</div></div>`);
+            _push2(`<div class="statistics-content" data-v-ccf4856a${_scopeId}><div class="item" data-v-ccf4856a${_scopeId}><p class="label" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.articles.label)}</p><div class="value" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.articles.value)}</div></div>`);
             _push2(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent2, _scopeId));
-            _push2(`<div class="item" data-v-efac2822${_scopeId}><p class="label" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.label)}</p><div class="value" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.value)}</div></div>`);
+            _push2(`<div class="item" data-v-ccf4856a${_scopeId}><p class="label" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.label)}</p><div class="value" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.todayViews.value)}</div></div>`);
             _push2(ssrRenderComponent(_component_divider, { type: "vertical" }, null, _parent2, _scopeId));
-            _push2(`<div class="item" data-v-efac2822${_scopeId}><p class="label" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.comments.label)}</p><div class="value" data-v-efac2822${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.comments.value)}</div></div></div>`);
+            _push2(`<div class="item" data-v-ccf4856a${_scopeId}><p class="label" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.comments.label)}</p><div class="value" data-v-ccf4856a${_scopeId}>${ssrInterpolate(unref(statisticState).statistics.value.comments.value)}</div></div></div>`);
           } else {
             return [
               createVNode("div", { class: "statistics-content" }, [
@@ -5696,10 +5687,10 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</div></div><div class="archive-wrapper" data-v-efac2822><div class="container" data-v-efac2822>`);
+      _push(`</div></div><div class="archive-wrapper" data-v-ccf4856a><div class="container" data-v-ccf4856a>`);
       _push(ssrRenderComponent(_component_placeholder, {
         loading: unref(archiveStore).fetching,
-        "has-data": !!unref(archiveStore).data?.articles.length
+        "has-data": !!unref(archiveStore).data.length
       }, {
         placeholder: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -5734,9 +5725,9 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="archive-skeleton" data-v-efac2822${_scopeId}><!--[-->`);
+            _push2(`<ul class="archive-skeleton" data-v-ccf4856a${_scopeId}><!--[-->`);
             ssrRenderList(3, (item) => {
-              _push2(`<li class="item" data-v-efac2822${_scopeId}>`);
+              _push2(`<li class="item" data-v-ccf4856a${_scopeId}>`);
               _push2(ssrRenderComponent(_component_skeleton, { class: "title" }, null, _parent2, _scopeId));
               _push2(`<!--[-->`);
               ssrRenderList(3, (i) => {
@@ -5777,14 +5768,14 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
             }, {
               title: withCtx(({ year, month, count }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<h3 class="archive-title" data-v-efac2822${_scopeId2}><span class="year" data-v-efac2822${_scopeId2}>`);
+                  _push3(`<h3 class="archive-title" data-v-ccf4856a${_scopeId2}><span class="year" data-v-ccf4856a${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     en: String(year),
                     zh: unref(numberToChinese)(year)
                   }, null, _parent3, _scopeId2));
-                  _push3(`</span><span class="month" data-v-efac2822${_scopeId2}>`);
+                  _push3(`</span><span class="month" data-v-ccf4856a${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, unref(getMonthNameI18n)(month), null, _parent3, _scopeId2));
-                  _push3(`</span><span class="count" data-v-efac2822${_scopeId2}>`);
+                  _push3(`</span><span class="count" data-v-ccf4856a${_scopeId2}>`);
                   _push3(ssrRenderComponent(_component_i18n, {
                     zh: `（${count}）`,
                     en: ` (${count})`
@@ -5814,7 +5805,7 @@ const _sfc_main$1P = /* @__PURE__ */ defineComponent({
               }),
               article: withCtx(({ article, day }, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="archive-article" data-v-efac2822${_scopeId2}><h4 class="title" data-v-efac2822${_scopeId2}><span class="date" data-v-efac2822${_scopeId2}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-efac2822${_scopeId2}>${ssrInterpolate(article.title)}</a></h4><p class="summary" data-v-efac2822${_scopeId2}>${article.summary ?? ""}</p></div>`);
+                  _push3(`<div class="archive-article" data-v-ccf4856a${_scopeId2}><h4 class="title" data-v-ccf4856a${_scopeId2}><span class="date" data-v-ccf4856a${_scopeId2}>D${ssrInterpolate(day)}</span><a class="link" target="_blank"${ssrRenderAttr("title", article.title)}${ssrRenderAttr("href", unref(getArticleDetailRoute)(article.id))} data-v-ccf4856a${_scopeId2}>${ssrInterpolate(article.title)}</a></h4><p class="summary" data-v-ccf4856a${_scopeId2}>${article.summary ?? ""}</p></div>`);
                 } else {
                   return [
                     createVNode("div", { class: "archive-article" }, [
@@ -5896,7 +5887,7 @@ _sfc_main$1P.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/archive/mobile.vue");
   return _sfc_setup$1P ? _sfc_setup$1P(props, ctx) : void 0;
 };
-const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-efac2822"]]);
+const MobileArchivePage = /* @__PURE__ */ _export_sfc(_sfc_main$1P, [["__scopeId", "data-v-ccf4856a"]]);
 const COMMENT_API_PATH = "/comments";
 const useCommentStore = defineStore("comment", () => {
   const fetching = ref(false);

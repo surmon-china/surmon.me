@@ -716,6 +716,10 @@ const cacher = {
   passive,
   interval
 };
+const getTagURL = (tag) => `${APP_PROFILE.url}/tag/${tag}`;
+const getCategoryURL = (category) => `${APP_PROFILE.url}/category/${category}`;
+const getArticleURL = (id) => `${APP_PROFILE.url}/article/${id}`;
+const getPageURL = (page) => `${APP_PROFILE.url}/${page}`;
 const axios = _axios.create({
   httpAgent: new HttpAgent({
     keepAlive: true,
@@ -734,54 +738,20 @@ const axios = _axios.create({
     keepAliveMsecs: 6e4
   })
 });
-const getTagURL = (tag) => `${APP_PROFILE.url}/tag/${tag}`;
-const getCategoryURL = (category) => `${APP_PROFILE.url}/category/${category}`;
-const getArticleURL = (id) => `${APP_PROFILE.url}/article/${id}`;
-const getPageURL = (page) => `${APP_PROFILE.url}/${page}`;
-const getRssXml = async (cache2) => {
-  let archiveData = await cache2.withoutNamespace?.().get("nodepress:archive");
-  if (!archiveData) {
-    const api = `${NODEPRESS_API_URL}/archive`;
-    const response = await axios.get(api, { timeout: 6e3 });
-    archiveData = response.data.result;
+const getDataFromNodePress = async (apiPath, cache2) => {
+  if (cache2) {
+    const cached = await cache2.store.withoutNamespace?.().get(`nodepress:${cache2.key}`);
+    if (cached) return cached;
   }
-  const feed = new RSS({
-    title: APP_PROFILE.title,
-    description: APP_PROFILE.sub_title_zh,
-    site_url: APP_PROFILE.url,
-    feed_url: `${APP_PROFILE.url}/rss.xml`,
-    image_url: `${APP_PROFILE.url}/icon.png`,
-    managingEditor: APP_PROFILE.author,
-    webMaster: APP_PROFILE.author,
-    generator: `${APP_PROFILE.domain}`,
-    categories: archiveData.categories.map((category) => category.slug),
-    copyright: `${(/* @__PURE__ */ new Date()).getFullYear()} ${APP_PROFILE.title}`,
-    language: "zh",
-    ttl: 60
-  });
-  archiveData.articles.forEach((article) => {
-    return feed.item({
-      title: article.title,
-      description: article.summary,
-      url: getArticleURL(article.id),
-      guid: String(article.id),
-      categories: article.categories.map((category) => category.slug),
-      author: APP_PROFILE.author,
-      date: article.created_at,
-      enclosure: {
-        url: article.thumbnail
-      }
-    });
-  });
-  return feed.xml({ indent: true });
+  const response = await axios.get(`${NODEPRESS_API_URL}${apiPath}`);
+  return response.data.result;
 };
-const getSitemapXml = async (cache2) => {
-  let archiveData = await cache2.withoutNamespace?.().get("nodepress:archive");
-  if (!archiveData) {
-    const api = `${NODEPRESS_API_URL}/archive`;
-    const response = await axios.get(api, { timeout: 6e3 });
-    archiveData = response.data.result;
-  }
+const getSitemapXml = async (store) => {
+  const [articles, categories, tags] = await Promise.all([
+    getDataFromNodePress("/articles/all", { store, key: "public-all-articles" }),
+    getDataFromNodePress("/categories/all", { store, key: "public-all-categories" }),
+    getDataFromNodePress("/tags/all", { store, key: "public-all-tags" })
+  ]);
   const sitemapStream = new SitemapStream({
     hostname: APP_PROFILE.url
   });
@@ -803,21 +773,21 @@ const getSitemapXml = async (cache2) => {
       priority: 1
     }
   ];
-  archiveData.categories.forEach((category) => {
+  categories.forEach((category) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
       url: getCategoryURL(category.slug)
     });
   });
-  archiveData.tags.forEach((tag) => {
+  tags.forEach((tag) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
       url: getTagURL(tag.slug)
     });
   });
-  archiveData.articles.forEach((article) => {
+  articles.forEach((article) => {
     sitemapItemList.push({
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
@@ -825,9 +795,43 @@ const getSitemapXml = async (cache2) => {
       lastmodISO: new Date(article.updated_at).toISOString()
     });
   });
-  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) => {
-    return data.toString();
+  const buffer = await streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream));
+  return buffer.toString();
+};
+const getRssXml = async (store) => {
+  const [articles, categories] = await Promise.all([
+    getDataFromNodePress("/articles/all", { store, key: "public-all-articles" }),
+    getDataFromNodePress("/categories/all", { store, key: "public-all-categories" })
+  ]);
+  const feed = new RSS({
+    title: APP_PROFILE.title,
+    description: APP_PROFILE.sub_title_zh,
+    site_url: APP_PROFILE.url,
+    feed_url: `${APP_PROFILE.url}/rss.xml`,
+    image_url: `${APP_PROFILE.url}/icon.png`,
+    managingEditor: APP_PROFILE.author,
+    webMaster: APP_PROFILE.author,
+    generator: `${APP_PROFILE.domain}`,
+    categories: categories.map((category) => category.slug),
+    copyright: `${(/* @__PURE__ */ new Date()).getFullYear()} ${APP_PROFILE.title}`,
+    language: "zh",
+    ttl: 60
   });
+  articles.forEach((article) => {
+    return feed.item({
+      title: article.title,
+      description: article.summary,
+      url: getArticleURL(article.id),
+      guid: String(article.id),
+      categories: article.categories.map((category) => category.slug),
+      author: APP_PROFILE.author,
+      date: article.created_at,
+      enclosure: {
+        url: article.thumbnail
+      }
+    });
+  });
+  return feed.xml({ indent: true });
 };
 const getGtagScriptURL = (measurementId) => {
   return `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
