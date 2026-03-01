@@ -83,7 +83,7 @@
         </responsive>
         <divider type="vertical" size="sm" class="vertical" />
         <span>
-          <i class="iconfont icon-eye"></i>
+          <i class="iconfont icon-eye-outlined"></i>
           <span>{{ numberSplit(article.stats.views) }}&nbsp;</span>
           <i18n :k="LocalesKey.ARTICLE_VIEWS" />
         </span>

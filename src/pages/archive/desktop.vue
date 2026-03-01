@@ -81,7 +81,7 @@
             <archive-tree class="archive-content" :tree="archiveStore.tree">
               <template #title="{ year, month, count }">
                 <h1 class="archive-title">
-                  <span class="year"><i18n :en="year" :zh="numberToChinese(year)" /></span>
+                  <span class="year"><i18n :en="String(year)" :zh="numberToChinese(year)" /></span>
                   <span class="month"><i18n v-bind="getMonthNameI18n(month)" /></span>
                   <span class="count"><i18n :zh="`（${count}）`" :en="` (${count})`" /></span>
                 </h1>

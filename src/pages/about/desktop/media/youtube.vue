@@ -40,7 +40,7 @@
                 <span class="text">{{ item.snippet.title }}</span>
               </p>
               <div class="mask">
-                <i class="iconfont icon-eye"></i>
+                <i class="iconfont icon-music-play"></i>
               </div>
             </ulink>
           </li>
