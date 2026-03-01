@@ -143,8 +143,8 @@
   @use '/src/styles/base/mixins' as mix;
 
   .sponsor-modal {
-    width: 39rem;
-    height: 23rem;
+    width: 38rem;
+    height: 22rem;
     display: flex;
     flex-direction: column;
     background-color: $module-bg-lighter;
