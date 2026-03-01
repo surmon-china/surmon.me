@@ -113,7 +113,7 @@
         border: 4px solid $module-bg-lighter;
         background-color: $module-bg-darker-1;
         @include mix.dark-theme {
-          background-color: $black;
+          background-color: $module-bg-darker-2;
         }
 
         .image {
