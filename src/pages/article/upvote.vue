@@ -87,7 +87,7 @@
         align-items: center;
         height: $button-size;
         line-height: $button-size;
-        padding: 0 $gap;
+        padding: 0 $gap-sm;
         border-width: 1px 0;
         border-color: $lighter-red;
         color: $lighter-red;
