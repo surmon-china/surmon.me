@@ -5,22 +5,18 @@
  */
 
 import RSS from 'rss'
-import axios from '@/server/services/axios'
 import { APP_PROFILE } from '@/configs/app.config'
-import { NODEPRESS_API_URL } from '@/configs/bff.api'
-import type { Archive } from '@/interfaces/archive'
-import type { NodePressSuccessResponse } from '@/services/nodepress'
+import type { Article } from '@/interfaces/article'
+import type { Category } from '@/interfaces/category'
 import type { CacheStore } from '@/server/services/cache'
 import { getArticleURL } from '../utils/url'
+import { getDataFromNodePress } from './sitemap'
 
-export const getRssXml = async (cache: CacheStore) => {
-  // HACK: use cache to avoid frequent API requests
-  let archiveData = await cache.withoutNamespace?.().get<Archive>('nodepress:archive')
-  if (!archiveData) {
-    const api = `${NODEPRESS_API_URL}/archive`
-    const response = await axios.get<NodePressSuccessResponse<Archive>>(api, { timeout: 6000 })
-    archiveData = response.data.result
-  }
+export const getRssXml = async (store: CacheStore) => {
+  const [articles, categories] = await Promise.all([
+    getDataFromNodePress<Article[]>('/articles/all', { store, key: 'public-all-articles' }),
+    getDataFromNodePress<Category[]>('/categories/all', { store, key: 'public-all-categories' })
+  ])
 
   const feed = new RSS({
     title: APP_PROFILE.title,
@@ -31,13 +27,13 @@ export const getRssXml = async (cache: CacheStore) => {
     managingEditor: APP_PROFILE.author,
     webMaster: APP_PROFILE.author,
     generator: `${APP_PROFILE.domain}`,
-    categories: archiveData.categories.map((category) => category.slug),
+    categories: categories.map((category) => category.slug),
     copyright: `${new Date().getFullYear()} ${APP_PROFILE.title}`,
     language: 'zh',
     ttl: 60
   })
 
-  archiveData.articles.forEach((article) => {
+  articles.forEach((article) => {
     return feed.item({
       title: article.title,
       description: article.summary,

@@ -8,21 +8,35 @@ import axios from '@/server/services/axios'
 import { Readable } from 'stream'
 import { SitemapStream, streamToPromise, EnumChangefreq } from 'sitemap'
 import type { SitemapItemLoose } from 'sitemap'
+import type { Tag } from '@/interfaces/tag'
+import type { Category } from '@/interfaces/category'
+import type { Article } from '@/interfaces/article'
 import type { CacheStore } from '@/server/services/cache'
-import type { Archive } from '@/interfaces/archive'
 import type { NodePressSuccessResponse } from '@/services/nodepress'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
 import { APP_PROFILE } from '@/configs/app.config'
 import { getArticleURL, getPageURL, getTagURL, getCategoryURL } from '../utils/url'
 
-export const getSitemapXml = async (cache: CacheStore) => {
+export const getDataFromNodePress = async <T>(
+  apiPath: string,
+  cache?: { store: CacheStore; key: string }
+) => {
   // HACK: use cache to avoid frequent API requests
-  let archiveData = await cache.withoutNamespace?.().get<Archive>('nodepress:archive')
-  if (!archiveData) {
-    const api = `${NODEPRESS_API_URL}/archive`
-    const response = await axios.get<NodePressSuccessResponse<Archive>>(api, { timeout: 6000 })
-    archiveData = response.data.result
+  // https://github.com/surmon-china/nodepress/blob/main/src/constants/cache.constant.ts
+  if (cache) {
+    const cached = await cache.store.withoutNamespace?.().get<T>(`nodepress:${cache.key}`)
+    if (cached) return cached
   }
+  const response = await axios.get<NodePressSuccessResponse<T>>(`${NODEPRESS_API_URL}${apiPath}`)
+  return response.data.result
+}
+
+export const getSitemapXml = async (store: CacheStore) => {
+  const [articles, categories, tags] = await Promise.all([
+    getDataFromNodePress<Article[]>('/articles/all', { store, key: 'public-all-articles' }),
+    getDataFromNodePress<Category[]>('/categories/all', { store, key: 'public-all-categories' }),
+    getDataFromNodePress<Tag[]>('/tags/all', { store, key: 'public-all-tags' })
+  ])
 
   const sitemapStream = new SitemapStream({
     hostname: APP_PROFILE.url
@@ -47,7 +61,7 @@ export const getSitemapXml = async (cache: CacheStore) => {
     }
   ]
 
-  archiveData.categories.forEach((category) => {
+  categories.forEach((category) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
@@ -55,7 +69,7 @@ export const getSitemapXml = async (cache: CacheStore) => {
     })
   })
 
-  archiveData.tags.forEach((tag) => {
+  tags.forEach((tag) => {
     sitemapItemList.push({
       priority: 0.6,
       changefreq: EnumChangefreq.DAILY,
@@ -63,7 +77,7 @@ export const getSitemapXml = async (cache: CacheStore) => {
     })
   })
 
-  archiveData.articles.forEach((article) => {
+  articles.forEach((article) => {
     sitemapItemList.push({
       priority: 0.8,
       changefreq: EnumChangefreq.DAILY,
@@ -72,7 +86,6 @@ export const getSitemapXml = async (cache: CacheStore) => {
     })
   })
 
-  return streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream)).then((data) => {
-    return data.toString()
-  })
+  const buffer = await streamToPromise(Readable.from(sitemapItemList).pipe(sitemapStream))
+  return buffer.toString()
 }
