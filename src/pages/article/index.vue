@@ -166,7 +166,7 @@
               :article="article"
               @rendered="handleContentRendered"
             >
-              <template #body-top-extra v-if="aiSummaryContent && aiSummaryProvider">
+              <template #body-top-extra v-if="aiSummaryContent">
                 <article-ai-summary
                   :content="aiSummaryContent"
                   :provider="aiSummaryProvider"

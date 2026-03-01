@@ -1,13 +1,23 @@
 <script lang="ts" setup>
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { LocalesKey } from '/@/locales'
+
+  const iconMap = {
+    deepseek: '/images/ai-providers/deepseek.svg',
+    chatgpt: '/images/ai-providers/openai.svg',
+    gemini: '/images/ai-providers/gemini.svg'
+  }
 
   const props = defineProps<{
     content: string
-    provider: string
+    provider?: string
     model?: string
     timestamp?: string
   }>()
+
+  const iconUrl = computed<string | null>(() => {
+    return props.provider ? iconMap[props.provider.toLowerCase()] : null
+  })
 
   const isExpanded = ref(false)
   const toggleExpand = () => {
@@ -18,8 +28,11 @@
 <template>
   <div class="ai-summary" :class="{ 'is-expanded': isExpanded }">
     <div class="summary-header">
-      <span class="title">✨ AI <i18n :k="LocalesKey.ARTICLE_SUMMARY" /></span>
-      <span class="provider" v-if="provider">{{ provider }} · {{ model }}</span>
+      <span class="title">AI <i18n :k="LocalesKey.ARTICLE_SUMMARY" /></span>
+      <span class="provider" v-if="model">
+        <uimage class="icon" :alt="provider" :title="provider" :src="iconUrl" v-if="iconUrl" />
+        <span class="model">{{ model }}</span>
+      </span>
     </div>
     <div class="summary-content">
       <p class="text">{{ content }}</p>
@@ -48,8 +61,8 @@
     font-size: $font-size-secondary;
     background-color: var(--background-color);
 
-    --padding-block: 1em;
-    --padding-inline: 1.2em;
+    --padding-block: 0.8em;
+    --padding-inline: 1em;
     --background-color: #eee;
     @include mix.dark-theme {
       --background-color: #333;
@@ -69,6 +82,11 @@
       .provider {
         font-size: $font-size-tertiary;
         color: $color-text-divider;
+
+        .icon {
+          height: $font-size-quaternary;
+          margin-right: $gap-tiny;
+        }
       }
     }
 
@@ -78,7 +96,6 @@
 
       .text {
         margin: 0;
-        text-indent: 2em;
         @include mix.clamp(3);
       }
     }
