@@ -64,7 +64,7 @@
       </div>
       <div class="archive-wrapper">
         <div class="container">
-          <placeholder :loading="archiveStore.fetching" :has-data="!!archiveStore.data?.articles.length">
+          <placeholder :loading="archiveStore.fetching" :has-data="!!archiveStore.data.length">
             <template #placeholder>
               <empty class="archive-empty">
                 <i18n :k="LocalesKey.ARTICLE_PLACEHOLDER" />
