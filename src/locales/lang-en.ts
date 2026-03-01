@@ -42,6 +42,8 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.ANNOUNCEMENT_PLACEHOLDER]: 'No announcements',
   [LocalesKey.TAG_PLACEHOLDER]: 'No tags',
   [LocalesKey.LIST_NO_MORE_DATA]: 'No more',
+
+  [LocalesKey.ARTICLE_SUMMARY]: 'Summary',
   [LocalesKey.ARTICLE_PLACEHOLDER]: 'No articles',
   [LocalesKey.ARTICLE_VIEWS]: 'views',
   [LocalesKey.ARTICLE_READ_ALL]: 'Read full article',

@@ -41,6 +41,8 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.ANNOUNCEMENT_PLACEHOLDER]: '空空如也',
   [LocalesKey.CATEGORY_UNCATEGORIZED]: '未分类',
   [LocalesKey.TAG_PLACEHOLDER]: '无标签',
+
+  [LocalesKey.ARTICLE_SUMMARY]: '摘要',
   [LocalesKey.ARTICLE_VIEWS]: '次阅读',
   [LocalesKey.ARTICLE_PLACEHOLDER]: '空空如也',
   [LocalesKey.ARTICLE_READ_ALL]: '阅读余下全文',

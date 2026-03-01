@@ -45,6 +45,7 @@ export enum LocalesKey {
   TAG_PLACEHOLDER = 'tag-placeholder',
   LIST_NO_MORE_DATA = 'no-more',
 
+  ARTICLE_SUMMARY = 'article-summary',
   ARTICLE_VIEWS = 'article-views',
   ARTICLE_PLACEHOLDER = 'article-empty-placeholder',
   ARTICLE_READ_ALL = 'read-all-article-content',

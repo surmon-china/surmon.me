@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { Article } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
+
   defineProps<{
     prev: Article | null
     next: Article | null

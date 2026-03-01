@@ -88,6 +88,7 @@
           <i18n :k="LocalesKey.ARTICLE_VIEWS" />
         </span>
       </div>
+      <slot name="body-top-extra"></slot>
       <markdown :html="ctxStore.defaultContent?.html" />
       <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
         <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">

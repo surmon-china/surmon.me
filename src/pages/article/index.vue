@@ -25,6 +25,7 @@
   import ArticleRelated from './related.vue'
   import ArticleNeighbour from './neighbour.vue'
   import ArticleAiReview from './ai-review.vue'
+  import ArticleAiSummary from './ai-summary.vue'
 
   const props = defineProps<{
     articleId: number
@@ -47,7 +48,13 @@
   const aiReviewTimestamp = computed(() => articleExtrasMap.value.get('ai-review-timestamp'))
   const aiReviewLink = computed(() => articleExtrasMap.value.get('ai-review-link'))
 
-  const handleAiReviewClick = () => {
+  // fot AI summary
+  const aiSummaryContent = computed(() => articleExtrasMap.value.get('ai-summary-content'))
+  const aiSummaryProvider = computed(() => articleExtrasMap.value.get('ai-summary-provider'))
+  const aiSummaryModel = computed(() => articleExtrasMap.value.get('ai-summary-model'))
+  const aiSummaryTimestamp = computed(() => articleExtrasMap.value.get('ai-summary-timestamp'))
+
+  const handleAiReviewLinkClick = () => {
     gtag?.event('ai_review_link', {
       event_category: GAEventCategories.Comment
     })
@@ -81,7 +88,10 @@
   }
 
   const fetchArticleDetail = (articleId: number) => {
-    const commentRequest = commentStore.fetchList({ target_type: CommentTargetType.Article, target_id: articleId })
+    const commentRequest = commentStore.fetchList({
+      target_type: CommentTargetType.Article,
+      target_id: articleId
+    })
     const articleRequest = articleDetailStore.fetchCompleteArticle(articleId)
     return Promise.all([articleRequest, commentRequest])
   }
@@ -155,7 +165,16 @@
               :readmore-id="ANCHORS.ARTICLE_READMORE_ELEMENT_ID"
               :article="article"
               @rendered="handleContentRendered"
-            />
+            >
+              <template #body-top-extra v-if="aiSummaryContent && aiSummaryProvider">
+                <article-ai-summary
+                  :content="aiSummaryContent"
+                  :provider="aiSummaryProvider"
+                  :model="aiSummaryModel"
+                  :timestamp="aiSummaryTimestamp"
+                />
+              </template>
+            </article-content>
             <div class="divider"><div class="line"></div></div>
             <article-meta :id="ANCHORS.ARTICLE_META_ELEMENT_ID" :article="article" :plain="isMobile">
               <template #action>
@@ -212,7 +231,7 @@
             :model="aiReviewModel"
             :link="aiReviewLink"
             :hidden-avatar="isMobile"
-            @click-link="handleAiReviewClick"
+            @click-link="handleAiReviewLinkClick"
           />
         </template>
       </comment>
