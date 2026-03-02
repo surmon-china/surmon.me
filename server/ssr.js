@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.1.1";
+const APP_VERSION = "7.1.2";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -807,6 +807,7 @@ const LOADING_HTML = `
   <head>
     <meta charset="utf-8" />
     <title>Connecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <style>
       :root {
         --bg-color: #ffffff;
@@ -834,8 +835,8 @@ const LOADING_HTML = `
       .spinner {
         width: 40px;
         height: 40px;
-        border: 4px solid var(--spinner-border);
-        border-top: 4px solid var(--spinner-top);
+        border: 6px solid var(--spinner-border);
+        border-top: 6px solid var(--spinner-top);
         border-radius: 50%;
         animation: spin 2s linear infinite;
         margin-bottom: 32px;
@@ -7598,34 +7599,34 @@ const _sfc_main$1B = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-c44b2cc9>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-3338021a>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="username ai" data-v-c44b2cc9>`);
+        _push(`<span class="username ai" data-v-3338021a>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_AI_ASSISTANT
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isGhostUser) {
-        _push(`<span class="username ghost" data-v-c44b2cc9>`);
+        _push(`<span class="username ghost" data-v-3338021a>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_GHOST_USER
         }, null, _parent));
         _push(`</span>`);
       } else if (authorUrl.value) {
-        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-c44b2cc9>${ssrInterpolate(authorName.value)}</a>`);
+        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-3338021a>${ssrInterpolate(authorName.value)}</a>`);
       } else {
-        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-c44b2cc9>${ssrInterpolate(authorName.value)}</span>`);
+        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-3338021a>${ssrInterpolate(authorName.value)}</span>`);
       }
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="badge ai" data-v-c44b2cc9>AI</span>`);
+        _push(`<span class="badge ai" data-v-3338021a>AI</span>`);
       } else if (__props.meta.isPatronUser) {
-        _push(`<span class="badge patron" data-v-c44b2cc9>`);
+        _push(`<span class="badge patron" data-v-3338021a>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_PATRON
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isModeratorUser) {
-        _push(`<span class="badge moderator" data-v-c44b2cc9>`);
+        _push(`<span class="badge moderator" data-v-3338021a>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7643,7 +7644,7 @@ _sfc_main$1B.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-username.vue");
   return _sfc_setup$1B ? _sfc_setup$1B(props, ctx) : void 0;
 };
-const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-c44b2cc9"]]);
+const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1B, [["__scopeId", "data-v-3338021a"]]);
 const OFFSET = 127397;
 const regionCodeToEmoji = (regionCode) => {
   return regionCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
@@ -18033,13 +18034,13 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "wall" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-fc749c9b><div class="picture-box"${ssrRenderAttr("title", activePaper.value.copyright)} style="${ssrRenderStyle({ backgroundImage: `url(${activePaper.value.humanizedImageUrl})` })}" data-v-fc749c9b></div><div class="story-box" data-v-fc749c9b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "wall" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-c9a85978><div class="picture-box"${ssrRenderAttr("title", activePaper.value.copyright)} style="${ssrRenderStyle({ backgroundImage: `url(${activePaper.value.humanizedImageUrl})` })}" data-v-c9a85978></div><div class="story-box" data-v-c9a85978>`);
       if (activePaper.value.title) {
-        _push(`<!--[--><h2 class="title" data-v-fc749c9b>${ssrInterpolate(activePaper.value.title)}</h2><p class="sub-title" data-v-fc749c9b>${ssrInterpolate(activePaper.value.copyright)}</p><!--]-->`);
+        _push(`<!--[--><h2 class="title" data-v-c9a85978>${ssrInterpolate(activePaper.value.title)}</h2><p class="sub-title" data-v-c9a85978>${ssrInterpolate(activePaper.value.copyright)}</p><!--]-->`);
       } else {
-        _push(`<h2 class="title lonely" data-v-fc749c9b>${ssrInterpolate(activePaper.value.copyright)}</h2>`);
+        _push(`<h2 class="title lonely" data-v-c9a85978>${ssrInterpolate(activePaper.value.copyright)}</h2>`);
       }
-      _push(`<p class="description" data-v-fc749c9b>${ssrInterpolate(activePaper.value.desc)}</p><div class="tools" data-v-fc749c9b>`);
+      _push(`<p class="description" data-v-c9a85978>${ssrInterpolate(activePaper.value.desc)}</p><div class="tools" data-v-c9a85978>`);
       _push(ssrRenderComponent(_component_ulink, {
         class: "button",
         href: activePaper.value.humanizedCopyrightUrl,
@@ -18047,7 +18048,7 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
       }, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="iconfont icon-bing" data-v-fc749c9b${_scopeId}></i>`);
+            _push2(`<i class="iconfont icon-bing" data-v-c9a85978${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", { class: "iconfont icon-bing" })
@@ -18056,7 +18057,7 @@ const _sfc_main$q = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`<button class="button" title="Prev"${ssrIncludeBooleanAttr(index.value <= 0) ? " disabled" : ""} data-v-fc749c9b><i class="iconfont icon-prev" data-v-fc749c9b></i></button><button class="button" title="Next"${ssrIncludeBooleanAttr(index.value >= wallpapers.value.length - 1) ? " disabled" : ""} data-v-fc749c9b><i class="iconfont icon-next" data-v-fc749c9b></i></button><button class="button" title="Close" data-v-fc749c9b><i class="iconfont icon-cancel" data-v-fc749c9b></i></button></div></div></div>`);
+      _push(`<button class="button" title="Prev"${ssrIncludeBooleanAttr(index.value <= 0) ? " disabled" : ""} data-v-c9a85978><i class="iconfont icon-prev" data-v-c9a85978></i></button><button class="button" title="Next"${ssrIncludeBooleanAttr(index.value >= wallpapers.value.length - 1) ? " disabled" : ""} data-v-c9a85978><i class="iconfont icon-next" data-v-c9a85978></i></button><button class="button" title="Close" data-v-c9a85978><i class="iconfont icon-cancel" data-v-c9a85978></i></button></div></div></div>`);
     };
   }
 });
@@ -18066,7 +18067,7 @@ _sfc_main$q.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/wallpaper/wall.vue");
   return _sfc_setup$q ? _sfc_setup$q(props, ctx) : void 0;
 };
-const Wallpapers = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-fc749c9b"]]);
+const Wallpapers = /* @__PURE__ */ _export_sfc(_sfc_main$q, [["__scopeId", "data-v-c9a85978"]]);
 const _sfc_main$p = /* @__PURE__ */ defineComponent({
   __name: "switcher",
   __ssrInlineRender: true,
