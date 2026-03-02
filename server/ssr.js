@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.1.2";
+const APP_VERSION = "7.1.3";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -9859,13 +9859,13 @@ const _sfc_main$1j = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["ai-summary", { "is-expanded": isExpanded.value }]
-      }, _attrs))} data-v-f84e0c94><div class="summary-header" data-v-f84e0c94><span class="title" data-v-f84e0c94>AI `);
+      }, _attrs))} data-v-12c15e2b><div class="summary-header" data-v-12c15e2b><span class="title" data-v-12c15e2b>AI `);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).ARTICLE_SUMMARY
       }, null, _parent));
       _push(`</span>`);
       if (__props.model) {
-        _push(`<span class="provider" data-v-f84e0c94>`);
+        _push(`<span class="provider" data-v-12c15e2b>`);
         if (iconUrl.value) {
           _push(ssrRenderComponent(_component_uimage, {
             class: "icon",
@@ -9876,11 +9876,11 @@ const _sfc_main$1j = /* @__PURE__ */ defineComponent({
         } else {
           _push(`<!---->`);
         }
-        _push(`<span class="model" data-v-f84e0c94>${ssrInterpolate(__props.model)}</span></span>`);
+        _push(`<span class="model" data-v-12c15e2b>${ssrInterpolate(__props.model)}</span></span>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="summary-content" data-v-f84e0c94><p class="text" data-v-f84e0c94>${ssrInterpolate(__props.content)}</p></div><div class="toggle-action" data-v-f84e0c94><button class="toggle-btn" data-v-f84e0c94>`);
+      _push(`</div><div class="summary-content" data-v-12c15e2b><p class="text" data-v-12c15e2b>${ssrInterpolate(__props.content)}</p></div><div class="toggle-action" data-v-12c15e2b><button class="toggle-btn" data-v-12c15e2b>`);
       if (isExpanded.value) {
         _push(ssrRenderComponent(_component_i18n, {
           zh: "收起",
@@ -9902,7 +9902,7 @@ _sfc_main$1j.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/ai-summary.vue");
   return _sfc_setup$1j ? _sfc_setup$1j(props, ctx) : void 0;
 };
-const ArticleAiSummary = /* @__PURE__ */ _export_sfc(_sfc_main$1j, [["__scopeId", "data-v-f84e0c94"]]);
+const ArticleAiSummary = /* @__PURE__ */ _export_sfc(_sfc_main$1j, [["__scopeId", "data-v-12c15e2b"]]);
 const _sfc_main$1i = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
