@@ -75,7 +75,12 @@
       </template>
     </responsive>
     <div class="comment">
-      <comment :target-type="CommentTargetType.Page" :target-id="0" :plain="props.isMobile" :fetching="isLoading" />
+      <comment
+        :target-type="CommentTargetType.Page"
+        :target-id="PageIds.Guestbook"
+        :plain="props.isMobile"
+        :fetching="isLoading"
+      />
     </div>
   </div>
 </template>

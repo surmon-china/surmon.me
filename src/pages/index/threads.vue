@@ -193,22 +193,19 @@
   }
 
   .threads-content {
-    .profile,
-    .posts {
-      @include mix.common-bg-module();
-    }
+    gap: $gap-xs;
 
     .profile {
       width: auto;
       height: 100%;
       padding: 0 0.8rem;
-      margin-right: $gap-xs;
       display: flex;
       justify-content: center;
       align-items: center;
       @include mix.radius-box($radius-sm);
       border-top-right-radius: $radius-tiny;
       border-bottom-right-radius: $radius-tiny;
+      @include mix.common-bg-module();
 
       .link {
         position: relative;
@@ -284,6 +281,7 @@
       flex: 1;
       height: $threads-height;
       @include mix.radius-box($radius-tiny);
+      @include mix.common-bg-module();
 
       .posts-empty {
         min-height: auto;
@@ -412,10 +410,10 @@
     .navigation {
       width: 2.6rem;
       height: 100%;
-      margin-left: $gap-xs;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: $gap-xs;
 
       .button {
         flex: 1;
@@ -436,7 +434,6 @@
         }
 
         &.prev {
-          margin-bottom: $gap-xs;
           border-top-right-radius: $radius-sm;
         }
 

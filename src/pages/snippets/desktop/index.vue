@@ -38,7 +38,12 @@
 
 <template>
   <div class="snippets-page">
-    <page-banner class="page-banner" background-video="/videos/clips/forest-1.mp4" :background-video-y="72" cdn>
+    <page-banner
+      class="page-banner"
+      background-video="/videos/clips/forest-1.mp4"
+      :background-video-y="72"
+      cdn
+    >
       <template #title>
         <webfont><i18n v-bind="i18nTitle" /></webfont>
       </template>

@@ -45,7 +45,9 @@
   usePageSeo(() => {
     const enTitle = 'Photography'
     const titles = isZhLang.value ? [_i18n.t(LocalesKey.PAGE_PHOTOGRAPHY)!, enTitle] : [enTitle]
-    const description = isZhLang.value ? `${APP_PROFILE.author} 的摄影作品` : `${APP_PROFILE.author}'s photographs`
+    const description = isZhLang.value
+      ? `${APP_PROFILE.author} 的摄影作品`
+      : `${APP_PROFILE.author}'s photographs`
     return {
       pageTitles: titles,
       description: description
@@ -57,7 +59,12 @@
 
 <template>
   <div class="photography-page">
-    <page-banner class="page-banner" background-video="/videos/clips/ocean-5.mp4" :background-video-y="72" cdn>
+    <page-banner
+      class="page-banner"
+      background-video="/videos/clips/ocean-5.mp4"
+      :background-video-y="72"
+      cdn
+    >
       <template #title>
         <webfont>
           <i18n zh="大千同在，萬象共棲" :en="`${APP_PROFILE.author}'s photographs`" />
