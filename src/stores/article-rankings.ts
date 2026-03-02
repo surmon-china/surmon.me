@@ -8,18 +8,18 @@ import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { SortMode } from '/@/constants/sort-param'
 import { PaginationList } from '/@/interfaces/pagination'
-import { Article } from '/@/interfaces/article'
+import { ArticleListItem } from '/@/interfaces/article'
 import { APP_CONFIG } from '/@/configs/app.config'
 import { ARTICLE_LIST_API_PATH } from './article-list'
 import nodepress from '/@/services/nodepress'
 
 const createSpecialArticleListStore = (_params: Record<string, any>) => {
-  return createFetchStore<Article[]>({
+  return createFetchStore<ArticleListItem[]>({
     once: true,
     data: [],
     async fetcher() {
       const params = { ..._params, per_page: APP_CONFIG.desktop_sidebar_article_list_count }
-      const response = await nodepress.get<PaginationList<Article>>(ARTICLE_LIST_API_PATH, { params })
+      const response = await nodepress.get<PaginationList<ArticleListItem>>(ARTICLE_LIST_API_PATH, { params })
       return response.result.data
     }
   })

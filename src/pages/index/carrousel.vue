@@ -3,13 +3,13 @@
   import { shallowRef, computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { LocalesKey } from '/@/locales'
-  import type { Article } from '/@/interfaces/article'
+  import type { ArticleListItem } from '/@/interfaces/article'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getAssetURL, getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
 
   interface Props {
-    articles: Array<Article>
+    articles: Array<ArticleListItem>
     fetching: boolean
     count?: number
   }

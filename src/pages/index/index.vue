@@ -43,7 +43,9 @@
       class="threads"
       :profile="threadsProfileStore.data"
       :medias="threadsLatestMediasStore.data?.data ?? []"
-      :fetching="threadsLatestMediasStore.fetching || threadsProfileStore.fetching || articleListStore.fetching"
+      :fetching="
+        threadsLatestMediasStore.fetching || threadsProfileStore.fetching || articleListStore.fetching
+      "
     />
     <article-list-main
       :mammon="false"

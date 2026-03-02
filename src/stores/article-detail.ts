@@ -8,7 +8,7 @@ import { ref, shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useIdentityStore } from './identity'
 import { useCdnDomain } from '/@/app/context'
-import { Article } from '/@/interfaces/article'
+import { Article, ArticleListItem } from '/@/interfaces/article'
 import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/element-anchor'
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -49,9 +49,9 @@ const renderArticleMarkdown = (
 export const useArticleDetailStore = defineStore('articleDetail', () => {
   const fetching = ref(false)
   const article = ref<Article | null>(null)
-  const prevArticle = shallowRef<Article | null>(null)
-  const nextArticle = shallowRef<Article | null>(null)
-  const relatedArticles = shallowRef<Article[]>([])
+  const prevArticle = shallowRef<ArticleListItem | null>(null)
+  const nextArticle = shallowRef<ArticleListItem | null>(null)
+  const relatedArticles = shallowRef<ArticleListItem[]>([])
   const renderedFullContent = ref(true)
 
   const contentLength = computed(() => {

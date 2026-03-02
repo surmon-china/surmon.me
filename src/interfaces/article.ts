@@ -53,4 +53,4 @@ export interface Article {
   created_at: string
 }
 
-export type ArticleWithoutContent = Omit<Article, 'content'>
+export type ArticleListItem = Omit<Article, 'content' | 'extras'>

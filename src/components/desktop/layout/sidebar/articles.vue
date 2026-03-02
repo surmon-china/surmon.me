@@ -66,7 +66,11 @@
       </span>
       <div class="tabs">
         <template :key="index" v-for="(tab, index) in tabs">
-          <span class="item" :class="{ activated: index === activatedTabIndex }" @click="switchTabList(index)">
+          <span
+            class="item"
+            :class="{ activated: index === activatedTabIndex }"
+            @click="switchTabList(index)"
+          >
             <i18n :zh="tab.zh_label" :en="tab.en_label" />
           </span>
           <divider type="vertical" size="sm" v-if="index !== tabs.length - 1" />
@@ -87,7 +91,10 @@
       <template #default>
         <ul class="article-list">
           <li
-            v-for="(article, i) in activatedTab.store.data.slice(0, APP_CONFIG.desktop_sidebar_article_list_count)"
+            v-for="(article, i) in activatedTab.store.data.slice(
+              0,
+              APP_CONFIG.desktop_sidebar_article_list_count
+            )"
             :key="article.id"
             class="item"
           >

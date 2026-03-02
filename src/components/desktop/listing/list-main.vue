@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { LocalesKey } from '/@/locales'
-  import { Article } from '/@/interfaces/article'
+  import { ArticleListItem } from '/@/interfaces/article'
   import ListItem from './list-item.vue'
 
   const props = defineProps<{
-    articles: Article[]
+    articles: ArticleListItem[]
     fetching: boolean
     mammon: boolean
   }>()
@@ -63,7 +63,12 @@
             </template>
           </client-only>
           <transition-group name="list">
-            <list-item class="article-list-item" v-for="article in articles" :key="article.id" :article="article" />
+            <list-item
+              class="article-list-item"
+              v-for="article in articles"
+              :key="article.id"
+              :article="article"
+            />
           </transition-group>
         </div>
       </template>

@@ -4,10 +4,10 @@
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getImgProxyPath, ImgProxyFormat } from '/@/transforms/imgproxy'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
-  import { Article } from '/@/interfaces/article'
+  import { ArticleListItem } from '/@/interfaces/article'
 
   interface Props {
-    articles?: Article[]
+    articles?: ArticleListItem[]
     columns?: number
     count?: number
   }
@@ -31,7 +31,7 @@
     )
   }
 
-  const articleList = computed<Article[]>(() => {
+  const articleList = computed<ArticleListItem[]>(() => {
     const articles = [...props.articles].slice(0, props.count)
     if (articles.length >= props.count) {
       return articles
@@ -51,7 +51,12 @@
 <template>
   <div class="related">
     <ul class="articles" :style="{ gridTemplateColumns: `repeat(${columns}, 1fr)` }">
-      <li v-for="(article, index) in articleList" :class="{ disabled: !article.id }" :key="index" class="item">
+      <li
+        class="item"
+        :class="{ disabled: !article.id }"
+        :key="index"
+        v-for="(article, index) in articleList"
+      >
         <router-link class="item-article" :title="article.title" :to="getArticleDetailRoute(article.id)">
           <picture class="thumbnail">
             <template v-if="isOriginalStaticURL(article.thumbnail)">
@@ -64,7 +69,11 @@
               loading="lazy"
               draggable="false"
               :alt="article.title"
-              :src="isOriginalStaticURL(article.thumbnail) ? getThumbnailURL(article.thumbnail) : article.thumbnail"
+              :src="
+                isOriginalStaticURL(article.thumbnail)
+                  ? getThumbnailURL(article.thumbnail)
+                  : article.thumbnail
+              "
             />
           </picture>
           <div class="title">{{ article.title }}</div>
@@ -124,7 +133,12 @@
               height: 100%;
               top: 0;
               left: 0;
-              background: linear-gradient(to top, rgba($black, 0.2) 20%, rgba($black, 0.1) 50%, transparent 90%);
+              background: linear-gradient(
+                to top,
+                rgba($black, 0.2) 20%,
+                rgba($black, 0.1) 50%,
+                transparent 90%
+              );
             }
 
             .image {

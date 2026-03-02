@@ -7,11 +7,11 @@
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
   import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/article'
   import { numberSplit } from '/@/transforms/text'
-  import { Article, ArticleLanguageI18n } from '/@/interfaces/article'
+  import { ArticleListItem, ArticleLanguageI18n } from '/@/interfaces/article'
   import { LocalesKey } from '/@/locales'
 
   const props = defineProps<{
-    article: Article
+    article: ArticleListItem
   }>()
 
   const { cdnDomain, globalState } = useEnhancer()

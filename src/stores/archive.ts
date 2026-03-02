@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
-import { ArticleWithoutContent } from '/@/interfaces/article'
+import { ArticleListItem } from '/@/interfaces/article'
 import { dateToHuman, HumanDate } from '/@/transforms/moment'
 import nodepress from '/@/services/nodepress'
 
@@ -15,16 +15,16 @@ export type ArchiveTreeList = Array<{
   year: number
   months: Array<{
     month: number
-    articles: Array<ArticleWithoutContent & { createAt: HumanDate }>
+    articles: Array<ArticleListItem & { createAt: HumanDate }>
   }>
 }>
 
 export const useArchiveStore = defineStore('archive', () => {
-  const store = createFetchStore<ArticleWithoutContent[]>({
+  const store = createFetchStore<ArticleListItem[]>({
     data: [],
     once: true,
     async fetcher() {
-      const response = await nodepress.get<ArticleWithoutContent[]>('/articles/all')
+      const response = await nodepress.get<ArticleListItem[]>('/articles/all')
       return response.result.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))
     }
   })

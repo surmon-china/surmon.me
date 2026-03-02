@@ -25,7 +25,9 @@
   const tagBackgroundColor = computed(() => tagExtrasMap.value.get('background-color'))
   const tagBackgroundImage = computed(() => {
     const imageUrl = tagExtrasMap.value.get('background-image')
-    return imageUrl && isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl
+    return imageUrl && isOriginalStaticURL(imageUrl)
+      ? getStaticURL(cdnDomain, getStaticPath(imageUrl))
+      : imageUrl
   })
 
   const loadmoreArticles = async () => {

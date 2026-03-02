@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { ref, shallowRef, shallowReactive, computed } from 'vue'
 import { Pagination, PaginationList } from '/@/interfaces/pagination'
-import { Article } from '/@/interfaces/article'
+import { ArticleListItem } from '/@/interfaces/article'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/configs/app.env'
 import nodepress from '/@/services/nodepress'
@@ -25,7 +25,7 @@ export interface ArticleListParams {
 
 export const useArticleListStore = defineStore('articleList', () => {
   const fetching = ref(false)
-  const data = shallowReactive<Article[]>([])
+  const data = shallowReactive<ArticleListItem[]>([])
   const pagination = shallowRef<Pagination | null>(null)
 
   // Request identifier for concurrency control
@@ -44,7 +44,7 @@ export const useArticleListStore = defineStore('articleList', () => {
     const currentFetchId = ++fetchId
     fetching.value = true
     try {
-      const request = nodepress.get<PaginationList<Article>>(ARTICLE_LIST_API_PATH, { params })
+      const request = nodepress.get<PaginationList<ArticleListItem>>(ARTICLE_LIST_API_PATH, { params })
       const response = await (isClient ? delayPromise(460, request) : request)
       // Only return data if the current request is the most recent one
       // Return null if it's not the latest request, indicating it has been canceled/ignored

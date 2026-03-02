@@ -10,7 +10,7 @@ import { SitemapStream, streamToPromise, EnumChangefreq } from 'sitemap'
 import type { SitemapItemLoose } from 'sitemap'
 import type { Tag } from '@/interfaces/tag'
 import type { Category } from '@/interfaces/category'
-import type { Article } from '@/interfaces/article'
+import type { ArticleListItem } from '@/interfaces/article'
 import type { CacheStore } from '@/server/services/cache'
 import type { NodePressSuccessResponse } from '@/services/nodepress'
 import { NODEPRESS_API_URL } from '@/configs/bff.api'
@@ -33,7 +33,7 @@ export const getDataFromNodePress = async <T>(
 
 export const getSitemapXml = async (store: CacheStore) => {
   const [articles, categories, tags] = await Promise.all([
-    getDataFromNodePress<Article[]>('/articles/all', { store, key: 'public-all-articles' }),
+    getDataFromNodePress<ArticleListItem[]>('/articles/all', { store, key: 'public-all-articles' }),
     getDataFromNodePress<Category[]>('/categories/all', { store, key: 'public-all-categories' }),
     getDataFromNodePress<Tag[]>('/tags/all', { store, key: 'public-all-tags' })
   ])

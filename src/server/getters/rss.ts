@@ -6,7 +6,7 @@
 
 import RSS from 'rss'
 import { APP_PROFILE } from '@/configs/app.config'
-import type { Article } from '@/interfaces/article'
+import type { ArticleListItem } from '@/interfaces/article'
 import type { Category } from '@/interfaces/category'
 import type { CacheStore } from '@/server/services/cache'
 import { getArticleURL } from '../utils/url'
@@ -14,7 +14,7 @@ import { getDataFromNodePress } from './sitemap'
 
 export const getRssXml = async (store: CacheStore) => {
   const [articles, categories] = await Promise.all([
-    getDataFromNodePress<Article[]>('/articles/all', { store, key: 'public-all-articles' }),
+    getDataFromNodePress<ArticleListItem[]>('/articles/all', { store, key: 'public-all-articles' }),
     getDataFromNodePress<Category[]>('/categories/all', { store, key: 'public-all-categories' })
   ])
 

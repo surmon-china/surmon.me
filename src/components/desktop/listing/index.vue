@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { Pagination } from '/@/interfaces/pagination'
-  import { Article } from '/@/interfaces/article'
+  import { ArticleListItem } from '/@/interfaces/article'
   import ListLoadmore from './list-loadmore.vue'
   import ListMain from './list-main.vue'
 
   interface Props {
-    articles: Article[]
+    articles: ArticleListItem[]
     pagination: Pagination | null
     fetching: boolean
     hasMore: boolean

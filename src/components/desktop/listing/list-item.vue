@@ -3,7 +3,7 @@
   import { LocalesKey } from '/@/locales'
   import { useEnhancer } from '/@/app/enhancer'
   import { useHistoryStore } from '/@/stores/history'
-  import { Article, ArticleLanguage, ArticleLanguageI18n } from '/@/interfaces/article'
+  import { ArticleListItem, ArticleLanguage, ArticleLanguageI18n } from '/@/interfaces/article'
   import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/article'
   import { getArticleDetailRoute, getCategoryFlowRoute } from '/@/transforms/route'
   import { getImgProxyURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
@@ -11,7 +11,7 @@
   import { numberSplit } from '/@/transforms/text'
 
   const props = defineProps<{
-    article: Article
+    article: ArticleListItem
   }>()
 
   const { cdnDomain, isZhLang, i18n: _i18n } = useEnhancer()
