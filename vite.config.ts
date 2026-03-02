@@ -36,12 +36,12 @@ export default defineConfig(({ mode }) => {
         [BASE_ENV_CONFIG.VITE_API_PROXY_URL]: {
           target: BASE_ENV_CONFIG.VITE_API_ONLINE_URL,
           rewrite: (path) => path.replace(/^\/api/, ''),
-          changeOrigin: true,
-          configure: (proxy, options) => {
-            proxy.on('proxyReq', (proxyReq, req, res) => {
-              proxyReq.removeHeader('Accept-Encoding')
-            })
-          }
+          changeOrigin: true
+          // configure: (proxy, options) => {
+          //   proxy.on('proxyReq', (proxyReq, req, res) => {
+          //     proxyReq.removeHeader('Accept-Encoding')
+          //   })
+          // }
         }
       }
     },
