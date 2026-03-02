@@ -107,6 +107,7 @@
 
       .tools {
         display: flex;
+        gap: $gap-lg;
         $size: 2.2rem;
 
         .button {
@@ -114,7 +115,6 @@
           width: $size;
           height: $size;
           line-height: $size;
-          margin-right: $gap-lg;
           text-align: center;
           font-size: $font-size-h4;
           background-color: $module-bg;

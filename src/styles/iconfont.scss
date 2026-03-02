@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_kxb1kiqwit.woff2?t=1772377875714') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_kxb1kiqwit.woff?t=1772377875714') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_kxb1kiqwit.ttf?t=1772377875714') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_9tdphi0kn1a.woff2?t=1772421521361') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_9tdphi0kn1a.woff?t=1772421521361') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_9tdphi0kn1a.ttf?t=1772421521361') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-network:before {
+  content: '\e651';
+}
+
+.icon-openai:before {
+  content: '\e604';
 }
 
 .icon-eye-outlined:before {
@@ -156,10 +164,6 @@
 
 .icon-cpu:before {
   content: '\e64c';
-}
-
-.icon-chat-gpt:before {
-  content: '\e644';
 }
 
 .icon-opensea:before {
@@ -690,10 +694,6 @@
   content: '\e6fa';
 }
 
-.icon-webpack:before {
-  content: '\e65e';
-}
-
 .icon-vuejs-gray:before {
   content: '\f25f';
 }
@@ -778,10 +778,6 @@
   content: '\e6d6';
 }
 
-.icon-network:before {
-  content: '\e606';
-}
-
 .icon-eye:before {
   content: '\e668';
 }
@@ -826,16 +822,8 @@
   content: '\e6a2';
 }
 
-.icon-swift:before {
-  content: '\e6a3';
-}
-
 .icon-javascript:before {
   content: '\e6a6';
-}
-
-.icon-sql:before {
-  content: '\e6a8';
 }
 
 .icon-stackoverflow:before {

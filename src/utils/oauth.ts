@@ -12,6 +12,7 @@ const LOADING_HTML = `
   <head>
     <meta charset="utf-8" />
     <title>Connecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <style>
       :root {
         --bg-color: #ffffff;
@@ -39,8 +40,8 @@ const LOADING_HTML = `
       .spinner {
         width: 40px;
         height: 40px;
-        border: 4px solid var(--spinner-border);
-        border-top: 4px solid var(--spinner-top);
+        border: 6px solid var(--spinner-border);
+        border-top: 6px solid var(--spinner-top);
         border-radius: 50%;
         animation: spin 2s linear infinite;
         margin-bottom: 32px;

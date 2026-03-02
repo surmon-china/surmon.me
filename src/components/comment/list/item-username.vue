@@ -89,7 +89,9 @@
     .badge {
       display: inline-block;
       margin-left: $gap-tiny;
-      padding: 0 0.26em 0.1em;
+      padding-inline: 0.26em;
+      height: $font-size-root;
+      line-height: $font-size-root;
       white-space: nowrap;
       font-size: $font-size-quaternary;
       border-radius: $radius-xs;
@@ -105,7 +107,9 @@
       }
 
       &.ai {
-        padding: 0 0.3em 0.1em;
+        padding-inline: 0.3em;
+        height: $font-size-base;
+        line-height: $font-size-base;
         background-image: $ai-primary-gradient;
         color: $white;
         opacity: 0.8;
