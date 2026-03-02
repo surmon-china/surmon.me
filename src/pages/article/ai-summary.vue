@@ -60,8 +60,9 @@
     color: $color-text-secondary;
     font-size: $font-size-secondary;
     background-color: var(--background-color);
+    border: 1px solid $module-bg-darker-1;
 
-    --padding-block: 0.8em;
+    --padding-block: 0.6em;
     --padding-inline: 1em;
     --background-color: #eee;
     @include mix.dark-theme {
@@ -69,14 +70,19 @@
     }
 
     .summary-header {
+      margin-bottom: 0.35rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: $gap-xs;
+      user-select: none;
 
       .title {
         font-weight: bold;
-        color: $color-text;
+        background-image: $ai-primary-gradient;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
       }
 
       .provider {
@@ -113,7 +119,7 @@
         background: transparent;
         border: none;
         outline: none;
-        color: $primary;
+        font-weight: bold;
         cursor: pointer;
         padding: 0;
       }
@@ -126,13 +132,7 @@
       }
 
       .toggle-action {
-        position: relative;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: flex-end;
-        background: transparent;
-        padding-left: 0;
+        padding-left: 1em;
       }
     }
   }
