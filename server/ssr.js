@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.1.4";
+const APP_VERSION = "7.1.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -15599,7 +15599,7 @@ const _sfc_main$I = /* @__PURE__ */ defineComponent({
     const mediaUrl = useThreadsMediaUrl(props.media.media_url);
     const thumbnailUrl = useThreadsMediaUrl(props.media.thumbnail_url);
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "threads-media-body" }, _attrs))} data-v-6f0299b7>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "threads-media-body" }, _attrs))} data-v-7e43d0ec>`);
       _push(ssrRenderComponent(_sfc_main$1I, {
         class: "text",
         compact: "",
@@ -15607,13 +15607,13 @@ const _sfc_main$I = /* @__PURE__ */ defineComponent({
         "render-options": { codeLineNumbers: false }
       }, null, _parent));
       if (unref(mediaUrl)) {
-        _push(`<div class="${ssrRenderClass([{ audio: __props.media.media_type === "AUDIO" }, "media"])}" data-v-6f0299b7>`);
+        _push(`<div class="${ssrRenderClass([{ audio: __props.media.media_type === "AUDIO" }, "media"])}" data-v-7e43d0ec>`);
         if (__props.media.media_type === "AUDIO") {
-          _push(`<audio class="audio"${ssrRenderAttr("src", unref(mediaUrl))} controls data-v-6f0299b7></audio>`);
+          _push(`<audio class="audio"${ssrRenderAttr("src", unref(mediaUrl))} controls data-v-7e43d0ec></audio>`);
         } else if (__props.media.media_type === "VIDEO") {
-          _push(`<div class="video" data-v-6f0299b7><button class="play-button" data-v-6f0299b7><i class="iconfont icon-video-play" data-v-6f0299b7></i></button><img class="poster"${ssrRenderAttr("alt", unref(thumbnailUrl) ?? "")}${ssrRenderAttr("src", unref(thumbnailUrl) ?? "")} loading="lazy" draggable="false" data-v-6f0299b7></div>`);
+          _push(`<div class="video" data-v-7e43d0ec><button class="play-button" data-v-7e43d0ec><i class="iconfont icon-video-play" data-v-7e43d0ec></i></button><img class="poster"${ssrRenderAttr("alt", unref(thumbnailUrl) ?? "")}${ssrRenderAttr("src", unref(thumbnailUrl) ?? "")} loading="lazy" draggable="false" data-v-7e43d0ec></div>`);
         } else {
-          _push(`<img class="image"${ssrRenderAttr("alt", unref(mediaUrl))}${ssrRenderAttr("src", unref(mediaUrl))} loading="lazy" draggable="false" data-v-6f0299b7>`);
+          _push(`<img class="image"${ssrRenderAttr("alt", unref(mediaUrl))}${ssrRenderAttr("src", unref(mediaUrl))} loading="lazy" draggable="false" data-v-7e43d0ec>`);
         }
         _push(`</div>`);
       } else {
@@ -15629,7 +15629,7 @@ _sfc_main$I.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/snippets/desktop/body-threads.vue");
   return _sfc_setup$I ? _sfc_setup$I(props, ctx) : void 0;
 };
-const ThreadsBody = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["__scopeId", "data-v-6f0299b7"]]);
+const ThreadsBody = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["__scopeId", "data-v-7e43d0ec"]]);
 const _sfc_main$H = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
