@@ -84,7 +84,7 @@
     }
 
     .image {
-      min-height: 6rem;
+      min-height: 3rem;
       background-color: $module-bg-darker-1;
       cursor: pointer;
     }
