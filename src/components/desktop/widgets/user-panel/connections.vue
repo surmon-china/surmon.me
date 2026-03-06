@@ -1,8 +1,9 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
-  import { UserIdentityProvider } from '/@/interfaces/user'
-  import { LocalesKey } from '/@/locales'
+  import { useTokenStore } from '/@/stores/token'
   import { useEnhancer } from '/@/app/enhancer'
+  import { LocalesKey } from '/@/locales'
+  import { UserIdentityProvider } from '/@/interfaces/user'
   import { getMessageFromNormalError } from '/@/transforms/error'
   import nodepress from '/@/services/nodepress'
   import { openOAuthPopup } from '/@/utils/oauth'
@@ -11,6 +12,7 @@
   const isProcessing = ref(false)
 
   const { identity, i18n: _i18n } = useEnhancer()
+  const tokenStore = useTokenStore()
 
   const identityList = computed(() => {
     const ids = identity.userProfile?.identities ?? []
@@ -40,7 +42,7 @@
     openOAuthPopup({
       provider,
       nodepressApi: `/account/auth/${provider}/link`,
-      nodepressToken: identity.token,
+      nodepressToken: tokenStore.accessToken,
       async onSuccess(message) {
         if (message.type === 'link') {
           identity.fetchUserProfile()
@@ -69,7 +71,7 @@
 
     try {
       isProcessing.value = true
-      await nodepress.delete(`/account/identities/${provider}`, { token: identity.token })
+      await nodepress.delete(`/account/identities/${provider}`, { token: tokenStore.accessToken })
       await identity.fetchUserProfile()
     } catch (error) {
       logger.failure('Unlink user identity failed.', error)

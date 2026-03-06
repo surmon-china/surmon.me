@@ -1,5 +1,5 @@
 import axios from '@/server/services/axios'
-import { INSTAGRAM_TOKEN } from '@/configs/bff.args'
+import { INSTAGRAM_TOKEN } from '@/configs/bff.env'
 
 export interface InstagramProfile {
   id: string

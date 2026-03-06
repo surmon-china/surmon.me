@@ -13,6 +13,7 @@ import { CommentTargetType } from '/@/interfaces/comment'
 import { SortMode } from '/@/constants/sort-param'
 import { delayPromise } from '/@/utils/delayer'
 import { useIdentityStore } from './identity'
+import { useTokenStore } from './token'
 import nodepress from '/@/services/nodepress'
 
 export const COMMENT_API_PATH = '/comments'
@@ -131,11 +132,11 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   const postComment = async (comment: Partial<Comment>) => {
-    const identityStore = useIdentityStore()
+    const tokenStore = useTokenStore()
     try {
       posting.value = true
       const response = await nodepress.post<Comment>('/comments', comment, {
-        token: identityStore.token
+        token: tokenStore.accessToken
       })
       comments.value.unshift(response.result)
       if (pagination.value) {
@@ -148,10 +149,10 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   const deleteComment = async (commentId: number) => {
-    const identityStore = useIdentityStore()
+    const tokenStore = useTokenStore()
     try {
       deleting.value = true
-      await nodepress.delete(`/account/comments/${commentId}`, { token: identityStore.token })
+      await nodepress.delete(`/account/comments/${commentId}`, { token: tokenStore.accessToken })
       const index = comments.value.findIndex((comment) => comment.id === commentId)
       if (index > -1) {
         comments.value.splice(index, 1)
@@ -163,6 +164,7 @@ export const useCommentStore = defineStore('comment', () => {
   }
 
   const postCommentVote = async (commentId: number, vote: 1 | -1) => {
+    const tokenStore = useTokenStore()
     const identityStore = useIdentityStore()
     await nodepress.post(
       `/votes/comment`,
@@ -172,7 +174,7 @@ export const useCommentStore = defineStore('comment', () => {
         author_name: identityStore.profile?.name,
         author_email: identityStore.profile?.email
       },
-      { token: identityStore.token }
+      { token: tokenStore.accessToken }
     )
     const comment = commentMap.value.get(commentId)
     if (comment) {

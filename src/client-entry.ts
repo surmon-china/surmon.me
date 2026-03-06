@@ -13,6 +13,7 @@ import { createMainApp } from '/@/app/main'
 import { useAppOptionsStore } from '/@/stores/foundation'
 import { useIdentityStore } from '/@/stores/identity'
 import { useHistoryStore } from '/@/stores/history'
+import { useTokenStore } from '/@/stores/token'
 import { useGoLinksStore } from '/@/stores/go-links'
 
 import { gtag } from '/@/composables/gtag'
@@ -132,7 +133,8 @@ router.isReady().finally(() => {
     globalState.setHydrate()
     // reset i18n language
     i18n.set(globalState.userAgent.isZhUser ? Language.Chinese : Language.English)
-    // init user identity / history state
+    // init token / user identity / history state
+    useTokenStore(store.pinia).initOnClient()
     useHistoryStore(store.pinia).initOnClient()
     useIdentityStore(store.pinia).initOnClient()
     // init go url map state

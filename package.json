@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "7.1.5",
+  "version": "7.2.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -33,6 +33,7 @@
     "geojson": "^0.5.0",
     "highlight.js": "^11.11.x",
     "html-to-image": "^1.11.x",
+    "localforage": "^1.x",
     "lodash-es": "^4.17.x",
     "lozad": "^1.16.x",
     "lru-cache": "^11.x",
@@ -51,8 +52,7 @@
     "ua-parser-js": "^2.x",
     "vue": "^3.5.x",
     "vue-router": "^5.0.x",
-    "wonderful-bing-wallpaper": "^0.3.4",
-    "yargs-parser": "^22.x"
+    "wonderful-bing-wallpaper": "^0.3.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.x",

@@ -1,5 +1,5 @@
 import axios from '@/server/services/axios'
-import { THREADS_TOKEN } from '@/configs/bff.args'
+import { THREADS_TOKEN } from '@/configs/bff.env'
 
 export interface ThreadsProfile {
   // profile

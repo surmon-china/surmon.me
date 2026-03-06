@@ -4,16 +4,17 @@
   import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
+  import AiLogo from '/@/components/desktop/widgets/ai-logo.vue'
 
-  const { gtag, i18n: _i18n } = useEnhancer()
+  const { globalState, gtag, i18n: _i18n } = useEnhancer()
 
   const animationFrameId = ref(0)
   const isTopButtonMouseOver = ref(false)
   const isBottomButtonMouseOver = ref(false)
 
   const handleAiClick = () => {
-    alert('Coming soon!')
-    gtag?.event('ai_modal', {
+    globalState.toggleSwitcher('aiAgentModal', true)
+    gtag?.event('ai_agent_modal', {
       event_category: GAEventCategories.Widget
     })
   }
@@ -65,8 +66,8 @@
   <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
-        <button class="ai" disabled @click="handleAiClick">
-          <i class="iconfont icon-robot" />
+        <button class="ai" :title="_i18n.t(LocalesKey.COMMENT_AI_ASSISTANT)" @click="handleAiClick" disabled>
+          <ai-logo class="logo" :animation="true" />
         </button>
         <button
           class="to-page-top"
@@ -154,15 +155,9 @@
           background: $ai-primary-gradient;
           animation: ai-button 4s ease infinite;
           transition: opacity $motion-duration-fast;
-
-          .iconfont {
-            font-size: $font-size-h3;
-          }
-
           &[disabled] {
             opacity: 0.7;
           }
-
           &:not([disabled]):hover {
             opacity: 1;
             background-color: $primary;

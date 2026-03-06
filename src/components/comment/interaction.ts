@@ -88,7 +88,7 @@ export function useCommentInteraction(options: { targetType: CommentTargetType; 
 
     // Save guest profile to store
     if (identityStore.isAnonymous) {
-      identityStore.saveGuestProfile({ ...toRaw(inputProfile) })
+      identityStore.setGuestProfile({ ...toRaw(inputProfile) })
     }
   }
 

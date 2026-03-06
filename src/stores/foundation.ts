@@ -9,6 +9,7 @@ import { defineStore } from 'pinia'
 import { createFetchStore } from './_fetch'
 import { AdminProfile, AppOptions, AppRemoteConfig } from '/@/interfaces/options'
 import { useIdentityStore } from './identity'
+import { useTokenStore } from './token'
 import nodepress from '/@/services/nodepress'
 
 export const useAdminProfileStore = defineStore('adminProfile', () => {
@@ -22,6 +23,7 @@ export const useAdminProfileStore = defineStore('adminProfile', () => {
 })
 
 export const useAppOptionsStore = defineStore('appOptions', () => {
+  const tokenStore = useTokenStore()
   const identityStore = useIdentityStore()
   const fetchStore = createFetchStore<AppOptions | null>({
     shallow: false,
@@ -51,7 +53,7 @@ export const useAppOptionsStore = defineStore('appOptions', () => {
         author_name: identityStore.profile?.name,
         author_email: identityStore.profile?.email
       },
-      { token: identityStore.token }
+      { token: tokenStore.accessToken }
     )
   }
 

@@ -1,6 +1,7 @@
 import { UserIdentityProvider } from '/@/interfaces/user'
 import API_CONFIG from '/@/configs/app.api'
 import { APP_CONFIG } from '/@/configs/app.config'
+import { AuthTokenResult } from '/@/interfaces/auth'
 import nodepress, { NodePressResponseStatus } from '/@/services/nodepress'
 import { getMessageFromNormalError } from '/@/transforms/error'
 import { openPopupWindow } from './opener'
@@ -67,7 +68,7 @@ type OAuthSuccessMessage = {
   source: typeof POST_MESSAGE_SOURCE
   status: NodePressResponseStatus.Success
   type: 'login' | 'link'
-  token?: string
+  auth?: AuthTokenResult
 }
 
 type OAuthErrorMessage = {

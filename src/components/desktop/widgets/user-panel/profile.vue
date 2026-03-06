@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useTokenStore } from '/@/stores/token'
   import { LocalesKey } from '/@/locales'
   import { User } from '/@/interfaces/user'
   import nodepress from '/@/services/nodepress'
@@ -10,6 +11,7 @@
   type UserProfile = Pick<User, 'name' | 'email' | 'website' | 'avatar_url'>
 
   const { identity, i18n: _i18n } = useEnhancer()
+  const tokenStore = useTokenStore()
 
   const isUpdating = ref(false)
 
@@ -32,7 +34,7 @@
 
     try {
       isUpdating.value = true
-      await nodepress.patch('/account/profile', body, { token: identity.token })
+      await nodepress.patch('/account/profile', body, { token: tokenStore.accessToken })
       await identity.fetchUserProfile()
       // reset profile form
       Object.assign(localProfile, createProfileState(identity.userProfile!))

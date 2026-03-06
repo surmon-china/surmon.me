@@ -87,6 +87,7 @@ export const createGlobalState = (options: GlobalStateOptions) => {
 
   // Global switchers
   const switcher = reactive({
+    aiAgentModal: false,
     sponsorModal: false,
     feedbackModal: false,
     statementModal: false,

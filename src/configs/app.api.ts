@@ -25,5 +25,6 @@ export default {
   FRONT_END: import.meta.env.VITE_FE_URL as string,
   STATIC: import.meta.env.VITE_STATIC_URL as string,
   CDN_CHINA: import.meta.env.VITE_CDN_CHINA_URL as string,
-  CDN_GLOBAL: import.meta.env.VITE_CDN_GLOBAL_URL as string
+  CDN_GLOBAL: import.meta.env.VITE_CDN_GLOBAL_URL as string,
+  AI_AGENT: import.meta.env.VITE_AI_AGENT_API_URL as string
 }

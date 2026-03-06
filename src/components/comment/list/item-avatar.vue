@@ -5,6 +5,7 @@
   import { APP_CONFIG } from '/@/configs/app.config'
   import type { Comment } from '/@/interfaces/comment'
   import type { CommentMeta } from './item.vue'
+  import AiLogo from '/@/components/desktop/widgets/ai-logo.vue'
 
   const props = defineProps<{
     comment: Comment
@@ -37,9 +38,7 @@
 <template>
   <div class="comment-avatar">
     <div class="ai-avatar" v-if="meta.isAiGenerated">
-      <div class="ai-brand">
-        <i class="iconfont icon-robot"></i>
-      </div>
+      <ai-logo class="ai-logo" />
     </div>
     <div class="author-avatar" v-else>
       <img :src="getAuthorAvatarUrl()" :alt="comment.author_name" draggable="false" />
@@ -72,21 +71,11 @@
     }
 
     .ai-avatar {
-      .ai-brand {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
+      .ai-logo {
         border-radius: $radius-xs;
         background-color: $primary-lighter;
         background: $ai-primary-gradient;
         opacity: 0.8;
-
-        .iconfont {
-          color: $white;
-          font-size: $font-size-h1;
-        }
       }
     }
 

@@ -21,3 +21,7 @@ export const DIST_PATH = path.join(ROOT_PATH, 'dist')
 export const PROD_CLIENT_PATH = path.join(DIST_PATH, 'client')
 export const PROD_SERVER_PATH = path.join(DIST_PATH, 'server')
 export const PUBLIC_PATH = isNodeDev ? path.join(ROOT_PATH, 'public') : PROD_CLIENT_PATH
+
+export const YOUTUBE_API_KEY = process.env.SU_YOUTUBE_API_KEY
+export const INSTAGRAM_TOKEN = process.env.SU_INSTAGRAM_TOKEN
+export const THREADS_TOKEN = process.env.SU_THREADS_TOKEN

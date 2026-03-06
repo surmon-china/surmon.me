@@ -5,9 +5,8 @@
  */
 
 import { App, inject, ref, computed, readonly } from 'vue'
-import storage from '/@/utils/storage'
-
-const THEME_STORAGE_KEY = 'theme'
+import { LocalStorageKey } from '/@/constants/storage-key'
+import localstorage from '/@/utils/storage'
 
 const ThemeSymbol = Symbol('theme-state')
 
@@ -25,7 +24,7 @@ export const createTheme = (initialValue: Theme) => {
   const set = (newTheme: Theme) => {
     if (themes.includes(newTheme) && newTheme !== theme.value) {
       theme.value = newTheme
-      storage.set(THEME_STORAGE_KEY, newTheme)
+      localstorage.set(LocalStorageKey.Theme, newTheme)
     }
   }
 

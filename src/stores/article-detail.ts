@@ -6,8 +6,9 @@
 
 import { ref, shallowRef, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { useIdentityStore } from './identity'
 import { useCdnDomain } from '/@/app/context'
+import { useIdentityStore } from './identity'
+import { useTokenStore } from './token'
 import { Article, ArticleListItem } from '/@/interfaces/article'
 import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/element-anchor'
 import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
@@ -140,6 +141,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
   }
 
   const postArticleLike = (articleId: number) => {
+    const tokenStore = useTokenStore()
     const identityStore = useIdentityStore()
     return nodepress
       .post<number>(
@@ -150,7 +152,7 @@ export const useArticleDetailStore = defineStore('articleDetail', () => {
           author_name: identityStore.profile?.name,
           author_email: identityStore.profile?.email
         },
-        { token: identityStore.token }
+        { token: tokenStore.accessToken }
       )
       .then((response) => {
         if (article.value) {

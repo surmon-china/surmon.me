@@ -73,8 +73,6 @@
       font-weight: bold;
 
       &.ai {
-        font-size: $font-size-secondary;
-        text-transform: uppercase;
       }
 
       &.ghost {

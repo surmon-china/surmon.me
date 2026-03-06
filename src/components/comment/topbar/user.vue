@@ -75,7 +75,7 @@
             </button>
           </li>
           <li class="item">
-            <button class="button" title="Clean local profile" @click="identity.removeGuestProfile">
+            <button class="button" title="Clean local profile" @click="identity.clearGuestProfile">
               <i18n zh="退出本地访客身份" en="Clean local profile" />
             </button>
           </li>

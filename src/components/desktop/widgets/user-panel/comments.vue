@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import { shallowRef, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
+  import { useTokenStore } from '/@/stores/token'
   import { LocalesKey } from '/@/locales'
   import { Comment } from '/@/interfaces/comment'
   import nodepress from '/@/services/nodepress'
   import { getMessageFromNormalError } from '/@/transforms/error'
   import { logger } from './state'
 
-  const { identity, i18n: _i18n } = useEnhancer()
+  const { i18n: _i18n } = useEnhancer()
+  const tokenStore = useTokenStore()
 
   const isFetching = shallowRef(false)
   const isDeleting = shallowRef(false)
@@ -17,7 +19,9 @@
     if (window.confirm(_i18n.t(LocalesKey.COMMENT_DELETE_CONFIRM))) {
       try {
         isDeleting.value = true
-        await nodepress.delete(`/account/comments/${comments.value[index].id}`, { token: identity.token })
+        await nodepress.delete(`/account/comments/${comments.value[index].id}`, {
+          token: tokenStore.accessToken
+        })
         comments.value.splice(index, 1)
       } catch (error) {
         logger.failure(`Delete user's commnt failed.`, error)
@@ -31,7 +35,7 @@
   const fetchComments = async () => {
     try {
       isFetching.value = true
-      const response = await nodepress.get('/account/comments', { token: identity.token })
+      const response = await nodepress.get('/account/comments', { token: tokenStore.accessToken })
       comments.value = response.result
     } catch (error) {
       logger.failure(`Fetch user's commnts failed.`, error)

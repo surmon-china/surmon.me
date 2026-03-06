@@ -6,7 +6,8 @@
 
 import { defineStore } from 'pinia'
 import { ref, reactive, computed, watch } from 'vue'
-import { getJSON, setJSON, remove } from '/@/utils/storage'
+import { LocalStorageKey } from '/@/constants/storage-key'
+import localstorage from '/@/utils/storage'
 
 interface HistoryState {
   feedbacks: any[]
@@ -14,8 +15,6 @@ interface HistoryState {
   likedComments: number[]
   dislikedComments: number[]
 }
-
-const LOCAL_STORAGE_KEY = 'history-state'
 
 export const useHistoryStore = defineStore('history', () => {
   const feedbacks = ref<any[]>([])
@@ -30,9 +29,11 @@ export const useHistoryStore = defineStore('history', () => {
   const likeArticle = (id: number) => {
     likedArticles.add(id)
   }
+
   const likeComment = (commentId: number) => {
     likedComments.add(commentId)
   }
+
   const dislikeComment = (commentId: number) => {
     dislikedComments.add(commentId)
   }
@@ -48,54 +49,44 @@ export const useHistoryStore = defineStore('history', () => {
     dislikedComments: Array.from(dislikedComments)
   })
 
-  const loadState = (): HistoryState | null => {
-    const local = getJSON<HistoryState>(LOCAL_STORAGE_KEY)
-    if (local) return local
+  const setState = (state: HistoryState | null) => {
+    feedbacks.value = state?.feedbacks || []
 
-    const legacy = getJSON<any>('identity-state')
-    if (legacy) {
-      return {
-        feedbacks: legacy.feedbacks ?? [],
-        likedArticles: legacy.vote?.likedArticles ?? [],
-        likedComments: legacy.vote?.likedComments ?? [],
-        dislikedComments: legacy.vote?.dislikedComments ?? []
-      }
-    }
+    likedArticles.clear()
+    likedComments.clear()
+    dislikedComments.clear()
 
-    return null
+    state?.likedArticles?.forEach((id) => likedArticles.add(id))
+    state?.likedComments?.forEach((id) => likedComments.add(id))
+    state?.dislikedComments?.forEach((id) => dislikedComments.add(id))
   }
 
   const resetStateFromStorage = () => {
     try {
-      const localState = loadState()
-      if (!localState) return
-
-      feedbacks.value = localState.feedbacks || []
-
-      likedArticles.clear()
-      likedComments.clear()
-      dislikedComments.clear()
-
-      localState.likedArticles?.forEach((id) => likedArticles.add(id))
-      localState.likedComments?.forEach((id) => likedComments.add(id))
-      localState.dislikedComments?.forEach((id) => dislikedComments.add(id))
+      setState(localstorage.getJSON<HistoryState>(LocalStorageKey.HistoryState))
     } catch {
-      remove(LOCAL_STORAGE_KEY)
+      setState(null)
+      localstorage.remove(LocalStorageKey.HistoryState)
     }
   }
 
   const initOnClient = () => {
+    // Load data form storage
     resetStateFromStorage()
-    watch(
-      () => getState(),
-      (state) => setJSON(LOCAL_STORAGE_KEY, state),
-      { deep: true }
-    )
-    window.addEventListener('storage', (event) => {
-      if (event.key === LOCAL_STORAGE_KEY) {
+
+    // Sync storage to store
+    window.addEventListener('storage', ({ key }) => {
+      if (key === LocalStorageKey.HistoryState) {
         resetStateFromStorage()
       }
     })
+
+    // Sync store to storage
+    watch(
+      () => getState(),
+      (state) => localstorage.setJSON(LocalStorageKey.HistoryState, state),
+      { deep: true }
+    )
   }
 
   return {

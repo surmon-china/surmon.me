@@ -12,17 +12,18 @@ import { TunnelModule } from '/@/constants/tunnel'
 import { isClient } from '/@/configs/app.env'
 
 const tunnel = axios.create({
-  baseURL: isClient ? BFF_CONFIG.tunnel_url_prefix : `${BFF_CONFIG.server_local_url}${BFF_CONFIG.tunnel_url_prefix}`
+  baseURL: isClient
+    ? BFF_CONFIG.tunnel_url_prefix
+    : `${BFF_CONFIG.server_local_url}${BFF_CONFIG.tunnel_url_prefix}`
 })
 
-// Transform response data
 tunnel.interceptors.response.use(
   (response) => response.data,
   (error: AxiosError<string>) => {
     return Promise.reject({
-      code: error?.status,
+      code: error.status!,
       message: error.response?.data ?? error.response?.statusText ?? error?.message
-    } as AppError)
+    } satisfies AppError)
   }
 )
 
