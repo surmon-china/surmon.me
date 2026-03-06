@@ -15,7 +15,6 @@ import { Readable } from "stream";
 import { SitemapStream, EnumChangefreq, streamToPromise } from "sitemap";
 import WonderfulBingWallpaper from "wonderful-bing-wallpaper";
 import { XMLParser } from "fast-xml-parser";
-import yargsArgv from "yargs-parser";
 const NODE_ENV = process.env.NODE_ENV;
 const isNodeDev = process.env.NODE_ENV === "development";
 const isNodeProd = process.env.NODE_ENV === "production";
@@ -24,6 +23,9 @@ const DIST_PATH = path.join(ROOT_PATH, "dist");
 const PROD_CLIENT_PATH = path.join(DIST_PATH, "client");
 const PROD_SERVER_PATH = path.join(DIST_PATH, "server");
 const PUBLIC_PATH = isNodeDev ? path.join(ROOT_PATH, "public") : PROD_CLIENT_PATH;
+const YOUTUBE_API_KEY = process.env.SU_YOUTUBE_API_KEY;
+const INSTAGRAM_TOKEN = process.env.SU_INSTAGRAM_TOKEN;
+const THREADS_TOKEN = process.env.SU_THREADS_TOKEN;
 const STATIC_URL = process.env.VITE_STATIC_URL;
 const API_ONLINE_URL = process.env.VITE_API_ONLINE_URL;
 const API_LOCAL_URL = process.env.VITE_API_LOCAL_URL;
@@ -951,10 +953,6 @@ const getSongList = async () => {
     url: `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
   }));
 };
-const argv = yargsArgv(process.argv.slice(2));
-const YOUTUBE_API_KEY = argv.youtube_token;
-const INSTAGRAM_TOKEN = argv.instagram_token;
-const THREADS_TOKEN = argv.threads_token;
 const getYouTubeChannelPlayLists = async () => {
   const response = await axios.get(`https://www.googleapis.com/youtube/v3/playlists`, {
     timeout: 8e3,
