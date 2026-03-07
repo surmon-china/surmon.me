@@ -42,7 +42,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
 import localforage from "localforage";
-const APP_VERSION = "7.2.0";
+const APP_VERSION = "7.2.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -288,7 +288,7 @@ const zhLangMap = {
   [LocalesKey.COMMENT_DELETE_CONFIRM]: "确定要删除此评论吗？此操作不可恢复",
   [LocalesKey.COMMENT_REPLY]: "回复",
   [LocalesKey.COMMENT_REPLY_CANCEL]: "取消回复",
-  [LocalesKey.COMMENT_AI_ASSISTANT]: "AI 助理",
+  [LocalesKey.COMMENT_AI_ASSISTANT]: "赛博灵澈",
   [LocalesKey.COMMENT_MODERATOR]: "博主",
   [LocalesKey.COMMENT_PATRON]: "上客",
   [LocalesKey.COMMENT_GHOST_USER]: "已删除用户",
@@ -7729,34 +7729,34 @@ const _sfc_main$1C = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-53c5e0fd>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-feaaab6d>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="username ai" data-v-53c5e0fd>`);
+        _push(`<span class="username ai" data-v-feaaab6d>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_AI_ASSISTANT
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isGhostUser) {
-        _push(`<span class="username ghost" data-v-53c5e0fd>`);
+        _push(`<span class="username ghost" data-v-feaaab6d>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_GHOST_USER
         }, null, _parent));
         _push(`</span>`);
       } else if (authorUrl.value) {
-        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-53c5e0fd>${ssrInterpolate(authorName.value)}</a>`);
+        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-feaaab6d>${ssrInterpolate(authorName.value)}</a>`);
       } else {
-        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-53c5e0fd>${ssrInterpolate(authorName.value)}</span>`);
+        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-feaaab6d>${ssrInterpolate(authorName.value)}</span>`);
       }
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="badge ai" data-v-53c5e0fd>AI</span>`);
+        _push(`<span class="badge ai" data-v-feaaab6d>AI</span>`);
       } else if (__props.meta.isPatronUser) {
-        _push(`<span class="badge patron" data-v-53c5e0fd>`);
+        _push(`<span class="badge patron" data-v-feaaab6d>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_PATRON
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isModeratorUser) {
-        _push(`<span class="badge moderator" data-v-53c5e0fd>`);
+        _push(`<span class="badge moderator" data-v-feaaab6d>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7774,7 +7774,7 @@ _sfc_main$1C.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-username.vue");
   return _sfc_setup$1C ? _sfc_setup$1C(props, ctx) : void 0;
 };
-const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-53c5e0fd"]]);
+const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1C, [["__scopeId", "data-v-feaaab6d"]]);
 const OFFSET = 127397;
 const regionCodeToEmoji = (regionCode) => {
   return regionCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
