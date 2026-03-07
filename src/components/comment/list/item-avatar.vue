@@ -92,12 +92,12 @@
         bottom: 0;
         width: 40%;
         height: 40%;
-        padding-top: 1px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-top-left-radius: $radius-xs;
         background-color: rgb(255 255 255 / 0.2);
+        font-size: $font-size-quaternary;
         color: $white;
       }
     }
