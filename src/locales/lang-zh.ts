@@ -60,7 +60,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.COMMENT_DELETE_CONFIRM]: '确定要删除此评论吗？此操作不可恢复',
   [LocalesKey.COMMENT_REPLY]: '回复',
   [LocalesKey.COMMENT_REPLY_CANCEL]: '取消回复',
-  [LocalesKey.COMMENT_AI_ASSISTANT]: 'AI 助理',
+  [LocalesKey.COMMENT_AI_ASSISTANT]: '赛博灵澈',
   [LocalesKey.COMMENT_MODERATOR]: '博主',
   [LocalesKey.COMMENT_PATRON]: '上客',
   [LocalesKey.COMMENT_GHOST_USER]: '已删除用户',

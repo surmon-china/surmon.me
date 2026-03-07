@@ -73,6 +73,11 @@
       font-weight: bold;
 
       &.ai {
+        // background-image: $ai-primary-gradient;
+        // -webkit-background-clip: text;
+        // background-clip: text;
+        // -webkit-text-fill-color: transparent;
+        // color: transparent;
       }
 
       &.ghost {
@@ -105,7 +110,7 @@
       }
 
       &.ai {
-        padding-inline: 0.3em;
+        padding-inline: 0.4em;
         height: $font-size-base;
         line-height: $font-size-base;
         background-image: $ai-primary-gradient;
