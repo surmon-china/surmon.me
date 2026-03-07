@@ -42,7 +42,7 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
 import localforage from "localforage";
-const APP_VERSION = "7.2.1";
+const APP_VERSION = "7.2.2";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -7672,19 +7672,19 @@ const _sfc_main$1D = /* @__PURE__ */ defineComponent({
       return defaultAvatar;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-avatar" }, _attrs))} data-v-d84fbb3b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-avatar" }, _attrs))} data-v-4b929160>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<div class="ai-avatar" data-v-d84fbb3b>`);
+        _push(`<div class="ai-avatar" data-v-4b929160>`);
         _push(ssrRenderComponent(AiLogo, { class: "ai-logo" }, null, _parent));
         _push(`</div>`);
       } else {
-        _push(`<div class="author-avatar" data-v-d84fbb3b><img${ssrRenderAttr("src", getAuthorAvatarUrl())}${ssrRenderAttr("alt", __props.comment.author_name)} draggable="false" data-v-d84fbb3b>`);
+        _push(`<div class="author-avatar" data-v-4b929160><img${ssrRenderAttr("src", getAuthorAvatarUrl())}${ssrRenderAttr("alt", __props.comment.author_name)} draggable="false" data-v-4b929160>`);
         if (__props.comment.user || __props.meta.isDisqusAuthor) {
-          _push(`<span class="role" data-v-d84fbb3b>`);
+          _push(`<span class="role" data-v-4b929160>`);
           if (__props.comment.user) {
-            _push(`<i class="iconfont icon-user" data-v-d84fbb3b></i>`);
+            _push(`<i class="iconfont icon-user" data-v-4b929160></i>`);
           } else {
-            _push(`<i class="iconfont icon-disqus" data-v-d84fbb3b></i>`);
+            _push(`<i class="iconfont icon-disqus" data-v-4b929160></i>`);
           }
           _push(`</span>`);
         } else {
@@ -7702,7 +7702,7 @@ _sfc_main$1D.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-avatar.vue");
   return _sfc_setup$1D ? _sfc_setup$1D(props, ctx) : void 0;
 };
-const CommentAvatar = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-d84fbb3b"]]);
+const CommentAvatar = /* @__PURE__ */ _export_sfc(_sfc_main$1D, [["__scopeId", "data-v-4b929160"]]);
 const _sfc_main$1C = /* @__PURE__ */ defineComponent({
   __name: "item-username",
   __ssrInlineRender: true,
