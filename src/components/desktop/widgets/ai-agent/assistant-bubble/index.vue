@@ -17,7 +17,7 @@
     getBlogList: { zh: '正在检索博客列表...', en: 'Fetching blog list...' },
     getArticleDetail: { zh: '正在阅读文章详情...', en: 'Reading article...' },
     askKnowledgeBase: { zh: '正在查阅知识库...', en: 'Searching knowledge base...' },
-    getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open source projects...' }
+    getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' }
   }
 
   const toolCallingi18n = computed(() => {
