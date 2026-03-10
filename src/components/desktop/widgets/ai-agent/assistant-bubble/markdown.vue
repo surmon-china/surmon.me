@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
   import Markdown from '/@/components/common/markdown.vue'
   defineProps<{ content: string }>()
 </script>

@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
   import { ref, shallowRef, computed, nextTick, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useAiAgentStore } from '/@/stores/ai-agent'

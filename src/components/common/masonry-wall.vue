@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T">
+<script lang="ts" generic="T" setup>
   import type { VNode } from 'vue'
   import { ref, shallowRef, onMounted, nextTick } from 'vue'
 
