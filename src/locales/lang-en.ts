@@ -95,6 +95,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.AI_ASSISTANT_NAME]: 'CyberMonk',
   [LocalesKey.AI_AGENT_WELCOME]: "What's on your mind?",
   [LocalesKey.AI_AGENT_SEND_BUTTON]: 'Send',
+  [LocalesKey.AI_AGENT_STOP_BUTTON]: 'Stop',
   [LocalesKey.AI_AGENT_RESET_BUTTON]: 'Reset chat',
   [LocalesKey.AI_AGENT_RESET_CONFIRM]:
     'Resetting the chat will permanently delete all message history and cannot be undone. Are you sure you want to continue?',

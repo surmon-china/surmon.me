@@ -15,7 +15,7 @@
   const lastMessageIndex = computed(() => aiAgentStore.messages.length - 1)
 
   const input = ref('')
-  const canSubmit = computed(() => input.value.length >= 2 && !aiAgentStore.isStreaming)
+  const hasInputValue = computed(() => input.value.length >= 3)
 
   const scrollToMessagesBottom = () => {
     messagesContainer.value?.scrollTo({
@@ -24,8 +24,13 @@
     })
   }
 
-  const handleSubmit = () => {
-    if (!canSubmit.value) return
+  const handleStop = () => {
+    aiAgentStore.abortStreaming()
+    scrollToMessagesBottom()
+  }
+
+  const handleSend = () => {
+    if (!hasInputValue.value) return
     aiAgentStore.sendMessage(input.value.trim())
     input.value = ''
     nextTick(() => scrollToMessagesBottom())
@@ -85,16 +90,18 @@
         data-form-type="other"
         data-lpignore="true"
         data-1p-ignore
-        minlength="2"
+        minlength="3"
         maxlength="200"
         :disabled="aiAgentStore.isStreaming"
         :placeholder="_i18n.t(LocalesKey.AI_AGENT_INPUT_PLACEHOLDER)"
-        @keydown.enter.prevent="handleSubmit"
+        @keydown.enter.prevent="handleSend"
         v-model.trim="input"
       />
-      <button class="submit" :disabled="!canSubmit" @click="handleSubmit">
-        <i18n :k="LocalesKey.AI_AGENT_THINKING" v-if="aiAgentStore.isStreaming" />
-        <i18n :k="LocalesKey.AI_AGENT_SEND_BUTTON" v-else />
+      <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming">
+        <i18n :k="LocalesKey.AI_AGENT_STOP_BUTTON" />
+      </button>
+      <button class="submit" :disabled="!hasInputValue" @click="handleSend" v-else>
+        <i18n :k="LocalesKey.AI_AGENT_SEND_BUTTON" />
       </button>
     </div>
   </div>

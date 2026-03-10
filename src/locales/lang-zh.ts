@@ -95,6 +95,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.AI_ASSISTANT_NAME]: '赛博灵澈',
   [LocalesKey.AI_AGENT_WELCOME]: '一念起处？缘何至此？',
   [LocalesKey.AI_AGENT_SEND_BUTTON]: '发送',
+  [LocalesKey.AI_AGENT_STOP_BUTTON]: '中止',
   [LocalesKey.AI_AGENT_RESET_BUTTON]: '重置对话',
   [LocalesKey.AI_AGENT_RESET_CONFIRM]: '重置对话将会丢失所有聊天记录，且无法找回！确定要继续操作吗？',
   [LocalesKey.AI_AGENT_INPUT_PLACEHOLDER]: '想知道什么，尽管问',

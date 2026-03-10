@@ -96,6 +96,7 @@ export enum LocalesKey {
   AI_ASSISTANT_NAME = 'ai-assistant-name',
   AI_AGENT_WELCOME = 'ai-agent-welcome',
   AI_AGENT_SEND_BUTTON = 'ai-agent-send-button',
+  AI_AGENT_STOP_BUTTON = 'ai-agent-stop-button',
   AI_AGENT_RESET_BUTTON = 'ai-agent-reset-button',
   AI_AGENT_RESET_CONFIRM = 'ai-agent-reset-confirm',
   AI_AGENT_INPUT_PLACEHOLDER = 'ai-agent-input-placeholder',
