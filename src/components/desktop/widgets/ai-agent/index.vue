@@ -1,25 +1,62 @@
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue'
+  import { onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useAiAgentStore } from '/@/stores/ai-agent'
+  import { LocalesKey } from '/@/locales'
+  import AgentChat from './chat.vue'
+  import logger from '/@/utils/logger'
 
-  const loaded = ref(false)
+  const { globalState, i18n: _i18n } = useEnhancer()
   const aiAgentStore = useAiAgentStore()
-  const { globalState } = useEnhancer()
 
-  const closeModal = () => {
-    globalState.toggleSwitcher('aiAgentModal', false)
+  const handleReset = () => {
+    if (window.confirm(_i18n.t(LocalesKey.AI_AGENT_RESET_CONFIRM))) {
+      aiAgentStore.resetState()
+      aiAgentStore.initialize().catch((error) => {
+        logger.error('AI agent init after reset failed.', error)
+      })
+    }
   }
 
   onMounted(() => {
-    // Promise.all([aiAgentStore.ensureToken(), aiAgentStore.initMessages()]).then(() => {
-    //   loaded.value = true
-    // })
+    aiAgentStore.initialize().catch((error) => {
+      logger.error('AI agent init failed.', error)
+    })
   })
 </script>
 
 <template>
-  <div class="ai-agent-modal"></div>
+  <div class="ai-agent-modal">
+    <div class="header">
+      <div class="brand">
+        <div class="logo"></div>
+        <span class="title">
+          <i18n>
+            <template #zh>与 {{ _i18n.t(LocalesKey.AI_ASSISTANT_NAME) }} 对话</template>
+            <template #en>Chat with {{ _i18n.t(LocalesKey.AI_ASSISTANT_NAME) }}</template>
+          </i18n>
+        </span>
+      </div>
+      <button class="close" @click="globalState.toggleSwitcher('aiAgentModal', false)">
+        <i class="iconfont icon-cancel"></i>
+      </button>
+    </div>
+    <div class="body">
+      <transition mode="out-in" name="module">
+        <div class="error" v-if="aiAgentStore.error">
+          <i class="iconfont icon-error-outlined" />
+          <p class="message">{{ aiAgentStore.error.message }}</p>
+          <button class="reset" @click="handleReset">
+            <i18n :k="LocalesKey.AI_AGENT_RESET_BUTTON" />
+          </button>
+        </div>
+        <div class="loading" v-else-if="aiAgentStore.fetching">
+          <loading-indicator width="1.8rem" />
+        </div>
+        <agent-chat v-else-if="aiAgentStore.initialized" />
+      </transition>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -30,11 +67,81 @@
   .ai-agent-modal {
     width: 46rem;
     max-width: 80vw;
-    height: 38rem;
+    height: 40rem;
     max-height: 100vh;
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background-color: $module-bg-opaque;
+
+    .header {
+      height: 3rem;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid $module-bg-darker-1;
+
+      .brand {
+        display: flex;
+        align-items: center;
+
+        .logo {
+          margin-left: $gap-sm;
+          margin-right: $gap-tiny;
+          width: 1.8rem;
+          height: 100%;
+          background: $ai-primary-gradient;
+          -webkit-mask: url('/images/ai-agent/cybermonk-white.png') center / contain no-repeat;
+          mask: url('/images/ai-agent/cybermonk-white.png') center / contain no-repeat;
+        }
+
+        .title {
+          font-weight: bold;
+          background-image: $ai-primary-gradient;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: transparent;
+        }
+      }
+
+      .close {
+        width: 3rem;
+        height: 3rem;
+      }
+    }
+
+    .body {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .error {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        .iconfont {
+          font-size: $font-size-h1 * 2;
+          color: $red;
+        }
+
+        .message {
+          color: $red;
+          font-size: $font-size-root;
+        }
+
+        .reset {
+          margin-top: $gap;
+          padding-block: $gap-tiny;
+          border-radius: $radius-xs;
+          background-color: $module-bg-darker-1;
+          &:hover {
+            background-color: $module-bg-darker-2;
+          }
+        }
+      }
+    }
   }
 </style>

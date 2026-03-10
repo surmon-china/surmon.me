@@ -4,10 +4,11 @@ import { APP_PROFILE } from '/@/configs/app.config'
 
 export const zhLangMap: LocalesMap = {
   [LocalesKey.APP_SLOGAN]: APP_PROFILE.sub_title_zh,
-  [LocalesKey.PAGE_HOME]: '明殿',
-  [LocalesKey.PAGE_GITHUB]: '工巧',
   [LocalesKey.CATEGORY_INSIGHT]: '不二門',
   [LocalesKey.CATEGORY_CODE]: '無夢寺',
+
+  [LocalesKey.PAGE_HOME]: '明殿',
+  [LocalesKey.PAGE_GITHUB]: '工巧',
   [LocalesKey.PAGE_ARCHIVE]: '一切藏',
   [LocalesKey.PAGE_GUESTBOOK]: '四方館',
   [LocalesKey.PAGE_ABOUT]: '狂浪生',
@@ -15,10 +16,12 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.PAGE_SNIPPETS]: '覺有情',
   [LocalesKey.PAGE_PHOTOGRAPHY]: '大千界',
   [LocalesKey.PAGE_APP]: '客戶端',
+
   [LocalesKey.GUESTBOOK_SLOGAN]: '此心光明，亦復何言',
   [LocalesKey.NOT_FOUND]: '众里寻他，我已不再',
   [LocalesKey.BACK_TO_HOME_PAGE]: '返回首页',
   [LocalesKey.EMPTY_PLACEHOLDER]: '空空如也',
+
   [LocalesKey.STATISTIC_ARTICLES]: '全站文章',
   [LocalesKey.STATISTIC_COMMENTS]: '全站评论',
   [LocalesKey.STATISTIC_TAGS]: '全站标签',
@@ -26,6 +29,7 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.STATISTIC_TOTAL_VIEWS]: '累计被阅读',
   [LocalesKey.STATISTIC_TOTAL_UPVOTES]: '累计获赞',
   [LocalesKey.STATISTIC_AVERAGE_EMOTION]: '平均评分',
+
   [LocalesKey.AD]: '广而告之',
   [LocalesKey.FEEDBACK]: '反馈',
   [LocalesKey.PRIVACY]: '隐私',
@@ -42,16 +46,17 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.CATEGORY_UNCATEGORIZED]: '未分类',
   [LocalesKey.TAG_PLACEHOLDER]: '无标签',
 
+  [LocalesKey.LIST_NO_MORE_DATA]: '没有更多',
   [LocalesKey.ARTICLE_SUMMARY]: '摘要',
   [LocalesKey.ARTICLE_VIEWS]: '次阅读',
   [LocalesKey.ARTICLE_PLACEHOLDER]: '空空如也',
   [LocalesKey.ARTICLE_READ_ALL]: '阅读余下全文',
   [LocalesKey.ARTICLE_RENDERING]: '渲染中..',
-  [LocalesKey.LIST_NO_MORE_DATA]: '没有更多',
   [LocalesKey.ARTICLE_LIST_LOADMORE]: '加载更多',
   [LocalesKey.ARTICLE_LIST_LOADING]: '加载中...',
   [LocalesKey.ARTICLE_FEATURED]: '精选',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: '精选',
+
   [LocalesKey.COMMENT_LIST_EMPTY]: '期待你的捷足先登',
   [LocalesKey.COMMENT_DISABLED]: '当前页面的评论功能已关闭',
   [LocalesKey.COMMENT_UPVOTE]: '赞',
@@ -60,7 +65,6 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.COMMENT_DELETE_CONFIRM]: '确定要删除此评论吗？此操作不可恢复',
   [LocalesKey.COMMENT_REPLY]: '回复',
   [LocalesKey.COMMENT_REPLY_CANCEL]: '取消回复',
-  [LocalesKey.COMMENT_AI_ASSISTANT]: '赛博灵澈',
   [LocalesKey.COMMENT_MODERATOR]: '博主',
   [LocalesKey.COMMENT_PATRON]: '上客',
   [LocalesKey.COMMENT_GHOST_USER]: '已删除用户',
@@ -75,16 +79,26 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.COMMENT_POST_CONTENT]: '内容',
   [LocalesKey.COMMENT_POST_PLACEHOLDER]: '愿你的见解一针见血',
   [LocalesKey.COMMENT_POST_ERROR_CONTENT]: '内容需要在 3000 字以内',
+
+  [LocalesKey.SUBMIT]: '提交',
+  [LocalesKey.SUBMITTING]: '提交中...',
   [LocalesKey.QUERY_PARAMS_ERROR]: '请求参数错误：',
   [LocalesKey.POST_ACTION_ERROR]: '操作失败，详细原因 > 控制台',
+
   [LocalesKey.USER_SIGN_IN]: '登录',
   [LocalesKey.USER_SIGN_OUT]: '退出登录',
   [LocalesKey.USER_IDENTITY_LINK]: '立即绑定',
   [LocalesKey.USER_IDENTITY_UNLINK]: '解除绑定',
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: '你确定要解绑此账户吗？',
   [LocalesKey.USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN]: `无法解除当前绑定，至少需要保留一种登录方式。`,
-  [LocalesKey.SUBMIT]: '提交',
-  [LocalesKey.SUBMITTING]: '提交中...',
+
+  [LocalesKey.AI_ASSISTANT_NAME]: '赛博灵澈',
+  [LocalesKey.AI_AGENT_SEND_BUTTON]: '发送',
+  [LocalesKey.AI_AGENT_RESET_BUTTON]: '重置对话',
+  [LocalesKey.AI_AGENT_RESET_CONFIRM]: '重置对话将会丢失所有聊天记录，且无法找回！确定要继续操作吗？',
+  [LocalesKey.AI_AGENT_INPUT_PLACEHOLDER]: '想知道什么，尽管问',
+  [LocalesKey.AI_AGENT_THINKING]: '思考中...',
+
   [LocalesKey.MOMENT_AM]: '上午',
   [LocalesKey.MOMENT_PM]: '下午',
   [LocalesKey.MOMENT_JUST_NOW]: '刚刚',

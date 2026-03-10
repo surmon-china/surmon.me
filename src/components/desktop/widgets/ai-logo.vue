@@ -16,7 +16,7 @@
   <div class="ai-logo" :class="{ animation }">
     <uimage
       class="image"
-      :alt="_i18n.t(LocalesKey.COMMENT_AI_ASSISTANT)"
+      :alt="_i18n.t(LocalesKey.AI_ASSISTANT_NAME)"
       src="/images/ai-agent/cybermonk-white.png"
       :cdn="true"
     />

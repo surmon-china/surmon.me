@@ -4,17 +4,19 @@ import { APP_PROFILE } from '/@/configs/app.config'
 
 export const enLangMap: LocalesMap = {
   [LocalesKey.APP_SLOGAN]: APP_PROFILE.sub_title_en,
-  [LocalesKey.PAGE_HOME]: 'Home',
   [LocalesKey.CATEGORY_INSIGHT]: 'Insight',
   [LocalesKey.CATEGORY_CODE]: 'Code',
+
+  [LocalesKey.PAGE_HOME]: 'Home',
   [LocalesKey.PAGE_ARCHIVE]: 'Archive',
   [LocalesKey.PAGE_GITHUB]: 'GitHub',
   [LocalesKey.PAGE_ABOUT]: 'About',
   [LocalesKey.PAGE_GUESTBOOK]: 'Guestbook',
   [LocalesKey.PAGE_SPONSOR]: 'Sponsor',
   [LocalesKey.PAGE_SNIPPETS]: 'Snippets',
-  [LocalesKey.PAGE_APP]: 'APP',
   [LocalesKey.PAGE_PHOTOGRAPHY]: 'Photog',
+  [LocalesKey.PAGE_APP]: 'APP',
+
   [LocalesKey.STATISTIC_ARTICLES]: 'Articles',
   [LocalesKey.STATISTIC_COMMENTS]: 'Comments',
   [LocalesKey.STATISTIC_TAGS]: 'Tags',
@@ -22,6 +24,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.STATISTIC_TOTAL_VIEWS]: 'Total views',
   [LocalesKey.STATISTIC_TOTAL_UPVOTES]: 'Total upvotes',
   [LocalesKey.STATISTIC_AVERAGE_EMOTION]: 'Rating',
+
   [LocalesKey.EMPTY_PLACEHOLDER]: 'NULL',
   [LocalesKey.NOT_FOUND]: 'Arrives here at last',
   [LocalesKey.BACK_TO_HOME_PAGE]: 'Back to home page',
@@ -52,6 +55,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.ARTICLE_LIST_LOADING]: 'Loading...',
   [LocalesKey.ARTICLE_FEATURED]: 'featured',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: 'feat',
+
   [LocalesKey.COMMENT_LIST_EMPTY]: 'Be the first to comment',
   [LocalesKey.COMMENT_DISABLED]: 'Commenting on this page is currently unavailable',
   [LocalesKey.COMMENT_UPVOTE]: 'upvote',
@@ -61,7 +65,6 @@ export const enLangMap: LocalesMap = {
     'Are you sure you want to delete this comment? You cannot undo this action.',
   [LocalesKey.COMMENT_REPLY]: 'reply',
   [LocalesKey.COMMENT_REPLY_CANCEL]: 'cancel reply',
-  [LocalesKey.COMMENT_AI_ASSISTANT]: 'CyberMonk',
   [LocalesKey.COMMENT_MODERATOR]: 'Moderator',
   [LocalesKey.COMMENT_PATRON]: 'Patron',
   [LocalesKey.COMMENT_GHOST_USER]: 'Deleted user',
@@ -76,16 +79,27 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.COMMENT_POST_CONTENT]: 'content',
   [LocalesKey.COMMENT_POST_PLACEHOLDER]: 'Hit the nail on the head',
   [LocalesKey.COMMENT_POST_ERROR_CONTENT]: 'Content requirements are within 3000 characters!',
+
+  [LocalesKey.SUBMIT]: 'Submit',
+  [LocalesKey.SUBMITTING]: 'Submitting...',
   [LocalesKey.QUERY_PARAMS_ERROR]: 'Invalid query params: ',
   [LocalesKey.POST_ACTION_ERROR]: 'Failed! Get error detail in console',
+
   [LocalesKey.USER_SIGN_IN]: 'Sign in',
   [LocalesKey.USER_SIGN_OUT]: 'Sign out',
   [LocalesKey.USER_IDENTITY_LINK]: 'Link Account',
   [LocalesKey.USER_IDENTITY_UNLINK]: 'Unlink',
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: 'Are you sure you want to unlink this account?',
   [LocalesKey.USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN]: `You can't unlink your last remaining sign-in method.`,
-  [LocalesKey.SUBMIT]: 'Submit',
-  [LocalesKey.SUBMITTING]: 'Submitting...',
+
+  [LocalesKey.AI_ASSISTANT_NAME]: 'CyberMonk',
+  [LocalesKey.AI_AGENT_SEND_BUTTON]: 'Send',
+  [LocalesKey.AI_AGENT_RESET_BUTTON]: 'Reset chat',
+  [LocalesKey.AI_AGENT_RESET_CONFIRM]:
+    'Resetting the chat will permanently delete all message history and cannot be undone. Are you sure you want to continue?',
+  [LocalesKey.AI_AGENT_INPUT_PLACEHOLDER]: 'Ask me anything',
+  [LocalesKey.AI_AGENT_THINKING]: 'Thinking...',
+
   [LocalesKey.MOMENT_AM]: 'AM',
   [LocalesKey.MOMENT_PM]: 'PM',
   [LocalesKey.MOMENT_JUST_NOW]: 'Just now',

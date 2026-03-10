@@ -11,7 +11,7 @@ const API_PROXY_URL = import.meta.env.VITE_API_PROXY_URL as string
 const API_LOCAL_URL = import.meta.env.VITE_API_LOCAL_URL as string
 const API_ONLINE_URL = import.meta.env.VITE_API_ONLINE_URL as string
 
-// dev: server ? online api : proxy</api>
+// dev: server ? online api : proxy('/api')
 // If you want to develop quickly, you can use a proxy address to connect directly to the production server.
 const DEV_API = isServer ? API_ONLINE_URL : API_PROXY_URL
 // const DEV_API = API_LOCAL_URL

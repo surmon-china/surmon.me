@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_jssy32llrnm.woff2?t=1772849275826') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_jssy32llrnm.woff?t=1772849275826') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_jssy32llrnm.ttf?t=1772849275826') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_ohh0u0mo1ar.woff2?t=1773095044132') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_ohh0u0mo1ar.woff?t=1773095044132') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_ohh0u0mo1ar.ttf?t=1773095044132') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-error-outlined:before {
+  content: '\e7df';
+}
+
+.icon-error:before {
+  content: '\e86f';
 }
 
 .icon-cpu:before {
@@ -800,10 +808,6 @@
 
 .icon-git:before {
   content: '\e67e';
-}
-
-.icon-redis:before {
-  content: '\e69c';
 }
 
 .icon-java:before {

@@ -8,6 +8,7 @@ export enum LocalesKey {
   APP_SLOGAN = 'app-slogan',
   CATEGORY_INSIGHT = 'insight',
   CATEGORY_CODE = 'code',
+
   PAGE_HOME = 'home',
   PAGE_GITHUB = 'github',
   PAGE_PHOTOGRAPHY = 'photography',
@@ -17,6 +18,7 @@ export enum LocalesKey {
   PAGE_GUESTBOOK = 'guestbook',
   PAGE_APP = 'app',
   PAGE_ARCHIVE = 'archive',
+
   STATISTIC_ARTICLES = 'statistic-articles',
   STATISTIC_COMMENTS = 'statistic-comments',
   STATISTIC_TAGS = 'statistic-tags',
@@ -24,6 +26,7 @@ export enum LocalesKey {
   STATISTIC_TOTAL_VIEWS = 'statistic-total-views',
   STATISTIC_TOTAL_UPVOTES = 'statistic-total-upvotes',
   STATISTIC_AVERAGE_EMOTION = 'statistic-average-emotion',
+
   EMPTY_PLACEHOLDER = 'common-empty-placeholder',
   NOT_FOUND = 'not-found',
   BACK_TO_HOME_PAGE = 'back-to-home-page',
@@ -63,7 +66,6 @@ export enum LocalesKey {
   COMMENT_DELETE = 'delete-comment',
   COMMENT_DELETE_CONFIRM = 'delete-comment-confirm',
   COMMENT_REPLY_CANCEL = 'cancel-reply-comment',
-  COMMENT_AI_ASSISTANT = 'comment-ai-assistant',
   COMMENT_MODERATOR = 'comment-moderator',
   COMMENT_PATRON = 'comment-patron',
   COMMENT_GHOST_USER = 'comment-ghost-user',
@@ -78,6 +80,9 @@ export enum LocalesKey {
   COMMENT_POST_CONTENT = 'comment-content',
   COMMENT_POST_PLACEHOLDER = 'comment-box-placeholder',
   COMMENT_POST_ERROR_CONTENT = 'comment-submit-failed-of-content-error',
+
+  SUBMIT = 'submit-data',
+  SUBMITTING = 'submitting',
   QUERY_PARAMS_ERROR = 'query-params-error',
   POST_ACTION_ERROR = 'post-requiest-failed-of-other-error',
 
@@ -88,8 +93,13 @@ export enum LocalesKey {
   USER_IDENTITY_UNLINK_CONFIRM = 'user-identity-unlink-confirm',
   USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN = 'user-identity-unlink-last-provider-forbidden',
 
-  SUBMIT = 'submit-data',
-  SUBMITTING = 'submitting',
+  AI_ASSISTANT_NAME = 'ai-assistant-name',
+  AI_AGENT_SEND_BUTTON = 'ai-agent-send-button',
+  AI_AGENT_RESET_BUTTON = 'ai-agent-reset-button',
+  AI_AGENT_RESET_CONFIRM = 'ai-agent-reset-confirm',
+  AI_AGENT_INPUT_PLACEHOLDER = 'ai-agent-input-placeholder',
+  AI_AGENT_THINKING = 'ai-agent-thinking',
+
   MOMENT_AM = 'moment-am',
   MOMENT_PM = 'moment-pm',
   MOMENT_JUST_NOW = 'moment-just-now',

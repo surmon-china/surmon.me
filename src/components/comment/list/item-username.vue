@@ -30,7 +30,7 @@
 <template>
   <div class="comment-username">
     <span class="username ai" v-if="meta.isAiGenerated">
-      <i18n :k="LocalesKey.COMMENT_AI_ASSISTANT" />
+      <i18n :k="LocalesKey.AI_ASSISTANT_NAME" />
     </span>
     <span class="username ghost" v-else-if="meta.isGhostUser">
       <i18n :k="LocalesKey.COMMENT_GHOST_USER" />

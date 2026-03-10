@@ -59,35 +59,37 @@ nodepress.interceptors.response.use(
   }
 )
 
-interface NodePressRequestConfig extends AxiosRequestConfig {
+export interface NodePressRequestConfig extends AxiosRequestConfig {
   token?: string | null
 }
 
 const request = <T = any>(config: NodePressRequestConfig): Promise<NodePressSuccessResponse<T>> => {
   const { token, headers, ...restConfig } = config
-  const finalHeaders = {
-    ...headers,
-    ...(token ? { Authorization: `Bearer ${token}` } : {})
-  }
-  return nodepress.request({ ...restConfig, headers: finalHeaders })
+  return nodepress.request({
+    ...restConfig,
+    headers: {
+      ...headers,
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    }
+  })
 }
 
 export default {
   $: nodepress,
   request,
   get<T = any>(url: string, config?: NodePressRequestConfig) {
-    return this.request<T>({ ...config, method: 'get', url })
+    return request<T>({ ...config, method: 'get', url })
   },
   post<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
-    return this.request<T>({ ...config, method: 'post', url, data })
+    return request<T>({ ...config, method: 'post', url, data })
   },
   put<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
-    return this.request<T>({ ...config, method: 'put', url, data })
+    return request<T>({ ...config, method: 'put', url, data })
   },
   patch<T = any>(url: string, data?: any, config?: NodePressRequestConfig) {
-    return this.request<T>({ ...config, method: 'patch', url, data })
+    return request<T>({ ...config, method: 'patch', url, data })
   },
   delete<T = any>(url: string, config?: NodePressRequestConfig) {
-    return this.request<T>({ ...config, method: 'delete', url })
+    return request<T>({ ...config, method: 'delete', url })
   }
 }

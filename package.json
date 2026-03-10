@@ -33,7 +33,6 @@
     "geojson": "^0.5.0",
     "highlight.js": "^11.11.x",
     "html-to-image": "^1.11.x",
-    "localforage": "^1.x",
     "lodash-es": "^4.17.x",
     "lozad": "^1.16.x",
     "lru-cache": "^11.x",

@@ -44,7 +44,7 @@ export default defineComponent({
     const mounted = ref(globalState.isHydrated)
 
     onMounted(() => {
-      // SSR inited -> mounted -> render -> transition
+      // SSR initialized -> mounted -> render -> transition
       if (!globalState.isHydrated) {
         const setRender = () => {
           mounted.value = true

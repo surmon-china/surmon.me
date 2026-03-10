@@ -66,7 +66,7 @@
   <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
-        <button class="ai" :title="_i18n.t(LocalesKey.COMMENT_AI_ASSISTANT)" @click="handleAiClick" disabled>
+        <button class="ai" :title="_i18n.t(LocalesKey.AI_ASSISTANT_NAME)" @click="handleAiClick">
           <ai-logo class="logo" :animation="true" />
         </button>
         <button
