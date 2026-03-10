@@ -107,6 +107,10 @@
       .close {
         width: 3rem;
         height: 3rem;
+
+        &:hover {
+          color: $color-link;
+        }
       }
     }
 
