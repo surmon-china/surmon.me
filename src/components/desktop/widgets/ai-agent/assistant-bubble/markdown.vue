@@ -13,13 +13,10 @@
   @use '/src/styles/base/mixins' as mix;
 
   .assistant-message-markdown {
-    ::v-deep(p) {
-      margin-bottom: 0;
-    }
-
-    ::v-deep(li) {
-      &:hover {
-      }
+    ::v-deep(p),
+    ::v-deep(ul),
+    ::v-deep(ol) {
+      margin-bottom: $gap-tiny;
     }
   }
 </style>
