@@ -25,6 +25,7 @@
 **[Related projects](https://github.com/stars/surmon-china/lists/surmon-me)**
 
 - **RESTful API service:** [`NodePress`](https://github.com/surmon-china/nodepress) built with NestJS.
+- **Blog AI agent:** [`surmon.me.ai`](https://github.com/surmon-china/surmon.me.ai) built on Cloudflare.
 - **Blog admin site:** [`surmon.me.admin`](https://github.com/surmon-china/surmon.me.admin) built with React and [Veact](https://github.com/veactjs/veact).
 - **Blog native app:** [`surmon.me.native`](https://github.com/surmon-china/surmon.me.native) built with React Native.
 
