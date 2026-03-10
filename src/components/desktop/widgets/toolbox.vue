@@ -3,8 +3,8 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
+  import { AiLogoImage } from '/@/components/desktop/widgets/ai-agent/logo'
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
-  import AiLogo from '/@/components/desktop/widgets/ai-logo.vue'
 
   const { globalState, gtag, i18n: _i18n } = useEnhancer()
 
@@ -67,7 +67,7 @@
     <div class="container">
       <div class="tools">
         <button class="ai" :title="_i18n.t(LocalesKey.AI_ASSISTANT_NAME)" @click="handleAiClick">
-          <ai-logo class="logo" :animation="true" />
+          <ai-logo-image class="ai-logo" variant="white" />
         </button>
         <button
           class="to-page-top"
@@ -122,7 +122,53 @@
           border-bottom-right-radius: $radius-sm;
         }
 
-        .ai,
+        @keyframes ai-button-background-flow {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .ai {
+          width: $size;
+          height: $size;
+          background-color: $primary-lighter;
+          background: $ai-primary-gradient;
+          background-size: 300% 200%;
+          animation: ai-button-background-flow 4s ease infinite;
+          transition: opacity $motion-duration-fast;
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
+            .ai-logo {
+              animation-play-state: paused;
+              opacity: 1 !important;
+            }
+          }
+
+          @keyframes ai-logo-breath {
+            0%,
+            100% {
+              opacity: 1;
+            }
+            50% {
+              opacity: 0.3;
+            }
+          }
+
+          .ai-logo {
+            width: 80%;
+            height: auto;
+            transition: opacity $motion-duration-fast;
+            animation: ai-logo-breath 4s ease-in-out infinite;
+          }
+        }
+
         .to-page-top,
         .to-page-bottom {
           display: block;
@@ -131,37 +177,6 @@
           line-height: $size;
           text-align: center;
           @include mix.common-bg-module($motion-duration-fast);
-        }
-
-        @keyframes ai-button {
-          0% {
-            background-position: 92% 0%;
-            background-size: 100% 300%;
-          }
-          50% {
-            background-position: 4% 100%;
-            background-size: 400% 100%;
-          }
-          100% {
-            background-position: 96% 0%;
-            background-size: 100% 200%;
-          }
-        }
-
-        .ai {
-          color: $white;
-          opacity: 0.8;
-          background-color: $primary-lighter;
-          background: $ai-primary-gradient;
-          animation: ai-button 4s ease infinite;
-          transition: opacity $motion-duration-fast;
-          &[disabled] {
-            opacity: 0.7;
-          }
-          &:not([disabled]):hover {
-            opacity: 1;
-            background-color: $primary;
-          }
         }
 
         .to-page-bottom {

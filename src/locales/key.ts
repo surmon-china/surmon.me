@@ -94,6 +94,7 @@ export enum LocalesKey {
   USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN = 'user-identity-unlink-last-provider-forbidden',
 
   AI_ASSISTANT_NAME = 'ai-assistant-name',
+  AI_AGENT_WELCOME = 'ai-agent-welcome',
   AI_AGENT_SEND_BUTTON = 'ai-agent-send-button',
   AI_AGENT_RESET_BUTTON = 'ai-agent-reset-button',
   AI_AGENT_RESET_CONFIRM = 'ai-agent-reset-confirm',

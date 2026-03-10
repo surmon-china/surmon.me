@@ -3,6 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useAiAgentStore } from '/@/stores/ai-agent'
   import { LocalesKey } from '/@/locales'
+  import { AI_LOGO_WHITE } from './logo'
   import AgentChat from './chat.vue'
   import logger from '/@/utils/logger'
 
@@ -29,7 +30,7 @@
   <div class="ai-agent-modal">
     <div class="header">
       <div class="brand">
-        <div class="logo"></div>
+        <div class="logo" :style="{ '--url': `url(${AI_LOGO_WHITE})` }"></div>
         <span class="title">
           <i18n>
             <template #zh>与 {{ _i18n.t(LocalesKey.AI_ASSISTANT_NAME) }} 对话</template>
@@ -90,8 +91,8 @@
           width: 1.8rem;
           height: 100%;
           background: $ai-primary-gradient;
-          -webkit-mask: url('/images/ai-agent/cybermonk-white.png') center / contain no-repeat;
-          mask: url('/images/ai-agent/cybermonk-white.png') center / contain no-repeat;
+          -webkit-mask: var(--url) center / contain no-repeat;
+          mask: var(--url) center / contain no-repeat;
         }
 
         .title {

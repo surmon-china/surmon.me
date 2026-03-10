@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
+  import { AiLogoImage } from '/@/components/desktop/widgets/ai-agent/logo'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getAssetURL, getCdnProxyURL } from '/@/transforms/url'
   import { APP_CONFIG } from '/@/configs/app.config'
   import type { Comment } from '/@/interfaces/comment'
   import type { CommentMeta } from './item.vue'
-  import AiLogo from '/@/components/desktop/widgets/ai-logo.vue'
 
   const props = defineProps<{
     comment: Comment
@@ -38,7 +38,9 @@
 <template>
   <div class="comment-avatar">
     <div class="ai-avatar" v-if="meta.isAiGenerated">
-      <ai-logo class="ai-logo" />
+      <div class="logo-wrapper">
+        <ai-logo-image class="ai-logo" variant="white" />
+      </div>
     </div>
     <div class="author-avatar" v-else>
       <img :src="getAuthorAvatarUrl()" :alt="comment.author_name" draggable="false" />
@@ -71,11 +73,20 @@
     }
 
     .ai-avatar {
-      .ai-logo {
-        border-radius: $radius-xs;
+      .logo-wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background-color: $primary-lighter;
         background: $ai-primary-gradient;
         opacity: 0.8;
+
+        .ai-logo {
+          width: 88%;
+          height: auto;
+        }
       }
     }
 

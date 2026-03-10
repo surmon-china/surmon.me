@@ -93,6 +93,7 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN]: `You can't unlink your last remaining sign-in method.`,
 
   [LocalesKey.AI_ASSISTANT_NAME]: 'CyberMonk',
+  [LocalesKey.AI_AGENT_WELCOME]: "What's on your mind?",
   [LocalesKey.AI_AGENT_SEND_BUTTON]: 'Send',
   [LocalesKey.AI_AGENT_RESET_BUTTON]: 'Reset chat',
   [LocalesKey.AI_AGENT_RESET_CONFIRM]:

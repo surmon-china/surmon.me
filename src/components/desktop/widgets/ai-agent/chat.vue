@@ -3,6 +3,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { useAiAgentStore } from '/@/stores/ai-agent'
   import { LocalesKey } from '/@/locales'
+  import { AiLogoImage } from './logo'
   import AssistantBubble from './assistant-bubble/index.vue'
 
   const messagesContainer = shallowRef<HTMLElement | null>(null)
@@ -48,6 +49,10 @@
 <template>
   <div class="ai-agent-chat">
     <div class="chat-messages" ref="messagesContainer">
+      <div class="chat-welcome" v-if="!aiAgentStore.messages.length">
+        <ai-logo-image class="logo" />
+        <p class="text"><i18n :k="LocalesKey.AI_AGENT_WELCOME" /></p>
+      </div>
       <div
         ref="messagesListRef"
         :class="['message-row', message.role]"
@@ -104,6 +109,26 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+
+    .chat-welcome {
+      margin-top: 8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .logo {
+        opacity: 0.6;
+        width: 10rem;
+        margin-bottom: $gap;
+      }
+
+      .text {
+        font-weight: bold;
+        font-size: $font-size-h3;
+        color: $color-text-disabled;
+      }
+    }
 
     .chat-messages {
       flex-grow: 1;
