@@ -1,14 +1,13 @@
 <script lang="ts" setup>
   import { ref, watch, computed } from 'vue'
   import { Language, LocalesKey } from '/@/locales'
-  import { ToolCall } from '/@/stores/ai-agent'
+  import { type ChatMessage, ToolCall } from '/@/stores/ai-agent'
   import Markdown from './markdown.vue'
   import Typewriter from './typewriter.vue'
 
   const props = defineProps<{
-    content: string
+    message: ChatMessage
     streaming: boolean
-    error: string | null
     toolCalls: readonly ToolCall[]
   }>()
 
@@ -43,19 +42,22 @@
 </script>
 
 <template>
-  <div class="assistant-bubble" :class="{ streaming, error: !!error }">
-    <div class="assistant-error" v-if="error">
+  <div class="assistant-bubble" :class="{ streaming, error: !!message.error }">
+    <div class="assistant-error" v-if="message.error">
       <i class="iconfont icon-error-outlined"></i>
-      {{ error }}
+      {{ message.error }}
     </div>
-    <div class="assistant-message" v-if="content">
+    <div class="assistant-message" v-if="message.content">
       <typewriter
         v-if="streaming || !typingDone"
-        :content="content"
+        :content="message.content"
         @done="typingDone = true"
         @tick="emit('tick')"
       />
-      <markdown v-else :content="content" />
+      <markdown v-else :content="message.content" />
+      <span class="time" v-if="message.created_at">
+        <udate :date="message.created_at" to="ago" />
+      </span>
     </div>
     <transition mode="out-in" name="module" v-else-if="streaming">
       <div class="assistant-thinking" :key="toolCallingi18n ? 'tool' : 'thinking'">
@@ -158,6 +160,25 @@
         100% {
           background-position: -100% 0;
         }
+      }
+    }
+
+    .assistant-message {
+      .time {
+        position: absolute;
+        top: -1.2rem;
+        left: $gap-tiny;
+        font-size: $font-size-quaternary;
+        color: $color-text-disabled;
+        white-space: nowrap;
+        @include mix.hidden();
+        @include mix.visibility-transition();
+      }
+    }
+
+    &:hover {
+      .assistant-message .time {
+        @include mix.visible();
       }
     }
   }

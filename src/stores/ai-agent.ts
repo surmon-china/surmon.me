@@ -17,7 +17,8 @@ const TOKEN_HEADER_NAME = 'X-Token'
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
-  created_at: string
+  // For new message create from store
+  created_at: string | null
   // For assistant message error state
   error?: string | null
 }
@@ -65,7 +66,7 @@ export const useAiAgentStore = defineStore('ai-agent', () => {
     messages.value.push({
       role: 'user',
       content: message,
-      created_at: new Date().toISOString()
+      created_at: null
     } satisfies ChatMessage)
 
     // Assistant message states
@@ -77,7 +78,7 @@ export const useAiAgentStore = defineStore('ai-agent', () => {
     messages.value.push({
       role: 'assistant',
       content: '',
-      created_at: new Date().toISOString(),
+      created_at: null,
       error: null
     })
     const assistantMessage = messages.value.at(-1)!

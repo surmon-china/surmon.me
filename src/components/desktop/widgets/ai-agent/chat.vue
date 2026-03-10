@@ -58,8 +58,7 @@
         <assistant-bubble
           v-if="message.role === 'assistant'"
           class="assistant-bubble"
-          :content="message.content"
-          :error="message.error ?? null"
+          :message="message"
           :streaming="index === lastMessageIndex && aiAgentStore.isStreaming"
           :tool-calls="index === lastMessageIndex ? aiAgentStore.streaming.toolCalls : []"
           @tick="scrollToMessagesBottom"
