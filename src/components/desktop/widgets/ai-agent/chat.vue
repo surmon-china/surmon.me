@@ -67,6 +67,7 @@
           :streaming="index === lastMessageIndex && aiAgentStore.isStreaming"
           :tool-calls="index === lastMessageIndex ? aiAgentStore.streaming.toolCalls : []"
           @tick="scrollToMessagesBottom"
+          @done="scrollToMessagesBottom"
         />
       </div>
     </div>

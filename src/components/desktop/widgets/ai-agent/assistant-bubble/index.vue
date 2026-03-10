@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, watch, computed } from 'vue'
+  import { ref, watch, computed, nextTick } from 'vue'
   import { Language, LocalesKey } from '/@/locales'
   import { type ChatMessage, ToolCall } from '/@/stores/ai-agent'
   import Markdown from './markdown.vue'
@@ -11,7 +11,7 @@
     toolCalls: readonly ToolCall[]
   }>()
 
-  const emit = defineEmits<{ tick: [] }>()
+  const emit = defineEmits<{ tick: []; done: [] }>()
 
   const toolNameI18nMap: Record<string, Record<Language.Chinese | Language.English, string>> = {
     getBlogList: { zh: '正在检索博客列表...', en: 'Fetching blog list...' },
@@ -32,6 +32,11 @@
   })
 
   const typingDone = ref(!props.streaming)
+  const handleTypingTick = () => emit('tick')
+  const handleTypingDone = () => {
+    typingDone.value = true
+    nextTick(() => emit('done'))
+  }
 
   watch(
     () => props.streaming,
@@ -51,8 +56,8 @@
       <typewriter
         v-if="streaming || !typingDone"
         :content="message.content"
-        @done="typingDone = true"
-        @tick="emit('tick')"
+        @tick="handleTypingTick"
+        @done="handleTypingDone"
       />
       <markdown v-else :content="message.content" />
       <span class="time" v-if="message.created_at">
