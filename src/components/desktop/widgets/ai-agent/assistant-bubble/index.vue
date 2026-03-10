@@ -56,7 +56,7 @@
       />
       <markdown v-else :content="message.content" />
       <span class="time" v-if="message.created_at">
-        <udate :date="message.created_at" to="ago" />
+        <udate :date="message.created_at * 1000" to="ago" />
       </span>
     </div>
     <transition mode="out-in" name="module" v-else-if="streaming">

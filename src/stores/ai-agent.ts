@@ -18,7 +18,7 @@ export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
   // For new message create from store
-  created_at: string | null
+  created_at: number | null
   // For assistant message error state
   error?: string | null
 }
