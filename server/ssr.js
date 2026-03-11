@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.3.2";
+const APP_VERSION = "7.3.3";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17801,11 +17801,11 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-chat" }, _attrs))} data-v-6a94c686><div class="chat-messages" data-v-6a94c686>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-chat" }, _attrs))} data-v-b7182304><div class="chat-messages" data-v-b7182304>`);
       if (!unref(aiAgentStore).messages.length) {
-        _push(`<div class="chat-welcome" data-v-6a94c686>`);
+        _push(`<div class="chat-welcome" data-v-b7182304>`);
         _push(ssrRenderComponent(unref(AiLogoImage), { class: "logo" }, null, _parent));
-        _push(`<p class="text" data-v-6a94c686>`);
+        _push(`<p class="text" data-v-b7182304>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_WELCOME
         }, null, _parent));
@@ -17815,9 +17815,9 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
       }
       _push(`<!--[-->`);
       ssrRenderList(unref(aiAgentStore).messages, (message, index) => {
-        _push(`<div class="${ssrRenderClass(["message-row", message.role])}" data-v-6a94c686>`);
+        _push(`<div class="${ssrRenderClass(["message-row", message.role])}" data-v-b7182304>`);
         if (message.role === "user") {
-          _push(`<div class="user-bubble" data-v-6a94c686>${ssrInterpolate(message.content)}</div>`);
+          _push(`<div class="user-bubble" data-v-b7182304>${ssrInterpolate(message.content)}</div>`);
         } else {
           _push(`<!---->`);
         }
@@ -17835,15 +17835,15 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
         }
         _push(`</div>`);
       });
-      _push(`<!--]--></div><div class="chat-input" data-v-6a94c686><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiAgentStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_AGENT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-6a94c686>`);
-      if (unref(aiAgentStore).isStreaming) {
-        _push(`<button class="submit" data-v-6a94c686>`);
+      _push(`<!--]--></div><div class="chat-input" data-v-b7182304><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiAgentStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_AGENT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-b7182304>`);
+      if (unref(aiAgentStore).isStreaming && !isAssistantBubbleTyping.value) {
+        _push(`<button class="submit" data-v-b7182304>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_STOP_BUTTON
         }, null, _parent));
         _push(`</button>`);
       } else {
-        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-6a94c686>`);
+        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-b7182304>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_SEND_BUTTON
         }, null, _parent));
@@ -17859,7 +17859,7 @@ _sfc_main$B.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/chat.vue");
   return _sfc_setup$B ? _sfc_setup$B(props, ctx) : void 0;
 };
-const AgentChat = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-6a94c686"]]);
+const AgentChat = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-b7182304"]]);
 const _sfc_main$A = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
