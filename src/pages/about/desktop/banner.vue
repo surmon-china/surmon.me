@@ -269,7 +269,7 @@
       }
 
       .socials {
-        $button-size: 2.5rem;
+        $button-size: 2.4rem;
         z-index: $z-index-normal + 2;
         margin-bottom: $gap-xs;
         display: flex;
