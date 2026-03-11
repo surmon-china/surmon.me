@@ -105,7 +105,7 @@
         maxlength="200"
         :disabled="aiAgentStore.isStreaming || isAssistantBubbleTyping"
         :placeholder="_i18n.t(LocalesKey.AI_AGENT_INPUT_PLACEHOLDER)"
-        @keydown.enter.prevent="handleSend"
+        @keydown.enter.exact.prevent="handleSend"
         v-model.trim="input"
       />
       <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming">
