@@ -154,8 +154,10 @@
       height: 2rem;
       border-radius: $radius-xs;
       background-color: $module-bg-darker-1;
+      color: $color-text-secondary;
       &:not([disabled]):hover {
         background-color: $module-bg-darker-2;
+        color: $color-link;
       }
     }
   }

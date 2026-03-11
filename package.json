@@ -1,6 +1,6 @@
 {
   "name": "surmon.me",
-  "version": "7.2.2",
+  "version": "7.3.0",
   "description": "Surmon.me blog",
   "author": "Surmon",
   "license": "MIT",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@braintree/sanitize-url": "^7.1.x",
-    "@dotenvx/dotenvx": "^1.52.x",
+    "@dotenvx/dotenvx": "^1.54.x",
     "@redis/client": "^5.x",
     "@sentry/vue": "^10.x",
     "@unhead/vue": "^2.x",
@@ -71,7 +71,7 @@
     "eslint-plugin-vue": "^10.x",
     "globals": "^17.x",
     "prettier": "^3.x",
-    "sass": "1.97.x",
+    "sass": "1.98.x",
     "tsx": "^4.21.x",
     "typescript": "^5.9.x",
     "typescript-eslint": "^8.x",

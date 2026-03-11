@@ -214,10 +214,11 @@
         border-radius: $radius-xs;
         background-color: $module-bg-darker-1;
         &[disabled] {
-          opacity: 0.8;
+          opacity: 0.7;
         }
         &:not([disabled]):hover {
           background-color: $module-bg-darker-2;
+          color: $color-link;
         }
       }
     }

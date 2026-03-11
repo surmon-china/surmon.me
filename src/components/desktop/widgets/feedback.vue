@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { reactive, computed, toRaw } from 'vue'
+  import { reactive, shallowRef, computed, toRaw, onMounted, nextTick } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useHistoryStore } from '/@/stores/history'
   import { useAppOptionsStore } from '/@/stores/foundation'
-  import { LocalesKey } from '/@/locales/key'
   import { GAEventCategories } from '/@/constants/google-analytics'
+  import { LocalesKey } from '/@/locales/key'
   import { APP_PROFILE } from '/@/configs/app.config'
 
   enum Event {
@@ -26,6 +26,8 @@
   const { gtag, isZhLang } = useEnhancer()
   const appOptionsStore = useAppOptionsStore()
   const historyStore = useHistoryStore()
+
+  const textareaRef = shallowRef<HTMLTextAreaElement | null>(null)
 
   const state = reactive({
     emotion: 5 as number,
@@ -59,6 +61,10 @@
       state.submitting = false
     }
   }
+
+  onMounted(() => {
+    nextTick(() => textareaRef.value?.focus())
+  })
 </script>
 
 <template>
@@ -108,24 +114,23 @@
       </div>
       <div class="input">
         <textarea
+          ref="textareaRef"
           class="textarea"
           name="feedback"
           id="feedback"
           rows="10"
-          autofocus="true"
           v-model.trim="state.content"
           :disabled="state.submitting"
-          :placeholder="isZhLang ? '你可在此畅所欲言，这将仅对博主可见' : 'Tell me about your opinion...'"
+          :placeholder="
+            isZhLang ? '你可在此畅所欲言，这将仅对博主可见' : `Share your thoughts, I'd love to hear them.`
+          "
         ></textarea>
         <div class="buttons">
           <button class="item cancel" :disabled="state.submitting" @click="handleClose">
             <span class="text"><i18n zh="取消" en="Cancel" /></span>
           </button>
           <button class="item submit" :disabled="!isSubmitable || state.submitting" @click="handleSubmit">
-            <i class="iconfont icon-mail-plane" />
-            <span class="text">
-              <i18n :k="state.submitting ? LocalesKey.SUBMITTING : LocalesKey.SUBMIT" />
-            </span>
+            <i18n :k="state.submitting ? LocalesKey.SUBMITTING : LocalesKey.SUBMIT" />
           </button>
         </div>
       </div>
@@ -164,9 +169,9 @@
       margin: 0;
       list-style: none;
       display: flex;
-      padding: $gap-lg 0;
+      margin-top: 2rem;
+      margin-bottom: $gap-xs;
       justify-content: space-between;
-      border-bottom: 1px dashed $module-bg-darker-1;
 
       .item {
         width: 20%;
@@ -206,7 +211,7 @@
         .arrow {
           $size: 15px;
           position: absolute;
-          bottom: -3rem;
+          bottom: -2rem;
           left: 50%;
           margin-bottom: -1px;
           margin-left: -$size;
@@ -237,16 +242,13 @@
         justify-content: space-between;
 
         .item {
-          height: 2.4rem;
+          height: 2rem;
           display: flex;
           justify-content: center;
           align-items: center;
           border-radius: $radius-xs;
           &[disabled] {
             opacity: 0.7;
-          }
-          &:not([disabled]):hover {
-            color: $color-link-hover;
           }
 
           &.cancel {
@@ -258,20 +260,13 @@
           }
 
           &.submit {
-            width: 8.4rem;
-            color: $color-text-secondary;
+            width: 7rem;
+            font-weight: bold;
             background-color: $module-bg-darker-2;
             &:not([disabled]):hover {
               background-color: $module-bg-darker-3;
+              color: $color-link;
             }
-          }
-
-          .iconfont {
-            margin-right: $gap-xs;
-          }
-
-          .text {
-            font-weight: bold;
           }
         }
       }
