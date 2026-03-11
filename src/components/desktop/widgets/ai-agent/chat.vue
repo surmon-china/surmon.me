@@ -139,6 +139,7 @@
       .logo {
         opacity: 0.6;
         width: 10rem;
+        height: 10rem;
         margin-bottom: $gap;
       }
 
