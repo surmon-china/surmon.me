@@ -41,7 +41,7 @@ import { markedHighlight } from "marked-highlight";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import _lozad from "lozad";
 import QRCode from "qrcode";
-const APP_VERSION = "7.3.4";
+const APP_VERSION = "7.3.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17612,7 +17612,7 @@ _sfc_main$F.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-bubble/message-markdown.vue");
   return _sfc_setup$F ? _sfc_setup$F(props, ctx) : void 0;
 };
-const Markdown = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-3b8ce30f"]]);
+const Markdown = /* @__PURE__ */ _export_sfc(_sfc_main$F, [["__scopeId", "data-v-db6d1673"]]);
 const _sfc_main$E = /* @__PURE__ */ defineComponent({
   __name: "message-typewriter",
   __ssrInlineRender: true,
