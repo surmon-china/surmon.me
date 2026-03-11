@@ -123,8 +123,6 @@
       align-items: center;
 
       .error {
-        display: flex;
-        flex-direction: column;
         text-align: center;
 
         .iconfont {
@@ -139,7 +137,9 @@
 
         .reset {
           margin-top: $gap;
-          padding-block: $gap-tiny;
+          padding-inline: $gap;
+          height: 2rem;
+          line-height: 2rem;
           border-radius: $radius-xs;
           background-color: $module-bg-darker-1;
           &:hover {
