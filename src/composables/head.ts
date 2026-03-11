@@ -8,7 +8,7 @@
 import { computed, ComputedGetter } from 'vue'
 import { useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
-import { getPageURL } from '/@/transforms/url'
+import { getSiteURL } from '/@/transforms/url'
 import { APP_PROFILE, APP_CONFIG } from '/@/configs/app.config'
 
 export { useHead, useSeoMeta } from '@unhead/vue'
@@ -63,8 +63,8 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     ogType: () => _.value.ogType ?? 'website',
     ogTitle: () => _.value.ogTitle ?? _.value.pureTitle,
     ogDescription: () => _.value.ogDescription ?? _.value.description,
-    ogUrl: () => _.value.ogUrl ?? getPageURL(route.fullPath),
-    ogImage: () => _.value.ogImage ?? getPageURL(APP_CONFIG.default_og_image),
+    ogUrl: () => _.value.ogUrl ?? getSiteURL(route.fullPath),
+    ogImage: () => _.value.ogImage ?? getSiteURL(APP_CONFIG.default_og_image),
     ogImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
     ogImageWidth: () => _.value.ogImageWidth ?? (_.value.ogImage ? null : '1000'),
     ogImageHeight: () => _.value.ogImageHeight ?? (_.value.ogImage ? null : '526'),
@@ -73,7 +73,7 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     // Twitter
     twitterTitle: () => _.value.ogTitle ?? _.value.fullTitle,
     twitterDescription: () => _.value.ogDescription ?? _.value.description,
-    twitterImage: () => _.value.ogImage ?? getPageURL(APP_CONFIG.default_og_image),
+    twitterImage: () => _.value.ogImage ?? getSiteURL(APP_CONFIG.default_og_image),
     twitterImageAlt: () => _.value.ogImageAlt ?? _.value.ogTitle ?? _.value.fullTitle,
     twitterCard: 'summary_large_image',
     // Product specific https://ogp.me/#type_article

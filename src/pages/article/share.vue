@@ -6,7 +6,7 @@
   import { numberSplit } from '/@/transforms/text'
   import { getMarkdownSplitIndex } from '/@/transforms/markdown'
   import { getArticleDetailRoute } from '/@/transforms/route'
-  import { getOriginalProxyURL, getPageURL } from '/@/transforms/url'
+  import { getOriginalProxyURL, getSiteURL } from '/@/transforms/url'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import BaseShare, { SocialMedia } from '/@/components/common/share.vue'
   import Markdown from '/@/components/common/markdown.vue'
@@ -90,7 +90,7 @@
       if (shareTemplateElementRef.value) {
         // Generate QRcode
         shareTemplateQRCode.value = await renderTextToQRCodeDataURL(
-          getPageURL(getArticleDetailRoute(props.article.id)),
+          getSiteURL(getArticleDetailRoute(props.article.id)),
           { errorCorrectionLevel: 'M' }
         )
         // Ensure all images loaded

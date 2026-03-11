@@ -1,13 +1,13 @@
 <script lang="ts" setup>
   import { ref, computed, watch, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { getPageURL } from '/@/transforms/url'
+  import { getSiteURL } from '/@/transforms/url'
   import HeaderView from './header.vue'
   import FooterView from './footer.vue'
   import DrawerView from './drawer.vue'
 
   const { route } = useEnhancer()
-  const pageURL = computed(() => getPageURL(route.fullPath))
+  const pageURL = computed(() => getSiteURL(route.fullPath))
 
   const isLoaded = ref(false)
   const isOpenedDrawer = ref(false)

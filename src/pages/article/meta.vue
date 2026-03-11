@@ -5,7 +5,7 @@
   import { copy } from '/@/utils/clipboard'
   import { firstUpperCase } from '/@/transforms/text'
   import { dateToYMD } from '/@/transforms/moment'
-  import { getPageURL } from '/@/transforms/url'
+  import { getSiteURL } from '/@/transforms/url'
   import {
     getArticleDetailRoute,
     getCategoryFlowRoute,
@@ -19,7 +19,7 @@
   }>()
 
   const articleURL = computed(() => {
-    return getPageURL(getArticleDetailRoute(props.article.id))
+    return getSiteURL(getArticleDetailRoute(props.article.id))
   })
 </script>
 

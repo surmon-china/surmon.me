@@ -2,7 +2,7 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { Comment } from '/@/interfaces/comment'
   import { getCommentUrlHashById } from '/@/constants/element-anchor'
-  import { getPageURL } from '/@/transforms/url'
+  import { getSiteURL } from '/@/transforms/url'
   import { copy } from '/@/utils/clipboard'
 
   const props = defineProps<{
@@ -13,7 +13,7 @@
 
   const copyCommentUrl = () => {
     const urlHash = getCommentUrlHashById(props.comment.id)
-    const url = getPageURL(route.path, urlHash)
+    const url = getSiteURL(route.path, urlHash)
     copy(url)
   }
 </script>

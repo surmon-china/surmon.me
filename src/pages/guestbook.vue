@@ -9,7 +9,7 @@
   import { CommentTargetType } from '/@/interfaces/comment'
   import { PageIds } from '/@/constants/page-id'
   import { firstUpperCase } from '/@/transforms/text'
-  import { getPageURL } from '/@/transforms/url'
+  import { getSiteURL } from '/@/transforms/url'
   import { isClient } from '/@/configs/app.env'
   import MobileBanner from '/@/components/mobile/widgets/page-banner.vue'
   import Comment from '/@/components/comment/index.vue'
@@ -41,7 +41,7 @@
       pageTitles: titles,
       description,
       ogType: 'website',
-      ogImage: getPageURL(bannerImage),
+      ogImage: getSiteURL(bannerImage),
       ogImageWidth: 1200,
       ogImageHeight: 675
     }

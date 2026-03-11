@@ -57,7 +57,7 @@ export const getCdnProxyURL = (domain: string, url: string) => {
   }
 }
 
-export const getPageURL = (path: string, hash?: string) => {
+export const getSiteURL = (path: string, hash?: string) => {
   const targetPath = hash ? `${path}#${hash}` : path
   return `${API_CONFIG.FRONT_END}${normalizePath(targetPath)}`
 }

@@ -16,7 +16,7 @@
   import { LocalesKey } from '/@/locales'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { GAEventCategories } from '/@/constants/google-analytics'
-  import { getPageURL } from '/@/transforms/url'
+  import { getSiteURL } from '/@/transforms/url'
   import { stringify } from '/@/transforms/query-string'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import { openPopupWindow } from '/@/utils/opener'
@@ -159,7 +159,7 @@
       : defaultSocials
   })
 
-  const getURL = () => getPageURL(route.fullPath)
+  const getURL = () => getSiteURL(route.fullPath)
   const getTitle = () => document.title || APP_PROFILE.title
   const getOgTitle = () =>
     document.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? undefined
