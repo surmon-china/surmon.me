@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-  import { ref, watch, computed, nextTick } from 'vue'
+  import { computed } from 'vue'
   import { Language, LocalesKey } from '/@/locales'
   import { type ChatMessage, ToolCall } from '/@/stores/ai-agent'
-  import Markdown from './markdown.vue'
-  import Typewriter from './typewriter.vue'
+  import MessageContent from './message-content.vue'
 
   const props = defineProps<{
     message: ChatMessage
@@ -15,7 +14,7 @@
 
   const toolNameI18nMap: Record<string, Record<Language.Chinese | Language.English, string>> = {
     getBlogList: { zh: '正在检索博客列表...', en: 'Fetching blog list...' },
-    getArticleDetail: { zh: '正在阅读文章详情...', en: 'Reading article...' },
+    getArticleDetail: { zh: '正在阅读文章内容...', en: 'Reading article...' },
     askKnowledgeBase: { zh: '正在查阅知识库...', en: 'Searching knowledge base...' },
     getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' }
   }
@@ -30,20 +29,6 @@
       }
     )
   })
-
-  const typingDone = ref(!props.streaming)
-  const handleTypingTick = () => emit('typingTick')
-  const handleTypingDone = () => {
-    typingDone.value = true
-    nextTick(() => emit('typingDone'))
-  }
-
-  watch(
-    () => props.streaming,
-    (val) => {
-      if (val) typingDone.value = false
-    }
-  )
 </script>
 
 <template>
@@ -53,13 +38,12 @@
       {{ message.error }}
     </div>
     <div class="assistant-message" v-if="message.content">
-      <typewriter
-        v-if="streaming || !typingDone"
+      <message-content
         :content="message.content"
-        @tick="handleTypingTick"
-        @done="handleTypingDone"
+        :streaming="streaming"
+        @typing-tick="emit('typingTick')"
+        @typing-done="emit('typingDone')"
       />
-      <markdown v-else :content="message.content" />
       <span class="time" v-if="message.created_at">
         <udate :date="message.created_at * 1000" to="ago" />
       </span>

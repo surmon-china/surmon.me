@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, watch, onUnmounted } from 'vue'
-  import Markdown from './markdown.vue'
+  import MessageMarkdown from './message-markdown.vue'
 
   const props = defineProps<{ content: string }>()
   const emit = defineEmits<{ tick: []; done: [] }>()
@@ -33,14 +33,14 @@
 </script>
 
 <template>
-  <div class="typewriter-content">
-    <markdown :content="displayed" />
+  <div class="message-typewriter">
+    <message-markdown :content="displayed" />
     <p class="cursor">▋</p>
   </div>
 </template>
 
 <style lang="scss" scoped>
-  .typewriter-content {
+  .message-typewriter {
     .cursor {
       margin: 0;
       animation: blink 1s step-end infinite;

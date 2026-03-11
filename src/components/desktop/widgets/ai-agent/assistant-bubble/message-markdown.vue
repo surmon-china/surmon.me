@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <markdown class="assistant-message-markdown" :markdown="content" :compact="true" />
+  <markdown class="message-markdown" :markdown="content" :compact="true" />
 </template>
 
 <style lang="scss" scoped>
@@ -12,7 +12,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .assistant-message-markdown {
+  .message-markdown {
     ::v-deep(p),
     ::v-deep(ul),
     ::v-deep(ol) {
