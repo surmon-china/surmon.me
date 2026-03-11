@@ -718,10 +718,10 @@ const cacher = {
   passive,
   interval
 };
-const getTagURL = (tag) => `${APP_PROFILE.url}/tag/${tag}`;
-const getCategoryURL = (category) => `${APP_PROFILE.url}/category/${category}`;
-const getArticleURL = (id) => `${APP_PROFILE.url}/article/${id}`;
-const getPageURL = (page) => `${APP_PROFILE.url}/${page}`;
+const getTagURL = (tagSlug) => `${APP_PROFILE.url}/tag/${tagSlug}`;
+const getCategoryURL = (categorySlug) => `${APP_PROFILE.url}/category/${categorySlug}`;
+const getArticleURL = (ArticleId) => `${APP_PROFILE.url}/article/${ArticleId}`;
+const getPageURL = (pagePath) => `${APP_PROFILE.url}/${pagePath}`;
 const axios = _axios.create({
   httpAgent: new HttpAgent({
     keepAlive: true,
