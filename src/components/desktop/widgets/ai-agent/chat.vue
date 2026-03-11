@@ -2,6 +2,7 @@
   import { ref, shallowRef, computed, nextTick, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useAiAgentStore } from '/@/stores/ai-agent'
+  import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
   import { LocalesKey } from '/@/locales'
   import { AiLogoImage } from './logo'
   import AssistantBubble from './assistant-bubble/index.vue'
@@ -47,6 +48,12 @@
     nextTick(() => scrollToMessagesBottom())
   }
 
+  const handleInputEnter = (event: KeyboardEvent) => {
+    if (!event.isComposing) {
+      handleSend()
+    }
+  }
+
   onMounted(() => {
     nextTick(() => {
       inputRef.value?.focus()
@@ -72,8 +79,8 @@
       <div
         ref="messagesListRef"
         :class="['message-row', message.role]"
-        :key="index"
         v-for="(message, index) in aiAgentStore.messages"
+        :key="index"
       >
         <div v-if="message.role === 'user'" class="user-bubble">{{ message.content }}</div>
         <assistant-bubble
@@ -105,10 +112,12 @@
         maxlength="200"
         :disabled="aiAgentStore.isStreaming || isAssistantBubbleTyping"
         :placeholder="_i18n.t(LocalesKey.AI_AGENT_INPUT_PLACEHOLDER)"
-        @keydown.enter.exact.prevent="handleSend"
+        @keydown.enter.exact.prevent="handleInputEnter"
+        @focus="disableCopyrighter"
+        @blur="enableCopyrighter"
         v-model.trim="input"
       />
-      <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming">
+      <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming && !isAssistantBubbleTyping">
         <i18n :k="LocalesKey.AI_AGENT_STOP_BUTTON" />
       </button>
       <button class="submit" :disabled="!hasInputValue || isAssistantBubbleTyping" @click="handleSend" v-else>
