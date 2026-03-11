@@ -24,6 +24,16 @@
     })
   }
 
+  const isAssistantBubbleTyping = ref(false)
+  const handleAssistantBubbleTypingTick = () => {
+    isAssistantBubbleTyping.value = true
+    scrollToMessagesBottom()
+  }
+  const handleAssistantBubbleTypingDone = () => {
+    isAssistantBubbleTyping.value = false
+    scrollToMessagesBottom()
+  }
+
   const handleStop = () => {
     aiAgentStore.abortStreaming()
     scrollToMessagesBottom()
@@ -31,6 +41,7 @@
 
   const handleSend = () => {
     if (!hasInputValue.value) return
+    if (isAssistantBubbleTyping.value) return
     aiAgentStore.sendMessage(input.value.trim())
     input.value = ''
     nextTick(() => scrollToMessagesBottom())
@@ -71,8 +82,8 @@
           :message="message"
           :streaming="index === lastMessageIndex && aiAgentStore.isStreaming"
           :tool-calls="index === lastMessageIndex ? aiAgentStore.streaming.toolCalls : []"
-          @tick="scrollToMessagesBottom"
-          @done="scrollToMessagesBottom"
+          @typing-tick="handleAssistantBubbleTypingTick"
+          @typing-done="handleAssistantBubbleTypingDone"
         />
       </div>
     </div>
@@ -92,7 +103,7 @@
         data-1p-ignore
         minlength="3"
         maxlength="200"
-        :disabled="aiAgentStore.isStreaming"
+        :disabled="aiAgentStore.isStreaming || isAssistantBubbleTyping"
         :placeholder="_i18n.t(LocalesKey.AI_AGENT_INPUT_PLACEHOLDER)"
         @keydown.enter.prevent="handleSend"
         v-model.trim="input"
@@ -100,7 +111,7 @@
       <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming">
         <i18n :k="LocalesKey.AI_AGENT_STOP_BUTTON" />
       </button>
-      <button class="submit" :disabled="!hasInputValue" @click="handleSend" v-else>
+      <button class="submit" :disabled="!hasInputValue || isAssistantBubbleTyping" @click="handleSend" v-else>
         <i18n :k="LocalesKey.AI_AGENT_SEND_BUTTON" />
       </button>
     </div>
