@@ -151,7 +151,7 @@
 
   .feedback {
     width: 38rem;
-    background-color: $module-bg-lighter;
+    background-color: $module-bg-opaque;
 
     .title {
       width: 100%;
