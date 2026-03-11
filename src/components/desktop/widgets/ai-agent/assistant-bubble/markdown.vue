@@ -16,7 +16,7 @@
     ::v-deep(p),
     ::v-deep(ul),
     ::v-deep(ol) {
-      margin-bottom: $gap-tiny;
+      margin-bottom: $gap-xs;
     }
   }
 </style>

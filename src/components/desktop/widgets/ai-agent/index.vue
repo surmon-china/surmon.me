@@ -68,7 +68,7 @@
   .ai-agent-modal {
     width: 46rem;
     max-width: 80vw;
-    height: 40rem;
+    height: 41rem;
     max-height: 100vh;
     position: relative;
     display: flex;

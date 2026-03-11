@@ -130,7 +130,7 @@
     flex-direction: column;
 
     .chat-welcome {
-      margin-top: 8rem;
+      margin-top: 9rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
