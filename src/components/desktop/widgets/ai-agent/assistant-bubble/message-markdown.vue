@@ -16,7 +16,30 @@
     ::v-deep(p),
     ::v-deep(ul),
     ::v-deep(ol) {
-      margin-bottom: $gap-xs;
+      margin-bottom: $gap-tiny;
+    }
+
+    ::v-deep(hr) {
+      margin-block: $gap-xs;
+      border-color: $module-bg-darker-1;
+      border-style: dashed;
+    }
+
+    ::v-deep(h1),
+    ::v-deep(h2),
+    ::v-deep(h3) {
+      margin-top: $gap-sm;
+      margin-bottom: $gap-tiny;
+    }
+
+    ::v-deep(h1),
+    ::v-deep(h2) {
+      font-size: $font-size-h4;
+    }
+    ::v-deep(h3),
+    ::v-deep(h4),
+    ::v-deep(h5) {
+      font-size: $font-size-h5;
     }
   }
 </style>
