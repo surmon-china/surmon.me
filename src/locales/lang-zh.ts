@@ -47,15 +47,14 @@ export const zhLangMap: LocalesMap = {
   [LocalesKey.TAG_PLACEHOLDER]: '无标签',
 
   [LocalesKey.LIST_NO_MORE_DATA]: '没有更多',
-  [LocalesKey.ARTICLE_SUMMARY]: '摘要',
   [LocalesKey.ARTICLE_VIEWS]: '次阅读',
   [LocalesKey.ARTICLE_PLACEHOLDER]: '空空如也',
-  [LocalesKey.ARTICLE_READ_ALL]: '阅读余下全文',
-  [LocalesKey.ARTICLE_RENDERING]: '渲染中..',
+  [LocalesKey.ARTICLE_RENDER_ALL]: '阅读余下全文',
   [LocalesKey.ARTICLE_LIST_LOADMORE]: '加载更多',
   [LocalesKey.ARTICLE_LIST_LOADING]: '加载中...',
   [LocalesKey.ARTICLE_FEATURED]: '精选',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: '精选',
+  [LocalesKey.ARTICLE_SUMMARY]: '摘要',
 
   [LocalesKey.COMMENT_LIST_EMPTY]: '期待你的捷足先登',
   [LocalesKey.COMMENT_DISABLED]: '当前页面的评论功能已关闭',

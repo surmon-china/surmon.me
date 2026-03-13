@@ -20,7 +20,11 @@ const lozadObserve = (target: _lozad.Selector) => {
   return observer
 }
 
-export const useLozad = (options?: { elementor?: () => HTMLElement; immediate?: boolean; className?: string }) => {
+export const useLozad = (options?: {
+  elementor?: () => HTMLElement
+  immediate?: boolean
+  className?: string
+}) => {
   const container = ref<HTMLElement>()
   const observer = ref<_lozad.Observer | null>(null)
 

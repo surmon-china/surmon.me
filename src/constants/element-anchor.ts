@@ -13,7 +13,7 @@ export const SIDEBAR_ELEMENT_ID = 'A_sidebar'
 export const MAIN_CONTENT_ELEMENT_ID = 'A_main'
 
 export const ARTICLE_CONTENT_ELEMENT_ID = 'A_article_content'
-export const ARTICLE_READMORE_ELEMENT_ID = 'A_article_readmore'
+export const ARTICLE_RENDER_MORE_ELEMENT_ID = 'A_article_render_more'
 export const ARTICLE_META_ELEMENT_ID = 'A_article_meta'
 export const ARTICLE_SHARE_ELEMENT_ID = 'A_article_share'
 export const ARTICLE_RELATED_ELEMENT_ID = 'A_article_related'

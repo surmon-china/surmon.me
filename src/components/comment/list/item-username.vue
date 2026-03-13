@@ -71,14 +71,8 @@
     .username {
       text-transform: capitalize;
       font-weight: bold;
-
-      &.ai {
-        // background-image: $ai-primary-gradient;
-        // -webkit-background-clip: text;
-        // background-clip: text;
-        // -webkit-text-fill-color: transparent;
-        // color: transparent;
-      }
+      max-width: 8rem;
+      @include mix.text-overflow();
 
       &.ghost {
         color: $color-text-disabled;

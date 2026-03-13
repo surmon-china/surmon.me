@@ -18,7 +18,12 @@
 
 <template>
   <div class="threads-media-body">
-    <markdown class="text" compact :markdown="media.text" :render-options="{ codeLineNumbers: false }" />
+    <markdown
+      class="text"
+      :markdown="media.text"
+      :render-options="{ codeLineNumbers: false }"
+      :compact="true"
+    />
     <div class="media" :class="{ audio: media.media_type === 'AUDIO' }" v-if="mediaUrl">
       <audio class="audio" :src="mediaUrl" controls v-if="media.media_type === 'AUDIO'" />
       <div class="video" v-else-if="media.media_type === 'VIDEO'">

@@ -1,8 +1,8 @@
 // global variables
 @use './base/variables' as *;
 
-// reset style
-@use './reset.scss' as *;
+// normalize styles
+@use './normalize.scss' as *;
 
 // iconfont
 @use './iconfont.scss' as *;

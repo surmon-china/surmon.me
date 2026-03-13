@@ -47,7 +47,7 @@
     border-top: $gap-sm solid transparent;
     border-bottom: $gap-sm solid transparent;
     overflow-y: auto;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: none;
     scrollbar-width: thin;
 
     .tag-list {

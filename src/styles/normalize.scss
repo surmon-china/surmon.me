@@ -1,0 +1,605 @@
+@use './base/variables' as *;
+@use './base/functions' as funs;
+
+// ============================================================
+// Box Model & Root
+// ============================================================
+
+:root,
+html {
+  font-size: $font-size-root;
+  box-sizing: border-box;
+  cursor: default;
+  tab-size: 4;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+  border-style: solid;
+  border-width: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+::before,
+::after {
+  text-decoration: inherit;
+  vertical-align: inherit;
+}
+
+// ============================================================
+// Typography — Headings
+// ============================================================
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  font-family: inherit;
+  line-height: $line-height-base;
+  margin-block-start: 1em;
+}
+
+h1 {
+  font-size: $font-size-h1;
+  margin-block-end: 0.75em;
+}
+
+h2 {
+  font-size: $font-size-h2;
+  margin-block-end: 0.625em;
+}
+
+h3 {
+  font-size: $font-size-h3;
+  margin-block-end: 0.5em;
+}
+
+h4 {
+  font-size: $font-size-h4;
+  margin-block-end: 0.5em;
+}
+
+h5 {
+  font-size: $font-size-h5;
+  margin-block-end: 0.5em;
+}
+
+h6 {
+  font-size: $font-size-h6;
+  margin-block-end: 0.5em;
+}
+
+// ============================================================
+// Typography — Inline & Block Text
+// ============================================================
+
+p {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+small {
+  vertical-align: bottom;
+  font-size: $font-size-h6;
+  color: $color-text-secondary;
+}
+
+abbr[title] {
+  text-decoration: underline dotted;
+}
+
+u {
+  text-decoration: underline;
+}
+
+s {
+  text-decoration: line-through;
+}
+
+sup {
+  font-size: $font-size-h6;
+  vertical-align: super;
+}
+
+sub {
+  font-size: $font-size-h6;
+  vertical-align: sub;
+}
+
+mark {
+  background: $orange;
+}
+
+// ============================================================
+// Typography — Code & Preformatted
+// ============================================================
+
+code,
+kbd,
+pre,
+samp {
+  font-family: ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 1em;
+}
+
+pre {
+  margin: 0;
+  display: block;
+  white-space: pre;
+}
+
+code {
+  margin: 0;
+  padding: 0;
+  vertical-align: baseline;
+  word-break: break-word;
+}
+
+// ============================================================
+// Typography — Lists & Definition
+// ============================================================
+
+ul,
+ol {
+  margin-bottom: 1em;
+  padding-left: 3em;
+  vertical-align: baseline;
+}
+
+dl {
+  margin-bottom: 1em;
+}
+
+dd {
+  margin-left: 3em;
+}
+
+nav ol,
+nav ul {
+  list-style: none;
+}
+
+// ============================================================
+// Typography — Blockquote, HR, Figure
+// ============================================================
+
+hr {
+  display: block;
+  width: 100%;
+  border-top: 1px solid $module-bg-darker-1;
+  margin-block: 1em;
+}
+
+figcaption {
+  font-family: $font-family-normal;
+}
+
+// ============================================================
+// Links
+// ============================================================
+
+a {
+  text-decoration: none;
+  color: $color-link;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  &:hover,
+  &:focus {
+    color: $color-link-hover;
+  }
+}
+
+// ============================================================
+// Media & Embedded
+// ============================================================
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+img {
+  height: auto;
+}
+
+svg {
+  fill: currentColor;
+}
+
+// ============================================================
+// Layout — Semantic Elements
+// ============================================================
+
+main,
+header,
+footer,
+article,
+section,
+aside,
+details,
+summary {
+  margin: 0 auto;
+  width: 100%;
+}
+
+footer {
+  clear: both;
+}
+
+summary {
+  display: list-item;
+}
+
+@media screen and (max-width: $breakpoint-small) {
+  article,
+  section,
+  aside {
+    clear: both;
+    display: block;
+    max-width: 100%;
+  }
+}
+
+// ============================================================
+// Table
+// ============================================================
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: currentcolor;
+
+  th,
+  td {
+    vertical-align: inherit;
+  }
+}
+
+caption {
+  padding: $gap-tiny 0;
+}
+
+// ============================================================
+// Forms — Base Reset
+// ============================================================
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  background-color: transparent;
+  color: inherit;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  // correct line-height in Firefox/Safari
+  line-height: 1.15;
+  margin: 0;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+input {
+  border-radius: 0;
+
+  &[type='number'] {
+    width: auto;
+  }
+
+  &[type='search'] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+
+    &::-webkit-search-decoration {
+      -webkit-appearance: none;
+    }
+  }
+}
+
+input,
+input:focus {
+  outline: none;
+}
+
+textarea {
+  overflow: auto;
+}
+
+// correct the cursor style of spin buttons in Safari
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  height: auto;
+}
+
+// correct file upload button in iOS and Safari
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+}
+
+// ============================================================
+// Forms — Minimum Height
+// ============================================================
+
+button,
+[type='button'],
+[type='date'],
+[type='datetime'],
+[type='datetime-local'],
+[type='email'],
+[type='month'],
+[type='number'],
+[type='password'],
+[type='reset'],
+[type='search'],
+[type='submit'],
+[type='tel'],
+[type='text'],
+[type='time'],
+[type='url'],
+[type='week'],
+select,
+textarea {
+  min-height: 1.5em;
+}
+
+// ============================================================
+// Forms — Text Inputs & Select
+// ============================================================
+
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='url'],
+input[type='date'],
+input[type='month'],
+input[type='time'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='week'],
+input[type='number'],
+input[type='search'],
+input[type='tel'],
+select {
+  background: $module-bg;
+  color: $color-text;
+  display: inline-block;
+  padding: $gap-tiny;
+  vertical-align: middle;
+}
+
+input[type='color'] {
+  background: $color-text-reversal;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+input:not([type]) {
+  -webkit-appearance: none;
+  background-clip: padding-box;
+  display: inline-block;
+  text-align: left;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: menulist-button;
+  vertical-align: sub;
+}
+
+select[multiple] {
+  height: auto;
+}
+
+// ============================================================
+// Forms — Focus States
+// ============================================================
+
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='url']:focus,
+input[type='date']:focus,
+input[type='month']:focus,
+input[type='time']:focus,
+input[type='datetime']:focus,
+input[type='datetime-local']:focus,
+input[type='week']:focus,
+input[type='number']:focus,
+input[type='search']:focus,
+input[type='tel']:focus,
+input[type='color']:focus,
+select:focus,
+textarea:focus {
+  border-color: $primary;
+}
+
+input:not([type]):focus {
+  border-color: $primary;
+}
+
+input[type='file']:focus,
+input[type='radio']:focus,
+input[type='checkbox']:focus {
+  outline: 1px thin $color-text-divider;
+}
+
+// ============================================================
+// Forms — Disabled & Readonly States
+// ============================================================
+
+input[type='text'][disabled],
+input[type='password'][disabled],
+input[type='email'][disabled],
+input[type='url'][disabled],
+input[type='date'][disabled],
+input[type='month'][disabled],
+input[type='time'][disabled],
+input[type='datetime'][disabled],
+input[type='datetime-local'][disabled],
+input[type='week'][disabled],
+input[type='number'][disabled],
+input[type='search'][disabled],
+input[type='tel'][disabled],
+input[type='color'][disabled],
+select[disabled],
+textarea[disabled] {
+  background-color: $color-text-divider;
+  color: $color-text-secondary;
+  cursor: not-allowed;
+}
+
+input:not([type])[disabled] {
+  background-color: $color-text-divider;
+  color: $color-text-secondary;
+  cursor: not-allowed;
+}
+
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  border-color: $color-text-divider;
+  color: $color-text-secondary;
+}
+
+// ============================================================
+// Forms — Validation States
+// ============================================================
+
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  border-color: funs.darken($red, 10%);
+  color: $red;
+}
+
+input[type='file']:focus:invalid:focus,
+input[type='radio']:focus:invalid:focus,
+input[type='checkbox']:focus:invalid:focus {
+  outline-color: $red;
+}
+
+// ============================================================
+// Forms — Button
+// ============================================================
+
+input[type='submit'],
+input[type='reset'],
+button {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+input[type='submit']:active,
+input[type='reset']:active,
+button:active {
+  outline-offset: -2px;
+}
+
+input[type='submit']:focus,
+input[type='reset']:focus,
+button:focus {
+  outline: 0;
+}
+
+input[type='submit']:disabled,
+button:disabled {
+  color: $color-text-disabled;
+  cursor: not-allowed;
+}
+
+// ============================================================
+// Forms — Misc
+// ============================================================
+
+label {
+  line-height: 2;
+}
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: $gap-tiny 0;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border-bottom: 1px solid $module-bg-darker-1;
+  color: $color-text;
+}
+
+textarea {
+  display: block;
+  max-width: 100%;
+  background: $color-text-reversal;
+}
+
+// ============================================================
+// Accessibility & ARIA
+// ============================================================
+
+a,
+area,
+button,
+input,
+label,
+select,
+textarea,
+[tabindex] {
+  touch-action: manipulation;
+}
+
+[aria-busy='true'] {
+  cursor: progress;
+}
+
+[aria-controls] {
+  cursor: pointer;
+}
+
+[aria-disabled] {
+  cursor: default;
+}

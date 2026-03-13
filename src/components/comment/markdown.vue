@@ -1,9 +1,6 @@
 <script lang="ts" setup>
   import Markdown from '/@/components/common/markdown.vue'
-
-  const props = defineProps<{
-    content: string
-  }>()
+  const props = defineProps<{ content: string }>()
 </script>
 
 <template>
@@ -21,15 +18,49 @@
   @use '/src/styles/base/mixins' as mix;
 
   .comment-markdown {
-    overflow: hidden;
+    --markdown-block-gap: 0.5em;
+    --markdown-list-li-block-gap: 0.25em;
+    --markdown-list-left-padding: 1em;
+  }
+
+  .comment-markdown {
     padding-bottom: 0.2em;
 
     > :first-child {
       margin-top: 0.2em;
     }
 
-    ::v-deep(hr) {
-      border-color: $module-bg-darker-2;
+    > :is(blockquote, pre, .figure-wrapper):first-child {
+      margin-top: 0.5em;
+    }
+
+    :deep(blockquote) {
+      border-color: $module-bg-darker-3;
+    }
+
+    :deep(hr) {
+      border-color: $module-bg-darker-3;
+    }
+
+    :deep(code) {
+      border-color: $module-bg-darker-3;
+      background-color: $module-bg-darker-2;
+    }
+
+    :deep(figure.image) {
+      border-color: $module-bg-darker-3;
+
+      figcaption {
+        border-color: $module-bg-darker-2;
+      }
+
+      img {
+        max-height: 10rem;
+      }
+
+      figcaption {
+        display: none;
+      }
     }
   }
 </style>

@@ -28,7 +28,10 @@
 <template>
   <div class="ai-summary" :class="{ 'is-expanded': isExpanded }">
     <div class="summary-header">
-      <span class="title">AI <i18n :k="LocalesKey.ARTICLE_SUMMARY" /></span>
+      <span class="title">
+        <i class="iconfont icon-ai-text"></i>
+        <span class="text"><i18n :k="LocalesKey.ARTICLE_SUMMARY" /></span>
+      </span>
       <span class="provider" v-if="model">
         <uimage class="icon" :alt="provider" :title="provider" :src="iconUrl" v-if="iconUrl" />
         <span class="model">{{ model }}</span>
@@ -77,12 +80,16 @@
       user-select: none;
 
       .title {
-        font-weight: bold;
         background-image: $ai-primary-gradient;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         color: transparent;
+
+        .text {
+          margin-left: 2px;
+          font-weight: bold;
+        }
       }
 
       .provider {

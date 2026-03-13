@@ -208,7 +208,7 @@
     background-color: $module-bg-opaque;
     &.rendered {
       overflow-y: auto;
-      overscroll-behavior-y: contain;
+      overscroll-behavior-y: none;
       scrollbar-width: thin;
     }
 

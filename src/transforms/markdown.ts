@@ -23,7 +23,12 @@ const markdownCodeLanguageNamesMap = new Map([
   ['ts', 'TypeScript'],
   ['typescript', 'TypeScript'],
   ['html', 'HTML'],
-  ['css', 'CSS']
+  ['css', 'CSS'],
+  ['scss', 'Scss'],
+  ['vue', 'Vue'],
+  ['sql', 'SQL'],
+  ['json', 'JSON'],
+  ['python', 'Python']
 ])
 
 // https://marked.js.org
@@ -98,7 +103,8 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
       const copy = `window.navigator.clipboard?.writeText(this.href)`
       const onclick = `onclick="${preventDefault};${copy}"`
       const href = `href="#${anchor}"`
-      return `<a class="anchor link" ${href} ${onclick}>#</a>`
+      const icon = `<i class="iconfont icon-heading-pound"></i>`
+      return `<a class="anchor link" ${href} ${onclick}>${icon}</a>`
     }
 
     const html = renderer.parser.parseInline(tokens)
@@ -166,7 +172,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
     // figure > alt
     return trimHTML(`
       <div class="figure-wrapper">
-        <figure class="image ${altValue ? 'caption' : ''}" data-status="loading">
+        <figure class="image${altValue ? ' caption' : ''}" data-status="loading">
           <div class="placeholder error">
             <i class="iconfont icon-image-error"></i>
           </div>
@@ -214,7 +220,7 @@ const createRenderer = (options?: Partial<RendererCreatorOptions>): Renderer => 
             <span class="text">${langString ? (markdownCodeLanguageNamesMap.get(langString.toLowerCase()) ?? langString) : 'code'}</span>
           </span>
           <button class="copy" title="Copy code" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('code').innerText)">
-            <i class="iconfont icon-copy"></i>
+            <i class="iconfont icon-copy-outlined"></i>
           </button>
         </div>
         <div class="code-wrapper">

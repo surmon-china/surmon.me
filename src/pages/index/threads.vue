@@ -198,7 +198,7 @@
     .profile {
       width: auto;
       height: 100%;
-      padding: 0 0.8rem;
+      padding: 0 0.75rem;
       display: flex;
       justify-content: center;
       align-items: center;

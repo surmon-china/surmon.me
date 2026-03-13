@@ -244,8 +244,8 @@
 
         .left {
           .iconfont {
+            margin-right: 0.75em;
             font-size: $font-size-h3;
-            margin-right: 0.8em;
             color: var(--item-primary, $primary);
           }
 

@@ -10,8 +10,7 @@
   <div class="statement">
     <div class="content">
       <markdown :markdown="appOptions?.statement" :compact="true" />
-      <br />
-      <hr />
+      <divider :dashed="true" />
       <p v-if="appOptions" class="email">
         <a :href="getEmailLink(appOptions.site_email)" class="link" target="_blank">
           <i class="iconfont icon-mail"></i>
@@ -33,25 +32,25 @@
     max-height: 80vh;
     background-color: $module-bg-opaque;
     overflow-y: scroll;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: none;
     scrollbar-width: thin;
 
     .content {
-      padding: 0 2em;
+      padding-block: $gap;
+      padding-inline: 2em;
 
       .email {
+        margin: 0;
+
         .link {
           color: $color-text-secondary;
-
-          .iconfont {
-            margin-right: $gap-tiny;
-          }
-          .text {
-            font-weight: bold;
-          }
-
           &:hover {
             color: $color-link-hover;
+          }
+
+          .text {
+            margin-left: $gap-tiny;
+            font-weight: bold;
           }
         }
       }

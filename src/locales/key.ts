@@ -48,15 +48,14 @@ export enum LocalesKey {
   TAG_PLACEHOLDER = 'tag-placeholder',
   LIST_NO_MORE_DATA = 'no-more',
 
-  ARTICLE_SUMMARY = 'article-summary',
   ARTICLE_VIEWS = 'article-views',
   ARTICLE_PLACEHOLDER = 'article-empty-placeholder',
-  ARTICLE_READ_ALL = 'read-all-article-content',
-  ARTICLE_RENDERING = 'rendering',
+  ARTICLE_RENDER_ALL = 'article-render-all-content',
   ARTICLE_LIST_LOADMORE = 'loadmore',
   ARTICLE_LIST_LOADING = 'loading',
   ARTICLE_FEATURED = 'article-featured',
   ARTICLE_FEATURED_SHORT = 'article-featured-short',
+  ARTICLE_SUMMARY = 'article-summary',
 
   COMMENT_LIST_EMPTY = 'comment-list-placeholder',
   COMMENT_DISABLED = 'comment-disabled',

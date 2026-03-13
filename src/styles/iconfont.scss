@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'iconfont'; /* Project id 64825 */
   src:
-    url('//at.alicdn.com/t/c/font_64825_d69erkemdtl.woff2?t=1773204579614') format('woff2'),
-    url('//at.alicdn.com/t/c/font_64825_d69erkemdtl.woff?t=1773204579614') format('woff'),
-    url('//at.alicdn.com/t/c/font_64825_d69erkemdtl.ttf?t=1773204579614') format('truetype');
+    url('//at.alicdn.com/t/c/font_64825_t9vctphpftk.woff2?t=1773395209012') format('woff2'),
+    url('//at.alicdn.com/t/c/font_64825_t9vctphpftk.woff?t=1773395209012') format('woff'),
+    url('//at.alicdn.com/t/c/font_64825_t9vctphpftk.ttf?t=1773395209012') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,50 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-heading-pound:before {
+  content: '\e701';
+}
+
+.icon-format-header-2:before {
+  content: '\e861';
+}
+
+.icon-format-header-3:before {
+  content: '\e862';
+}
+
+.icon-format-header-4:before {
+  content: '\e863';
+}
+
+.icon-format-header-5:before {
+  content: '\e864';
+}
+
+.icon-format-header-6:before {
+  content: '\e865';
+}
+
+.icon-format-header-decrease:before {
+  content: '\e866';
+}
+
+.icon-format-header-increase:before {
+  content: '\e868';
+}
+
+.icon-format-header-pound:before {
+  content: '\e869';
+}
+
+.icon-format-header-1:before {
+  content: '\e75b';
+}
+
+.icon-copy-outlined:before {
+  content: '\e72f';
 }
 
 .icon-feedback:before {
@@ -382,30 +426,6 @@
   content: '\e6fc';
 }
 
-.icon-h-1:before {
-  content: '\e786';
-}
-
-.icon-h-2:before {
-  content: '\e787';
-}
-
-.icon-h-4:before {
-  content: '\e788';
-}
-
-.icon-h-3:before {
-  content: '\e789';
-}
-
-.icon-h-6:before {
-  content: '\e78a';
-}
-
-.icon-h-5:before {
-  content: '\e78b';
-}
-
 .icon-share:before {
   content: '\e60d';
 }
@@ -646,7 +666,7 @@
   content: '\e64d';
 }
 
-.icon-ai:before {
+.icon-ai-text:before {
   content: '\e662';
 }
 
@@ -922,10 +942,6 @@
   content: '\e645';
 }
 
-.icon-php:before {
-  content: '\e647';
-}
-
 .icon-nodejs:before {
   content: '\e649';
 }
@@ -936,8 +952,4 @@
 
 .icon-tag:before {
   content: '\e64b';
-}
-
-.icon-angularjs:before {
-  content: '\e653';
 }

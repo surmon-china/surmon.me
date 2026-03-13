@@ -315,7 +315,7 @@
       }
     }
 
-    &:hover {
+    &:not(.hide-avatar):hover {
       .cm-body {
         background-color: $module-bg-hover;
       }

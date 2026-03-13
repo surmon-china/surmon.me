@@ -72,9 +72,7 @@
         </div>
       </div>
       <div class="ai-content">
-        <div class="markdown">
-          <markdown :markdown="content" :compact="true" :render-options="{ sanitize: true }" />
-        </div>
+        <markdown class="markdown" :markdown="content" :compact="true" :render-options="{ sanitize: true }" />
       </div>
     </div>
   </div>
@@ -179,11 +177,15 @@
       }
 
       > .ai-content {
-        padding-right: $gap-tiny;
         user-select: text;
 
         .markdown {
-          margin-top: $gap-tiny;
+          margin-top: 0.25em;
+
+          :deep(hr),
+          :deep(blockquote) {
+            border-color: $module-bg-darker-3;
+          }
         }
       }
     }

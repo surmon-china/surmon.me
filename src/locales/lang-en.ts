@@ -46,15 +46,14 @@ export const enLangMap: LocalesMap = {
   [LocalesKey.TAG_PLACEHOLDER]: 'No tags',
   [LocalesKey.LIST_NO_MORE_DATA]: 'No more',
 
-  [LocalesKey.ARTICLE_SUMMARY]: 'Summary',
   [LocalesKey.ARTICLE_PLACEHOLDER]: 'No articles',
   [LocalesKey.ARTICLE_VIEWS]: 'views',
-  [LocalesKey.ARTICLE_READ_ALL]: 'Read full article',
-  [LocalesKey.ARTICLE_RENDERING]: 'Rendering...',
+  [LocalesKey.ARTICLE_RENDER_ALL]: 'Continue reading',
   [LocalesKey.ARTICLE_LIST_LOADMORE]: 'Loadmore',
   [LocalesKey.ARTICLE_LIST_LOADING]: 'Loading...',
   [LocalesKey.ARTICLE_FEATURED]: 'featured',
   [LocalesKey.ARTICLE_FEATURED_SHORT]: 'feat',
+  [LocalesKey.ARTICLE_SUMMARY]: 'Summary',
 
   [LocalesKey.COMMENT_LIST_EMPTY]: 'Be the first to comment',
   [LocalesKey.COMMENT_DISABLED]: 'Commenting on this page is currently unavailable',

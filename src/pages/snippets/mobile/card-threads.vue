@@ -31,10 +31,9 @@
     </div>
     <markdown
       class="content"
-      compact
-      :title="media.text"
       :markdown="media.text"
       :render-options="{ codeLineNumbers: false }"
+      :compact="true"
     />
     <div class="footer">
       <ulink class="link" :title="media.username" :href="media.permalink">

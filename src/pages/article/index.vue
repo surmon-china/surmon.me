@@ -162,7 +162,7 @@
           <div class="module margin background overflow radius-md">
             <article-content
               :id="ANCHORS.ARTICLE_CONTENT_ELEMENT_ID"
-              :readmore-id="ANCHORS.ARTICLE_READMORE_ELEMENT_ID"
+              :render-more-id="ANCHORS.ARTICLE_RENDER_MORE_ELEMENT_ID"
               :article="article"
               @rendered="handleContentRendered"
             >

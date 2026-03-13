@@ -102,14 +102,14 @@
       }
 
       .mapboxgl-popup-content {
+        max-height: 260px;
+        padding: 0.75em 1em;
+        border-radius: $radius-md;
+        line-height: 1.7;
+        font-size: $font-size-base;
+        font-family: $font-family-normal;
         background-color: $white;
         box-shadow: 0px 0px 14px 4px rgb(0 0 0 / 10%);
-        border-radius: $radius-md;
-        padding: 0.8em 1em;
-        font-size: $font-size-base;
-        line-height: 1.7;
-        max-height: 260px;
-        font-family: $font-family-normal;
         color: #555555;
         overflow-y: auto;
         overscroll-behavior-y: contain;

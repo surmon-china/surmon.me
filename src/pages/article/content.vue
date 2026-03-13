@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, computed, nextTick, onMounted, onUpdated } from 'vue'
+  import { ref, computed, onMounted, onUpdated } from 'vue'
   import { LocalesKey } from '/@/locales'
   import { Article } from '/@/interfaces/article'
   import { useArticleDetailStore } from '/@/stores/article-detail'
@@ -7,44 +7,28 @@
   import { numberSplit } from '/@/transforms/text'
   import Markdown from '/@/components/common/markdown.vue'
 
-  enum Events {
-    Rendered = 'rendered'
-  }
-
   const props = defineProps<{
     article: Article
-    readmoreId: string
+    renderMoreId: string
   }>()
 
   const emit = defineEmits<{
-    (e: Events.Rendered, v: HTMLDivElement): void
+    (e: 'rendered', v: HTMLDivElement): void
   }>()
 
-  const ctxStore = useArticleDetailStore()
+  const detailStore = useArticleDetailStore()
   const isHybrid = computed(() => isHybridArticle(props.article.origin))
   const isReprint = computed(() => isReprintArticle(props.article.origin))
   const isOriginal = computed(() => isOriginalArticle(props.article.origin))
 
   const element = ref<HTMLDivElement>()
-  const isRenderMoreContent = ref(false)
-  const isRenderMoreEnabled = computed(() => ctxStore.isLongContent && !ctxStore.renderedFullContent)
 
-  const handleRenderMore = () => {
-    isRenderMoreContent.value = true
-    nextTick(() => {
-      setTimeout(() => {
-        ctxStore.renderFullContent()
-        isRenderMoreContent.value = false
-      }, 0)
-    })
+  const handleContentRendered = () => {
+    emit('rendered', element.value!)
   }
 
-  const handleFullContentRendered = () => {
-    emit(Events.Rendered, element.value!)
-  }
-
-  onMounted(() => handleFullContentRendered())
-  onUpdated(() => handleFullContentRendered())
+  onMounted(() => handleContentRendered())
+  onUpdated(() => handleContentRendered())
 </script>
 
 <template>
@@ -71,8 +55,8 @@
       <div class="meta">
         <i class="iconfont icon-t"></i>
         <i18n
-          :zh="`共 ${numberSplit(ctxStore.contentLength)} 字，需阅读 ${ctxStore.readMinutes} 分钟`"
-          :en="`${numberSplit(ctxStore.contentLength)} characters, ${ctxStore.readMinutes} min read`"
+          :zh="`共 ${numberSplit(detailStore.contentLength)} 字，需阅读 ${detailStore.readMinutes} 分钟`"
+          :en="`${numberSplit(detailStore.contentLength)} characters, ${detailStore.readMinutes} min read`"
         />
         <responsive desktop>
           <divider type="vertical" size="sm" class="vertical" />
@@ -89,15 +73,20 @@
         </span>
       </div>
       <slot name="body-top-extra"></slot>
-      <markdown :html="ctxStore.defaultContent?.html" />
-      <transition name="module" mode="out-in" @after-enter="handleFullContentRendered">
-        <div :id="readmoreId" v-if="isRenderMoreEnabled" class="readmore">
-          <button class="readmore-btn" :disabled="isRenderMoreContent" @click="handleRenderMore">
-            <i18n :k="isRenderMoreContent ? LocalesKey.ARTICLE_RENDERING : LocalesKey.ARTICLE_READ_ALL" />
+      <markdown :html="detailStore.defaultContent?.html" />
+      <transition
+        name="module"
+        mode="out-in"
+        @after-enter="handleContentRendered"
+        v-if="detailStore.isLongContent"
+      >
+        <div :id="renderMoreId" v-if="!detailStore.renderedFullContent" class="render-more">
+          <button class="button" @click="detailStore.renderFullContent()">
+            <i18n :k="LocalesKey.ARTICLE_RENDER_ALL" />
             <i class="iconfont icon-loadmore"></i>
           </button>
         </div>
-        <markdown v-else-if="ctxStore.renderedFullContent" :html="ctxStore.moreContent?.html" />
+        <markdown class="more-content" :html="detailStore.moreContent?.html" v-else />
       </transition>
     </div>
   </div>
@@ -178,7 +167,11 @@
         }
       }
 
-      .readmore {
+      .more-content {
+        margin-top: $gap;
+      }
+
+      .render-more {
         position: absolute;
         bottom: 0;
         width: 100%;
@@ -188,8 +181,8 @@
         align-items: center;
         background: linear-gradient(to top, $module-bg-hover, transparent);
 
-        .readmore-btn {
-          width: 80%;
+        .button {
+          width: 70%;
           margin-top: 2rem;
           line-height: 2.5rem;
           text-align: center;

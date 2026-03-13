@@ -330,7 +330,7 @@
           }
 
           .prospect {
-            padding: 0 0.8em;
+            padding: 0 0.75em;
             height: 2em;
             line-height: 2em;
             border-radius: $radius-xs;

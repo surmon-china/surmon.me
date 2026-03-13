@@ -23,13 +23,19 @@
 
 <template>
   <div class="anchor" v-if="store.article">
-    <button class="header" :title="store.article.title" @click="scrollToAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)">
+    <button
+      class="header"
+      :title="store.article.title"
+      @click="scrollToAnchor(ANCHORS.ARTICLE_CONTENT_ELEMENT_ID)"
+    >
       <div class="title">{{ store.article.title }}</div>
       <div class="read">
         <i18n v-bind="ArticleLanguageI18n[store.article.lang]" />
         <i18n zh="，" en=", " />
         <i18n>
-          <template #zh>共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template>
+          <template #zh
+            >共 {{ numberSplit(store.contentLength) }} 字，需阅读 {{ store.readMinutes }} 分钟</template
+          >
           <template #en>
             {{ numberSplit(store.contentLength) }} characters, {{ store.readMinutes }} min read
           </template>
@@ -46,7 +52,7 @@
           v-for="(heading, index) in headings"
           @click="scrollToAnchor(heading.id)"
         >
-          <i class="level iconfont" :class="`icon-h-${heading.level}`"></i>
+          <i class="level iconfont" :class="`icon-format-header-${heading.level}`"></i>
           <span class="text">{{ heading.text }}</span>
         </li>
         <li
@@ -54,10 +60,10 @@
           key="readmore"
           v-if="store.isLongContent && !store.renderedFullContent"
           :class="`level-${minHeadingLevel}`"
-          @click="scrollToAnchor(ANCHORS.ARTICLE_READMORE_ELEMENT_ID)"
+          @click="scrollToAnchor(ANCHORS.ARTICLE_RENDER_MORE_ELEMENT_ID)"
         >
           <i class="level iconfont icon-loadmore"></i>
-          <span class="text"><i18n :k="LocalesKey.ARTICLE_READ_ALL" /></span>
+          <span class="text"><i18n :k="LocalesKey.ARTICLE_RENDER_ALL" /></span>
         </li>
       </ul>
     </div>
@@ -157,7 +163,7 @@
       padding-block: $gap-tiny;
       padding-inline: $gap-sm $gap;
       overflow-y: auto;
-      overscroll-behavior-y: contain;
+      overscroll-behavior-y: none;
       scrollbar-width: thin;
       @include mix.scroll-snap-y();
       &:hover {
