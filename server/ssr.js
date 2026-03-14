@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.2";
+const APP_VERSION = "7.4.3";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -7814,34 +7814,34 @@ const _sfc_main$1L = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-a7d692f8>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-5180144b>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="username ai" data-v-a7d692f8>`);
+        _push(`<span class="username ai" data-v-5180144b>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_ASSISTANT_NAME
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isGhostUser) {
-        _push(`<span class="username ghost" data-v-a7d692f8>`);
+        _push(`<span class="username ghost" data-v-5180144b>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_GHOST_USER
         }, null, _parent));
         _push(`</span>`);
       } else if (authorUrl.value) {
-        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-a7d692f8>${ssrInterpolate(authorName.value)}</a>`);
+        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-5180144b>${ssrInterpolate(authorName.value)}</a>`);
       } else {
-        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-a7d692f8>${ssrInterpolate(authorName.value)}</span>`);
+        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-5180144b>${ssrInterpolate(authorName.value)}</span>`);
       }
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="badge ai" data-v-a7d692f8>AI</span>`);
+        _push(`<span class="badge ai" data-v-5180144b>AI</span>`);
       } else if (__props.meta.isPatronUser) {
-        _push(`<span class="badge patron" data-v-a7d692f8>`);
+        _push(`<span class="badge patron" data-v-5180144b>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_PATRON
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isModeratorUser) {
-        _push(`<span class="badge moderator" data-v-a7d692f8>`);
+        _push(`<span class="badge moderator" data-v-5180144b>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7859,7 +7859,7 @@ _sfc_main$1L.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-username.vue");
   return _sfc_setup$1L ? _sfc_setup$1L(props, ctx) : void 0;
 };
-const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-a7d692f8"]]);
+const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-5180144b"]]);
 const OFFSET = 127397;
 const regionCodeToEmoji = (regionCode) => {
   return regionCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
