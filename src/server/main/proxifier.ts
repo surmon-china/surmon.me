@@ -139,7 +139,10 @@ export const createProxifier = (options: ProxifierOptions) => {
         }
 
         // Pipe response headers
-        response.writeHead(proxyResponse.statusCode || HTTP_CODES.INTERNAL_SERVER_ERROR, proxyResponse.headers)
+        response.writeHead(
+          proxyResponse.statusCode || HTTP_CODES.INTERNAL_SERVER_ERROR,
+          proxyResponse.headers
+        )
 
         try {
           // Use pipeline to handle response stream

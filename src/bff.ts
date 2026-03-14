@@ -168,36 +168,42 @@ app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMedias
 })
 
 // Threads media children
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaChildren}`, async (context) => {
-  const mediaId = context.query?.id
-  if (!mediaId || typeof mediaId !== 'string') {
-    return respond.error('Invalid params!', BAD_REQUEST)
-  }
+app.usePathRequest(
+  `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaChildren}`,
+  async (context) => {
+    const mediaId = context.query?.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      return respond.error('Invalid params!', BAD_REQUEST)
+    }
 
-  return respond.json(
-    await cacher.passive(cache, {
-      key: `threads_media_children_${mediaId}`,
-      ttl: days(7),
-      getter: () => getThreadsMediaChildren(mediaId)
-    })
-  )
-})
+    return respond.json(
+      await cacher.passive(cache, {
+        key: `threads_media_children_${mediaId}`,
+        ttl: days(7),
+        getter: () => getThreadsMediaChildren(mediaId)
+      })
+    )
+  }
+)
 
 // Threads media conversation
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaConversation}`, async (context) => {
-  const mediaId = context.query?.id
-  if (!mediaId || typeof mediaId !== 'string') {
-    return respond.error('Invalid params!', BAD_REQUEST)
-  }
+app.usePathRequest(
+  `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.ThreadsMediaConversation}`,
+  async (context) => {
+    const mediaId = context.query?.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      return respond.error('Invalid params!', BAD_REQUEST)
+    }
 
-  return respond.json(
-    await cacher.passive(cache, {
-      key: `threads_media_conversation_${mediaId}`,
-      ttl: days(7),
-      getter: () => getThreadsMediaConversation(mediaId)
-    })
-  )
-})
+    return respond.json(
+      await cacher.passive(cache, {
+        key: `threads_media_conversation_${mediaId}`,
+        ttl: days(7),
+        getter: () => getThreadsMediaConversation(mediaId)
+      })
+    )
+  }
+)
 
 // Instagram profile
 app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramProfile}`, async () => {
@@ -242,20 +248,23 @@ app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramMedi
 })
 
 // Instagram media children
-app.usePathRequest(`${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramMediaChildren}`, async (context) => {
-  const mediaId = context.query?.id
-  if (!mediaId || typeof mediaId !== 'string') {
-    return respond.error('Invalid params!', BAD_REQUEST)
-  }
+app.usePathRequest(
+  `${BFF_CONFIG.tunnel_url_prefix}/${TunnelModule.InstagramMediaChildren}`,
+  async (context) => {
+    const mediaId = context.query?.id
+    if (!mediaId || typeof mediaId !== 'string') {
+      return respond.error('Invalid params!', BAD_REQUEST)
+    }
 
-  return respond.json(
-    await cacher.passive(cache, {
-      key: `instagram_media_children_${mediaId}`,
-      ttl: days(7),
-      getter: () => getInstagramMediaChildren(mediaId)
-    })
-  )
-})
+    return respond.json(
+      await cacher.passive(cache, {
+        key: `instagram_media_children_${mediaId}`,
+        ttl: days(7),
+        getter: () => getInstagramMediaChildren(mediaId)
+      })
+    )
+  }
+)
 
 // Instagram calendar
 const getInsCalendarCache = cacher.interval(cache, {
