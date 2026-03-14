@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.0";
+const APP_VERSION = "7.4.1";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -10077,13 +10077,13 @@ const _sfc_main$1t = /* @__PURE__ */ defineComponent({
       const _component_uimage = resolveComponent("uimage");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["ai-summary", { "is-expanded": isExpanded.value }]
-      }, _attrs))} data-v-ec671916><div class="summary-header" data-v-ec671916><span class="title" data-v-ec671916><i class="iconfont icon-ai-text" data-v-ec671916></i><span class="text" data-v-ec671916>`);
+      }, _attrs))} data-v-24db2630><div class="summary-header" data-v-24db2630><span class="title" data-v-24db2630><i class="iconfont icon-ai-text" data-v-24db2630></i><span class="text" data-v-24db2630>`);
       _push(ssrRenderComponent(_component_i18n, {
         k: unref(LocalesKey).ARTICLE_SUMMARY
       }, null, _parent));
       _push(`</span></span>`);
       if (__props.model) {
-        _push(`<span class="provider" data-v-ec671916>`);
+        _push(`<span class="provider" data-v-24db2630>`);
         if (iconUrl.value) {
           _push(ssrRenderComponent(_component_uimage, {
             class: "icon",
@@ -10094,11 +10094,11 @@ const _sfc_main$1t = /* @__PURE__ */ defineComponent({
         } else {
           _push(`<!---->`);
         }
-        _push(`<span class="model" data-v-ec671916>${ssrInterpolate(__props.model)}</span></span>`);
+        _push(`<span class="model" data-v-24db2630>${ssrInterpolate(__props.model)}</span></span>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`</div><div class="summary-content" data-v-ec671916><p class="text" data-v-ec671916>${ssrInterpolate(unref(cjkSpacing)(__props.content))}</p></div><div class="toggle-action" data-v-ec671916><button class="toggle-btn" data-v-ec671916>`);
+      _push(`</div><div class="summary-content" data-v-24db2630><p class="text" data-v-24db2630>${ssrInterpolate(unref(cjkSpacing)(__props.content))}</p></div><div class="toggle-action" data-v-24db2630><button class="toggle-btn" data-v-24db2630>`);
       if (isExpanded.value) {
         _push(ssrRenderComponent(_component_i18n, {
           zh: "收起",
@@ -10120,7 +10120,7 @@ _sfc_main$1t.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/article/ai-summary.vue");
   return _sfc_setup$1t ? _sfc_setup$1t(props, ctx) : void 0;
 };
-const ArticleAiSummary = /* @__PURE__ */ _export_sfc(_sfc_main$1t, [["__scopeId", "data-v-ec671916"]]);
+const ArticleAiSummary = /* @__PURE__ */ _export_sfc(_sfc_main$1t, [["__scopeId", "data-v-24db2630"]]);
 const _sfc_main$1s = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
