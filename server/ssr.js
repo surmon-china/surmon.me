@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.6";
+const APP_VERSION = "7.4.7";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -18000,7 +18000,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     onMounted(() => {
       nextTick(() => {
         inputRef.value?.focus();
-        const target = messagesListRef.value?.at(-2);
+        const target = messagesListRef.value?.findLast((el) => el.dataset.role === "user");
         const container = messagesContainer.value;
         if (target && container) {
           container.scrollTo({
@@ -18013,11 +18013,11 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-chat" }, _attrs))} data-v-62b36f51><div class="chat-messages" data-v-62b36f51>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-chat" }, _attrs))} data-v-31f451de><div class="chat-messages" data-v-31f451de>`);
       if (!unref(aiAgentStore).messages.length) {
-        _push(`<div class="chat-welcome" data-v-62b36f51>`);
+        _push(`<div class="chat-welcome" data-v-31f451de>`);
         _push(ssrRenderComponent(unref(AiLogoImage), { class: "logo" }, null, _parent));
-        _push(`<p class="text" data-v-62b36f51>`);
+        _push(`<p class="text" data-v-31f451de>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_WELCOME
         }, null, _parent));
@@ -18027,9 +18027,9 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
       }
       _push(`<!--[-->`);
       ssrRenderList(unref(aiAgentStore).messages, (message, index) => {
-        _push(`<div class="${ssrRenderClass([message.role, "message-row"])}" data-v-62b36f51>`);
+        _push(`<div class="${ssrRenderClass([message.role, "message-row"])}"${ssrRenderAttr("data-role", message.role)} data-v-31f451de>`);
         if (message.role === "user") {
-          _push(`<div class="user-bubble" data-v-62b36f51>${ssrInterpolate(message.content)}</div>`);
+          _push(`<div class="user-bubble" data-v-31f451de>${ssrInterpolate(message.content)}</div>`);
         } else {
           _push(`<!---->`);
         }
@@ -18047,7 +18047,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
                     _push2(`<!---->`);
                   }
                   if (message.created_at) {
-                    _push2(`<span class="message-time" data-v-62b36f51${_scopeId}>`);
+                    _push2(`<span class="message-time" data-v-31f451de${_scopeId}>`);
                     _push2(ssrRenderComponent(_component_udate, {
                       date: message.created_at * 1e3,
                       to: "ago"
@@ -18180,15 +18180,15 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
         }
         _push(`</div>`);
       });
-      _push(`<!--]--></div><div class="chat-input" data-v-62b36f51><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiAgentStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_AGENT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-62b36f51>`);
+      _push(`<!--]--></div><div class="chat-input" data-v-31f451de><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiAgentStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_AGENT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-31f451de>`);
       if (unref(aiAgentStore).isStreaming && !isAssistantBubbleTyping.value) {
-        _push(`<button class="submit" data-v-62b36f51>`);
+        _push(`<button class="submit" data-v-31f451de>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_STOP_BUTTON
         }, null, _parent));
         _push(`</button>`);
       } else {
-        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-62b36f51>`);
+        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-31f451de>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_AGENT_SEND_BUTTON
         }, null, _parent));
@@ -18204,7 +18204,7 @@ _sfc_main$B.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/chat.vue");
   return _sfc_setup$B ? _sfc_setup$B(props, ctx) : void 0;
 };
-const AgentChat = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-62b36f51"]]);
+const AgentChat = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-31f451de"]]);
 const _sfc_main$A = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
