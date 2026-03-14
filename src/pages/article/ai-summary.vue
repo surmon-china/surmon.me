@@ -116,11 +116,13 @@
     }
 
     .toggle-action {
+      display: flex;
+      align-items: center;
       position: absolute;
       right: var(--padding-inline);
       bottom: var(--padding-block);
       padding-left: 4em;
-      line-height: 2em;
+      height: 2em;
       cursor: pointer;
       background: linear-gradient(to right, transparent, var(--background-color) 40%);
 
