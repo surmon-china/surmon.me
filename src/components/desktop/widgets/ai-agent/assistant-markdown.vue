@@ -37,6 +37,7 @@
     }
 
     :deep(hr) {
+      margin-block: 0.5em;
       border-color: $module-bg-darker-1;
       border-style: dashed;
     }
