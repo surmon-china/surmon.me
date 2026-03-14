@@ -63,13 +63,14 @@
         margin-right: $gap-sm;
         margin-top: $gap-sm;
         height: $height;
-        line-height: $height;
         font-size: $font-size-secondary;
         font-family: $font-family-normal;
         @include mix.radius-box($radius-xs);
 
         .iconfont {
-          width: 2em;
+          width: $height;
+          height: $height;
+          line-height: $height;
           text-align: center;
           background-color: $module-bg-darker-1;
           @include mix.background-transition();
@@ -77,8 +78,9 @@
 
         .name {
           display: block;
-          padding-left: $gap-xs;
-          padding-right: $gap-xs;
+          height: $height;
+          line-height: $height;
+          padding-inline: $gap-xs;
           @include mix.background-transition();
 
           .count {
