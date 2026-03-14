@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.4";
+const APP_VERSION = "7.4.5";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
