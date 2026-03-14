@@ -458,7 +458,7 @@
     --markdown-blockquote-padding-right: 1em;
     --markdown-blockquote-border-width: 0.5em;
     --markdown-list-padding-left: 3em;
-    --markdown-list-li-block-gap: 0.5em;
+    --markdown-list-li-block-gap: 0.75em;
   }
 
   .markdown-html-compact {
