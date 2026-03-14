@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.3";
+const APP_VERSION = "7.4.4";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -6264,7 +6264,7 @@ const createCodeRenderer = (renderer, options) => {
     const code = text.replace(/\n$/, "");
     const langString = (lang || "").match(/^\S*/)?.[0];
     const getLineNumbersElement = () => {
-      return `<ul class="code-lines">${code.split("\n").map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, " ")).join("")}</ul>`;
+      return `<div class="code-lines">${code.split("\n").map((_, i) => `<span class="code-line-number">${i + 1}</span>`.replace(/\s+/g, " ")).join("")}</div>`;
     };
     return `
       <pre ${langString ? `data-lang="${langString}"` : ""}>
@@ -6287,7 +6287,7 @@ const createCodeRenderer = (renderer, options) => {
 };
 const createCheckboxRenderer = (render, options) => {
   return function({ checked }) {
-    return checked ? `<i class="checkbox iconfont icon-checkbox-selected checked"></i>` : `<i class="checkbox iconfont icon-checkbox-unselected"></i>`;
+    return checked ? `<i class="checkbox iconfont icon-checkbox-selected"></i>` : `<i class="checkbox iconfont icon-checkbox-unselected"></i>`;
   };
 };
 const verseConfig = {
@@ -6437,6 +6437,15 @@ const createParagraphRenderer = (renderer, options) => {
     return hasImage ? html : `<p>${html}</p>`;
   };
 };
+const createListItemRenderer = (renderer, options) => {
+  return function(item) {
+    const firstTokenType = item.tokens[0]?.type;
+    const dataType = firstTokenType ? ` data-type="${firstTokenType}"` : "";
+    const html = renderer.parser.parse(item.tokens);
+    return `<li${dataType}>${html}</li>
+`;
+  };
+};
 const createLinkRenderer = (renderer, options) => {
   return function({ href, title, tokens, text: _text }) {
     const text = renderer.parser.parseInline(tokens);
@@ -6465,6 +6474,7 @@ const createRenderer = (options) => {
   renderer.heading = createHeadingRenderer(renderer, options);
   renderer.paragraph = createParagraphRenderer(renderer);
   renderer.checkbox = createCheckboxRenderer();
+  renderer.listitem = createListItemRenderer(renderer);
   renderer.link = createLinkRenderer(renderer, options);
   renderer.image = createImageRenderer(renderer, options);
   renderer.code = createCodeRenderer(renderer, options);
