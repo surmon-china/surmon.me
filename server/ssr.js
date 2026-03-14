@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.5";
+const APP_VERSION = "7.4.6";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17733,7 +17733,7 @@ _sfc_main$H.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-markdown.vue");
   return _sfc_setup$H ? _sfc_setup$H(props, ctx) : void 0;
 };
-const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-e3ed06c4"]]);
+const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-524a809f"]]);
 const _sfc_main$G = /* @__PURE__ */ defineComponent({
   __name: "message-typewriter",
   __ssrInlineRender: true,
