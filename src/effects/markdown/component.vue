@@ -199,7 +199,7 @@
         > ul,
         > ol {
           padding-left: 1em;
-          margin-top: 0.5em;
+          margin-top: var(--markdown-list-li-block-gap);
           &:last-child {
             margin-bottom: 0;
           }
