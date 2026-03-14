@@ -60,17 +60,19 @@ export const createMusicPlayer = (config: MusicPlayerConfig) => {
   }
 
   const play = (index?: number) => {
-    if (index != null) {
-      state.index = index
+    const targetIndex = index ?? state.index
+
+    if (index != null || !audio.src) {
+      audio.pause()
+      state.index = targetIndex
       state.currentTime = 0
       state.progress = 0
-      audio.src = playlist.songs[index].url
-      // https://developer.chrome.com/blog/play-request-was-interrupted/
-      audio.play().catch(() => {})
-    } else {
-      // https://developer.chrome.com/blog/play-request-was-interrupted/
-      audio.play().catch(() => {})
+      audio.src = playlist.songs[targetIndex].url
+      audio.load()
     }
+
+    // https://developer.chrome.com/blog/play-request-was-interrupted/
+    audio.play().catch(() => {})
   }
 
   const prevSong = () => {
@@ -119,7 +121,7 @@ export const createMusicPlayer = (config: MusicPlayerConfig) => {
 
   audio.addEventListener('timeupdate', () => {
     state.currentTime = audio.currentTime
-    state.progress = audio.currentTime / audio.duration
+    state.progress = audio.duration ? audio.currentTime / audio.duration : 0
   })
 
   audio.addEventListener('error', () => {
@@ -129,18 +131,22 @@ export const createMusicPlayer = (config: MusicPlayerConfig) => {
     // amplitude.removeSong(state.index)
     // But still maintains a list for external use
     playlist.unplayableIndexs.push(state.index)
+    if (playlist.unplayableIndexs.length >= playlist.total) {
+      config.logger.warn('All songs unplayable, stopping.')
+      return
+    }
     // Network blocking can cause interruptions to neighboring subsequent requests,
     // so there needs to be a delay in performing the next operation to avoid waterfall requests.
     window.setTimeout(nextSong, 1668)
   })
 
   const init = async () => {
+    if (state.initialized) return
     try {
       playlist.fetching = true
       playlist.songs = await tunnel.fetch<Song[]>(TunnelModule.NetEaseMusic)
       playlist.total = playlist.songs.length
       if (playlist.total) {
-        audio.src = playlist.songs[state.index].url
         state.initialized = true
       } else {
         throw 'Empty playlist!'

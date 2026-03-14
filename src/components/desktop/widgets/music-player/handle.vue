@@ -51,7 +51,11 @@
         >
           <i class="iconfont" :class="state.muted ? 'icon-music-muted' : 'icon-music-unmuted'"></i>
         </button>
-        <button class="button player" @click="handleOpenModel" @mousedown="handleAnyOperate('open player model')">
+        <button
+          class="button player"
+          @click="handleOpenModel"
+          @mousedown="handleAnyOperate('open player model')"
+        >
           <i class="iconfont icon-netease-music"></i>
         </button>
       </div>
