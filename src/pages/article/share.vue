@@ -4,12 +4,11 @@
   import { Article } from '/@/interfaces/article'
   import { useEnhancer } from '/@/app/enhancer'
   import { numberSplit } from '/@/transforms/text'
-  import { getMarkdownSplitIndex } from '/@/transforms/markdown'
+  import { getMarkdownSplitIndex, Markdown } from '/@/effects/markdown'
   import { getArticleDetailRoute } from '/@/transforms/route'
   import { getOriginalProxyURL, getSiteURL } from '/@/transforms/url'
   import { renderTextToQRCodeDataURL } from '/@/transforms/qrcode'
   import BaseShare, { SocialMedia } from '/@/components/common/share.vue'
-  import Markdown from '/@/components/common/markdown.vue'
 
   const props = defineProps({
     article: {
@@ -270,7 +269,7 @@
         }
 
         .markdown {
-          font-size: $font-size-h4;
+          --markdown-font-size: #{$font-size-h4};
         }
 
         .read-more-mask {

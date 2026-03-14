@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { shallowRef, onMounted } from 'vue'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
   import vanilla from '/@/services/vanilla'
 
   const content = shallowRef<string>()
@@ -15,7 +15,9 @@
 
 <template>
   <div class="privacy">
-    <markdown class="content" :markdown="content" :compact="true" />
+    <div class="content">
+      <markdown :markdown="content" :compact="true" />
+    </div>
   </div>
 </template>
 

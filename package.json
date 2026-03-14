@@ -41,6 +41,7 @@
     "marked-highlight": "^2.2.x",
     "marked-mangle": "^1.1.x",
     "marked-xhtml": "^1.0.x",
+    "pangu": "^7.x",
     "pinia": "^3.x",
     "qrcode": "^1.5.x",
     "rss": "^1.2.2",

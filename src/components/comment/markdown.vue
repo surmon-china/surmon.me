@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
   const props = defineProps<{ content: string }>()
 </script>
 
@@ -19,8 +19,8 @@
 
   .comment-markdown {
     --markdown-block-gap: 0.5em;
-    --markdown-list-li-block-gap: 0.25em;
-    --markdown-list-left-padding: 1em;
+    --markdown-list-li-block-gap: 0.1em;
+    --markdown-list-padding-left: 1em;
   }
 
   .comment-markdown {
@@ -30,7 +30,7 @@
       margin-top: 0.2em;
     }
 
-    > :is(blockquote, pre, .figure-wrapper):first-child {
+    > :is(blockquote, pre, table, .figure-wrapper):first-child {
       margin-top: 0.5em;
     }
 

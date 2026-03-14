@@ -5,7 +5,7 @@
   import { useArticleDetailStore } from '/@/stores/article-detail'
   import { isOriginalArticle, isHybridArticle, isReprintArticle } from '/@/transforms/article'
   import { numberSplit } from '/@/transforms/text'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
 
   const props = defineProps<{
     article: Article

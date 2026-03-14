@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import type { ThreadsMedia } from '/@/server/getters/threads'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
   import { useThreadsMediaUrl } from '../threads'
 
   const props = defineProps<{
@@ -81,13 +81,7 @@
 
     .content {
       padding: $gap-tiny 0.7em;
-
-      ::v-deep(p) {
-        margin-bottom: $gap-xs;
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
+      --markdown-block-gap: 0.5em;
     }
 
     .footer {

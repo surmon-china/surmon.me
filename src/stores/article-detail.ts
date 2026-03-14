@@ -11,7 +11,7 @@ import { useIdentityStore } from './identity'
 import { useTokenStore } from './token'
 import { Article, ArticleListItem } from '/@/interfaces/article'
 import { getArticleContentHeadingElementId, getArticleHeadingUrlHash } from '/@/constants/element-anchor'
-import { markdownToHTML, getMarkdownSplitIndex, MarkdownRenderOption } from '/@/transforms/markdown'
+import { getMarkdownSplitIndex, renderMarkdownToHTML, type RenderMarkdownOptions } from '/@/effects/markdown'
 import { getStaticURL, getStaticPath, isOriginalStaticURL } from '/@/transforms/url'
 import { delayPromise } from '/@/utils/delayer'
 import { isClient } from '/@/configs/app.env'
@@ -30,10 +30,10 @@ interface ArticleHeading {
 // Use the parsing capabilities of the marked renderer to store the results in the store..
 const renderArticleMarkdown = (
   markdown: string,
-  imageSourceGetter: MarkdownRenderOption['imageSourceGetter']
+  imageSourceGetter: RenderMarkdownOptions['imageSourceGetter']
 ) => {
   const headings: Array<ArticleHeading> = []
-  const html = markdownToHTML(markdown, {
+  const html = renderMarkdownToHTML(markdown, {
     sanitize: false,
     imageSourceGetter,
     headingIdentifierGetter: (level, text) => {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
   import { getEmailLink } from '/@/transforms/email'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
 
   const { appOptions } = useEnhancer()
 </script>

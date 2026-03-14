@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import type { ThreadsMedia } from '/@/server/getters/threads'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { type ThreadsMedia } from '/@/server/getters/threads'
+  import { Markdown } from '/@/effects/markdown'
   import { useThreadsMediaUrl } from '../threads'
 
   const props = defineProps<{
@@ -59,7 +59,7 @@
   .threads-media-body {
     &:hover {
       .text {
-        color: $color-link;
+        color: $color-link-hover;
       }
 
       .audio,

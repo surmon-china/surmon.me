@@ -4,7 +4,6 @@
   import { useAdminProfileStore } from '/@/stores/foundation'
   import { getAssetURL } from '/@/transforms/url'
   import { getEmailLink } from '/@/transforms/email'
-  import { markdownToHTML } from '/@/transforms/markdown'
   import { APP_PROFILE } from '/@/configs/app.config'
   import { useAdminAvatar } from '../shared'
 
@@ -12,7 +11,7 @@
     (event: 'gTagEvent', name: string): void
   }>()
 
-  const { globalState, appOptions, appConfig, goLinks, cdnDomain, isZhLang } = useEnhancer()
+  const { appOptions, goLinks, cdnDomain, isZhLang } = useEnhancer()
   const adminProfileStore = useAdminProfileStore()
 
   const emailLink = getEmailLink({
@@ -103,21 +102,7 @@
         </div>
       </div>
       <div class="container">
-        <div
-          class="biography"
-          :class="
-            isZhLang
-              ? 'zh'
-              : globalState.userAgent.isFirefox || globalState.userAgent.isSafari
-                ? 'en-hack'
-                : 'en'
-          "
-          v-html="
-            markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
-              sanitize: false
-            })
-          "
-        ></div>
+        <slot name="bottom"></slot>
       </div>
     </div>
   </div>
@@ -403,52 +388,6 @@
           }
           &.email {
             background-color: $surmon;
-          }
-        }
-      }
-
-      .biography {
-        margin: 0;
-        padding: $gap-sm * 1.8 $gap;
-        text-indent: 2em;
-        font-weight: 600;
-        color: $color-text-secondary;
-        @include mix.color-transition($motion-duration-mid);
-        &:hover {
-          color: $color-text;
-        }
-
-        &.zh {
-          font-size: $font-size-base + 1;
-          line-height: $line-height-base * 1.9;
-        }
-
-        &.en {
-          font-size: $font-size-base + 2;
-          line-height: $line-height-base * 1.8;
-        }
-
-        &.en-hack {
-          font-size: $font-size-base + 1.4;
-          line-height: $line-height-base * 1.9;
-        }
-
-        &::first-letter {
-          line-height: 1;
-          font-weight: bold;
-          font-size: $font-size-h2;
-          color: $color-text-darker;
-        }
-
-        ::v-deep(a) {
-          text-decoration: underline;
-          text-underline-offset: 0.4em;
-          text-decoration-style: dotted;
-        }
-
-        ::v-deep(p) {
-          &:last-child {
-            margin-bottom: 0;
           }
         }
       }

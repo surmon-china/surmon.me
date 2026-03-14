@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
-  import Markdown from '/@/components/common/markdown.vue'
+  import { Markdown } from '/@/effects/markdown'
 
   const avatarMap = {
     chatgpt3: '/images/ai-providers/chatgpt-3.webp',

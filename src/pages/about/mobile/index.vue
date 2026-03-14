@@ -1,10 +1,11 @@
 <script lang="ts" setup>
+  import { computed } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
   import { useAdminProfileStore } from '/@/stores/foundation'
+  import { useUniversalFetch } from '/@/app/universal'
   import { LocalesKey } from '/@/locales'
   import { RouteName } from '/@/app/router'
-  import { markdownToHTML } from '/@/transforms/markdown'
-  import { useUniversalFetch } from '/@/app/universal'
+  import { renderMarkdownToHTML } from '/@/effects/markdown'
   import { getPageRoute } from '/@/transforms/route'
   import { useAboutPageMeta, useAdminAvatar, i18ns } from '../shared'
   import { APP_PROFILE, BFF_CONFIG } from '/@/configs/app.config'
@@ -12,6 +13,11 @@
 
   const { appConfig, goLinks, isZhLang } = useEnhancer()
   const adminProfileStore = useAdminProfileStore()
+
+  const biographyHtml = computed(() => {
+    const markdown = isZhLang.value ? appConfig.value.ABOUT_BIOGRAPHY_ZH : appConfig.value.ABOUT_BIOGRAPHY_EN
+    return renderMarkdownToHTML(markdown ?? '', { sanitize: false })
+  })
 
   useAboutPageMeta()
   useUniversalFetch(() => adminProfileStore.fetch())
@@ -59,15 +65,7 @@
     <div class="biography">
       <div class="bridge left"></div>
       <div class="bridge right"></div>
-      <div
-        class="content"
-        :class="isZhLang ? 'zh' : 'en'"
-        v-html="
-          markdownToHTML((isZhLang ? appConfig.ABOUT_BIOGRAPHY_ZH : appConfig.ABOUT_BIOGRAPHY_EN) ?? '', {
-            sanitize: false
-          })
-        "
-      ></div>
+      <div class="content" :class="isZhLang ? 'zh' : 'en'" v-html="biographyHtml"></div>
     </div>
     <div class="buttons">
       <router-link class="item" :to="getPageRoute(RouteName.Archive)">

@@ -15,6 +15,7 @@
   import YoutubeMedia from './media/youtube.vue'
   import AggregateCalendar from './calendar/index.vue'
   import FootprintMap from './footprint/index.vue'
+  import AboutBiography from './biography.vue'
   import AboutPageBanner from './banner.vue'
   import { useAboutPageMeta, i18ns } from '../shared'
 
@@ -114,7 +115,11 @@
 
 <template>
   <div class="about-page">
-    <about-page-banner @g-tag-event="handleGTagEvent" />
+    <about-page-banner @g-tag-event="handleGTagEvent">
+      <template #bottom>
+        <about-biography />
+      </template>
+    </about-page-banner>
     <div class="page-content">
       <div class="container">
         <div class="module-buttons">

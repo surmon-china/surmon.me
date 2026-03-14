@@ -1,12 +1,12 @@
 <script lang="ts" setup>
   import { useLozad } from '/@/composables/lozad'
-  import { markdownToHTML, MarkdownRenderOption } from '/@/transforms/markdown'
+  import { renderMarkdownToHTML, RenderMarkdownOptions } from './render'
 
   const props = defineProps<{
     html?: string
     markdown?: string
     compact?: boolean
-    renderOptions?: MarkdownRenderOption
+    renderOptions?: RenderMarkdownOptions
   }>()
 
   const { element } = useLozad()
@@ -15,9 +15,9 @@
 <template>
   <section
     ref="element"
-    :class="['global-markdown-html', { compact }]"
-    v-html="props.markdown ? markdownToHTML(props.markdown, props.renderOptions) : props.html || ''"
-  ></section>
+    :class="compact ? 'markdown-html-compact' : 'markdown-html-normal'"
+    v-html="markdown ? renderMarkdownToHTML(markdown, renderOptions) : html || ''"
+  />
 </template>
 
 <style lang="scss">
@@ -25,15 +25,8 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .global-markdown-html {
-    --markdown-font-size: #{$font-size-base * 1.05};
-    --markdown-line-text-indent: 2em;
-    --markdown-line-line-height: 2.2;
-    --markdown-heading-line-height: #{$line-height-loose};
-    --markdown-list-left-padding: 3em;
-    --markdown-list-li-block-gap: 0.5em;
-    --markdown-block-gap: 1em;
-
+  .markdown-html-normal,
+  .markdown-html-compact {
     font-size: var(--markdown-font-size);
 
     p,
@@ -60,8 +53,8 @@
     }
 
     p {
-      text-indent: var(--markdown-line-text-indent);
-      line-height: var(--markdown-line-line-height);
+      text-indent: var(--markdown-paragraph-text-indent);
+      line-height: var(--markdown-paragraph-line-height);
     }
 
     a {
@@ -73,8 +66,8 @@
       }
 
       &.image-link {
-        margin: 0;
         border: 0;
+        text-decoration: none;
       }
     }
 
@@ -122,9 +115,9 @@
     }
 
     blockquote {
-      padding-left: 1.5em;
-      padding-right: 1em;
-      border-left: 0.5em solid $module-bg-darker-1;
+      padding-left: var(--markdown-blockquote-padding-left);
+      padding-right: var(--markdown-blockquote-padding-right);
+      border-left: var(--markdown-blockquote-border-width) solid $module-bg-darker-1;
       font-style: italic;
 
       p {
@@ -161,13 +154,17 @@
 
     ul:not(.code-lines),
     ol {
-      padding-left: var(--markdown-list-left-padding);
+      padding-left: var(--markdown-list-padding-left);
 
       > li {
         line-height: 2em;
         padding-left: 0.25em;
         margin-bottom: var(--markdown-list-li-block-gap);
         &:last-child {
+          margin-bottom: 0;
+        }
+
+        > :last-child {
           margin-bottom: 0;
         }
 
@@ -451,19 +448,32 @@
     }
   }
 
-  .global-markdown-html.compact {
-    --markdown-font-size: #{$font-size-base};
-    --markdown-line-text-indent: 0;
-    --markdown-line-line-height: 2;
-    --markdown-list-left-padding: 2em;
+  .markdown-html-normal {
+    --markdown-block-gap: 1em;
+    --markdown-font-size: #{$font-size-base * 1.05};
+    --markdown-heading-line-height: #{$line-height-loose};
+    --markdown-paragraph-text-indent: 2em;
+    --markdown-paragraph-line-height: 2.2;
+    --markdown-blockquote-padding-left: 1.5em;
+    --markdown-blockquote-padding-right: 1em;
+    --markdown-blockquote-border-width: 0.5em;
+    --markdown-list-padding-left: 3em;
+    --markdown-list-li-block-gap: 0.5em;
+  }
+
+  .markdown-html-compact {
     --markdown-block-gap: 0.75em;
+    --markdown-font-size: #{$font-size-base};
+    --markdown-heading-line-height: #{$line-height-loose};
+    --markdown-paragraph-text-indent: 0;
+    --markdown-paragraph-line-height: 2;
+    --markdown-blockquote-padding-left: 1em;
+    --markdown-blockquote-padding-right: 0.5em;
+    --markdown-blockquote-border-width: 0.5em;
+    --markdown-list-padding-left: 2em;
+    --markdown-list-li-block-gap: 0.5em;
 
     word-wrap: break-word;
-
-    blockquote {
-      padding-left: 1em;
-      padding-right: 0.5em;
-    }
 
     .figure-wrapper {
       justify-content: start;
