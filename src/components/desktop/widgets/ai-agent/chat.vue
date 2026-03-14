@@ -5,7 +5,10 @@
   import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
   import { LocalesKey } from '/@/locales'
   import { AiLogoImage } from './logo'
-  import AssistantBubble from './assistant-bubble/index.vue'
+  import AssistantWrapper from './assistant-wrapper.vue'
+  import AssistantMarkdown from './assistant-markdown.vue'
+  import AssistantStream from './assistant-stream/index.vue'
+  import AssistantError from './assistant-error.vue'
 
   const messagesContainer = shallowRef<HTMLElement | null>(null)
   const messagesListRef = shallowRef<HTMLElement[] | null>(null)
@@ -13,7 +16,6 @@
 
   const { i18n: _i18n } = useEnhancer()
   const aiAgentStore = useAiAgentStore()
-  const lastMessageIndex = computed(() => aiAgentStore.messages.length - 1)
 
   const input = ref('')
   const hasInputValue = computed(() => input.value.length >= 3)
@@ -35,14 +37,20 @@
     scrollToMessagesBottom()
   }
 
+  const handleWaitingStateChange = () => {
+    nextTick(() => {
+      requestAnimationFrame(() => {
+        scrollToMessagesBottom()
+      })
+    })
+  }
+
   const handleStop = () => {
     aiAgentStore.abortStreaming()
-    scrollToMessagesBottom()
   }
 
   const handleSend = () => {
     if (!hasInputValue.value) return
-    if (isAssistantBubbleTyping.value) return
     aiAgentStore.sendMessage(input.value.trim())
     input.value = ''
     nextTick(() => scrollToMessagesBottom())
@@ -78,20 +86,48 @@
       </div>
       <div
         ref="messagesListRef"
-        :class="['message-row', message.role]"
+        class="message-row"
+        :class="message.role"
         v-for="(message, index) in aiAgentStore.messages"
         :key="index"
       >
         <div v-if="message.role === 'user'" class="user-bubble">{{ message.content }}</div>
-        <assistant-bubble
-          v-if="message.role === 'assistant'"
-          class="assistant-bubble"
-          :message="message"
-          :streaming="index === lastMessageIndex && aiAgentStore.isStreaming"
-          :tool-calls="index === lastMessageIndex ? aiAgentStore.streaming.toolCalls : []"
-          @typing-tick="handleAssistantBubbleTypingTick"
-          @typing-done="handleAssistantBubbleTypingDone"
-        />
+        <template v-if="message.role === 'assistant'">
+          <assistant-wrapper class="assistant-bubble" v-if="!message.transient">
+            <assistant-markdown :content="message.content" v-if="message.content" />
+            <span class="message-time" v-if="message.created_at">
+              <udate :date="message.created_at * 1000" to="ago" />
+            </span>
+          </assistant-wrapper>
+          <assistant-wrapper
+            class="assistant-bubble"
+            :danger="!!message.error"
+            v-else-if="index !== aiAgentStore.messages.length - 1"
+          >
+            <assistant-error :error="message.error" v-if="message.error" />
+            <assistant-markdown :content="message.content" v-if="message.content" />
+          </assistant-wrapper>
+          <assistant-wrapper
+            class="assistant-bubble"
+            :animating="aiAgentStore.isStreaming"
+            :danger="!!message.error"
+            v-else
+          >
+            <assistant-stream
+              :content="message.content"
+              :streaming="aiAgentStore.isStreaming"
+              :tool-waiting="aiAgentStore.streaming.toolWaiting"
+              :tool-calls="aiAgentStore.streaming.toolCalls"
+              @typing-tick="handleAssistantBubbleTypingTick"
+              @typing-done="handleAssistantBubbleTypingDone"
+              @waiting-state-change="handleWaitingStateChange"
+            >
+              <template #error>
+                <assistant-error :error="message.error" v-if="message.error" />
+              </template>
+            </assistant-stream>
+          </assistant-wrapper>
+        </template>
       </div>
     </div>
     <div class="chat-input">
@@ -190,9 +226,27 @@
         }
 
         .assistant-bubble {
+          position: relative;
           padding: $gap-sm;
           border-radius: $radius-md;
           border-top-left-radius: $radius-tiny;
+
+          &:hover {
+            .message-time {
+              @include mix.visible();
+            }
+          }
+
+          .message-time {
+            position: absolute;
+            top: -1.2rem;
+            left: $gap-tiny;
+            font-size: $font-size-quaternary;
+            color: $color-text-disabled;
+            white-space: nowrap;
+            @include mix.visibility-transition();
+            @include mix.hidden();
+          }
         }
       }
     }

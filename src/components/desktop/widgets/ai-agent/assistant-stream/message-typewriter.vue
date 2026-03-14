@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref, watch, onUnmounted } from 'vue'
-  import MessageMarkdown from './message-markdown.vue'
+  import AssistantMarkdown from '../assistant-markdown.vue'
 
   const props = defineProps<{ content: string }>()
   const emit = defineEmits<{ tick: []; done: [] }>()
@@ -12,7 +12,8 @@
     if (timer !== null) return
     timer = setInterval(() => {
       if (displayed.value.length < props.content.length) {
-        displayed.value = props.content.slice(0, displayed.value.length + 1)
+        const step = Math.max(1, Math.floor(props.content.length / 200))
+        displayed.value = props.content.slice(0, displayed.value.length + step)
         emit('tick')
       } else {
         clearInterval(timer!)
@@ -33,27 +34,5 @@
 </script>
 
 <template>
-  <div class="message-typewriter">
-    <message-markdown :content="displayed" />
-    <p class="cursor">▋</p>
-  </div>
+  <assistant-markdown class="message-typewriter" :content="displayed" />
 </template>
-
-<style lang="scss" scoped>
-  .message-typewriter {
-    .cursor {
-      margin: 0;
-      animation: blink 1s step-end infinite;
-    }
-  }
-
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-</style>

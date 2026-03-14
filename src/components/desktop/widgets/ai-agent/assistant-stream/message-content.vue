@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, watch, nextTick } from 'vue'
-  import Markdown from './message-markdown.vue'
-  import Typewriter from './message-typewriter.vue'
+  import AssistantMarkdown from '../assistant-markdown.vue'
+  import MessageTypewriter from './message-typewriter.vue'
 
   const props = defineProps<{
     content: string
@@ -11,7 +11,7 @@
   const emit = defineEmits<{ typingTick: []; typingDone: [] }>()
 
   const typingDone = ref(!props.streaming)
-  const typewriterDone = ref(false)
+  const typewriterDone = ref(!props.streaming)
 
   const handleTypingTick = () => emit('typingTick')
   const handleTypingDone = () => {
@@ -39,17 +39,11 @@
 </script>
 
 <template>
-  <typewriter
+  <message-typewriter
     v-if="streaming || !typingDone"
     :content="content"
     @tick="handleTypingTick"
     @done="handleTypingDone"
   />
-  <markdown :content="content" v-else />
+  <assistant-markdown :content="content" v-else />
 </template>
-
-<style lang="scss" scoped>
-  @use '/src/styles/base/variables' as *;
-  @use '/src/styles/base/functions' as funs;
-  @use '/src/styles/base/mixins' as mix;
-</style>

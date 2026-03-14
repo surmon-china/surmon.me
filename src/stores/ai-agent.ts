@@ -7,6 +7,7 @@
 import { defineStore } from 'pinia'
 import { ref, shallowRef, reactive, computed, readonly } from 'vue'
 import { useIdentityStore } from './identity'
+import { Language } from '/@/locales'
 import { LocalStorageKey } from '/@/constants/storage-key'
 import localstorage from '/@/utils/storage'
 import aiAgent from '/@/services/ai-agent'
@@ -14,11 +15,21 @@ import API_CONFIG from '/@/configs/app.api'
 
 const TOKEN_HEADER_NAME = 'X-Token'
 
+// https://github.com/surmon-china/surmon.me.ai
+export const toolI18nMap: Record<string, Record<Language.Chinese | Language.English, string>> = {
+  getBlogList: { zh: '正在检索博客列表...', en: 'Fetching blog list...' },
+  getArticleDetail: { zh: '正在阅读文章内容...', en: 'Reading article...' },
+  askKnowledgeBase: { zh: '正在翻阅信息库...', en: 'Searching knowledge base...' },
+  getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' }
+}
+
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
   // For new message create from store
   created_at: number | null
+  // For new message create from store
+  transient?: boolean
   // For assistant message error state
   error?: string | null
 }
@@ -32,6 +43,7 @@ export interface ToolCall {
 export interface StreamingState {
   status: 'idle' | 'streaming' | 'error'
   toolCalls: ToolCall[]
+  toolWaiting: boolean
   abortController: AbortController | null
 }
 
@@ -48,6 +60,7 @@ export const useAiAgentStore = defineStore('ai-agent', () => {
   const streaming = reactive<StreamingState>({
     status: 'idle',
     toolCalls: [],
+    toolWaiting: false,
     abortController: null
   })
 
@@ -66,18 +79,21 @@ export const useAiAgentStore = defineStore('ai-agent', () => {
     messages.value.push({
       role: 'user',
       content: message,
+      transient: true,
       created_at: null
     } satisfies ChatMessage)
 
     // Assistant message states
     streaming.status = 'streaming'
     streaming.toolCalls = []
+    streaming.toolWaiting = false
     streaming.abortController = new AbortController()
 
     // New assistant message
     messages.value.push({
       role: 'assistant',
       content: '',
+      transient: true,
       created_at: null,
       error: null
     })
@@ -127,16 +143,21 @@ export const useAiAgentStore = defineStore('ai-agent', () => {
           try {
             const data = JSON.parse(raw)
             if (data.type === 'text') {
-              assistantMessage.content += data.content
+              const fromToolWaiting = streaming.toolWaiting
+              streaming.toolWaiting = false
+              assistantMessage.content += fromToolWaiting ? '\n\n' + data.content : data.content
             } else if (data.type === 'tool_start') {
               streaming.toolCalls.push({
-                id: data.name,
+                id: data.id,
                 name: data.name,
                 status: 'calling'
               })
             } else if (data.type === 'tool_end') {
-              const last = streaming.toolCalls.at(-1)
-              if (last) last.status = 'done'
+              const tool = streaming.toolCalls.find(({ id }) => id === data.id)
+              if (tool) tool.status = 'done'
+              if (streaming.toolCalls.every(({ status }) => status === 'done')) {
+                streaming.toolWaiting = true
+              }
             } else if (data.type === 'done') {
               streaming.status = 'idle'
             } else if (data.type === 'error') {
