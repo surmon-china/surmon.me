@@ -6,8 +6,9 @@ export const createListItemRenderer = (
   options?: CreateRendererOptions
 ): RendererApi['listitem'] => {
   return function (item) {
-    const firstType = item.tokens[0].type
+    const firstTokenType = item.tokens[0]?.type
+    const dataType = firstTokenType ? ` data-type="${firstTokenType}"` : ''
     const html = renderer.parser.parse(item.tokens)
-    return `<li data-type="${firstType}">${html}</li>\n`
+    return `<li${dataType}>${html}</li>\n`
   }
 }
