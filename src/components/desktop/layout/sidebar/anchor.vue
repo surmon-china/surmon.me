@@ -193,13 +193,16 @@
 
         .item {
           cursor: pointer;
-          line-height: 2.4em;
+          line-height: 2.4;
           @include mix.scroll-snap-item();
           @include mix.text-overflow();
           &:hover {
-            color: $primary;
             .iconfont {
               color: $primary;
+            }
+            .text {
+              color: $primary;
+              text-emphasis-color: $primary;
             }
           }
 
@@ -209,8 +212,9 @@
           }
 
           .text {
-            @include mix.text-underline(0.4em);
-            text-decoration-style: dotted;
+            text-emphasis-style: '•';
+            text-emphasis-position: under;
+            text-emphasis-color: $color-text-divider;
           }
 
           &.level-2 {
@@ -233,6 +237,7 @@
             margin-top: $gap-tiny;
             .text {
               font-weight: bold;
+              text-emphasis: none;
             }
           }
         }
