@@ -69,17 +69,22 @@
     margin-right: $gap-sm;
 
     .username {
+      $underline-offset: 0.3em;
       text-transform: capitalize;
       font-weight: bold;
+      // Text overflow ellipsis
       max-width: 8rem;
       @include mix.text-overflow();
+      // Avoid underline being obscured
+      padding-bottom: $underline-offset;
+      margin-bottom: -$underline-offset;
+
+      &.link:hover {
+        @include mix.text-underline($underline-offset);
+      }
 
       &.ghost {
         color: $color-text-disabled;
-      }
-
-      &.link:hover {
-        @include mix.text-underline();
       }
     }
 
