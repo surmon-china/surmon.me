@@ -14,7 +14,7 @@ const markedWithSpacing = createMarked().use({
 })
 
 export interface RenderMarkdownOptions extends Partial<CreateRendererOptions> {
-  chineseSpacing?: boolean
+  cjkSpacing?: boolean
 }
 
 export const renderMarkdownToHTML = (markdown: string, options?: RenderMarkdownOptions) => {
@@ -22,7 +22,7 @@ export const renderMarkdownToHTML = (markdown: string, options?: RenderMarkdownO
     return ''
   }
 
-  const _marked = options?.chineseSpacing ? markedWithSpacing : markedDefault
+  const _marked = options?.cjkSpacing ? markedWithSpacing : markedDefault
   const _renderer = createRenderer({
     ...options,
     sanitize: options?.sanitize ?? false,
