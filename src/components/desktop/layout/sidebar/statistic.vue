@@ -4,7 +4,7 @@
   import { RouteName } from '/@/app/router'
   import { LocalesKey } from '/@/locales'
 
-  const StatisticsSkeleton = defineComponent({
+  const StatisticsCount = defineComponent({
     props: {
       fetching: Boolean,
       count: Number
@@ -32,21 +32,21 @@
 <template>
   <router-link class="statistic" :to="{ name: RouteName.Archive }">
     <div class="item">
-      <statistics-skeleton :fetching="fetching" :count="statisticStore.data?.articles" />
+      <statistics-count :fetching="fetching" :count="statisticStore.data?.articles" />
       <span class="label">
         <i18n :k="LocalesKey.STATISTIC_ARTICLES" />
       </span>
     </div>
     <divider type="vertical" size="sm" />
     <div class="item">
-      <statistics-skeleton :fetching="fetching" :count="statisticStore.data?.todayViews" />
+      <statistics-count :fetching="fetching" :count="statisticStore.data?.todayViews" />
       <span class="label">
         <i18n :k="LocalesKey.STATISTIC_TODAY_VIEWS" />
       </span>
     </div>
     <divider type="vertical" size="sm" />
     <div class="item">
-      <statistics-skeleton :fetching="fetching" :count="statisticStore.data?.comments" />
+      <statistics-count :fetching="fetching" :count="statisticStore.data?.comments" />
       <span class="label">
         <i18n :k="LocalesKey.STATISTIC_COMMENTS" />
       </span>
@@ -91,6 +91,7 @@
       }
 
       .skeleton {
+        letter-spacing: 2px;
         font-size: $font-size-h2;
         animation: skeleton 0.8s linear alternate infinite;
         @keyframes skeleton {
