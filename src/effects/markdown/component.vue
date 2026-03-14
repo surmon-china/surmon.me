@@ -128,31 +128,51 @@
       }
     }
 
-    > ul {
+    ul {
       list-style: none;
 
       > li {
         position: relative;
-        &:hover {
-          &::before {
-            color: $color-text;
+
+        &[data-type='checkbox'] {
+          &:hover {
+            > .checkbox {
+              color: $color-text;
+            }
+          }
+
+          > .checkbox {
+            position: absolute;
+            top: 0;
+            left: -1.35em;
+            line-height: inherit;
+            color: $color-text-secondary;
+            @include mix.color-transition();
           }
         }
 
-        &::before {
-          content: '■';
-          font-size: 8px;
-          position: absolute;
-          left: calc(-2em + 2px);
-          top: 0;
-          line-height: inherit;
-          color: $color-text-secondary;
-          @include mix.color-transition();
+        &:not([data-type='checkbox']) {
+          &:hover {
+            &::before {
+              color: $color-text;
+            }
+          }
+
+          &::before {
+            content: '■';
+            font-size: 8px;
+            position: absolute;
+            top: 0;
+            left: calc(-2em + 2px);
+            line-height: inherit;
+            color: $color-text-secondary;
+            @include mix.color-transition();
+          }
         }
       }
     }
 
-    ul:not(.code-lines),
+    ul,
     ol {
       padding-left: var(--markdown-list-padding-left);
 
@@ -170,10 +190,6 @@
 
         > p {
           text-indent: 0;
-        }
-
-        > ul {
-          list-style: circle;
         }
 
         > ol {
@@ -234,8 +250,8 @@
     iframe {
       width: 100%;
       min-height: 320px;
-      padding: $gap-tiny;
-      border-radius: $radius-xs;
+      padding: $gap-xs;
+      border-radius: $radius-sm;
       border: 1px solid $module-bg-darker-1;
     }
 
@@ -304,18 +320,15 @@
 
         .code-lines {
           display: block;
-          margin: 0;
-          padding: 0;
           width: $code-numbers-width;
           text-align: center;
           user-select: none;
-          color: $color-text-divider;
 
           .code-line-number {
-            padding: 0;
-            font-size: $code-font-size - 1;
-            list-style-type: none;
+            display: block;
             line-height: $code-row-line-height;
+            font-size: $code-font-size - 1;
+            color: $color-text-divider;
           }
 
           & + code {
@@ -340,13 +353,6 @@
           // desktop only x scroll
           overscroll-behavior-x: contain;
         }
-      }
-    }
-
-    .checkbox {
-      margin: 0 $gap-tiny;
-      &.checked {
-        color: $theme-black;
       }
     }
 

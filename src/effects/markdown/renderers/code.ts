@@ -25,10 +25,10 @@ export const createCodeRenderer = (
     const langString = (lang || '').match(/^\S*/)?.[0]
 
     const getLineNumbersElement = () => {
-      return `<ul class="code-lines">${code
+      return `<div class="code-lines">${code
         .split('\n')
-        .map((_, i) => `<li class="code-line-number">${i + 1}</li>`.replace(/\s+/g, ' '))
-        .join('')}</ul>`
+        .map((_, i) => `<span class="code-line-number">${i + 1}</span>`.replace(/\s+/g, ' '))
+        .join('')}</div>`
     }
 
     return `

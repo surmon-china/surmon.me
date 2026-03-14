@@ -7,7 +7,7 @@ export const createCheckboxRenderer = (
 ): RendererApi['checkbox'] => {
   return function ({ checked }) {
     return checked
-      ? `<i class="checkbox iconfont icon-checkbox-selected checked"></i>`
+      ? `<i class="checkbox iconfont icon-checkbox-selected"></i>`
       : `<i class="checkbox iconfont icon-checkbox-unselected"></i>`
   }
 }

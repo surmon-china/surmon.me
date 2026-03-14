@@ -5,6 +5,7 @@ import { createHtmlRenderer } from './renderers/html'
 import { createImageRenderer } from './renderers/image'
 import { createHeadingRenderer } from './renderers/heading'
 import { createParagraphRenderer } from './renderers/paragraph'
+import { createListItemRenderer } from './renderers/list'
 import { createLinkRenderer } from './renderers/link'
 
 export interface CreateRendererOptions {
@@ -27,6 +28,8 @@ export const createRenderer = (options?: CreateRendererOptions): Renderer => {
   renderer.paragraph = createParagraphRenderer(renderer, options)
   // checkbox
   renderer.checkbox = createCheckboxRenderer(renderer, options)
+  // list item
+  renderer.listitem = createListItemRenderer(renderer, options)
   // link: sanitize
   renderer.link = createLinkRenderer(renderer, options)
   // image: sanitize(title, alt) > popup
