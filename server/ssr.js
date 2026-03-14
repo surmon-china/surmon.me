@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.1";
+const APP_VERSION = "7.4.2";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -7206,7 +7206,7 @@ _sfc_main$1R.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/markdown.vue");
   return _sfc_setup$1R ? _sfc_setup$1R(props, ctx) : void 0;
 };
-const CommentMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-83286523"]]);
+const CommentMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$1R, [["__scopeId", "data-v-e18af8be"]]);
 const _sfc_main$1Q = /* @__PURE__ */ defineComponent({
   __name: "emoji",
   __ssrInlineRender: true,
@@ -18567,17 +18567,17 @@ const createMusicPlayer = (config) => {
     audio.pause();
   };
   const play = (index) => {
-    if (index != null) {
-      state.index = index;
+    const targetIndex = index ?? state.index;
+    if (index != null || !audio.src) {
+      audio.pause();
+      state.index = targetIndex;
       state.currentTime = 0;
       state.progress = 0;
-      audio.src = playlist.songs[index].url;
-      audio.play().catch(() => {
-      });
-    } else {
-      audio.play().catch(() => {
-      });
+      audio.src = playlist.songs[targetIndex].url;
+      audio.load();
     }
+    audio.play().catch(() => {
+    });
   };
   const prevSong = () => {
     play(state.index > 0 ? state.index - 1 : playlist.total - 1);
@@ -18615,21 +18615,25 @@ const createMusicPlayer = (config) => {
   });
   audio.addEventListener("timeupdate", () => {
     state.currentTime = audio.currentTime;
-    state.progress = audio.currentTime / audio.duration;
+    state.progress = audio.duration ? audio.currentTime / audio.duration : 0;
   });
   audio.addEventListener("error", () => {
     config.logger.warn("something error! auto next", toRaw(unref(currentSong.value)));
     state.playing = false;
     playlist.unplayableIndexs.push(state.index);
+    if (playlist.unplayableIndexs.length >= playlist.total) {
+      config.logger.warn("All songs unplayable, stopping.");
+      return;
+    }
     window.setTimeout(nextSong, 1668);
   });
   const init = async () => {
+    if (state.initialized) return;
     try {
       playlist.fetching = true;
       playlist.songs = await tunnel$1.fetch(TunnelModule.NetEaseMusic);
       playlist.total = playlist.songs.length;
       if (playlist.total) {
-        audio.src = playlist.songs[state.index].url;
         state.initialized = true;
       } else {
         throw "Empty playlist!";
@@ -18671,15 +18675,15 @@ const _sfc_main$v = /* @__PURE__ */ defineComponent({
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["music-player-handle", { playing: unref(state).playing }]
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-36cd9371><div class="panel" data-v-36cd9371><div class="control" data-v-36cd9371><button class="button prev-song"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-36cd9371><i class="iconfont icon-music-prev" data-v-36cd9371></i></button><button class="button next-song"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-36cd9371><i class="iconfont icon-music-next" data-v-36cd9371></i></button><button class="button muted-toggle"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-36cd9371><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-36cd9371></i></button><button class="button player" data-v-36cd9371><i class="iconfont icon-netease-music" data-v-36cd9371></i></button></div><button class="song-link" data-v-36cd9371>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-b3218d87><div class="panel" data-v-b3218d87><div class="control" data-v-b3218d87><button class="button prev-song"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-b3218d87><i class="iconfont icon-music-prev" data-v-b3218d87></i></button><button class="button next-song"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-b3218d87><i class="iconfont icon-music-next" data-v-b3218d87></i></button><button class="button muted-toggle"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-b3218d87><i class="${ssrRenderClass([unref(state).muted ? "icon-music-muted" : "icon-music-unmuted", "iconfont"])}" data-v-b3218d87></i></button><button class="button player" data-v-b3218d87><i class="iconfont icon-netease-music" data-v-b3218d87></i></button></div><button class="song-link" data-v-b3218d87>`);
       if (unref(currentSong)) {
-        _push(`<span data-v-36cd9371>${ssrInterpolate(unref(currentSong).name)}</span>`);
+        _push(`<span data-v-b3218d87>${ssrInterpolate(unref(currentSong).name)}</span>`);
       } else {
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).MUSIC_PLACEHOLDER
         }, null, _parent));
       }
-      _push(`</button></div><div class="cd" data-v-36cd9371><img class="${ssrRenderClass([{ spinning: __props.player.state.playing }, "image"])}"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} data-v-36cd9371><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-36cd9371><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-36cd9371></i></button></div><div class="trigger" data-v-36cd9371><i class="iconfont icon-music" data-v-36cd9371></i></div></div>`);
+      _push(`</button></div><div class="cd" data-v-b3218d87><img class="${ssrRenderClass([{ spinning: __props.player.state.playing }, "image"])}"${ssrRenderAttr("src", unref(useCoverArtURL)(unref(currentSong)?.cover_art_url))} data-v-b3218d87><button class="toggle-button"${ssrIncludeBooleanAttr(!unref(state).initialized) ? " disabled" : ""} data-v-b3218d87><i class="${ssrRenderClass([unref(state).playing ? "icon-music-pause" : "icon-music-play", "iconfont"])}" data-v-b3218d87></i></button></div><div class="trigger" data-v-b3218d87><i class="iconfont icon-music" data-v-b3218d87></i></div></div>`);
     };
   }
 });
@@ -18689,7 +18693,7 @@ _sfc_main$v.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/music-player/handle.vue");
   return _sfc_setup$v ? _sfc_setup$v(props, ctx) : void 0;
 };
-const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-36cd9371"]]);
+const MusicPlayerHandle = /* @__PURE__ */ _export_sfc(_sfc_main$v, [["__scopeId", "data-v-b3218d87"]]);
 const _sfc_main$u = /* @__PURE__ */ defineComponent({
   __name: "player",
   __ssrInlineRender: true,
@@ -19325,20 +19329,55 @@ const _sfc_main$k = /* @__PURE__ */ defineComponent({
   __name: "privacy",
   __ssrInlineRender: true,
   setup(__props) {
+    const loading = shallowRef(true);
     const content = shallowRef();
     const fetchPrivacyMarkdown = () => {
       vanilla("/privacy/index.md").then((respnse) => {
         content.value = respnse.data;
+        loading.value = false;
       });
     };
     onMounted(() => fetchPrivacyMarkdown());
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "privacy" }, _attrs))} data-v-8d34f48c><div class="content" data-v-8d34f48c>`);
-      _push(ssrRenderComponent(unref(_sfc_main$1Y), {
-        markdown: content.value,
-        compact: true
-      }, null, _parent));
-      _push(`</div></div>`);
+      const _component_placeholder = resolveComponent("placeholder");
+      const _component_loading_indicator = resolveComponent("loading-indicator");
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "privacy" }, _attrs))} data-v-56bf70d4>`);
+      _push(ssrRenderComponent(_component_placeholder, { loading: loading.value }, {
+        loading: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<div class="loading" data-v-56bf70d4${_scopeId}>`);
+            _push2(ssrRenderComponent(_component_loading_indicator, { width: "1.8rem" }, null, _parent2, _scopeId));
+            _push2(`</div>`);
+          } else {
+            return [
+              createVNode("div", { class: "loading" }, [
+                createVNode(_component_loading_indicator, { width: "1.8rem" })
+              ])
+            ];
+          }
+        }),
+        default: withCtx((_, _push2, _parent2, _scopeId) => {
+          if (_push2) {
+            _push2(`<div class="content" data-v-56bf70d4${_scopeId}>`);
+            _push2(ssrRenderComponent(unref(_sfc_main$1Y), {
+              markdown: content.value,
+              compact: true
+            }, null, _parent2, _scopeId));
+            _push2(`</div>`);
+          } else {
+            return [
+              createVNode("div", { class: "content" }, [
+                createVNode(unref(_sfc_main$1Y), {
+                  markdown: content.value,
+                  compact: true
+                }, null, 8, ["markdown"])
+              ])
+            ];
+          }
+        }),
+        _: 1
+      }, _parent));
+      _push(`</div>`);
     };
   }
 });
@@ -19348,7 +19387,7 @@ _sfc_main$k.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/privacy.vue");
   return _sfc_setup$k ? _sfc_setup$k(props, ctx) : void 0;
 };
-const Privacy = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-8d34f48c"]]);
+const Privacy = /* @__PURE__ */ _export_sfc(_sfc_main$k, [["__scopeId", "data-v-56bf70d4"]]);
 const _sfc_main$j = /* @__PURE__ */ defineComponent({
   __name: "search",
   __ssrInlineRender: true,
