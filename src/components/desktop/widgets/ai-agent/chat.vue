@@ -65,7 +65,7 @@
   onMounted(() => {
     nextTick(() => {
       inputRef.value?.focus()
-      const target = messagesListRef.value?.at(-2)
+      const target = messagesListRef.value?.findLast((el) => el.dataset.role === 'user')
       const container = messagesContainer.value
       if (target && container) {
         container.scrollTo({
@@ -88,6 +88,7 @@
         ref="messagesListRef"
         class="message-row"
         :class="message.role"
+        :data-role="message.role"
         v-for="(message, index) in aiAgentStore.messages"
         :key="index"
       >
