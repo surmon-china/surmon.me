@@ -160,10 +160,10 @@
 
           &::before {
             content: '■';
-            font-size: 8px;
+            font-size: 9px;
             position: absolute;
             top: 0;
-            left: calc(-2em + 2px);
+            left: calc(-2em + 4px);
             line-height: inherit;
             color: $color-text-secondary;
             @include mix.color-transition();
