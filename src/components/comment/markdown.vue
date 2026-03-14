@@ -51,16 +51,18 @@
     :deep(figure.image) {
       border-color: $module-bg-darker-3;
 
-      figcaption {
-        border-color: $module-bg-darker-2;
-      }
-
       img {
-        max-height: 10rem;
+        max-height: 8rem;
       }
 
-      figcaption {
-        display: none;
+      &.caption {
+        .placeholder {
+          padding-bottom: 0;
+        }
+
+        figcaption {
+          display: none;
+        }
       }
     }
   }
