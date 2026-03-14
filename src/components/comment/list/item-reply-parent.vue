@@ -35,7 +35,7 @@
         <span class="at ghost" v-if="isGhostParent"><i18n :k="LocalesKey.COMMENT_GHOST_USER" /></span>
         <span class="at active" v-else-if="parentComment?.author_name">@{{ parentComment.author_name }}</span>
       </button>
-      <i18n zh="：" en=":" />
+      <span class="colon"><i18n zh="：" en=":" /></span>
     </template>
   </p>
 </template>
@@ -48,11 +48,15 @@
   .comment-reply-parent {
     display: flex;
     align-items: center;
-    margin-top: 0.3rem;
+    margin-top: $gap-tiny;
     margin-bottom: 0;
     font-weight: bold;
     font-size: $font-size-secondary;
-    color: $color-text-disabled;
+
+    .reply,
+    .colon {
+      color: $color-text-disabled;
+    }
 
     .reply {
       margin-right: $gap-tiny;
@@ -67,7 +71,7 @@
 
     .parent {
       font-weight: bold;
-      color: $color-link;
+      color: $color-text-secondary;
       &:hover {
         color: $color-link-hover;
       }
