@@ -1,6 +1,6 @@
-import { pangu } from 'pangu'
 import { createMarked } from './marked'
 import { createRenderer, CreateRendererOptions } from './renderer'
+import { cjkSpacing } from '/@/transforms/text'
 
 const markedDefault = createMarked()
 const markedWithSpacing = createMarked().use({
@@ -8,7 +8,7 @@ const markedWithSpacing = createMarked().use({
   walkTokens(token) {
     // Only text nodes that do not contain child elements can be determined to be plain text.
     if (token.type === 'text' && !token.tokens?.length) {
-      token.text = pangu.spacingText(token.text)
+      token.text = cjkSpacing(token.text)
     }
   }
 })

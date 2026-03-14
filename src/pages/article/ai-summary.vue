@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue'
   import { LocalesKey } from '/@/locales'
+  import { cjkSpacing } from '/@/transforms/text'
 
   const iconMap = {
     deepseek: '/images/ai-providers/deepseek.svg',
@@ -38,7 +39,7 @@
       </span>
     </div>
     <div class="summary-content">
-      <p class="text">{{ content }}</p>
+      <p class="text">{{ cjkSpacing(content) }}</p>
     </div>
     <div class="toggle-action" @click="toggleExpand">
       <button class="toggle-btn">
@@ -109,6 +110,7 @@
 
       .text {
         margin: 0;
+        text-autospace: normal;
         @include mix.clamp(3);
       }
     }

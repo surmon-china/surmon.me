@@ -4,6 +4,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
+import { pangu } from 'pangu'
 import _escape from 'lodash-es/escape'
 import _unescape from 'lodash-es/unescape'
 import _truncate from 'lodash-es/truncate'
@@ -15,6 +16,8 @@ export const unescape = _unescape
 export const padStart = _padStart
 export const textOverflow = _truncate
 export const firstUpperCase = _capitalize
+
+export const cjkSpacing = (text: string): string => pangu.spacingText(text)
 
 export function numberToKilo(count: number): string {
   return count > 1000 ? `${parseFloat((count / 1000).toFixed(2))}k` : String(count)
