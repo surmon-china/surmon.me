@@ -1,4 +1,4 @@
-import { pangu } from 'pangu/browser'
+import { pangu } from 'pangu'
 import { createMarked } from './marked'
 import { createRenderer, CreateRendererOptions } from './renderer'
 
