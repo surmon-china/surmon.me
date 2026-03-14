@@ -172,6 +172,26 @@
       }
     }
 
+    ol {
+      list-style: none;
+      counter-reset: ol-counter;
+
+      > li {
+        position: relative;
+        counter-increment: ol-counter;
+
+        &::before {
+          content: counter(ol-counter) '.';
+          position: absolute;
+          top: 0;
+          left: calc(-2em + 4px);
+          line-height: inherit;
+          min-width: 1.5em;
+          text-align: right;
+        }
+      }
+    }
+
     ul,
     ol {
       padding-left: var(--markdown-list-padding-left);
@@ -193,7 +213,12 @@
         }
 
         > ol {
-          list-style: lower-alpha;
+          counter-reset: ol-counter;
+          > li {
+            &::before {
+              content: counter(ol-counter, lower-alpha) '.';
+            }
+          }
         }
 
         > ul,
