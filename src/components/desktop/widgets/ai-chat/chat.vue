@@ -223,18 +223,20 @@
         .user-bubble,
         .assistant-bubble {
           max-width: 100%;
-          padding-block: 0.75em;
-          padding-inline: 1em;
           border-radius: $radius-md;
         }
 
         .user-bubble {
+          padding-block: 0.6em;
+          padding-inline: 1em;
           border-top-right-radius: $radius-tiny;
           background-color: $module-bg-darker-1;
           line-height: $line-height-loose;
         }
 
         .assistant-bubble {
+          padding-block: 0.75em;
+          padding-inline: 1em;
           border-top-left-radius: $radius-tiny;
           position: relative;
 
