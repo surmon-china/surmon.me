@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.10";
+const APP_VERSION = "7.4.11";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -192,7 +192,7 @@ const IDENTITIES = Object.freeze({
   GOOGLE_ADSENSE_CLIENT_ID: "ca-pub-4710915636313788",
   SENTRY_PUBLIC_DSN: "https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528",
   YOUTUBE_CHANNEL_ID: "UCoL-j6T28PLSJ2U6ZdONS0w",
-  YOUTUBE_CHANNEL_SHORT_ID: "@surmon_v",
+  YOUTUBE_CHANNEL_SHORT_ID: "surmon_v",
   MUSIC_163_BGM_ALBUM_ID: "638949385",
   ZHIHU_USERNAME: "surmon",
   DOUBAN_USER_ID: "56647958",
@@ -7987,32 +7987,32 @@ const _sfc_main$1I = /* @__PURE__ */ defineComponent({
     const isGhostParent = computed(() => parentComment.value?.author_status === CommentAuthorStatus.Ghost);
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<p${ssrRenderAttrs(mergeProps({ class: "comment-reply-parent" }, _attrs))} data-v-4705f5cf><span class="reply" data-v-4705f5cf>`);
+      _push(`<p${ssrRenderAttrs(mergeProps({ class: "comment-reply-parent" }, _attrs))} data-v-5b47cf17><span class="reply" data-v-5b47cf17>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: "回复",
         en: "Reply to"
       }, null, _parent));
       _push(`</span>`);
       if (__props.comment.orphaned) {
-        _push(`<span class="tombstone" data-v-4705f5cf>`);
+        _push(`<span class="tombstone" data-v-5b47cf17>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_DELETED_COMMENT
         }, null, _parent));
         _push(`</span>`);
       } else {
-        _push(`<!--[--><button class="parent" data-v-4705f5cf><span class="id" data-v-4705f5cf>#${ssrInterpolate(parentId.value)}</span>`);
+        _push(`<!--[--><button class="parent" data-v-5b47cf17><span class="id" data-v-5b47cf17>#${ssrInterpolate(parentId.value)}</span>`);
         if (isGhostParent.value) {
-          _push(`<span class="at ghost" data-v-4705f5cf>`);
+          _push(`<span class="at ghost" data-v-5b47cf17>`);
           _push(ssrRenderComponent(_component_i18n, {
             k: unref(LocalesKey).COMMENT_GHOST_USER
           }, null, _parent));
           _push(`</span>`);
         } else if (parentComment.value?.author_name) {
-          _push(`<span class="at active" data-v-4705f5cf>@${ssrInterpolate(parentComment.value.author_name)}</span>`);
+          _push(`<span class="at active" data-v-5b47cf17><i class="iconfont icon-at" data-v-5b47cf17></i>${ssrInterpolate(parentComment.value.author_name)}</span>`);
         } else {
           _push(`<!---->`);
         }
-        _push(`</button><span class="colon" data-v-4705f5cf>`);
+        _push(`</button><span class="colon" data-v-5b47cf17>`);
         _push(ssrRenderComponent(_component_i18n, {
           zh: "：",
           en: ":"
@@ -8029,7 +8029,7 @@ _sfc_main$1I.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-reply-parent.vue");
   return _sfc_setup$1I ? _sfc_setup$1I(props, ctx) : void 0;
 };
-const CommentReplyParent = /* @__PURE__ */ _export_sfc(_sfc_main$1I, [["__scopeId", "data-v-4705f5cf"]]);
+const CommentReplyParent = /* @__PURE__ */ _export_sfc(_sfc_main$1I, [["__scopeId", "data-v-5b47cf17"]]);
 const _sfc_main$1H = /* @__PURE__ */ defineComponent({
   __name: "item-ai-info",
   __ssrInlineRender: true,
@@ -11386,7 +11386,7 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
       const _component_skeleton = resolveComponent("skeleton");
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-511ebff4>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "youtube" }, _attrs))} data-v-92f7bf4f>`);
       _push(ssrRenderComponent(_component_placeholder, {
         loading: unref(youtubePlayListStore).fetching,
         "has-data": !!unref(youtubePlayListStore).data.length
@@ -11410,7 +11410,7 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
         }),
         loading: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="playlist-skeleton" data-v-511ebff4${_scopeId}><!--[-->`);
+            _push2(`<div class="playlist-skeleton" data-v-92f7bf4f${_scopeId}><!--[-->`);
             ssrRenderList(6, (i) => {
               _push2(ssrRenderComponent(_component_skeleton, {
                 class: "item",
@@ -11433,9 +11433,9 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<ul class="playlist-list" data-v-511ebff4${_scopeId}><!--[-->`);
+            _push2(`<ul class="playlist-list" data-v-92f7bf4f${_scopeId}><!--[-->`);
             ssrRenderList(unref(youtubePlayListStore).data.slice(0, 5), (item, index) => {
-              _push2(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-511ebff4${_scopeId}>`);
+              _push2(`<li class="item"${ssrRenderAttr("title", item.snippet.title)} data-v-92f7bf4f${_scopeId}>`);
               _push2(ssrRenderComponent(_component_ulink, {
                 class: "link",
                 href: unref(getYouTubePlaylistURL)(item.id)
@@ -11447,7 +11447,7 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
                       proxy: "",
                       src: item.snippet.thumbnails.medium.url
                     }, null, _parent3, _scopeId2));
-                    _push3(`<span class="count" data-v-511ebff4${_scopeId2}><i class="iconfont icon-video" data-v-511ebff4${_scopeId2}></i><span class="number" data-v-511ebff4${_scopeId2}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-511ebff4${_scopeId2}><i class="iconfont icon-playlist" data-v-511ebff4${_scopeId2}></i><span class="text" data-v-511ebff4${_scopeId2}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-511ebff4${_scopeId2}><i class="iconfont icon-music-play" data-v-511ebff4${_scopeId2}></i></div>`);
+                    _push3(`<span class="count" data-v-92f7bf4f${_scopeId2}><i class="iconfont icon-video" data-v-92f7bf4f${_scopeId2}></i><span class="number" data-v-92f7bf4f${_scopeId2}>${ssrInterpolate(item.contentDetails.itemCount)}</span></span><p class="title" data-v-92f7bf4f${_scopeId2}><i class="iconfont icon-playlist" data-v-92f7bf4f${_scopeId2}></i><span class="text" data-v-92f7bf4f${_scopeId2}>${ssrInterpolate(item.snippet.title)}</span></p><div class="mask" data-v-92f7bf4f${_scopeId2}><i class="iconfont icon-music-play" data-v-92f7bf4f${_scopeId2}></i></div>`);
                   } else {
                     return [
                       createVNode(_component_uimage, {
@@ -11473,19 +11473,18 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
               }, _parent2, _scopeId));
               _push2(`</li>`);
             });
-            _push2(`<!--]--><li class="item" data-v-511ebff4${_scopeId}>`);
+            _push2(`<!--]--><li class="item" data-v-92f7bf4f${_scopeId}>`);
             _push2(ssrRenderComponent(_component_ulink, {
               class: "link more",
               href: unref(goLinks).youtube
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<i class="iconfont icon-youtube" data-v-511ebff4${_scopeId2}></i><span class="username" data-v-511ebff4${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span><span class="text" data-v-511ebff4${_scopeId2}>•••</span>`);
+                  _push3(`<i class="iconfont icon-youtube" data-v-92f7bf4f${_scopeId2}></i><span class="username" data-v-92f7bf4f${_scopeId2}>${ssrInterpolate(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID)}</span>`);
                 } else {
                   return [
                     createVNode("i", { class: "iconfont icon-youtube" }),
-                    createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1),
-                    createVNode("span", { class: "text" }, "•••")
+                    createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1)
                   ];
                 }
               }),
@@ -11534,8 +11533,7 @@ const _sfc_main$1l = /* @__PURE__ */ defineComponent({
                   }, {
                     default: withCtx(() => [
                       createVNode("i", { class: "iconfont icon-youtube" }),
-                      createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1),
-                      createVNode("span", { class: "text" }, "•••")
+                      createVNode("span", { class: "username" }, toDisplayString(unref(IDENTITIES).YOUTUBE_CHANNEL_SHORT_ID), 1)
                     ]),
                     _: 1
                   }, 8, ["href"])
@@ -11556,7 +11554,7 @@ _sfc_main$1l.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/media/youtube.vue");
   return _sfc_setup$1l ? _sfc_setup$1l(props, ctx) : void 0;
 };
-const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$1l, [["__scopeId", "data-v-511ebff4"]]);
+const YoutubeMedia = /* @__PURE__ */ _export_sfc(_sfc_main$1l, [["__scopeId", "data-v-92f7bf4f"]]);
 const useArticlesCalendarStore = defineStore("articlesCalendar", () => {
   return createFetchStore({
     once: true,
