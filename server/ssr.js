@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.7";
+const APP_VERSION = "7.4.8";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -126,14 +126,13 @@ var LocalesKey = /* @__PURE__ */ ((LocalesKey2) => {
   LocalesKey2["USER_IDENTITY_UNLINK"] = "user-identity-unlink";
   LocalesKey2["USER_IDENTITY_UNLINK_CONFIRM"] = "user-identity-unlink-confirm";
   LocalesKey2["USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN"] = "user-identity-unlink-last-provider-forbidden";
-  LocalesKey2["AI_ASSISTANT_NAME"] = "ai-assistant-name";
-  LocalesKey2["AI_AGENT_WELCOME"] = "ai-agent-welcome";
-  LocalesKey2["AI_AGENT_SEND_BUTTON"] = "ai-agent-send-button";
-  LocalesKey2["AI_AGENT_STOP_BUTTON"] = "ai-agent-stop-button";
-  LocalesKey2["AI_AGENT_RESET_BUTTON"] = "ai-agent-reset-button";
-  LocalesKey2["AI_AGENT_RESET_CONFIRM"] = "ai-agent-reset-confirm";
-  LocalesKey2["AI_AGENT_INPUT_PLACEHOLDER"] = "ai-agent-input-placeholder";
-  LocalesKey2["AI_AGENT_THINKING"] = "ai-agent-thinking";
+  LocalesKey2["AI_CHAT_WELCOME"] = "ai-chat-welcome";
+  LocalesKey2["AI_CHAT_SEND_BUTTON"] = "ai-chat-send-button";
+  LocalesKey2["AI_CHAT_STOP_BUTTON"] = "ai-chat-stop-button";
+  LocalesKey2["AI_CHAT_RESET_BUTTON"] = "ai-chat-reset-button";
+  LocalesKey2["AI_CHAT_RESET_CONFIRM"] = "ai-chat-reset-confirm";
+  LocalesKey2["AI_CHAT_INPUT_PLACEHOLDER"] = "ai-chat-input-placeholder";
+  LocalesKey2["AI_CHAT_THINKING"] = "ai-chat-thinking";
   LocalesKey2["MOMENT_AM"] = "moment-am";
   LocalesKey2["MOMENT_PM"] = "moment-pm";
   LocalesKey2["MOMENT_JUST_NOW"] = "moment-just-now";
@@ -317,14 +316,13 @@ const zhLangMap = {
   [LocalesKey.USER_IDENTITY_UNLINK]: "解除绑定",
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: "你确定要解绑此账户吗？",
   [LocalesKey.USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN]: `无法解除当前绑定，至少需要保留一种登录方式。`,
-  [LocalesKey.AI_ASSISTANT_NAME]: "赛博灵澈",
-  [LocalesKey.AI_AGENT_WELCOME]: "一念起处，缘何至此？",
-  [LocalesKey.AI_AGENT_SEND_BUTTON]: "发送",
-  [LocalesKey.AI_AGENT_STOP_BUTTON]: "中止",
-  [LocalesKey.AI_AGENT_RESET_BUTTON]: "重置对话",
-  [LocalesKey.AI_AGENT_RESET_CONFIRM]: "重置对话将会丢失所有聊天记录，且无法找回！确定要继续操作吗？",
-  [LocalesKey.AI_AGENT_INPUT_PLACEHOLDER]: "有何所惑，但说无妨",
-  [LocalesKey.AI_AGENT_THINKING]: "思考中...",
+  [LocalesKey.AI_CHAT_WELCOME]: "一念起处，缘何至此？",
+  [LocalesKey.AI_CHAT_SEND_BUTTON]: "发送",
+  [LocalesKey.AI_CHAT_STOP_BUTTON]: "中止",
+  [LocalesKey.AI_CHAT_RESET_BUTTON]: "重置对话",
+  [LocalesKey.AI_CHAT_RESET_CONFIRM]: "重置对话将会丢失所有聊天记录，且无法找回！确定要继续操作吗？",
+  [LocalesKey.AI_CHAT_INPUT_PLACEHOLDER]: "有何所惑，但说无妨",
+  [LocalesKey.AI_CHAT_THINKING]: "思考中...",
   [LocalesKey.MOMENT_AM]: "上午",
   [LocalesKey.MOMENT_PM]: "下午",
   [LocalesKey.MOMENT_JUST_NOW]: "刚刚",
@@ -416,14 +414,13 @@ const enLangMap = {
   [LocalesKey.USER_IDENTITY_UNLINK]: "Unlink",
   [LocalesKey.USER_IDENTITY_UNLINK_CONFIRM]: "Are you sure you want to unlink this account?",
   [LocalesKey.USER_IDENTITY_UNLINK_LAST_PROVIDER_FORBIDDEN]: `You can't unlink your last remaining sign-in method.`,
-  [LocalesKey.AI_ASSISTANT_NAME]: "CyberMonk",
-  [LocalesKey.AI_AGENT_WELCOME]: "What's on your mind?",
-  [LocalesKey.AI_AGENT_SEND_BUTTON]: "Send",
-  [LocalesKey.AI_AGENT_STOP_BUTTON]: "Stop",
-  [LocalesKey.AI_AGENT_RESET_BUTTON]: "Reset chat",
-  [LocalesKey.AI_AGENT_RESET_CONFIRM]: "Resetting the chat will permanently delete all message history and cannot be undone. Are you sure you want to continue?",
-  [LocalesKey.AI_AGENT_INPUT_PLACEHOLDER]: "Ask me anything",
-  [LocalesKey.AI_AGENT_THINKING]: "Thinking...",
+  [LocalesKey.AI_CHAT_WELCOME]: "What's on your mind?",
+  [LocalesKey.AI_CHAT_SEND_BUTTON]: "Send",
+  [LocalesKey.AI_CHAT_STOP_BUTTON]: "Stop",
+  [LocalesKey.AI_CHAT_RESET_BUTTON]: "Reset chat",
+  [LocalesKey.AI_CHAT_RESET_CONFIRM]: "Resetting the chat will permanently delete all message history and cannot be undone. Are you sure you want to continue?",
+  [LocalesKey.AI_CHAT_INPUT_PLACEHOLDER]: "Ask me anything",
+  [LocalesKey.AI_CHAT_THINKING]: "Thinking...",
   [LocalesKey.MOMENT_AM]: "AM",
   [LocalesKey.MOMENT_PM]: "PM",
   [LocalesKey.MOMENT_JUST_NOW]: "Just now",
@@ -593,7 +590,7 @@ const createGlobalState = (options) => {
     }
   };
   const switcher = reactive({
-    aiAgentModal: false,
+    aiChatModal: false,
     sponsorModal: false,
     feedbackModal: false,
     statementModal: false,
@@ -7715,20 +7712,27 @@ const Uimage = defineComponent({
     };
   }
 });
+const AI_ASSISTANT_NAME_ZH = "赛博灵澈";
+const AI_ASSISTANT_NAME_EN = "CyberMonk";
+const useAiAssistantName = () => {
+  const { isZhLang } = useEnhancer();
+  return computed(() => isZhLang.value ? AI_ASSISTANT_NAME_ZH : AI_ASSISTANT_NAME_EN);
+};
 const AI_LOGO_WHITE = "/images/ai-agent/cybermonk-white.png";
 const AI_LOGO_BLACK = "/images/ai-agent/cybermonk-black.png";
 const AiLogoImage = defineComponent({
   name: "AiLogoImage",
   props: { variant: String },
   setup(props) {
-    const { i18n, theme } = useEnhancer();
-    const logoPath = computed(() => {
+    const { theme } = useEnhancer();
+    const aiAssistantName = useAiAssistantName();
+    const aiLogoPath = computed(() => {
       return props.variant === "white" ? AI_LOGO_WHITE : props.variant === "black" ? AI_LOGO_BLACK : theme.isDark.value ? AI_LOGO_WHITE : AI_LOGO_BLACK;
     });
     return () => {
       return h(Uimage, {
-        alt: i18n.t(LocalesKey.AI_ASSISTANT_NAME),
-        src: logoPath.value,
+        alt: aiAssistantName.value,
+        src: aiLogoPath.value,
         cdn: true
       });
     };
@@ -7764,22 +7768,22 @@ const _sfc_main$1M = /* @__PURE__ */ defineComponent({
       return defaultAvatar;
     };
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-avatar" }, _attrs))} data-v-5daf161e>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-avatar" }, _attrs))} data-v-29d6d7ef>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<div class="ai-avatar" data-v-5daf161e><div class="logo-wrapper" data-v-5daf161e>`);
+        _push(`<div class="ai-avatar" data-v-29d6d7ef><div class="logo-wrapper" data-v-29d6d7ef>`);
         _push(ssrRenderComponent(unref(AiLogoImage), {
           class: "ai-logo",
           variant: "white"
         }, null, _parent));
         _push(`</div></div>`);
       } else {
-        _push(`<div class="author-avatar" data-v-5daf161e><img${ssrRenderAttr("src", getAuthorAvatarUrl())}${ssrRenderAttr("alt", __props.comment.author_name)} draggable="false" data-v-5daf161e>`);
+        _push(`<div class="author-avatar" data-v-29d6d7ef><img${ssrRenderAttr("src", getAuthorAvatarUrl())}${ssrRenderAttr("alt", __props.comment.author_name)} draggable="false" data-v-29d6d7ef>`);
         if (__props.comment.user || __props.meta.isDisqusAuthor) {
-          _push(`<span class="role" data-v-5daf161e>`);
+          _push(`<span class="role" data-v-29d6d7ef>`);
           if (__props.comment.user) {
-            _push(`<i class="iconfont icon-user" data-v-5daf161e></i>`);
+            _push(`<i class="iconfont icon-user" data-v-29d6d7ef></i>`);
           } else {
-            _push(`<i class="iconfont icon-disqus" data-v-5daf161e></i>`);
+            _push(`<i class="iconfont icon-disqus" data-v-29d6d7ef></i>`);
           }
           _push(`</span>`);
         } else {
@@ -7797,7 +7801,7 @@ _sfc_main$1M.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-avatar.vue");
   return _sfc_setup$1M ? _sfc_setup$1M(props, ctx) : void 0;
 };
-const CommentAvatar = /* @__PURE__ */ _export_sfc(_sfc_main$1M, [["__scopeId", "data-v-5daf161e"]]);
+const CommentAvatar = /* @__PURE__ */ _export_sfc(_sfc_main$1M, [["__scopeId", "data-v-29d6d7ef"]]);
 const _sfc_main$1L = /* @__PURE__ */ defineComponent({
   __name: "item-username",
   __ssrInlineRender: true,
@@ -7807,6 +7811,7 @@ const _sfc_main$1L = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     const props = __props;
+    const aiAssistantName = useAiAssistantName();
     const authorName = computed(() => {
       return props.comment.user?.name ?? props.comment.author_name;
     });
@@ -7824,34 +7829,30 @@ const _sfc_main$1L = /* @__PURE__ */ defineComponent({
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-5180144b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "comment-username" }, _attrs))} data-v-90c6b1b8>`);
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="username ai" data-v-5180144b>`);
-        _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).AI_ASSISTANT_NAME
-        }, null, _parent));
-        _push(`</span>`);
+        _push(`<span class="username ai" data-v-90c6b1b8>${ssrInterpolate(unref(aiAssistantName))}</span>`);
       } else if (__props.meta.isGhostUser) {
-        _push(`<span class="username ghost" data-v-5180144b>`);
+        _push(`<span class="username ghost" data-v-90c6b1b8>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_GHOST_USER
         }, null, _parent));
         _push(`</span>`);
       } else if (authorUrl.value) {
-        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-5180144b>${ssrInterpolate(authorName.value)}</a>`);
+        _push(`<a class="${ssrRenderClass([{ patron: __props.meta.isPatronUser, moderator: __props.meta.isModeratorUser }, "username link"])}" target="_blank" rel="external nofollow noopener"${ssrRenderAttr("href", authorUrl.value)} data-v-90c6b1b8>${ssrInterpolate(authorName.value)}</a>`);
       } else {
-        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-5180144b>${ssrInterpolate(authorName.value)}</span>`);
+        _push(`<span class="${ssrRenderClass([{ patron: __props.meta.isPatronUser }, "username"])}" data-v-90c6b1b8>${ssrInterpolate(authorName.value)}</span>`);
       }
       if (__props.meta.isAiGenerated) {
-        _push(`<span class="badge ai" data-v-5180144b>AI</span>`);
+        _push(`<span class="badge ai" data-v-90c6b1b8>AI</span>`);
       } else if (__props.meta.isPatronUser) {
-        _push(`<span class="badge patron" data-v-5180144b>`);
+        _push(`<span class="badge patron" data-v-90c6b1b8>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_PATRON
         }, null, _parent));
         _push(`</span>`);
       } else if (__props.meta.isModeratorUser) {
-        _push(`<span class="badge moderator" data-v-5180144b>`);
+        _push(`<span class="badge moderator" data-v-90c6b1b8>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).COMMENT_MODERATOR
         }, null, _parent));
@@ -7869,7 +7870,7 @@ _sfc_main$1L.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/comment/list/item-username.vue");
   return _sfc_setup$1L ? _sfc_setup$1L(props, ctx) : void 0;
 };
-const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-5180144b"]]);
+const CommentUsername = /* @__PURE__ */ _export_sfc(_sfc_main$1L, [["__scopeId", "data-v-90c6b1b8"]]);
 const OFFSET = 127397;
 const regionCodeToEmoji = (regionCode) => {
   return regionCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(char.charCodeAt(0) + OFFSET));
@@ -17527,9 +17528,10 @@ const toolI18nMap = {
   getBlogList: { zh: "正在检索博客列表...", en: "Fetching blog list..." },
   getArticleDetail: { zh: "正在阅读文章内容...", en: "Reading article..." },
   askKnowledgeBase: { zh: "正在翻阅信息库...", en: "Searching knowledge base..." },
-  getOpenSourceProjects: { zh: "正在收集开源项目...", en: "Fetching open-source projects..." }
+  getOpenSourceProjects: { zh: "正在收集开源项目...", en: "Fetching open-source projects..." },
+  getThreadsMedias: { zh: "正在拉取最近社交动态...", en: "Fetching latest threads..." }
 };
-const useAiAgentStore = defineStore("ai-agent", () => {
+const useAiChatStore = defineStore("ai-chat", () => {
   const identityStore = useIdentityStore();
   const fetching = shallowRef(false);
   const initialized = shallowRef(false);
@@ -17697,7 +17699,7 @@ const _sfc_main$I = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({
         class: ["assistant-bubble-wrapper", { animating: __props.animating, danger: __props.danger }]
-      }, _attrs))} data-v-b566df41>`);
+      }, _attrs))} data-v-9f9bc466>`);
       ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
       _push(`</div>`);
     };
@@ -17706,10 +17708,10 @@ const _sfc_main$I = /* @__PURE__ */ defineComponent({
 const _sfc_setup$I = _sfc_main$I.setup;
 _sfc_main$I.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-wrapper.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-wrapper.vue");
   return _sfc_setup$I ? _sfc_setup$I(props, ctx) : void 0;
 };
-const AssistantWrapper = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["__scopeId", "data-v-b566df41"]]);
+const AssistantWrapper = /* @__PURE__ */ _export_sfc(_sfc_main$I, [["__scopeId", "data-v-9f9bc466"]]);
 const _sfc_main$H = /* @__PURE__ */ defineComponent({
   __name: "assistant-markdown",
   __ssrInlineRender: true,
@@ -17730,10 +17732,10 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
 const _sfc_setup$H = _sfc_main$H.setup;
 _sfc_main$H.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-markdown.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-markdown.vue");
   return _sfc_setup$H ? _sfc_setup$H(props, ctx) : void 0;
 };
-const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-524a809f"]]);
+const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-acf12666"]]);
 const _sfc_main$G = /* @__PURE__ */ defineComponent({
   __name: "message-typewriter",
   __ssrInlineRender: true,
@@ -17778,7 +17780,7 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
 const _sfc_setup$G = _sfc_main$G.setup;
 _sfc_main$G.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-stream/message-typewriter.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-stream/message-typewriter.vue");
   return _sfc_setup$G ? _sfc_setup$G(props, ctx) : void 0;
 };
 const _sfc_main$F = /* @__PURE__ */ defineComponent({
@@ -17832,22 +17834,22 @@ const _sfc_main$F = /* @__PURE__ */ defineComponent({
 const _sfc_setup$F = _sfc_main$F.setup;
 _sfc_main$F.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-stream/message-content.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-stream/message-content.vue");
   return _sfc_setup$F ? _sfc_setup$F(props, ctx) : void 0;
 };
 const _sfc_main$E = {};
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
-  _push(`<span${ssrRenderAttrs(mergeProps({ class: "shimmer-text" }, _attrs))} data-v-1269a62b>`);
+  _push(`<span${ssrRenderAttrs(mergeProps({ class: "shimmer-text" }, _attrs))} data-v-81461095>`);
   ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
   _push(`</span>`);
 }
 const _sfc_setup$E = _sfc_main$E.setup;
 _sfc_main$E.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-stream/shimmer-text.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-stream/shimmer-text.vue");
   return _sfc_setup$E ? _sfc_setup$E(props, ctx) : void 0;
 };
-const ShimmerText = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-1269a62b"]]);
+const ShimmerText = /* @__PURE__ */ _export_sfc(_sfc_main$E, [["ssrRender", _sfc_ssrRender], ["__scopeId", "data-v-81461095"]]);
 const _sfc_main$D = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
@@ -17901,7 +17903,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
         _push(`<!---->`);
       }
       if (waitingState.value) {
-        _push(`<div class="assistant-waiting-indicator" data-v-df4161f8>`);
+        _push(`<div class="assistant-waiting-indicator" data-v-a65f5909>`);
         _push(ssrRenderComponent(ShimmerText, null, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
@@ -17912,7 +17914,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
                 }, null, _parent2, _scopeId));
               } else {
                 _push2(ssrRenderComponent(_component_i18n, {
-                  k: unref(LocalesKey).AI_AGENT_THINKING
+                  k: unref(LocalesKey).AI_CHAT_THINKING
                 }, null, _parent2, _scopeId));
               }
             } else {
@@ -17923,7 +17925,7 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
                   en: callingTooli18n.value.en
                 }, null, 8, ["zh", "en"])) : (openBlock(), createBlock(_component_i18n, {
                   key: 1,
-                  k: unref(LocalesKey).AI_AGENT_THINKING
+                  k: unref(LocalesKey).AI_CHAT_THINKING
                 }, null, 8, ["k"]))
               ];
             }
@@ -17941,10 +17943,10 @@ const _sfc_main$D = /* @__PURE__ */ defineComponent({
 const _sfc_setup$D = _sfc_main$D.setup;
 _sfc_main$D.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-stream/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-stream/index.vue");
   return _sfc_setup$D ? _sfc_setup$D(props, ctx) : void 0;
 };
-const AssistantStream = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-df4161f8"]]);
+const AssistantStream = /* @__PURE__ */ _export_sfc(_sfc_main$D, [["__scopeId", "data-v-a65f5909"]]);
 const _sfc_main$C = /* @__PURE__ */ defineComponent({
   __name: "assistant-error",
   __ssrInlineRender: true,
@@ -17953,17 +17955,17 @@ const _sfc_main$C = /* @__PURE__ */ defineComponent({
   },
   setup(__props) {
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "assistant-error" }, _attrs))} data-v-dae741ca><i class="iconfont icon-error-outlined" data-v-dae741ca></i> ${ssrInterpolate(__props.error)}</div>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "assistant-error" }, _attrs))} data-v-9136a55e><i class="iconfont icon-error-outlined" data-v-9136a55e></i> ${ssrInterpolate(__props.error)}</div>`);
     };
   }
 });
 const _sfc_setup$C = _sfc_main$C.setup;
 _sfc_main$C.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/assistant-error.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-error.vue");
   return _sfc_setup$C ? _sfc_setup$C(props, ctx) : void 0;
 };
-const AssistantError = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-dae741ca"]]);
+const AssistantError = /* @__PURE__ */ _export_sfc(_sfc_main$C, [["__scopeId", "data-v-9136a55e"]]);
 const _sfc_main$B = /* @__PURE__ */ defineComponent({
   __name: "chat",
   __ssrInlineRender: true,
@@ -17972,7 +17974,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     const messagesListRef = shallowRef(null);
     const inputRef = shallowRef(null);
     const { i18n: _i18n } = useEnhancer();
-    const aiAgentStore = useAiAgentStore();
+    const aiChatStore = useAiChatStore();
     const input = ref("");
     const hasInputValue = computed(() => input.value.length >= 3);
     const scrollToMessagesBottom = () => {
@@ -18013,23 +18015,23 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_udate = resolveComponent("udate");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-chat" }, _attrs))} data-v-31f451de><div class="chat-messages" data-v-31f451de>`);
-      if (!unref(aiAgentStore).messages.length) {
-        _push(`<div class="chat-welcome" data-v-31f451de>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-chat-panel" }, _attrs))} data-v-f167615c><div class="chat-messages" data-v-f167615c>`);
+      if (!unref(aiChatStore).messages.length) {
+        _push(`<div class="chat-welcome" data-v-f167615c>`);
         _push(ssrRenderComponent(unref(AiLogoImage), { class: "logo" }, null, _parent));
-        _push(`<p class="text" data-v-31f451de>`);
+        _push(`<p class="text" data-v-f167615c>`);
         _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).AI_AGENT_WELCOME
+          k: unref(LocalesKey).AI_CHAT_WELCOME
         }, null, _parent));
         _push(`</p></div>`);
       } else {
         _push(`<!---->`);
       }
       _push(`<!--[-->`);
-      ssrRenderList(unref(aiAgentStore).messages, (message, index) => {
-        _push(`<div class="${ssrRenderClass([message.role, "message-row"])}"${ssrRenderAttr("data-role", message.role)} data-v-31f451de>`);
+      ssrRenderList(unref(aiChatStore).messages, (message, index) => {
+        _push(`<div class="${ssrRenderClass([message.role, "message-row"])}"${ssrRenderAttr("data-role", message.role)} data-v-f167615c>`);
         if (message.role === "user") {
-          _push(`<div class="user-bubble" data-v-31f451de>${ssrInterpolate(message.content)}</div>`);
+          _push(`<div class="user-bubble" data-v-f167615c>${ssrInterpolate(message.content)}</div>`);
         } else {
           _push(`<!---->`);
         }
@@ -18047,7 +18049,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
                     _push2(`<!---->`);
                   }
                   if (message.created_at) {
-                    _push2(`<span class="message-time" data-v-31f451de${_scopeId}>`);
+                    _push2(`<span class="message-time" data-v-f167615c${_scopeId}>`);
                     _push2(ssrRenderComponent(_component_udate, {
                       date: message.created_at * 1e3,
                       to: "ago"
@@ -18076,7 +18078,7 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
               }),
               _: 2
             }, _parent));
-          } else if (index !== unref(aiAgentStore).messages.length - 1) {
+          } else if (index !== unref(aiChatStore).messages.length - 1) {
             _push(ssrRenderComponent(AssistantWrapper, {
               class: "assistant-bubble",
               danger: !!message.error
@@ -18115,16 +18117,16 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
           } else {
             _push(ssrRenderComponent(AssistantWrapper, {
               class: "assistant-bubble",
-              animating: unref(aiAgentStore).isStreaming,
+              animating: unref(aiChatStore).isStreaming,
               danger: !!message.error
             }, {
               default: withCtx((_, _push2, _parent2, _scopeId) => {
                 if (_push2) {
                   _push2(ssrRenderComponent(AssistantStream, {
                     content: message.content,
-                    streaming: unref(aiAgentStore).isStreaming,
-                    "tool-waiting": unref(aiAgentStore).streaming.toolWaiting,
-                    "tool-calls": unref(aiAgentStore).streaming.toolCalls,
+                    streaming: unref(aiChatStore).isStreaming,
+                    "tool-waiting": unref(aiChatStore).streaming.toolWaiting,
+                    "tool-calls": unref(aiChatStore).streaming.toolCalls,
                     onTypingTick: handleAssistantBubbleTypingTick,
                     onTypingDone: handleAssistantBubbleTypingDone,
                     onWaitingStateChange: handleWaitingStateChange
@@ -18153,9 +18155,9 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
                   return [
                     createVNode(AssistantStream, {
                       content: message.content,
-                      streaming: unref(aiAgentStore).isStreaming,
-                      "tool-waiting": unref(aiAgentStore).streaming.toolWaiting,
-                      "tool-calls": unref(aiAgentStore).streaming.toolCalls,
+                      streaming: unref(aiChatStore).isStreaming,
+                      "tool-waiting": unref(aiChatStore).streaming.toolWaiting,
+                      "tool-calls": unref(aiChatStore).streaming.toolCalls,
                       onTypingTick: handleAssistantBubbleTypingTick,
                       onTypingDone: handleAssistantBubbleTypingDone,
                       onWaitingStateChange: handleWaitingStateChange
@@ -18180,17 +18182,17 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
         }
         _push(`</div>`);
       });
-      _push(`<!--]--></div><div class="chat-input" data-v-31f451de><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiAgentStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_AGENT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-31f451de>`);
-      if (unref(aiAgentStore).isStreaming && !isAssistantBubbleTyping.value) {
-        _push(`<button class="submit" data-v-31f451de>`);
+      _push(`<!--]--></div><div class="chat-input" data-v-f167615c><input class="input" name="input" type="search" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore minlength="3" maxlength="200"${ssrIncludeBooleanAttr(unref(aiChatStore).isStreaming || isAssistantBubbleTyping.value) ? " disabled" : ""}${ssrRenderAttr("placeholder", unref(_i18n).t(unref(LocalesKey).AI_CHAT_INPUT_PLACEHOLDER))}${ssrRenderAttr("value", input.value)} data-v-f167615c>`);
+      if (unref(aiChatStore).isStreaming && !isAssistantBubbleTyping.value) {
+        _push(`<button class="submit" data-v-f167615c>`);
         _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).AI_AGENT_STOP_BUTTON
+          k: unref(LocalesKey).AI_CHAT_STOP_BUTTON
         }, null, _parent));
         _push(`</button>`);
       } else {
-        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-31f451de>`);
+        _push(`<button class="submit"${ssrIncludeBooleanAttr(!hasInputValue.value || isAssistantBubbleTyping.value) ? " disabled" : ""} data-v-f167615c>`);
         _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).AI_AGENT_SEND_BUTTON
+          k: unref(LocalesKey).AI_CHAT_SEND_BUTTON
         }, null, _parent));
         _push(`</button>`);
       }
@@ -18201,59 +18203,60 @@ const _sfc_main$B = /* @__PURE__ */ defineComponent({
 const _sfc_setup$B = _sfc_main$B.setup;
 _sfc_main$B.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/chat.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/chat.vue");
   return _sfc_setup$B ? _sfc_setup$B(props, ctx) : void 0;
 };
-const AgentChat = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-31f451de"]]);
+const ChatPanel = /* @__PURE__ */ _export_sfc(_sfc_main$B, [["__scopeId", "data-v-f167615c"]]);
 const _sfc_main$A = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
   setup(__props) {
-    const { i18n: _i18n } = useEnhancer();
-    const aiAgentStore = useAiAgentStore();
+    useEnhancer();
+    const aiChatStore = useAiChatStore();
+    const aiAssistantName = useAiAssistantName();
     onMounted(() => {
-      aiAgentStore.initialize().catch((error) => {
-        logger$2.error("AI agent init failed.", error);
+      aiChatStore.initialize().catch((error) => {
+        logger$2.error("AI chat store init failed.", error);
       });
     });
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-agent-modal" }, _attrs))} data-v-b88980da><div class="header" data-v-b88980da><div class="brand" data-v-b88980da><div class="logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-b88980da></div><span class="title" data-v-b88980da>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-chat-modal" }, _attrs))} data-v-ec5859fe><div class="header" data-v-ec5859fe><div class="brand" data-v-ec5859fe><div class="logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-ec5859fe></div><span class="title" data-v-ec5859fe>`);
       _push(ssrRenderComponent(_component_i18n, null, {
         zh: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`与 ${ssrInterpolate(unref(_i18n).t(unref(LocalesKey).AI_ASSISTANT_NAME))} 对话`);
+            _push2(`与 ${ssrInterpolate(unref(aiAssistantName))} 对话`);
           } else {
             return [
-              createTextVNode("与 " + toDisplayString(unref(_i18n).t(unref(LocalesKey).AI_ASSISTANT_NAME)) + " 对话", 1)
+              createTextVNode("与 " + toDisplayString(unref(aiAssistantName)) + " 对话", 1)
             ];
           }
         }),
         en: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`Chat with ${ssrInterpolate(unref(_i18n).t(unref(LocalesKey).AI_ASSISTANT_NAME))}`);
+            _push2(`Chat with ${ssrInterpolate(unref(aiAssistantName))}`);
           } else {
             return [
-              createTextVNode("Chat with " + toDisplayString(unref(_i18n).t(unref(LocalesKey).AI_ASSISTANT_NAME)), 1)
+              createTextVNode("Chat with " + toDisplayString(unref(aiAssistantName)), 1)
             ];
           }
         }),
         _: 1
       }, _parent));
-      _push(`</span></div><button class="close" data-v-b88980da><i class="iconfont icon-cancel" data-v-b88980da></i></button></div><div class="body" data-v-b88980da>`);
-      if (unref(aiAgentStore).error) {
-        _push(`<div class="error" data-v-b88980da><i class="iconfont icon-error-outlined" data-v-b88980da></i><p class="message" data-v-b88980da>${ssrInterpolate(unref(aiAgentStore).error.message)}</p><button class="reset" data-v-b88980da>`);
+      _push(`</span></div><button class="close" data-v-ec5859fe><i class="iconfont icon-cancel" data-v-ec5859fe></i></button></div><div class="body" data-v-ec5859fe>`);
+      if (unref(aiChatStore).error) {
+        _push(`<div class="error" data-v-ec5859fe><i class="iconfont icon-error-outlined" data-v-ec5859fe></i><p class="message" data-v-ec5859fe>${ssrInterpolate(unref(aiChatStore).error.message)}</p><button class="reset" data-v-ec5859fe>`);
         _push(ssrRenderComponent(_component_i18n, {
-          k: unref(LocalesKey).AI_AGENT_RESET_BUTTON
+          k: unref(LocalesKey).AI_CHAT_RESET_BUTTON
         }, null, _parent));
         _push(`</button></div>`);
-      } else if (unref(aiAgentStore).fetching) {
-        _push(`<div class="loading" data-v-b88980da>`);
+      } else if (unref(aiChatStore).fetching) {
+        _push(`<div class="loading" data-v-ec5859fe>`);
         _push(ssrRenderComponent(_component_loading_indicator, { width: "1.8rem" }, null, _parent));
         _push(`</div>`);
-      } else if (unref(aiAgentStore).initialized) {
-        _push(ssrRenderComponent(AgentChat, null, null, _parent));
+      } else if (unref(aiChatStore).initialized) {
+        _push(ssrRenderComponent(ChatPanel, null, null, _parent));
       } else {
         _push(`<!---->`);
       }
@@ -18264,10 +18267,10 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
 const _sfc_setup$A = _sfc_main$A.setup;
 _sfc_main$A.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-agent/index.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/index.vue");
   return _sfc_setup$A ? _sfc_setup$A(props, ctx) : void 0;
 };
-const AiAgent = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["__scopeId", "data-v-b88980da"]]);
+const AiChat = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["__scopeId", "data-v-ec5859fe"]]);
 const logger = createLogger("APP:User");
 var TabKeys = /* @__PURE__ */ ((TabKeys2) => {
   TabKeys2["Profile"] = "profile";
@@ -19136,17 +19139,18 @@ const _sfc_main$n = /* @__PURE__ */ defineComponent({
   __ssrInlineRender: true,
   setup(__props) {
     const { i18n: _i18n } = useEnhancer();
+    const aiAssistantName = useAiAssistantName();
     ref(0);
     ref(false);
     ref(false);
     return (_ctx, _push, _parent, _attrs) => {
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-ebee5d54><div class="container" data-v-ebee5d54><div class="tools" data-v-ebee5d54><button class="ai"${ssrRenderAttr("title", unref(_i18n).t(unref(LocalesKey).AI_ASSISTANT_NAME))} data-v-ebee5d54>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ id: "toolbox" }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-ccf7ad5a><div class="container" data-v-ccf7ad5a><div class="tools" data-v-ccf7ad5a><button class="ai"${ssrRenderAttr("title", unref(aiAssistantName))} data-v-ccf7ad5a>`);
       _push(ssrRenderComponent(unref(AiLogoImage), {
         class: "ai-logo",
         variant: "white"
       }, null, _parent));
-      _push(`</button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LocalesKey).TO_TOP))} data-v-ebee5d54><i class="iconfont icon-totop" data-v-ebee5d54></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LocalesKey).TO_BOTTOM))} data-v-ebee5d54><i class="iconfont icon-tobottom" data-v-ebee5d54></i></button></div></div></div>`);
+      _push(`</button><button class="to-page-top"${ssrRenderAttr("title", unref(_i18n).t(unref(LocalesKey).TO_TOP))} data-v-ccf7ad5a><i class="iconfont icon-totop" data-v-ccf7ad5a></i></button><button class="to-page-bottom"${ssrRenderAttr("title", unref(_i18n).t(unref(LocalesKey).TO_BOTTOM))} data-v-ccf7ad5a><i class="iconfont icon-tobottom" data-v-ccf7ad5a></i></button></div></div></div>`);
     };
   }
 });
@@ -19156,7 +19160,7 @@ _sfc_main$n.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/toolbox.vue");
   return _sfc_setup$n ? _sfc_setup$n(props, ctx) : void 0;
 };
-const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-ebee5d54"]]);
+const Toolbox = /* @__PURE__ */ _export_sfc(_sfc_main$n, [["__scopeId", "data-v-ccf7ad5a"]]);
 const _sfc_main$m = /* @__PURE__ */ defineComponent({
   __name: "feedback",
   __ssrInlineRender: true,
@@ -20969,7 +20973,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       const _component_popup = resolveComponent("popup");
       const _component_router_view = resolveComponent("router-view");
       const _directive_disabled_wallflower = resolveDirective("disabled-wallflower");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-layout" }, _attrs))} data-v-071ab617>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "desktop-layout" }, _attrs))} data-v-a04caa4c>`);
       _push(ssrRenderComponent(Background, null, null, _parent));
       _push(ssrRenderComponent(Wallflower, null, null, _parent));
       _push(ssrRenderComponent(_component_client_only, null, {
@@ -20982,7 +20986,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="sponsor-modal" data-v-071ab617${_scopeId2}><div class="sponsor" data-v-071ab617${_scopeId2}>`);
+                  _push3(`<div class="sponsor-modal" data-v-a04caa4c${_scopeId2}><div class="sponsor" data-v-a04caa4c${_scopeId2}>`);
                   _push3(ssrRenderComponent(SponsorTabs, {
                     class: "tabs",
                     state: unref(sponsorState),
@@ -21088,17 +21092,17 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
               _: 1
             }, _parent2, _scopeId));
             _push2(ssrRenderComponent(_component_popup, {
-              visible: unref(switcher).aiAgentModal,
-              "onUpdate:visible": ($event) => unref(switcher).aiAgentModal = $event,
+              visible: unref(switcher).aiChatModal,
+              "onUpdate:visible": ($event) => unref(switcher).aiChatModal = $event,
               "body-scrollable": false,
               "mask-closable": false
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(ssrRenderComponent(AiAgent, null, null, _parent3, _scopeId2));
+                  _push3(ssrRenderComponent(AiChat, null, null, _parent3, _scopeId2));
                 } else {
                   return [
-                    createVNode(AiAgent)
+                    createVNode(AiChat)
                   ];
                 }
               }),
@@ -21175,13 +21179,13 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
                 _: 1
               }, 8, ["visible", "onUpdate:visible"]),
               createVNode(_component_popup, {
-                visible: unref(switcher).aiAgentModal,
-                "onUpdate:visible": ($event) => unref(switcher).aiAgentModal = $event,
+                visible: unref(switcher).aiChatModal,
+                "onUpdate:visible": ($event) => unref(switcher).aiChatModal = $event,
                 "body-scrollable": false,
                 "mask-closable": false
               }, {
                 default: withCtx(() => [
-                  createVNode(AiAgent)
+                  createVNode(AiChat)
                 ]),
                 _: 1
               }, 8, ["visible", "onUpdate:visible"])
@@ -21221,7 +21225,7 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(HeaderView$1, {
         "enabled-nav": !unref(pageLayout).isNormal
       }, null, _parent));
-      _push(`<main${ssrRenderAttr("id", unref(CONTAINER_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(pageLayout).isFull }, "main-container"])}" data-v-071ab617>`);
+      _push(`<main${ssrRenderAttr("id", unref(CONTAINER_ELEMENT_ID))} class="${ssrRenderClass([{ "full-page": unref(pageLayout).isFull }, "main-container"])}" data-v-a04caa4c>`);
       if (unref(pageLayout).isNormal) {
         _push(ssrRenderComponent(NavView, { class: "nav-view" }, null, _parent));
       } else {
@@ -21236,11 +21240,11 @@ const _sfc_main$7 = /* @__PURE__ */ defineComponent({
         "layout-normal": unref(pageLayout).isNormal,
         "layout-wide": unref(pageLayout).isWide,
         "layout-full": unref(pageLayout).isFull
-      }, "main-view"])}" data-v-071ab617>`);
+      }, "main-view"])}" data-v-a04caa4c>`);
       _push(ssrRenderComponent(_component_router_view, null, {
         default: withCtx(({ Component, route: r }, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-071ab617${_scopeId}>`);
+            _push2(`<div${ssrRenderAttrs(mergeProps({ class: "router-view" }, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-a04caa4c${_scopeId}>`);
             ssrRenderSuspense(_push2, {
               default: () => {
                 ssrRenderVNode(_push2, createVNode(resolveDynamicComponent(Component), {
@@ -21290,7 +21294,7 @@ _sfc_main$7.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/main.vue");
   return _sfc_setup$7 ? _sfc_setup$7(props, ctx) : void 0;
 };
-const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-071ab617"]]);
+const DesktopMain = /* @__PURE__ */ _export_sfc(_sfc_main$7, [["__scopeId", "data-v-a04caa4c"]]);
 const _sfc_main$6 = /* @__PURE__ */ defineComponent({
   __name: "header",
   __ssrInlineRender: true,
