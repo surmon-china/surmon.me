@@ -20,7 +20,8 @@ export const toolI18nMap: Record<string, Record<Language.Chinese | Language.Engl
   getBlogList: { zh: '正在检索博客列表...', en: 'Fetching blog list...' },
   getArticleDetail: { zh: '正在阅读文章内容...', en: 'Reading article...' },
   askKnowledgeBase: { zh: '正在翻阅信息库...', en: 'Searching knowledge base...' },
-  getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' }
+  getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' },
+  getThreadsMedias: { zh: '正在拉取最近社交动态...', en: 'Fetching latest threads...' }
 }
 
 export interface ChatMessage {
