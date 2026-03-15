@@ -13,8 +13,8 @@
   const typingDone = ref(!props.streaming)
   const typewriterDone = ref(!props.streaming)
 
-  const handleTypingTick = () => emit('typingTick')
-  const handleTypingDone = () => {
+  const handleTypewriterTick = () => emit('typingTick')
+  const handleTypewriterDone = () => {
     typewriterDone.value = true
     if (!props.streaming) {
       typingDone.value = true
@@ -42,8 +42,8 @@
   <message-typewriter
     v-if="streaming || !typingDone"
     :content="content"
-    @tick="handleTypingTick"
-    @done="handleTypingDone"
+    @tick="handleTypewriterTick"
+    @done="handleTypewriterDone"
   />
   <assistant-markdown :content="content" v-else />
 </template>

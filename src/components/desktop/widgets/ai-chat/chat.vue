@@ -35,6 +35,7 @@
   const handleAssistantBubbleTypingDone = () => {
     isAssistantBubbleTyping.value = false
     scrollToMessagesBottom()
+    nextTick(() => inputRef.value?.focus())
   }
 
   const handleWaitingStateChange = () => {
