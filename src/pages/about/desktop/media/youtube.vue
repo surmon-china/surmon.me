@@ -107,7 +107,8 @@
           display: inline-flex;
           justify-content: center;
           align-items: center;
-          padding: $gap-tiny;
+          padding-block: $gap-tiny;
+          padding-inline: $gap-xs;
           border-radius: $radius-sm;
           background-color: rgba(#000, 0.3);
           font-size: $font-size-h6;

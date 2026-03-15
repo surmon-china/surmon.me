@@ -50,7 +50,8 @@
       <template #description>
         <div class="links">
           <ulink class="item threads" title="Threads" :href="goLinks.threads">
-            <span class="username">@{{ IDENTITIES.THREADS_USERNAME }}</span>
+            <i class="iconfont icon-threads"></i>
+            <span class="username">{{ IDENTITIES.THREADS_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
           <ulink class="item zhihu" title="知乎" :href="goLinks.zhihu">
@@ -151,6 +152,12 @@
           }
 
           &.threads {
+            .iconfont {
+              font-size: 90%;
+              font-weight: normal;
+              margin-right: 0.1em;
+            }
+
             .username {
               font-family: $font-family-monospace;
               font-size: $font-size-h3;

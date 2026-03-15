@@ -177,12 +177,12 @@
             font-weight: bold;
 
             .new-window-icon {
-              margin: 0;
-              font-size: 10px;
-              font-weight: normal;
               position: absolute;
-              top: -0.5em;
-              right: -1.2em;
+              top: -0.2em;
+              right: -1.3em;
+              margin: 0;
+              font-weight: normal;
+              font-size: $font-size-quinary;
               color: $color-text-divider;
             }
           }

@@ -73,7 +73,8 @@
       <template #description>
         <div class="links">
           <ulink class="item instagram" title="Instagram" :href="goLinks.instagram">
-            <span class="username">@{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
+            <i class="iconfont icon-instagram"></i>
+            <span class="username">{{ IDENTITIES.INSTAGRAM_USERNAME }}</span>
           </ulink>
           <divider type="vertical" size="lg" color="#ffffffcc" />
           <ulink class="item xiaohongshu" title="小红书" :href="goLinks.xiaohongshu">
@@ -148,6 +149,12 @@
           }
 
           &.instagram {
+            .iconfont {
+              font-size: 90%;
+              font-weight: normal;
+              margin-right: 0.2em;
+            }
+
             .username {
               font-size: $font-size-h3;
               font-family: $font-family-monospace;
