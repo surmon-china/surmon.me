@@ -8,7 +8,7 @@
   import { isDev } from '/@/configs/app.env'
   import logger from '/@/utils/logger'
   import { CONTAINER_ELEMENT_ID, MAIN_CONTENT_ELEMENT_ID } from '/@/constants/element-anchor'
-  import AiAgent from '/@/components/desktop/widgets/ai-agent/index.vue'
+  import AiChat from '/@/components/desktop/widgets/ai-chat/index.vue'
   import UserPanel from '/@/components/desktop/widgets/user-panel/index.vue'
   import MusicPlayerEntry from '/@/components/desktop/widgets/music-player/index.vue'
   import Wallflower from '/@/components/desktop/widgets/wallflower/garden.vue'
@@ -96,8 +96,8 @@
       <popup v-model:visible="switcher.userPanelModal" :body-scrollable="false" :mask-closable="false">
         <user-panel />
       </popup>
-      <popup v-model:visible="switcher.aiAgentModal" :body-scrollable="false" :mask-closable="false">
-        <ai-agent />
+      <popup v-model:visible="switcher.aiChatModal" :body-scrollable="false" :mask-closable="false">
+        <ai-chat />
       </popup>
     </client-only>
     <template v-if="!pageLayout.isFull">

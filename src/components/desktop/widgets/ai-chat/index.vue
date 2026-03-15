@@ -1,61 +1,62 @@
 <script lang="ts" setup>
   import { onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useAiAgentStore } from '/@/stores/ai-agent'
+  import { useAiChatStore } from '/@/stores/ai-chat'
+  import { useAiAssistantName, AI_LOGO_WHITE } from '/@/components/common/ai-brand'
   import { LocalesKey } from '/@/locales'
   import { getSiteURL } from '/@/transforms/url'
-  import { AI_LOGO_WHITE } from './logo'
-  import AgentChat from './chat.vue'
+  import ChatPanel from './chat.vue'
   import logger from '/@/utils/logger'
 
   const { globalState, i18n: _i18n } = useEnhancer()
-  const aiAgentStore = useAiAgentStore()
+  const aiChatStore = useAiChatStore()
+  const aiAssistantName = useAiAssistantName()
 
   const handleReset = () => {
-    if (window.confirm(_i18n.t(LocalesKey.AI_AGENT_RESET_CONFIRM))) {
-      aiAgentStore.resetState()
-      aiAgentStore.initialize().catch((error) => {
-        logger.error('AI agent init after reset failed.', error)
+    if (window.confirm(_i18n.t(LocalesKey.AI_CHAT_RESET_CONFIRM))) {
+      aiChatStore.resetState()
+      aiChatStore.initialize().catch((error) => {
+        logger.error('AI chat store init after reset failed.', error)
       })
     }
   }
 
   onMounted(() => {
-    aiAgentStore.initialize().catch((error) => {
-      logger.error('AI agent init failed.', error)
+    aiChatStore.initialize().catch((error) => {
+      logger.error('AI chat store init failed.', error)
     })
   })
 </script>
 
 <template>
-  <div class="ai-agent-modal">
+  <div class="ai-chat-modal">
     <div class="header">
       <div class="brand">
         <div class="logo" :style="{ '--url': `url(${getSiteURL(AI_LOGO_WHITE)})` }"></div>
         <span class="title">
           <i18n>
-            <template #zh>与 {{ _i18n.t(LocalesKey.AI_ASSISTANT_NAME) }} 对话</template>
-            <template #en>Chat with {{ _i18n.t(LocalesKey.AI_ASSISTANT_NAME) }}</template>
+            <template #zh>与 {{ aiAssistantName }} 对话</template>
+            <template #en>Chat with {{ aiAssistantName }}</template>
           </i18n>
         </span>
       </div>
-      <button class="close" @click="globalState.toggleSwitcher('aiAgentModal', false)">
+      <button class="close" @click="globalState.toggleSwitcher('aiChatModal', false)">
         <i class="iconfont icon-cancel"></i>
       </button>
     </div>
     <div class="body">
       <transition mode="out-in" name="module">
-        <div class="error" v-if="aiAgentStore.error">
+        <div class="error" v-if="aiChatStore.error">
           <i class="iconfont icon-error-outlined" />
-          <p class="message">{{ aiAgentStore.error.message }}</p>
+          <p class="message">{{ aiChatStore.error.message }}</p>
           <button class="reset" @click="handleReset">
-            <i18n :k="LocalesKey.AI_AGENT_RESET_BUTTON" />
+            <i18n :k="LocalesKey.AI_CHAT_RESET_BUTTON" />
           </button>
         </div>
-        <div class="loading" v-else-if="aiAgentStore.fetching">
+        <div class="loading" v-else-if="aiChatStore.fetching">
           <loading-indicator width="1.8rem" />
         </div>
-        <agent-chat v-else-if="aiAgentStore.initialized" />
+        <chat-panel v-else-if="aiChatStore.initialized" />
       </transition>
     </div>
   </div>
@@ -66,7 +67,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .ai-agent-modal {
+  .ai-chat-modal {
     width: 46rem;
     max-width: 80vw;
     height: 41rem;

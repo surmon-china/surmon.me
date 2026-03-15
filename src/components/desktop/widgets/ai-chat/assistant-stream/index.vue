@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { ref, computed, watch } from 'vue'
   import { Language, LocalesKey } from '/@/locales'
-  import { type ToolCall, toolI18nMap } from '/@/stores/ai-agent'
+  import { type ToolCall, toolI18nMap } from '../../../../../stores/ai-chat'
   import MessageContent from './message-content.vue'
   import ShimmerText from './shimmer-text.vue'
 
@@ -65,7 +65,7 @@
     <div class="assistant-waiting-indicator" :key="waitingState" v-if="waitingState">
       <shimmer-text>
         <i18n :zh="callingTooli18n!.zh" :en="callingTooli18n!.en" v-if="waitingState === 'tool-calling'" />
-        <i18n :k="LocalesKey.AI_AGENT_THINKING" v-else />
+        <i18n :k="LocalesKey.AI_CHAT_THINKING" v-else />
       </shimmer-text>
     </div>
   </transition>

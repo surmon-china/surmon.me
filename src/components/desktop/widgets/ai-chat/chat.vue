@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import { ref, shallowRef, computed, nextTick, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useAiAgentStore } from '/@/stores/ai-agent'
+  import { useAiChatStore } from '/@/stores/ai-chat'
   import { enableCopyrighter, disableCopyrighter } from '/@/effects/copyright'
   import { LocalesKey } from '/@/locales'
-  import { AiLogoImage } from './logo'
+  import { AiLogoImage } from '/@/components/common/ai-brand'
   import AssistantWrapper from './assistant-wrapper.vue'
   import AssistantMarkdown from './assistant-markdown.vue'
   import AssistantStream from './assistant-stream/index.vue'
@@ -15,7 +15,7 @@
   const inputRef = shallowRef<HTMLInputElement | null>(null)
 
   const { i18n: _i18n } = useEnhancer()
-  const aiAgentStore = useAiAgentStore()
+  const aiChatStore = useAiChatStore()
 
   const input = ref('')
   const hasInputValue = computed(() => input.value.length >= 3)
@@ -46,12 +46,12 @@
   }
 
   const handleStop = () => {
-    aiAgentStore.abortStreaming()
+    aiChatStore.abortStreaming()
   }
 
   const handleSend = () => {
     if (!hasInputValue.value) return
-    aiAgentStore.sendMessage(input.value.trim())
+    aiChatStore.sendMessage(input.value.trim())
     input.value = ''
     nextTick(() => scrollToMessagesBottom())
   }
@@ -78,18 +78,18 @@
 </script>
 
 <template>
-  <div class="ai-agent-chat">
+  <div class="ai-chat-panel">
     <div class="chat-messages" ref="messagesContainer">
-      <div class="chat-welcome" v-if="!aiAgentStore.messages.length">
+      <div class="chat-welcome" v-if="!aiChatStore.messages.length">
         <ai-logo-image class="logo" />
-        <p class="text"><i18n :k="LocalesKey.AI_AGENT_WELCOME" /></p>
+        <p class="text"><i18n :k="LocalesKey.AI_CHAT_WELCOME" /></p>
       </div>
       <div
         ref="messagesListRef"
         class="message-row"
         :class="message.role"
         :data-role="message.role"
-        v-for="(message, index) in aiAgentStore.messages"
+        v-for="(message, index) in aiChatStore.messages"
         :key="index"
       >
         <div v-if="message.role === 'user'" class="user-bubble">{{ message.content }}</div>
@@ -103,22 +103,22 @@
           <assistant-wrapper
             class="assistant-bubble"
             :danger="!!message.error"
-            v-else-if="index !== aiAgentStore.messages.length - 1"
+            v-else-if="index !== aiChatStore.messages.length - 1"
           >
             <assistant-error :error="message.error" v-if="message.error" />
             <assistant-markdown :content="message.content" v-if="message.content" />
           </assistant-wrapper>
           <assistant-wrapper
             class="assistant-bubble"
-            :animating="aiAgentStore.isStreaming"
+            :animating="aiChatStore.isStreaming"
             :danger="!!message.error"
             v-else
           >
             <assistant-stream
               :content="message.content"
-              :streaming="aiAgentStore.isStreaming"
-              :tool-waiting="aiAgentStore.streaming.toolWaiting"
-              :tool-calls="aiAgentStore.streaming.toolCalls"
+              :streaming="aiChatStore.isStreaming"
+              :tool-waiting="aiChatStore.streaming.toolWaiting"
+              :tool-calls="aiChatStore.streaming.toolCalls"
               @typing-tick="handleAssistantBubbleTypingTick"
               @typing-done="handleAssistantBubbleTypingDone"
               @waiting-state-change="handleWaitingStateChange"
@@ -147,18 +147,18 @@
         data-1p-ignore
         minlength="3"
         maxlength="200"
-        :disabled="aiAgentStore.isStreaming || isAssistantBubbleTyping"
-        :placeholder="_i18n.t(LocalesKey.AI_AGENT_INPUT_PLACEHOLDER)"
+        :disabled="aiChatStore.isStreaming || isAssistantBubbleTyping"
+        :placeholder="_i18n.t(LocalesKey.AI_CHAT_INPUT_PLACEHOLDER)"
         @keydown.enter.exact.prevent="handleInputEnter"
         @focus="disableCopyrighter"
         @blur="enableCopyrighter"
         v-model.trim="input"
       />
-      <button class="submit" @click="handleStop" v-if="aiAgentStore.isStreaming && !isAssistantBubbleTyping">
-        <i18n :k="LocalesKey.AI_AGENT_STOP_BUTTON" />
+      <button class="submit" @click="handleStop" v-if="aiChatStore.isStreaming && !isAssistantBubbleTyping">
+        <i18n :k="LocalesKey.AI_CHAT_STOP_BUTTON" />
       </button>
       <button class="submit" :disabled="!hasInputValue || isAssistantBubbleTyping" @click="handleSend" v-else>
-        <i18n :k="LocalesKey.AI_AGENT_SEND_BUTTON" />
+        <i18n :k="LocalesKey.AI_CHAT_SEND_BUTTON" />
       </button>
     </div>
   </div>
@@ -169,7 +169,7 @@
   @use '/src/styles/base/functions' as funs;
   @use '/src/styles/base/mixins' as mix;
 
-  .ai-agent-chat {
+  .ai-chat-panel {
     width: 100%;
     height: 100%;
     display: flex;

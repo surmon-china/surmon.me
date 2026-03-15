@@ -3,18 +3,19 @@
   import { useEnhancer } from '/@/app/enhancer'
   import { LocalesKey } from '/@/locales'
   import { GAEventCategories } from '/@/constants/google-analytics'
-  import { AiLogoImage } from '/@/components/desktop/widgets/ai-agent/logo'
+  import { AiLogoImage, useAiAssistantName } from '/@/components/common/ai-brand'
   import { scrollToPageTop, scrollToNextScreen } from '/@/utils/scroller'
 
   const { globalState, gtag, i18n: _i18n } = useEnhancer()
+  const aiAssistantName = useAiAssistantName()
 
   const animationFrameId = ref(0)
   const isTopButtonMouseOver = ref(false)
   const isBottomButtonMouseOver = ref(false)
 
   const handleAiClick = () => {
-    globalState.toggleSwitcher('aiAgentModal', true)
-    gtag?.event('ai_agent_modal', {
+    globalState.toggleSwitcher('aiChatModal', true)
+    gtag?.event('ai_chat_modal', {
       event_category: GAEventCategories.Widget
     })
   }
@@ -66,7 +67,7 @@
   <div id="toolbox" v-disabled-wallflower>
     <div class="container">
       <div class="tools">
-        <button class="ai" :title="_i18n.t(LocalesKey.AI_ASSISTANT_NAME)" @click="handleAiClick">
+        <button class="ai" :title="aiAssistantName" @click="handleAiClick">
           <ai-logo-image class="ai-logo" variant="white" />
         </button>
         <button

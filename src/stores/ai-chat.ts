@@ -1,6 +1,6 @@
 /**
- * @file AI Agent store
- * @module store/ai-agent
+ * @file AI chat store
+ * @module store/ai-chat
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -47,7 +47,7 @@ export interface StreamingState {
   abortController: AbortController | null
 }
 
-export const useAiAgentStore = defineStore('ai-agent', () => {
+export const useAiChatStore = defineStore('ai-chat', () => {
   const identityStore = useIdentityStore()
 
   const fetching = shallowRef(false)

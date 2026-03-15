@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { useEnhancer } from '/@/app/enhancer'
-  import { AiLogoImage } from '/@/components/desktop/widgets/ai-agent/logo'
+  import { AiLogoImage } from '/@/components/common/ai-brand'
   import { getGravatarByHash, getDisqusAvatarByUsername } from '/@/transforms/avatar'
   import { getAssetURL, getCdnProxyURL } from '/@/transforms/url'
   import { APP_CONFIG } from '/@/configs/app.config'

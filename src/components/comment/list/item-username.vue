@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue'
   import { LocalesKey } from '/@/locales'
+  import { useAiAssistantName } from '/@/components/common/ai-brand'
   import type { Comment } from '/@/interfaces/comment'
   import type { CommentMeta } from './item.vue'
 
@@ -8,6 +9,8 @@
     comment: Comment
     meta: CommentMeta
   }>()
+
+  const aiAssistantName = useAiAssistantName()
 
   const authorName = computed(() => {
     return props.comment.user?.name ?? props.comment.author_name
@@ -30,7 +33,7 @@
 <template>
   <div class="comment-username">
     <span class="username ai" v-if="meta.isAiGenerated">
-      <i18n :k="LocalesKey.AI_ASSISTANT_NAME" />
+      {{ aiAssistantName }}
     </span>
     <span class="username ghost" v-else-if="meta.isGhostUser">
       <i18n :k="LocalesKey.COMMENT_GHOST_USER" />
