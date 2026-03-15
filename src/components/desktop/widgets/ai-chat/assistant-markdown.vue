@@ -8,7 +8,7 @@
     class="assistant-message-markdown"
     :markdown="content"
     :compact="true"
-    :render-options="{ cjkSpacing: true }"
+    :render-options="{ cjkSpacing: true, codeLineNumbers: true }"
   />
 </template>
 
@@ -40,6 +40,11 @@
       margin-block: 0.5em;
       border-color: $module-bg-darker-1;
       border-style: dashed;
+    }
+
+    :deep(pre) {
+      border-color: $module-bg-darker-1;
+      background-color: transparent;
     }
 
     :deep(h1),

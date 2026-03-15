@@ -221,6 +221,7 @@
 
         .user-bubble,
         .assistant-bubble {
+          max-width: 100%;
           padding-block: 0.75em;
           padding-inline: 1em;
           border-radius: $radius-md;
