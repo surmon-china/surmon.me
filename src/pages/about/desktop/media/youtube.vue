@@ -48,7 +48,6 @@
             <ulink class="link more" :href="goLinks.youtube">
               <i class="iconfont icon-youtube"></i>
               <span class="username">{{ IDENTITIES.YOUTUBE_CHANNEL_SHORT_ID }}</span>
-              <span class="text">•••</span>
             </ulink>
           </li>
         </ul>
@@ -171,18 +170,13 @@
 
           .iconfont {
             line-height: 1;
-            font-size: $font-size-h1 * 1.5;
+            font-size: $font-size-h1 * 1.6;
             color: $youtube-primary;
           }
-          .username {
-            font-weight: bold;
-            &:first-letter {
-              font-family: system-ui;
-            }
-          }
 
-          .text {
-            font-size: $font-size-h2;
+          .username {
+            margin-top: $gap-xs;
+            font-weight: bold;
           }
         }
       }

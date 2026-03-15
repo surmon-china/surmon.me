@@ -33,7 +33,9 @@
       <button class="parent" @click="scrollToParentComment">
         <span class="id">#{{ parentId }}</span>
         <span class="at ghost" v-if="isGhostParent"><i18n :k="LocalesKey.COMMENT_GHOST_USER" /></span>
-        <span class="at active" v-else-if="parentComment?.author_name">@{{ parentComment.author_name }}</span>
+        <span class="at active" v-else-if="parentComment?.author_name">
+          <i class="iconfont icon-at"></i>{{ parentComment.author_name }}
+        </span>
       </button>
       <span class="colon"><i18n zh="：" en=":" /></span>
     </template>
@@ -81,6 +83,10 @@
 
         &.ghost {
           color: $color-text-disabled;
+        }
+
+        .iconfont {
+          font-weight: normal;
         }
       }
     }

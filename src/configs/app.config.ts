@@ -55,7 +55,7 @@ export const IDENTITIES = Object.freeze({
   GOOGLE_ADSENSE_CLIENT_ID: 'ca-pub-4710915636313788',
   SENTRY_PUBLIC_DSN: 'https://4a5f194531fe4527879812e4a4d8cf89@o360897.ingest.sentry.io/4505569138966528',
   YOUTUBE_CHANNEL_ID: 'UCoL-j6T28PLSJ2U6ZdONS0w',
-  YOUTUBE_CHANNEL_SHORT_ID: '@surmon_v',
+  YOUTUBE_CHANNEL_SHORT_ID: 'surmon_v',
   MUSIC_163_BGM_ALBUM_ID: '638949385',
   ZHIHU_USERNAME: 'surmon',
   DOUBAN_USER_ID: '56647958',
@@ -74,7 +74,8 @@ export const RESOURCE_LINKS = Object.freeze({
   GOOGLE_MY_MAP: 'https://www.google.com/maps/d/embed?mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w&z=3',
   MUSIC_163_PLAYLIST: `https://music.163.com/#/playlist?id=${IDENTITIES.MUSIC_163_BGM_ALBUM_ID}`,
   GITHUB_STATISTICS_JSON_URL: 'https://raw.githubusercontent.com/surmon-china/surmon-china/release/',
-  GOOGLE_MY_MAP_KML_URL: 'https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
+  GOOGLE_MY_MAP_KML_URL:
+    'https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1sRx6t0Yj1TutbwORCvjwTMgr70r62Z6w',
   GO_LINKS_MAP_ENDPOINT: 'https://go.surmon.me'
 })
 
