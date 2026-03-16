@@ -22,7 +22,7 @@ export const toolI18nMap: Record<string, Record<Language.Chinese | Language.Engl
   getOpenSourceProjects: { zh: '正在收集开源项目...', en: 'Fetching open-source projects...' },
   getThreadsMedias: { zh: '正在拉取最近社交动态...', en: 'Fetching latest Threads posts...' },
   getSiteInformation: { zh: '正在翻阅站点信息...', en: 'Reading site information...' },
-  getTravelFootprint: { zh: '正在收集旅行轨迹...', en: 'Fetching travel footprint...' }
+  getTravelFootprint: { zh: '正在收集旅行足迹...', en: 'Fetching travel footprint...' }
 }
 
 export interface ChatMessage {
