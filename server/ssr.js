@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.15";
+const APP_VERSION = "7.4.16";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -11893,17 +11893,17 @@ const addPlacemarksLayerToMap = (lib, map, geoJson) => {
     createPlacemarkPopup(lib, coordinates, description).addTo(map);
   });
 };
-const getTransportIconName = (transport) => {
-  if (transport === -1) return "icon-meditation";
-  if (transport === 0) return "icon-route";
-  if (transport === 1) return "icon-transport-flight";
-  if (transport === 2) return "icon-transport-train";
-  if (transport === 3) return "icon-transport-bus";
-  if (transport === 4) return "icon-transport-ship";
-  if (transport === 5) return "icon-transport-motocycle";
-  if (transport === 6) return "icon-transport-bicycle";
-  if (transport === 7) return "icon-transport-walk";
-  if (transport === 8) return "icon-transport-hiking";
+const getTransportIconName = (_transport) => {
+  const transport = _transport?.toLowerCase();
+  if (transport === "meditation") return "icon-meditation";
+  if (transport === "flight") return "icon-transport-flight";
+  if (transport === "train") return "icon-transport-train";
+  if (transport === "bus") return "icon-transport-bus";
+  if (transport === "ship") return "icon-transport-ship";
+  if (transport === "motorcycle") return "icon-transport-motocycle";
+  if (transport === "bicycle") return "icon-transport-bicycle";
+  if (transport === "walk") return "icon-transport-walk";
+  if (transport === "hiking") return "icon-transport-hiking";
   return "icon-route";
 };
 const getCoordinatesBounds = (coordinates) => {
@@ -11926,7 +11926,7 @@ const getFlatSegmentId = (tripId, index) => `${tripId}-${index}`;
 const getSegmentLineId = (segmentId) => `trip-segment-line-${segmentId}`;
 const getSegmentLineHighlightId = (segmentId) => `${getSegmentLineId(segmentId)}-highlight`;
 const getSegmentLineActiveId = (segmentId) => `${getSegmentLineId(segmentId)}-active`;
-const getSegmentPointsId = (segmentId) => `trip-segment-points-${segmentId}}`;
+const getSegmentPointsId = (segmentId) => `trip-segment-points-${segmentId}`;
 const getSegmentPointsActiveId = (segmentId) => `${getSegmentPointsId(segmentId)}-active`;
 const lastActiveSegmentId = shallowRef(null);
 const resetActiveTripSegment = (map) => {
@@ -12234,18 +12234,18 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
       const _component_i18n = resolveComponent("i18n");
       const _component_skeleton = resolveComponent("skeleton");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-3d13333b>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "modal" }, _attrs))} data-v-2686d6d1>`);
       _push(ssrRenderComponent(Mapbox, {
         class: "mapbox",
         onLoad: handleMapboxLoad
       }, null, _parent));
-      _push(`<div class="panel" data-v-3d13333b><div class="head" data-v-3d13333b><h3 class="title" data-v-3d13333b>`);
+      _push(`<div class="panel" data-v-2686d6d1><div class="head" data-v-2686d6d1><h3 class="title" data-v-2686d6d1>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintTitle, null, _parent));
-      _push(`</h3><p class="description" data-v-3d13333b>`);
+      _push(`</h3><p class="description" data-v-2686d6d1>`);
       _push(ssrRenderComponent(_component_i18n, unref(i18ns).footprintDescription, null, _parent));
       _push(`</p></div>`);
       if (!loaded.value) {
-        _push(`<div class="content-skeleton" data-v-3d13333b><!--[-->`);
+        _push(`<div class="content-skeleton" data-v-2686d6d1><!--[-->`);
         ssrRenderList(5, (i) => {
           _push(ssrRenderComponent(_component_skeleton, {
             class: "line",
@@ -12254,29 +12254,29 @@ const _sfc_main$1h = /* @__PURE__ */ defineComponent({
         });
         _push(`<!--]--></div>`);
       } else {
-        _push(`<div class="content" data-v-3d13333b><ul class="group-list" data-v-3d13333b><!--[-->`);
+        _push(`<div class="content" data-v-2686d6d1><ul class="group-list" data-v-2686d6d1><!--[-->`);
         ssrRenderList(unref(mapTss).configJson.value, (trip) => {
-          _push(`<li class="group" data-v-3d13333b><h5 class="title" data-v-3d13333b><i class="iconfont icon-route" data-v-3d13333b></i><span class="text" data-v-3d13333b>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-3d13333b><!--[-->`);
+          _push(`<li class="group" data-v-2686d6d1><h5 class="title" data-v-2686d6d1><i class="iconfont icon-route" data-v-2686d6d1></i><span class="text" data-v-2686d6d1>${ssrInterpolate(trip.name)}</span></h5><ul class="child-list" data-v-2686d6d1><!--[-->`);
           ssrRenderList(trip.segments, (segment, index) => {
-            _push(`<li class="${ssrRenderClass([{ actived: unref(getFlatSegmentId)(trip.id, index) === unref(lastActiveSegmentId) }, "item"])}"${ssrRenderAttr("title", segment.name)} data-v-3d13333b><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-3d13333b></i><span class="text" data-v-3d13333b>${ssrInterpolate(segment.name)}</span></li>`);
+            _push(`<li class="${ssrRenderClass([{ actived: unref(getFlatSegmentId)(trip.id, index) === unref(lastActiveSegmentId) }, "item"])}"${ssrRenderAttr("title", segment.name)} data-v-2686d6d1><i class="${ssrRenderClass([unref(getTransportIconName)(segment.transport), "iconfont"])}" data-v-2686d6d1></i><span class="text" data-v-2686d6d1>${ssrInterpolate(segment.name)}</span></li>`);
           });
           _push(`<!--]--></ul></li>`);
         });
-        _push(`<!--]--></ul><ul class="group-list" data-v-3d13333b><!--[-->`);
+        _push(`<!--]--></ul><ul class="group-list" data-v-2686d6d1><!--[-->`);
         ssrRenderList(unref(mapPms).folders.value, (folder, index) => {
-          _push(`<li class="group" data-v-3d13333b><h5 class="title" data-v-3d13333b><i class="iconfont icon-map" data-v-3d13333b></i><span class="text" data-v-3d13333b>${ssrInterpolate(folder.name)}</span><span class="count" data-v-3d13333b>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
+          _push(`<li class="group" data-v-2686d6d1><h5 class="title" data-v-2686d6d1><i class="iconfont icon-map" data-v-2686d6d1></i><span class="text" data-v-2686d6d1>${ssrInterpolate(folder.name)}</span><span class="count" data-v-2686d6d1>(${ssrInterpolate(folder.placemarks.length)})</span></h5>`);
           if (!folder.placemarks.length) {
-            _push(`<div class="empty" data-v-3d13333b>null</div>`);
+            _push(`<div class="empty" data-v-2686d6d1>null</div>`);
           } else {
-            _push(`<ul class="child-list placemarks" data-v-3d13333b><!--[-->`);
+            _push(`<ul class="child-list placemarks" data-v-2686d6d1><!--[-->`);
             ssrRenderList(folder.placemarks, (placemark, i) => {
-              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-3d13333b>`);
+              _push(`<li class="item"${ssrRenderAttr("title", placemark.name)} data-v-2686d6d1>`);
               _push(ssrRenderComponent(_component_uimage, {
                 class: "img-icon",
                 cdn: true,
                 src: "/images/third-party/mapbox-veterinary.svg"
               }, null, _parent));
-              _push(`<span class="text" data-v-3d13333b>${ssrInterpolate(placemark.name)}</span></li>`);
+              _push(`<span class="text" data-v-2686d6d1>${ssrInterpolate(placemark.name)}</span></li>`);
             });
             _push(`<!--]--></ul>`);
           }
@@ -12294,7 +12294,7 @@ _sfc_main$1h.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/footprint/box-modal.vue");
   return _sfc_setup$1h ? _sfc_setup$1h(props, ctx) : void 0;
 };
-const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-3d13333b"]]);
+const MapboxModal = /* @__PURE__ */ _export_sfc(_sfc_main$1h, [["__scopeId", "data-v-2686d6d1"]]);
 const _sfc_main$1g = /* @__PURE__ */ defineComponent({
   __name: "index",
   __ssrInlineRender: true,
