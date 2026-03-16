@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.14";
+const APP_VERSION = "7.4.15";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -6158,8 +6158,9 @@ const ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX = "A_article_content_heading";
 const getArticleContentHeadingElementId = (level, anchor) => {
   return `${ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX}_${level}_${anchor}`;
 };
+const CJK = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u;
 const getArticleHeadingUrlHash = (heading) => {
-  return heading.replace(/[^\p{L}\d\s\-_]/gu, "").toLowerCase().replace(/\s+/g, "-");
+  return heading.replace(/[^\p{L}\d\s\-_]/gu, "").replace(new RegExp(`(${CJK.source})([a-zA-Z\\d])`, "gu"), "$1-$2").replace(new RegExp(`([a-zA-Z\\d])(${CJK.source})`, "gu"), "$1-$2").toLowerCase().replace(/\s+/g, "-");
 };
 const COMMENT_ELEMENT_ID = "A_comment_wrapper";
 const getCommentItemElementId = (commentId) => {
