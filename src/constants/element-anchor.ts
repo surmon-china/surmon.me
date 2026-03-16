@@ -23,11 +23,19 @@ export const getArticleContentHeadingElementId = (level: number, anchor: string)
   return `${ARTICLE_CONTENT_HEADING_ELEMENT_ID_PREFIX}_${level}_${anchor}`
 }
 
+const CJK = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u
 export const getArticleHeadingUrlHash = (heading: string) => {
-  return heading
-    .replace(/[^\p{L}\d\s\-_]/gu, '')
-    .toLowerCase()
-    .replace(/\s+/g, '-')
+  return (
+    heading
+      // strip everything except unicode letters, digits, whitespace, hyphens and underscores
+      .replace(/[^\p{L}\d\s\-_]/gu, '')
+      // insert hyphen between CJK and ASCII boundaries for readability
+      .replace(new RegExp(`(${CJK.source})([a-zA-Z\\d])`, 'gu'), '$1-$2')
+      .replace(new RegExp(`([a-zA-Z\\d])(${CJK.source})`, 'gu'), '$1-$2')
+      .toLowerCase()
+      // collapse whitespace into hyphens
+      .replace(/\s+/g, '-')
+  )
 }
 
 export const COMMENT_ELEMENT_ID = 'A_comment_wrapper'
