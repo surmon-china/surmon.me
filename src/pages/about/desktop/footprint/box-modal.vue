@@ -74,7 +74,10 @@
                   :title="segment.name"
                   v-for="(segment, index) in trip.segments"
                   @click="
-                    activateTripSegment(map!, mapTss.flatSegmentsMap.value.get(getFlatSegmentId(trip.id, index))!)
+                    activateTripSegment(
+                      map!,
+                      mapTss.flatSegmentsMap.value.get(getFlatSegmentId(trip.id, index))!
+                    )
                   "
                 >
                   <i class="iconfont" :class="getTransportIconName(segment.transport)"></i>

@@ -14,36 +14,23 @@ import vanilla from '/@/services/vanilla'
 // TibetGar: [80.12582, 32.49448]
 // Delingha: [97.37135478972726, 37.36417118624104]
 
-export enum TripSegmentTransport {
-  Meditation = -1,
-  Nil = 0,
-  Flight = 1,
-  Train = 2,
-  Bus = 3,
-  Ship = 4,
-  Motorcycle = 5,
-  Bicycle = 6,
-  Walk = 7,
-  Hiking = 8
-}
-
-export const getTransportIconName = (transport: TripSegmentTransport) => {
-  if (transport === TripSegmentTransport.Meditation) return 'icon-meditation'
-  if (transport === TripSegmentTransport.Nil) return 'icon-route'
-  if (transport === TripSegmentTransport.Flight) return 'icon-transport-flight'
-  if (transport === TripSegmentTransport.Train) return 'icon-transport-train'
-  if (transport === TripSegmentTransport.Bus) return 'icon-transport-bus'
-  if (transport === TripSegmentTransport.Ship) return 'icon-transport-ship'
-  if (transport === TripSegmentTransport.Motorcycle) return 'icon-transport-motocycle'
-  if (transport === TripSegmentTransport.Bicycle) return 'icon-transport-bicycle'
-  if (transport === TripSegmentTransport.Walk) return 'icon-transport-walk'
-  if (transport === TripSegmentTransport.Hiking) return 'icon-transport-hiking'
+export const getTransportIconName = (_transport: string) => {
+  const transport = _transport?.toLowerCase()
+  if (transport === 'meditation') return 'icon-meditation'
+  if (transport === 'flight') return 'icon-transport-flight'
+  if (transport === 'train') return 'icon-transport-train'
+  if (transport === 'bus') return 'icon-transport-bus'
+  if (transport === 'ship') return 'icon-transport-ship'
+  if (transport === 'motorcycle') return 'icon-transport-motocycle'
+  if (transport === 'bicycle') return 'icon-transport-bicycle'
+  if (transport === 'walk') return 'icon-transport-walk'
+  if (transport === 'hiking') return 'icon-transport-hiking'
   return 'icon-route'
 }
 
 interface TripSegment {
   name: string
-  transport: TripSegmentTransport
+  transport: string
   // MARK: data from https://geojson.io
   coordinates: [number, number][]
 }
@@ -87,7 +74,7 @@ const getSegmentLineId = (segmentId: string) => `trip-segment-line-${segmentId}`
 const getSegmentLineHighlightId = (segmentId: string) => `${getSegmentLineId(segmentId)}-highlight`
 const getSegmentLineActiveId = (segmentId: string) => `${getSegmentLineId(segmentId)}-active`
 
-const getSegmentPointsId = (segmentId: string) => `trip-segment-points-${segmentId}}`
+const getSegmentPointsId = (segmentId: string) => `trip-segment-points-${segmentId}`
 const getSegmentPointsActiveId = (segmentId: string) => `${getSegmentPointsId(segmentId)}-active`
 
 export const lastActiveSegmentId = shallowRef<string | null>(null)
