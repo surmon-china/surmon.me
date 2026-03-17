@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import type { ThreadsMedia } from '/@/server/getters/threads'
-  import { Markdown } from '/@/effects/markdown'
   import { useThreadsMediaUrl } from '../threads'
+  import ThreadsText from '../threads-text.vue'
 
   const props = defineProps<{
     media: ThreadsMedia
@@ -29,17 +29,12 @@
         v-else
       />
     </div>
-    <markdown
-      class="content"
-      :markdown="media.text"
-      :render-options="{ codeLineNumbers: false }"
-      :compact="true"
-    />
+    <threads-text class="text" :text="media.text" v-if="!!media.text" />
     <div class="footer">
       <ulink class="link" :title="media.username" :href="media.permalink">
         <i class="iconfont icon-repost" v-if="media.is_quote_post"></i>
         <i class="iconfont icon-threads" v-else></i>
-        <span class="username">thread</span>
+        <span class="username">threads</span>
       </ulink>
       <div class="timestamp">
         <udate to="ago" :date="media.timestamp" />
@@ -66,7 +61,7 @@
 
       .image {
         background-color: $module-bg-darker-1;
-        min-height: 3rem;
+        min-height: 2rem;
       }
 
       .video {
@@ -79,15 +74,21 @@
       }
     }
 
-    .content {
-      padding: $gap-tiny 0.7em;
-      --markdown-block-gap: 0.5em;
+    .text {
+      padding: $gap-tiny 0.65em;
+    }
+
+    .text + .footer {
+      margin-top: 0.1em;
+    }
+
+    .media + .footer {
+      margin-top: $gap-xs;
     }
 
     .footer {
-      margin-top: 0.1rem;
       margin-bottom: $gap-xs;
-      padding: 0 0.7em;
+      padding-inline: 0.65em;
       display: flex;
       justify-content: space-between;
       align-items: center;

@@ -22,6 +22,7 @@
     --markdown-list-li-block-gap: #{$gap-tiny};
     --markdown-block-gap: #{$gap-tiny};
     --markdown-blockquote-border-width: 0.4em;
+    --markdown-hr-gap: 0.5em;
   }
 
   .assistant-message-markdown {
@@ -37,7 +38,6 @@
     }
 
     :deep(hr) {
-      margin-block: 0.5em;
       border-color: $module-bg-darker-1;
       border-style: dashed;
     }

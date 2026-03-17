@@ -4,14 +4,14 @@
   import { useThreadsLatestMediasStore } from '/@/stores/socials'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsMediasRequest } from '../threads'
-  import { i18nTitle, useSnippetsPageMeta, mobileBannerImageUrl } from '../shared'
+  import { useSnippetsPageMeta, i18nTitle, mobileBannerImageUrl } from '../shared'
   import { LocalesKey } from '/@/locales'
   import { IDENTITIES } from '/@/configs/app.config'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
   import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import MobileBanner from '/@/components/mobile/widgets/page-banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import ThreadsCard from './card-threads.vue'
+  import ThreadsCard from './threads-card.vue'
 
   const { goLinks, popup } = useEnhancer()
   const threadsLatestMediasStore = useThreadsLatestMediasStore()

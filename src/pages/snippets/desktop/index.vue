@@ -4,15 +4,14 @@
   import { useThreadsLatestMediasStore } from '/@/stores/socials'
   import { useUniversalFetch } from '/@/app/universal'
   import { useThreadsMediasRequest } from '../threads'
-  import { i18nTitle, useSnippetsPageMeta } from '../shared'
+  import { useSnippetsPageMeta, i18nTitle } from '../shared'
+  import { LocalesKey } from '/@/locales'
+  import { IDENTITIES } from '/@/configs/app.config'
   import type { ThreadsMedia, ThreadsMediaListResponse } from '/@/server/getters/threads'
   import MasonryWall, { MasonryRef } from '/@/components/common/masonry-wall.vue'
   import PageBanner from '/@/components/desktop/widgets/page-banner.vue'
   import Loadmore from '/@/components/common/loadmore.vue'
-  import ListItemCard from './card.vue'
-  import ThreadsBody from './body-threads.vue'
-  import { LocalesKey } from '/@/locales'
-  import { IDENTITIES } from '/@/configs/app.config'
+  import ThreadsCard from './threads-card.vue'
 
   const { popup, goLinks } = useEnhancer()
   const threadsLatestMediasStore = useThreadsLatestMediasStore()
@@ -91,18 +90,11 @@
                 @mounted="masonryRef = $event"
               >
                 <template #default="{ item }">
-                  <list-item-card
-                    icon="icon-threads"
-                    :username="item.username"
-                    :permalink="item.permalink"
-                    :timestamp="item.timestamp"
-                  >
-                    <threads-body
-                      :media="item"
-                      @click-image="(url) => popup.image(url)"
-                      @click-video="(url) => popup.video(url)"
-                    />
-                  </list-item-card>
+                  <threads-card
+                    :media="item"
+                    @click-image="(url) => popup.image(url)"
+                    @click-video="(url) => popup.video(url)"
+                  />
                 </template>
               </masonry-wall>
               <loadmore

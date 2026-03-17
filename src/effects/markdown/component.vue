@@ -49,7 +49,7 @@
     }
 
     hr {
-      margin-block: var(--markdown-block-gap);
+      margin-block: var(--markdown-hr-gap);
     }
 
     p {
@@ -235,7 +235,9 @@
     table {
       $border-color: $module-bg-darker-2;
       $border-radius: $radius-sm;
-      width: 100%;
+      max-width: 100%;
+      min-width: var(--markdown-table-min-width);
+      margin-inline: auto;
       border-collapse: separate;
       border-spacing: 0;
       border-top: 1px solid $border-color;
@@ -249,7 +251,7 @@
         background: none;
         border-right: 1px solid $border-color;
         border-bottom: 1px solid $border-color;
-        padding: 0.35em 0.5em;
+        padding: var(--markdown-table-cell-padding);
         &:not([align]) {
           text-align: left;
         }
@@ -480,6 +482,7 @@
   }
 
   .markdown-html-normal {
+    --markdown-hr-gap: 1em;
     --markdown-block-gap: 1em;
     --markdown-font-size: #{$font-size-base * 1.05};
     --markdown-heading-line-height: #{$line-height-loose};
@@ -490,9 +493,12 @@
     --markdown-blockquote-border-width: 0.5em;
     --markdown-list-padding-left: 3em;
     --markdown-list-li-block-gap: 0.75em;
+    --markdown-table-cell-padding: 0.35em 0.5em;
+    --markdown-table-min-width: calc(100% - 2em);
   }
 
   .markdown-html-compact {
+    --markdown-hr-gap: 0.75em;
     --markdown-block-gap: 0.75em;
     --markdown-font-size: #{$font-size-base};
     --markdown-heading-line-height: #{$line-height-loose};
@@ -503,6 +509,8 @@
     --markdown-blockquote-border-width: 0.5em;
     --markdown-list-padding-left: 2em;
     --markdown-list-li-block-gap: 0.5em;
+    --markdown-table-cell-padding: 0.35em 0.5em;
+    --markdown-table-min-width: 100%;
 
     word-wrap: break-word;
 

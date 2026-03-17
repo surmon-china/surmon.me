@@ -10,7 +10,7 @@
   <div class="statement">
     <div class="content">
       <markdown :markdown="appOptions?.statement" :compact="true" />
-      <divider :dashed="true" />
+      <hr />
       <p v-if="appOptions" class="email">
         <a :href="getEmailLink(appOptions.site_email)" class="link" target="_blank">
           <i class="iconfont icon-mail"></i>
