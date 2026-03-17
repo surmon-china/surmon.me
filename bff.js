@@ -121,7 +121,6 @@ const METHOD_NOT_ALLOWED = 405;
 const INTERNAL_SERVER_ERROR = 500;
 const GATEWAY_TIMEOUT = 504;
 var TunnelModule = /* @__PURE__ */ ((TunnelModule2) => {
-  TunnelModule2["WebFont"] = "webfont";
   TunnelModule2["MyGoogleMap"] = "my_google_map";
   TunnelModule2["YouTubePlaylist"] = "youtube_playlist";
   TunnelModule2["YouTubeVideoList"] = "youtube_video_list";

@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.18";
+const APP_VERSION = "7.4.19";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -2747,7 +2747,6 @@ _sfc_main$2f.setup = (props, ctx) => {
 };
 const MobileListing = /* @__PURE__ */ _export_sfc(_sfc_main$2f, [["__scopeId", "data-v-6a9fa606"]]);
 var TunnelModule = /* @__PURE__ */ ((TunnelModule2) => {
-  TunnelModule2["WebFont"] = "webfont";
   TunnelModule2["MyGoogleMap"] = "my_google_map";
   TunnelModule2["YouTubePlaylist"] = "youtube_playlist";
   TunnelModule2["YouTubeVideoList"] = "youtube_video_list";
