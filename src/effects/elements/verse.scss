@@ -1,17 +1,19 @@
 @use '/src/styles/base/variables' as *;
 
 p.verse {
-  text-indent: $font-size-base * 2;
-
-  &[zh]:not([heading]) {
-    font-weight: 700;
-    text-emphasis-style: '•';
-    text-emphasis-position: under;
-  }
+  text-indent: calc(var(--markdown-font-size) * 2);
 
   &[heading] {
-    font-weight: 700;
     font-size: $font-size-h3;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  &[zh] {
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-emphasis-style: '•';
+    text-emphasis-position: under;
   }
 
   &[py] {

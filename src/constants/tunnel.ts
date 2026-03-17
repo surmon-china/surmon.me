@@ -5,7 +5,6 @@
  */
 
 export enum TunnelModule {
-  WebFont = 'webfont',
   MyGoogleMap = 'my_google_map',
   YouTubePlaylist = 'youtube_playlist',
   YouTubeVideoList = 'youtube_video_list',
