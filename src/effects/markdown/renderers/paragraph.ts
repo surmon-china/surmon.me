@@ -8,6 +8,10 @@ export const createParagraphRenderer = (
   return function ({ tokens }) {
     const html = renderer.parser.parseInline(tokens)
     const hasImage = tokens.some((token) => token.type === 'image')
-    return hasImage ? html : `<p>${html}</p>`
+    const hasBlockHtml = tokens.some(
+      (token) => token.type === 'html' && /^<(video|audio)/i.test(token.raw.trim())
+    )
+
+    return hasImage || hasBlockHtml ? html : `<p>${html}</p>`
   }
 }

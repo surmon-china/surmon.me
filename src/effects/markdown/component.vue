@@ -35,6 +35,7 @@
     pre,
     table,
     blockquote,
+    video,
     iframe,
     .figure-wrapper {
       margin-bottom: var(--markdown-block-gap);
@@ -274,9 +275,14 @@
       }
     }
 
+    video {
+      display: block;
+    }
+
+    video,
     iframe {
       width: 100%;
-      min-height: 320px;
+      min-height: 14rem;
       padding: $gap-xs;
       border-radius: $radius-sm;
       border: 1px solid $module-bg-darker-1;
