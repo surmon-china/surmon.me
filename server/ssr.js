@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.20";
+const APP_VERSION = "7.4.21";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -6431,7 +6431,10 @@ const createParagraphRenderer = (renderer, options) => {
   return function({ tokens }) {
     const html = renderer.parser.parseInline(tokens);
     const hasImage = tokens.some((token) => token.type === "image");
-    return hasImage ? html : `<p>${html}</p>`;
+    const hasBlockHtml = tokens.some(
+      (token) => token.type === "html" && /^<(video|audio)/i.test(token.raw.trim())
+    );
+    return hasImage || hasBlockHtml ? html : `<p>${html}</p>`;
   };
 };
 const createListItemRenderer = (renderer, options) => {
