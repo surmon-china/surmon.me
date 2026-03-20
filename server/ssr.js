@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.21";
+const APP_VERSION = "7.4.22";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -18231,7 +18231,7 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_i18n = resolveComponent("i18n");
       const _component_loading_indicator = resolveComponent("loading-indicator");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-chat-modal" }, _attrs))} data-v-ec5859fe><div class="header" data-v-ec5859fe><div class="brand" data-v-ec5859fe><div class="logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-ec5859fe></div><span class="title" data-v-ec5859fe>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "ai-chat-modal" }, _attrs))} data-v-78866b7a><div class="header" data-v-78866b7a><div class="brand" data-v-78866b7a><div class="logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-78866b7a></div><span class="title" data-v-78866b7a>`);
       _push(ssrRenderComponent(_component_i18n, null, {
         zh: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
@@ -18253,15 +18253,15 @@ const _sfc_main$A = /* @__PURE__ */ defineComponent({
         }),
         _: 1
       }, _parent));
-      _push(`</span></div><button class="close" data-v-ec5859fe><i class="iconfont icon-cancel" data-v-ec5859fe></i></button></div><div class="body" data-v-ec5859fe>`);
+      _push(`</span></div><button class="close" data-v-78866b7a><i class="iconfont icon-cancel" data-v-78866b7a></i></button></div><div class="body" data-v-78866b7a>`);
       if (unref(aiChatStore).error) {
-        _push(`<div class="error" data-v-ec5859fe><i class="iconfont icon-error-outlined" data-v-ec5859fe></i><p class="message" data-v-ec5859fe>${ssrInterpolate(unref(aiChatStore).error.message)}</p><button class="reset" data-v-ec5859fe>`);
+        _push(`<div class="error" data-v-78866b7a><i class="iconfont icon-error-outlined" data-v-78866b7a></i><p class="message" data-v-78866b7a>${ssrInterpolate(unref(aiChatStore).error.message)}</p><button class="reset" data-v-78866b7a>`);
         _push(ssrRenderComponent(_component_i18n, {
           k: unref(LocalesKey).AI_CHAT_RESET_BUTTON
         }, null, _parent));
         _push(`</button></div>`);
       } else if (unref(aiChatStore).fetching) {
-        _push(`<div class="loading" data-v-ec5859fe>`);
+        _push(`<div class="loading" data-v-78866b7a>`);
         _push(ssrRenderComponent(_component_loading_indicator, { width: "1.8rem" }, null, _parent));
         _push(`</div>`);
       } else if (unref(aiChatStore).initialized) {
@@ -18279,7 +18279,7 @@ _sfc_main$A.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/index.vue");
   return _sfc_setup$A ? _sfc_setup$A(props, ctx) : void 0;
 };
-const AiChat = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["__scopeId", "data-v-ec5859fe"]]);
+const AiChat = /* @__PURE__ */ _export_sfc(_sfc_main$A, [["__scopeId", "data-v-78866b7a"]]);
 const logger = createLogger("APP:User");
 var TabKeys = /* @__PURE__ */ ((TabKeys2) => {
   TabKeys2["Profile"] = "profile";
@@ -19822,7 +19822,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       const _component_ulink = resolveComponent("ulink");
       const _component_uimage = resolveComponent("uimage");
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-9d2a6c99>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "mammon" }, _attrs))} data-v-7bf7906b>`);
       _push(ssrRenderComponent(unref(Swiper$1), {
         class: "swiper",
         direction: "vertical",
@@ -19839,9 +19839,9 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
       }, {
         "container-end": withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="swiper-pagination" data-v-9d2a6c99${_scopeId}><!--[-->`);
+            _push2(`<div class="swiper-pagination" data-v-7bf7906b${_scopeId}><!--[-->`);
             ssrRenderList(unref(appConfig).AD_PC_SIDEBAR_SWIPER, (__, _index) => {
-              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${_index}`)} class="${ssrRenderClass([{ active: _index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-9d2a6c99${_scopeId}><span class="bullet-progress" data-v-9d2a6c99${_scopeId}></span></div>`);
+              _push2(`<div${ssrRenderAttr("aria-label", `Go to slide ${_index}`)} class="${ssrRenderClass([{ active: _index === activeIndex.value }, "swiper-pagination-bullet"])}" role="button" data-v-7bf7906b${_scopeId}><span class="bullet-progress" data-v-7bf7906b${_scopeId}></span></div>`);
             });
             _push2(`<!--]--></div>`);
           } else {
@@ -19881,14 +19881,14 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
                             src: ad.src,
                             alt: "aside-swiper-ad"
                           }, null, _parent4, _scopeId3));
-                          _push4(`<i class="iconfont icon-ad" data-v-9d2a6c99${_scopeId3}></i>`);
+                          _push4(`<i class="iconfont icon-badge-ad" data-v-7bf7906b${_scopeId3}></i>`);
                         } else {
                           return [
                             createVNode(_component_uimage, {
                               src: ad.src,
                               alt: "aside-swiper-ad"
                             }, null, 8, ["src"]),
-                            createVNode("i", { class: "iconfont icon-ad" })
+                            createVNode("i", { class: "iconfont icon-badge-ad" })
                           ];
                         }
                       }),
@@ -19905,7 +19905,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
                             src: ad.src,
                             alt: "aside-swiper-ad"
                           }, null, 8, ["src"]),
-                          createVNode("i", { class: "iconfont icon-ad" })
+                          createVNode("i", { class: "iconfont icon-badge-ad" })
                         ]),
                         _: 2
                       }, 1032, ["href"])
@@ -19933,7 +19933,7 @@ const _sfc_main$g = /* @__PURE__ */ defineComponent({
                           src: ad.src,
                           alt: "aside-swiper-ad"
                         }, null, 8, ["src"]),
-                        createVNode("i", { class: "iconfont icon-ad" })
+                        createVNode("i", { class: "iconfont icon-badge-ad" })
                       ]),
                       _: 2
                     }, 1032, ["href"])
@@ -19956,7 +19956,7 @@ _sfc_main$g.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/sidebar/mammon.vue");
   return _sfc_setup$g ? _sfc_setup$g(props, ctx) : void 0;
 };
-const SidebarMammon = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-9d2a6c99"]]);
+const SidebarMammon = /* @__PURE__ */ _export_sfc(_sfc_main$g, [["__scopeId", "data-v-7bf7906b"]]);
 const _sfc_main$f = /* @__PURE__ */ defineComponent({
   __name: "calendar",
   __ssrInlineRender: true,
@@ -20421,65 +20421,65 @@ const menus = [
   {
     id: RouteName.Home,
     route: "/",
-    icon: "icon-home",
+    iconFont: "icon-home",
     i18nKey: LocalesKey.PAGE_HOME
   },
   {
     id: CategorySlug.Code,
     route: getCategoryFlowRoute(CategorySlug.Code),
-    icon: "icon-code",
+    iconFont: "icon-code",
     i18nKey: LocalesKey.CATEGORY_CODE
   },
   {
     id: CategorySlug.Insight,
     route: getCategoryFlowRoute(CategorySlug.Insight),
-    icon: "icon-insight",
+    iconFont: "icon-insight",
     i18nKey: LocalesKey.CATEGORY_INSIGHT
   },
   {
     id: "github",
     url: GO_LINKS_MAP.github,
-    icon: "icon-github",
+    iconFont: "icon-github",
     i18nKey: LocalesKey.PAGE_GITHUB,
     newWindow: true
   },
   {
     id: RouteName.Photography,
     route: getPageRoute(RouteName.Photography),
-    icon: "icon-lens",
+    iconFont: "icon-lens",
     i18nKey: LocalesKey.PAGE_PHOTOGRAPHY
   },
   {
     id: RouteName.Snippets,
     route: getPageRoute(RouteName.Snippets),
     i18nKey: LocalesKey.PAGE_SNIPPETS,
-    icon: "icon-buddhism"
+    iconFont: "icon-buddhism"
   },
   {
     id: RouteName.About,
     route: getPageRoute(RouteName.About),
-    icon: "icon-swordsman",
+    iconFont: "icon-swordsman",
     i18nKey: LocalesKey.PAGE_ABOUT
   },
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),
     i18nKey: LocalesKey.PAGE_GUESTBOOK,
-    icon: "icon-comment"
+    iconFont: "icon-comment"
   },
   {
     id: "sponsor",
     route: getPageRoute(RouteName.Sponsor),
-    icon: "icon-peachblossom",
+    iconFont: "icon-peachblossom",
     i18nKey: LocalesKey.PAGE_SPONSOR,
-    hot: true,
+    badgeText: "HOT",
     divider: true
   }
   // {
   //   id: RouteName.App,
   //   route: getPageRoute(RouteName.App),
-  //   imageIcon: getPageURL('/images/page-app/logo.png'),
-  //   i18nKey: LocaleKey.PAGE_APP,
+  //   iconImage: '/images/page-app/logo.png',
+  //   i18nKey: LocalesKey.PAGE_APP,
   //   divider: true
   // }
 ];
@@ -20518,7 +20518,7 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
       _push(`<header${ssrRenderAttrs(mergeProps({
         id: unref(HEADER_ELEMENT_ID),
         class: "header"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-35b8fb22><div class="header-container container" data-v-35b8fb22><div class="header-brand" data-v-35b8fb22>`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-1724c6b2><div class="header-container container" data-v-1724c6b2><div class="header-brand" data-v-1724c6b2>`);
       _push(ssrRenderComponent(_component_uimage, {
         cdn: "",
         src: "/images/logo.svg",
@@ -20547,17 +20547,17 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
         title: unref(APP_PROFILE).title,
         onMousedown: handleRootNavEvent
       }, null, _parent));
-      _push(`</div><div class="headers-tools" data-v-35b8fb22>`);
+      _push(`</div><div class="headers-tools" data-v-1724c6b2>`);
       if (__props.enabledNav) {
-        _push(`<button class="button menu" data-v-35b8fb22><i class="iconfont icon-top-menu" data-v-35b8fb22></i></button>`);
+        _push(`<button class="button menu" data-v-1724c6b2><i class="iconfont icon-top-menu" data-v-1724c6b2></i></button>`);
       } else {
         _push(`<!---->`);
       }
-      _push(`<button class="button language" title="Switch language" data-v-35b8fb22><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-35b8fb22></i></button><button class="button theme" data-v-35b8fb22>`);
+      _push(`<button class="button language" title="Switch language" data-v-1724c6b2><i class="${ssrRenderClass([languageIcon.value, "iconfont"])}" data-v-1724c6b2></i></button><button class="button theme" data-v-1724c6b2>`);
       _push(ssrRenderComponent(_component_client_only, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}"${ssrRenderAttr("data-value", unref(theme).theme.value)} data-v-35b8fb22${_scopeId}></i>`);
+            _push2(`<i class="${ssrRenderClass([themeIcon.value, "iconfont"])}"${ssrRenderAttr("data-value", unref(theme).theme.value)} data-v-1724c6b2${_scopeId}></i>`);
           } else {
             return [
               createVNode("i", {
@@ -20571,11 +20571,11 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
       }, _parent));
       _push(`</button></div></div>`);
       if (__props.enabledNav) {
-        _push(`<div class="header-nav" data-v-35b8fb22><nav class="nav-list container" data-v-35b8fb22><!--[-->`);
+        _push(`<div class="header-nav" data-v-1724c6b2><nav class="nav-list container" data-v-1724c6b2><!--[-->`);
         ssrRenderList(unref(menus), (menu, index) => {
           _push(`<!--[-->`);
           if (index > 0) {
-            _push(`<span class="divider" data-v-35b8fb22></span>`);
+            _push(`<span class="divider" data-v-1724c6b2></span>`);
           } else {
             _push(`<!---->`);
           }
@@ -20586,20 +20586,20 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
           }, {
             default: withCtx((_, _push2, _parent2, _scopeId) => {
               if (_push2) {
-                if (menu.imageIcon) {
+                if (menu.iconImage) {
                   _push2(ssrRenderComponent(_component_uimage, {
-                    class: "image-icon",
-                    src: menu.imageIcon
+                    class: "icon-image",
+                    src: menu.iconImage
                   }, null, _parent2, _scopeId));
-                } else if (menu.icon) {
-                  _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-35b8fb22${_scopeId}></i>`);
+                } else if (menu.iconFont) {
+                  _push2(`<i class="${ssrRenderClass([menu.iconFont, "icon-font iconfont"])}" data-v-1724c6b2${_scopeId}></i>`);
                 } else {
                   _push2(`<!---->`);
                 }
                 _push2(ssrRenderComponent(_component_webfont, {
                   class: "text",
-                  bolder: "",
-                  uppercase: !menu.disabledUppercase
+                  bolder: true,
+                  uppercase: true
                 }, {
                   default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                     if (_push3) {
@@ -20617,24 +20617,24 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
                   _: 2
                 }, _parent2, _scopeId));
                 if (menu.newWindow) {
-                  _push2(`<span class="new-window" data-v-35b8fb22${_scopeId}><i class="iconfont icon-new-window-s" data-v-35b8fb22${_scopeId}></i></span>`);
+                  _push2(`<span class="new-window-icon" data-v-1724c6b2${_scopeId}><i class="iconfont icon-new-window-s" data-v-1724c6b2${_scopeId}></i></span>`);
                 } else {
                   _push2(`<!---->`);
                 }
               } else {
                 return [
-                  menu.imageIcon ? (openBlock(), createBlock(_component_uimage, {
+                  menu.iconImage ? (openBlock(), createBlock(_component_uimage, {
                     key: 0,
-                    class: "image-icon",
-                    src: menu.imageIcon
-                  }, null, 8, ["src"])) : menu.icon ? (openBlock(), createBlock("i", {
+                    class: "icon-image",
+                    src: menu.iconImage
+                  }, null, 8, ["src"])) : menu.iconFont ? (openBlock(), createBlock("i", {
                     key: 1,
-                    class: ["font-icon iconfont", menu.icon]
+                    class: ["icon-font iconfont", menu.iconFont]
                   }, null, 2)) : createCommentVNode("", true),
                   createVNode(_component_webfont, {
                     class: "text",
-                    bolder: "",
-                    uppercase: !menu.disabledUppercase
+                    bolder: true,
+                    uppercase: true
                   }, {
                     default: withCtx(() => [
                       createVNode(_component_i18n, {
@@ -20642,10 +20642,10 @@ const _sfc_main$a = /* @__PURE__ */ defineComponent({
                       }, null, 8, ["k"])
                     ]),
                     _: 2
-                  }, 1032, ["uppercase"]),
+                  }, 1024),
                   menu.newWindow ? (openBlock(), createBlock("span", {
                     key: 2,
-                    class: "new-window"
+                    class: "new-window-icon"
                   }, [
                     createVNode("i", { class: "iconfont icon-new-window-s" })
                   ])) : createCommentVNode("", true)
@@ -20670,7 +20670,7 @@ _sfc_main$a.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/header.vue");
   return _sfc_setup$a ? _sfc_setup$a(props, ctx) : void 0;
 };
-const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-35b8fb22"]]);
+const HeaderView$1 = /* @__PURE__ */ _export_sfc(_sfc_main$a, [["__scopeId", "data-v-1724c6b2"]]);
 const _sfc_main$9 = /* @__PURE__ */ defineComponent({
   __name: "footer",
   __ssrInlineRender: true,
@@ -20805,11 +20805,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: unref(NAV_ELEMENT_ID),
         class: "desktop-nav"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-4e379361><nav class="nav-list" data-v-4e379361><!--[-->`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-2532f07c><nav class="nav-list" data-v-2532f07c><!--[-->`);
       ssrRenderList(unref(menus), (menu) => {
         _push(`<!--[-->`);
         if (menu.divider) {
-          _push(`<span class="divider" data-v-4e379361></span>`);
+          _push(`<span class="divider" data-v-2532f07c></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -20820,20 +20820,20 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              if (menu.imageIcon) {
+              if (menu.iconImage) {
                 _push2(ssrRenderComponent(_component_uimage, {
-                  class: "image-icon",
-                  src: menu.imageIcon
+                  class: "icon-image",
+                  src: menu.iconImage
                 }, null, _parent2, _scopeId));
-              } else if (menu.icon) {
-                _push2(`<i class="${ssrRenderClass([menu.icon, "font-icon iconfont"])}" data-v-4e379361${_scopeId}></i>`);
+              } else if (menu.iconFont) {
+                _push2(`<i class="${ssrRenderClass([menu.iconFont, "icon-font iconfont"])}" data-v-2532f07c${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
               _push2(ssrRenderComponent(_component_webfont, {
                 class: "text",
-                bolder: "",
-                uppercase: !menu.disabledUppercase
+                bolder: true,
+                uppercase: true
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
@@ -20850,30 +20850,30 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 }),
                 _: 2
               }, _parent2, _scopeId));
-              if (menu.newWindow) {
-                _push2(`<span class="new-window-icon" data-v-4e379361${_scopeId}><i class="iconfont icon-new-window-s" data-v-4e379361${_scopeId}></i></span>`);
+              if (menu.badgeText) {
+                _push2(`<span class="badge-text" data-v-2532f07c${_scopeId}>${ssrInterpolate(menu.badgeText)}</span>`);
               } else {
                 _push2(`<!---->`);
               }
-              if (menu.hot) {
-                _push2(`<span class="superscript hot" data-v-4e379361${_scopeId}><i class="iconfont icon-hot" data-v-4e379361${_scopeId}></i></span>`);
+              if (menu.newWindow) {
+                _push2(`<span class="new-window-icon" data-v-2532f07c${_scopeId}><i class="iconfont icon-new-window-s" data-v-2532f07c${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
             } else {
               return [
-                menu.imageIcon ? (openBlock(), createBlock(_component_uimage, {
+                menu.iconImage ? (openBlock(), createBlock(_component_uimage, {
                   key: 0,
-                  class: "image-icon",
-                  src: menu.imageIcon
-                }, null, 8, ["src"])) : menu.icon ? (openBlock(), createBlock("i", {
+                  class: "icon-image",
+                  src: menu.iconImage
+                }, null, 8, ["src"])) : menu.iconFont ? (openBlock(), createBlock("i", {
                   key: 1,
-                  class: ["font-icon iconfont", menu.icon]
+                  class: ["icon-font iconfont", menu.iconFont]
                 }, null, 2)) : createCommentVNode("", true),
                 createVNode(_component_webfont, {
                   class: "text",
-                  bolder: "",
-                  uppercase: !menu.disabledUppercase
+                  bolder: true,
+                  uppercase: true
                 }, {
                   default: withCtx(() => [
                     createVNode(_component_i18n, {
@@ -20881,18 +20881,16 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                     }, null, 8, ["k"])
                   ]),
                   _: 2
-                }, 1032, ["uppercase"]),
-                menu.newWindow ? (openBlock(), createBlock("span", {
+                }, 1024),
+                menu.badgeText ? (openBlock(), createBlock("span", {
                   key: 2,
+                  class: "badge-text"
+                }, toDisplayString(menu.badgeText), 1)) : createCommentVNode("", true),
+                menu.newWindow ? (openBlock(), createBlock("span", {
+                  key: 3,
                   class: "new-window-icon"
                 }, [
                   createVNode("i", { class: "iconfont icon-new-window-s" })
-                ])) : createCommentVNode("", true),
-                menu.hot ? (openBlock(), createBlock("span", {
-                  key: 3,
-                  class: "superscript hot"
-                }, [
-                  createVNode("i", { class: "iconfont icon-hot" })
                 ])) : createCommentVNode("", true)
               ];
             }
@@ -20901,9 +20899,14 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, _parent));
         _push(`<!--]-->`);
       });
-      _push(`<!--]--><!--[-->`);
+      _push(`<!--]--><span class="divider" data-v-2532f07c></span><button class="item ai-chat" data-v-2532f07c><div class="ai-logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-2532f07c></div><span class="ai-text" data-v-2532f07c>`);
+      _push(ssrRenderComponent(_component_i18n, {
+        zh: unref(AI_ASSISTANT_NAME_ZH),
+        en: "ASK AI"
+      }, null, _parent));
+      _push(`</span><span class="badge-text" data-v-2532f07c>NEW</span></button><!--[-->`);
       ssrRenderList(unref(appConfig).AD_PC_NAV, (ad, index) => {
-        _push(`<!--[--><span class="divider" data-v-4e379361></span>`);
+        _push(`<!--[--><span class="divider" data-v-2532f07c></span>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "item",
           href: ad.url,
@@ -20911,7 +20914,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="${ssrRenderClass([ad.icon, "font-icon iconfont"])}" data-v-4e379361${_scopeId}></i><span class="ad-text" data-v-4e379361${_scopeId}>`);
+              _push2(`<i class="${ssrRenderClass([ad.icon, "icon-font iconfont"])}" data-v-2532f07c${_scopeId}></i><span class="ad-text" data-v-2532f07c${_scopeId}>`);
               if (ad.i18n) {
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: ad.i18n.zh,
@@ -20920,11 +20923,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!--[-->${ssrInterpolate(ad.text)}<!--]-->`);
               }
-              _push2(`</span><span class="superscript ad" data-v-4e379361${_scopeId}><i class="iconfont icon-ad" data-v-4e379361${_scopeId}></i></span>`);
+              _push2(`</span><span class="ad-badge-icon" data-v-2532f07c${_scopeId}><i class="iconfont icon-badge-ad" data-v-2532f07c${_scopeId}></i></span>`);
             } else {
               return [
                 createVNode("i", {
-                  class: ["font-icon iconfont", ad.icon]
+                  class: ["icon-font iconfont", ad.icon]
                 }, null, 2),
                 createVNode("span", { class: "ad-text" }, [
                   ad.i18n ? (openBlock(), createBlock(_component_i18n, {
@@ -20935,8 +20938,8 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                     createTextVNode(toDisplayString(ad.text), 1)
                   ], 64))
                 ]),
-                createVNode("span", { class: "superscript ad" }, [
-                  createVNode("i", { class: "iconfont icon-ad" })
+                createVNode("span", { class: "ad-badge-icon" }, [
+                  createVNode("i", { class: "iconfont icon-badge-ad" })
                 ])
               ];
             }
@@ -20955,7 +20958,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/nav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-4e379361"]]);
+const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-2532f07c"]]);
 const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
