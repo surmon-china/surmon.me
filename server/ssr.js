@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.22";
+const APP_VERSION = "7.4.23";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -20805,11 +20805,11 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
       _push(`<div${ssrRenderAttrs(mergeProps({
         id: unref(NAV_ELEMENT_ID),
         class: "desktop-nav"
-      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-2532f07c><nav class="nav-list" data-v-2532f07c><!--[-->`);
+      }, _attrs, ssrGetDirectiveProps(_ctx, _directive_disabled_wallflower)))} data-v-8aa66b76><nav class="nav-list" data-v-8aa66b76><!--[-->`);
       ssrRenderList(unref(menus), (menu) => {
         _push(`<!--[-->`);
         if (menu.divider) {
-          _push(`<span class="divider" data-v-2532f07c></span>`);
+          _push(`<span class="divider" data-v-8aa66b76></span>`);
         } else {
           _push(`<!---->`);
         }
@@ -20826,7 +20826,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                   src: menu.iconImage
                 }, null, _parent2, _scopeId));
               } else if (menu.iconFont) {
-                _push2(`<i class="${ssrRenderClass([menu.iconFont, "icon-font iconfont"])}" data-v-2532f07c${_scopeId}></i>`);
+                _push2(`<i class="${ssrRenderClass([menu.iconFont, "icon-font iconfont"])}" data-v-8aa66b76${_scopeId}></i>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -20851,12 +20851,12 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
               if (menu.badgeText) {
-                _push2(`<span class="badge-text" data-v-2532f07c${_scopeId}>${ssrInterpolate(menu.badgeText)}</span>`);
+                _push2(`<span class="badge-text" data-v-8aa66b76${_scopeId}>${ssrInterpolate(menu.badgeText)}</span>`);
               } else {
                 _push2(`<!---->`);
               }
               if (menu.newWindow) {
-                _push2(`<span class="new-window-icon" data-v-2532f07c${_scopeId}><i class="iconfont icon-new-window-s" data-v-2532f07c${_scopeId}></i></span>`);
+                _push2(`<span class="new-window-icon" data-v-8aa66b76${_scopeId}><i class="iconfont icon-new-window-s" data-v-8aa66b76${_scopeId}></i></span>`);
               } else {
                 _push2(`<!---->`);
               }
@@ -20899,14 +20899,14 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, _parent));
         _push(`<!--]-->`);
       });
-      _push(`<!--]--><span class="divider" data-v-2532f07c></span><button class="item ai-chat" data-v-2532f07c><div class="ai-logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-2532f07c></div><span class="ai-text" data-v-2532f07c>`);
+      _push(`<!--]--><span class="divider" data-v-8aa66b76></span><button class="item ai-chat" data-v-8aa66b76><div class="ai-logo" style="${ssrRenderStyle({ "--url": `url(${unref(getSiteURL)(unref(AI_LOGO_WHITE))})` })}" data-v-8aa66b76></div><span class="ai-text" data-v-8aa66b76>`);
       _push(ssrRenderComponent(_component_i18n, {
         zh: unref(AI_ASSISTANT_NAME_ZH),
         en: "ASK AI"
       }, null, _parent));
-      _push(`</span><span class="badge-text" data-v-2532f07c>NEW</span></button><!--[-->`);
+      _push(`</span><span class="badge-text" data-v-8aa66b76>NEW</span></button><!--[-->`);
       ssrRenderList(unref(appConfig).AD_PC_NAV, (ad, index) => {
-        _push(`<!--[--><span class="divider" data-v-2532f07c></span>`);
+        _push(`<!--[--><span class="divider" data-v-8aa66b76></span>`);
         _push(ssrRenderComponent(_component_ulink, {
           class: "item",
           href: ad.url,
@@ -20914,7 +20914,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(`<i class="${ssrRenderClass([ad.icon, "icon-font iconfont"])}" data-v-2532f07c${_scopeId}></i><span class="ad-text" data-v-2532f07c${_scopeId}>`);
+              _push2(`<i class="${ssrRenderClass([ad.icon, "icon-font iconfont"])}" data-v-8aa66b76${_scopeId}></i><span class="ad-text" data-v-8aa66b76${_scopeId}>`);
               if (ad.i18n) {
                 _push2(ssrRenderComponent(_component_i18n, {
                   zh: ad.i18n.zh,
@@ -20923,7 +20923,7 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
               } else {
                 _push2(`<!--[-->${ssrInterpolate(ad.text)}<!--]-->`);
               }
-              _push2(`</span><span class="ad-badge-icon" data-v-2532f07c${_scopeId}><i class="iconfont icon-badge-ad" data-v-2532f07c${_scopeId}></i></span>`);
+              _push2(`</span><span class="ad-badge-icon" data-v-8aa66b76${_scopeId}><i class="iconfont icon-badge-ad" data-v-8aa66b76${_scopeId}></i></span>`);
             } else {
               return [
                 createVNode("i", {
@@ -20958,7 +20958,7 @@ _sfc_main$8.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/layout/nav.vue");
   return _sfc_setup$8 ? _sfc_setup$8(props, ctx) : void 0;
 };
-const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-2532f07c"]]);
+const NavView = /* @__PURE__ */ _export_sfc(_sfc_main$8, [["__scopeId", "data-v-8aa66b76"]]);
 const _sfc_main$7 = /* @__PURE__ */ defineComponent({
   __name: "main",
   __ssrInlineRender: true,
