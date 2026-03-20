@@ -8,77 +8,76 @@ export interface MenuItem {
   route?: string
   url?: string
   i18nKey: LocalesKey
-  icon?: string
-  imageIcon?: string
+  iconFont?: string
+  iconImage?: string
   divider?: boolean
   newWindow?: boolean
-  disabledUppercase?: boolean
-  hot?: boolean
+  badgeText?: string
 }
 
 export const menus: Array<MenuItem> = [
   {
     id: RouteName.Home,
     route: '/',
-    icon: 'icon-home',
+    iconFont: 'icon-home',
     i18nKey: LocalesKey.PAGE_HOME
   },
   {
     id: CategorySlug.Code,
     route: getCategoryFlowRoute(CategorySlug.Code),
-    icon: 'icon-code',
+    iconFont: 'icon-code',
     i18nKey: LocalesKey.CATEGORY_CODE
   },
   {
     id: CategorySlug.Insight,
     route: getCategoryFlowRoute(CategorySlug.Insight),
-    icon: 'icon-insight',
+    iconFont: 'icon-insight',
     i18nKey: LocalesKey.CATEGORY_INSIGHT
   },
   {
     id: 'github',
     url: GO_LINKS_MAP.github,
-    icon: 'icon-github',
+    iconFont: 'icon-github',
     i18nKey: LocalesKey.PAGE_GITHUB,
     newWindow: true
   },
   {
     id: RouteName.Photography,
     route: getPageRoute(RouteName.Photography),
-    icon: 'icon-lens',
+    iconFont: 'icon-lens',
     i18nKey: LocalesKey.PAGE_PHOTOGRAPHY
   },
   {
     id: RouteName.Snippets,
     route: getPageRoute(RouteName.Snippets),
     i18nKey: LocalesKey.PAGE_SNIPPETS,
-    icon: 'icon-buddhism'
+    iconFont: 'icon-buddhism'
   },
   {
     id: RouteName.About,
     route: getPageRoute(RouteName.About),
-    icon: 'icon-swordsman',
+    iconFont: 'icon-swordsman',
     i18nKey: LocalesKey.PAGE_ABOUT
   },
   {
     id: RouteName.Guestbook,
     route: getPageRoute(RouteName.Guestbook),
     i18nKey: LocalesKey.PAGE_GUESTBOOK,
-    icon: 'icon-comment'
+    iconFont: 'icon-comment'
   },
   {
     id: 'sponsor',
     route: getPageRoute(RouteName.Sponsor),
-    icon: 'icon-peachblossom',
+    iconFont: 'icon-peachblossom',
     i18nKey: LocalesKey.PAGE_SPONSOR,
-    hot: true,
+    badgeText: 'HOT',
     divider: true
   }
   // {
   //   id: RouteName.App,
   //   route: getPageRoute(RouteName.App),
-  //   imageIcon: getPageURL('/images/page-app/logo.png'),
-  //   i18nKey: LocaleKey.PAGE_APP,
+  //   iconImage: '/images/page-app/logo.png',
+  //   i18nKey: LocalesKey.PAGE_APP,
   //   divider: true
   // }
 ]

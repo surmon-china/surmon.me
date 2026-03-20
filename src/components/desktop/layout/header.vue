@@ -82,17 +82,14 @@
         <template v-for="(menu, index) in menus" :key="menu.id">
           <span v-if="index > 0" class="divider"></span>
           <ulink class="item" :class="menu.id" :to="menu.route" :href="menu.url">
-            <uimage v-if="menu.imageIcon" class="image-icon" :src="menu.imageIcon" />
-            <i v-else-if="menu.icon" class="font-icon iconfont" :class="menu.icon"></i>
-            <webfont class="text" bolder :uppercase="!menu.disabledUppercase">
+            <uimage v-if="menu.iconImage" class="icon-image" :src="menu.iconImage" />
+            <i v-else-if="menu.iconFont" class="icon-font iconfont" :class="menu.iconFont"></i>
+            <webfont class="text" :bolder="true" :uppercase="true">
               <i18n :k="menu.i18nKey" />
             </webfont>
-            <span v-if="menu.newWindow" class="new-window">
+            <span v-if="menu.newWindow" class="new-window-icon">
               <i class="iconfont icon-new-window-s"></i>
             </span>
-            <!-- <span v-if="menu.hot" class="superscript">
-              <i class="iconfont icon-hot"></i>
-            </span> -->
           </ulink>
         </template>
       </nav>
@@ -245,22 +242,18 @@
             background-color: $module-bg-opaque;
           }
 
-          .font-icon {
+          .icon-font {
             margin-right: $gap-xs;
           }
 
-          .image-icon {
+          .icon-image {
             width: 1em;
             height: 1em;
             margin-right: $gap-xs;
             border-radius: $radius-xs;
           }
 
-          .superscript {
-            margin-left: $gap-tiny;
-          }
-
-          .new-window {
+          .new-window-icon {
             margin-left: $gap-tiny;
             margin-right: -$gap-tiny;
             margin-top: -$gap-tiny;

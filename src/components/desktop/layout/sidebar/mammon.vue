@@ -62,7 +62,7 @@
       <swiper-slide class="swiper-slide" :key="_index" v-for="(ad, _index) in appConfig.AD_PC_SIDEBAR_SWIPER">
         <ulink class="content" :href="ad.url">
           <uimage :src="ad.src" alt="aside-swiper-ad" />
-          <i class="iconfont icon-ad"></i>
+          <i class="iconfont icon-badge-ad"></i>
         </ulink>
       </swiper-slide>
       <template #container-end>

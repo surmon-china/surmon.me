@@ -90,7 +90,7 @@
         .logo {
           margin-left: $gap-sm;
           margin-right: $gap-tiny;
-          width: 1.8rem;
+          width: 1.6rem;
           height: 100%;
           background: $ai-primary-gradient;
           -webkit-mask: var(--url) center / contain no-repeat;
