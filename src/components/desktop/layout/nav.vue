@@ -143,10 +143,10 @@
         }
 
         .badge-text {
-          line-height: 1;
+          display: inline-block;
           margin-left: $gap-xs;
           padding-inline: 1px;
-          padding-block: 1px;
+          line-height: initial;
           font-size: 8px;
           font-weight: bold;
           border: 1px solid;
