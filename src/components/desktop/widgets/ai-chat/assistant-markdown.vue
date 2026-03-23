@@ -3,7 +3,7 @@
   import { copy } from '/@/utils/clipboard'
   import { Markdown } from '/@/effects/markdown'
 
-  const props = defineProps<{ content: string }>()
+  const props = defineProps<{ content: string; hideCopyButton?: boolean }>()
 
   const copied = ref(false)
   let copyTimer: ReturnType<typeof setTimeout> | null = null
@@ -37,6 +37,7 @@
       :title="copied ? 'Copied!' : 'Copy Markdown'"
       :disabled="copied"
       @click="handleCopy"
+      v-if="!hideCopyButton"
     >
       <i :class="['iconfont', copied ? 'icon-copy-success' : 'icon-copy-outlined']" />
     </button>

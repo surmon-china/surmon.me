@@ -34,5 +34,5 @@
 </script>
 
 <template>
-  <assistant-markdown class="message-typewriter" :content="displayed" />
+  <assistant-markdown class="message-typewriter" :content="displayed" :hide-copy-button="true" />
 </template>
