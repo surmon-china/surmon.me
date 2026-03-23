@@ -1,7 +1,26 @@
 <script lang="ts" setup>
+  import { ref, onBeforeUnmount } from 'vue'
   import { copy } from '/@/utils/clipboard'
   import { Markdown } from '/@/effects/markdown'
+
   const props = defineProps<{ content: string }>()
+
+  const copied = ref(false)
+  let copyTimer: ReturnType<typeof setTimeout> | null = null
+
+  const handleCopy = () => {
+    if (copied.value) return
+    copy(props.content)
+    copied.value = true
+    copyTimer = setTimeout(() => {
+      copied.value = false
+      copyTimer = null
+    }, 1800)
+  }
+
+  onBeforeUnmount(() => {
+    if (copyTimer) clearTimeout(copyTimer)
+  })
 </script>
 
 <template>
@@ -12,8 +31,14 @@
       :compact="true"
       :render-options="{ cjkSpacing: true, codeLineNumbers: true }"
     />
-    <button class="copy-button" title="Copy Markdown" @click="copy(content)">
-      <i class="iconfont icon-copy-outlined"></i>
+    <button
+      class="copy-button"
+      :class="copied ? 'copied' : 'idle'"
+      :title="copied ? 'Copied!' : 'Copy Markdown'"
+      :disabled="copied"
+      @click="handleCopy"
+    >
+      <i :class="['iconfont', copied ? 'icon-copy-success' : 'icon-copy-outlined']" />
     </button>
   </div>
 </template>
@@ -38,9 +63,16 @@
       @include mix.visibility-transition();
       @include mix.hidden();
       font-size: $font-size-tertiary;
-      color: $color-text-disabled;
-      &:hover {
-        color: $color-link;
+
+      &.idle {
+        color: $color-text-disabled;
+        &:hover {
+          color: $color-link;
+        }
+      }
+
+      &.copied {
+        color: $color-text;
       }
     }
   }
