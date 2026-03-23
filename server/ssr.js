@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.24";
+const APP_VERSION = "7.4.25";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -17736,21 +17736,27 @@ const _sfc_main$H = /* @__PURE__ */ defineComponent({
   __name: "assistant-markdown",
   __ssrInlineRender: true,
   props: {
-    content: {}
+    content: {},
+    hideCopyButton: { type: Boolean }
   },
   setup(__props) {
     const copied = ref(false);
     onBeforeUnmount(() => {
     });
     return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: "assistant-message-markdown" }, _attrs))} data-v-4d5e00b2>`);
+      _push(`<div${ssrRenderAttrs(mergeProps({ class: "assistant-message-markdown" }, _attrs))} data-v-9443117c>`);
       _push(ssrRenderComponent(unref(_sfc_main$1Z), {
         class: "message-markdown",
         markdown: __props.content,
         compact: true,
         "render-options": { cjkSpacing: true, codeLineNumbers: true }
       }, null, _parent));
-      _push(`<button class="${ssrRenderClass([copied.value ? "copied" : "idle", "copy-button"])}"${ssrRenderAttr("title", copied.value ? "Copied!" : "Copy Markdown")}${ssrIncludeBooleanAttr(copied.value) ? " disabled" : ""} data-v-4d5e00b2><i class="${ssrRenderClass(["iconfont", copied.value ? "icon-copy-success" : "icon-copy-outlined"])}" data-v-4d5e00b2></i></button></div>`);
+      if (!__props.hideCopyButton) {
+        _push(`<button class="${ssrRenderClass([copied.value ? "copied" : "idle", "copy-button"])}"${ssrRenderAttr("title", copied.value ? "Copied!" : "Copy Markdown")}${ssrIncludeBooleanAttr(copied.value) ? " disabled" : ""} data-v-9443117c><i class="${ssrRenderClass(["iconfont", copied.value ? "icon-copy-success" : "icon-copy-outlined"])}" data-v-9443117c></i></button>`);
+      } else {
+        _push(`<!---->`);
+      }
+      _push(`</div>`);
     };
   }
 });
@@ -17760,7 +17766,7 @@ _sfc_main$H.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/components/desktop/widgets/ai-chat/assistant-markdown.vue");
   return _sfc_setup$H ? _sfc_setup$H(props, ctx) : void 0;
 };
-const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-4d5e00b2"]]);
+const AssistantMarkdown = /* @__PURE__ */ _export_sfc(_sfc_main$H, [["__scopeId", "data-v-9443117c"]]);
 const _sfc_main$G = /* @__PURE__ */ defineComponent({
   __name: "message-typewriter",
   __ssrInlineRender: true,
@@ -17797,7 +17803,8 @@ const _sfc_main$G = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       _push(ssrRenderComponent(AssistantMarkdown, mergeProps({
         class: "message-typewriter",
-        content: displayed.value
+        content: displayed.value,
+        "hide-copy-button": true
       }, _attrs), null, _parent));
     };
   }
