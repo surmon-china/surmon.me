@@ -340,9 +340,24 @@
 
         .copy {
           font-size: 90%;
-          color: $color-text-secondary;
-          &:hover {
-            color: $color-link-hover;
+
+          &:not([data-copied]) {
+            color: $color-text-secondary;
+            &:hover {
+              color: $color-link-hover;
+            }
+
+            .icon-copy-success {
+              display: none;
+            }
+          }
+
+          &[data-copied] {
+            color: $color-text;
+
+            .icon-copy-outlined {
+              display: none;
+            }
           }
         }
       }

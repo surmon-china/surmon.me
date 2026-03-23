@@ -43,8 +43,8 @@ export const createImageRenderer = (
               ${options?.lazyLoadImage ? `data-src="${srcValue}"` : `src="${srcValue}"`}
               ${altValue ? `alt="${altValue}"` : ''}
               ${titleValue ? `title="${titleValue}"` : ''}
-              onload="this.parentElement.parentElement.dataset.status = 'loaded'"
-              onerror="this.parentElement.parentElement.dataset.status = 'error'"
+              onload="this.closest('figure').dataset.status = 'loaded'"
+              onerror="this.closest('figure').dataset.status = 'error'"
               onclick="window.$popup?.image(this.currentSrc || this.src)"
             />
           </picture>

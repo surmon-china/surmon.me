@@ -38,8 +38,19 @@ export const createCodeRenderer = (
             <i class="iconfont icon-code"></i>
             <span class="text">${langString ? (markdownCodeLanguageNamesMap.get(langString.toLowerCase()) ?? langString) : 'code'}</span>
           </span>
-          <button class="copy" title="Copy code" onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('code').innerText)">
+          <button
+            class="copy"
+            title="Copy code"
+            onclick="
+              const button = this;
+              if (button.dataset.copied) return;
+              navigator.clipboard.writeText(button.closest('pre').querySelector('code').innerText);
+              button.dataset.copied = true;
+              setTimeout(() => delete button.dataset.copied, 3000);
+            "
+            >
             <i class="iconfont icon-copy-outlined"></i>
+            <i class="iconfont icon-copy-success"></i>
           </button>
         </div>
         <div class="code-wrapper">
