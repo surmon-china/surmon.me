@@ -73,7 +73,7 @@
         </span>
       </div>
       <slot name="body-top-extra"></slot>
-      <markdown :html="detailStore.defaultContent?.html" />
+      <markdown class="main-content" :html="detailStore.defaultContent?.html" />
       <transition
         name="module"
         mode="out-in"
@@ -129,13 +129,13 @@
     }
 
     .knowledge {
-      user-select: text;
       position: relative;
 
       .title {
         margin-top: $gap-sm;
         margin-bottom: $gap-xs;
         text-align: center;
+        user-select: text;
 
         .featured {
           display: inline-block;
@@ -157,14 +157,20 @@
         text-align: center;
         color: $color-text-disabled;
         font-size: $font-size-tertiary;
-        user-select: none;
         line-height: 2;
+
         .iconfont {
           margin-right: $gap-tiny;
         }
+
         .vertical {
           top: -1px;
         }
+      }
+
+      .main-content,
+      .more-content {
+        user-select: text;
       }
 
       .more-content {

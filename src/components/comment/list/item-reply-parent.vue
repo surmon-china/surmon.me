@@ -68,7 +68,6 @@
       font-style: italic;
       font-weight: normal;
       font-size: $font-size-tertiary;
-      user-select: none;
     }
 
     .parent {

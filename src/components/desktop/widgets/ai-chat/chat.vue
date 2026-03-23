@@ -232,6 +232,7 @@
           border-top-right-radius: $radius-tiny;
           background-color: $module-bg-darker-1;
           line-height: $line-height-loose;
+          user-select: text;
         }
 
         .assistant-bubble {

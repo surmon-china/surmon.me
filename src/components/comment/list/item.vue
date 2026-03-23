@@ -256,10 +256,6 @@
         }
       }
 
-      > .cm-content {
-        user-select: text;
-      }
-
       .cm-footer {
         display: flex;
         justify-content: space-between;

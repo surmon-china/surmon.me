@@ -28,6 +28,7 @@
   .assistant-message-markdown {
     overflow: hidden;
     text-autospace: normal;
+    user-select: text;
 
     > :first-child {
       margin-top: 0;

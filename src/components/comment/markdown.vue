@@ -26,6 +26,7 @@
   .comment-markdown {
     padding-bottom: 0.2em;
     text-autospace: normal;
+    user-select: text;
 
     > :first-child {
       margin-top: 0.2em;

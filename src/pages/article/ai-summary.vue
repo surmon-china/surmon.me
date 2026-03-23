@@ -78,7 +78,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      user-select: none;
 
       .title {
         background-image: $ai-primary-gradient;
@@ -107,6 +106,7 @@
     .summary-content {
       position: relative;
       line-height: 2em;
+      user-select: text;
 
       .text {
         margin: 0;
