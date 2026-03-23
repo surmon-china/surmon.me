@@ -1,15 +1,21 @@
 <script lang="ts" setup>
+  import { copy } from '/@/utils/clipboard'
   import { Markdown } from '/@/effects/markdown'
   const props = defineProps<{ content: string }>()
 </script>
 
 <template>
-  <markdown
-    class="assistant-message-markdown"
-    :markdown="content"
-    :compact="true"
-    :render-options="{ cjkSpacing: true, codeLineNumbers: true }"
-  />
+  <div class="assistant-message-markdown">
+    <markdown
+      class="message-markdown"
+      :markdown="content"
+      :compact="true"
+      :render-options="{ cjkSpacing: true, codeLineNumbers: true }"
+    />
+    <button class="copy-button" title="Copy Markdown" @click="copy(content)">
+      <i class="iconfont icon-copy-outlined"></i>
+    </button>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -18,6 +24,28 @@
   @use '/src/styles/base/mixins' as mix;
 
   .assistant-message-markdown {
+    position: relative;
+    &:hover {
+      .copy-button {
+        @include mix.visible();
+      }
+    }
+
+    .copy-button {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      @include mix.visibility-transition();
+      @include mix.hidden();
+      font-size: $font-size-tertiary;
+      color: $color-text-disabled;
+      &:hover {
+        color: $color-link;
+      }
+    }
+  }
+
+  .message-markdown {
     --markdown-heading-line-height: #{$line-height-loose};
     --markdown-list-li-block-gap: #{$gap-tiny};
     --markdown-block-gap: #{$gap-tiny};
@@ -25,7 +53,7 @@
     --markdown-hr-gap: 0.5em;
   }
 
-  .assistant-message-markdown {
+  .message-markdown {
     overflow: hidden;
     text-autospace: normal;
     user-select: text;
