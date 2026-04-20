@@ -2,18 +2,12 @@ import axios from '@/server/services/axios'
 import { THREADS_TOKEN } from '@/configs/bff.env'
 
 export interface ThreadsProfile {
-  // profile
   id: string
   name: string
   username: string
   avatar_url: string
   biography: string
-
-  // insights
-  totalLikes: number // The number of likes on your posts.
-  totalReposts: number // The number of replies on your posts. (This number includes only top-level replies.)
-  totalQuotes: number // The number of times your posts were reposted.
-  followersCount: number // Your total number of followers on Threads.
+  followers_count: number // Total number of followers.
 }
 
 const getThreadsUserProfile = async () => {
@@ -38,35 +32,31 @@ const getThreadsUserProfile = async () => {
   }
 }
 
-const getThreadsUserInsights = async () => {
+const getThreadsUserFollowersCount = async () => {
   try {
     // https://developers.facebook.com/docs/threads/insights
     const uri = 'https://graph.threads.net/v1.0/me/threads_insights'
-    const metric = 'likes,reposts,quotes,followers_count'
-    const since = '1712991600'
-    const until = Date.now().toString().slice(0, 10)
-
+    // MARK: Per the documentation, `followers_count` always reflects the latest real-time value, regardless of the `since` and `until` parameters.
+    const metric = 'followers_count'
     const response = await axios.get<any>(uri, {
-      params: { access_token: THREADS_TOKEN, metric, since, until },
+      params: { access_token: THREADS_TOKEN, metric },
       timeout: 8000
     })
-
     // MARK: data.data[index] follow the `metric`'s order
-    return {
-      totalLikes: response.data.data[0].total_value.value,
-      totalReposts: response.data.data[1].total_value.value,
-      totalQuotes: response.data.data[2].total_value.value,
-      followersCount: response.data.data[3].total_value.value
-    } satisfies Partial<ThreadsProfile>
+    return response.data.data[0].total_value.value as number
   } catch (error: any) {
     throw error.response?.data?.error?.message ?? error
   }
 }
 
 export const getThreadsProfile = async (): Promise<ThreadsProfile> => {
-  const [userProfile, userInsights] = await Promise.all([getThreadsUserProfile(), getThreadsUserInsights()])
+  const [userProfile, followersCount] = await Promise.all([
+    getThreadsUserProfile(),
+    getThreadsUserFollowersCount()
+  ])
+
   return {
     ...userProfile,
-    ...userInsights
+    followers_count: followersCount
   }
 }

@@ -50,18 +50,16 @@
       </i18n>
     </p>
     <p>
-      <i class="iconfont icon-heart-outlined"></i>
-      <span v-if="isZhLang">共收到</span>
-      <statistic-count large primary split :count="threadsProfileStore.data?.totalLikes || '-'" />
-      <span v-if="isZhLang">个按赞</span>
-      <span v-else> likes earned</span>
-    </p>
-    <p>
       <i class="iconfont icon-follower"></i>
       <span v-if="isZhLang">获得了</span>
-      <statistic-count split :count="threadsProfileStore.data?.followersCount || '-'" />
+      <statistic-count large primary split :count="threadsProfileStore.data?.followers_count || '-'" />
       <span v-if="isZhLang">位关注者</span>
       <span v-else>followers</span>
+    </p>
+    <p>
+      <i class="iconfont icon-threads"></i>
+      <span v-if="isZhLang">ID 是 </span>
+      <span>{{ threadsProfileStore.data?.username }}</span>
     </p>
   </statistic-card>
 </template>
