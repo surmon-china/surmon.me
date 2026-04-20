@@ -59,7 +59,7 @@
     <p>
       <i class="iconfont icon-threads"></i>
       <span v-if="isZhLang">ID 是 </span>
-      <span>{{ threadsProfileStore.data?.username }}</span>
+      <span class="id">{{ threadsProfileStore.data?.username }}</span>
     </p>
   </statistic-card>
 </template>
@@ -75,6 +75,10 @@
     .line-1 {
       margin-top: $gap;
       margin-bottom: 0.7em;
+    }
+
+    .id {
+      color: $color-link;
     }
   }
 </style>
