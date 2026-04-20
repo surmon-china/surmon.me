@@ -42,7 +42,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import QRCode from "qrcode";
-const APP_VERSION = "7.4.25";
+const APP_VERSION = "7.4.26";
 const APP_MODE = "production";
 const isDev = false;
 const isClient = false;
@@ -10879,13 +10879,13 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
       }, _attrs), {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<p class="line-1" data-v-1da08f3a${_scopeId}><i class="iconfont icon-calendar" data-v-1da08f3a${_scopeId}></i>`);
+            _push2(`<p class="line-1" data-v-27dc60d4${_scopeId}><i class="iconfont icon-calendar" data-v-27dc60d4${_scopeId}></i>`);
             _push2(ssrRenderComponent(_component_i18n, null, {
               zh: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<span data-v-1da08f3a${_scopeId2}>活跃了`);
+                  _push3(`<span data-v-27dc60d4${_scopeId2}>活跃了`);
                   _push3(ssrRenderComponent(unref(StatisticCount), { count: unref(totalYears) }, null, _parent3, _scopeId2));
-                  _push3(`年</span><span data-v-1da08f3a${_scopeId2}>零`);
+                  _push3(`年</span><span data-v-27dc60d4${_scopeId2}>零`);
                   _push3(ssrRenderComponent(unref(StatisticCount), { count: unref(totalMonths) }, null, _parent3, _scopeId2));
                   _push3(`个月</span>`);
                 } else {
@@ -10914,9 +10914,9 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</p><p data-v-1da08f3a${_scopeId}><i class="iconfont icon-heart-outlined" data-v-1da08f3a${_scopeId}></i>`);
+            _push2(`</p><p data-v-27dc60d4${_scopeId}><i class="iconfont icon-follower" data-v-27dc60d4${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span data-v-1da08f3a${_scopeId}>共收到</span>`);
+              _push2(`<span data-v-27dc60d4${_scopeId}>获得了</span>`);
             } else {
               _push2(`<!---->`);
             }
@@ -10924,29 +10924,20 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
               large: "",
               primary: "",
               split: "",
-              count: unref(threadsProfileStore).data?.totalLikes || "-"
+              count: unref(threadsProfileStore).data?.followers_count || "-"
             }, null, _parent2, _scopeId));
             if (unref(isZhLang)) {
-              _push2(`<span data-v-1da08f3a${_scopeId}>个按赞</span>`);
+              _push2(`<span data-v-27dc60d4${_scopeId}>位关注者</span>`);
             } else {
-              _push2(`<span data-v-1da08f3a${_scopeId}> likes earned</span>`);
+              _push2(`<span data-v-27dc60d4${_scopeId}>followers</span>`);
             }
-            _push2(`</p><p data-v-1da08f3a${_scopeId}><i class="iconfont icon-follower" data-v-1da08f3a${_scopeId}></i>`);
+            _push2(`</p><p data-v-27dc60d4${_scopeId}><i class="iconfont icon-threads" data-v-27dc60d4${_scopeId}></i>`);
             if (unref(isZhLang)) {
-              _push2(`<span data-v-1da08f3a${_scopeId}>获得了</span>`);
+              _push2(`<span data-v-27dc60d4${_scopeId}>ID 是 </span>`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(ssrRenderComponent(unref(StatisticCount), {
-              split: "",
-              count: unref(threadsProfileStore).data?.followersCount || "-"
-            }, null, _parent2, _scopeId));
-            if (unref(isZhLang)) {
-              _push2(`<span data-v-1da08f3a${_scopeId}>位关注者</span>`);
-            } else {
-              _push2(`<span data-v-1da08f3a${_scopeId}>followers</span>`);
-            }
-            _push2(`</p>`);
+            _push2(`<span data-v-27dc60d4${_scopeId}>${ssrInterpolate(unref(threadsProfileStore).data?.username)}</span></p>`);
           } else {
             return [
               createVNode("p", { class: "line-1" }, [
@@ -10971,24 +10962,20 @@ const _sfc_main$1p = /* @__PURE__ */ defineComponent({
                 })
               ]),
               createVNode("p", null, [
-                createVNode("i", { class: "iconfont icon-heart-outlined" }),
-                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "共收到")) : createCommentVNode("", true),
+                createVNode("i", { class: "iconfont icon-follower" }),
+                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "获得了")) : createCommentVNode("", true),
                 createVNode(unref(StatisticCount), {
                   large: "",
                   primary: "",
                   split: "",
-                  count: unref(threadsProfileStore).data?.totalLikes || "-"
-                }, null, 8, ["count"]),
-                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "个按赞")) : (openBlock(), createBlock("span", { key: 2 }, " likes earned"))
-              ]),
-              createVNode("p", null, [
-                createVNode("i", { class: "iconfont icon-follower" }),
-                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "获得了")) : createCommentVNode("", true),
-                createVNode(unref(StatisticCount), {
-                  split: "",
-                  count: unref(threadsProfileStore).data?.followersCount || "-"
+                  count: unref(threadsProfileStore).data?.followers_count || "-"
                 }, null, 8, ["count"]),
                 unref(isZhLang) ? (openBlock(), createBlock("span", { key: 1 }, "位关注者")) : (openBlock(), createBlock("span", { key: 2 }, "followers"))
+              ]),
+              createVNode("p", null, [
+                createVNode("i", { class: "iconfont icon-threads" }),
+                unref(isZhLang) ? (openBlock(), createBlock("span", { key: 0 }, "ID 是 ")) : createCommentVNode("", true),
+                createVNode("span", null, toDisplayString(unref(threadsProfileStore).data?.username), 1)
               ])
             ];
           }
@@ -11004,7 +10991,7 @@ _sfc_main$1p.setup = (props, ctx) => {
   (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("src/pages/about/desktop/statistic/threads.vue");
   return _sfc_setup$1p ? _sfc_setup$1p(props, ctx) : void 0;
 };
-const ThreadsStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-1da08f3a"]]);
+const ThreadsStatistic = /* @__PURE__ */ _export_sfc(_sfc_main$1p, [["__scopeId", "data-v-27dc60d4"]]);
 const _sfc_main$1o = /* @__PURE__ */ defineComponent({
   __name: "douban",
   __ssrInlineRender: true,

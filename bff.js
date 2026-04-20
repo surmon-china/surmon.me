@@ -1043,31 +1043,27 @@ const getThreadsUserProfile = async () => {
     throw error.response?.data?.error?.message ?? error;
   }
 };
-const getThreadsUserInsights = async () => {
+const getThreadsUserFollowersCount = async () => {
   try {
     const uri = "https://graph.threads.net/v1.0/me/threads_insights";
-    const metric = "likes,reposts,quotes,followers_count";
-    const since = "1712991600";
-    const until = Date.now().toString().slice(0, 10);
+    const metric = "followers_count";
     const response = await axios.get(uri, {
-      params: { access_token: THREADS_TOKEN, metric, since, until },
+      params: { access_token: THREADS_TOKEN, metric },
       timeout: 8e3
     });
-    return {
-      totalLikes: response.data.data[0].total_value.value,
-      totalReposts: response.data.data[1].total_value.value,
-      totalQuotes: response.data.data[2].total_value.value,
-      followersCount: response.data.data[3].total_value.value
-    };
+    return response.data.data[0].total_value.value;
   } catch (error) {
     throw error.response?.data?.error?.message ?? error;
   }
 };
 const getThreadsProfile = async () => {
-  const [userProfile, userInsights] = await Promise.all([getThreadsUserProfile(), getThreadsUserInsights()]);
+  const [userProfile, followersCount] = await Promise.all([
+    getThreadsUserProfile(),
+    getThreadsUserFollowersCount()
+  ]);
   return {
     ...userProfile,
-    ...userInsights
+    followers_count: followersCount
   };
 };
 const getInstagramMedias = async (options) => {
