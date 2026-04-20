@@ -26,7 +26,7 @@
     "@sentry/vue": "^10.x",
     "@unhead/vue": "^2.x",
     "agentkeepalive": "^4.6.x",
-    "axios": "^1.13.x",
+    "axios": "^1.15.x",
     "bezier-easing": "^3.x",
     "fast-xml-parser": "^5.x",
     "fs-extra": "^11.3.x",
