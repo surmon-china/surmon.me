@@ -37,6 +37,8 @@
 
 ## Development Setup
 
+Requires Node.js 24+ and pnpm 12.
+
 ```bash
 # install dependencies
 $ pnpm install

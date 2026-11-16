@@ -17,18 +17,17 @@ const tunnel = axios.create({
     : `${BFF_CONFIG.server_local_url}${BFF_CONFIG.tunnel_url_prefix}`
 })
 
-tunnel.interceptors.response.use(
-  (response) => response.data,
-  (error: AxiosError<string>) => {
-    return Promise.reject({
-      code: error.status!,
-      message: error.response?.data ?? error.response?.statusText ?? error?.message
-    } satisfies AppError)
-  }
-)
+tunnel.interceptors.response.use(undefined, (error: AxiosError<string>) => {
+  return Promise.reject({
+    code: error.status!,
+    message: error.response?.data ?? error.response?.statusText ?? error?.message
+  } satisfies AppError)
+})
 
 export default {
   $: tunnel,
-  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> => tunnel.request(...args),
-  fetch: <T = any>(module: TunnelModule, params?: any): Promise<T> => tunnel.get(module, { params })
+  request: <T = any>(...args: Parameters<AxiosInstance['request']>): Promise<T> =>
+    tunnel.request<T>(...args).then((response) => response.data),
+  fetch: <T = any>(module: TunnelModule, params?: any): Promise<T> =>
+    tunnel.get<T>(module, { params }).then((response) => response.data)
 }

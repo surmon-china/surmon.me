@@ -188,7 +188,7 @@
         opacity: 1;
       }
 
-      ::v-deep(.share-ejector) {
+      :deep(.share-ejector) {
         flex-grow: 1;
         width: auto;
         height: $share-size;

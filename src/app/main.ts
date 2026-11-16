@@ -89,14 +89,14 @@ export const createMainApp = (context: AppCreatorContext) => {
   router.onError((error) => globalState.setError(error))
 
   // handle router validate error & 404 error
-  // https://router.vuejs.org/guide/advanced/navigation-guards.html#Optional-third-argument-next
+  // https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
   router.beforeEach(async (to) => {
     if (to.meta.validator) {
       try {
         await to.meta.validator({ route: to, i18n, store })
       } catch (error: any) {
-        // client: next(error) > router error > global state error
-        // server: next(error) > router error > render catch error
+        // client: throw > router error > global state error
+        // server: throw > router error > render catch error
         throw createAppError(error.message, error.code)
       }
     }

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { type ThreadsMedia } from '/@/server/getters/threads'
+  import type { ThreadsMedia } from '/@/server/getters/threads'
   import { useThreadsMediaUrl } from '../threads'
 
   const props = defineProps<{

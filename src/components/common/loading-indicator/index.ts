@@ -3,12 +3,10 @@ import { defineComponent, h, PropType, ExtractPropTypes } from 'vue'
 const divChildCount = 4
 const rootClassName = 'global-loading-indicator'
 
-type GapType = (typeof GapTypes)[number]
-const GapTypes = ['default', 'lg', 'sm', 'xs', 'tiny'] as const
+type GapType = 'default' | 'lg' | 'sm' | 'xs' | 'tiny'
 const getGapClassName = (key: GapType) => `gap-${key}`
 
-type RadiusType = (typeof RadiusTypes)[number]
-const RadiusTypes = ['tiny', 'xs', 'sm', 'md'] as const
+type RadiusType = 'tiny' | 'xs' | 'sm' | 'md'
 const getRadiusClassName = (key: RadiusType) => `radius-${key}`
 
 export const LoadingIndicatorProps = {

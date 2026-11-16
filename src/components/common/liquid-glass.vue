@@ -103,7 +103,7 @@
 
     const ctx = canvasElement.value.getContext('2d')!
     ctx.putImageData(new ImageData(data, w, h), 0, 0)
-    feImageElement.value.setAttributeNS('http://www.w3.org/1999/xlink', 'href', canvasElement.value.toDataURL())
+    feImageElement.value.setAttribute('href', canvasElement.value.toDataURL())
     feDisplacementMapElement.value.setAttribute('scale', (maxScale / canvasDPI.value).toString())
   }
 

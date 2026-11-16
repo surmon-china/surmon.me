@@ -12,7 +12,9 @@
   const isOnYouTubeModal = computed(() => Boolean(youtubeModalVideo.value))
   const youTubeModalURL = computed(() => {
     const video = youtubeModalVideo.value
-    return video ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId) : undefined
+    return video
+      ? getYouTubeVideoEmbedURL(video.snippet.resourceId.videoId, video.snippet.playlistId)
+      : undefined
   })
 
   const openYouTubeModal = (video: any) => {

@@ -93,7 +93,7 @@ export interface CacheStoreOptions {
 }
 
 export const createCacheStore = async (options?: CacheStoreOptions) => {
-  let cacheStore: CacheStore | null = null
+  let cacheStore: CacheStore
   try {
     cacheStore = await createRedisStore(options)
     logger.info('Redis store readied.')

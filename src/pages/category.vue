@@ -26,7 +26,9 @@
   const categoryBackgroundColor = computed(() => categoryExtrasMap.value.get('background-color'))
   const categoryBackgroundImage = computed(() => {
     const imageUrl = categoryExtrasMap.value.get('background-image')
-    return imageUrl && isOriginalStaticURL(imageUrl) ? getStaticURL(cdnDomain, getStaticPath(imageUrl)) : imageUrl
+    return imageUrl && isOriginalStaticURL(imageUrl)
+      ? getStaticURL(cdnDomain, getStaticPath(imageUrl))
+      : imageUrl
   })
 
   const loadmoreArticles = async () => {

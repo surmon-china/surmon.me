@@ -288,7 +288,7 @@
       }
 
       .posts-swiper {
-        ::v-deep(.swiper-wrapper) {
+        :deep(.swiper-wrapper) {
           flex-direction: column;
           &[style*='300ms'] {
             .swiper-slide-active {

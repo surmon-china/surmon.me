@@ -9,7 +9,6 @@
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "experimentalDecorators": true,
-    "downlevelIteration": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,12 +16,11 @@
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
-    "baseUrl": ".",
     "paths": {
       "/@/*": ["./src/*"],
       "@/*": ["./src/*"]
     },
-    "types": ["node", "vite/client"]
+    "types": ["node", "vite/client", "geojson"]
   },
   "include": ["src/**/*"]
 }

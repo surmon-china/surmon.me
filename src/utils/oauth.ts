@@ -119,8 +119,11 @@ export const openOAuthPopup = async (options: OAuthPopupOptions) => {
   })
 
   if (popup) {
-    popup.document.write(LOADING_HTML)
-    popup.document.close()
+    const loadingDocument = new DOMParser().parseFromString(LOADING_HTML, 'text/html')
+    popup.document.replaceChild(
+      popup.document.importNode(loadingDocument.documentElement, true),
+      popup.document.documentElement
+    )
   }
 
   try {

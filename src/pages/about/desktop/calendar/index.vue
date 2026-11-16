@@ -1,7 +1,11 @@
 <script lang="ts" setup>
   import { computed, onMounted } from 'vue'
   import { useEnhancer } from '/@/app/enhancer'
-  import { useArticlesCalendarStore, useGitHubCalendarStore, useInstagramCalendarStore } from '/@/stores/calendar'
+  import {
+    useArticlesCalendarStore,
+    useGitHubCalendarStore,
+    useInstagramCalendarStore
+  } from '/@/stores/calendar'
   import { GAEventCategories } from '/@/constants/google-analytics'
   import { dateToHuman, HumanDate, humanDateToYMD } from '/@/transforms/moment'
   import CalendarDay from './day.vue'

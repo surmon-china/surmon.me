@@ -6,7 +6,7 @@
  */
 
 import { computed, ComputedGetter } from 'vue'
-import { useSeoMeta, MetaFlat } from '@unhead/vue'
+import { useHead, useSeoMeta, MetaFlat } from '@unhead/vue'
 import { useEnhancer } from '/@/app/enhancer'
 import { getSiteURL } from '/@/transforms/url'
 import { APP_PROFILE, APP_CONFIG } from '/@/configs/app.config'
@@ -54,11 +54,12 @@ export function usePageSeo(input: UsePageSeoInput | ComputedGetter<UsePageSeoInp
     return { pureTitle, fullTitle, ...rest }
   })
 
+  useHead({ meta: [{ name: 'keywords', content: () => _.value.keywords }] })
+
   return useSeoMeta({
     // Basic SEO
     title: computed(() => _.value.fullTitle),
     description: () => _.value.description,
-    keywords: () => _.value.keywords,
     // Open Graph
     ogType: () => _.value.ogType ?? 'website',
     ogTitle: () => _.value.ogTitle ?? _.value.pureTitle,

@@ -250,14 +250,14 @@
           font-weight: bold;
         }
 
-        ::v-deep(a) {
+        :deep(a) {
           font-weight: bold;
           text-decoration: underline;
           text-underline-offset: 0.3em;
           text-decoration-style: dotted;
         }
 
-        ::v-deep(p) {
+        :deep(p) {
           &:last-child {
             margin-bottom: 0;
           }

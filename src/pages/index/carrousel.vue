@@ -220,7 +220,7 @@
       height: $carrousel-height;
 
       // filter for slide when transitioning
-      ::v-deep(.swiper-wrapper[style*='300ms']) {
+      :deep(.swiper-wrapper[style*='300ms']) {
         .swiper-slide-active {
           .content {
             @include global.motion-blur-filter('horizontal');

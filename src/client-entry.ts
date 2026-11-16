@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/vue'
 import { computed, watch, nextTick } from 'vue'
 import { createWebHistory } from 'vue-router'
 import { createHead } from '@unhead/vue/client'
+import { createDomRenderer } from 'unhead/client'
 import type { SerializableHead } from '@unhead/vue'
 import { createMainApp } from '/@/app/main'
 import { useAppOptionsStore } from '/@/stores/foundation'
@@ -57,7 +58,7 @@ const { app, router, globalState, i18n, store, getGlobalHead } = createMainApp({
 // init: composables
 const defer = createDefer()
 const popup = createPopup()
-const head = createHead({ disableCapoSorting: true })
+const head = createHead({ render: createDomRenderer({ tagWeight: () => 100 }) })
 
 // init: global head attributes
 const globalHeadRef = computed<SerializableHead>(() => {
@@ -112,6 +113,20 @@ if (isProd) {
     app,
     dsn: IDENTITIES.SENTRY_PUBLIC_DSN,
     release: APP_VERSION,
+    // Keep the v10 data collection defaults when upgrading to Sentry v11.
+    dataCollection: {
+      userInfo: false,
+      cookies: false,
+      httpHeaders: {
+        request: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+        response: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] }
+      },
+      httpBodies: [],
+      urlQueryParams: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+      genAI: { inputs: false, outputs: false },
+      databaseQueryData: false,
+      graphQL: { document: false, variables: false }
+    },
     tracesSampleRate: isDev ? 1.0 : 0.2,
     // replaysSessionSampleRate: isDev ? 0.8 : 0.1,
     // replaysOnErrorSampleRate: 1.0,

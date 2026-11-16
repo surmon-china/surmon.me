@@ -8,8 +8,8 @@ import path from 'path'
 import * as sass from 'sass'
 import { loadEnv, defineConfig } from 'vite'
 import vuePlugin from '@vitejs/plugin-vue'
-import unheadPlugin from '@unhead/addons/vite'
-import packageJSON from './package.json'
+import { Unhead } from '@unhead/vue/bundler'
+import packageJSON from './package.json' with { type: 'json' }
 
 const CWD = process.cwd()
 const BASE_ENV_CONFIG = loadEnv('', CWD)
@@ -18,12 +18,12 @@ export default defineConfig(({ mode }) => {
   const TARGET_MODE_ENV_CONFIG = loadEnv(mode, CWD)
 
   return {
-    plugins: [vuePlugin(), unheadPlugin()],
-    root: path.resolve(__dirname),
+    plugins: [vuePlugin(), ...Unhead().vite()],
+    root: path.resolve(import.meta.dirname),
     publicDir: 'public',
     resolve: {
       alias: {
-        '/@': path.resolve(__dirname, 'src')
+        '/@': path.resolve(import.meta.dirname, 'src')
       }
     },
     define: {
@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
       manifest: true,
-      rollupOptions: {
+      rolldownOptions: {
         // disable vite warning
         // https://github.com/vitejs/vite/pull/10331
         // https://github.com/vitejs/vite/issues/10766
@@ -67,28 +67,34 @@ export default defineConfig(({ mode }) => {
           entryFileNames: '[name]-[hash].js',
           chunkFileNames: '[name]-[hash].js',
           assetFileNames: '[name]-[hash].[ext]',
-          manualChunks: {
-            sentry: ['@sentry/vue'],
-            vendor: [
-              'vue',
-              'vue-router',
-              '@unhead/vue',
-              'pinia',
-              'axios',
-              'swiper',
-              'lozad',
-              'qrcode',
-              'geojson',
-              'lodash-es',
-              'marked',
-              'marked-highlight',
-              'marked-mangle',
-              'marked-xhtml',
-              'highlight.js',
-              'html-to-image',
-              'ua-parser-js',
-              'bezier-easing',
-              '@braintree/sanitize-url'
+          codeSplitting: {
+            groups: [
+              { name: 'sentry', test: /\/node_modules\/@sentry\// },
+              {
+                name: 'vendor',
+                test: (id) =>
+                  [
+                    'vue',
+                    'vue-router',
+                    '@unhead/vue',
+                    'pinia',
+                    'axios',
+                    'swiper',
+                    'lozad',
+                    'qrcode',
+                    'geojson',
+                    'lodash-es',
+                    'marked',
+                    'marked-highlight',
+                    'marked-mangle',
+                    'marked-xhtml',
+                    'highlight.js',
+                    'html-to-image',
+                    'ua-parser-js',
+                    'bezier-easing',
+                    '@braintree/sanitize-url'
+                  ].some((name) => id.includes(`/node_modules/${name}/`))
+              }
             ]
           }
         }

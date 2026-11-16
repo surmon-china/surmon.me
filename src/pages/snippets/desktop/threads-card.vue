@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { type ThreadsMedia as ThreadsMediaType } from '/@/server/getters/threads'
+  import type { ThreadsMedia as ThreadsMediaType } from '/@/server/getters/threads'
   import ThreadsText from '../threads-text.vue'
   import ThreadsMedia from './threads-media.vue'
 

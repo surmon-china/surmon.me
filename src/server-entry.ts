@@ -8,10 +8,10 @@ import serialize from 'serialize-javascript'
 import { toRaw } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { createMemoryHistory } from 'vue-router'
-import { createHead, renderSSRHead } from '@unhead/vue/server'
+import { createHead } from '@unhead/vue/server'
 import { createMainApp, MainApp } from '/@/app/main'
 import { createLogger } from '/@/utils/logger'
-import type { SSRHeadPayload, VueHeadClient } from '@unhead/vue/server'
+import type { SSRHeadPayload } from '@unhead/vue/server'
 import type { SSRContext } from '/@/app/context'
 import type { AppErrorValue } from '/@/app/state'
 import type { RequestContext } from '@/server/main'
@@ -53,7 +53,7 @@ const createSSRContext = (context: RequestContext, error: AppErrorValue = null):
   }
 }
 
-const createSSRMainApp = (ssrContext: SSRContext): [MainApp, VueHeadClient] => {
+const createSSRMainApp = (ssrContext: SSRContext): [MainApp, ReturnType<typeof createHead>] => {
   const mainApp = createMainApp({
     routerHistoryCreator: createMemoryHistory,
     languages: parseAcceptLanguage(ssrContext.acceptLanguage, { ignoreWildcard: true }),
@@ -75,8 +75,8 @@ const createSSRMainApp = (ssrContext: SSRContext): [MainApp, VueHeadClient] => {
   // https://unhead.unjs.io/docs/vue/head/guides/get-started/migration#default-ssr-tags
   // https://unhead.unjs.io/docs/vue/head/guides/get-started/migration#tag-sorting-updated
   const head = createHead({
+    tagWeight: () => 100,
     disableDefaults: true,
-    disableCapoSorting: true,
     init: [mainApp.getGlobalHead()]
   })
   mainApp.app.use(head)
@@ -110,7 +110,7 @@ export const renderError = async (context: RequestContext, error: unknown): Prom
   return {
     code: appError.code,
     appHTML: await renderToString(app, ssrContext),
-    headHTML: await renderSSRHead(head),
+    headHTML: head.render(),
     assetsPrefix: ssrContext.assetsPrefix,
     contextScripts: renderSSRContextScript(serialize(ssrContext)),
     stateScripts: renderSSRStateScript(
@@ -176,7 +176,7 @@ export const renderApp = async (context: RequestContext, cache: CacheStore): Pro
     }
 
     devDebug('- 5. renderSSRHead')
-    const headHTML = await renderSSRHead(head)
+    const headHTML = head.render()
 
     devDebug('- 6. SSR State & SSR context script')
     const contextScripts = renderSSRContextScript(serialize({ ...ssrContext, cacheStatus: 'miss' }))

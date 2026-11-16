@@ -5,7 +5,7 @@
  */
 
 import { createRouter } from 'vue-router'
-import type { RouteRecordRaw, NavigationGuard, NavigationGuardNext, RouterHistory } from 'vue-router'
+import type { RouteRecordRaw, NavigationGuard, NavigationHookAfter, RouterHistory } from 'vue-router'
 import { LocalesKey } from '/@/locales'
 import { PageLayout } from '/@/constants/page-layout'
 import { NOT_FOUND, BAD_REQUEST } from '/@/constants/http-code'
@@ -335,7 +335,7 @@ export const routes: RouteRecordRaw[] = [
 export interface RouterCreatorOptions {
   history: RouterHistory
   beforeMiddleware?: NavigationGuard | NavigationGuard[]
-  afterMiddleware?: NavigationGuardNext | NavigationGuardNext[]
+  afterMiddleware?: NavigationHookAfter | NavigationHookAfter[]
 }
 
 export const createUniversalRouter = (options: RouterCreatorOptions) => {

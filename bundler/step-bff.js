@@ -27,7 +27,7 @@ export const bundleBFFServer = async (paths) => {
       sourcemap: false,
       manifest: false,
       minify: false,
-      rollupOptions: {
+      rolldownOptions: {
         input: path.join(paths.src, 'bff.ts'),
         output: {
           entryFileNames: 'bff.js'
